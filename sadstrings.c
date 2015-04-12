@@ -5,7 +5,7 @@ make sadstrings CFLAGS="-g -Wall -std=gnu11 -O3"
 /*
  * note:
  * 1)calling the system function has problem at line:23
- *
+ * 2)fixed line:23, the first argument of argv is the program name
  */
 
 #include <stdio.h>
@@ -26,7 +26,8 @@ void get_strings(char const *in){
 }
 
 int main(int argc, char **argv){
-    printf("argv[0]=%s\n", argv[0]);
-    get_strings(argv[0]);
+    if (argc < 2) return (-1);
+    printf("argv[1]=%s\n", argv[1]);
+    get_strings(argv[1]);
     return (0);
 }
