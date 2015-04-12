@@ -5,7 +5,8 @@ make sadstrings CFLAGS="-g -Wall -std=gnu11 -O3"
 /*
  * note:
  * 1)calling the system function has problem at line:23
- * 2)fixed line:23, the first argument of argv is the program name
+ * 2)fixed line:23, the first argument of argv is the name of program itself
+ * 3)searching itself may be the what the author want to do
  */
 
 #include <stdio.h>
