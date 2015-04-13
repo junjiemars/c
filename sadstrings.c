@@ -27,8 +27,6 @@ void get_strings(char const *in){
 }
 
 int main(int argc, char **argv){
-    if (argc < 2) return (-1);
-    printf("argv[1]=%s\n", argv[1]);
-    get_strings(argv[1]);
+    get_strings(argc > 1 ? argv[1] : argv[0]);
     return (0);
 }
