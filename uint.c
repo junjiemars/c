@@ -4,6 +4,12 @@ make uint
 */
 #include <stdio.h>
 
+/*
+ * the neg will be prompted to size_t,
+ * so (size_t)neg=18446744073709551614 < 0 is false
+ *
+ */
+
 int main(){
     int neg = -2;
     size_t zero = 0;
