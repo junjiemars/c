@@ -2,7 +2,10 @@
 make copystructs CFLAGS="-g -Wall -O3 -std=gnu99"
 */
 #include <assert.h>
-
+/*
+ * 1) set A to B, just struct copy;
+ * 2) if the pointer/array in B, so copy the pointer itself;
+ */
 typedef struct{
     int a, b;
     double c, d;
