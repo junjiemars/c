@@ -2,7 +2,8 @@
 #include <stdlib.h>
 
 /*
- * 1) goto idiom for cleanning up
+ * 1) goto idiom for cleanning up;
+ * 2) use longjmp jump to other function;
  */
 
 int sum(int *v, size_t size) {
