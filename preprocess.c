@@ -2,6 +2,11 @@
 export CFLAGS="-g -Wall -std=gnu11 -O3"  #the usual.
 make preprocess
 */
+
+/*
+ * 1) ## operator used to concate two identifiers in macro
+ */
+
 #include <stdio.h>
 #include <math.h> //NAN
 

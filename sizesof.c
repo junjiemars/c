@@ -6,8 +6,8 @@ make sizesof CFLAGS="-g -Wall -std=gnu11 -O3"
 /*
  * note:
  * 1)'#' convert expression to string
- * 2)'%g' format double?
- * 3) the point length just equals sizeof(int)
+ * 2)'%g' format double
+ * 3) the length of pointer just equals sizeof(int)
  *
  */
 
