@@ -2,6 +2,10 @@
 export CFLAGS="-g -Wall -std=gnu11 -O3"  #the usual.
 make automem
 */
+
+/*
+ * 1) address of stack memory associated with local variable 'out'
+ */
 #include <stdio.h>
 
 typedef struct powers {
