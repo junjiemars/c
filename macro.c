@@ -4,7 +4,7 @@
 /*
  * 1) expression-type macro: parens or avoid double usage
  * 2) block-type macro
- * 3) use: cc -E macro.c
+ * 3) use: cc -E macro.c just to run preprocessor
  */
 
 #define double0(x) 2*x
@@ -28,6 +28,16 @@
     printf("I understand ur input to be %i.\n", v); \
 }
 
+#define test(assertion, retval) {                               \
+    if (!(assertion)) {                                         \
+        fprintf(stderr, "(" #assertion ") failed to be true."   \
+                "returning " #retval "\n");                     \
+        return retval;                                          \
+    }                                                           \
+}
+
+
+
 int main(int argc, char *argv[]) {
     printf("double0(1+1)*8=%i\n", double0(1+1)*8);
     printf("double1(1+1)*8=%i\n", double1(1+1)*8);
@@ -42,4 +52,8 @@ int main(int argc, char *argv[]) {
 
     check_blank(0);
     check_blank();
+
+    test(a==b, -1);
+    // can't run in cc
+    //test(a==b,   );
 }
