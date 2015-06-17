@@ -28,7 +28,7 @@
     printf("I understand ur input to be %i.\n", v); \
 }
 
-#define test(assertion, retval) {                               \
+#define test(assertion, retvaql) {                               \
     if (!(assertion)) {                                         \
         fprintf(stderr, "(" #assertion ") failed to be true."   \
                 "returning " #retval "\n");                     \
