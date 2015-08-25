@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "scope.h"
 
 /*
  * A good artical here: http://norswap.com/c_scope_duration_linkage/
@@ -52,6 +53,27 @@
  * compiler does make sure that you do not take the address of a vairable with
  * the register storage class.
  *
+ * Declarations & Definitions
+ * ----------
+ * 1) All declarations with no linkage are also definitions. Other declarations are
+ * definitions if they have an intializer.
+ * 2) A file-scope variable declaration without the extern storage class specifier
+ * or initializer is a tentative definition.
+ * 3) All definitions are declarations but not vice-versa.
+ * 4) A definition of an identifier is a declaration for that identifier that:
+ * for an object, causes storage to be reserved for that object.
+ *
+ * Linkage
+ * ----------
+ * 1) No Linkage: A declaration with no linkage is associated to an object that
+ * is not shared with any other declaration. All declarations with no linkage
+ * happen at block scope: all block scope declarations without the extern storage
+ * class specifier have no linkage.
+ * 2) Internal Linkage: within the compilation unit, all declarations with
+ * internal linkage for the same identifier refer to the same object.
+ * 3) External Linkage: within the whole program, all declarations with external
+ * linkage for the same identifier refer to the same object.
+ *
  * A. automatic variables:
  * 1) automatic variables includes global_auto_i0/i1, i0/i1;
  * 2) uninitialized variables will be set to 0;
@@ -59,38 +81,36 @@
  * 
  */
 
-/* int global_auto_i0 = 123; */
-/* int global_auto_i1; */
-/* static int file_scope_i0 = 345; */
-/* static int file_scope_i1; */
-
-/* file scope  */
+/* file scope, declaration, definition with initializer  */
 int i0 = 123;
+
+/* file scope, declaration, tentative definition with initializer to 0 */
+int i1;
+
+/* file scope, extern declaration, must without initializer */
+extern int i2;
 
 /* function sub forward declaration */
 void sub(int, int);
 
 int main(int argc, char *argv[]) {
-  /* file scope i0 */
+  
   printf("file scope: i0=%i\n", i0);
   
-  /* block scope in main */
   int i0 = 321;
-  printf("function scope in main: i0=%i\n", i0);
+  printf("block scope in main: i0=%i\n", i0);
 
   {
     int i0 = 123+321;
-    printf("block scope in main function: i0=%i\n", i0);
+    printf("block scope in main nested block: i0=%i\n", i0);
   }
 
-  /* block scope in main again */
   printf("block scope in main: i0=%i\n", i0);
 
-  /* function parameters also has block scope */
-  printf("function parameter also has block scope: argc=%i\n", argc);
+  printf("function scope for function parameter: argc=%i\n", argc);
   {
     int argc = 123;
-    printf("function parameter also has block scope: argc=%i\n", argc);
+    printf("block scope in main nested block: argc=%i\n", argc);
   }
 
   if (i0 > 0) {
@@ -103,23 +123,20 @@ int main(int argc, char *argv[]) {
      * so u can use i0 here
      */
     i0:
-    printf("goto labe i0 inside inner block\n");
+    printf("goto label i0 in main nested block, samed id with i0\n");
   }
 
   sub(i0, i0+1);
 
   {
     auto int i0 = 1;
-    printf("auto int i0 inside anther block: i0=%i\n", i0);
+    printf("auto int i0 in main nested block: i0=%i\n", i0);
   }
-    /* int i1; */
-    /* static int static_i0 = 234; */
-    /* static int static_i1; */
 
-    /* printf("i0=%i i1=%i\n", i0, i1); */
-    /* printf("global_auto_i0=%i global_auto_i1=%i\n", global_auto_i0, global_auto_i1); */
-    /* printf("static_i0=%i static_i1=%i\n", static_i0, static_i1); */
-    /* printf("file_scope_i0=%i file_scope_i1=%i\n", file_scope_i0, file_scope_i1); */
+  printf("file scope, tentative definition: i1=%i\n", i1);
+
+  printf("file scope, extern declaration: i2=%i\n", i2); 
+  
 
 }
 
