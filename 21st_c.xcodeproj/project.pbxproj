@@ -16,14 +16,35 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		B3DF6A3F1B99D721004BB769 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		B30DE9CD1B99C26B00284135 /* 21st_c */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = 21st_c; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3DF6A3C1B99D4D6004BB769 /* preprocessing */ = {isa = PBXFileReference; lastKnownFileType = folder; name = preprocessing; path = ../../../../private/tmp/21st_c/preprocessing; sourceTree = "<group>"; };
+		B3DF6A411B99D721004BB769 /* preprocessing */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = preprocessing; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3DF6A491B99D80A004BB769 /* py */ = {isa = PBXFileReference; lastKnownFileType = folder; path = py; sourceTree = "<group>"; };
+		B3DF6A4A1B99D815004BB769 /* src */ = {isa = PBXFileReference; lastKnownFileType = folder; path = src; sourceTree = "<group>"; };
+		B3DF6A4B1B99D823004BB769 /* type */ = {isa = PBXFileReference; lastKnownFileType = folder; path = type; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		B30DE9CA1B99C26B00284135 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B3DF6A3E1B99D721004BB769 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -36,6 +57,10 @@
 		B30DE9C41B99C26B00284135 = {
 			isa = PBXGroup;
 			children = (
+				B3DF6A4B1B99D823004BB769 /* type */,
+				B3DF6A4A1B99D815004BB769 /* src */,
+				B3DF6A491B99D80A004BB769 /* py */,
+				B3DF6A3C1B99D4D6004BB769 /* preprocessing */,
 				B30DE9CE1B99C26B00284135 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -44,6 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				B30DE9CD1B99C26B00284135 /* 21st_c */,
+				B3DF6A411B99D721004BB769 /* preprocessing */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -68,6 +94,23 @@
 			productReference = B30DE9CD1B99C26B00284135 /* 21st_c */;
 			productType = "com.apple.product-type.tool";
 		};
+		B3DF6A401B99D721004BB769 /* preprocessing */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B3DF6A451B99D721004BB769 /* Build configuration list for PBXNativeTarget "preprocessing" */;
+			buildPhases = (
+				B3DF6A3D1B99D721004BB769 /* Sources */,
+				B3DF6A3E1B99D721004BB769 /* Frameworks */,
+				B3DF6A3F1B99D721004BB769 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = preprocessing;
+			productName = preprocessing;
+			productReference = B3DF6A411B99D721004BB769 /* preprocessing */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -78,6 +121,9 @@
 				ORGANIZATIONNAME = "Jun Jie";
 				TargetAttributes = {
 					B30DE9CC1B99C26B00284135 = {
+						CreatedOnToolsVersion = 6.4;
+					};
+					B3DF6A401B99D721004BB769 = {
 						CreatedOnToolsVersion = 6.4;
 					};
 				};
@@ -95,12 +141,20 @@
 			projectRoot = "";
 			targets = (
 				B30DE9CC1B99C26B00284135 /* 21st_c */,
+				B3DF6A401B99D721004BB769 /* preprocessing */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B30DE9C91B99C26B00284135 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B3DF6A3D1B99D721004BB769 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -201,6 +255,24 @@
 			};
 			name = Release;
 		};
+		B3DF6A461B99D721004BB769 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B3DF6A471B99D721004BB769 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -221,6 +293,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		B3DF6A451B99D721004BB769 /* Build configuration list for PBXNativeTarget "preprocessing" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B3DF6A461B99D721004BB769 /* Debug */,
+				B3DF6A471B99D721004BB769 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
