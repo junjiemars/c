@@ -35,3 +35,6 @@ erf
 erf.dSYM/
 *.dSYM/
 *.i
+
+# Imediatly files
+*.preprocessed
