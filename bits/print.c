@@ -19,4 +19,9 @@ int main(int argc, const char *argv[]) {
 
   print_binary1(7); printf("\n");
   print_binary1(5); printf("\n");
-}
+
+  print_binary(-3);
+
+  float f = 7.0;
+  print_binary(*(unsigned*)&f);
+ }
