@@ -5,6 +5,9 @@ default: all
 .DEFAULT:
 	cd src && $(MAKE) $@
 
+BITS:
+	cd src/bits && $(MAKE) $@
+
 install:
 	cd src && $(MAKE) $@
 
