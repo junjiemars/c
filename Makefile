@@ -1,11 +1,17 @@
 # Top level makefile, the real shit is at src/Makefile
 
-default: all
+PREFIX?=$(HOME)/bin
+INSTALL_BIN=$(PREFIX)
+
+#default: all
+
 
 .DEFAULT:
+	@echo $(INSTALL_BIN)
+	@mkdir -p ../bin
 	cd src && $(MAKE) $@
 
-BITS:
+bits:
 	cd src/bits && $(MAKE) $@
 
 install:
