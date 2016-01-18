@@ -32,9 +32,11 @@
 *.x86_64
 *.hex
 erf
-erf.dSYM/
 *.dSYM/
 *.i
 
 # Imediatly files
-*.preprocessed
+*.preprocessedsimulate_turing_machine
+
+src/endian/test_endian
+src/turning/simulate_turning_machine
