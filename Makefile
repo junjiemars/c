@@ -17,8 +17,8 @@ install: all
 	cd src/hi && $(MAKE) install
 	cd src/bits && $(MAKE) install
 
-run: install
-	cd src/hi && $(MAKE) run
+run: 
+	cd src/$(WHAT) && $(MAKE) run
 
 clean:
 	cd src/hi && $(MAKE) clean
