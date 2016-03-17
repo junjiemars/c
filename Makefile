@@ -1,20 +1,26 @@
 # Top level makefile, the real shit is at src/Makefile
 
-PREFIX?=$(HOME)/bin
-INSTALL_BIN=$(PREFIX)
-
-#default: all
-
-
-.DEFAULT:
-	@echo $(INSTALL_BIN)
-	@mkdir -p ../bin
-	cd src && $(MAKE) $@
-
-bits:
-	cd src/bits && $(MAKE) $@
-
-install:
-	cd src && $(MAKE) $@
+PREFIX?=$(PWD)
+export PREFIX
+export INSTALL_BIN=$(PREFIX)/bin
 
 .PHONY: install
+
+default: all
+
+.DEFAULT:
+	cd src/hi && $(MAKE)
+	cd src/bits && $(MAKE)
+
+install: all
+	test -d $(INSTALL_BIN) || mkdir -p $(INSTALL_BIN)
+	cd src/hi && $(MAKE) install
+	cd src/bits && $(MAKE) install
+
+run: install
+	cd src/hi && $(MAKE) run
+
+clean:
+	cd src/hi && $(MAKE) clean
+	cd src/bits && $(MAKE) clean
+	rm -f $(INSTALL_BIN)/*

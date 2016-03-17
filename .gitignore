@@ -35,6 +35,9 @@ erf
 *.dSYM/
 *.i
 
+# bin directory
+bin/
+
 # Imediatly files
 *.preprocessedsimulate_turing_machine
 
