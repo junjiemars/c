@@ -4,7 +4,7 @@ PREFIX?=$(PWD)
 export PREFIX
 export INSTALL_BIN=$(PREFIX)/bin
 
-.PHONY: install
+.PHONY: install run
 
 default: all
 
@@ -18,7 +18,7 @@ install: all
 	cd src/bits && $(MAKE) install
 
 run: 
-	cd src/$(WHAT) && $(MAKE) run
+	cd src/$(WHAT) && $(MAKE) "run"
 
 clean:
 	cd src/hi && $(MAKE) clean

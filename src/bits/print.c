@@ -24,4 +24,6 @@ int main(int argc, const char *argv[]) {
 
   float f = 7.0;
   print_binary(*(unsigned*)&f);
- }
+
+  return 0;
+}
