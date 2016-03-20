@@ -8,7 +8,7 @@ run: hi.out
 	./hi.out $(ARGS)
 
 debug: hi.out
-	$(DEBUG) ./hi.out
+	$(DEBUG) ./hi.out $(ARGS)
 
 clean:
 	rm -f hi.out
