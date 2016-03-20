@@ -31,6 +31,5 @@ debug:
 	cd src/$(WHAT) && $(MAKE) debug
 
 clean:
-	cd src/hi && $(MAKE) clean
-	cd src/bits && $(MAKE) clean
+	cd src/$(WHAT) && $(MAKE) clean
 	rm -f $(INSTALL_BIN)/*
