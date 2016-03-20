@@ -1,8 +1,10 @@
 # C Lessons
-c programming basic and use cases
+c programming basics and use cases
 
 ## Clone the source
+```shell
 git clone https://github.com/junjiemars/c_lessons.git
+```
 
 ## Build from source
 * make
