@@ -7,7 +7,7 @@ OS:=$(shell uname -s)
 ifeq ($(OS), Darwin)
 	DEBUG := lldb
 else
-	DEBUG := gdb
+	DEBUG := gdb --args 
 endif
 export DEBUG
 
@@ -24,7 +24,7 @@ install: all
 	cd src/hi && $(MAKE) install
 	cd src/bits && $(MAKE) install
 
-run: 
+run:
 	cd src/$(WHAT) && $(MAKE) run
 
 debug:
