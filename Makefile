@@ -1,10 +1,17 @@
 # Top level makefile, the real shit is at src/Makefile
 
-PREFIX?=$(PWD)
-export PREFIX
+export PREFIX?=$(PWD)
 export INSTALL_BIN=$(PREFIX)/bin
+export CFLAGS=-Wall -g
+OS:=$(shell uname -s)
+ifeq ($(OS), Darwin)
+	DEBUG := lldb
+else
+	DEBUG := gdb
+endif
+export DEBUG
 
-.PHONY: install run
+.PHONY: install run debug
 
 default: all
 
@@ -18,7 +25,10 @@ install: all
 	cd src/bits && $(MAKE) install
 
 run: 
-	cd src/$(WHAT) && $(MAKE) "run"
+	cd src/$(WHAT) && $(MAKE) run
+
+debug:
+	cd src/$(WHAT) && $(MAKE) debug
 
 clean:
 	cd src/hi && $(MAKE) clean
