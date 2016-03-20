@@ -5,10 +5,10 @@ install: hi.out
 	cp hi.out $(INSTALL_BIN)/hi
 
 run: hi.out
-	./hi.out $(ARGS)
+	./hi.out $(args)
 
 debug: hi.out
-	$(DEBUG) ./hi.out $(ARGS)
+	$(DEBUG) ./hi.out $(args)
 
 clean:
 	rm -f hi.out
