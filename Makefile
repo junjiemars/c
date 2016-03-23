@@ -11,27 +11,28 @@ else
 endif
 export DEBUG
 
-.PHONY: install run debug uninstall
-
 default: all
 
 .DEFAULT:
-	cd src/hi && $(MAKE)
-	cd src/bits && $(MAKE)
+	@(cd src/hi && $(MAKE))
+	@(cd src/bits && $(MAKE))
 
 run:
-	cd src/$(what) && $(MAKE) run
+	@(cd src/$(what) && $(MAKE) run)
 
 debug:
-	cd src/$(what) && $(MAKE) debug
+	@(cd src/$(what) && $(MAKE) debug)
 
 clean:
-	cd src/$(what) && $(MAKE) clean
+	@(cd src/$(what) && $(MAKE) clean)
 
 install: all
-	test -d $(INSTALL_BIN) || mkdir -p $(INSTALL_BIN)
-	cd src/hi && $(MAKE) install
-	cd src/bits && $(MAKE) install
+	@(test -d $(INSTALL_BIN) || mkdir -p $(INSTALL_BIN))
+	@(cd src/hi && $(MAKE) install)
+	@(cd src/bits && $(MAKE) install)
 
 uninstall:
-	rm -f $(INSTALL_BIN)/*
+	-(rm -f $(INSTALL_BIN)/*)
+
+
+.PHONY: install run debug uninstall
