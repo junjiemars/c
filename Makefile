@@ -16,6 +16,7 @@ default: all
 .DEFAULT:
 	@(cd src/hi && $(MAKE))
 	@(cd src/bits && $(MAKE))
+	@(cd src/utf8 && $(MAKE))
 
 run:
 	@(cd src/$(what) && $(MAKE) run)
@@ -30,6 +31,7 @@ install: all
 	@(test -d $(INSTALL_BIN) || mkdir -p $(INSTALL_BIN))
 	@(cd src/hi && $(MAKE) install)
 	@(cd src/bits && $(MAKE) install)
+	@(cd src/utf8 && $(MAKE) install)
 
 uninstall:
 	-(rm -f $(INSTALL_BIN)/*)
