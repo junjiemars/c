@@ -1,3 +1,5 @@
+CFLAGS ?= -Wall -g 
+
 utf8.out: utf8.c
 	$(CC) $(CFLAGS) -o $@ $^
 
