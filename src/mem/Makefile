@@ -4,7 +4,7 @@ mem.out: mem.c
 	$(CC) $(CFLAGS) -o $@ $^
 
 install: mem.out
-	@(cp mem.out $(INSTALL_BIN)/utf8)
+	@(cp mem.out $(INSTALL_BIN)/mem)
 
 run: mem.out
 	./mem.out $(args)

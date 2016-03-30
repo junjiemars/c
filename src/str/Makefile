@@ -4,7 +4,7 @@ str.out: str.c
 	$(CC) $(CFLAGS) -o $@ $^
 
 install: str.out
-	@(cp str.out $(INSTALL_BIN)/utf8)
+	@(cp str.out $(INSTALL_BIN)/str)
 
 run: str.out
 	./str.out $(args)

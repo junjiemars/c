@@ -1,15 +1,11 @@
-/* Compile with:
-export CFLAGS="-g -Wall -std=gnu11 -O3"  #the usual.
-make na
-*/
 #include <stdio.h>
-#include <math.h> //isnan
+#include <math.h>
 
 double ref;
 
 double set_na(){
     if (!ref) {
-        ref=0/0.;
+        ref = 0/0.;
         char *cr = (char *)(&ref);
         cr[2]='a';
     }
@@ -29,9 +25,11 @@ int is_na(double in){
 int main(){
     double x = set_na();
     double y = x;
-    printf("Is x=set_na() NA? %i\n", is_na(x));
-    printf("Is x=set_na() NAN? %i\n", isnan(x));
-    printf("Is y=x NA? %i\n", is_na(y));
-    printf("Is 0/0 NA? %i\n", is_na(0/0.));
-    printf("Is 8 NA? %i\n", is_na(8));
+    printf("is x = set_na() NA? %i\n", is_na(x));
+    printf("is x = set_na() NAN? %i\n", isnan(x));
+    printf("is y = x NA? %i\n", is_na(y));
+    printf("is 0/0 NA? %i\n", is_na(0/0.));
+    printf("is 8 NA? %i\n", is_na(8));
+
+    return 0;
 }
