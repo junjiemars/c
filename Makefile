@@ -18,6 +18,8 @@ default: all
 	@(cd src/bits && $(MAKE))
 	@(cd src/utf8 && $(MAKE))
 	@(cd src/str && $(MAKE))
+	@(cd src/mem && $(MAKE))
+	
 
 run:
 	@(cd src/$(what) && $(MAKE) run)
@@ -34,6 +36,7 @@ install: all
 	@(cd src/bits && $(MAKE) install)
 	@(cd src/utf8 && $(MAKE) install)
 	@(cd src/str && $(MAKE) install)
+	@(cd src/mem && $(MAKE) install)
 
 uninstall:
 	-(rm -f $(INSTALL_BIN)/*)
