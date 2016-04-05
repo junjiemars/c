@@ -14,13 +14,7 @@ export DEBUG
 default: all
 
 .DEFAULT:
-	@(cd src/hi && $(MAKE))
-	@(cd src/bits && $(MAKE))
-	@(cd src/utf8 && $(MAKE))
-	@(cd src/str && $(MAKE))
-	@(cd src/mem && $(MAKE))
-	@(cd src/math && $(MAKE))
-	
+	@(MAKE=${MAKE} ./auto.sh)
 
 run:
 	@(cd src/$(what) && $(MAKE) run)
@@ -31,14 +25,12 @@ debug:
 clean:
 	@(cd src/$(what) && $(MAKE) clean)
 
+clean_all:
+	@(MAKE=${MAKE} ./auto.sh clean)
+
 install: all
 	@(test -d $(INSTALL_BIN) || mkdir -p $(INSTALL_BIN))
-	@(cd src/hi && $(MAKE) install)
-	@(cd src/bits && $(MAKE) install)
-	@(cd src/utf8 && $(MAKE) install)
-	@(cd src/str && $(MAKE) install)
-	@(cd src/mem && $(MAKE) install)
-	@(cd src/math && $(MAKE) install)
+	@(MAKE=${MAKE} ./auto.sh install)
 
 uninstall:
 	-(rm -f $(INSTALL_BIN)/*)
