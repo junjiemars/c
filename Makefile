@@ -7,6 +7,7 @@ OS:=$(shell uname -s)
 ifeq ($(OS), Darwin)
 	DEBUG := lldb
 else
+	MAKE := "$(MAKE) --no-print-directory"
 	DEBUG := gdb --args 
 endif
 export DEBUG
