@@ -24,12 +24,11 @@ int is_na(double in){
 
 int main(){
     double x = set_na();
-    double y = x;
-    printf("is x = set_na() NA? %i\n", is_na(x));
-    printf("is x = set_na() NAN? %i\n", isnan(x));
-    printf("is y = x NA? %i\n", is_na(y));
-    printf("is 0/0 NA? %i\n", is_na(0/0.));
-    printf("is 8 NA? %i\n", is_na(8));
+    printf("8 is not a number = %i\n", is_na(8));
+    printf("0/0. is not a number = %i\n", isnan(0/0.));
+    printf("nan spec: 0x%08x\n", *(unsigned int*)&x);
+    printf("0x%08x is not a number = %i, via self:is_na\n", *(unsigned int*)&x, is_na(x));
+    printf("0x%08x is not a number = %i, via stdc:isnan\n", *(unsigned int*)&x, isnan(x));
 
     return 0;
 }

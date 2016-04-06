@@ -1,4 +1,5 @@
 CFLAGS ?= -Wall -g 
+CFLAGS += -std=c99
 
 math.out: math1.c
 	$(CC) $(CFLAGS) -o $@ $^
