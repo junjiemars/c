@@ -27,9 +27,9 @@ int main(){
     printf("8 is not a number = %i\n", is_na(8));
     printf("0/0. is not a number = %i\n", isnan(0/0.));
     unsigned long lu = *(unsigned long*)&x;
-    printf("nan spec: 0x%08x\n", lu);
-    printf("0x%08x is not a number = %i, via self:is_na\n", lu, is_na(x));
-    printf("0x%08x is not a number = %i, via stdc:isnan\n", lu, isnan(x));
+    printf("nan spec: 0x%lx\n", lu);
+    printf("0x%lx is not a number = %i, via self:is_na\n", lu, is_na(x));
+    printf("0x%lx is not a number = %i, via stdc:isnan\n", lu, isnan(x));
 
     return 0;
 }

@@ -1,3 +1,16 @@
+CFLAGS ?= -Wall -g 
 
-test_endian: test_endian.c
-	$(CC) -Wall -g test_endian.c -o test_endian
+endian.out: endian.c
+	$(CC) $(CFLAGS) -o $@ $^
+
+install: endian.out
+	@(cp $^ $(INSTALL_BIN)/endian)
+
+run: endian.out
+	./$^ $(args)
+
+debug: endian.out
+	$(DEBUG) ./$^ $(args)
+
+clean:
+	-(rm -f endian.out)
