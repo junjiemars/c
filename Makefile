@@ -25,7 +25,7 @@ debug:
 clean:
 	@(cd src/$(what) && $(MAKE) clean)
 
-clean_all:
+purge:
 	@(MAKE=${MAKE} ./auto.sh clean)
 
 install: all
