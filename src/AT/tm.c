@@ -17,7 +17,7 @@ Retrieved from: http://en.literateprograms.org/Turing_machine_simulator_(C)?oldi
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include "simulate_turing_machine.h"
+#include "tm.h"
 
 struct turing_machine_state {
     int control_state;
@@ -93,7 +93,7 @@ int is_in_int_list(int value, int list_size, int list[]) {
     return 0;
 }
 void simulate(struct turing_machine machine, int input_string_length, symbol* input_string) {
-    struct turing_machine_state state = 
+    struct turing_machine_state state =
         create_initial_state(machine.initial_control_state, input_string_length, input_string);
     trace_state(&state, machine.blank_symbol);
 

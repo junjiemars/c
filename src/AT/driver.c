@@ -16,7 +16,7 @@ Retrieved from: http://en.literateprograms.org/Turing_machine_simulator_(C)?oldi
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "simulate_turing_machine.h"
+#include "tm.h"
 
 struct turing_machine get_example_turing_machine(void) {
     struct turing_machine machine;
@@ -91,7 +91,7 @@ struct turing_machine get_example_turing_machine(void) {
     machine.transition_table[3]['#'].write_symbol  = '#';
     machine.transition_table[3]['#'].dir           = DIR_RIGHT;
     return machine;
-}   
+}
 
 int main(int argc, char* argv[]) {
     if (argc < 1 + 1) {
