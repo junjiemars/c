@@ -43,3 +43,4 @@ bin/
 
 src/endian/test_endian
 src/turning/simulate_turning_machine
+TAGS
