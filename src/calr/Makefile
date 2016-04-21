@@ -1,7 +1,10 @@
 CFLAGS ?= -Wall -g 
 
-calr.out: calr.s
+calr.out: calr.o
 	$(CC) $(CFLAGS) -o $@ $^
+
+calr.o: calr.s
+	$(CC) -c -o $@ $^
 
 calr.s: calr.i
 	$(CC) -S -o $@ $^
