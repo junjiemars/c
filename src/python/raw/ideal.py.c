@@ -1,6 +1,6 @@
 /* See compilation notes in build.python*/
 #include <Python.h>
-#include "../ideal.h"
+#include "./ideal.h"
 
 static PyObject *ideal_py(PyObject *self, PyObject *args){
     double intemp;
