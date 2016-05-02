@@ -2,7 +2,7 @@
 
 export PREFIX?=$(PWD)
 export INSTALL_BIN=$(PREFIX)/bin
-export CFLAGS=-Wall -g
+export CFLAGS=-Wall -g -std=c99 
 OS:=$(shell uname -s)
 ifeq ($(OS), Darwin)
 	DEBUG := lldb
