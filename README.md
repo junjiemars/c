@@ -2,7 +2,7 @@
 c programming basics and use cases
 
 ## Clone the source
-```shell
+```sh
 git clone https://github.com/junjiemars/c_lessons.git
 ```
 
@@ -15,6 +15,10 @@ git clone https://github.com/junjiemars/c_lessons.git
 
 ## Debug
 * make debug what=hi args=Dennis
+
+## Clean
+* make clean what=hi
+* make purge
 
 ## References
 
