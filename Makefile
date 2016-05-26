@@ -3,13 +3,19 @@
 export PREFIX?=$(PWD)
 export INSTALL_BIN=$(PREFIX)/bin
 export CFLAGS=-Wall -g -std=c99 
-OS:=$(shell uname -s)
+export OS:=$(shell uname -s)
+
 ifeq ($(OS), Darwin)
 	DEBUG := lldb
+LIB_SUFFIX := .dylib
 else
 	DEBUG := gdb --args 
+	LIB_SUFFIX := .so
 endif
+
 export DEBUG
+export LIB_SUFFIX
+
 
 default: all
 
