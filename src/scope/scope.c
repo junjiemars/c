@@ -42,7 +42,7 @@
  * scope. They are visible from their declarration until the end of the file.
  * Here, the term 'file' should be understood as the source file being compiled,
  * after all includes have been resolved.
- * 
+ *
  * Storage Class Specifiers
  * ----------
  * 1) auto: can't apply to parameter declarations. It is the default for variable
@@ -78,7 +78,7 @@
  * 1) automatic variables includes global_auto_i0/i1, i0/i1;
  * 2) uninitialized variables will be set to 0;
  *
- * 
+ *
  */
 
 /* file scope, declaration, definition with initializer  */
@@ -94,9 +94,9 @@ extern int i2;
 void sub(int, int);
 
 int main(int argc, char *argv[]) {
-  
+
   printf("file scope: i0=%i\n", i0);
-  
+
   int i0 = 321;
   printf("block scope in main: i0=%i\n", i0);
 
@@ -117,9 +117,9 @@ int main(int argc, char *argv[]) {
     goto i0;
     printf("this line bypassed via goto\n");
   }
-  
+
   {
-    /* goto lable has different namespace than objects,
+    /* goto label has different namespace than objects,
      * so u can use i0 here
      */
     i0:
@@ -135,8 +135,8 @@ int main(int argc, char *argv[]) {
 
   printf("file scope, tentative definition: i1=%i\n", i1);
 
-  printf("file scope, extern declaration: i2=%i\n", i2); 
-  
+  printf("file scope, extern declaration: i2=%i\n", i2);
+
 
 }
 
