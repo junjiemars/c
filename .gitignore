@@ -35,8 +35,11 @@ erf
 *.dSYM/
 *.i
 
-# bin directory
-bin/
+# objs directory
+objs/
+
+# editor swap files
+*.swp
 
 # Imediatly files
 *.preprocessedsimulate_turing_machine
@@ -45,3 +48,4 @@ src/endian/test_endian
 src/turning/simulate_turning_machine
 TAGS
 *.dylib
+

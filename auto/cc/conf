@@ -1,0 +1,44 @@
+
+LINK="\$(CC)"
+
+MODULE_LINK="-shared"
+
+c_include_opt="-I "
+c_compile_opt="-c"
+c_pic_opt="-fPIC"
+c_objout="-o "
+c_binout="-o "
+c_objext="o"
+c_binext=
+c_modext=".so"
+
+c_regex_dirsep="\/"
+c_dirsep='/'
+
+. auto/cc/name
+
+if test -n "$CFLAGS"; then
+
+    CC_TEST_FLAGS="$CFLAGS $C_CC_OPT"
+
+else
+
+    case $C_CC_NAME in
+        gcc)
+            . auto/cc/gcc
+        ;;
+
+        clang)
+            . auto/cc/clang
+        ;;
+
+        msvc*)
+            . auto/cc/msvc
+    ;;
+    esac
+
+fi
+
+CFLAGS="$CFLAGS $C_CC_OPT"
+C_TEST_LD_OPT="$C_LD_OPT"
+

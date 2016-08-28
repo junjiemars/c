@@ -1,0 +1,71 @@
+
+
+
+case ".$CL_BIN_PATH" in
+    ./*)
+    ;;
+
+    *)
+        CL_BIN_PATH=$CL_PREFIX/$CL_BIN_PATH
+    ;;
+esac
+
+
+case ".$CL_LIB_PATH" in
+    ./*)
+    ;;
+
+    *)
+        CL_LIB_PATH=$CL_PREFIX/$CL_LIB_PATH
+    ;;
+esac
+
+CL_LIB_PATH=`dirname $CL_LIB_PATH/.`
+
+
+case ".$CL_CONF_PATH" in
+    ./*)
+    ;;
+
+    *)
+        CL_CONF_PATH=$CL_PREFIX/$CL_CONF_PATH
+    ;;
+esac
+
+
+CL_CONF_PREFIX=`dirname $CL_CONF_PATH`
+
+
+case ".$CL_PID_PATH" in
+    ./*)
+    ;;
+
+    *)
+        CL_PID_PATH=$CL_PREFIX/$CL_PID_PATH
+    ;;
+esac
+
+
+case ".$CL_ERROR_LOG_PATH" in
+    ./* | .)
+    ;;
+
+    *)
+        CL_ERROR_LOG_PATH=$CL_PREFIX/$CL_ERROR_LOG_PATH
+    ;;
+esac
+
+
+# create Makefile
+
+cat << END >> Makefile
+
+build:
+	\$(MAKE) -f $CL_MAKEFILE
+
+install: 
+	\$(MAKE) -f $CL_MAKEFILE install
+
+END
+
+

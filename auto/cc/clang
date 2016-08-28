@@ -1,0 +1,24 @@
+
+# clang
+
+C_CLANG_VER=`$CC -v 2>&1 | grep '\(clang\|LLVM\) version' 2>&1 \
+                         | sed -e 's/^.* version \(.*\)/\1/'`
+
+echo " + clang version: $C_CLANG_VER"
+
+# optimizations
+
+C_CLANG_OPT="-O"
+
+# warnings
+
+CFLAGS="$CFLAGS $C_CLANG_OPT -Wall -Wextra -Wpointer-arith"
+CFLAGS="$CFLAGS -Wconditional-uninitialized"
+CFLAGS="$CFLAGS -Wno-unused-parameter"
+
+# stop on warning
+CFLAGS="$CFLAGS -Werror"
+
+# debug
+CFLAGS="$CFLAGS -g"
+

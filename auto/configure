@@ -1,0 +1,38 @@
+#!/bin/sh
+
+LCL_ALL=C
+export LCL_ALL
+
+. auto/options
+. auto/init
+
+test -d "$CL_OBJS" || mkdir -p $CL_OBJS
+
+if test -z "$CL_PLATFORM"; then
+  echo "checking for OS"
+  
+  CL_SYSTEM=`uname -s 2>/dev/null`
+  CL_RELEASE=`uname -r 2>/dev/null`
+  CL_MACHINE=`uname -m 2>/dev/null`
+  
+  echo " + $CL_SYSTEM $CL_RELEASE $CL_MACHINE"
+  
+  CL_PLATEFORM="$CL_SYSTEM:$CL_RELEASE:$CL_MACHINE";
+  
+  case "$CL_SYSTEM" in
+    MSYS_NT*)
+      CL_PLATFORM=win32
+    ;;
+  esac
+  
+else
+  echo "building for $CL_PLATFORM"
+  CL_SYSTEM=$CL_PLATFORM
+fi
+
+. auto/cc/conf
+. auto/make
+. auto/install
+
+
+. auto/summary

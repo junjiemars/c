@@ -1,0 +1,20 @@
+
+echo "checking for $C_SYSTEM specific features"
+
+case "$C_PLATFORM" in
+
+    Linux:*)
+        . auto/os/linux
+    ;;
+
+    Darwin:*)
+        . auto/os/darwin
+    ;;
+
+    win32)
+        . auto/os/win32
+    ;;
+
+esac
+
+

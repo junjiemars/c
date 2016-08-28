@@ -1,0 +1,14 @@
+
+# gcc
+
+C_GCC_VER=`$CC -v 2>&1 | grep 'gcc version' 2>&1 \
+                       | sed -e 's/^.* version \(.*\)/\1'`
+
+echo " + gcc version: $C_GCC_VER"
+
+# stop on warning
+CFLAGS="$CFLAGS -Werror"
+
+# debug
+CFLAGS="$CFLAGS -g"
+

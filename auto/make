@@ -1,0 +1,79 @@
+
+echo "creating $CL_MAKEFILE"
+
+mkdir -p $CL_OBJS/bin \
+         $CL_OBJS/lib \
+				 $CL_OBJS/log
+
+cat << END > $CL_MAKEFILE
+
+CC = $CC
+CFLAGS = $CFLAGS
+LINK = $LINK
+
+defualt: build
+
+END
+
+
+cl_sticks=
+cl_deps=
+
+if [ "$H_HI" = "yes" ]; then
+  cl_sticks=objs/$CL_BIN_PATH/hi${cl_sticks:+ $cl_sticks}
+fi
+
+if [ "$H_BITS" = "yes" ]; then
+  cl_sticks=objs/$CL_BIN_PATH/bits${cl_sticks:+ $cl_sticks}
+fi
+
+cl_build="build:${cl_deps:+ modules}${cl_sticks:+ binaries}"
+
+if [ "$cl_build" != "build:" ]; then
+
+	cat << END >> $CL_MAKEFILE
+
+$cl_build
+
+END
+
+fi
+
+if [ -n "$cl_deps" ]; then
+
+	cat << END >> $CL_MAKEFILE
+
+modules: $cl_deps
+END
+
+	for dep in $cl_deps; do
+
+		cat << END >> $CL_MAKEFILE
+		
+END
+
+	done
+
+fi
+
+if [ -n "$cl_sticks" ]; then
+
+	cat << END >> $CL_MAKEFILE
+	
+binaries: $cl_sticks
+
+END
+	
+	for stick in $cl_sticks; do
+
+		stick_bin=`basename $stick`
+		stick_path=src/$stick_bin
+
+		echo -e "`cat $stick_path/Makefile`" \
+			| sed -e "s#^$stick_bin\.out:#$stick:#" \
+						-e "s#\([a-zA-Z_]*\)\.c#$stick_path/\1\.c#g" \
+						-e "s#-o\ *$stick_bin\.out\$#-o $stick#g" >> $CL_MAKEFILE
+
+	done
+
+fi

@@ -1,0 +1,42 @@
+
+CL_MAKEFILE=$CL_OBJS/Makefile
+
+CL_AUTO_HEADERS_H=$CL_OBJS/cl_auto_headers.h
+CL_AUTO_CONFIG_H=$CL_OBJS/cl_auto_config.h
+
+CL_AUTOTEST=$CL_OBJS/autotest
+CL_AUTOCONF_ERR=$CL_OBJS/autoconf.err
+
+# STUBs
+CL_ERR=$CL_OBJS/autoconf.err
+MAKEFILE=$CL_OBJS/Makefile
+
+
+# check the echo's "-n" option and "\c" capability
+
+if echo "test\c" | grep c >/dev/null; then
+
+    if echo -n test | grep n >/dev/null; then
+        cl_n=
+        cl_c=
+
+    else
+        cl_n=-n
+        cl_c=
+    fi
+
+else
+    cl_n=
+    cl_c='\c'
+fi
+
+# creating Makefile
+
+cat << END > Makefile
+
+default:	build
+
+clean:
+	rm -rf Makefile $CL_OBJS
+END
+

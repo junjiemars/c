@@ -1,45 +1,12 @@
-# Top level makefile, the real shit is at src/Makefile
 
-export PREFIX?=$(PWD)
-export INSTALL_BIN=$(PREFIX)/bin
-export CFLAGS=-Wall -g -std=c99 
-export OS:=$(shell uname -s)
-
-ifeq ($(OS), Darwin)
-	DEBUG := lldb
-LIB_SUFFIX := .dylib
-else
-	DEBUG := gdb --args 
-	LIB_SUFFIX := .so
-endif
-
-export DEBUG
-export LIB_SUFFIX
-
-
-default: all
-
-.DEFAULT:
-	@(MAKE=${MAKE} ./auto.sh)
-
-run:
-	@(cd src/$(what) && $(MAKE) run)
-
-debug:
-	@(cd src/$(what) && $(MAKE) debug)
+default:	build
 
 clean:
-	@(cd src/$(what) && $(MAKE) clean)
+	rm -rf Makefile objs
 
-purge:
-	@(MAKE=${MAKE} ./auto.sh clean)
+build:
+	$(MAKE) -f objs/Makefile
 
-install: all
-	@(test -d $(INSTALL_BIN) || mkdir -p $(INSTALL_BIN))
-	@(MAKE=${MAKE} ./auto.sh install)
+install: 
+	$(MAKE) -f objs/Makefile install
 
-uninstall:
-	-(rm -f $(INSTALL_BIN)/*)
-
-
-.PHONY: install run debug uninstall
