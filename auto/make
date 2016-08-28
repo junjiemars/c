@@ -69,7 +69,7 @@ END
 		stick_bin=`basename $stick`
 		stick_path=src/$stick_bin
 
-		echo -e "`cat $stick_path/Makefile`" \
+		echo $cl_n "`cat $stick_path/Makefile`" \
 			| sed -e "s#^$stick_bin\.out:#$stick:#" \
 						-e "s#\([a-zA-Z_]*\)\.c#$stick_path/\1\.c#g" \
 						-e "s#-o\ *$stick_bin\.out\$#-o $stick#g" >> $CL_MAKEFILE

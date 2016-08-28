@@ -38,6 +38,10 @@ erf
 # objs directory
 objs/
 
+# makefiles
+Makefile
+objs/Makefile
+
 # editor swap files
 *.swp
 
