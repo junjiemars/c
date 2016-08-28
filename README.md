@@ -1,24 +1,17 @@
 # C Lessons
-c programming basics and use cases
+C programming basics and use cases
 
-## Clone the source
+* [Build](#build)
+* [References](#references)
+
+## Build 
 ```sh
-git clone https://github.com/junjiemars/c_lessons.git
+$ git clone https://github.com/junjiemars/c_lessons.git
+
+$ auto/configure --has-hi
+$ make
+$ make install
 ```
-
-## Build from source
-* make
-* make install
-
-## Run 
-* make run what=hi args=Dennis
-
-## Debug
-* make debug what=hi args=Dennis
-
-## Clean
-* make clean what=hi
-* make purge
 
 ## References
 
