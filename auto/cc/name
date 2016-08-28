@@ -1,10 +1,10 @@
 
 # cc name
 
-if [ "$C_PLATFORM" != win32 ]; then
-    c_feature="C compiler"
+if [ "$CL_PLATFORM" != win32 ]; then
+    cl_feature="C compiler"
 
-    if [ ".$c_found" = ".no" ]; then
+    if [ ".$cl_found" = ".no" ]; then
         echo
         echo $0: error: C compiler $CC is not found
         echo
@@ -13,18 +13,18 @@ if [ "$C_PLATFORM" != win32 ]; then
 fi
 
 if [ "$CC" = cl ]; then
-    C_CC_NAME=msvc
+    CL_CC_NAME=msvc
     echo " + using Microsoft Visual C++ compiler"
 
 elif `$CC -v 2>&1 | grep 'gcc version' >/dev/null 2>&1`; then
-    C_CC_NAME=gcc
+    CL_CC_NAME=gcc
     echo " + using GNU C compiler"
 
 elif `$CC -v 2>&1 | grep '\(clang\|LLVM\) version' >/dev/null 2>&1`; then
-    C_CC_NAME=clang
+    CL_CC_NAME=clang
     echo " + using Clang C compiler"
 
 else
-    C_CC_NAME=unknown
+    CL_CC_NAME=unknown
 
 fi

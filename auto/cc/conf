@@ -3,27 +3,27 @@ LINK="\$(CC)"
 
 MODULE_LINK="-shared"
 
-c_include_opt="-I "
-c_compile_opt="-c"
-c_pic_opt="-fPIC"
-c_objout="-o "
-c_binout="-o "
-c_objext="o"
-c_binext=
-c_modext=".so"
+cl_include_opt="-I "
+cl_compile_opt="-c"
+cl_pic_opt="-fPIC"
+cl_objout="-o "
+cl_binout="-o "
+cl_objext="o"
+cl_binext=
+cl_modext=".so"
 
-c_regex_dirsep="\/"
-c_dirsep='/'
+cl_regex_dirsep="\/"
+cl_dirsep='/'
 
 . auto/cc/name
 
 if test -n "$CFLAGS"; then
 
-    CC_TEST_FLAGS="$CFLAGS $C_CC_OPT"
+    CC_TEST_FLAGS="$CFLAGS $CL_CC_OPT"
 
 else
 
-    case $C_CC_NAME in
+    case $CL_CC_NAME in
         gcc)
             . auto/cc/gcc
         ;;
@@ -39,6 +39,6 @@ else
 
 fi
 
-CFLAGS="$CFLAGS $C_CC_OPT"
-C_TEST_LD_OPT="$C_LD_OPT"
+CFLAGS="$CFLAGS $CL_CC_OPT"
+CL_TEST_LD_OPT="$CL_LD_OPT"
 
