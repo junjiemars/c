@@ -4,3 +4,11 @@
 echo
 echo "Configuration summary"
 
+cat << END
+  c_lessons path prefix: "$CL_PREFIX"
+  c_lessons binary file: "$CL_BIN_PATH"
+  c_lessons modules path: "$CL_LIB_PATH"
+  c_lessons configuration prefix: "$CL_CONF_PREFIX"
+  c_lessons configuration file: "$CL_CONF_PATH"
+  c_lessons pid file: "$CL_PID_PATH"
+END

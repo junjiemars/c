@@ -1,7 +1,7 @@
 
-echo "checking for $C_SYSTEM specific features"
+echo "checking for $CL_SYSTEM specific features"
 
-case "$C_PLATFORM" in
+case "$CL_PLATFORM" in
 
     Linux:*)
         . auto/os/linux
