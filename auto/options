@@ -36,24 +36,25 @@ do
   case "$option" in
     --help)                          help=yes                   ;;
     
-    --prefix=)                       CL_PREFIX="!"             ;;
-    --prefix=*)                      CL_PREFIX="$value"        ;;
-    --sbin-path=*)                   CL_BIN_PATH="$value"     ;;
-    --modules-path=*)                CL_LIB_PATH="$value"  ;;
-    --conf-path=*)                   CL_CONF_PATH="$value"     ;;
-    --error-log-path=*)              CL_ERROR_LOG_PATH="$value";;
-    --pid-path=*)                    CL_PID_PATH="$value"      ;;
-    --lock-path=*)                   CL_LOCK_PATH="$value"     ;;
-    --user=*)                        CL_USER="$value"          ;;
-    --group=*)                       CL_GROUP="$value"         ;;
+    --prefix=)                       CL_PREFIX="!"              ;;
+    --prefix=*)                      CL_PREFIX="$value"         ;;
+    --sbin-path=*)                   CL_BIN_PATH="$value"       ;;
+    --modules-path=*)                CL_LIB_PATH="$value"  		  ;;
+    --conf-path=*)                   CL_CONF_PATH="$value"      ;;
+    --error-log-path=*)              CL_ERROR_LOG_PATH="$value ";;
+    --pid-path=*)                    CL_PID_PATH="$value"       ;;
+    --lock-path=*)                   CL_LOCK_PATH="$value"      ;;
+    --user=*)                        CL_USER="$value"           ;;
+    --group=*)                       CL_GROUP="$value"          ;;
     
-    --crossbuild=*)                  CL_PLATFORM="$value"      ;;
+    --crossbuild=*)                  CL_PLATFORM="$value"       ;;
+    --build=*)                       CL_BUILD="$value"          ;;
+    --builddir=*)                    CL_OBJS="$value"           ;;
     
-    --build=*)                       CL_BUILD="$value"         ;;
-    --builddir=*)                    CL_OBJS="$value"          ;;
-    
-		--has-hi)                        H_HI=yes                  ;;
-    --has-bits)                      H_BITS=yes                ;;
+		--with-debug)                    CL_DEBUG=yes               ;;
+
+		--has-hi)                        H_HI=yes                   ;;
+    --has-bits)                      H_BITS=yes                 ;;
     
     *)
       echo "$0: error: invalid option \"$option\""
@@ -80,12 +81,14 @@ cat << END
   --pid-path=PATH                    set pid pathname
   --lock-path=PATH                   set lock pathname
 
+  --crossbuild                       set cross build
   --build=NAME                       set build name
   --builddir=DIR                     set build directory
 
-	--has-hi                           enable hi stick
-  --has-bits                         enable bits stick 
   --with-debug                       enable debug logging
+
+  --has-hi                           enable hi stick
+  --has-bits                         enable bits stick 
 
 END
 
