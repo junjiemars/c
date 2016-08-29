@@ -113,11 +113,11 @@ CL_BIN_PATH=${CL_BIN_PATH:-bin}
 CL_LIB_PATH=${CL_LIB_PATH:-lib}
 CL_CONF_PATH=${CL_CONF_PATH:-conf}
 CL_CONF_PREFIX=`dirname $CL_CONF_PATH`
-CL_PID_PATH=${CL_PID_PATH:-logs}
-CL_LOCK_PATH=${CL_LOCK_PATH:-logs}
+CL_PID_PATH=${CL_PID_PATH:-log}
+CL_LOCK_PATH=${CL_LOCK_PATH:-log}
 
 if [ ".$CL_ERROR_LOG_PATH" = ".stderr" ]; then
   CL_ERROR_LOG_PATH=
 else
-  CL_ERROR_LOG_PATH=${CL_ERROR_LOG_PATH:-logs/error.log}
+  CL_ERROR_LOG_PATH=${CL_ERROR_LOG_PATH:-log/error.log}
 fi

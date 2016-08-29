@@ -5,6 +5,7 @@ export LCL_ALL
 
 . auto/options
 . auto/init
+. auto/sources
 
 test -d "$CL_OBJS" || mkdir -p $CL_OBJS
 

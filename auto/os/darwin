@@ -1,1 +1,5 @@
 
+
+have=CL_DARWIN . auto/have_headers
+
+CL_INCS="$UNIX_INCS"
