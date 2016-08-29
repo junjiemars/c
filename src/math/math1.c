@@ -17,8 +17,10 @@ int is_na(double in){
 
 	char *cc = (char *)(&in);
 	char *cr = (char *)(&ref);
-	for (int i=0; i< sizeof(double); i++)
+
+	for (size_t i = 0; i < sizeof(double); i++)
 		if (cc[i] != cr[i]) return 0;
+
 	return 1;
 }
 
