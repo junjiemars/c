@@ -9,6 +9,12 @@ export LCL_ALL
 
 test -d "$CL_OBJS" || mkdir -p $CL_OBJS
 
+echo > $CL_AUTO_HEADERS_H
+echo > $CL_AUTOCONF_ERR
+
+
+echo "#define CL_CONFIGURE \"$CL_CONFIGURE\"" > $CL_AUTO_CONFIG_H
+
 if test -z "$CL_PLATFORM"; then
   echo "checking for OS"
   
@@ -21,7 +27,7 @@ if test -z "$CL_PLATFORM"; then
   CL_PLATEFORM="$CL_SYSTEM:$CL_RELEASE:$CL_MACHINE";
   
   case "$CL_SYSTEM" in
-    MSYS_NT*)
+    MINGW32_*)
       CL_PLATFORM=win32
     ;;
   esac
@@ -31,7 +37,16 @@ else
   CL_SYSTEM=$CL_PLATFORM
 fi
 
+if [ "$CL_PLATFORM" != win32 ]; then
+	. auto/headers
+fi
+
 . auto/cc/conf
+
+if [ "$CL_PLATFORM" != win32 ]; then
+	. auto/unix
+fi
+
 . auto/os/conf
 
 
