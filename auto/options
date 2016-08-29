@@ -57,6 +57,7 @@ do
     --has-bits)                      H_BITS=yes                 ;;
     --has-env)                       H_ENV=yes                  ;;
     --has-endian)                    H_ENDIAN=yes               ;;
+    --has-fibo)                      H_FIBO=yes               ;;
     
     *)
       echo "$0: error: invalid option \"$option\""
@@ -93,6 +94,7 @@ cat << END
   --has-bits                         enable bits stick 
 	--has-env                          enable env stick
 	--has-endian                       enable endian stick
+	--has-fibo                         enable fibo stick
 
 END
 
