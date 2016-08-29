@@ -67,12 +67,12 @@ END
 	for stick in $cl_sticks; do
 
 		stick_bin=`basename $stick`
-		stick_path=src/$stick_bin
+		stick_src=src/$stick_bin
 
-		echo $cl_n "`cat $stick_path/Makefile`" \
-			| sed -e "s#^$stick_bin\.out:#$stick:#" \
-						-e "s#\([a-zA-Z_]*\)\.c#$stick_path/\1\.c#g" \
-						-e "s#-o\ *$stick_bin\.out\$#-o $stick#g" >> $CL_MAKEFILE
+		echo $cl_n "`cat $stick_src/Makefile`" \
+			| sed -e "s@$stick_bin\.out@$stick@g" \
+						-e "s@\([-_a-zA-Z0-9][-_a-zA-Z0-9]*\.[a-z][a-z]*\)@$stick_src\/\1@g" \
+		>> $CL_MAKEFILE 
 
 	done
 

@@ -2,7 +2,7 @@
 # gcc
 
 CL_GCC_VER=`$CC -v 2>&1 | grep 'gcc version' 2>&1 \
-                       | sed -e 's/^.* version \(.*\)/\1'`
+                        | sed -e 's/^.* version \(.*\)/\1/'`
 
 echo " + gcc version: $CL_GCC_VER"
 

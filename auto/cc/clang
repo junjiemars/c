@@ -2,7 +2,7 @@
 # clang
 
 CL_CLANG_VER=`$CC -v 2>&1 | grep '\(clang\|LLVM\) version' 2>&1 \
-                         | sed -e 's/^.* version \(.*\)/\1/'`
+                          | sed -e 's/^.* version \(.*\)/\1/'`
 
 echo " + clang version: $CL_CLANG_VER"
 
