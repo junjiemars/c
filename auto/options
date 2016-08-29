@@ -57,7 +57,8 @@ do
     --has-bits)                      H_BITS=yes                 ;;
     --has-env)                       H_ENV=yes                  ;;
     --has-endian)                    H_ENDIAN=yes               ;;
-    --has-fibo)                      H_FIBO=yes               ;;
+    --has-fibo)                      H_FIBO=yes                 ;;
+    --has-math)                      H_MATH=yes                 ;;
     
     *)
       echo "$0: error: invalid option \"$option\""
@@ -92,9 +93,10 @@ cat << END
 
   --has-hi                           enable hi stick
   --has-bits                         enable bits stick 
-	--has-env                          enable env stick
-	--has-endian                       enable endian stick
-	--has-fibo                         enable fibo stick
+  --has-env                          enable env stick
+  --has-endian                       enable endian stick
+  --has-fibo                         enable fibo stick
+  --has-math                         enable math stick
 
 END
 

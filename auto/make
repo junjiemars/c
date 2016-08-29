@@ -39,6 +39,10 @@ if [ "$H_FIBO" = "yes" ]; then
 	cl_sticks=objs/$CL_BIN_PATH/fibo${cl_sticks:+ $cl_sticks}
 fi
 
+if [ "$H_MATH" = "yes" ]; then
+	cl_sticks=objs/$CL_BIN_PATH/math${cl_sticks:+ $cl_sticks}
+fi
+
 cl_build="build:${cl_deps:+ modules}${cl_sticks:+ binaries}"
 
 if [ "$cl_build" != "build:" ]; then
