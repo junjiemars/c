@@ -27,6 +27,14 @@ if [ "$H_BITS" = "yes" ]; then
   cl_sticks=objs/$CL_BIN_PATH/bits${cl_sticks:+ $cl_sticks}
 fi
 
+if [ "$H_ENV" = "yes" ]; then
+	cl_sticks=objs/$CL_BIN_PATH/env${cl_sticks:+ $cl_sticks}
+fi
+
+if [ "$H_ENDIAN" = "yes" ]; then
+	cl_sticks=objs/$CL_BIN_PATH/endian${cl_sticks:+ $cl_sticks}
+fi
+
 cl_build="build:${cl_deps:+ modules}${cl_sticks:+ binaries}"
 
 if [ "$cl_build" != "build:" ]; then
