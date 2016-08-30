@@ -86,7 +86,7 @@ END
 		stick_bin=`basename $stick`
 		stick_src=src/$stick_bin
 
-		. $stick_src/configure
+		[ -f $stick_src/configure ] && . $stick_src/configure
 
 		src_path=$stick_src/
 		lib_path=objs/lib/

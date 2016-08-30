@@ -1,4 +1,5 @@
 
-bits.out: bits.c
-	$(CC) $(CFLAGS) bits.c -o bits.out
+
+$(bin_path)bits: $(src_path)bits.c
+	$(CC) $(CFLAGS) $(src_path)bits.c -o $(bin_path)bits
 
