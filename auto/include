@@ -1,6 +1,6 @@
 
 
-echo $cl_n "checking for $cl_include ...$ngx_c"
+echo $cl_n "checking for $cl_include ...$cl_c"
 
 cat << END >> $CL_AUTOCONF_ERR
 
