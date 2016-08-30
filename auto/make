@@ -11,7 +11,7 @@ CC = $CC
 CFLAGS = $CFLAGS
 CPP = $CPP
 LINK = $LINK
-CL_INCS = -I$CL_OBJS
+CL_INCS = -I $CL_OBJS
 
 defualt: build
 
