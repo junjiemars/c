@@ -12,14 +12,14 @@ END
 cl_found=no
 
 if test -n "$cl_feature_name"; then
-    cl_have_feature=`echo $cl_feature_name \
-                     | tr abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ`
+	cl_have_feature=`echo $cl_feature_name \
+                   | tr abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ`
 fi
 
 if test -n "$cl_feature_path"; then
-    for cl_temp in $cl_feature_path; do
-        cl_feature_inc_path="$cl_feature_inc_path -I $cl_temp"
-    done
+  for cl_temp in $cl_feature_path; do
+		cl_feature_inc_path="$cl_feature_inc_path -I $cl_temp"
+  done
 fi
 
 cat << END > $CL_AUTOTEST.c
@@ -45,75 +45,75 @@ eval "/bin/sh -c \"$cl_test\" >> $CL_AUTOCONF_ERR 2>&1"
 
 if [ -x $CL_AUTOTEST ]; then
 
-    case "$cl_feature_run" in
+  case "$cl_feature_run" in
 
-        yes)
-            # /bin/sh is used to intercept "Killed" or "Abort trap" messages
-            if /bin/sh -c $CL_AUTOTEST >> $CL_AUTOCONF_ERR 2>&1; then
-                echo " found"
-                cl_found=yes
+    yes)
+      # /bin/sh is used to intercept "Killed" or "Abort trap" messages
+      if /bin/sh -c $CL_AUTOTEST >> $CL_AUTOCONF_ERR 2>&1; then
+        echo " found"
+        cl_found=yes
 
-                if test -n "$cl_feature_name"; then
-                    have=$cl_have_feature . auto/have
-                fi
+        if test -n "$cl_feature_name"; then
+          have=$cl_have_feature . auto/have
+        fi
 
-            else
-                echo " found but is not working"
-            fi
-        ;;
+      else
+        echo " found but is not working"
+      fi
+    ;;
 
-        value)
-            # /bin/sh is used to intercept "Killed" or "Abort trap" messages
-            if /bin/sh -c $CL_AUTOTEST >> $CL_AUTOCONF_ERR 2>&1; then
-                echo " found"
-                cl_found=yes
+    value)
+      # /bin/sh is used to intercept "Killed" or "Abort trap" messages
+      if /bin/sh -c $CL_AUTOTEST >> $CL_AUTOCONF_ERR 2>&1; then
+        echo " found"
+        cl_found=yes
 
-                cat << END >> $CL_AUTO_CONFIG_H
+        cat << END >> $CL_AUTO_CONFIG_H
 
 #ifndef $cl_feature_name
 #define $cl_feature_name  `$CL_AUTOTEST`
 #endif
 
 END
-            else
-                echo " found but is not working"
-            fi
-        ;;
+      else
+        echo " found but is not working"
+      fi
+    ;;
 
-        bug)
-            # /bin/sh is used to intercept "Killed" or "Abort trap" messages
-            if /bin/sh -c $CL_AUTOTEST >> $CL_AUTOCONF_ERR 2>&1; then
-                echo " not found"
+    bug)
+      # /bin/sh is used to intercept "Killed" or "Abort trap" messages
+      if /bin/sh -c $CL_AUTOTEST >> $CL_AUTOCONF_ERR 2>&1; then
+        echo " not found"
 
-            else
-                echo " found"
-                cl_found=yes
+      else
+        echo " found"
+        cl_found=yes
 
-                if test -n "$cl_feature_name"; then
-                    have=$cl_have_feature . auto/have
-                fi
-            fi
-        ;;
+        if test -n "$cl_feature_name"; then
+          have=$cl_have_feature . auto/have
+        fi
+      fi
+    ;;
 
-        *)
-            echo " found"
-            cl_found=yes
+    *)
+      echo " found"
+      cl_found=yes
 
-            if test -n "$cl_feature_name"; then
-                have=$cl_have_feature . auto/have
-            fi
-        ;;
+      if test -n "$cl_feature_name"; then
+        have=$cl_have_feature . auto/have
+      fi
+    ;;
 
-    esac
+  esac
 
 else
-    echo " not found"
+  echo " not found"
 
-    echo "----------"    >> $CL_AUTOCONF_ERR
-    cat $CL_AUTOTEST.c   >> $CL_AUTOCONF_ERR
-    echo "----------"    >> $CL_AUTOCONF_ERR
-    echo $cl_test        >> $CL_AUTOCONF_ERR
-    echo "----------"    >> $CL_AUTOCONF_ERR
+  echo "----------"    >> $CL_AUTOCONF_ERR
+  cat $CL_AUTOTEST.c   >> $CL_AUTOCONF_ERR
+  echo "----------"    >> $CL_AUTOCONF_ERR
+  echo $cl_test        >> $CL_AUTOCONF_ERR
+  echo "----------"    >> $CL_AUTOCONF_ERR
 fi
 
 rm -rf $CL_AUTOTEST*
