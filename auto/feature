@@ -48,7 +48,7 @@ if [ -x $CL_AUTOTEST ]; then
   case "$cl_feature_run" in
 
     yes)
-      # /bin/sh is used to intercept "Killed" or "Abort trap" messages
+
       if /bin/sh -c $CL_AUTOTEST >> $CL_AUTOCONF_ERR 2>&1; then
         echo " found"
         cl_found=yes
@@ -63,7 +63,7 @@ if [ -x $CL_AUTOTEST ]; then
     ;;
 
     value)
-      # /bin/sh is used to intercept "Killed" or "Abort trap" messages
+
       if /bin/sh -c $CL_AUTOTEST >> $CL_AUTOCONF_ERR 2>&1; then
         echo " found"
         cl_found=yes
@@ -81,7 +81,7 @@ END
     ;;
 
     bug)
-      # /bin/sh is used to intercept "Killed" or "Abort trap" messages
+
       if /bin/sh -c $CL_AUTOTEST >> $CL_AUTOCONF_ERR 2>&1; then
         echo " not found"
 
