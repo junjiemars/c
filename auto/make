@@ -20,6 +20,9 @@ cl_sticks=
 cl_deps=
 
 if [ "$H_HI" = "yes" ]; then
+	if [ "$CL_PLATFORM" != win32 ]; then
+		cl_include="stdio.h" . auto/include
+	fi
   cl_sticks=objs/$CL_BIN_PATH/hi${cl_sticks:+ $cl_sticks}
 fi
 

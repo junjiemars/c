@@ -37,7 +37,9 @@ else
     ;;
     esac
 
+		CC_TEST_FLAGS="$CC_TEST_FLAGS $CL_CC_OPT"
 fi
+
 
 CFLAGS="$CFLAGS $CL_CC_OPT"
 CL_TEST_LD_OPT="$CL_LD_OPT"

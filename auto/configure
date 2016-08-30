@@ -37,20 +37,18 @@ else
   CL_SYSTEM=$CL_PLATFORM
 fi
 
-if [ "$CL_PLATFORM" != win32 ]; then
-	. auto/headers
-fi
-
 . auto/cc/conf
 
-if [ "$CL_PLATFORM" != win32 ]; then
-	. auto/unix
-fi
+
+#if [ "$CL_PLATFORM" != win32 ]; then
+#	. auto/unix
+#fi
 
 . auto/os/conf
 
 
 . auto/make
+
 . auto/install
 
 

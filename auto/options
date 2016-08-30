@@ -6,6 +6,7 @@ CL_BIN_PATH=
 CL_LIB_PATH=
 
 CC=${CC:-cc}
+CPP=
 CL_OBJS=objs
 CL_SRC=src
 
