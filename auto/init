@@ -1,4 +1,5 @@
 
+
 CL_MAKEFILE=$CL_OBJS/Makefile
 
 CL_AUTO_HEADERS_H=$CL_OBJS/cl_auto_headers.h
@@ -16,19 +17,20 @@ MAKEFILE=$CL_OBJS/Makefile
 
 if echo "test\c" | grep c >/dev/null; then
 
-    if echo -n test | grep n >/dev/null; then
-        cl_n=
-        cl_c=
+  if echo -n test | grep n >/dev/null; then
+    cl_n=
+    cl_c=
 
-    else
-        cl_n=-n
-        cl_c=
-    fi
+  else
+    cl_n=-n
+    cl_c=
+  fi
 
 else
-    cl_n=
-    cl_c='\c'
+  cl_n=
+  cl_c='\c'
 fi
+
 
 # creating Makefile
 
