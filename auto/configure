@@ -40,9 +40,6 @@ fi
 . auto/cc/conf
 
 
-#if [ "$CL_PLATFORM" != win32 ]; then
-#	. auto/unix
-#fi
 
 . auto/os/conf
 

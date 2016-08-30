@@ -22,6 +22,14 @@ cl_deps=
 if [ "$H_HI" = "yes" ]; then
 	if [ "$CL_PLATFORM" != win32 ]; then
 		cl_include="stdio.h" . auto/include
+		cl_feature="localtime_r()"
+		cl_feature_name="CL_HAVE_LOCALTIME_R"
+		cl_feature_run=no
+		cl_feature_incs="#include <time.h>"
+		cl_feature_path=
+		cl_feature_libs=
+		cl_feature_test="struct tm t; time_t c=0; localtime_r(&c, &t)"
+		. auto/feature
 	fi
   cl_sticks=objs/$CL_BIN_PATH/hi${cl_sticks:+ $cl_sticks}
 fi
