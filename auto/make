@@ -9,6 +9,7 @@ cat << END > $CL_MAKEFILE
 
 CC = $CC
 CFLAGS = $CFLAGS
+CPP = $CPP
 LINK = $LINK
 
 defualt: build
