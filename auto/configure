@@ -37,12 +37,10 @@ else
   CL_SYSTEM=$CL_PLATFORM
 fi
 
+
 . auto/cc/conf
 
-
-
 . auto/os/conf
-
 
 . auto/make
 

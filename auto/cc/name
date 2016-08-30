@@ -2,7 +2,15 @@
 # cc name
 
 if [ "$CL_PLATFORM" != win32 ]; then
+
     cl_feature="C compiler"
+    cl_feature_name=
+    cl_feature_run=yes
+    cl_feature_incs=
+    cl_feature_path=
+    cl_feature_libs=
+    cl_feature_test=
+    . auto/feature
 
     if [ ".$cl_found" = ".no" ]; then
         echo
@@ -10,6 +18,7 @@ if [ "$CL_PLATFORM" != win32 ]; then
         echo
         exit 1
     fi
+
 fi
 
 if [ "$CC" = cl ]; then
