@@ -22,17 +22,6 @@ cl_sticks=
 cl_deps=
 
 if [ "$H_HI" = "yes" ]; then
-	if [ "$CL_PLATFORM" != win32 ]; then
-		cl_include="stdio.h" . auto/include
-		cl_feature="localtime_r()"
-		cl_feature_name="CL_HAVE_LOCALTIME_R"
-		cl_feature_run=no
-		cl_feature_incs="#include <time.h>"
-		cl_feature_path=
-		cl_feature_libs=
-		cl_feature_test="struct tm t; time_t c=0; localtime_r(&c, &t)"
-		. auto/feature
-	fi
   cl_sticks=objs/$CL_BIN_PATH/hi${cl_sticks:+ $cl_sticks}
 fi
 
@@ -94,13 +83,19 @@ binaries: $cl_sticks
 END
 	
 	for stick in $cl_sticks; do
-
 		stick_bin=`basename $stick`
 		stick_src=src/$stick_bin
 
+		. $stick_src/configure
+
+		src_path=$stick_src/
+		lib_path=objs/lib/
+		bin_path=objs/bin/
+
 		echo $cl_n "`cat $stick_src/Makefile`" \
-			| sed -e "s@$stick_bin\.out@$stick@g" \
-						-e "s@\([-_a-zA-Z0-9][-_a-zA-Z0-9]*\.[a-z][a-z]*\)@$stick_src\/\1@g" \
+			| sed -e "s@\$(src_path)@$src_path@g" \
+						-e "s@\$(lib_path)@$lib_path@g" \
+						-e "s@\$(bin_path)@$bin_path@g" \
 		>> $CL_MAKEFILE 
 
 	done
