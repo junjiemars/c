@@ -46,7 +46,7 @@ fi
 
 case ".$CL_PREFIX" in
 	.)
-    CL_PREFIX=${CL_PREFIX:-/opt/run/nginx}
+    CL_PREFIX=${CL_PREFIX:-/opt/run}
     have=CL_PREFIX value="\"$CL_PREFIX/\"" . auto/define
 	;;
 
