@@ -3,17 +3,17 @@ echo "checking for $CL_SYSTEM specific features"
 
 case "$CL_PLATFORM" in
 
-    Linux:*)
-        . auto/os/linux
-    ;;
-
-    Darwin:*)
-        . auto/os/darwin
-    ;;
-
-    win32)
-        . auto/os/win32
-    ;;
+	Linux:*)
+		. auto/os/linux
+	;;
+	
+	Darwin:*)
+		. auto/os/darwin
+	;;
+	
+	win32)
+		. auto/os/win32
+	;;
 
 esac
 
