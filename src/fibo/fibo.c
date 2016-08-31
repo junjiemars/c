@@ -44,11 +44,11 @@ int main(int argc, char * const argv[]) {
 		switch (ch) {
 			case 's':
 				for (int i=0; i<10; i++) {
-					printf("%lli\n", fibo_static());
+					printf("%jd\n", fibo_static());
 				}
 				goto exit;
 			case 't':
-				printf("%lli\n", fibo_tail(10, 1, 0));
+				printf("%jd\n", fibo_tail(10, 1, 0));
 				goto exit;
 			case 'h':
 			default:

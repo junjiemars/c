@@ -1,8 +1,9 @@
 
-CFLAGS += -std=c99
+env_cflags := -std=c99
 
-$(lib_path)env.o: $(src_path)env.c
-	$(CC) -c $(CFLAGS) -o $(lib_path)env.o $(src_path)env.c 
+$(tmp_path)env.o: $(src_path)env.c
+	$(CC) -c $(CFLAGS) $(env_cflags) \
+        -o $(tmp_path)env.o $(src_path)env.c 
 
-$(bin_path)env: $(lib_path)env.o
-	$(LINK) -o $(bin_path)env $(lib_path)env.o
+$(bin_path)env: $(tmp_path)env.o
+	$(LINK) -o $(bin_path)env $(tmp_path)env.o
