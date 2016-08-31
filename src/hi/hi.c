@@ -12,7 +12,7 @@ int main(int argc, const char *argv[]) {
 	}
 
 
-#if (CL_HAVE_LOCALTIME_R)
+#ifdef CL_HAVE_LOCALTIME_R
 #include <time.h>
 	struct tm t; 
 	time_t c=0; 
