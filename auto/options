@@ -23,6 +23,8 @@ CL_LIBATOMIC=NO
 
 CL_CPU_CACHE_LINE=
 
+CL_HAS_STICKS=()
+
 opt=
 
 for option
@@ -54,12 +56,7 @@ do
     
 		--with-debug)                    CL_DEBUG=yes               ;;
 
-		--has-hi)                        H_HI=yes                   ;;
-    --has-bits)                      H_BITS=yes                 ;;
-    --has-env)                       H_ENV=yes                  ;;
-    --has-endian)                    H_ENDIAN=yes               ;;
-    --has-fibo)                      H_FIBO=yes                 ;;
-    --has-math)                      H_MATH=yes                 ;;
+		--has-*)                         CL_HAS_STICKS+=($option)      ;;
     
     *)
       echo "$0: error: invalid option \"$option\""
