@@ -13,11 +13,16 @@ int main(int argc, const char *argv[]) {
 
 
 #ifdef CL_HAVE_LOCALTIME_R
+
+#if (CL_HAVE_LOCALTIME_R)
+
 #include <time.h>
 	struct tm t; 
 	time_t c=0; 
 	localtime_r(&c, &t);
 	printf("%d/%d/%d\n", t.tm_year, t.tm_mon, t.tm_mday);		
+#endif
+
 #endif
 
 	return 0;
