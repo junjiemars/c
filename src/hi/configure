@@ -2,7 +2,7 @@
 if [ "$CL_PLATFORM" != win32 ]; then
 	cl_include="stdio.h" . auto/include
 	cl_feature="localtime_r()"
-	cl_feature_name="CL_HAVE_LOCALTIME_R"
+	cl_feature_name="CL_HAVE_LOCALTIME_H"
 	cl_feature_run=no
 	cl_feature_incs="#include <time.h>"
 	cl_feature_path=

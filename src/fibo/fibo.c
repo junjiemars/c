@@ -1,8 +1,17 @@
+#include <cl_auto_config.h>
+#include <cl_auto_headers.h>
 
 #include <stdio.h>
 #include <stdint.h>
 #include <getopt.h>
 
+
+#ifdef CL_HAVE_INTTYPES_H 
+	#include <inttypes.h>
+	#define outln_int64(s) printf("%" PRId64 "\n", s)
+#else
+	#define outln_int64(s) printf("%lld\n", s)
+#endif
 
 static struct option longopts[] = {
 	{"help",    no_argument,    0,      'h'},
@@ -44,11 +53,11 @@ int main(int argc, char * const argv[]) {
 		switch (ch) {
 			case 's':
 				for (int i=0; i<10; i++) {
-					printf("%jd\n", fibo_static());
+					outln_int64(fibo_static());
 				}
 				goto exit;
 			case 't':
-				printf("%jd\n", fibo_tail(10, 1, 0));
+				outln_int64(fibo_tail(10, 1, 0));
 				goto exit;
 			case 'h':
 			default:
