@@ -34,6 +34,12 @@ for opt in "${CL_HAS_STICKS[@]}"; do
 		cl_sticks+=($CL_OBJS/$CL_BIN_PATH/$stick)
 	else
 		echo "checking for $CL_SRC/$stick ... no found"
+		cat << END >> $CL_AUTOCONF_ERR
+---------------------------------------
+checking for $CL_SRC/$stick ... no found
+
+END
+
   fi
 
 done
