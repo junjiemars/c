@@ -25,16 +25,16 @@ cl_feature_test=
 CC_TEST_FLAGS=
 
 if [ $cl_found = yes ]; then
-    PIPE="-pipe"
+	PIPE="-pipe"
 fi
 
 
 case "$CL_MACHINE" in
 
-    sun4u | sun4v | sparc | sparc64 )
-        # "-mcpu=v9" enables the "casa" assembler instruction
-        CFLAGS="$CFLAGS -mcpu=v9"
-    ;;
+  sun4u | sun4v | sparc | sparc64 )
+    # "-mcpu=v9" enables the "casa" assembler instruction
+    CFLAGS="$CFLAGS -mcpu=v9"
+  ;;
 
 esac
 
