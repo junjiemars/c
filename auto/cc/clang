@@ -8,11 +8,11 @@ echo " + clang version: $CL_CLANG_VER"
 
 # optimizations
 
-C_CLANG_OPT="-O"
+CL_CLANG_OPT="-O"
 
 # warnings
 
-CFLAGS="$CFLAGS $C_CLANG_OPT -Wall -Wextra -Wpointer-arith"
+CFLAGS="$CFLAGS $CL_CLANG_OPT -Wall -Wextra -Wpointer-arith"
 CFLAGS="$CFLAGS -Wconditional-uninitialized"
 CFLAGS="$CFLAGS -Wno-unused-parameter"
 

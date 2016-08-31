@@ -19,25 +19,26 @@ cl_dirsep='/'
 
 if test -n "$CFLAGS"; then
 
-    CC_TEST_FLAGS="$CFLAGS $CL_CC_OPT"
+	CC_TEST_FLAGS="$CFLAGS $CL_CC_OPT"
 
 else
 
-    case $CL_CC_NAME in
-        gcc)
-            . auto/cc/gcc
-        ;;
-
-        clang)
-            . auto/cc/clang
-        ;;
-
-        msvc*)
-            . auto/cc/msvc
+  case $CL_CC_NAME in
+    gcc)
+      . auto/cc/gcc
     ;;
-    esac
 
-		CC_TEST_FLAGS="$CC_TEST_FLAGS $CL_CC_OPT"
+    clang)
+      . auto/cc/clang
+    ;;
+
+    msvc*)
+      . auto/cc/msvc
+  ;;
+  esac
+
+	CC_TEST_FLAGS="$CC_TEST_FLAGS $CL_CC_OPT"
+
 fi
 
 

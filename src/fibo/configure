@@ -1,7 +1,7 @@
 
 if [ "$CL_PLATFORM" != win32 ]; then
 	cl_include="inttypes.h" . auto/include
-	cl_feature=
+	cl_feature="printf(\"%s\" PRId \"\n\")"
 	cl_feature_name="CL_HAVE_INTTYPES_H"
 	cl_feature_run=no
 	cl_feature_incs="#include <inttypes.h>"
