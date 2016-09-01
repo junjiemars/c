@@ -39,7 +39,7 @@ erf
 objs/
 
 # makefiles
-Makefile
+/Makefile
 objs/Makefile
 
 # editor swap files
