@@ -3,6 +3,7 @@ echo "creating $CL_MAKEFILE"
 
 mkdir -p $CL_OBJS/bin \
          $CL_OBJS/lib \
+				 $CL_OBJS/inc \
 				 $CL_OBJS/tmp \
 				 $CL_OBJS/log \
 				 $CL_OBJS/conf
@@ -10,18 +11,25 @@ mkdir -p $CL_OBJS/bin \
 cat << END > $CL_MAKEFILE
 
 CC = $CC
-CFLAGS = $CFLAGS
 CPP = $CPP
 LINK = $LINK
-CL_INCS = -I $CL_OBJS
+CFLAGS = $CFLAGS
+LDFLAGS= $LDFLAGS
+
+CL_PIC_OPT = $CL_PIC_OPT
+
+CL_INCS = -I$CL_OBJS -I$CL_OBJS/inc 
+CL_LDS = -L$CL_OBJS/lib
+
+
 
 defualt: build
+
 
 END
 
 
 cl_sticks=()
-cl_deps=
 
 
 for opt in "${CL_HAS_STICKS[@]}"; do
@@ -31,7 +39,7 @@ for opt in "${CL_HAS_STICKS[@]}"; do
 				 | tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz`
 
 	if [ -d $CL_SRC/$stick ]; then
-		cl_sticks+=($CL_OBJS/$CL_BIN_PATH/$stick)
+		cl_sticks+=($stick)
 	else
 		echo "checking for $CL_SRC/$stick ... no found"
 		cat << END >> $CL_AUTOCONF_ERR
@@ -45,61 +53,39 @@ END
 done
 
 
-cl_build="build:${cl_deps:+ modules}${cl_sticks:+ binaries}"
 
-if [ "$cl_build" != "build:" ]; then
-
-	cat << END >> $CL_MAKEFILE
-
-$cl_build
-
-END
-
-fi
-
-if [ -n "$cl_deps" ]; then
-
-	cat << END >> $CL_MAKEFILE
-
-modules: $cl_deps
-END
-
-	for dep in $cl_deps; do
-
-		cat << END >> $CL_MAKEFILE
-		
-END
-
-	done
-
-fi
 
 if [ -n "$cl_sticks" ]; then
 
 	cat << END >> $CL_MAKEFILE
 	
-binaries: ${cl_sticks[@]}
+
+build: ${cl_sticks[@]}
+
 
 END
 	
 	for stick in ${cl_sticks[@]}; do
 
-		stick_bin=`basename $stick`
-		stick_src=$CL_SRC/$stick_bin
+		stick_src=$CL_SRC/$stick
 
 		[ -f $stick_src/configure ] && . $stick_src/configure
 
 		src_path=$stick_src/
+		inc_path=$CL_OBJS/inc/
 		tmp_path=$CL_OBJS/tmp/
 		lib_path=$CL_OBJS/lib/
 		bin_path=$CL_OBJS/bin/
 
+		echo "#---------------------------------------" >> $CL_MAKEFILE
 		echo $cl_n "`cat $stick_src/Makefile`" \
 			| sed -e "s@\$(src_path)@$src_path@g" \
+					  -e "s@\$(inc_path)@$inc_path@g" \
 						-e "s@\$(tmp_path)@$tmp_path@g" \
 						-e "s@\$(lib_path)@$lib_path@g" \
 						-e "s@\$(bin_path)@$bin_path@g" \
 		>> $CL_MAKEFILE 
+		echo >> $CL_MAKEFILE
 
 	done
 

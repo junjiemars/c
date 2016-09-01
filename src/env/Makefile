@@ -1,4 +1,6 @@
 
+env: $(bin_path)env
+
 env_cflags := -std=c99
 
 $(tmp_path)env.o: $(src_path)env.c

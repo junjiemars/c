@@ -1,5 +1,9 @@
 
+bits: $(bin_path)bits
 
-$(bin_path)bits: $(src_path)bits.c
-	$(CC) $(CFLAGS) $(src_path)bits.c -o $(bin_path)bits
+$(tmp_path)bits.o: $(src_path)bits.c
+	$(CC) $(CFLAGS) -c $^ -o $@
+
+$(bin_path)bits: $(tmp_path)bits.o
+	$(LINK) $^ -o $@ 
 
