@@ -1,7 +1,7 @@
 # C Lessons
 It is not **C Lessons** at all :). I'd programming in C long long time ago, sometimes I want to
 pick something up, but I cannot find the peice of code somewhere or cannot run the code 
-on a machine which been wrote in another machine. 
+on a machine that been wrote in another machine. 
 
 Sadly, old dog need learn something new
 * Access the code from anywhere, oh, GitHub is good one
