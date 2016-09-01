@@ -11,6 +11,8 @@ CL_OBJS=objs
 CL_SRC=src
 
 CL_DEBUG=NO
+CL_VERBOSE=
+
 CL_CC_OPT=
 CL_LD_OPT=
 CPU=NO
@@ -55,6 +57,7 @@ do
     --builddir=*)                    CL_OBJS="$value"           ;;
     
 		--with-debug)                    CL_DEBUG=yes               ;;
+		--with-verbose)                  CL_VERBOSE=-v              ;;
 
 		--has-*)                         CL_HAS_STICKS+=($option)   ;;
     
@@ -89,7 +92,7 @@ cat << END
   --builddir=DIR                     set build directory
 
   --with-debug                       enable debug logging
-
+  --with-verbose 										 enable verbose building
 
   --has-hi                           enable hi stick
   --has-bits                         enable bits stick 
