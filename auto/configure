@@ -28,7 +28,7 @@ if test -z "$CL_PLATFORM"; then
   CL_PLATFORM="$CL_SYSTEM:$CL_RELEASE:$CL_MACHINE";
   
   case "$CL_SYSTEM" in
-    MINGW32_*)
+    MSYS_NT*|MINGW*)
       CL_PLATFORM=win32
     ;;
   esac
