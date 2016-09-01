@@ -34,6 +34,7 @@
 erf
 *.dSYM/
 *.i
+*.dylib
 
 # objs directory
 objs/
@@ -45,11 +46,10 @@ objs/Makefile
 # editor swap files
 *.swp
 
-# Imediatly files
-*.preprocessedsimulate_turing_machine
+# vscode files
+.vscode/
+/TAGS
 
-src/endian/test_endian
-src/turning/simulate_turning_machine
-TAGS
-*.dylib
+
+
 
