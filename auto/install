@@ -3,9 +3,8 @@
 CL_BIN_PATH=${CL_PREFIX%/}/${CL_BIN_PATH%/}
 CL_LIB_PATH=${CL_PREFIX%/}/${CL_LIB_PATH%/}
 CL_CONF_PATH=${CL_PREFIX%/}/${CL_CONF_PATH%/}
-CL_INC_PATH=${CL_PREFIX%/}/${CL_INC_PATH%/}
-CL_PID_PATH=${CL_PREFIX%/}/${CL_PID_PATH%/}
 CL_LOG_PATH=${CL_PREFIX%/}/${CL_LOG_PATH%/}
+CL_INC_PATH=${CL_PREFIX%/}/${CL_INC_PATH%/}
 
 
 # append install target
@@ -15,27 +14,23 @@ cat << END >> $CL_MAKEFILE
 #---------------------------------------
 
 
-prefix_dirs:
-	mkdir -p $CL_BIN_PATH
-	mkdir -p $CL_LIB_PATH
-	mkdir -p $CL_CONF_PATH
-	mkdir -p $CL_INC_PATH
-	mkdir -p $CL_PID_PATH
-	mkdir -p $CL_LOG_PATH
+install: build $CL_BIN_PATH $CL_LIB_PATH $CL_CONF_PATH $CL_INC_PATH
+	\$(call if-cp, $CL_OBJS/bin, $CL_BIN_PATH/)
+	\$(call if-cp, $CL_OBJS/lib, $CL_LIB_PATH/)
+	\$(call if-cp, $CL_OBJS/conf, $CL_CONF_PATH/)
+	\$(call if-cp, $CL_OBJS/inc, $CL_INC_PATH/)
 
 
-bin_files := \$(wildcard $CL_OBJS/bin/*)
-lib_files := \$(wildcard $CL_OBJS/lib/*)
-conf_files := \$(wildcard $CL_OBJS/conf/*)
-inc_files := \$(wildcard $CL_OBJS/inc/*)
+$CL_BIN_PATH $CL_LIB_PATH $CL_CONF_PATH $CL_INC_PATH:
+	\$(call if-mkdir, $CL_BIN_PATH)
+	\$(call if-mkdir, $CL_LIB_PATH)
+	\$(call if-mkdir, $CL_CONF_PATH)
+	\$(call if-mkdir, $CL_INC_PATH)
+	\$(call if-mkdir, $CL_LOG_PATH)
 
 
-
-install: build | prefix_dirs
-	\$(foreach f,\$(bin_files),\$(shell cp \$(f) $CL_BIN_PATH/))
-	\$(foreach f,\$(lib_files),\$(shell cp \$(f) $CL_LIB_PATH/))
-	\$(foreach f,\$(conf_files),\$(shell cp \$(f) $CL_CONF_PATH/))
-	\$(foreach f,\$(inc_files),\$(shell cp \$(f) $CL_INC_PATH/))
+if-mkdir = \$(if \$(wildcard \$1),,mkdir -p \$1)
+if-cp = \$(foreach f,\$(wildcard \$1/*),\$(shell cp \$(f) \$2))
 
 
 
