@@ -43,12 +43,12 @@ do
     
     --prefix=)                       CL_PREFIX="!"              ;;
     --prefix=*)                      CL_PREFIX="$value"         ;;
-    --sbin-path=*)                   CL_BIN_PATH="$value"       ;;
+    --bin-path=*)                    CL_BIN_PATH="$value"       ;;
     --modules-path=*)                CL_LIB_PATH="$value"  		  ;;
     --conf-path=*)                   CL_CONF_PATH="$value"      ;;
-    --error-log-path=*)              CL_ERROR_LOG_PATH="$value ";;
+    --include-path=*)                CL_INC_PATH="$value"       ;;
     --pid-path=*)                    CL_PID_PATH="$value"       ;;
-    --lock-path=*)                   CL_LOCK_PATH="$value"      ;;
+    --log-path=*)                    CL_LOG_PATH="$value"       ;;
     --user=*)                        CL_USER="$value"           ;;
     --group=*)                       CL_GROUP="$value"          ;;
     
@@ -83,9 +83,9 @@ cat << END
   --bin-path=PATH                    set binaries directory
   --modules-path=PATH                set modules path
   --conf-path=PATH                   set conf pathname
-  --error-log-path=PATH              set error log pathname
+  --inc-path=PATH                    set inc pathname
   --pid-path=PATH                    set pid pathname
-  --lock-path=PATH                   set lock pathname
+  --log-path=PATH                    set log pathname
 
   --crossbuild                       set cross build
   --build=NAME                       set build name
@@ -117,11 +117,7 @@ CL_BIN_PATH=${CL_BIN_PATH:-bin}
 CL_LIB_PATH=${CL_LIB_PATH:-lib}
 CL_CONF_PATH=${CL_CONF_PATH:-conf}
 CL_CONF_PREFIX=`dirname $CL_CONF_PATH`
+CL_INC_PATH=${CL_INC_PATH:-inc}
 CL_PID_PATH=${CL_PID_PATH:-log}
-CL_LOCK_PATH=${CL_LOCK_PATH:-log}
+CL_LOG_PATH=${CL_LOG_PATH:-log}
 
-if [ ".$CL_ERROR_LOG_PATH" = ".stderr" ]; then
-  CL_ERROR_LOG_PATH=
-else
-  CL_ERROR_LOG_PATH=${CL_ERROR_LOG_PATH:-log/error.log}
-fi

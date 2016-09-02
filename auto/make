@@ -4,8 +4,9 @@ echo "creating $CL_MAKEFILE"
 mkdir -p $CL_OBJS/bin \
          $CL_OBJS/lib \
 				 $CL_OBJS/inc \
-				 $CL_OBJS/tmp \
 				 $CL_OBJS/log \
+				 $CL_OBJS/pid \
+				 $CL_OBJS/tmp \
 				 $CL_OBJS/conf
 
 cat << END > $CL_MAKEFILE

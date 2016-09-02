@@ -1,59 +1,46 @@
 
 
-
-case ".$CL_BIN_PATH" in
-    ./*)
-    ;;
-
-    *)
-        CL_BIN_PATH=$CL_PREFIX/$CL_BIN_PATH
-    ;;
-esac
+CL_BIN_PATH=${CL_PREFIX%/}/${CL_BIN_PATH%/}
+CL_LIB_PATH=${CL_PREFIX%/}/${CL_LIB_PATH%/}
+CL_CONF_PATH=${CL_PREFIX%/}/${CL_CONF_PATH%/}
+CL_INC_PATH=${CL_PREFIX%/}/${CL_INC_PATH%/}
+CL_PID_PATH=${CL_PREFIX%/}/${CL_PID_PATH%/}
+CL_LOG_PATH=${CL_PREFIX%/}/${CL_LOG_PATH%/}
 
 
-case ".$CL_LIB_PATH" in
-    ./*)
-    ;;
+# append install target
 
-    *)
-        CL_LIB_PATH=$CL_PREFIX/$CL_LIB_PATH
-    ;;
-esac
+cat << END >> $CL_MAKEFILE
 
-CL_LIB_PATH=`dirname $CL_LIB_PATH/.`
+#---------------------------------------
 
 
-case ".$CL_CONF_PATH" in
-    ./*)
-    ;;
-
-    *)
-        CL_CONF_PATH=$CL_PREFIX/$CL_CONF_PATH
-    ;;
-esac
-
-
-CL_CONF_PREFIX=`dirname $CL_CONF_PATH`
+prefix_dirs:
+	mkdir -p $CL_BIN_PATH
+	mkdir -p $CL_LIB_PATH
+	mkdir -p $CL_CONF_PATH
+	mkdir -p $CL_INC_PATH
+	mkdir -p $CL_PID_PATH
+	mkdir -p $CL_LOG_PATH
 
 
-case ".$CL_PID_PATH" in
-    ./*)
-    ;;
-
-    *)
-        CL_PID_PATH=$CL_PREFIX/$CL_PID_PATH
-    ;;
-esac
+bin_files := \$(wildcard $CL_OBJS/bin/*)
+lib_files := \$(wildcard $CL_OBJS/lib/*)
+conf_files := \$(wildcard $CL_OBJS/conf/*)
+inc_files := \$(wildcard $CL_OBJS/inc/*)
 
 
-case ".$CL_ERROR_LOG_PATH" in
-    ./* | .)
-    ;;
 
-    *)
-        CL_ERROR_LOG_PATH=$CL_PREFIX/$CL_ERROR_LOG_PATH
-    ;;
-esac
+install: build | prefix_dirs
+	\$(foreach f,\$(bin_files),\$(shell cp \$(f) $CL_BIN_PATH/))
+	\$(foreach f,\$(lib_files),\$(shell cp \$(f) $CL_LIB_PATH/))
+	\$(foreach f,\$(conf_files),\$(shell cp \$(f) $CL_CONF_PATH/))
+	\$(foreach f,\$(inc_files),\$(shell cp \$(f) $CL_INC_PATH/))
+
+
+
+END
+
 
 
 # create Makefile
