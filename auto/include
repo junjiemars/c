@@ -29,26 +29,27 @@ eval "$cl_test >> $CL_AUTOCONF_ERR 2>&1"
 
 if [ -x $CL_AUTOTEST ]; then
 
-    cl_found=yes
+  cl_found=yes
 
-    echo " found"
+  echo " found"
 
-    cl_name=`echo $cl_include \
-             | tr abcdefghijklmnopqrstuvwxyz/. ABCDEFGHIJKLMNOPQRSTUVWXYZ__`
+  cl_name=`echo $cl_include \
+       | tr abcdefghijklmnopqrstuvwxyz/. ABCDEFGHIJKLMNOPQRSTUVWXYZ__`
 
 
-    have=CL_HAVE_$cl_name . auto/have_headers
+  have=CL_HAVE_$cl_name . auto/have_headers
 
-    eval "CL_INCLUDE_$cl_name='#include <$cl_include>'"
+  eval "CL_INCLUDE_$cl_name='#include <$cl_include>'"
 
 else
-    echo " not found"
 
-    echo "----------"    >> $CL_AUTOCONF_ERR
-    cat $CL_AUTOTEST.c 	 >> $CL_AUTOCONF_ERR
-    echo "----------"    >> $CL_AUTOCONF_ERR
-    echo $cl_test      	 >> $CL_AUTOCONF_ERR
-    echo "----------"    >> $CL_AUTOCONF_ERR
+  echo " not found"
+
+  echo "----------"  	 >> $CL_AUTOCONF_ERR
+  cat $CL_AUTOTEST.c 	 >> $CL_AUTOCONF_ERR
+  echo "----------"  	 >> $CL_AUTOCONF_ERR
+  echo $cl_test    	   >> $CL_AUTOCONF_ERR
+  echo "----------"    >> $CL_AUTOCONF_ERR
 fi
 
 rm -rf $CL_AUTOTEST*
