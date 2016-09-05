@@ -11,7 +11,7 @@ case "$CL_PLATFORM" in
 		. auto/os/darwin
 	;;
 	
-	win32)
+	MSYS_NT:*)
 		. auto/os/win32
 	;;
 

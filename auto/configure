@@ -25,13 +25,13 @@ if test -z "$CL_PLATFORM"; then
   
   echo " + $CL_SYSTEM $CL_RELEASE $CL_MACHINE"
   
+	case $CL_SYSTEM in
+		MSYS_NT-*)
+			CL_SYSTEM=${CL_SYSTEM:0:7}
+		;;
+	esac
+		
   CL_PLATFORM="$CL_SYSTEM:$CL_RELEASE:$CL_MACHINE";
-  
-  case "$CL_SYSTEM" in
-    MSYS_NT*|MINGW*)
-      CL_PLATFORM=win32
-    ;;
-  esac
   
 else
   echo "building for $CL_PLATFORM"

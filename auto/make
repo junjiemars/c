@@ -22,6 +22,10 @@ CL_PIC_OPT = $CL_PIC_OPT
 CL_INCS = -I$CL_OBJS -I$CL_OBJS/inc 
 CL_LDS = -L$CL_OBJS/lib
 
+cl_objout=$cl_objout
+cl_binout=$cl_binout
+cl_objext=$cl_objext
+cl_binext=$cl_binext
 
 
 defualt: build

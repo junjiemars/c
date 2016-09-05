@@ -113,10 +113,6 @@ END
 fi
 
 
-if [ ".$CL_PLATFORM" = ".win32" ]; then
-  CL_WINE=$WINE
-fi
-
 
 CL_BIN_PATH=${CL_BIN_PATH:-bin}
 CL_LIB_PATH=${CL_LIB_PATH:-lib}
