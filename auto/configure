@@ -27,6 +27,7 @@ if test -z "$CL_PLATFORM"; then
   
 	case $CL_SYSTEM in
 		MSYS_NT-*)
+			CL_RELEASE=${CL_SYSTEM:8}
 			CL_SYSTEM=${CL_SYSTEM:0:7}
 		;;
 	esac
