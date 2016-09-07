@@ -1,5 +1,0 @@
-
-
-have=CL_LINUX . auto/have_headers
-
-CL_INCS="$UNIX_INCS"
