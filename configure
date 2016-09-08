@@ -1,2 +1,0 @@
-#!/bin/bash
-/opt/lab/m/nore/auto/configure $@
