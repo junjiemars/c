@@ -1,5 +1,7 @@
-#include <stdlib.h> //getenv, atoi
-#include <stdio.h>  //printf
+#include <env.h>
+
+#include <stdlib.h>
+#include <stdio.h>
 
 int main(){
 	char *c = getenv("COUNT");
