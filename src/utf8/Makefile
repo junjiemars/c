@@ -1,16 +1,12 @@
-CFLAGS ?= -Wall -g 
 
-utf8.out: utf8.c
-	$(CC) $(CFLAGS) -o $@ $^
+utf8_binout := $(bin_path)utf8$(nm_binext)
+utf8_objout := $(tmp_path)utf8$(nm_objext)
 
-install: utf8.out
-	@(cp utf8.out $(INSTALL_BIN)/utf8)
+utf8: $(utf8_binout)
 
-run: utf8.out
-	./utf8.out $(args)
+$(utf8_objout): $(src_path)utf8.c
+	$(CC) $(CFLAGS) $(NM_INCS) -c $^ $(nm_objout)$@
 
-debug: utf8.out
-	$(DEBUG) ./utf8.out $(args)
+$(utf8_binout): $(utf8_objout)
+	$(LINK) $^ $(nm_binout)$@
 
-clean:
-	-(rm -f utf8.out)
