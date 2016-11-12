@@ -52,8 +52,9 @@ objs/Makefile
 /TAGS
 
 # Nore
-/Nore
 configure
+auto/
+nore/
 
 
 
