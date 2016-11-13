@@ -1,0 +1,6 @@
+
+case "$NM_SYSTEM" in
+	Linux) 
+		flag=macro_cflags value=-std=c99 . ${NM_HOME}auto/cflags
+		;;
+esac
