@@ -1,6 +1,8 @@
 
 case "$NM_SYSTEM" in
 	Linux) 
-		flag=macro_cflags value=-std=c99 . ${NM_HOME}auto/cflags
+		if [ "$CC_NAME" = "gcc" ]; then
+			flag=macro_cflags value=-std=c99 . ${NM_HOME}auto/cflags
+		fi
 		;;
 esac
