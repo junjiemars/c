@@ -14,11 +14,16 @@ something not.
 
 ## Hot to Play
 ```sh
-$ bash <(curl https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh)
+# <where> to put nore down
+$ PREFIX=<where> bash <(curl https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh)
 
-$ nore/auto/configure --has-hi
+# configure -> make -> install
+$ ./configure --has-hi
 $ make
 $ make install
+
+# update nore, <what> you want to make
+$ ./configure --update --has-<what>
 ```
 
 
