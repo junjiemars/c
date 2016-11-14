@@ -1,13 +1,13 @@
 
-if [ "$CL_PLATFORM" != win32 ]; then
-	cl_include="inttypes.h" . auto/include
+if [ "$NM_SYSTEM" != "MSYS_NT" ]; then
+	cl_include="inttypes.h" . ${NM_HOME}auto/include
 	cl_feature="printf(\"%s\" PRId \"\n\")"
-	cl_feature_name="CL_HAVE_INTTYPES_H"
+	cl_feature_name="NM_HAVE_INTTYPES_H"
 	cl_feature_run=no
 	cl_feature_incs="#include <inttypes.h>"
 	cl_feature_path=
 	cl_feature_libs=
 	cl_feature_test=
-	. auto/feature
+	. ${NM_HOME}auto/feature
 fi
 

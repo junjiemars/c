@@ -1,5 +1,4 @@
-#include <cl_auto_config.h>
-#include <cl_auto_headers.h>
+#include <fibo.h>
 
 #include <stdio.h>
 #include <stdint.h>
