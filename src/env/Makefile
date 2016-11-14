@@ -1,11 +1,12 @@
 
-env: $(bin_path)env$(nm_binext)
+env_cflags += $(CFLAGS) $(NM_INCS) -I$(src_path) -O2
+env_binout := $(bin_path)env$(bin_ext)
+env_objout := $(tmp_path)env$(obj_ext)
 
-env_cflags += $(CFLAGS) $(NM_INCS) -I$(src_path)
+env: $(env_binout)
 
-$(tmp_path)env$(nm_objext): $(src_path)env.c
-	$(CC) -c $(env_cflags) $^ $(nm_objout)$@
+$(env_objout): $(src_path)env.c
+	$(CC) -c $(env_cflags) $^ $(obj_out)$@
 
-
-$(bin_path)env$(nm_binext): $(tmp_path)env$(nm_objext)
-	$(LINK) $^ $(nm_binout)$@ 
+$(env_binout): $(env_objout)
+	$(LINK) $^ $(bin_out)$@ 

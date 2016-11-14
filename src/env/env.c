@@ -4,6 +4,8 @@
 #include <stdio.h>
 
 int main(){
+	printf("your can set $COUNT or $TEXT env vars\n");
+
 	char *c = getenv("COUNT");
 	int count = c ? atoi(c) : 3;
 
