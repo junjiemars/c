@@ -1,3 +1,4 @@
+#include <macro.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -10,11 +11,11 @@
     (a)++;                      \
     (b)++;
 
-#define sum(max, out) {              \
-	int total = 0, max_g123=max;       \
-	for (int i=0; i<max_g123; i++)     \
-		total += i;                      \
-	out = total;                       \
+#define sum(max, out) {              								\
+	int total_g123 = 0, max_g124=max;  								\
+	for (int i_g125=0; i_g125<max_g124; i_g125++)    	\
+		total_g123 += i_g125;              							\
+	out = total_g123;                  								\
 }
 
 /*
@@ -25,6 +26,12 @@
 */
 
 int main(int argc, char *argv[]) {
+
+#if (CC_MSVC)
+	W_C4100(argc)
+	W_C4100(argv)
+#endif
+
 	printf("----------\n");
 	printf("double_v1(1+1)*8=%i\n", double_v1(1+1)*8);
 	printf("double_v2(1+1)*8=%i\n", double_v2(1+1)*8);
