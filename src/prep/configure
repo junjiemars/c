@@ -1,0 +1,4 @@
+
+if [ "$CC_NAME" = "gcc" ]; then
+	flag=prep_cflags value=-std=c99 . ${NM_HOME}auto/cflags
+fi
