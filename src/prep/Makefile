@@ -1,16 +1,17 @@
-CFLAGS ?= -Wall -g 
 
-prep.out: prep.c
-	$(CC) $(CFLAGS) -o $@ $^
+prep_cflags += $(CFLAGS) $(NM_INCS) -I$(src_path) -O2
 
-install: prep.out
-	@(cp $^ $(INSTALL_BIN)/prep)
+prep_binout := $(bin_path)prep$(bin_ext)
+prep_objout := $(tmp_path)prep$(obj_ext)
+prep_preout := $(tmp_path)prep.i
 
-run: prep.out
-	./$^ $(args)
+prep: $(prep_binout)
 
-debug: prep.out
-	$(DEBUG) ./$^ $(args)
+$(prep_preout): $(src_path)prep.c
+	$(CPP) $(prep_cflags) $^ > $@
 
-clean:
-	-(rm -f prep.out)
+$(prep_objout): $(prep_preout)
+	$(CC) -c $^ $(obj_out)$@
+
+$(prep_binout): $(prep_objout)
+	$(LINK) $^ $(bin_out)$@
