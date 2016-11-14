@@ -1,4 +1,9 @@
 
-if [ "$CC_NAME" = "gcc" ]; then
-	flag=prep_cflags value=-std=c99 . ${NM_HOME}auto/cflags
-fi
+case $CC_NAME in
+	gcc) 
+		flag=prep_less_cflags value=-std=c99 . ${NM_HOME}auto/cflags
+		;;
+	clang)
+		flag=prep_less_cflags value="" . ${NM_HOME}auto/cflags
+		;;
+esac	

@@ -11,7 +11,7 @@ $(prep_preout): $(src_path)prep.c
 	$(CPP) $(prep_cflags) $^ > $@
 
 $(prep_objout): $(prep_preout)
-	$(CC) -c $(prep_cflags) $^ $(obj_out)$@
+	$(CC) -c $(prep_less_cflags) $^ $(obj_out)$@
 
 $(prep_binout): $(prep_objout)
 	$(LINK) $^ $(bin_out)$@
