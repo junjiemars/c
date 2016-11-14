@@ -1,9 +1,14 @@
 
-bits: $(bin_path)bits
+bits_cflags += $(CFLAGS) $(NM_INCS) -I$(src_path) -O2
 
-$(tmp_path)bits.o: $(src_path)bits.c
-	$(CC) $(CFLAGS) -c $^ -o $@
+bits_binout := $(bin_path)bits$(bin_ext)
+bits_objout := $(tmp_path)bits$(obj_ext)
 
-$(bin_path)bits: $(tmp_path)bits.o
-	$(LINK) $^ -o $@ 
+bits: $(bits_binout)
+
+$(bits_objout): $(src_path)bits.c
+	$(CC) $(bits_cflags) -c $^ $(obj_out)$@
+
+$(bits_binout): $(bits_objout)
+	$(LINK) $^ $(bin_out)$@ 
 
