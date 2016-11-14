@@ -1,6 +1,13 @@
 
-$(tmp_path)endian.o: $(src_path)endian.c
-	$(CC) -c $(CFLAGS) -o $(tmp_path)endian.o $(src_path)endian.c
+endian_cflags += $(CFLAGS) $(NM_INCS) -I$(src_path) -O2
 
-$(bin_path)endian: $(tmp_path)endian.o
-	$(LINK) -o $(bin_path)endian $(tmp_path)endian.o
+endian_binout := $(bin_path)endian$(bin_ext)
+endian_objout := $(tmp_path)endian$(obj_ext)
+
+endian: $(endian_binout)
+
+$(endian_objout): $(src_path)endian.c
+	$(CC) -c $(endian_cflags) $(NM_INCS) $^ $(obj_out)$@
+
+$(endian_binout): $(endian_objout)
+	$(LINK) $^ $(bin_out)$@
