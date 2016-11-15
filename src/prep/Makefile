@@ -1,5 +1,5 @@
 
-prep_cppflags += $(CFLAGS) $(NM_INCS) -I$(src_path) -O2
+prep_cflags += $(CFLAGS) $(NM_INCS) -I$(src_path) 
 
 prep_binout := $(bin_path)prep$(bin_ext)
 prep_objout := $(tmp_path)prep$(obj_ext)
@@ -8,10 +8,10 @@ prep_preout := $(tmp_path)prep.i
 prep: $(prep_binout)
 
 $(prep_preout): $(src_path)prep.c
-	$(CPP) $(prep_cppflags) $^ > $@
+	$(CPP) $(prep_cflags) $^ > $@
 
 $(prep_objout): $(prep_preout)
-	$(CC) -c $(prep_cflags) $^ $(obj_out)$@
+	$(CC) -c $(prep_cppflags) $^ $(obj_out)$@
 
 $(prep_binout): $(prep_objout)
 	$(LINK) $^ $(bin_out)$@

@@ -1,9 +1,9 @@
 
 case $CC_NAME in
 	gcc) 
-		flag=prep_cppflags value=-std=c99 . ${NM_HOME}auto/cflags
+		flag=prep_cppflags value="-std=c99 -O2" . ${NM_HOME}auto/cflags
 		;;
-#	clang)
-#		flag=prep_less_cflags value="" . ${NM_HOME}auto/cflags
-#		;;
+	clang)
+		flag=prep_cppflags value="-O2" . ${NM_HOME}auto/cflags
+		;;
 esac	
