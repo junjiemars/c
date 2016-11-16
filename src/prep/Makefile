@@ -14,4 +14,4 @@ $(prep_objout): $(prep_cppout)
 	$(CC) -c $(prep_cppflags) $^ $(obj_out)$@
 
 $(prep_binout): $(prep_objout)
-	$(LINK) $^ $(bin_out)$@
+	$(LINK) $(prep_lnkflags) $^ $(bin_out)$@

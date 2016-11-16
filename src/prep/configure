@@ -6,4 +6,8 @@ case $CC_NAME in
 	clang)
 		flag=prep_cppflags value="-O2" . ${NM_HOME}auto/cflags
 		;;
+	msvc)
+		flag=prep_cppflags value="$nm_debug_opt" . ${NM_HOME}auto/cflags
+		flag=prep_lnkflags value="$CFLAGS" . ${NM_HOME}auto/cflags
+		;;
 esac	
