@@ -1,7 +1,8 @@
 
+flag=prep_cppflags value="$NM_INCS" . ${NM_HOME}auto/cflags
+
 case $CC_NAME in
 	gcc) 
-		flag=prep_cppflags value="$NM_INCS" . ${NM_HOME}auto/cflags
 		flag=prep_cflags value="-std=c99" . ${NM_HOME}auto/cflags
 		;;
 	clang)

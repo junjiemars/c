@@ -16,8 +16,9 @@ int main(){
 	    sum += *ptr;
 	printf("sum=%g, length<|nan=%i of item_list\n", sum, item_len);
 	
+	double sum1=0;
 	setup_list(another, -1, 2.2, 4.8, 0.1);
-	for (int i=0, sum=0; i < another_len; i++)
-	    sum += another_list[i];
-	printf("sum=%g, length<|nan=%i of another_list\n", sum, another_len);
+	for (int i=0; i < another_len; i++)
+	    sum1 += another_list[i];
+	printf("sum=%g, length<|nan=%i of another_list\n", sum1, another_len);
 }
