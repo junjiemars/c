@@ -9,4 +9,4 @@ $(env_objout): $(src_path)env.c
 	$(CC) -c $(env_cflags) $^ $(obj_out)$@
 
 $(env_binout): $(env_objout)
-	$(LINK) $^ $(bin_out)$@ 
+	$(LINK) $(LFLAGS) $^ $(bin_out)$@ 

@@ -10,5 +10,5 @@ $(macro_objout): $(src_path)macro.c
 	$(CC) -c $(macro_cflags) $^ $(obj_out)$@
 
 $(macro_binout): $(macro_objout)
-	$(LINK) $^ $(bin_out)$@
+	$(LINK) $(LFLAGS) $^ $(bin_out)$@
 

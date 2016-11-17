@@ -15,4 +15,4 @@ $(prep_objout): $(prep_cppout)
 	$(CC) -c $(prep_cflags) $^ $(obj_out)$@
 
 $(prep_binout): $(prep_objout)
-	$(LINK) $(prep_lnkflags) $^ $(bin_out)$@
+	$(LINK) $(LFLAGS) $^ $(bin_out)$@
