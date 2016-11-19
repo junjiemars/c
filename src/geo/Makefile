@@ -3,7 +3,7 @@
 geo: $(lib_path)libgeo$(nm_modext)
 
 
-geo_cflags := $(CFLAGS) $(NM_PIC_OPT) $(NM_INCS) -I$(src_path)
+geo_cflags := $(CFLAGS) $(NM_PIC_OPT) $(INC) -I$(src_path)
 geo_ldflags := $(LDFLAGS) 
 
 

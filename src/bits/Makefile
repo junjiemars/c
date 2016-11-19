@@ -1,5 +1,5 @@
 
-bits_cflags += $(CFLAGS) $(NM_INCS) -I$(src_path) -O2
+bits_cflags += $(CFLAGS) $(INC) -I$(src_path) -O2
 
 bits_binout := $(bin_path)bits$(bin_ext)
 bits_objout := $(tmp_path)bits$(obj_ext)

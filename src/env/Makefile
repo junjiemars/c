@@ -1,5 +1,5 @@
 
-env_cflags += $(CFLAGS) $(NM_INCS) -I$(src_path) -O2
+env_cflags += $(CFLAGS) $(INC) -I$(src_path) -O2
 env_binout := $(bin_path)env$(bin_ext)
 env_objout := $(tmp_path)env$(obj_ext)
 

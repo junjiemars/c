@@ -3,7 +3,7 @@ math: geo $(bin_path)math$(nm_binext)
 
 
 
-math_cflags = $(CFLAGS) $(NM_INCS) -std=c99
+math_cflags = $(CFLAGS) $(INC) -std=c99
 math_ldflags += $(NM_LDS)
 
 

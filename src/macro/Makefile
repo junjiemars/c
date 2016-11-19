@@ -1,5 +1,5 @@
 
-macro_cflags += $(CFLAGS) $(NM_INCS) -I$(src_path) -O2
+macro_cflags += $(CFLAGS) $(INC) -I$(src_path) -O2
 
 macro_binout := $(bin_path)macro$(bin_ext)
 macro_objout := $(tmp_path)macro$(obj_ext)

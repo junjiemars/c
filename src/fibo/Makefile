@@ -1,5 +1,5 @@
 
-fibo_cflags += $(CFLAGS) $(NM_INCS) -I$(src_path) -O2
+fibo_cflags += $(CFLAGS) $(INC) -I$(src_path) -O2
 fibo_binout := $(bin_path)fibo$(bin_ext)
 fibo_objout := $(tmp_path)fibo$(obj_ext)
 
