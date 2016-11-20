@@ -1,0 +1,15 @@
+
+[ -z "$JC" ] && flag=JC value=javac . ${NM_HOME}auto/cflags
+[ -z "$JH" ] && flag=JH value=javah . ${NM_HOME}auto/cflags
+[ -z "$JAVA" ] && flag=JAVA value=java . ${NM_HOME}auto/cflags
+
+case ${NM_SYSTEM} in
+	Darwin)
+		flag=jni_lflags value="-I$JAVA_HOME/include -I$JAVA_HOME/include/darwin" \
+		. ${NM_HOME}auto/cflags
+
+		flag=jni_ldflags value="-L$JAVA_HOME/jre/lib/server -ljvm" \
+		. ${NM_HOME}auto/cflags
+		;;
+esac
+
