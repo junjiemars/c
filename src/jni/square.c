@@ -7,13 +7,16 @@
 	#if (CC_MSVC)
 		#define W_C4100(x) { (x); }
 	#endif 
+
 #endif
 
 
 JNIEXPORT jint JNICALL Java_Java2c_square
   (JNIEnv *env, jobject obj, jint n) {
+		#if (CC_MSVC)
 			W_C4100(env)
 			W_C4100(obj)
+		#endif
 
       printf("Oh, Gandalf\n");
       int v = n * n;
