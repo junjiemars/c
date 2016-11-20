@@ -5,7 +5,7 @@ square_lib := $(lib_path)libsquare$(mod_ext)
 jni: $(square_lib)
 
 jni_jflags += -g
-jni_lflags += $(LFLAGS) $(INC) 
+jni_lflags += $(LFLAGS) $(INC)
 jni_ldflags += $(LDFLAGS) $(LDLIBS)
 
 java2c_class := $(bin_path)Java2c.class

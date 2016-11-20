@@ -11,5 +11,17 @@ case ${NM_SYSTEM} in
 		flag=jni_ldflags value="-L$JAVA_HOME/jre/lib/server -ljvm" \
 		. ${NM_HOME}auto/cflags
 		;;
+	Linux)
+		case ${NM_MACHINE} in
+			x86_64)
+				_cpu_="amd64"
+				;;
+		esac
+		flag=jni_lflags value="-I$JAVA_HOME/include -I$JAVA_HOME/include/linux" \
+		. ${NM_HOME}auto/cflags
+		
+		flag=jni_ldflags value="-L$JAVA_HOME/jre/lib/${_cpu_}/server -ljvm" \
+		. ${NM_HOME}auto/cflags
+		;;
 esac
 
