@@ -6,7 +6,14 @@ public class Java2c {
 
 		static {
 				// just executed once
-        System.loadLibrary("square");
+				final String os = System.getProperty("os.name");
+				out.println(String.format("os='%s'", os));
+				final String path = System.getProperty("java.library.path");
+				out.println(String.format("java.library.path='%s'", path));
+				if (os.startsWith("Windows"))
+        	System.loadLibrary("libsquare");
+				else
+        	System.loadLibrary("square");
 		}
 
     public static void main(String[] args) {
