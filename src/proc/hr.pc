@@ -1,0 +1,10 @@
+#include <stdio.h>
+#include <sqlca.h>
+
+ 
+int main() { 
+	char *conn = "hr/hr@localhost:1521/XE";
+	EXEC SQL CONNECT :conn;
+
+	return 0;
+}

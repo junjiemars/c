@@ -7,6 +7,7 @@ jni: $(square_lib)
 jni_jflags += -g
 jni_lflags += $(LFLAGS) $(INC)
 jni_ldflags += $(LDFLAGS)
+jni_classpath += -cp .$(nm_p)$(bin_path)$(nm_p)$(lib_path)
 
 java2c_class := $(bin_path)Java2c.class
 square_h := $(inc_path)square.h
@@ -21,5 +22,5 @@ $(square_lib): $(square_h) $(src_path)square.c
 	$(CC) $(jni_lflags) $(jni_ldflags) $(src_path)square.c $(bin_out)$@
 
 jni_test: jni
-	$(JAVA) -cp .$(nm_p)$(bin_path)$(nm_p)$(lib_path) -Djava.library.path=$(lib_path) Java2c
+	$(JAVA) $(jni_classpath) -Djava.library.path=$(lib_path) Java2c
 
