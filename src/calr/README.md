@@ -1,15 +1,16 @@
 # Compiler, Assembler, Linker and Loader
 
 ## Preprocessor
-* cc -E calr.c
-
-## Compiler
+* cc -E calr.c -o calr.i
 
 ## Assembler
-* cc -S calr.c
+* cc -S calr.i -o calr.s
+
+## Compiler
+* cc -c calr.s -o calr.o
 
 ## Linker
-* cc calr.s -o calr.out
+* cc calr.o -o calr
 
 ## Loader
 

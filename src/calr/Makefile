@@ -1,25 +1,19 @@
-CFLAGS ?= -Wall -g 
 
-calr.out: calr.o
-	$(CC) $(CFLAGS) -o $@ $^
+calr_binout := $(bin_path)calr$(bin_ext)
 
-calr.o: calr.s
-	$(CC) -c -o $@ $^
+calr: $(calr_binout)
 
-calr.s: calr.i
-	$(CC) -S -o $@ $^
+calr_test: calr
+	$(calr_binout)
 
-calr.i: calr.c
-	$(CC) -E -o $@ $^
+$(calr_binout): $(tmp_path)calr$(obj_ext)
+	$(LINK) $(LFLAGS) $^ $(bin_out)$@
 
-install: calr.out
-	@(cp calr.out $(INSTALL_BIN)/mem)
+$(tmp_path)calr$(obj_ext): $(tmp_path)calr$(asm_ext)
+	$(CC) $(CFLAGS) -c $^ $(obj_out)$@
 
-run: calr.out
-	./calr.out $(args)
+$(tmp_path)calr$(asm_ext): $(tmp_path)calr$(cpp_ext)
+	$(ASM) $^ $(asm_out)$@
 
-debug: calr.out
-	$(DEBUG) ./calr.out $(args)
-
-clean:
-	-(rm -f calr.out calr.s calr.i)
+$(tmp_path)calr$(cpp_ext): $(src_path)calr.c
+	$(CPP) $(CFLAGS) $(INC) $^ $(cpp_out)$@
