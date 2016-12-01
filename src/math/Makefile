@@ -1,15 +1,14 @@
 
-math: geo $(bin_path)math$(nm_binext)
+math_binout := $(bin_path)math$(bin_ext)
+
+math: geo $(math_binout)
+
+math_lflags += $(LFLAGS) $(INC) -std=c99
+math_ldlibs += $(LDLIBS) -lgeo
 
 
+$(math_binout): $(src_path)math1.c 
+	$(LINK) $(math_lflags) $^ $(bin_out)$@ $(math_ldlibs) 
 
-math_cflags = $(CFLAGS) $(INC) -std=c99
-math_ldflags += $(NM_LDS)
-
-
-$(tmp_path)math$(nm_objext): $(src_path)math1.c
-	$(CC) $(math_cflags) -c $^ $(nm_objout)$@
-
-
-$(bin_path)math$(nm_binext): $(tmp_path)math$(nm_objext)
-	$(LINK) $(math_ldflags) $^ -lgeo $(nm_binout)$@
+math_test: math
+	LD_LIBRARY_PATH=$(lib_path) $(math_binout)
