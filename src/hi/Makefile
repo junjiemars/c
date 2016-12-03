@@ -10,6 +10,9 @@ hi: $(hi_binout)
 $(hi_objout): $(src_path)hi.c
 	$(CC) $(CFLAGS) $(INC) -c $^ $(obj_out)$@
 
-$(hi_binout): $(hi_objout)
+$(hi_binout): $(hi_objout) 
 	$(LINK) $^ $(bin_out)$@
+
+hi_test: hi
+	$(hi_binout)
 
