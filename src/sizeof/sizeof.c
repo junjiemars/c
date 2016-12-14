@@ -11,13 +11,13 @@ make sizesof CFLAGS="-g -Wall -std=gnu11 -O3"
  *
  */
 
-#define peval(cmd) printf(#cmd ": %g\n", cmd);
+#define peval(expr) printf(#expr ": %lu\n", expr);
 
 int main(){
-    peval(sizeof(double)+0.0);
-    peval(sizeof(int)+0.0);
+    peval(sizeof(double));
+    peval(sizeof(int));
     double *plist = (double[]){1, 2, 3};
     double list[] = {1, 2, 3};
-    peval(sizeof(plist)/(sizeof(double)+0.0));
-    peval(sizeof(list)/(sizeof(double)+0.0));
+    peval(sizeof(plist)/(sizeof(double)));
+    peval(sizeof(list)/(sizeof(double)));
 }
