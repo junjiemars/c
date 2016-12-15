@@ -1,7 +1,3 @@
-/* Compile with:
-export CFLAGS="-g -Wall -std=gnu11 -O3"  #the usual.
-make const
-*/
 #include <stdio.h>
 
 int main(){
