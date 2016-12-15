@@ -1,16 +1,10 @@
-CFLAGS ?= -Wall -g 
 
-str.out: str.c
-	$(CC) $(CFLAGS) -o $@ $^
+str_binout := $(bin_path)str$(bin_ext)
 
-install: str.out
-	@(cp str.out $(INSTALL_BIN)/str)
+str: $(str_binout)
 
-run: str.out
-	./str.out $(args)
+$(str_binout): $(src_path)str.c
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-debug: str.out
-	$(DEBUG) ./str.out $(args)
-
-clean:
-	-(rm -f str.out)
+str_test: str
+	$(str_binout)

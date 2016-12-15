@@ -46,7 +46,8 @@ void ok_array_free(ok_array *ok_in){
 #ifdef test_ok_array
 int main (){
     char *delimiters = " `~!@#$%^&*()_-+={[]}|\\;:\",<>./?\n";
-    ok_array *o = ok_array_new(strdup("Hello,  reader. This is text."), delimiters);
+    ok_array *o = ok_array_new(strdup("Hello,  reader. This is text."),
+                               delimiters);
     assert(o->length==5);
     assert(!strcmp(o->elements[1], "reader"));
     assert(!strcmp(o->elements[4], "text"));

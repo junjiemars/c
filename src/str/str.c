@@ -20,12 +20,15 @@ void str_copy() {
 void str_cat() {
     char d[16] = "abc123";
     char s[16] = "def";
-    printf("d = %s strlen(d) = %lu sizeof(d) = %lu\n", d, strlen(d), sizeof(d));
-    printf("s = %s strlen(s) = %lu sizeof(s) = %lu\n", s, strlen(s), sizeof(s));
+    printf("d = %s strlen(d) = %lu sizeof(d) = %lu\n",
+           d, strlen(d), sizeof(d));
+    printf("s = %s strlen(s) = %lu sizeof(s) = %lu\n",
+           s, strlen(s), sizeof(s));
 
     if (strlen(d) + 1 <= sizeof(s) + strlen(s)) {
         char *n = strncat(d, s, sizeof(s) - strlen(s) - 1);
-        printf("n = %s strlen(n)=%lu sizeof(n) = %lu\n", n, strlen(n), sizeof(d));
+        printf("n = %s strlen(n)=%lu sizeof(n) = %lu\n",
+               n, strlen(n), sizeof(d));
     }
 }
 
