@@ -1,18 +1,35 @@
 # Compiler, Assembler, Linker and Loader
 
-## Preprocessor
+## Stages
+
+### Preprocessor
 * cc -E calr.c -o calr.i
 
-## Assembler
+### Assembler
 * cc -S calr.i -o calr.s
 
-## Compiler
+### Compiler
 * cc -c calr.s -o calr.o
 
-## Linker
+### Linker
 * cc calr.o -o calr
 
-## Loader
+### Loader
+
+## Tools
+
+### Darwin
+
+* objdump
+* otool
+
+### Linux
+
+* objdump
+* ldd
+* readelf
+
+### Windows
 
 ## References
 * clang man page
