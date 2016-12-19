@@ -20,8 +20,9 @@
 
 ### Darwin
 
-* objdump
-* otool
+* objdump: llvm object file dumper
+* otool: object file displaying tool
+* nm: llvm symbol table dumper
 
 ### Linux
 
