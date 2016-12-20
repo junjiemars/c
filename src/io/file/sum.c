@@ -1,25 +1,59 @@
 #include <sum.h>
 #include <stdio.h>
+#include <assert.h>
 
-int out_seq(const char *f) {
-	FILE *o;
 #ifdef CC_MSVC
-	fopen_s(&o, f, "w+");
+	#define io_fopen(f, n, m) fopen_s(&f, n, m);
+	#define io_fprintf(f, ...) fprintf_s(&f, __VA_ARGS__);
 #else
-	o = fopen(f, "w+");
+	#define io_fopen(f, n, m) f = fopen(n, m);
+	#define io_fprintf(f, ...) fprintf(f, __VA_ARGS__);
 #endif
 
-	if (0 == o) {
-		return 1;
-	}
-	fprintf(o, "%s\n", "24 13 55 342 19 0");
+int 
+out_seq(const char *f) {
+	assert(f);
+	int v = 1;
+	FILE *out;
 
-	if (!o) fclose(o);
-	return 0;
+	io_fopen(out, f, "w");
+
+	if (0 == out) {
+		return v;
+	}
+	fprintf(out, "%s\n", "24 13 55 42 19 0");
+
+	v = fclose(out);
+	return v;
 }
 
-//int sum_seq(const char *f) {
-//	f;
-//	return 0;
-//}
+int 
+sum_seq(const char *f) {
+	assert(f);
+	int num = 0, sum = 0, n = 0;
+	FILE *in;
+
+	io_fopen(in, f, "r+");
+
+	if (0 == in) {
+		return 1;
+	}
+
+	fscanf(in, "%d", &num);
+	while (0 != num) {
+		sum += num;
+		n++;
+		fscanf(in, "%d", &num);
+	};
+
+	io_fprintf(in, "------------------\n");
+	io_fprintf(in, "sum:%04d\n", sum);
+	if (0 < n) {
+		io_fprintf(in, "avg:%04d\n", sum/n);
+	}
+
+	fclose(in);
+
+	return sum;
+}
 
