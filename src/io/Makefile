@@ -7,7 +7,7 @@ io: $(io_binout)
 io_inc := $(INC) -I$(src_path) -I$(src_path)file
 io_c := $(src_path)file/sum.c
 
-ifeq ($(NM_SYSTEM), MSYS_NT)
+ifeq ($(CC_NAME), msvc)
 	io_inc += -I$(src_path)posix
 	io_c += $(src_path)posix/getopt.c
 	io_getopt_repo = https://raw.githubusercontent.com/alex85k/wingetopt/master/src/
