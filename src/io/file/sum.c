@@ -18,8 +18,8 @@ int out_seq(const char *f) {
 	return 0;
 }
 
-int sum_seq(const char *f) {
-	f;
-	return 0;
-}
+//int sum_seq(const char *f) {
+//	f;
+//	return 0;
+//}
 
