@@ -22,7 +22,7 @@ static void usage(const char *p) {
 }
 
 int op_file(const char *in, const char *out) {
-    assert(in);
+	assert(in);
 	assert(out);
 	int v = out_seq(in);	
 	return v; 
@@ -33,6 +33,11 @@ const char *opt_input;		size_t OPT_INPUT_LEN = 256;
 const char *opt_output;		size_t OPT_OUTPUT_LEN = 256;
 
 int main(int argc, char * *argv) {
+	if (1 == argc) {
+		usage(argv[0]);
+		goto clean_exit;
+	}
+
 	int ch;
 	while (-1 != (ch = getopt_long(argc, argv, "ht:i:o:", longopts, 0))) {
 		switch (ch) {
