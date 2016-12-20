@@ -2,14 +2,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <getopt.h>
+#include <assert.h>
 #include <sum.h>
 
 static struct option longopts[] = {
-	{"help",    no_argument,			    0,      				'h'},
-	{"type",    required_argument,    0,				      't'},
+	{"help",    no_argument,		  0,      				'h'},
+	{"type",    required_argument,    0,				    't'},
 	{"input",   required_argument,    0,      				'i'},
 	{"output",  required_argument,    0,      				'o'},
-	{0,         0,              0,       0}
+	{0,         0,              0,    0}
 };
 
 static void usage(const char *p) {
@@ -21,7 +22,8 @@ static void usage(const char *p) {
 }
 
 int op_file(const char *in, const char *out) {
-	out;
+    assert(in);
+	assert(out);
 	int v = out_seq(in);	
 	return v; 
 }
