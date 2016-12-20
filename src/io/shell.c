@@ -10,7 +10,7 @@ static struct option longopts[] = {
 	{"type",    required_argument,    0,					    't'},
 	{"input",   optional_argument,    0,      				'i'},
 	{"output",  optional_argument,    0,      				'o'},
-	{0,         0,              0,    0}
+	{0,         0,              			0,					     0}
 };
 
 static void 
@@ -22,9 +22,10 @@ usage(const char *p) {
 	printf("  -o, --output\t\toutputfile\n");
 }
 
-int 
+static int 
 op_file(const char *in) {
 	assert(in);
+
 	if (0 == out_seq(in)) {
 		int v = sum_seq(in);
 		printf("sum[%s]=%d\n", in, v);
