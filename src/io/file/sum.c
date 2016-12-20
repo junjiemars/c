@@ -1,8 +1,14 @@
-#include <stdio.h>
 #include <sum.h>
+#include <stdio.h>
 
 int out_seq(const char *f) {
-	FILE *o = fopen(f, "w+");
+	FILE *o;
+#ifdef CC_MSVC
+	fopen_s(&o, f, "w+");
+#else
+	o = fopen(f, "w+");
+#endif
+
 	if (0 == o) {
 		return 1;
 	}
@@ -13,6 +19,7 @@ int out_seq(const char *f) {
 }
 
 int sum_seq(const char *f) {
+	f;
 	return 0;
 }
 

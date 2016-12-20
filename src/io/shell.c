@@ -1,3 +1,4 @@
+#include "shell.h"
 #include <stdio.h>
 #include <string.h>
 #include <getopt.h>
@@ -19,27 +20,28 @@ static void usage(const char *p) {
 	printf("  -o, --output\t\toutputfile\n");
 }
 
-int op_file(char *in, const char *out) {
+int op_file(const char *in, const char *out) {
+	out;
 	int v = out_seq(in);	
 	return v; 
 }
 
-char opt_type[16] = {0};
-char opt_input[256] = {0};
-char opt_output[256] = {0};
+const char *opt_type; 		size_t OPT_TYPE_LEN = 16;
+const char *opt_input;		size_t OPT_INPUT_LEN = 256;
+const char *opt_output;		size_t OPT_OUTPUT_LEN = 256;
 
 int main(int argc, char * *argv) {
 	int ch;
 	while (-1 != (ch = getopt_long(argc, argv, "ht:i:o:", longopts, 0))) {
 		switch (ch) {
 			case 't':
-				strncpy(opt_type, optarg, sizeof(opt_type));
+				opt_type = optarg;
 				break;
 			case 'i':
-				strncpy(opt_input, optarg, sizeof(opt_input));
+				opt_input = optarg;
 				break;
 			case 'o':
-				strncpy(opt_output, optarg, sizeof(opt_output));
+				opt_output = optarg;
 				break;
 			case 'h':
 			default:
@@ -51,7 +53,7 @@ int main(int argc, char * *argv) {
 	argc -= optind;
 	argv += optind;
 
-	if (0 == strncmp("file", opt_type, sizeof(opt_type))) {
+	if (0 == strncmp("file", opt_type, OPT_TYPE_LEN)) {
 		op_file(opt_input, opt_output);
 	} else {
 		printf("panic type\n");
