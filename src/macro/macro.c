@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#define _unused_(x) ((void)(x))
 #define double_v1(x) 2*x
 #define double_v2(x) (2*(x))
 
@@ -26,6 +27,8 @@
 */
 
 int main(int argc, char *argv[]) {
+	_unused_(argc);
+	_unused_(argv);
 
 #if (CC_MSVC)
 	W_C4100(argc)
