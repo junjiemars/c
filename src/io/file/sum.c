@@ -4,15 +4,18 @@
 
 #ifdef CC_MSVC
 	#define io_fopen(f, n, m) fopen_s(&f, n, m);
-	#define io_fprintf(f, ...) fprintf_s(&f, __VA_ARGS__);
+	#define io_fprintf(f, ...) fprintf_s(f, __VA_ARGS__);
+	#define io_fscanf(f, ...) fscanf_s(f, __VA_ARGS__);
 #else
 	#define io_fopen(f, n, m) f = fopen(n, m);
 	#define io_fprintf(f, ...) fprintf(f, __VA_ARGS__);
+	#define io_fscanf(f, ...) fscanf(f, __VA_ARGS__);
 #endif
 
 int 
 out_seq(const char *f) {
 	assert(f);
+
 	int v = 1;
 	FILE *out;
 
@@ -21,7 +24,7 @@ out_seq(const char *f) {
 	if (0 == out) {
 		return v;
 	}
-	fprintf(out, "%s\n", "24 13 55 42 19 0");
+	io_fprintf(out, "%s\n", "24 13 55 42 19 0");
 
 	v = fclose(out);
 	return v;
@@ -30,6 +33,7 @@ out_seq(const char *f) {
 int 
 sum_seq(const char *f) {
 	assert(f);
+
 	int num = 0, sum = 0, n = 0;
 	FILE *in;
 
@@ -39,14 +43,14 @@ sum_seq(const char *f) {
 		return 1;
 	}
 
-	fscanf(in, "%d", &num);
+	io_fscanf(in, "%d", &num);
 	while (0 != num) {
 		sum += num;
 		n++;
-		fscanf(in, "%d", &num);
+		io_fscanf(in, "%d", &num);
 	};
 
-	io_fprintf(in, "------------------\n");
+	io_fprintf(in, "%s\n", "----------");
 	io_fprintf(in, "sum:%04d\n", sum);
 	if (0 < n) {
 		io_fprintf(in, "avg:%04d\n", sum/n);
