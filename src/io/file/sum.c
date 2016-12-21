@@ -49,6 +49,7 @@ sum_seq(const char *f) {
 		n++;
 		io_fscanf(in, "%d", &num);
 	};
+	io_fscanf(in, "%d", &num);
 
 	io_fprintf(in, "%s\n", "----------");
 	io_fprintf(in, "sum:%04d\n", sum);
