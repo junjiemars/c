@@ -31,11 +31,6 @@ int main(int argc, char *argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 
-#if (CC_MSVC)
-	W_C4100(argc)
-	W_C4100(argv)
-#endif
-
 	printf("----------\n");
 	printf("double_v1(1+1)*8=%i\n", double_v1(1+1)*8);
 	printf("double_v2(1+1)*8=%i\n", double_v2(1+1)*8);
@@ -54,11 +49,12 @@ int main(int argc, char *argv[]) {
 
 	printf("----------\n");
 	int total = 5, out;
+  printf("sum(5, out)\n");
 	sum(5, out);
-	printf("out=%i, total=%i, |+ sum\n", out, total);
+	printf("out=%i, total=%i, |-  sum(%i)\n", out, total, 5);
 	int i = 5;
 	sum(i, out);
-	printf("out=%i, total=%i, |- sum\n", out, total);
+	printf("out=%i, total=%i, |-- sum(%i)\n", out, total, i);
 
 	/*
 	check_blank(0);
