@@ -9,12 +9,8 @@ io_inc := $(INC) -I$(src_path) -I$(src_path)file
 io_c := $(src_path)file/sum.c
 
 ifeq ($(CC_NAME), msvc)
-	io_inc += -I$(src_path)posix
-	io_c += $(src_path)posix/getopt.c
-	io_getopt_repo = https://raw.githubusercontent.com/alex85k/wingetopt/master/src/
-$(src_path)posix/getopt.c $(src_path)posix/getopt.h: 
-	curl -sLo $(src_path)posix/getopt.h $(io_getopt_repo)getopt.h
-	curl -sLo $(src_path)posix/getopt.c $(io_getopt_repo)getopt.c
+	io_inc += -I$(src_root)posix
+	io_c += $(src_root)posix/getopt.c
 endif
 
 ifeq ($(CC_NAME), gcc)
