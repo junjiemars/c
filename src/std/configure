@@ -1,0 +1,24 @@
+
+nm_feature="C11 Type-generic expression"
+nm_feature_name="nm_have_generic_keyword"
+nm_feature_run=no
+nm_feature_incs="#include <math.h>
+#define cbrt(x) _Generic((x), long double: cbrtl, \
+                              default: cbrt, \
+                              float: cbrtf)(x)"
+nm_feature_path=
+nm_feature_libs=
+nm_feature_test="long double x=cbrt(3.1415L);double y=cbrt(2.718);"
+. ${NM_HOME}auto/feature
+
+
+nm_feature="C11 safe version of strcpy"
+nm_feature_name="nm_have_strcpy_s_fn"
+nm_feature_run=no
+nm_feature_incs="#include <string.h>"
+nm_feature_path=
+nm_feature_libs=
+nm_feature_test="char s[16];strcpy_s(s,sizeof(s),\"hello strcpy_s\")"
+. ${NM_HOME}auto/feature
+
+
