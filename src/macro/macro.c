@@ -3,13 +3,14 @@
 #include <string.h>
 
 #define _unused_(x) ((void)(x))
+
 #define double_v1(x) 2*x
 #define double_v2(x) (2*(x))
 
 #define max(a, b) ((a) > (b) ? (a) : (b))
 
 #define incr(a, b)      \
-    (a)++;                      \
+    (a)++;              \
     (b)++;
 
 #define sum(max, out) {              								\
@@ -54,10 +55,10 @@ int main(int argc, char *argv[]) {
 	printf("----------\n");
 	int total = 5, out;
 	sum(5, out);
-	printf("out=%i, original total=%i\n", out, total);
+	printf("out=%i, total=%i, |+ sum\n", out, total);
 	int i = 5;
 	sum(i, out);
-	printf("out=%i, original total=%i\n", out, total);
+	printf("out=%i, total=%i, |- sum\n", out, total);
 
 	/*
 	check_blank(0);

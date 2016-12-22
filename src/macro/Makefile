@@ -1,14 +1,18 @@
 
-macro_cflags += $(CFLAGS) $(INC) -I$(src_path) -O2
 
 macro_binout := $(bin_path)macro$(bin_ext)
-macro_objout := $(tmp_path)macro$(obj_ext)
+macro_cppout := $(tmp_path)macro$(cpp_ext)
 
 macro: $(macro_binout)
 
-$(macro_objout): $(src_path)macro.c
-	$(CC) -c $(macro_cflags) $^ $(obj_out)$@
+macro_cflags += $(CFLAGS) $(INC) -I$(src_path)
 
-$(macro_binout): $(macro_objout)
-	$(LINK) $(LFLAGS) $^ $(bin_out)$@
+$(macro_cppout): $(src_path)macro.c
+	$(CPP) $(macro_cflags) $^ > $@
+
+$(macro_binout): $(macro_cppout)
+	$(CC) $(macro_cflags) $^ $(bin_out)$@
+
+macro_test: macro
+	$(macro_binout)
 

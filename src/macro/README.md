@@ -35,7 +35,7 @@ Call it with
 int a=2, b=3;
 if (a > b) incr(a, b);
 ```
-just only ```b``` will be incremented. We can block it to convert it to block-type macro
+just only ```b``` will be incremented. We can block it and convert it to block-type macro
 ```c
 #define incr(a, b) { \
     (a)++;           \
@@ -44,8 +44,7 @@ just only ```b``` will be incremented. We can block it to convert it to block-ty
 ```
 
 ## Name Clashs
-We can use same machinism like Lisp's ```(gensym)``` to rebind the input 
-arguments to new symbols.
+We can use same machinism like Lisp's ```(gensym)``` to rebind the input arguments to new symbols.
 
 ## Check Expansion
 

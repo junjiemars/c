@@ -49,7 +49,6 @@ objs/Makefile
 
 # vscode files
 .vscode/
-/TAGS
 
 # Nore
 /configure
@@ -60,3 +59,7 @@ nore/
 
 # txt files
 *.txt
+
+# etags/ctags
+/TAGS
+/tags
