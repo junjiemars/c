@@ -1,24 +1,42 @@
 
-nm_feature="C11 Type-generic expression"
-nm_feature_name="nm_have_generic_keyword"
-nm_feature_run=no
-nm_feature_incs="#include <math.h>
-#define cbrt(x) _Generic((x), long double: cbrtl, \
-                              default: cbrt, \
-                              float: cbrtf)(x)"
-nm_feature_path=
-nm_feature_libs=
-nm_feature_test="long double x=cbrt(3.1415L);double y=cbrt(2.718);"
-. ${NM_HOME}auto/feature
 
-
-nm_feature="C11 safe version of strcpy"
+nm_feature="C11 strcpy_s function"
 nm_feature_name="nm_have_strcpy_s_fn"
 nm_feature_run=no
 nm_feature_incs="#include <string.h>"
 nm_feature_path=
 nm_feature_libs=
 nm_feature_test="char s[16];strcpy_s(s,sizeof(s),\"hello strcpy_s\")"
+. ${NM_HOME}auto/feature
+
+
+nm_feature="C11 threads.h header file"
+nm_feature_name="nm_have_threads_h"
+nm_feature_run=no
+nm_feature_incs="#include <threads.h>"
+nm_feature_path=
+nm_feature_libs=
+nm_feature_test=
+. ${NM_HOME}auto/feature
+
+
+nm_feature="C99 #pragma once"
+nm_feature_name="nm_pragma_once"
+nm_feature_run=no
+nm_feature_incs="#pragma once"
+nm_feature_path=
+nm_feature_libs=
+nm_feature_test=
+. ${NM_HOME}auto/feature
+
+
+nm_feature="C99 stdint.h header file"
+nm_feature_name="nm_have_stdint_h"
+nm_feature_run=no
+nm_feature_incs="#include <stdint.h>"
+nm_feature_path=
+nm_feature_libs=
+nm_feature_test="int8_t c='X';"
 . ${NM_HOME}auto/feature
 
 
