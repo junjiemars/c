@@ -11,7 +11,7 @@ $(macro_cppout): $(src_path)macro.c
 	$(CPP) $(macro_cflags) $^ > $@
 
 $(macro_binout): $(macro_cppout)
-	$(CC) $(macro_cflags) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 macro_test: macro
 	$(macro_binout)
