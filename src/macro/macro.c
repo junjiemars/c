@@ -20,12 +20,17 @@
 	out = total_g123;                  								\
 }
 
-/*
-#define check_blank(a) {                            \
-	int v = (strlen(#a)>0) ? (a+0) : 2;               \
-	printf("I understand ur input to be %i.\n", v);   \
-}
-*/
+#define check_blank(a) strlen(#a)
+
+#ifdef NM_HAVE_VARIADIC_MACRO
+
+	#ifdef CC_MSVC
+		#define io_sprintf(b, ...) sprintf_s(b, sizeof(b), __VA_ARGS__)
+	#else
+		#define io_sprintf(b, ...) sprintf(b, __VA_ARGS__)
+	#endif
+
+#endif
 
 int main(int argc, char *argv[]) {
 	_unused_(argc);
@@ -56,8 +61,16 @@ int main(int argc, char *argv[]) {
 	sum(i, out);
 	printf("out=%i, total=%i, |-- sum(%i)\n", out, total, i);
 
-	/*
-	check_blank(0);
-	check_blank();
-	*/
+	printf("----------\n");
+	printf("'%s' is blank strlen=%zu\n", "", check_blank());
+	printf("%s is blank strlen=%zu\n", "123", check_blank(123));
+	printf("%s is blank strlen=%zu\n", "abc", check_blank(abc));
+
+#ifdef NM_HAVE_VARIADIC_MACRO
+	printf("----------\n");
+	char strbuf[32];
+	io_sprintf(strbuf, "0x%x", 0xff00);
+	printf("sprintf out=%s\n", strbuf);
+#endif
+
 }
