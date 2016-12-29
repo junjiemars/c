@@ -62,7 +62,10 @@ int main(int argc, char *argv[]) {
 	printf("out=%i, total=%i, |-- sum(%i)\n", out, total, i);
 
 	printf("----------\n");
+#ifndef CC_MSVC
+	/* C2168 msvc */
 	printf("'%s' is blank strlen=%zu\n", "", check_blank());
+#endif
 	printf("%s is blank strlen=%zu\n", "123", check_blank(123));
 	printf("%s is blank strlen=%zu\n", "abc", check_blank(abc));
 
