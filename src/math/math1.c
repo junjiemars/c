@@ -2,6 +2,7 @@
 
 #include <geo.h>
 #include <stdio.h>
+#include <string.h>
 
 
 double ref;
@@ -34,7 +35,10 @@ int main(){
 	printf("8 is not a number = %i\n", is_na(8));
 	//printf("0/0. is not a number = %i\n", isnan(0/0.));
 
-	unsigned long lu = *(unsigned long*)&x;
+	// strict-aliasing warning 
+	// unsigned long lu = *(unsigned long*)&x;
+	unsigned long lu;
+	memcpy(&lu, &x, sizeof(x));	
 
 	printf("nan spec: 0x%lx\n", lu);
 	printf("0x%lx is not a number = %i, via self:is_na\n", 
