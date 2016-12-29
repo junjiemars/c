@@ -1,14 +1,14 @@
 
-math: geo $(bin_path)math$(nm_binext)
+
+math_binout := $(bin_path)math$(bin_ext)
+
+math: geo $(math_binout)
 
 math_cflags := $(CFLAGS) $(INC)
 math_ldflags := 
 
+$(math_binout): $(src_path)math1.c $(lib_path)libgeo.lib
+	$(CC) $(math_cflags) $^ $(bin_out)$@
 
-$(tmp_path)math$(nm_objext): $(src_path)math1.c
-	$(CC) $(math_cflags) -c $^ $(nm_objout)$@
-
-
-$(bin_path)math$(nm_binext): $(tmp_path)math$(nm_objext) \
-$(lib_path)libgeo.lib
-	$(CC) $(CFLAGS) $(math_ldflags) $^ $(nm_binout)$@
+math_test: math
+	PATH=$(lib_path) $(math_binout)
