@@ -1,4 +1,4 @@
-# Compiler, Assembler, Linker and Loader
+# Preprocessor, Compiler, Assembler, Linker and Loader
 
 ## Stages
 
