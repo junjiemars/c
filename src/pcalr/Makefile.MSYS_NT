@@ -1,26 +1,23 @@
 
-calr_binout := $(bin_path)calr$(bin_ext)
+pcalr_binout := $(bin_path)pcalr$(bin_ext)
 
-calr: $(calr_binout)
+pcalr: $(pcalr_binout)
 
 CFLAGS = -MT -Z7 -W3 -nologo
 ASFLAGS += -c -Zi -nologo -W3
 LFLAGS = -MT -Z7 -W3 -nologo -link -FORCE:MULTIPLE
 
-calr_test: calr
-	$(calr_binout)
-
-$(calr_binout): $(tmp_path)calr$(obj_ext)
+$(pcalr_binout): $(tmp_path)pcalr$(obj_ext)
 	$(LINK) $(bin_out)$@ $^ $(LFLAGS) 
 
-$(tmp_path)calr$(obj_ext): $(tmp_path)calr$(asm_ext)
+$(tmp_path)pcalr$(obj_ext): $(tmp_path)pcalr$(asm_ext)
 	$(AS) $(ASFLAGS) $(obj_out)$@ $^ 
 
-$(tmp_path)calr$(asm_ext): $(tmp_path)calr$(cpp_ext)
+$(tmp_path)pcalr$(asm_ext): $(tmp_path)pcalr$(cpp_ext)
 	$(CAS) $(CFLAGS) -c $(asm_out)$@ $^
 
-$(tmp_path)calr$(cpp_ext): $(src_path)calr.c
+$(tmp_path)pcalr$(cpp_ext): $(src_path)pcalr.c
 	$(CPP) $(CFLAGS) $(INC) $^ > $@
 
-calr_test: calr
-	$(calr_binout)
+pcalr_test: pcalr
+	$(pcalr_binout)
