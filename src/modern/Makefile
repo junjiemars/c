@@ -18,7 +18,7 @@ $(0_binout): $(src_path)0/level0.c
 3.0: $(3.0_binout)
 
 $(3.0_binout): $(src_path)3.0/30.c
-	$(CC) $(CFLAGS) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 3.0_test: 3.0
 	$(3.0_binout) a b c

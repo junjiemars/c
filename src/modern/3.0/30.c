@@ -1,10 +1,16 @@
+#include <nm_auto_config.h>
+#include <nm_auto_headers.h>
 #include <stdio.h>
 #include <stdlib.h>
 /* #include <stdbool.h> bool: true/false */
 
 #define _unused_(x) (void)(x)
 
+#ifdef CC_MSVC
+int main(int argc, char* argv[]) {
+#else
 int main(int argc, char* argv[argc+1]) {
+#endif
 	_unused_(argv);
 
 	puts("Hello world!");
