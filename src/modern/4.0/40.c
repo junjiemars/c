@@ -7,7 +7,11 @@ int main(int argc, char* argv[]) {
 	_unused_(argv);
 
 	/* arithmetic overflow: wrapping around */
+#ifdef DARWIN
+	printf("SIZE_MAX=%llu\n", SIZE_MAX);
+#else
 	printf("SIZE_MAX=%zu\n", SIZE_MAX);
+#endif
 	size_t max = SIZE_MAX;
 	printf("SIZE_MAX+1=%zu\n", max += 1);
 	printf("SIZE_MAX+1-1=%zu\n", max -= 1);
