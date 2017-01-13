@@ -1,7 +1,7 @@
 
-modern: 0 3.0 3.2 4.0
+modern: 0 3.0 3.2 4.0 5.4
 
-modern_test: 0_test 3.0_test 3.2_test 4.0_test
+modern_test: 0_test 3.0_test 3.2_test 4.0_test 5.4_test
 
 INC += -I$(src_path)
 
@@ -32,3 +32,10 @@ $(4.0_binout): $(src_path)4.0/40.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 4.0_test: 4.0
 	$(4.0_binout)
+
+5.4_binout := $(bin_path)m54$(bin_ext)
+5.4: $(5.4_binout)
+$(5.4_binout): $(src_path)5.4/54.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+5.4_test: 5.4
+	$(5.4_binout)
