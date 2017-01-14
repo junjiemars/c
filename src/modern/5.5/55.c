@@ -23,15 +23,26 @@ int main(int argc, char* argv[]) {
 	uint16_t a=240;
 	uint16_t b=287;
 
+	uint16_t V=UINT16_MAX;
+	uint16_t v_add_1=V+1;
+	print_binary("V", V);
+	print_binary("V+1", v_add_1);
+
 	print_binary("A", a);
 	print_binary("~A", ~a);
 	print_binary("-A", -a);
-	print_binary("~A+1", ~a+1);
+
+	print_binary("~A=V-A", V-a);
+	print_binary("-A=~A+1", ~a+1);
 
 	print_binary("B", b);
 	print_binary("A|B", a|b);
 	print_binary("A&B", a&b);
 	print_binary("A^B", a^b);
+
+
+	print_binary("A^B=(A-(A&B))+(B-(A&B))", (a-(a&b))+(b-(a&b)));
+	print_binary("A|B=A+B-(A&B)", a+b-(a&b));
 
 	return 0;
 }
