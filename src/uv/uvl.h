@@ -9,5 +9,6 @@
 #include <sys/socket.h>
 #include <netdb.h>
 
+#define _unused_(x) (void)(x)
 
 #endif

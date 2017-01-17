@@ -6,6 +6,8 @@ static uv_getaddrinfo_t handle;
 
 static void on_resolved(uv_getaddrinfo_t* handle, 
 	int status, struct addrinfo* res) {
+    _unused_(handle);
+    _unused_(status);
 	uv_freeaddrinfo(res);
 }
 
