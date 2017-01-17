@@ -5,9 +5,9 @@
 #include <nm_auto_config.h>
 #include <nm_auto_headers.h>
 #include <uv.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
+//#include <sys/types.h>
+//#include <sys/socket.h>
+//#include <netdb.h>
 
 #define _unused_(x) (void)(x)
 
