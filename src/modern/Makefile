@@ -3,14 +3,14 @@ modern: 0 \
 				3.0 3.2 \
 				4.0 \
 				5.4 5.5 \
-				6.1
+				6.1 6.3 \
 
 modern_test: 0_test \
 						 3.0_test \
 						 3.2_test \
 						 4.0_test \
 						 5.4_test 5.5_test \
-						 6.1
+						 6.1 6.3 
 
 INC += -I$(src_path)
 
@@ -69,3 +69,10 @@ $(6.1_binout): $(src_path)6.1/array.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 6.1_test: 6.1
 	$(6.1_binout)
+
+6.3_binout := $(bin_path)m63$(bin_ext)
+6.3: $(6.3_binout)
+$(6.3_binout): $(src_path)6.3/63.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+6.3_test: 6.3
+	$(6.3_binout)
