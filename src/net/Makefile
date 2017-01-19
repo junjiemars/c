@@ -12,5 +12,5 @@ dns: $(dns_binout)
 $(dns_binout): $(src_path)dns/dns.c
 	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@
 dns_test: dns 
-	$(dns_binout) -4 -s'http' www.bing.com
+	$(dns_binout) -s'http' www.google.com
 
