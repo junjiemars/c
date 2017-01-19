@@ -2,42 +2,57 @@
 
 static struct option longopts[] = {
 	{"help",    no_argument,		  		0,      				'h'},
-	{"type",    optional_argument,    0,					    't'},
-	{"node",    required_argument,    0,      				'n'},
+	{"4",    		no_argument,    			0,			    		'4'},
+	{"6",    		no_argument,   				0,			    		'6'},
 	{0,         0,              			0,					     0}
 };
 
 static void 
 usage(const char *p) {
-	printf("usage %s\n", p);
+	printf("usage %s [options ...] host\n", p);
 	printf("  -h, --help\t\tthis help text\n");
-	printf("  -t, --type\t\tIPv4 or IPv6, default is IPv4\n");
-	printf("  -n, --node\t\tthe node want to resolve\n");
+	printf("  -4, --4\t\tIPv4, it is default\n");
+	printf("  -6, --6\t\tIPv6\n");
 }
 
 
-//static char node4[INET_ADDRSTRLEN];
-//static struct addrinfo ai;
-// 
-//void get_ipv4_addr() {
-//	
-//}
+static int opt_type = AF_INET;
+
+void 
+get_ipv4_addr(const char* host) {
+	struct addrinfo hints;
+	struct addrinfo* res;
+
+	memset(&hints, 0, sizeof(struct addrinfo));
+	int s = getaddrinfo(host, 0, &hints, &res);
+	if (s) {
+		//fprintf(stderr, "get_ipv4_addr: %s\n", gai_strerror(s));
+	}
+	_unused_(hints);
+	freeaddrinfo(res);	
+}
+
+void 
+get_ipv6_addr(const char* host) {
+
+}
 
 
-int main(int argc, char* argv[]) {
+int 
+main(int argc, char* argv[]) {
 	if (1 == argc) {
 		usage(argv[0]);
 		goto clean_exit;
 	}
 
 	int ch;
-	while (-1 != (ch = getopt_long(argc, argv, "ht:n:", longopts, 0))) {
+	while (-1 != (ch = getopt_long(argc, argv, "h46", longopts, 0))) {
 		switch (ch) {
-			case 't':
-				//opt_type = optarg;
+			case '4':
+				opt_type = AF_INET;
 				break;
-			case 'n':
-				//opt_input = optarg;
+			case '6':
+				opt_type = AF_INET6;
 				break;
 			case 'h':
 			default:
@@ -48,6 +63,14 @@ int main(int argc, char* argv[]) {
 
 	argc -= optind;
 	argv += optind;
+
+	for (int i=0; i < argc; ++i) {
+		if (AF_INET6 == opt_type) {
+			get_ipv6_addr(argv[i]);
+		} else {
+			get_ipv4_addr(argv[i]);
+		}
+	}
 
 clean_exit:
 	return 0;

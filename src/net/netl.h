@@ -11,6 +11,8 @@
 #include <getopt.h>
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
+#include <unistd.h>
 
 #define _unused_(x) (void)(x)
 
