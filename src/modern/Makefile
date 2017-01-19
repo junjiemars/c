@@ -14,6 +14,7 @@ modern_test: 0_test \
 
 INC += -I$(src_path)
 
+
 0_binout := $(bin_path)m0$(bin_ext)
 0: $(0_binout)
 $(0_binout): $(src_path)0/level0.c
@@ -65,7 +66,7 @@ $(5.5.6_binout): $(src_path)5.5.6/556.c
 
 6.1_binout := $(bin_path)m61$(bin_ext)
 6.1: $(6.1_binout)
-$(6.1_binout): $(src_path)6.1/array.c
+$(6.1_binout): $(src_path)6.1/61.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 6.1_test: 6.1
 	$(6.1_binout)

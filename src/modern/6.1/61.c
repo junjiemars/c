@@ -12,16 +12,25 @@ int main(int argc, char* argv[]) {
 	printf("length-of({ 2, 3, })=%lu\n", sizeof(x2)/sizeof(x2[0]));
 
 	/* multi-dementional array */
+
 	int y1[2][3];
-	int y2[][2] = { [2]={49,48,}, };
-	for (size_t m=0,n=0; m<2; ++m,++n) {
-		y1[m][n] = m*n + 10;
+	int y2[][2] = { [3]={49,48,}, [1]={0xff, 0xff00}, };
+
+	for (size_t m=0; m < sizeof(y1)/sizeof(y1[0]); ++m) {
+		for (size_t n=0; n < sizeof(y1[0])/sizeof(y1[0][0]); ++n) {
+			y1[m][n] = (m+1)*(n+1) + 10;
+		}
 	}
+	_unused_(y1);
+
 	printf("y2[][2]=");
-	for (size_t m=0,n=0; m<sizeof(y2)/sizeof(y2[0][0]); ++m,++n) {
-		printf("%i,", y2[m][n]);
+	for (size_t m=0; m < sizeof(y2)/sizeof(y2[0]); ++m) {
+		for (size_t n=0; n < sizeof(y2[0])/sizeof(y2[0][0]); ++n) {
+			printf("%i,", y2[m][n]);
+		}
 	}	
 	printf("\n");
+	_unused_(y2);
 
 	/* string is a 0-terminated array of char */
 	/* string intro see modern/str */
