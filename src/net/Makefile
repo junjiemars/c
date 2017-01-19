@@ -1,14 +1,14 @@
 
-net: addr
-net_test: addr_test
+net: dns 
+net_test: dns_test
 
 INC += -I$(src_path)
-LFLAGS += -lsocket -lnsl
+#LFLAGS += -lsocket -lnsl
 
-addr_binout := $(bin_path)addr$(bin_ext)
-addr: $(addr_binout)
-$(addr_binout): $(src_path)addr/addr.c
+dns_binout := $(bin_path)dns$(bin_ext)
+dns: $(dns_binout)
+$(dns_binout): $(src_path)dns/dns.c
 	$(CC) $(INC) $(LFLAGS) $^ $(bin_out)$@
-addr_test: addr
-	$(addr_binout)
+dns_test: dns 
+	$(dns_binout) -4 -s'http' www.bing.com
 

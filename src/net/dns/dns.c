@@ -4,6 +4,7 @@ static struct option longopts[] = {
 	{"help",    no_argument,		  		0,      				'h'},
 	{"4",    		no_argument,    			0,			    		'4'},
 	{"6",    		no_argument,   				0,			    		'6'},
+	{"service",	optional_argument,  	0,			    		's'},
 	{0,         0,              			0,					     0}
 };
 
@@ -12,31 +13,47 @@ usage(const char *p) {
 	printf("usage %s [options ...] host\n", p);
 	printf("  -h, --help\t\tthis help text\n");
 	printf("  -4, --4\t\tIPv4, it is default\n");
-	printf("  -6, --6\t\tIPv6\n");
+	printf("  -s, --service\t\tservice name: port or name\n");
 }
 
 
 static int opt_type = AF_INET;
+static char opt_service[INET_ADDRSTRLEN] = {0, };
 
 void 
-get_ipv4_addr(const char* host) {
-	struct addrinfo hints;
-	struct addrinfo* res;
+get_ipv4_addr(const char* host, const char* service) {
+	struct addrinfo hints, *res;
 
 	memset(&hints, 0, sizeof(struct addrinfo));
-	int s = getaddrinfo(host, 0, &hints, &res);
-	if (s) {
-		//fprintf(stderr, "get_ipv4_addr: %s\n", gai_strerror(s));
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_STREAM;
+	
+	int e = getaddrinfo(host, service, &hints, &res);
+	if (e) {
+		fprintf(stderr, "get_ipv4_addr: %s\n", gai_strerror(e));
+		goto clean_exit;
 	}
+	
+	printf("Hostname: %s\n", host);
+	for (struct addrinfo* p=res; p != 0; p=p->ai_next) {
+		struct sockaddr_in* in = (struct sockaddr_in *)p->ai_addr;
+		void* a = &(in->sin_addr);
+		char s[INET_ADDRSTRLEN]; 
+		inet_ntop(p->ai_family, a, s, sizeof(s));
+		printf("+IPv4 Address: %s\n", s);
+	}
+
 	_unused_(hints);
+	_unused_(res);
+
+clean_exit:
 	freeaddrinfo(res);	
 }
 
 void 
 get_ipv6_addr(const char* host) {
-
+	_unused_(host);
 }
-
 
 int 
 main(int argc, char* argv[]) {
@@ -46,13 +63,16 @@ main(int argc, char* argv[]) {
 	}
 
 	int ch;
-	while (-1 != (ch = getopt_long(argc, argv, "h46", longopts, 0))) {
+	while (-1 != (ch = getopt_long(argc, argv, "h46s:", longopts, 0))) {
 		switch (ch) {
 			case '4':
 				opt_type = AF_INET;
 				break;
 			case '6':
 				opt_type = AF_INET6;
+				break;
+			case 's':
+				strncpy(opt_service, optarg, sizeof(opt_service));
 				break;
 			case 'h':
 			default:
@@ -68,7 +88,7 @@ main(int argc, char* argv[]) {
 		if (AF_INET6 == opt_type) {
 			get_ipv6_addr(argv[i]);
 		} else {
-			get_ipv4_addr(argv[i]);
+			get_ipv4_addr(argv[i], opt_service);
 		}
 	}
 
