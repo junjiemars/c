@@ -4,7 +4,7 @@ net_test: dns_test
 
 INC += -I$(src_path)
 ifeq ($(NM_SYSTEM), Linux)
-	CFLAGS += -D_POSIX_SOURCE
+	CFLAGS += -D_POSIX_SOURCE -D_GNU_SOURCE
 endif
 
 dns_binout := $(bin_path)dns$(bin_ext)
