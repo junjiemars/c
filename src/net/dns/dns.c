@@ -1,4 +1,10 @@
 #include <netl.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <getopt.h>
+#include <string.h>
+#include <arpa/inet.h>
 
 static struct option longopts[] = {
 	{"help",    no_argument,		  		0,      				'h'},
