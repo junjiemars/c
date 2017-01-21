@@ -4,13 +4,15 @@ modern: 0 \
 				4.0 \
 				5.4 5.5 \
 				6.1 6.3 \
+			  7.0
 
 modern_test: 0_test \
 						 3.0_test \
 						 3.2_test \
 						 4.0_test \
 						 5.4_test 5.5_test \
-						 6.1 6.3 
+						 6.1 6.3 \
+						 7.0
 
 INC += -I$(src_path)
 
@@ -77,3 +79,10 @@ $(6.3_binout): $(src_path)6.3/63.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 6.3_test: 6.3
 	$(6.3_binout)
+
+7.0_binout := $(bin_path)m70$(bin_ext)
+7.0: $(7.0_binout)
+$(7.0_binout): $(src_path)7.0/fn.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+7.0_test: 7.0
+	$(7.0_binout)
