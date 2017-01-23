@@ -7,7 +7,7 @@ nm_feature_incs="#include <string.h>"
 nm_feature_path=
 nm_feature_libs=
 nm_feature_flags=
-nm_feature_test="char s[16]; strcpy_s(s,sizeof(s),\"hello strcpy_s\")"
+nm_feature_test="char s[16]; strcpy_s(s,sizeof(s),\"hello strcpy_s\");"
 . ${NM_HOME}auto/feature
 
 
@@ -47,7 +47,16 @@ nm_feature_run=no
 nm_feature_incs="#include <stdbool.h>"
 nm_feature_path=
 nm_feature_libs=
-nm_feature_test="bool t = ture, f = false;"
+nm_feature_test="bool t=true,f=false;"
+. ${NM_HOME}auto/feature
+
+nm_feature="C99 tgmath.h header file"
+nm_feature_name="nm_have_tgmath_h"
+nm_feature_run=no
+nm_feature_incs="#include <tgmath.h>"
+nm_feature_path=
+nm_feature_libs=
+nm_feature_test="sqrt(1);sqrt(1.0f);sqrt(1.0);"
 . ${NM_HOME}auto/feature
 
 
