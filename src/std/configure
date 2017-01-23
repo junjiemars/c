@@ -51,4 +51,13 @@ nm_feature_libs=
 nm_feature_test="int8_t c='X';"
 . ${NM_HOME}auto/feature
 
+nm_feature="C99 stdbool.h header file"
+nm_feature_name="nm_have_stdbool_h"
+nm_feature_run=no
+nm_feature_incs="#include <stdbool.h>"
+nm_feature_path=
+nm_feature_libs=
+nm_feature_test="bool t = ture, f = false;"
+. ${NM_HOME}auto/feature
+
 
