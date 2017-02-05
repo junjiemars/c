@@ -20,6 +20,11 @@ main(int argc, const char* argv[]) {
 		return 0;
 	}
 	
+	#if (NM_HAVE_STATIC_ASSERT)
+		static_assert(4 == sizeof(int), "sizeof(int) != 4 bytes");
+		printf("sizeof(int)=%lu\n", sizeof(int));
+	#endif
+
 	uint32_t n = (uint32_t)atoi(argv[1]);
 	printf("sqr(%u)=%u\n", 2u, sqr(n));
 

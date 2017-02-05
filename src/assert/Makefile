@@ -1,5 +1,6 @@
 
-# assert at runtime:
+# assert at runtime
+# static_assert at compile time
 # ./configure --without-debug --has-assert
 
 assert_binout := $(bin_path)assert$(bin_ext)
