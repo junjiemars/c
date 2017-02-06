@@ -10,13 +10,13 @@ int main(){
 	printf("address of the list is:%p\n", list);
 
 	printf("----------\n");
-	printf("sizeof(char*)=%lu bytes\n", sizeof(char*));
-	printf("sizeof(short*)=%lu bytes\n", sizeof(short*));
-	printf("sizeof(int*)=%lu bytes\n", sizeof(int*));
-	printf("sizeof(long*)=%lu bytes\n", sizeof(long*));
-	printf("sizeof(float*)=%lu bytes\n", sizeof(float*));
-	printf("sizeof(double*)=%lu bytes\n", sizeof(double*));
-	printf("sizeof(uint64_t*)=%lu bytes\n", sizeof(uint64_t*));
+	printf("sizeof(char*)=%zu bytes\n", sizeof(char*));
+	printf("sizeof(short*)=%zu bytes\n", sizeof(short*));
+	printf("sizeof(int*)=%zu bytes\n", sizeof(int*));
+	printf("sizeof(long*)=%zu bytes\n", sizeof(long*));
+	printf("sizeof(float*)=%zu bytes\n", sizeof(float*));
+	printf("sizeof(double*)=%zu bytes\n", sizeof(double*));
+	printf("sizeof(uint64_t*)=%zu bytes\n", sizeof(uint64_t*));
 
 	printf("----------\n");
 	int v1 = 0x11223344, v2 = 0x44332211;
