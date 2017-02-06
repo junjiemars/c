@@ -4,7 +4,7 @@
 # ./configure --without-debug --has-assert
 
 assert_cflags = $(CFLAGS)
-ifeq ((NM_SYSTEM), Linux)
+ifeq ((CC_NAME), gcc)
 	assert_cflags += -std=c11
 endif
 
