@@ -27,6 +27,7 @@ main(int argc, const char* argv[]) {
 
 	uint32_t n = (uint32_t)atoi(argv[1]);
 	printf("sqr(%u)=%u\n", 2u, sqr(n));
+	printf("after call sqr()\n");
 
 	return 0;
 }

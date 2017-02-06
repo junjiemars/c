@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#define _unused_(x) (void)(x)
+
 void out(unsigned n) {
   unsigned i;
   printf("%16d: ", n);
@@ -17,6 +19,9 @@ void out1(unsigned n) {
 }
 
 int main(int argc, const char *argv[]) {
+	_unused_(argc);
+	_unused_(argv);
+
   out(7);
   out(3L);
 

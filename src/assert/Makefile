@@ -4,9 +4,9 @@
 # ./configure --without-debug --has-assert
 
 assert_cflags = $(CFLAGS)
-#if ((NM_SYSTEM), Linux)
+ifeq ((NM_SYSTEM), Linux)
 	assert_cflags += -std=c11
-#endif
+endif
 
 assert_binout := $(bin_path)assert$(bin_ext)
 
