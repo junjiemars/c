@@ -3,11 +3,11 @@
 
 int main(){
 	printf("----------\n");
-	char *list[] = {"first", "second", "third", NULL/*must has*/};
-	for (char **p=list; *p != NULL; p++){
-		printf("%s\n", p[0]);
+	char* ss[] = {"first", "second", "third", NULL/*must has*/ };
+	for (char** p=ss; *p != NULL; p++) {
+		printf("%s ", p[0]);
 	}
-	printf("address of the list is:%p\n", list);
+	printf("\naddress of the list is:%p\n", ss);
 
 	printf("----------\n");
 	printf("sizeof(char*)=%zu bytes\n", sizeof(char*));
