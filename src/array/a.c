@@ -1,6 +1,8 @@
 #include <nm_auto_config.h>
 #include <nm_auto_headers.h>
 #include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
 
 #define _unused_(x) ((void)(x))
 void 
@@ -15,6 +17,23 @@ iter_a(int *a, size_t n) {
 		printf("%d ", *p++);
 	}
 	putchar('\n');
+}
+
+size_t
+randomize(size_t n) {
+	size_t r = rand() % n;
+	return r;
+}
+
+void
+iter_aa(size_t m, size_t n, size_t a[m][n], size_t (*fn)(size_t), size_t r) {
+	for (size_t i=0; i<m; ++i) {
+		for (size_t j=0; j<n; ++j) {
+			a[i][j] = (*fn)(r);
+			printf("%4zu ", a[i][j]);
+		}
+		putchar('\n');
+	}
 }
 
 int
@@ -48,6 +67,12 @@ main(int argc, const char* argv[]) {
 	printf("a2[3/%zu]\n", sizeof(a2)/sizeof(int));
 	iter_a(a2, sizeof(a2)/sizeof(int));
 	
+	printf("----------\n");
+	srand(time(0));
+	size_t m=3, n=2;
+	size_t aa1[m][n];
+	printf("aa1<[%zu][%zu]/%zu]>\n", m, n, sizeof(aa1)/sizeof(size_t));
+	iter_aa(m, n, aa1, &randomize, 100);	
 
 	return 0;
 }
