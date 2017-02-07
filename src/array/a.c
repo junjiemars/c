@@ -2,6 +2,7 @@
 #include <nm_auto_headers.h>
 #include <stdio.h>
 
+#define _unused_(x) ((void)(x))
 void 
 iter_a(int *a, size_t n) {
 	for (size_t i=0; i<n; ++i) {
@@ -18,6 +19,8 @@ iter_a(int *a, size_t n) {
 
 int
 main(int argc, const char* argv[]) {
+	_unused_(argc);
+	_unused_(argv);
 	
 	printf("----------\n");
 	int a0[] = { 1, 10, 20 };
