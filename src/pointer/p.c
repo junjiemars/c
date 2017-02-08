@@ -107,7 +107,7 @@ main(){
 
 	size_t rs1[10];
 	size_t n_rs1 = sizeof(rs1)/sizeof(size_t);
-	srand(time(0));
+	srand((unsigned int)time(0));
 	for (size_t i=0; i<n_rs1; ++i) {
 		rs1[i] = rand() % 100;
 		printf("%zu ", rs1[i]);
