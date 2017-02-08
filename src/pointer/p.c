@@ -58,17 +58,40 @@ main(){
 	int v1 = 0x11223344, v2 = 0x44332211;
 	const int* p1 = &v1;
 	*(int**)&p1 = &v2;
-	printf("<const int*>: p1=%d\n", *p1);
+	printf("<const int*>: p1<%p>=%d\n", p1, *p1);
 
 	int* const p2 = &v1;
-	*(const int**)&p2 = &v2;
-	printf("<int* const>: p2=%d\n", *p2);
+	*(int**)&p2 = &v2;
+	printf("<int* const>: p2<%p>=%d\n", p2, *p2);
 
 	const int* const p3 = &v1;
 	*(int**)&p3 = &v2;
-	printf("<const int* const>: p3=%d\n", *p3);
-	*(int**)&p3 = &v1;
-	printf("<const int* const>: p3=%d\n", *p3);
+	printf("<const int* const>: p3<%p>=%d\n", p3, *p3);
+	**(int**)&p3 = v2+0x1;
+	printf("<const int* const>: p3<%p>=%d\n", p3, *p3);
+
+	int* p41 = &v1;
+	int** p4 = &p41;
+	printf("<int**>: p4<%p>=%d\n", *p4, **p4);
+	
+	const int** p5 = &p1;
+	printf("<const int**>: p5<%p>=%d\n", *p5, **p5);	
+
+	int* const* p6 = &p2;
+	printf("<int* const*>: p6<%p>=%d\n", *p6, **p6);
+
+	int** const p7 = &p41;
+	printf("<int** const>: p7<%p>=%d\n", *p7, **p7);
+
+	const int* const* p8 = &p1;
+	printf("<const int* const*>: p8<%p>=%d\n", *p8, **p8);
+
+	const int** const p9 = &p1;
+	printf("<const int** const>: p9<%p>=%d\n", *p9, **p9);
+
+	int* const* const p0 = &p41;
+	printf("<int* const* const>: p0<%p>=%d\n", *p0, **p0);
+	
 
 	printf("----------\n");
 	size_t a1[10] = { 0,1,2,3,4,5, };
@@ -93,6 +116,18 @@ main(){
 	qsort(rs1, n_rs1, sizeof(size_t), &qs_i_cmp);
 	for (size_t i=0; i<n_rs1; ++i) {
 		printf("%zu ", rs1[i]);
+	}
+	putchar('\n');
+
+	printf("----------\n");
+	char *ss2[sizeof(ss1)/sizeof(char*)] = { 0 };
+	for (size_t i=0; i<sizeof(ss1)/sizeof(char*)-1; ++i) {
+		size_t n = 10;
+		ss2[i] = malloc(n * sizeof(char));	
+		memcpy(ss2[i], ss1[i], n);
+	}	
+	for (char** p=ss2; *p!=0; p++) {
+		printf("%s ", *p);
 	}
 	putchar('\n');
 	
