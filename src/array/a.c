@@ -5,6 +5,13 @@
 #include <stdlib.h>
 
 #define _unused_(x) ((void)(x))
+#ifdef CC_MSVC
+	#define M 3
+	#define N 2
+#else
+	size_t M=3, N=2;
+#endif
+
 void 
 iter_a(int *a, size_t n) {
 	for (size_t i=0; i<n; ++i) {
@@ -26,7 +33,11 @@ randomize(size_t n) {
 }
 
 void
+#ifdef CC_MSVC
+iter_aa(size_t m, size_t n, size_t a[M][N], size_t (*fn)(size_t), size_t r) {
+#else
 iter_aa(size_t m, size_t n, size_t a[m][n], size_t (*fn)(size_t), size_t r) {
+#endif
 	for (size_t i=0; i<m; ++i) {
 		for (size_t j=0; j<n; ++j) {
 			a[i][j] = (*fn)(r);
@@ -68,11 +79,10 @@ main(int argc, const char* argv[]) {
 	iter_a(a2, sizeof(a2)/sizeof(int));
 	
 	printf("----------\n");
-	srand(time(0));
-	size_t m=3, n=2;
-	size_t aa1[m][n];
-	printf("aa1<[%zu][%zu]/%zu]>\n", m, n, sizeof(aa1)/sizeof(size_t));
-	iter_aa(m, n, aa1, &randomize, 100);	
+	srand((unsigned int)time(0));
+	size_t aa1[M][N];
+	printf("aa1<[%zu][%zu]/%zu]>\n", M, N, sizeof(aa1)/sizeof(size_t));
+	iter_aa(M, N, aa1, &randomize, 100);	
 
 	return 0;
 }
