@@ -130,6 +130,9 @@ main(){
 		printf("%s ", *p);
 	}
 	putchar('\n');
+	for (size_t i=0; i<sizeof(ss2)/sizeof(char*)-1; ++i) {
+		free(ss2[i]);
+	}
 	
 
 	return 0;

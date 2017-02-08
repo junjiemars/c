@@ -3,13 +3,16 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #define _unused_(x) ((void)(x))
+
 #ifdef CC_MSVC
 	#define M 3
 	#define N 2
+	#define Z 2
 #else
-	size_t M=3, N=2;
+	size_t M=3, N=2, Z=2;
 #endif
 
 void 
@@ -47,6 +50,46 @@ iter_aa(size_t m, size_t n, size_t a[m][n], size_t (*fn)(size_t), size_t r) {
 	}
 }
 
+void
+iter_aa1(size_t m, size_t n, size_t* a, size_t (*fn)(size_t), size_t r) {
+	for (size_t i=0; i<m; ++i) {
+		for (size_t j=0; j<n; ++j) {
+			a[i*n+j] = (*fn)(r);
+			printf("%4zu ", a[i*n+j]);
+		}
+		putchar('\n');
+	}
+}
+
+void 
+iter_aaa1(size_t m, size_t n, size_t z, size_t* a, 
+	size_t (*fn)(size_t), size_t r) {
+
+	for (size_t i=0; i<m; ++i) {
+		for (size_t j=0; j<n; ++j) {
+			for (size_t k=0; k<z; ++k) {
+				a[i*n*z+j*z+k] = (*fn)(r);
+				printf("%4zu ", a[i*n*z+j*z+k]);
+			}
+			printf("|");
+		}
+		putchar('\n');
+	}
+}
+
+void
+fn1(size_t a[][N]) {
+	assert(sizeof(*a) == sizeof(size_t) * N);
+	_unused_(a);
+}
+
+void
+fn2(int** a) {
+	assert(sizeof(*a) == sizeof(int*));
+	_unused_(a);
+}
+
+
 int
 main(int argc, const char* argv[]) {
 	_unused_(argc);
@@ -81,8 +124,24 @@ main(int argc, const char* argv[]) {
 	printf("----------\n");
 	srand((unsigned int)time(0));
 	size_t aa1[M][N];
-	printf("aa1<[%zu][%zu]/%zu]>\n", M, N, sizeof(aa1)/sizeof(size_t));
+	printf("aa1<[%zu][%zu]/%zu>\n", M, N, sizeof(aa1)/sizeof(size_t));
 	iter_aa(M, N, aa1, &randomize, 100);	
 
+	printf("----------\n");
+	size_t aa2[M*N];
+	printf("aa2<[%zu*%zu]/%zu>\n", M, N, sizeof(aa2)/sizeof(size_t));
+	iter_aa1(M, N, aa2, &randomize, 100);
+
+	printf("----------\n");
+	size_t aa3[M*N*Z];
+	printf("aa2<[%zu*%zu*%zu]/%zu>\n", M, N, Z, sizeof(aa3)/sizeof(size_t));
+	iter_aaa1(M, N, Z, aa3, &randomize, 100);
+
+	size_t aa4[M][N];
+	fn1(aa4);
+		
+	int* aa5[M];
+	fn2(aa5);
+	
 	return 0;
 }
