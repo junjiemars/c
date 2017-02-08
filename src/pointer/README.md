@@ -31,6 +31,13 @@ const int* const p = &v1;
 **(int**)&p = v2;
 ```
 
+## function Pointer
+
+## void Pointer
+via **void** pointer can get some ploymorphic behavior, 
+see ```qsort``` in ```stdlib.h```
+
+
 ## References
 * [printf size_t](http://stackoverflow.com/questions/2524611/how-can-one-print-a-size-t-variable-portably-using-the-printf-family)
 * [Pointers](http://stackoverflow.com/documentation/c/1108/pointers#t=201702060822544818513)

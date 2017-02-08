@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
 size_t 
 sqr(size_t n) {
@@ -15,9 +18,28 @@ sum(size_t (*fn)(size_t), size_t* lst, size_t n) {
 	return s;
 }
 
-int main(){
+int
+qs_s_cmp(const void* x, const void* y) {
+	const char* l = *(const char**)x;
+	const char* r = *(const char**)y;
+	
+	return strncmp(l, r, 10);
+}
+
+int
+qs_i_cmp(const void* x, const void* y) {
+	const size_t l = *((const size_t*)x);
+	const size_t r = *((const size_t*)y);
+
+	if (l < r) return -1;
+	if (l > r) return 1;
+	return 0;
+}
+
+int 
+main(){
 	printf("----------\n");
-	char* ss[] = {"first", "second", "third", NULL/*must has*/ };
+	char* ss[] = { "first", "second", "third", NULL/*must has*/ };
 	for (char** p=ss; *p != NULL; p++) {
 		printf("%s ", p[0]);
 	}
@@ -51,6 +73,29 @@ int main(){
 	printf("----------\n");
 	size_t a1[10] = { 0,1,2,3,4,5, };
 	printf("sum(|sqr|)=%zu\n", sum(&sqr, a1, sizeof(a1)/sizeof(size_t)));
+
+	printf("----------\n");
+	char* ss1[] = { "a", "orange", "apple", "berry", NULL, };
+	qsort(ss1, sizeof(ss1)/sizeof(char*)-1, sizeof(char*), &qs_s_cmp);
+	for (char** p=ss1; *p != NULL; p++) {
+		printf("%s ", p[0]);
+	}
+	putchar('\n');
+
+	size_t rs1[10];
+	size_t n_rs1 = sizeof(rs1)/sizeof(size_t);
+	srand(time(0));
+	for (size_t i=0; i<n_rs1; ++i) {
+		rs1[i] = rand() % 100;
+		printf("%zu ", rs1[i]);
+	}
+	putchar('\n');
+	qsort(rs1, n_rs1, sizeof(size_t), &qs_i_cmp);
+	for (size_t i=0; i<n_rs1; ++i) {
+		printf("%zu ", rs1[i]);
+	}
+	putchar('\n');
+	
 
 	return 0;
 }
