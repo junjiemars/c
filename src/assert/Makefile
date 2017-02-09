@@ -15,7 +15,13 @@ assert: $(assert_binout)
 $(assert_binout): $(src_path)a.c
 	$(CC) $(assert_cflags) $(INC) $^ $(bin_out)$@
 
+ifeq ($(CC_NAME), msvc)
 assert_test: assert
-	-$(assert_binout) 0
-	-$(assert_binout) 100
-	-$(assert_binout) 49
+		-$(assert_binout) 49
+		-$(assert_binout) 0 # will raise assert failed dialog box
+else
+assert_test: assert
+		-$(assert_binout) 0
+		-$(assert_binout) 100
+		-$(assert_binout) 49
+endif
