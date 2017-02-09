@@ -21,7 +21,7 @@ allowing the value stored there to be assigned or retrived.
 int v = 0x11223344;
 const int* p = &v;
 *p = (*p)+10; /* error: l-value specifies const object */
-*(int**)&p = (*p)+10; /* skip, dangerous */
+**(int**)&p = *p+10; /* skip, dangerous */
 ```
 
 ### const Pointer to object
@@ -29,7 +29,7 @@ const int* p = &v;
 int v1=0x11223344, v2=0x44332211;
 int* const p = &v1;
 p = &v2; /* error: l-value specifies const object */
-**(int**)&p = &v2; /* skip, dangerous */
+*(int**)&p = &v2; /* skip, dangerous */
 ```
 
 ### const Pointer to const object
@@ -77,8 +77,8 @@ return_type_of_fn (*fn)(type_of_arg1 arg1, type_of_arg2 arg2 ...);
 ```
 
 ## void Pointer
-```void*``` is a catch all type for pointers to object types, 
-via **void** pointer can get some ploymorphic behavior. see ```qsort``` in ```stdlib.h```
+```void*``` is a catch all type for pointers to object types, via **void** pointer 
+can get some ploymorphic behavior. see ```qsort``` in ```stdlib.h```
 
 
 ## References
