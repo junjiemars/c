@@ -1,16 +1,9 @@
-CFLAGS ?= -Wall -g 
 
-scope.out: scope.c
-	$(CC) $(CFLAGS) $^ -o $@
+scope_binout := $(bin_path)scope$(bin_ext)
 
-install: scope.out
-	@(cp scope.out $(INSTALL_BIN)/scope)
+scope: $(scope_binout)
+scope_test: scope
+	$(scope_binout)
 
-run: scope.out
-	./scope.out $(args)
-
-debug: scope.out
-	$(DEBUG) ./scope.out $(args)
-
-clean:
-	-(rm -f scope.out)
+$(scope_binout): $(src_path)scope.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
