@@ -4,17 +4,69 @@
 
 ## Scope
 
-## Vim Tips
-How to copy to or paste from system clipboard
+## auto Keyword
+This storage class denotes that an identifier has automatic storage duration. This
+means once the scope in which the identifier was defined ends, the object denoted
+by the identifier is no longer valid.
 
-## Linux
+Since all objects, not living in **global** scope or being declared **static**, have
+automatic storage duration by default when defined, this keyword is mostly of 
+historical interest and should not be used.
 
-### OSX
-:w !pbcopy
-:r !pbpaste
+## register Keyword
+Hints to the compiler that access to an object should as fast as possible. 
+Whether the compiler actually uses the hint is implementation-defined; it may simply
+treat it as equivalent to **auto**.
 
- * A good artical here: http://norswap.com/c_scope_duration_linkage/
- *
+The only property that is definitively different for all objects that are declared 
+with **register** is that they cannot have their address computed. 
+Thereby **register** can be a good tool to ensure centain optimizations:
+
+```c
+/* error: address of register variable requested */
+register int i4 = 0x10;
+int* p = &i4;
+sqr(*(&i4));
+```
+
+```i4``` that can never alias because no code can pass its address to another 
+function where it might be changed unexpectedly.
+
+This property also implies that an array
+```c
+register int a[5];
+```
+cannot decay into a pointer to its first element (i.e. turning into ```&a[0]```).
+This means that the elements of such an array cannot be accessed and the array itself
+cannot be passed to a function.
+
+In fact, the only legal usage of an array declared with a ```register``` storage class
+is the ```sizeof``` operator; Any other operator would require the address of the
+first element of the array. For that reason, arrays generally should not be declared
+with the ```register``` keyword since it makes them useless for anything other than
+size computation of the entire array, which can be done just as easily without 
+```register``` keyword.
+
+The ```register``` storage class is more appropriate for variables that are defined 
+inside a block and are accessed with high frequency.
+
+
+## static Keyword
+The **static** storge class serves different purposes, depending on the location
+of the declaration in the file:
+* Confine the identifier to that **translation unit** only (scope=file);
+* Save data for use with the next call of a function (scope=block); 
+* >=C99, used in function parameters to denote an array is expected to have a 
+constant minimum number of elements and a non-null parameter.
+
+## extern Keyword
+Used to declare an object or function that is defined elsewhere (and that 
+has **external linkage**). In general, it is used to declare an object or
+function to be used in a module that is not the one in which the corresponding
+object or function is defined. 
+
+
+## Note
  * The scope of a declaration is the part of the code where the declaration is seen
  * and can be used.
  * Note that this says nothing about whether the object associated
@@ -90,4 +142,8 @@ How to copy to or paste from system clipboard
  * 2) uninitialized variables will be set to 0;
  *
  *
- */
+
+
+## References
+* [C: Scope, Duration & Linkage](http://norswap.com/c_scope_duration_linkage/)
+* [C Language: Storage Classes](http://stackoverflow.com/documentation/c/3597/storage-classes#t=201702091201208256422) 

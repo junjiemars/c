@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "scope.h"
+#include <assert.h>
 
 #define _unused_(x) ((void)(x))
 
@@ -15,28 +16,47 @@ extern int i2;
 /* function sub forward declaration */
 void sub(int, int);
 
+int inc() {
+	static int i=0;
+	return i++;
+}
+
+int map(int (*fn)(int n), int a[static 4]) {
+	for (int i=0; i<4; ++i) {
+		a[i] = (*fn)(a[i]);
+	}
+	return 4;
+}
+
 int main(int argc, char *argv[]) {
 	_unused_(argv);
 
-  printf("file scope: i0=%i\n", i0);
+	printf("epoch: i0=%i, i1=%i, i2=%i\n", i0, i1, i2);
 
+	printf("----------file scope----------\n");
+  printf("=>main{i0}=%i\n", i0);
+
+
+	printf("----------block scope----------\n");
   int i0 = 321;
-  printf("block scope in main: i0=%i\n", i0);
+  printf("=>main{i0}=%i\n", i0);
 
   {
     int i0 = 123+321;
-    printf("block scope in main nested block: i0=%i\n", i0);
+    printf("=>main{{i0}}=%i\n", i0);
   }
 
-  printf("block scope in main: i0=%i\n", i0);
+  printf("=>main{i0}=%i\n", i0);
 
-  printf("function scope for function parameter: argc=%i\n", argc);
+  printf("=>main{argc}=%i\n", argc);
+
   {
     int argc = 123;
-    printf("block scope in main nested block: argc=%i\n", argc);
+    printf("=>main{{argc}}=%i\n", argc);
   }
 
   if (i0 > 0) {
+		printf("=>main{{goto i0}}=>{{i0:}}\n");
     goto i0;
 		#ifdef CC_MSVC 
 			#pragma warning(push)
@@ -51,25 +71,42 @@ int main(int argc, char *argv[]) {
      * so u can use i0 here
      */
     i0:
-    printf("goto label i0 in main nested block, samed id with i0\n");
+    printf("=>main{{i0:}}\n");
   }
 
+	printf("----------fn scope----------\n");
   sub(i0, i0+1);
 
+	printf("----------block scope----------\n");
   {
     auto int i0 = 1;
-    printf("auto int i0 in main nested block: i0=%i\n", i0);
+    printf("=>main{{auto i0}}=%i\n", i0);
   }
 
-  printf("file scope, tentative definition: i1=%i\n", i1);
+	printf("----------file scope----------\n");
+  printf("=>main{i1}=%i\n", i1);
 
-  printf("file scope, extern declaration: i2=%i\n", i2);
+  printf("=>main{extern int}:i2=%i\n", i2);
 
+	printf("=>main=>{extern inline fn}:sqr(%i)=%i\n", i2, sqr(i2));
 
+	printf("=>main=>{fn}:inc()=%i\n", inc());
+	printf("=>main=>{fn}:inc()=%i\n", inc());
+
+	int a[] = { 1, 2, 3, 4 };
+	printf("=>main=>{fn}:map({1,2,3,4},&sqr)=%i\n", map(&sqr, a));
+	for (size_t i=0; i<sizeof(a)/sizeof(a[0]); ++i) {
+		printf("%i ", a[i]);
+	}
+	putchar('\n');
+	
+	register int k, sum;
+	for (k=1, sum=0; k < 6; sum += k, k++);
+	printf("=>main{for:register:1~5}=%i\n", sum);
 }
 
 void sub(int i0, int i1) {
-  printf("block scope in sub: i0=%i\n", i0+i1);
+  printf("=>sub{i0=%i+%i}=%i\n", i0, i1, i0+i1);
 
   /* well, the i0 from function parameter i0, so u can't redefined it */
   /* int i0 += 1; */
