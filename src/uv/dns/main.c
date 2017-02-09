@@ -6,8 +6,16 @@ static uv_getaddrinfo_t handle;
 
 static void on_resolved(uv_getaddrinfo_t* handle, 
 	int status, struct addrinfo* res) {
-    _unused_(handle);
-    _unused_(status);
+	_unused_(handle);
+	_unused_(status);
+
+	for (struct addrinfo* p=res; p != 0; p=p->ai_next) {
+		struct sockaddr_in* in = (struct sockaddr_in *)p->ai_addr;
+		void* a = &(in->sin_addr);
+		char s[INET_ADDRSTRLEN]; 
+		inet_ntop(p->ai_family, a, s, sizeof(s));
+		printf("+IPv4 Address: %s\n", s);
+	}
 
 	uv_freeaddrinfo(res);
 }
