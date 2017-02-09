@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "scope.h"
 
+#define _unused_(x) ((void)(x))
 
 /* file scope, declaration, definition with initializer  */
 int i0 = 123;
@@ -15,6 +16,7 @@ extern int i2;
 void sub(int, int);
 
 int main(int argc, char *argv[]) {
+	_unused_(argv);
 
   printf("file scope: i0=%i\n", i0);
 
@@ -36,7 +38,12 @@ int main(int argc, char *argv[]) {
 
   if (i0 > 0) {
     goto i0;
-    printf("this line bypassed via goto\n");
+		#ifdef CC_MSVC 
+			#pragma warning(push)
+			#pragma warning(disable: 4702)
+			printf("this line bypassed via goto\n");
+			#pragma warning(pop)
+		#endif
   }
 
   {
