@@ -36,8 +36,8 @@ is not shared with any other declaration. All declarations with no linkage
 happen at block scope: all block scope declarations without the extern storage
 class specifier have no linkage.
 
-**Internal Linkage**: within the compilation unit, all declarations with
-internal linkage for the same identifier refer to the same object.
+**Internal Linkage**: within the compilation unit, all declarations with internal 
+linkage for the same identifier refer to the same object.
 
 **External Linkage**: within the whole program, all declarations with external
 linkage for the same identifier refer to the same object.
@@ -61,10 +61,10 @@ inside a function prototype. It extends until the end of the prototype. This
 scope exists to ensure that function parameters have distinct names.
 
 ### File Scope
-All vairables and functions defined ouside functions have file scope. They are 
-visible from their declarration until the end of the file. Here, the term *file*
-should be understood as the source file being compiled, after all includes have been 
-resolved.
+All vairables and functions defined ouside functions have [file scope](#file-scope).
+They are visible from their [declaration](#declaration-and-definition) until the 
+end of the file. Here, the term **file** should be understood as the source file 
+being compiled, after all includes have been resolved.
 
 
 ## Storage
@@ -136,9 +136,8 @@ of the declaration in the file:
 constant minimum number of elements and a non-null parameter.
 
 ### extern 
-Used to declare an object or function that is defined elsewhere (and that 
-has **external linkage**). In general, it is used to declare an object or
-function to be used in a module that is not the one in which the corresponding
+**extern** keyword used to declare an object or function that is defined 
+elsewhere (and that has **external linkage**). In general, it is used to declare an object or function to be used in a module that is not the one in which the corresponding
 object or function is defined. 
 
 
