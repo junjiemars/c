@@ -10,3 +10,9 @@ $(env_objout): $(src_path)env.c
 
 $(env_binout): $(env_objout)
 	$(LINK) $(LFLAGS) $^ $(bin_out)$@ 
+
+env_test: env
+	$(env_binout) --COUNT=2 --TEXT=Bonjour
+	COUNT=2 $(env_binout)
+	COUNT=3 TEXT="Bonjor" $(env_binout)
+	COUNT=2 $(env_binout) --TEXT=Bonjour
