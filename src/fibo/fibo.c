@@ -1,5 +1,4 @@
 #include <fibo.h>
-
 #include <stdio.h>
 #include <stdint.h>
 #include <getopt.h>
