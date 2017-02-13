@@ -1,4 +1,4 @@
-#include <fibo.h>
+#include "fibo.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <getopt.h>
@@ -8,7 +8,7 @@
 	#include <inttypes.h>
 	#define outln_int64(s) printf("%" PRId64 "\n", s)
 #else
-	#define outln_int64(s) printf("%lld\n", s)
+	#define outln_int64(s) printf("%ld\n", s)
 #endif
 
 static struct option longopts[] = {
