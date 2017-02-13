@@ -20,7 +20,12 @@ struct foo {
 struct foo*
 bar(struct foo* s) {
 	s->a = add1(s->a);	
+#ifdef CC_MSVC
+	char fmt[] = "add1(*foo->a) => %i => %i\n";
+	strcpy_s(s->b, sizeof(fmt)/sizeof(fmt[0]), fmt);
+#else
 	strcpy(s->b, "add1(*foo->a) => %i => %i\n");
+#endif
 	return s;
 }
 
@@ -42,7 +47,12 @@ main(int argc, char* argv[]) {
 	d = add1(c);
 	printf("add1(d) => %i => %i\n", c, d);
 
+#ifdef CC_MSVC
+	struct foo f;
+	f.a = d;
+#else
 	struct foo f = { .a=d, .b="" };	
+#endif
 	struct foo* f1 = bar(&f);
 	printf(f1->b, d, f1->a);
 
