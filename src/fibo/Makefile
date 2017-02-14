@@ -4,10 +4,10 @@ fibo_binout := $(bin_path)fibo$(bin_ext)
 fibo_cflags := $(CFLAGS) $(INC) -I$(src_path)
 fibo_getopt_c :=
 
-#ifeq ($(CC_NAME), msvc)
+ifeq ($(CC_NAME), msvc)
 	fibo_cflags += -I$(src_root)posix
-	fibo_getopt_c := $(src_root)/posix/getopt.c
-#endif
+	fibo_getopt_c := $(src_root)posix/getopt.c
+endif
 
 fibo: $(fibo_binout)
 fibo_test: fibo
