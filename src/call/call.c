@@ -3,18 +3,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
 #ifdef CC_GCC
 #define __cdecl __attribute__((cdecl))
 #define __stdcall __attribute__((stdcall))
 #endif
+*/
 
-int __cdecl 
+int
 add(int a, int b) {
 	int v = a+b;
 	return v;
 }
 
-int __stdcall
+int 
 sub(int a, int b) {
 	int v = a-b;
 	return v;
