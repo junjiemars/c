@@ -1,8 +1,6 @@
 #ifndef _IO_H_
 #define _IO_H_
 
-#include <nm_auto_config.h>
-#include <nm_auto_headers.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>

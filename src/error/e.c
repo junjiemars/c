@@ -1,3 +1,6 @@
+#include <nm_auto_config.h>
+#include <nm_auto_headers.h>
+#include <utils.h>
 #include <io.h>
 #include <stdio.h>
 
@@ -10,6 +13,7 @@ main(int argc, char* argv[]) {
 
 	FILE* out;
 	int e1, e2;
+	_unused_(e2);
 
 	io_fopen(e1, out, argv[1], "r");
 
@@ -24,6 +28,8 @@ main(int argc, char* argv[]) {
 		io_fprintf(e2, stderr, "open %s failed, caused by %s\n", argv[1], strerror(e1));
 	}
 
+
 	fclose(out);
 	
+	return 0;
 }
