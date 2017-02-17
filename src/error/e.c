@@ -1,8 +1,13 @@
 #include <nm_auto_config.h>
 #include <nm_auto_headers.h>
 #include <utils.h>
-#include <io.h>
 #include <stdio.h>
+#include <string.h>
+#include <errno.h>
+
+#ifdef CC_MSVC
+#pragma warning(disable:4996) /*_CRT_SECURE_NO_WARNINGS*/
+#endif
 
 int
 main(int argc, char* argv[]) {
@@ -12,20 +17,21 @@ main(int argc, char* argv[]) {
 	}
 
 	FILE* out;
-	int e1, e2;
-	_unused_(e2);
+	int e;
 
-	io_fopen(e1, out, argv[1], "r");
+	out = fopen(argv[1], "r");
+	e = errno;
 
-	if (e1) {
-		io_fprintf(e2, stderr, "open %s failed, caused:\n", argv[1]);
-		perror(strerror(e1));
+	if (e) {
+		fprintf(stderr, "open %s failed, caused:\n", argv[1]);
+		perror(strerror(e));
 		return -1;	
 	}
 
-	io_fprintf(e1, stdout, "open %s successed\n", argv[1]);
-	if (e1) {
-		io_fprintf(e2, stderr, "open %s failed, caused by %s\n", argv[1], strerror(e1));
+	fprintf(stdout, "open %s successed\n", argv[1]);
+	e = errno;
+	if (e) {
+		fprintf(stderr, "open %s failed, caused by %s\n", argv[1], strerror(e));
 	}
 
 
