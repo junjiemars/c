@@ -1,18 +1,12 @@
 
-
 hi_binout := $(bin_path)hi$(bin_ext)
-hi_objout := $(tmp_path)hi$(obj_ext)
-
 
 hi: $(hi_binout)
-
-
-$(hi_objout): $(src_path)hi.c
-	$(CC) $(CFLAGS) $(INC) -c $^ $(obj_out)$@
-
-$(hi_binout): $(hi_objout) 
-	$(LINK) $^ $(bin_out)$@
-
 hi_test: hi
 	$(hi_binout)
+	$(hi_binout) arlo
+
+$(hi_binout): $(src_path)hi.c 
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
