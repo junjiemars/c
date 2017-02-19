@@ -58,12 +58,14 @@ And also used with AX register along with DX for multiply and divde operations
 involving large values.
 
 ### Pointer Registers
-* IP: **instruction pointer** register stores the offset address of the next instruction to be executed. IP in association with CS register (as CS:IP) gives the complete 
-address of the current instruction in the code segment.
+* IP: **instruction pointer** register stores the offset address of the next 
+instruction to be executed. IP in association with CS register (as CS:IP) 
+gives the complete address of the current instruction in the code segment.
 * SP: **stack pointer** register provides the offset value within the program stack.
-* BP: **basic pointer** mainly helps in referencing the parameter variables passed 
-to a subroutine. The address in SS register is combined with the offset in BP to get
-the location of the parameter. BP can also be combined with DI and SI as base registerfor special addressing.
+* BP: **basic pointer** (aka. frame pointer) mainly helps in referencing the 
+parameter variables passed to a subroutine. The address in SS register is combined 
+with the offset in BP to get the location of the parameter. BP can also be combined 
+with DI and SI as base registerfor special addressing.
 
 ### Index Registers
 Are used for indexed addressing and sometimes used in addition and subtraction.
@@ -77,7 +79,7 @@ Thre are thre main segments:
 starting address of the code segment.
 * DS: **data segment** it contains data, contains and work areas. Stores the starting
 address of the data segment.
-* SP: **stack segment** it contains data and return addresses of procedure or 
+* SS: **stack segment** it contains data and return addresses of procedure or 
 subroutines. It is implemented as a **stack** data structure. Stores the starting
 address of the stack.
 
@@ -97,10 +99,16 @@ status flags to take the control flow to ther location.
 
 
 ## Stack 
+In computers, the stack is usually a specially treated region of memory. And a 
+stack frame is a frame of data that gets pushed onto the stack. In the case of
+a call stack, a stack frame would represent a function call and its argument data.
+
+### Top of Stack
+![Top of Stack](top-of-stack.png)
 
 
-## How to Taste
-LLDB/GDB debugging or **otool** :
+## How to play
+LLDB/GDB debugging or otool/objdump :
 ```sh
 $ ./configure --has-asm --with-optimize=NO
 $ make
@@ -113,3 +121,6 @@ $ otool -tv objs/bin/asm
 * [Intel and AT&T Syntax](http://www.imada.sdu.dk/Courses/DM18/Litteratur/IntelnATT.htm)
 * [Assembly Programming Tutorial](https://www.tutorialspoint.com/assembly_programming/index.htm)
 * [Intel® 64 and IA-32 Architectures Software Developer Manuals](https://software.intel.com/en-us/articles/intel-sdm)
+* [Stack frame layout on X86-64](http://eli.thegreenplace.net/2011/09/06/stack-frame-layout-on-x86-64)
+* [Where the top of the stack is on x86](http://eli.thegreenplace.net/2011/02/04/where-the-top-of-the-stack-is-on-x86/)
+* [Explain the concept of a stack frame in a nutshell](http://stackoverflow.com/questions/10057443/explain-the-concept-of-a-stack-frame-in-a-nutshell)
