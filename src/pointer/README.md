@@ -3,7 +3,9 @@
 ## Pointer and Array
 
 ## sizeof Pointer
-Depends on compiler and machine
+Depends on compiler and machine, all types of pointers on specified machine and 
+compiled via specified compiler has same the size, generally occupy one machine word.
+```sizeof(size_t)```
 
 ## Address of and Dereference 
 The ```*``` has two distinct meanings within C in relation to pointers, depending on 
@@ -80,6 +82,8 @@ return_type_of_fn (*fn)(type_of_arg1 arg1, type_of_arg2 arg2 ...);
 ```void*``` is a catch all type for pointers to object types, via **void** pointer 
 can get some ploymorphic behavior. see ```qsort``` in ```stdlib.h```
 
+## Dangling Pointer
+Pointers that point to invalid addresses are sometimes called dangling pointers.
 
 ## References
 * [printf size_t](http://stackoverflow.com/questions/2524611/how-can-one-print-a-size-t-variable-portably-using-the-printf-family)
