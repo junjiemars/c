@@ -18,8 +18,6 @@ allowing the value stored there to be assigned or retrived.
 ## const and Pointer
 Threre is a technique known as the **Clockwise/Spiral Rule** enables any C programmer to parse in their head any C declaration.
 
-![const and pointer](const-pointer.png)
-
 ### Pointer to const object
 ```c
 int v = 0x11223344;
