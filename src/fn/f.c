@@ -31,6 +31,31 @@ fn2(int op) {
 }
 
 int
+recursive_factorial(int n) {
+	if (n < 0) return 0;
+	if (n < 2) {
+		return 1;
+	} else {
+		return n*recursive_factorial(n-1);
+	}
+}
+
+static inline int 
+_iter_fact(int n, int acc) {
+	if (n == 1) {
+		return acc;
+	} else {
+		return _iter_fact(n-1, n*acc);
+	}
+}
+
+int
+iterative_factorial(int n) {
+	if (n < 0) return 0;
+	return _iter_fact(n, 1);
+}
+
+int
 main(int argc, char* argv[]) {
 	_unused_(argc);
 	_unused_(argv);
@@ -41,5 +66,9 @@ main(int argc, char* argv[]) {
 
 	printf("fn2(ADD1:%d)=%d\n", i1, fn2(ADD1)(i1));
 	printf("fn2(SUB1:%d)=%d\n", i1, fn2(SUB1)(i1));
+
+	int f1 = 10;
+	printf("recursive_factorial(%i)=%i\n", f1, recursive_factorial(f1));
+	printf("iterative_factorial(%i)=%i\n", f1, iterative_factorial(f1));
 
 }
