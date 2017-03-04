@@ -18,7 +18,7 @@ allowing the value stored there to be assigned or retrived.
 ## const and Pointer
 Threre is a technique known as the **Clockwise/Spiral Rule** enables any C programmer to parse in their head any C declaration.
 
-![const and pointer](const-point.png)
+![const and pointer](./const-point.png)
 
 ### Pointer to const object
 ```c
@@ -109,4 +109,4 @@ and dimension.
 * [What is array decaying?](http://stackoverflow.com/questions/1461432/what-is-array-decaying)
 * [The Development of the C Lanuage](https://www.bell-labs.com/usr/dmr/www/chist.html)
 * [array](../array/README.md)
-* [Clockwise/Spiral Rule](http://c-faq.com/decl/spiral.anderson.html]
+* [Clockwise/Spiral Rule](http://c-faq.com/decl/spiral.anderson.html)
