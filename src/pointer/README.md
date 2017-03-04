@@ -16,6 +16,9 @@ allowing the value stored there to be assigned or retrived.
 
 
 ## const and Pointer
+Threre is a technique known as the **Clockwise/Spiral Rule** enables any C programmer to parse in their head any C declaration.
+
+![const and pointer](const-point.png)
 
 ### Pointer to const object
 ```c
@@ -81,6 +84,9 @@ return_type_of_fn (*fn)(type_of_arg1 arg1, type_of_arg2 arg2 ...);
 ```void*``` is a catch all type for pointers to object types, via **void** pointer 
 can get some ploymorphic behavior. see ```qsort``` in ```stdlib.h```
 
+## volatile pointer
+
+
 ## Dangling Pointer
 Pointers that point to invalid addresses are sometimes called dangling pointers.
 
@@ -103,3 +109,4 @@ and dimension.
 * [What is array decaying?](http://stackoverflow.com/questions/1461432/what-is-array-decaying)
 * [The Development of the C Lanuage](https://www.bell-labs.com/usr/dmr/www/chist.html)
 * [array](../array/README.md)
+* [Clockwise/Spiral Rule](http://c-faq.com/decl/spiral.anderson.html]
