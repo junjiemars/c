@@ -18,7 +18,7 @@ allowing the value stored there to be assigned or retrived.
 ## const and Pointer
 Threre is a technique known as the **Clockwise/Spiral Rule** enables any C programmer to parse in their head any C declaration.
 
-![const and pointer](./const-point.png)
+![const and pointer](const-pointer.png)
 
 ### Pointer to const object
 ```c
@@ -84,8 +84,6 @@ return_type_of_fn (*fn)(type_of_arg1 arg1, type_of_arg2 arg2 ...);
 ```void*``` is a catch all type for pointers to object types, via **void** pointer 
 can get some ploymorphic behavior. see ```qsort``` in ```stdlib.h```
 
-## volatile pointer
-
 
 ## Dangling Pointer
 Pointers that point to invalid addresses are sometimes called dangling pointers.
@@ -102,6 +100,15 @@ The exceptions to this rule are when an array is an operand of either the
 initializer in a declaration. More importantly the term decay signifies loss of type 
 and dimension.
 
+## volatile pointer
+```volatile``` is to tell the compiler not to optimize the reference, so that every 
+read/write does not use the value stored in register but does a real memory access.
+
+```c
+volatile int v1;
+int *p_v1 = &v1; /* bad */
+volatile int *p_v1 = &v1; /* better */
+```
 
 ## References
 * [printf size_t](http://stackoverflow.com/questions/2524611/how-can-one-print-a-size-t-variable-portably-using-the-printf-family)
