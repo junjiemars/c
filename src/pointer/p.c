@@ -135,6 +135,12 @@ main(){
 		free(ss2[i]);
 	}
 	
+	printf("----------\n");
+	char* *p_ss1 = ss1;
+	/* point to array of char* */
+	char* (*pa_ss1)[sizeof(ss1)/sizeof(ss1[0])] = &ss1;	
+	printf("addressof(ss1[0])=%p\nchar** =%p\nchar* (*)[]=%p\n", ss1, p_ss1, pa_ss1);
+	printf("&ss1[1]<%p>==(ss1+1)<%p>\n", &ss1[1], ss1+1);
 
 	return 0;
 }

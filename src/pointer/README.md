@@ -1,6 +1,5 @@
 # Pointer
 
-## Pointer and Array
 
 ## sizeof Pointer
 Depends on compiler and machine, all types of pointers on specified machine and 
@@ -85,6 +84,22 @@ can get some ploymorphic behavior. see ```qsort``` in ```stdlib.h```
 ## Dangling Pointer
 Pointers that point to invalid addresses are sometimes called dangling pointers.
 
+## Pointer and Array
+
+### Decay
+Decay refers to the implicit conversion of an expression from an array type to 
+a pointer type. In most contexts, when the compiler sees an array expression it 
+converts the type of the expression from **N-element array of T** to 
+**const pointer to T** and set the value of the expression to the address of the first element of the array.
+The exceptions to this rule are when an array is an operand of either the 
+```sizeof``` or ```&``` operators, or the array is a string literal being used as an
+initializer in a declaration. More importantly the term decay signifies loss of type 
+and dimension.
+
+
 ## References
 * [printf size_t](http://stackoverflow.com/questions/2524611/how-can-one-print-a-size-t-variable-portably-using-the-printf-family)
 * [Pointers](http://stackoverflow.com/documentation/c/1108/pointers#t=201702060822544818513)
+* [What is array decaying?](http://stackoverflow.com/questions/1461432/what-is-array-decaying)
+* [The Development of the C Lanuage](https://www.bell-labs.com/usr/dmr/www/chist.html)
+* [array](../array/README.md)
