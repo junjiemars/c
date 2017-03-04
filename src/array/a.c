@@ -102,6 +102,9 @@ main(int argc, const char* argv[]) {
 		printf("%d ", a0[i]);
 	}
 
+	printf("\n----------\n");
+	printf("a0[1]=%i\n1[a0]=%i\n", a0[1], 1[a0]);
+
 	/* c99 */
 	printf("\n----------\n");
 	int a1[] = { [2]=20, [1]=10, [0]=1 };
@@ -142,6 +145,7 @@ main(int argc, const char* argv[]) {
 		
 	int* aa5[M];
 	fn2(aa5);
+
 	
 	return 0;
 }
