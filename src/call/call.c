@@ -11,33 +11,27 @@
 */
 
 int
-add(int a, int b) {
-	int v = a+b;
-	return v;
-}
-
-int 
-sub(int a, int b) {
-	int v = a-b;
+add(int a, int b, int *c) {
+	int v = a + b + *c;
+	*c += 1;
 	return v;
 }
 
 int
 main(int argc, char* argv[]) {
-	if (argc < 3) {
+	if (argc < 4) {
 		printf("input 2 integer oprands\n");
 		return -1;
 	}
 
-	int a, b, v1, v2;
+	int a, b, c, v;
 
 	a = atoi(argv[1]);
 	b = atoi(argv[2]);
+	c = atoi(argv[3]);
 
-	v1 = add(a, b);
-	v2 = sub(v1, b);
+	v = add(a, b, &c);
 	
-	printf("cdecl=> add(%i,%i)=%i\n", a, b, v1);		
-	printf("stdcall=> sub(%i,%i)=%i\n", v1, b, v2);		
+	printf("cdecl=> add(%i,%i,%i)=%i\nc=%i\n", a, b, c, v, c);		
 	
 }
