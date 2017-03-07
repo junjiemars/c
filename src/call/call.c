@@ -11,8 +11,18 @@
 */
 
 int
+factorial(int n, int acc) {
+	if (n < 1) {
+		return acc;
+	} else {
+		return factorial(n-1, n*acc);
+	}
+}
+
+int
 add(int a, int b, int *c) {
 	int v = a + b + *c;
+	v = factorial(v, 1);
 	*c += 1;
 	return v;
 }

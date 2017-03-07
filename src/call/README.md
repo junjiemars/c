@@ -14,6 +14,19 @@ of arguments is not appended to the name of the function by the compiler, and th
 assembler and the linker are therefore unable to detemine if an incorrect number
 of arguments is used.
 
+![stack frame](frame-cdecl.gif)
+
+|    ...    |                                                   |
+|----------:|:--------------------------------------------------|
+|  16(%ebp) | - third function parameter                        |
+|  12(%ebp) | - second function parameter                       |
+|   8(%ebp) | - first function parameter                        |
+|   4(%ebp) | - old %eip (the function's return address)        |
+|   0(%ebp) | - old %ebp (previous function's base pointer)     |
+|  -4(%ebp) | - first local variable                            |
+|  -8(%ebp) | - second local variable                           |
+| -12(%ebp) | - third local variable                            |
+
 ## stdcall
 * Passes arguments Right-to-Left, and returns the value in _eax_.
 * The callee cleans the stack, unlike _cdecl_.
