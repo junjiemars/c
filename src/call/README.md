@@ -16,16 +16,17 @@ of arguments is used.
 
 ![stack frame](frame-cdecl.gif)
 
-|    ...    |                                                   |
-|----------:|:--------------------------------------------------|
-|  16(%ebp) | - third function parameter                        |
-|  12(%ebp) | - second function parameter                       |
-|   8(%ebp) | - first function parameter                        |
-|   4(%ebp) | - old %eip (the function's return address)        |
-|   0(%ebp) | - old %ebp (previous function's base pointer)     |
-|  -4(%ebp) | - first local variable                            |
-|  -8(%ebp) | - second local variable                           |
-| -12(%ebp) | - third local variable                            |
+|  32 bits  |  64 bits  |                                                   |
+|----------:|----------:|:--------------------------------------------------|
+|  16(%ebp) |  32(%rbp) | - third function parameter                        |
+|  12(%ebp) |  24(%rbp) | - second function parameter                       |
+|   8(%ebp) |  16(%rbp) | - first function parameter                        |
+|   4(%ebp) |   8(%rbp) | - old %eip (the function's return address)        |
+|   0(%ebp) |   0(%rbp) | - old %ebp (previous function's base pointer)     |
+|  -4(%ebp) |  -8(%rbp) | - first local variable                            |
+|  -8(%ebp) | -16(%rbp) | - second local variable                           |
+| -12(%ebp) | -24(%rbp) | - third local variable                            |
+
 
 ## stdcall
 * Passes arguments Right-to-Left, and returns the value in _eax_.
@@ -41,3 +42,5 @@ often in Right-to-Left order.
 ## References
 * [x86 Disassembly/Calling Conversions](https://en.wikibooks.org/wiki/X86_Disassembly/Calling_Conventions)
 * [x86 calling conversions](https://en.wikipedia.org/wiki/X86_calling_conventions)
+* [Intel x86 Function-call conversions - Assembly View](http://unixwiz.net/techtips/win32-callconv-asm.html)
+* [Procedures, Video 4: Linux stack frame](https://www.youtube.com/watch?v=PrDsGldP1Q0)
