@@ -106,6 +106,32 @@ a call stack, a stack frame would represent a function call and its argument dat
 ### Top of Stack
 ![Top of Stack](top-of-stack.png)
 
+## Basic Instructions
+
+### Move
+```mov[x] <source> <dest>```, ```x``` will be b(byte), w(word), l(long), q(quad).
+
+
+#### Transfer data between memory and register
+* __Load__ data from memory into register: %R = M[address]
+* __Store__ register data into memory: M[address] = %R
+
+#### Operand Types
+* Immediate: constant data, eg., ```$0x400```
+* Registers
+* Memory: block bytes of memory at address given by register, eg., ```(%rax)```
+
+#### movq Operand Combinations
+* I => R: ```movq $0x4, %rax      => a = 0x4;```
+* I => M: ```movq $0x4, (%rax)    => *p = 0x5;```
+* R => R: ```movq %rax, %rdx      => a = b;```
+* R => M: ```movq %rax, (%rdx)    => *p = a;```
+* M => R: ```movq (%rax), %rdx    => b = *p;```
+
+#### Memory Addressing Modes
+* Indirect: (R) => M[R[x]] eg., ```movq (%rcx), %rax```
+* Displacement: D(R) => M[R[x]+D] eg., ```movq -0x8(%rbp), %rdx```
+
 
 ## How to play
 LLDB/GDB debugging or otool/objdump :
