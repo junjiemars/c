@@ -93,10 +93,35 @@ Many instructions involve comparisons and mathematical calculations and change t
 status of the flags and some other conditional instructions test the value of these
 status flags to take the control flow to ther location.
 
-|  Flag:  |    |    |    |    |  O |  D | I | T | S | Z |   | A |   | P |   | C |
+|  Flags: |    |    |    |    |  O |  D | I | T | S | Z |   | A |   | P |   | C |
 |:-------:|:--:|:--:|:--:|:--:|:--:|:--:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| Bit No: | 15 | 14 | 13 | 12 | 11 | 10 | 9 | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+| Bit#    | 15 | 14 | 13 | 12 | 11 | 10 | 9 | 8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
 
+
+|  Bit#  |  Abbrreviation |      Description       |   Category    |
+|:------:|:--------------:|:-----------------------|:-------------:|
+|  0     |  CF            | Carry flag             | status        |
+|  2     |  PF            | Parity flag            | status        |
+|  4     |  AF            | Adjust flag            | status        |
+|  6     |  ZF            | Zero flag              | status        |
+|  7     |  SF            | Sign flag              | status        |
+|  8     |  TF            | Trap flag              | status        |
+|  9     |  IF            | Interrupt enable flag  | status        |
+| 10     |  DF            | Direction flag         | status        |
+| 11     |  OF            | Overflow flag          | status        |
+
+
+### Conditional Jumps
+
+Jump instructions which operates on signed integers.
+| OP  | Jump Condition           | Test                     |
+|:----|:-------------------------|:-------------------------|
+| JE  | jump if Equal            | ZF = 1                   |
+| JNE | jump if Not Equal        | ZF = 0                   |
+| JG  | jump if Greater          | ZF = 0 AND SF = OF       |
+| JGE | jump if Greater or Equal | SF = OF                  |
+| JL  | jump if Less             | SF != OF                 |
+| JLE | jump if Less or Equal    | ZF = 1 OR SF != OF       |
 
 ## Stack 
 In computers, the stack is usually a specially treated region of memory. And a 
@@ -150,3 +175,4 @@ $ otool -tv objs/bin/asm
 * [Stack frame layout on X86-64](http://eli.thegreenplace.net/2011/09/06/stack-frame-layout-on-x86-64)
 * [Where the top of the stack is on x86](http://eli.thegreenplace.net/2011/02/04/where-the-top-of-the-stack-is-on-x86/)
 * [Explain the concept of a stack frame in a nutshell](http://stackoverflow.com/questions/10057443/explain-the-concept-of-a-stack-frame-in-a-nutshell)
+* [Conditional Branching and Flags](https://courses.engr.illinois.edu/ece390/books/labmanual/assembly.html)

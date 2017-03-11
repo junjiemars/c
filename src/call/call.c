@@ -10,8 +10,8 @@
 #endif
 */
 
-int
-factorial(int n, int acc) {
+long
+factorial(long n, long acc) {
 	if (n < 1) {
 		return acc;
 	} else {
@@ -19,9 +19,9 @@ factorial(int n, int acc) {
 	}
 }
 
-int
-add(int a, int b, int *c) {
-	int v = a + b + *c;
+long
+add(long a, long b, long *c) {
+	long v = a + b + *c;
 	v = factorial(v, 1);
 	*c += 1;
 	return v;
@@ -34,14 +34,14 @@ main(int argc, char* argv[]) {
 		return -1;
 	}
 
-	int a, b, c, v;
+	long a, b, c, v;
 
-	a = atoi(argv[1]);
-	b = atoi(argv[2]);
-	c = atoi(argv[3]);
+	a = atol(argv[1]);
+	b = atol(argv[2]);
+	c = atol(argv[3]);
 
 	v = add(a, b, &c);
 	
-	printf("cdecl=> add(%i,%i,%i)=%i\nc=%i\n", a, b, c, v, c);		
+	printf("cdecl=> add(%li,%li,%li)=%li\nc=%li\n", a, b, c, v, c);		
 	
 }

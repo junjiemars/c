@@ -16,16 +16,18 @@ of arguments is used.
 
 ![stack frame](frame-cdecl.gif)
 
-|  32 bits  |  64 bits  |                                                   |
-|----------:|----------:|:--------------------------------------------------|
-|  16(%ebp) |  32(%rbp) | - third function parameter                        |
-|  12(%ebp) |  24(%rbp) | - second function parameter                       |
-|   8(%ebp) |  16(%rbp) | - first function parameter                        |
-|   4(%ebp) |   8(%rbp) | - old %eip (the function's return address)        |
-|   0(%ebp) |   0(%rbp) | - old %ebp (previous function's base pointer)     |
-|  -4(%ebp) |  -8(%rbp) | - first local variable                            |
-|  -8(%ebp) | -16(%rbp) | - second local variable                           |
-| -12(%ebp) | -24(%rbp) | - third local variable                            |
+|  32 bits  |  64 bits  |                                                     |
+|----------:|----------:|:----------------------------------------------------|
+|  16(%ebp) |  32(%rbp) |  third function parameter                           |
+|  12(%ebp) |  24(%rbp) |  second function parameter                          |
+|   8(%ebp) |  16(%rbp) |  first function parameter                           |
+|   4(%ebp) |   8(%rbp) |  old %eip|%rip (the function's return address)      |
+|   0(%ebp) |   0(%rbp) |  old %ebp|%rbp (previous function's base pointer)   |
+|  -4(%ebp) |  -8(%rbp) |  first local variable                               |
+|  -8(%ebp) | -16(%rbp) |  second local variable                              |
+| -12(%ebp) | -24(%rbp) |  third local variable                               |
+
+
 
 
 ## stdcall
