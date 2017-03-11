@@ -114,6 +114,8 @@ status flags to take the control flow to ther location.
 ### Conditional Jumps
 
 Jump instructions which operates on signed integers.
+
+
 | OP  | Jump Condition           | Test                     |
 |:----|:-------------------------|:-------------------------|
 | JE  | jump if Equal            | ZF = 1                   |
