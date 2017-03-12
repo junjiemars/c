@@ -12,7 +12,7 @@ machine languages, but they enable a programmer to use names instead of numbers.
 | Doubleword |            4 |          32 |
 |  Quadword  |            8 |          64 |
 | Paragraph  |           16 |         128 |
-| Kilobytes  |         1024 |        8192 |
+| Kilobyte   |         1024 |        8192 |
 | Megabyte   |    1,048,576 |     8388608 |
 
 
@@ -113,7 +113,7 @@ status flags to take the control flow to ther location.
 
 ### Conditional Jumps
 
-Jump instructions which operates on signed integers.
+Jump instructions operate on signed integers.
 
 
 | OP  | Jump Condition           | Test                     |
@@ -124,6 +124,7 @@ Jump instructions which operates on signed integers.
 | JGE | jump if Greater or Equal | SF = OF                  |
 | JL  | jump if Less             | SF != OF                 |
 | JLE | jump if Less or Equal    | ZF = 1 OR SF != OF       |
+
 
 ## Stack 
 In computers, the stack is usually a specially treated region of memory. And a 
