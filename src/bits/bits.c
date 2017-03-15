@@ -34,5 +34,11 @@ int main(int argc, const char *argv[]) {
   out(*(unsigned*)&f1);
   out(*(unsigned*)&f2);
 
+	int x = -94, y = 2;
+	int ars1 = x >> y;
+	int ars2 = ((unsigned int)x >> y | ~(~0u >> y));
+	out(ars1);
+	out(ars2);
+
   return 0;
 }
