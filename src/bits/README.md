@@ -2,7 +2,7 @@
 
 ## Shift
 Logical shift always fill discarded bits with 0s while arithmetic shift fills it with
-0s only for left shift, but for right shift it copies the most significant bit 
+0s only for left shift, but for right shift it copies the most significant bit (MSB)
 thereby preserving the sign of the operand.
 
 ### On Unsigned Integers
@@ -29,10 +29,12 @@ Right shift, ```x >> y```
 * arithmetic shift for signed values
 	* replicate most significant on left
 	* maintains sign of ```x```
-* equivalent to dividing by ```2^y```
+* equivalent to ```floor(2^y)```
 	* correct rounding towards 0 requires some care with signed numbers.
-	* ```x >> y | ~(~0u >> y)```
+	* ```(unsigned)x >> y | ~(~0u >> y)```
 
 
 ## References
+* [Logical shift](https://en.wikipedia.org/wiki/Logical_shift)
+* [Arithmetic shift](https://en.wikipedia.org/wiki/Arithmetic_shift)
 * [Are the shift operators arithmetic or logical in C?](https://stackoverflow.com/questions/7622/are-the-shift-operators-arithmetic-or-logical-in-c)
