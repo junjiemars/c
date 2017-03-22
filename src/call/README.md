@@ -2,7 +2,7 @@
 
 ## Machine
 
-### Darwin
+### x86 
 The **stack** growth from high to low, and **memory** growth from low to high.
 
 ## cdecl

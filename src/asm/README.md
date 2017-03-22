@@ -164,7 +164,7 @@ a call stack, a stack frame would represent a function call and its argument dat
 ## How to play
 LLDB/GDB debugging or otool/objdump :
 ```sh
-$ ./configure --has-asm --with-optimize=NO
+$ ./configure --has-asm --with-optimize=NO --without-symbol
 $ make
 $ lldb objs/bin/asm
 $ otool -tv objs/bin/asm
