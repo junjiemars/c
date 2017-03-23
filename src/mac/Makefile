@@ -18,7 +18,7 @@ bit_test: bit
 $(bit_binout): $(source_path)/bit.c $(examples_path)/bit/ex-1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-bitree_libout := $(lib_path)libbitree$(mod_ext)
+bitree_libout := $(lib_path)libbitree$(lib_ext)
 bitree: $(bitree_libout)
 $(bitree_libout): $(source_path)/bitree.c
 	$(CC) $(LFLAGS) $(LDFLAGS) $(INC) $^ $(bin_out)$@

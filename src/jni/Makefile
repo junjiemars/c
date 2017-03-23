@@ -1,5 +1,5 @@
 
-square_lib := $(lib_path)libsquare$(mod_ext)
+square_lib := $(lib_path)libsquare$(lib_ext)
 
 
 jni: $(square_lib)

@@ -1,6 +1,6 @@
 
 
-geo_binout := $(lib_path)libgeo$(mod_ext)
+geo_binout := $(lib_path)libgeo$(lib_ext)
 
 geo: $(geo_binout)
 
