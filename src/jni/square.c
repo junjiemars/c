@@ -2,21 +2,13 @@
 #include <square.h>
 #include <stdio.h>
 
-#if (MSYS_NT)
-
-	#if (CC_MSVC)
-		#define W_C4100(x) { (x); }
-	#endif 
-
-#endif
-
+#define _unused_(x) ((void)(x))
 
 JNIEXPORT jint JNICALL Java_Java2c_square
   (JNIEnv *env, jobject obj, jint n) {
-		#if (CC_MSVC)
-			W_C4100(env)
-			W_C4100(obj)
-		#endif
+
+		_unused_(env);
+		_unused_(obj);
 
       printf("Oh, Gandalf\n");
       int v = n * n;
