@@ -46,6 +46,38 @@ main(int argc, const char *argv[]) {
 		return 1;
 	}
 
+	char *prow;
+	char *pbuf = buf;
+	char *rows[4][4] = {{0}};
+	size_t i = 0;
+
+	while ((prow = strchr(pbuf, '\n')) != 0) {
+		char *pcol;	
+		char *row = (char *)malloc((prow-pbuf) * sizeof(char));
+		strncpy(row, pbuf, (prow-pbuf));
+		size_t j = 0;
+
+		while (((pcol = strchr(row, ',')) != 0) && (j < 4)) {
+			rows[i][j] = (char *)malloc((pcol-pbuf) * sizeof(char));
+			strncpy(rows[i][j], pbuf, (pcol-pbuf));
+			j++;
+			pbuf += (pcol-pbuf) + 1;	
+		}	
+		if ((pcol < prow) && (j < 4)) {
+			rows[i][j] = (char *)malloc((prow-pcol) * sizeof(char));
+			strncpy(rows[i][j], pbuf, (prow-pcol));
+			j++;
+			pbuf += (prow-pcol) + 1;
+		}
+
+		free(row);
+		i++;
+		pbuf += (prow-pbuf) + 1;
+	}
+
+	while (i > 0) {
+		free(rows[i--]);
+	}
 	//char buff[200];
 	//char tokens[10][30];
 	//fgets(buff, 200, stdin);
