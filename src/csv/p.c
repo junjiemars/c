@@ -3,6 +3,8 @@
 #include <stdlib.h>
 
 #define _unused_(x) ((void)(x))
+#define ROW_SIZE 4
+#define COL_SIZE 4
 
 char *
 read_file(const char* f) {
@@ -17,7 +19,7 @@ read_file(const char* f) {
 	flen = ftell(fp);
 	rewind(fp);
 
-	buf = (char *)malloc((flen+1) * sizeof(char));
+	buf = malloc((flen+1) * sizeof * buf);
 	fread(buf, flen, 1, fp);
 	if (ferror(fp)) {
 		free(buf);
@@ -48,36 +50,42 @@ main(int argc, const char *argv[]) {
 
 	char *prow;
 	char *pbuf = buf;
-	char *rows[4][4] = {{0}};
+	char *rows[ROW_SIZE][COL_SIZE] = {{0}};
 	size_t i = 0;
 
 	while ((prow = strchr(pbuf, '\n')) != 0) {
-		char *pcol;	
-		char *row = (char *)malloc((prow-pbuf) * sizeof(char));
-		strncpy(row, pbuf, (prow-pbuf));
+		char *pcol, *pre = 0;	
 		size_t j = 0;
 
-		while (((pcol = strchr(row, ',')) != 0) && (j < 4)) {
-			rows[i][j] = (char *)malloc((pcol-pbuf) * sizeof(char));
+		while (((pcol = strchr(pbuf, ',')) != 0) && (pcol < prow) && (j < COL_SIZE)) {
+			rows[i][j] = malloc((pcol-pbuf) * sizeof *rows);
 			strncpy(rows[i][j], pbuf, (pcol-pbuf));
+			pre = pcol;
 			j++;
 			pbuf += (pcol-pbuf) + 1;	
 		}	
-		if ((pcol < prow) && (j < 4)) {
-			rows[i][j] = (char *)malloc((prow-pcol) * sizeof(char));
-			strncpy(rows[i][j], pbuf, (prow-pcol));
+		if ((pre < prow) && (j < COL_SIZE)) {
+			rows[i][j] = malloc((prow-pre) * sizeof *rows);
+			strncpy(rows[i][j], pbuf, (prow-pre)-1);
 			j++;
-			pbuf += (prow-pcol) + 1;
+			pbuf += (prow-pre) + 1;
 		}
 
-		free(row);
 		i++;
 		pbuf += (prow-pbuf) + 1;
 	}
 
-	while (i > 0) {
-		free(rows[i--]);
+	for (size_t m = 0; m < ROW_SIZE; m++) {
+		putchar('#');
+		for (size_t n = 0; n < COL_SIZE; n++) {
+			if (rows[m][n]) {
+				printf("%4s,", rows[m][n]);
+				free(rows[m][n]);
+			}
+		}
+		putchar('\n');
 	}
+
 	//char buff[200];
 	//char tokens[10][30];
 	//fgets(buff, 200, stdin);
