@@ -8,10 +8,13 @@ INC += -I$(include_path)
 mac: bit \
 		 bitree \
 		 bistree \
+		 list \
 		 set1 \
-		 set2
+		 set2 
+
 mac_test: bit_test \
 				  bistree_test \
+					list_test \
 					set1_test \
 					set2_test
 
@@ -40,6 +43,18 @@ bistree_test: bistree
 	$(bistree_binout)
 $(bistree_binout): $(source_path)/bistree.c $(examples_path)/bistree/ex-1.c
 	$(CC) $(CFLAGS) $(INC) $(LDLIBS) $^ -lbitree $(bin_out)$@
+
+#----------
+# list 
+#----------
+
+list_binout := $(bin_path)list$(bin_ext)
+list: $(list_binout)
+list_test: list
+	$(list_binout)
+
+$(list_binout): $(source_path)/list.c $(examples_path)/list/ex-1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 #----------
 # set

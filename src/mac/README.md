@@ -40,6 +40,10 @@ reflects an algorithm's order of growth.
 Ө-notation says once n gets large enough, the running time is at least ```k1*n``` and
 at most ```k2*n``` for some constants ```k1``` and ```k2```.
 
+A function ```f(n)``` belongs to ```Theta(g(n))```, if there exists positive constant
+```c1``` and ```c2``` such that ```f(n)``` can be sandwiched between ```c1(g(n))```
+and ```c2(g(n))```.
+
 
 ## References
 * asymptote: a line that continually approaches a given curve but doest not meet it
