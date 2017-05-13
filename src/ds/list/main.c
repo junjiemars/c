@@ -1,8 +1,6 @@
 #include <list.h>
 #include <stdlib.h>
 
-#define _unused_(x) ((void)(x))
-
 void
 free_node(list_node *node) {
 	if (0 == node) return;

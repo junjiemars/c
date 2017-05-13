@@ -1,4 +1,5 @@
 #include <list.h>
+#include <stdio.h>
 
 list* 
 list_new(list* lst) {
@@ -6,22 +7,23 @@ list_new(list* lst) {
 
 	lst->size = 0;
 	lst->head = 0;	
-	lst->tail = lst->head;
+	lst->tail = 0;
 
 	return lst;
 }
 
 void 
 list_free(list *lst, list_node_free free_node) {
-	if (0 == lst || list_empty(lst) || 0 == free_node) return;
+	if (0 == lst || 0 == free_node || list_empty(lst)) return;
 
-	list_node **head = &list_head(lst);
+	list_node *head = lst->head;
+	_unused_(head);
 
-	while (*head) {
-		list_node **next = &(*head)->next;
-		free_node(*head);			
-		head = next; 
+	while (head) {
+		printf("%s\n", (char*)head->data);
+		head = head->next;
 	}
+
 }
 
 list*
@@ -36,14 +38,14 @@ list_append(list *lst, list_node_new new_node, void *data) {
 	if (0 == lst || 0 == new_node) return lst;
 
 	//list_node **tail = &list_tail(lst);
-	list_node *new = new_node(data);
-	if (0 == new) return lst;
-	new->data = data;
+	list_node *node = new_node(data);
+	if (0 == node) return lst;
+	node->data = data;
 
 	if (list_empty(lst)) {
-		list_head(lst) = list_tail(lst) = new;	
+		list_head(lst) = list_tail(lst) = node;	
 	} else {
-		list_tail(lst) = list_tail(lst)->next = new;
+		list_tail(lst) = list_tail(lst)->next = node;
 	}	
 	lst->size++;	
 
