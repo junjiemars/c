@@ -1,14 +1,12 @@
 #include <list.h>
+#include <string.h>
 
 list* 
-list_new(list* lst) {
-	if (0 == lst) return lst;
+list_new(list *alloc) {
+	if (0 == alloc) return alloc;
+	memset(alloc, 0, sizeof(list));
 
-	lst->size = 0;
-	lst->head = 0;	
-	lst->tail = 0;
-
-	return lst;
+	return alloc;
 }
 
 void 
@@ -33,12 +31,12 @@ list_where(list *lst, list_node *node) {
 }
 
 list*
-list_append(list *lst, list_node_new new_node, void *data) {
+list_append(list *lst, void *val, list_node_new new_node) {
 	if (0 == lst || 0 == new_node) return lst;
 
-	list_node *node = new_node(data);
+	list_node *node = new_node(val);
 	if (0 == node) return lst;
-	node->data = data;
+	node->data = val;
 
 	if (list_empty(lst)) {
 		list_head(lst) = list_tail(lst) = node;	
@@ -51,18 +49,46 @@ list_append(list *lst, list_node_new new_node, void *data) {
 }
 
 list*
-list_push(list *lst, list_node_new new_node, void *data) {
+list_push(list *lst, void *val, list_node_new new_node) {
 	if (0 == lst || 0 == new_node) return lst;
 
-	list_node *node = new_node(data);
+	list_node *node = new_node(val);
 	if (0 == node) return lst;
-	node->data = data;
+	node->data = val;
 
 	if (list_empty(lst)) {
 		lst->head = lst->tail = node;
 	} else {
 		node->next = lst->head;
 		lst->head = node;	
+	}
+	lst->size++;
+
+	return lst;
+}
+
+list*
+list_remove(list *lst, void *val, list_node_free free_node) {
+	if (0 == lst || 0 == lst->head || 0 == free_node)	return lst;
+	
+	list_node **pp = &lst->head;
+	list_node *node = lst->head;
+
+	while (node) {
+		list_node *del = 0;
+		if (node->data == val) {
+			*pp = node->next;
+			del = node;
+		}
+
+		pp = &node->next;
+		node = node->next;
+
+		if (del) {	
+			free_node(del);
+			lst->size--;
+			break;
+		}
 	}
 
 	return lst;
