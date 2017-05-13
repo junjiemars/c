@@ -18,17 +18,25 @@ typedef struct list {
 
 typedef void (*list_node_free)(list_node *node); 
 typedef list_node* (*list_node_new)(void *val);
+typedef int (*list_node_comp)(void *lhs, void *rhs);
 
 list* list_new(list *alloc);
 void list_free(list *lst, list_node_free free_node);
 
-list* list_where(list *lst, list_node *node);
+list_node* list_append(list *lst, void *val, list_node_new new_node);
+list_node* list_push(list *lst, void *val, list_node_new new_node);
 
-list* list_append(list *lst, void *val, list_node_new new_node);
-list* list_push(list *lst, void *val, list_node_new new_node);
-list* list_remove(list *lst, void *val, list_node_free free_node); 
-list* list_insert(list *lst, void *data, list_node *where);
+list* list_remove(list *lst, 
+	void *val, 
+	list_node_comp test, 
+	list_node_free free_node); 
 
+list_node* list_find(list *lst, void *val, list_node_comp test);
+
+list_node* list_insert(list *lst, 
+	list_node *after, 
+	void *val, 
+	list_node_new new_node);
 
 #define list_size(list) ((list)->size)
 #define list_head(list) ((list)->head)

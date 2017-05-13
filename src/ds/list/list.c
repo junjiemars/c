@@ -23,19 +23,12 @@ list_free(list *lst, list_node_free free_node) {
 
 }
 
-list*
-list_where(list *lst, list_node *node) {
-	if (0 == lst || 0 == node) return lst;
-
-	return 0;
-}
-
-list*
+list_node*
 list_append(list *lst, void *val, list_node_new new_node) {
-	if (0 == lst || 0 == new_node) return lst;
+	if (0 == lst || 0 == new_node) return 0;
 
 	list_node *node = new_node(val);
-	if (0 == node) return lst;
+	if (0 == node) return 0;
 	node->data = val;
 
 	if (list_empty(lst)) {
@@ -45,15 +38,15 @@ list_append(list *lst, void *val, list_node_new new_node) {
 	}	
 	lst->size++;	
 
-	return lst;
+	return node;
 }
 
-list*
+list_node*
 list_push(list *lst, void *val, list_node_new new_node) {
-	if (0 == lst || 0 == new_node) return lst;
+	if (0 == lst || 0 == new_node) return 0;
 
 	list_node *node = new_node(val);
-	if (0 == node) return lst;
+	if (0 == node) return 0;
 	node->data = val;
 
 	if (list_empty(lst)) {
@@ -64,19 +57,19 @@ list_push(list *lst, void *val, list_node_new new_node) {
 	}
 	lst->size++;
 
-	return lst;
+	return node;
 }
 
 list*
-list_remove(list *lst, void *val, list_node_free free_node) {
-	if (0 == lst || 0 == lst->head || 0 == free_node)	return lst;
+list_remove(list *lst, void *val, list_node_comp test, list_node_free free_node) {
+	if (0 == lst || 0 == lst->head || 0 == test || 0 == free_node)	return lst;
 	
 	list_node **pp = &lst->head;
 	list_node *node = lst->head;
 
 	while (node) {
 		list_node *del = 0;
-		if (node->data == val) {
+		if (0 == test(node->data, val)) {
 			*pp = node->next;
 			del = node;
 		}
@@ -94,12 +87,36 @@ list_remove(list *lst, void *val, list_node_free free_node) {
 	return lst;
 }
 
-list*
-list_insert(list *lst, void *data, list_node *where) {
-	_unused_(data);
-	_unused_(where);
-	if (0 == lst) return lst;
+list_node*
+list_find(list *lst, void *val, list_node_comp test) {
+	if (0 == lst || 0 == test) return 0;
 
-	return 0;		
+	list_node *node = lst->head;
+	while (node) {
+		if (0 == test(node->data, val)) {
+			return node;
+		}
+		node = node->next;
+	}
 	
+	return 0;
+}
+
+list_node*
+list_insert(list* lst, list_node *after, void *val, list_node_new new_node) {
+	if (0 == lst || 0 == new_node) return 0;
+
+	list_node *node = new_node(val);
+	if (0 == node) return 0;
+	node->data = val;
+	
+	if (lst->tail == after) {
+		lst->tail->next = node;
+	} else {
+		node->next = after->next->next;
+		after->next = node;
+	}
+	lst->size++;
+
+	return node;		
 }
