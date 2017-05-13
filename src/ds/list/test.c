@@ -1,5 +1,6 @@
 #include <list.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 
 void
@@ -44,13 +45,31 @@ test_append() {
 
 	char *s1 = malloc(64*sizeof(char));
 	assert(s1);
-	s1[0] = 'A';
+	strcpy(s1, "Apple");
 	list_append(lst, new_node, s1);
 	
 	char *s2 = malloc(64*sizeof(char));
 	assert(s2);
-	s2[0] = 'B';
+	strcpy(s2, "Bee");
 	list_append(lst, new_node, s2);
+
+	list_free(lst, free_node);
+	free(lst);
+}
+
+void 
+test_push() {
+	list* lst = list_new(malloc(sizeof(list)));
+
+	char *s1 = malloc(64*sizeof(char));
+	assert(s1);
+	strcpy(s1, "Apple"); 
+	list_push(lst, new_node, s1);
+	
+	char *s2 = malloc(64*sizeof(char));
+	assert(s2);
+	strcpy(s2, "Bee");
+	list_push(lst, new_node, s2);
 
 	list_free(lst, free_node);
 	free(lst);
@@ -61,4 +80,5 @@ main() {
 	test_new_free_node();
 	test_new_free_list();
 	test_append();
+	test_push();
 }

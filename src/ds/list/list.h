@@ -25,7 +25,7 @@ void list_free(list *lst, list_node_free free_node);
 list* list_where(list *lst, list_node *node);
 
 list* list_append(list *lst, list_node_new new_node, void *data);
-list* list_push(list *lst, void *data);
+list* list_push(list *lst, list_node_new new_node, void *data);
 list* list_insert(list *lst, void *data, list_node *where);
 
 

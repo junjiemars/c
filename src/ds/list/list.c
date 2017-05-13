@@ -36,7 +36,6 @@ list*
 list_append(list *lst, list_node_new new_node, void *data) {
 	if (0 == lst || 0 == new_node) return lst;
 
-	//list_node **tail = &list_tail(lst);
 	list_node *node = new_node(data);
 	if (0 == node) return lst;
 	node->data = data;
@@ -47,6 +46,24 @@ list_append(list *lst, list_node_new new_node, void *data) {
 		list_tail(lst) = list_tail(lst)->next = node;
 	}	
 	lst->size++;	
+
+	return lst;
+}
+
+list*
+list_push(list *lst, list_node_new new_node, void *data) {
+	if (0 == lst || 0 == new_node) return lst;
+
+	list_node *node = new_node(data);
+	if (0 == node) return lst;
+	node->data = data;
+
+	if (list_empty(lst)) {
+		lst->head = lst->tail = node;
+	} else {
+		node->next = lst->head;
+		lst->head = node;	
+	}
 
 	return lst;
 }
