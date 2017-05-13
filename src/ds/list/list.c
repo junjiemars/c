@@ -1,5 +1,4 @@
 #include <list.h>
-#include <stdio.h>
 
 list* 
 list_new(list* lst) {
@@ -17,11 +16,11 @@ list_free(list *lst, list_node_free free_node) {
 	if (0 == lst || 0 == free_node || list_empty(lst)) return;
 
 	list_node *head = lst->head;
-	_unused_(head);
 
 	while (head) {
-		printf("%s\n", (char*)head->data);
-		head = head->next;
+		list_node *next = head->next;
+		free_node(head);
+		head = next;
 	}
 
 }
