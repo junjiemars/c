@@ -29,7 +29,6 @@ list_append(list *lst, void *val, list_node_new new_node) {
 
 	list_node *node = new_node(val);
 	if (0 == node) return 0;
-	node->data = val;
 
 	if (list_empty(lst)) {
 		list_head(lst) = list_tail(lst) = node;	
@@ -47,7 +46,6 @@ list_push(list *lst, void *val, list_node_new new_node) {
 
 	list_node *node = new_node(val);
 	if (0 == node) return 0;
-	node->data = val;
 
 	if (list_empty(lst)) {
 		lst->head = lst->tail = node;
@@ -104,18 +102,15 @@ list_find(list *lst, void *val, list_node_comp test) {
 
 list_node*
 list_insert(list* lst, list_node *after, void *val, list_node_new new_node) {
-	if (0 == lst || 0 == new_node) return 0;
+	if (0 == lst || 0 == after || 0 == new_node) return 0;
 
 	list_node *node = new_node(val);
 	if (0 == node) return 0;
-	node->data = val;
 	
-	if (lst->tail == after) {
-		lst->tail->next = node;
-	} else {
-		node->next = after->next->next;
-		after->next = node;
+	if (after->next) {
+		node->next = after->next;
 	}
+	after->next = node;
 	lst->size++;
 
 	return node;		

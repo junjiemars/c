@@ -34,7 +34,7 @@ comp_int_node(void *lhs, void *rhs) {
 int
 comp_str_node(void *lhs, void *rhs) {
 	char *l = lhs;
-	char *r = lhs;
+	char *r = rhs;
 	return strcmp(l, r);
 }
 
@@ -150,19 +150,30 @@ test_insert() {
 	list* lst = list_new(malloc(sizeof(list)));
 	assert(lst);
 
+	list_node *n;
+
 	int *i1 = malloc(sizeof(int));
 	assert(i1);
 	*i1 = 1;
-	list_insert(lst, lst->tail, i1, new_node);
-	
+	n = list_append(lst, i1, new_node);
+	assert(n);
+
 	int *i2 = malloc(sizeof(int));
 	assert(i2);
 	*i2 = 2;
-	list_insert(lst, lst->head, i2, new_node);
-
+	n = list_insert(lst, n, i2, new_node);
+	if (0 == n) free(i2);
+	assert(2 == *(int*)n->data);
+	
+	int *i3 = malloc(sizeof(int));
+	assert(i3);
+	*i3 = 3;
+	n = list_insert(lst, lst->head, i3, new_node);
+	if (0 == n) free(i3);
+	assert(3 == *(int*)n->data);
+	
 	list_free(lst, free_node);
 	free(lst);	
-
 }
 
 int
