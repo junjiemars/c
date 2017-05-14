@@ -59,7 +59,7 @@ list_push(list *lst, void *val, list_node_new new_node) {
 }
 
 list*
-list_remove(list *lst, void *val, list_node_comp test, list_node_free free_node) {
+list_remove(list *lst, void *val, list_node_cmp test, list_node_free free_node) {
 	if (0 == lst || 0 == lst->head || 0 == test || 0 == free_node)	return lst;
 	
 	list_node **pp = &lst->head;
@@ -86,7 +86,7 @@ list_remove(list *lst, void *val, list_node_comp test, list_node_free free_node)
 }
 
 list_node*
-list_find(list *lst, void *val, list_node_comp test) {
+list_find(list *lst, void *val, list_node_cmp test) {
 	if (0 == lst || 0 == test) return 0;
 
 	list_node *node = lst->head;

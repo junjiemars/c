@@ -22,7 +22,7 @@ new_node(void *val) {
 }
 
 int
-comp_int_node(void *lhs, void *rhs) {
+cmp_int_node(void *lhs, void *rhs) {
 	int *l = lhs;
 	int *r = rhs;
 	
@@ -32,7 +32,7 @@ comp_int_node(void *lhs, void *rhs) {
 }
 
 int
-comp_str_node(void *lhs, void *rhs) {
+cmp_str_node(void *lhs, void *rhs) {
 	char *l = lhs;
 	char *r = rhs;
 	return strcmp(l, r);
@@ -99,13 +99,13 @@ test_remove() {
 	list* lst = list_new(malloc(sizeof(list)));
 	assert(lst);
 
-	list_remove(lst, 0, comp_str_node, free_node);
+	list_remove(lst, 0, cmp_str_node, free_node);
 
 	char *s1 = malloc(64*sizeof(char));
 	assert(s1);
 	strcpy(s1, "Apple");
 	list_append(lst, s1, new_node);
-	list_remove(lst, s1, comp_str_node, free_node);
+	list_remove(lst, s1, cmp_str_node, free_node);
 	
 	s1 = malloc(64*sizeof(char));
 	assert(s1);
@@ -117,7 +117,7 @@ test_remove() {
 	strcpy(s2, "Bee");
 	list_append(lst, s2, new_node);
 
-	list_remove(lst, s2, comp_str_node, free_node);
+	list_remove(lst, s2, cmp_str_node, free_node);
 
 	list_free(lst, free_node);
 	free(lst);
@@ -138,7 +138,7 @@ test_find() {
 	*i2 = 2;
 	list_append(lst, i2, new_node);
 
-	list_node *node = list_find(lst, i1, comp_int_node);
+	list_node *node = list_find(lst, i1, cmp_int_node);
 	assert(node);
 
 	list_free(lst, free_node);
