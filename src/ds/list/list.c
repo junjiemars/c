@@ -99,7 +99,11 @@ list_find(list *lst, void *val, list_node_cmp test) {
 
 list_node*
 list_insert(list* lst, list_node *after, void *val, list_node_new new_node) {
-	if (0 == lst || 0 == after || 0 == new_node) return 0;
+	if (0 == lst || 0 == new_node) return 0;
+
+	if (0 == after) {
+		return list_append(lst, val, new_node);
+	}
 
 	list_node *node = new_node(val);
 	if (0 == node) return 0;

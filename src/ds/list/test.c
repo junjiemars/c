@@ -173,22 +173,30 @@ test_insert() {
 	int *i1 = malloc(sizeof(int));
 	assert(i1);
 	*i1 = 1;
-	n = list_append(lst, i1, new_node);
-	assert(n);
+	n = list_insert(lst, 0, i1, new_node);
+	if (0 == n) free(i1);
+	assert(*i1 == *(int*)n->val);
 
 	int *i2 = malloc(sizeof(int));
 	assert(i2);
 	*i2 = 2;
 	n = list_insert(lst, n, i2, new_node);
 	if (0 == n) free(i2);
-	assert(2 == *(int*)n->val);
+	assert(*i2 == *(int*)n->val);
 	
 	int *i3 = malloc(sizeof(int));
 	assert(i3);
 	*i3 = 3;
 	n = list_insert(lst, lst->head, i3, new_node);
 	if (0 == n) free(i3);
-	assert(3 == *(int*)n->val);
+	assert(*i3 == *(int*)n->val);
+
+	int *i4 = malloc(sizeof(int));
+	assert(i4);
+	*i4 = 4;
+	n = list_insert(lst, lst->tail, i4, new_node);
+	if (0 == n) free(i4);
+	assert(*i4 == *(int*)n->val);	
 	
 	list_free(lst, free_node);
 	free(lst);	
