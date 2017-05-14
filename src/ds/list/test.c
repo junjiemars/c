@@ -67,13 +67,13 @@ test_append() {
 	assert(s1);
 	strcpy(s1, "Apple");
 	n = list_append(lst, s1, new_node);
-	assert(0 == strcmp("Apple", (char*)lst->tail->val));
+	assert(lst->tail == n && 0 == strcmp("Apple", (char*)n->val));
 	
 	char *s2 = malloc(64*sizeof(char));
 	assert(s2);
 	strcpy(s2, "Bee");
 	n = list_append(lst, s2, new_node);
-	assert(0 == strcmp("Bee", (char*)lst->tail->val));
+	assert(lst->tail == n && 0 == strcmp("Bee", (char*)n->val));
 
 	list_free(lst, free_node);
 	free(lst);
