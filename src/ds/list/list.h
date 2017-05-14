@@ -5,7 +5,7 @@
 #include <stddef.h>
 
 typedef struct list_node {
-	void *data;
+	void *val;
 	struct list_node *next;
 } list_node;
 
@@ -38,10 +38,10 @@ list_node* list_insert(list *lst,
 	void *val, 
 	list_node_new new_node);
 
+#define list_empty(list) (0 == (list)->head)
 #define list_size(list) ((list)->size)
 #define list_head(list) ((list)->head)
 #define list_tail(list) ((list)->tail)
-#define list_empty(list) (0 == (list)->head)
 
 #define _unused_(x) ((void)(x))
 

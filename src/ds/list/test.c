@@ -7,7 +7,7 @@ void
 free_node(list_node *node) {
 	if (0 == node) return;
 	
-	free(node->data);
+	free(node->val);
 	free(node);
 }
 
@@ -17,7 +17,7 @@ new_node(void *val) {
 	assert(node);
 	memset(node, 0, sizeof(list_node));
 
-	node->data = val;
+	node->val = val;
 	return node;
 }
 
@@ -163,14 +163,14 @@ test_insert() {
 	*i2 = 2;
 	n = list_insert(lst, n, i2, new_node);
 	if (0 == n) free(i2);
-	assert(2 == *(int*)n->data);
+	assert(2 == *(int*)n->val);
 	
 	int *i3 = malloc(sizeof(int));
 	assert(i3);
 	*i3 = 3;
 	n = list_insert(lst, lst->head, i3, new_node);
 	if (0 == n) free(i3);
-	assert(3 == *(int*)n->data);
+	assert(3 == *(int*)n->val);
 	
 	list_free(lst, free_node);
 	free(lst);	

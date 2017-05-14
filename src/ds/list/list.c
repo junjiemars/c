@@ -67,7 +67,7 @@ list_remove(list *lst, void *val, list_node_comp test, list_node_free free_node)
 
 	while (node) {
 		list_node *del = 0;
-		if (0 == test(node->data, val)) {
+		if (0 == test(node->val, val)) {
 			*pp = node->next;
 			del = node;
 		}
@@ -91,7 +91,7 @@ list_find(list *lst, void *val, list_node_comp test) {
 
 	list_node *node = lst->head;
 	while (node) {
-		if (0 == test(node->data, val)) {
+		if (0 == test(node->val, val)) {
 			return node;
 		}
 		node = node->next;
