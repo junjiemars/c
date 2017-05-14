@@ -20,7 +20,6 @@ list_free(list *lst, list_node_free free_node) {
 		free_node(head);
 		head = next;
 	}
-
 }
 
 list_node*
@@ -31,10 +30,10 @@ list_append(list *lst, void *val, list_node_new new_node) {
 	if (0 == node) return 0;
 
 	if (list_empty(lst)) {
-		list_head(lst) = list_tail(lst) = node;	
+		lst->tail = lst->head = node;
 	} else {
-		list_tail(lst) = list_tail(lst)->next = node;
-	}	
+		lst->tail = lst->tail->next = node;
+	}
 	lst->size++;	
 
 	return node;
@@ -47,42 +46,39 @@ list_push(list *lst, void *val, list_node_new new_node) {
 	list_node *node = new_node(val);
 	if (0 == node) return 0;
 
-	if (list_empty(lst)) {
-		lst->head = lst->tail = node;
-	} else {
-		node->next = lst->head;
-		lst->head = node;	
-	}
+	list_node **pp = &lst->head;
+	list_node *head = lst->head;
+
+	*pp = node;
+	node->next = head;
 	lst->size++;
+
+	if (0 == head) {
+		lst->tail = node;
+	}
 
 	return node;
 }
 
-list*
-list_remove(list *lst, void *val, list_node_cmp test, list_node_free free_node) {
-	if (0 == lst || 0 == lst->head || 0 == test || 0 == free_node)	return lst;
+list_node*
+list_remove(list *lst, void *val, list_node_cmp test) {
+	if (0 == lst || list_empty(lst) || 0 == test)	return 0;
 	
 	list_node **pp = &lst->head;
 	list_node *node = lst->head;
 
 	while (node) {
-		list_node *del = 0;
 		if (0 == test(node->val, val)) {
 			*pp = node->next;
-			del = node;
+			lst->size--;
+			return node;
 		}
 
 		pp = &node->next;
 		node = node->next;
-
-		if (del) {	
-			free_node(del);
-			lst->size--;
-			break;
-		}
 	}
 
-	return lst;
+	return 0;
 }
 
 list_node*
@@ -90,6 +86,7 @@ list_find(list *lst, void *val, list_node_cmp test) {
 	if (0 == lst || 0 == test) return 0;
 
 	list_node *node = lst->head;
+
 	while (node) {
 		if (0 == test(node->val, val)) {
 			return node;

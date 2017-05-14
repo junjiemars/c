@@ -61,15 +61,19 @@ void
 test_append() {
 	list* lst = list_new(malloc(sizeof(list)));
 
+	list_node *n;
+
 	char *s1 = malloc(64*sizeof(char));
 	assert(s1);
 	strcpy(s1, "Apple");
-	list_append(lst, s1, new_node);
+	n = list_append(lst, s1, new_node);
+	assert(0 == strcmp("Apple", (char*)lst->tail->val));
 	
 	char *s2 = malloc(64*sizeof(char));
 	assert(s2);
 	strcpy(s2, "Bee");
-	list_append(lst, s2, new_node);
+	n = list_append(lst, s2, new_node);
+	assert(0 == strcmp("Bee", (char*)lst->tail->val));
 
 	list_free(lst, free_node);
 	free(lst);
@@ -80,15 +84,22 @@ test_push() {
 	list* lst = list_new(malloc(sizeof(list)));
 	assert(lst);
 
+	list_node *n;
+
 	char *s1 = malloc(64*sizeof(char));
 	assert(s1);
 	strcpy(s1, "Apple"); 
-	list_push(lst, s1, new_node);
+	n = list_push(lst, s1, new_node);
+	assert(0 == strcmp("Apple", (char*)n->val));
+	assert(0 == strcmp("Apple", (char*)lst->head->val));
 	
 	char *s2 = malloc(64*sizeof(char));
 	assert(s2);
 	strcpy(s2, "Bee");
-	list_push(lst, s2, new_node);
+	n = list_push(lst, s2, new_node);
+	assert(0 == strcmp("Bee", (char*)n->val));
+	assert(0 == strcmp("Bee", (char*)lst->head->val));
+	assert(0 == strcmp("Apple", (char*)lst->tail->val));
 
 	list_free(lst, free_node);
 	free(lst);
@@ -99,13 +110,18 @@ test_remove() {
 	list* lst = list_new(malloc(sizeof(list)));
 	assert(lst);
 
-	list_remove(lst, 0, cmp_str_node, free_node);
+	list_node *a, *n;
+	
+	n = list_remove(lst, 0, cmp_str_node);
+	assert(0 == n);
 
 	char *s1 = malloc(64*sizeof(char));
 	assert(s1);
 	strcpy(s1, "Apple");
-	list_append(lst, s1, new_node);
-	list_remove(lst, s1, cmp_str_node, free_node);
+	a = list_append(lst, s1, new_node);
+	n = list_remove(lst, s1, cmp_str_node);
+	assert(a == n && 0 == strcmp("Apple", (char*)n->val));
+	free_node(n);
 	
 	s1 = malloc(64*sizeof(char));
 	assert(s1);
@@ -115,9 +131,11 @@ test_remove() {
 	char *s2 = malloc(64*sizeof(char));
 	assert(s2);
 	strcpy(s2, "Bee");
-	list_append(lst, s2, new_node);
+	a = list_append(lst, s2, new_node);
 
-	list_remove(lst, s2, cmp_str_node, free_node);
+	n = list_remove(lst, s2, cmp_str_node);
+	assert(a == n && 0 == strcmp("Bee", (char*)n->val));
+	free_node(n);
 
 	list_free(lst, free_node);
 	free(lst);
