@@ -104,10 +104,10 @@ list_insert(list* lst, list_node *after, void *val, list_node_new new_node) {
 	list_node *node = new_node(val);
 	if (0 == node) return 0;
 	
-	if (after->next) {
-		node->next = after->next;
-	}
+	list_node **pp = &node->next;
+	*pp = after->next;
 	after->next = node;
+
 	lst->size++;
 
 	return node;		
