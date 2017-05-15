@@ -86,6 +86,20 @@ list_remove(list *lst, void *val, list_node_cmp test) {
 }
 
 list_node*
+list_remove_next(list *lst, list_node *after) {
+	if (0 == lst || 0 == after || 0 == after->next) return 0;
+
+	list_node *remove = after->next;
+	if (lst->tail == remove) {
+		lst->tail = after;
+	}
+	after->next = after->next->next;	
+	lst->size--;
+		
+	return remove;
+}
+
+list_node*
 list_find(list *lst, void *val, list_node_cmp test) {
 	if (0 == lst || 0 == test) return 0;
 

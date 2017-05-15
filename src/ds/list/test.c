@@ -141,6 +141,43 @@ test_remove() {
 	free(list_free(lst, free_node));
 }
 
+void
+test_remove_next() {
+	list *lst = list_new(malloc(sizeof(list)));
+	assert(lst);
+
+	char *s1 = malloc(64*sizeof(char));
+	strcpy(s1, "Apple");
+	list_node *n1 = list_append(lst, s1, new_node);
+	assert(n1);
+
+	char *s2 = malloc(64*sizeof(char));
+	strcpy(s2, "Bear");
+	list_node *n2 = list_append(lst, s2, new_node);
+	assert(n2);
+
+	char *s3 = malloc(64*sizeof(char));
+	strcpy(s3, "Code");
+	list_node *n3 = list_append(lst, s3, new_node);
+	assert(n3);
+	assert(lst->tail == n3);
+
+	list_node *removed = list_remove_next(lst, n3);
+	assert(0 == removed);
+
+	removed = list_remove_next(lst, n2);
+	assert(removed);
+	assert(list_tail(lst) == n2);
+	free_node(removed);
+
+	removed = list_remove_next(lst, lst->head);
+	assert(removed);
+	assert(removed == n2);
+	free_node(removed);
+
+	free(list_free(lst, free_node));
+}
+
 void 
 test_find() {
 	list* lst = list_new(malloc(sizeof(list)));
@@ -211,6 +248,7 @@ main() {
 	test_append();
 	test_push();
 	test_remove();
+	test_remove_next();
 	test_find();
 	test_insert();
 }
