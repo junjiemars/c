@@ -26,7 +26,7 @@ list* list_free(list *lst, list_node_free free_node);
 list_node* list_append(list *lst, void *val, list_node_new new_node);
 list_node* list_push(list *lst, void *val, list_node_new new_node);
 
-list_node* list_remove(list *lst, void *val, list_node_cmp test); 
+list_node* list_remove_val(list *lst, void *val, list_node_cmp test); 
 list_node* list_remove_next(list *lst, list_node *after);
 
 list_node* list_find(list *lst, void *val, list_node_cmp test);

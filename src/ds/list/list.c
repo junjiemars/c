@@ -65,7 +65,7 @@ list_push(list *lst, void *val, list_node_new new_node) {
 }
 
 list_node*
-list_remove(list *lst, void *val, list_node_cmp test) {
+list_remove_val(list *lst, void *val, list_node_cmp test) {
 	if (0 == lst || list_empty(lst) || 0 == test)	return 0;
 	
 	list_node **pp = &lst->head;
