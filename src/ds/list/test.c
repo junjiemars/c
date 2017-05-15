@@ -183,6 +183,8 @@ test_insert() {
 	n = list_insert(lst, n, i2, new_node);
 	if (0 == n) free(i2);
 	assert(*i2 == *(int*)n->val);
+	assert(2 == list_size(lst));
+	assert(lst->head != lst->tail);
 	
 	int *i3 = malloc(sizeof(int));
 	assert(i3);
