@@ -2,6 +2,8 @@
 ds: list
 ds_test: list_test
 
+INC += -I$(src_path)
+
 list_binout := $(bin_path)list$(bin_ext)
 list_inc := $(INC) -I$(src_path)/list
 list: $(list_binout)
