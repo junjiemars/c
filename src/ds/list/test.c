@@ -55,8 +55,7 @@ test_new_free_list() {
 	list* lst = list_new(malloc(sizeof(list)));
 	assert(lst);
 
-	list_free(lst, free_node);
-	free(lst);
+	free(list_free(lst, free_node));
 }
 
 void
@@ -77,7 +76,8 @@ test_append() {
 	n = list_append(lst, s2, new_node);
 	assert(lst->tail == n && 0 == strcmp("Bee", (char*)n->val));
 
-	list_free(lst, free_node);
+	lst = list_free(lst, free_node);
+	assert(0 == list_size(lst));
 	free(lst);
 }
 
@@ -103,8 +103,7 @@ test_push() {
 	assert(0 == strcmp("Bee", (char*)lst->head->val));
 	assert(0 == strcmp("Apple", (char*)lst->tail->val));
 
-	list_free(lst, free_node);
-	free(lst);
+	free(list_free(lst, free_node));
 }
 
 void
@@ -139,8 +138,7 @@ test_remove() {
 	assert(a == n && 0 == strcmp("Bee", (char*)n->val));
 	free_node(n);
 
-	list_free(lst, free_node);
-	free(lst);
+	free(list_free(lst, free_node));
 }
 
 void 

@@ -21,7 +21,7 @@ typedef list_node* (*list_node_new)(void *val);
 typedef int (*list_node_cmp)(void *lhs, void *rhs);
 
 list* list_new(list *alloc);
-void list_free(list *lst, list_node_free free_node);
+list* list_free(list *lst, list_node_free free_node);
 
 list_node* list_append(list *lst, void *val, list_node_new new_node);
 list_node* list_push(list *lst, void *val, list_node_new new_node);

@@ -9,17 +9,21 @@ list_new(list *alloc) {
 	return alloc;
 }
 
-void 
+list* 
 list_free(list *lst, list_node_free free_node) {
-	if (0 == lst || 0 == free_node || list_empty(lst)) return;
+	if (0 == lst || 0 == free_node || list_empty(lst)) return lst;
 
 	list_node *head = lst->head;
 
 	while (head) {
 		list_node *next = head->next;
 		free_node(head);
+
+		lst->size--;
 		head = next;
 	}
+
+	return lst;
 }
 
 list_node*
