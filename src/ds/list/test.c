@@ -6,21 +6,21 @@
 
 
 void
-free_node(list_node *node) {
+free_node(node *node) {
 	if (0 == node) return;
 	
 	free(node->val);
 	free(node);
 }
 
-list_node*
+node*
 new_node(void *val) {
-	list_node *node = malloc(sizeof(list_node));
-	assert(node);
-	memset(node, 0, sizeof(list_node));
+	node *n = malloc(sizeof(node));
+	assert(n);
+	memset(n, 0, sizeof(node));
 
-	node->val = val;
-	return node;
+	n->val = val;
+	return n;
 }
 
 int
@@ -46,7 +46,7 @@ test_new_free_node() {
 	assert(s);
 	strcpy(s, "New node");	
 
-	list_node *node = new_node(s);
+	node *node = new_node(s);
 	free_node(node);
 }
 
@@ -62,7 +62,7 @@ void
 test_append() {
 	list* lst = list_new(malloc(sizeof(list)));
 
-	list_node *n;
+	node *n;
 
 	char *s1 = malloc(64*sizeof(char));
 	assert(s1);
@@ -86,7 +86,7 @@ test_push() {
 	list* lst = list_new(malloc(sizeof(list)));
 	assert(lst);
 
-	list_node *n;
+	node *n;
 
 	char *s1 = malloc(64*sizeof(char));
 	assert(s1);
@@ -111,7 +111,7 @@ test_remove_val() {
 	list* lst = list_new(malloc(sizeof(list)));
 	assert(lst);
 
-	list_node *a, *n;
+	node *a, *n;
 	
 	n = list_remove_val(lst, 0, cmp_str_node);
 	assert(0 == n);
@@ -148,21 +148,21 @@ test_remove_next() {
 
 	char *s1 = malloc(64*sizeof(char));
 	strcpy(s1, "Apple");
-	list_node *n1 = list_append(lst, s1, new_node);
+	node *n1 = list_append(lst, s1, new_node);
 	assert(n1);
 
 	char *s2 = malloc(64*sizeof(char));
 	strcpy(s2, "Bear");
-	list_node *n2 = list_append(lst, s2, new_node);
+	node *n2 = list_append(lst, s2, new_node);
 	assert(n2);
 
 	char *s3 = malloc(64*sizeof(char));
 	strcpy(s3, "Code");
-	list_node *n3 = list_append(lst, s3, new_node);
+	node *n3 = list_append(lst, s3, new_node);
 	assert(n3);
 	assert(lst->tail == n3);
 
-	list_node *removed = list_remove_next(lst, n3);
+	node *removed = list_remove_next(lst, n3);
 	assert(0 == removed);
 
 	removed = list_remove_next(lst, n2);
@@ -193,7 +193,7 @@ test_find() {
 	*i2 = 2;
 	list_append(lst, i2, new_node);
 
-	list_node *node = list_find(lst, i1, cmp_int_node);
+	node *node = list_find(lst, i1, cmp_int_node);
 	assert(node);
 
 	list_free(lst, free_node);
@@ -205,7 +205,7 @@ test_insert() {
 	list* lst = list_new(malloc(sizeof(list)));
 	assert(lst);
 
-	list_node *n;
+	node *n;
 
 	int *i1 = malloc(sizeof(int));
 	assert(i1);
