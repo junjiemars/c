@@ -1,13 +1,17 @@
 
-ds: singly
-ds_test: singly_test
+ds: list
+ds_test: list_test
 
 INC += -I$(src_path)
 
-singly_binout := $(bin_path)singly$(bin_ext)
-singly_inc := $(INC) -I$(src_path)/singly
-singly: $(singly_binout)
-singly_test: singly
-	$(singly_binout)
-$(singly_binout): $(src_path)singly/test.c $(src_path)singly/list.c
-	$(CC) $(CFLAGS) $(singly_inc) $^ $(bin_out)$@
+list_binout := $(bin_path)list$(bin_ext)
+list_inc := $(INC) -I$(src_path)/list
+list: $(list_binout)
+list_test: list
+	$(list_binout)
+list_valgrind_test: list
+	valgrind $(list_binout)
+$(list_binout): $(src_path)list/test.c \
+								$(src_path)list/list.c \
+								$(src_path)list/list.h
+	$(CC) $(CFLAGS) $(list_inc) $^ $(bin_out)$@
