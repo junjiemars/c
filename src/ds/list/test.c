@@ -178,6 +178,35 @@ test_remove_next() {
 	free(list_free(lst, free_node));
 }
 
+void
+test_remove_tail() {
+	list *lst = list_new(malloc(sizeof(list)));
+	assert(lst);
+
+	char *s1 = malloc(64*sizeof(char));
+	strcpy(s1, "Apple");
+	node *n1 = list_append(lst, s1, new_node);
+	assert(n1);
+
+	char *s2 = malloc(64*sizeof(char));
+	strcpy(s2, "Bear");
+	node *n2 = list_append(lst, s2, new_node);
+	assert(n2);
+
+	char *s3 = malloc(64*sizeof(char));
+	strcpy(s3, "Code");
+	node *n3 = list_append(lst, s3, new_node);
+	assert(n3);
+	assert(lst->tail == n3);
+
+	node *tail = 0;
+	while(!list_empty(lst)) {
+		free_node(list_remove_tail(lst, &tail));
+	}
+	
+	free(list_free(lst, free_node));
+}
+
 void 
 test_find() {
 	list* lst = list_new(malloc(sizeof(list)));
@@ -249,6 +278,7 @@ main() {
 	test_push();
 	test_remove_val();
 	test_remove_next();
+	test_remove_tail();
 	test_find();
 	test_insert();
 }

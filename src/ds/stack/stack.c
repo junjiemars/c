@@ -31,7 +31,7 @@ stack*
 stack_free(stack *s, stack_val_free free_val) {
 	if (0 == s || 0 == free_val) return 0;
 	
-	while (stack_top(s)) {
+	while (!stack_empty(s)) {
 		void *n = 0;
 		stack_pop(s, &n);
 		free_val(n);
@@ -51,21 +51,19 @@ stack_push(stack *s, void *val) {
 	return s;	
 }
 
-stack*
+void
 stack_pop(stack *s, void **val) {
-	if (0 == s) return 0;
+	if (0 == s || 0 == val) return;
 
 	if (list_empty(s->_c)) {
 		_unused_(val);
-		return 0;
+		return;
 	}
 
-	node *tail;
+	node *tail = 0;
 	if (list_remove_tail(s->_c, &tail)) {
-		val = &tail->val;
+		*val = tail->val;
 		free_node(tail);
-		return s;
+		return;
 	}
-	
-	return 0;
 }

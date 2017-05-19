@@ -104,7 +104,7 @@ list_remove_tail(list *lst, node **tail) {
 	if (0 == lst || 0 == lst->tail) return 0;
 
 	if (lst->head == lst->tail) {
-		tail = &lst->tail;
+		*tail = lst->tail;
 
 		lst->head = lst->tail = 0;
 		lst->size--;
@@ -115,7 +115,7 @@ list_remove_tail(list *lst, node **tail) {
 	while (n) {
 		if (n->next == lst->tail) {
 			node * remove = list_remove_next(lst, n);	
-			tail = &remove;
+			*tail = remove;
 			return *tail;	
 		}
 		n = n->next;

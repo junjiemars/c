@@ -19,7 +19,7 @@ stack* stack_free(stack *stack, stack_val_free free_val);
 
 
 stack* stack_push(stack *stack, void *val);
-stack* stack_pop(stack *stack, void **val);
+void stack_pop(stack *stack, void **val);
 
 
 #define stack_top(s) ((0 != (s) && (s)->_c && (s)->_c->head) \

@@ -10,7 +10,7 @@ list: $(list_binout)
 list_test: list
 	$(list_binout)
 list_valgrind_test: list
-	valgrind $(list_binout)
+	valgrind --leak-check=full --track-origins=yes $(list_binout)
 $(list_binout): $(src_path)list/test.c \
 								$(src_path)list/list.c \
 								$(src_path)list/list.h
