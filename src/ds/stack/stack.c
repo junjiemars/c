@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 node*
 new_node(void *val) {
 	node *n = malloc(sizeof(node));
@@ -27,40 +28,44 @@ stack_new(stack *alloc, size_t capacity) {
 }
 
 stack* 
-stack_free(stack *stack, stack_val_free free_val) {
-	if (0 == stack || 0 == free_val) return 0;
+stack_free(stack *s, stack_val_free free_val) {
+	if (0 == s || 0 == free_val) return 0;
 	
-	while (stack_top(stack)) {
-		void *n;
-		stack_pop(stack, &n);
+	while (stack_top(s)) {
+		void *n = 0;
+		stack_pop(s, &n);
 		free_val(n);
 	}
+
+	free(list_free(s->_c, free_node));
+	s->_c = 0;
 	
-	return 0;		
+	return s;		
 }
 
 stack*
-stack_push(stack *stack, void *val) {
-	if (0 == stack) return 0;
+stack_push(stack *s, void *val) {
+	if (0 == s || stack_size(s) == s->capacity) return 0;
 
-	list_push(stack->_c, val, new_node);
-	return stack;	
+	list_push(s->_c, val, new_node);
+	return s;	
 }
 
 stack*
-stack_pop(stack *stack, void **val) {
-	if (0 == stack) return 0;
-	if (list_empty(stack->_c)) {
+stack_pop(stack *s, void **val) {
+	if (0 == s) return 0;
+
+	if (list_empty(s->_c)) {
 		_unused_(val);
 		return 0;
 	}
 
 	node *tail;
-	if (list_remove_tail(stack->_c, &tail)) {
+	if (list_remove_tail(s->_c, &tail)) {
 		val = &tail->val;
-		free(tail);
-		return stack;
+		free_node(tail);
+		return s;
 	}
 	
-	return stack;
+	return 0;
 }

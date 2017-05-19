@@ -22,7 +22,7 @@ stack: $(stack_binout)
 stack_test: stack
 	$(stack_binout)
 stack_valgrind_test: stack
-	valgrind $(stack_binout)
+	valgrind --leak-check=full --track-origins=yes $(stack_binout)
 $(stack_binout): $(src_path)stack/test.c  \
 								 $(src_path)stack/stack.c \
 								 $(src_path)stack/stack.h \
