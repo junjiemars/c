@@ -43,12 +43,12 @@ stack_free(stack *s, stack_val_free free_val) {
 	return s;		
 }
 
-stack*
+void
 stack_push(stack *s, void *val) {
-	if (0 == s || stack_size(s) == s->capacity) return 0;
+	if (0 == s || stack_size(s) == s->capacity) return;
 
 	list_push(s->_c, val, new_node);
-	return s;	
+	return;	
 }
 
 void

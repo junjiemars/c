@@ -18,7 +18,7 @@ stack* stack_new(stack *alloc, size_t capacity);
 stack* stack_free(stack *stack, stack_val_free free_val);
 
 
-stack* stack_push(stack *stack, void *val);
+void stack_push(stack *stack, void *val);
 void stack_pop(stack *stack, void **val);
 
 
