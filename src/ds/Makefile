@@ -12,8 +12,7 @@ list_test: list
 list_valgrind_test: list
 	valgrind --leak-check=full --track-origins=yes $(list_binout)
 $(list_binout): $(src_path)list/test.c \
-								$(src_path)list/list.c \
-								$(src_path)list/list.h
+								$(src_path)list/list.c
 	$(CC) $(CFLAGS) $(list_inc) $^ $(bin_out)$@
 
 stack_binout := $(bin_path)stack$(bin_ext)
@@ -23,8 +22,7 @@ stack_test: stack
 	$(stack_binout)
 stack_valgrind_test: stack
 	valgrind --leak-check=full --track-origins=yes $(stack_binout)
-$(stack_binout): $(src_path)stack/test.c  \
+$(stack_binout): $(src_path)stack/test.c \
 								 $(src_path)stack/stack.c \
-								 $(src_path)stack/stack.h \
 								 $(src_path)list/list.c
 	$(CC) $(CFLAGS) $(stack_inc) $^ $(bin_out)$@

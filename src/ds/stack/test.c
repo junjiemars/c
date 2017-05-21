@@ -8,7 +8,7 @@
 
 void 
 free_nothing(void *val) {
-
+	_unused_(val);
 }
 
 void 
