@@ -6,7 +6,7 @@ bits: $(bits_binout)
 bits_lflags += $(LFLAGS) $(INC)
 
 $(bits_binout): $(src_path)bits.c
-	$(LINK) $(bits_lflags) $^ $(bin_out)$@  $(bits_lflags)
+	$(LINK) $(bits_lflags) $^ $(bin_out)$@
 
 bits_test: bits
 	$(bits_binout)
