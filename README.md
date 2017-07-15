@@ -27,7 +27,7 @@ $ ./configure --update --has-<what>
 ```
 
 
-## C Lessons
-This part is the **Lessons** indeed, ... Quiet!
+## Vim Basic Skills 
 
-
+* show variable state: ```:verbose set <var>?```
+* open ```:clist``` after ```grep```: ```:copen```

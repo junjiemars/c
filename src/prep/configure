@@ -10,3 +10,4 @@ case $CC_NAME in
 	msvc)
 		;;
 esac	
+
