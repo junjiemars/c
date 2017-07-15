@@ -22,7 +22,7 @@ double GEO_API area_of_rect(double, double);
 
 #define GEO_API
 
-double area_of_rect(double, double);
+double GEO_API area_of_rect(double, double);
 
 #endif // MSYS_NT
 

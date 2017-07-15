@@ -1,5 +1,5 @@
+#include "math1.h"
 #include <math.h>
-
 #include <geo.h>
 #include <stdio.h>
 #include <string.h>
@@ -16,7 +16,8 @@ double ref;
 //	return ref;
 //}
 
-int is_na(double in){
+int 
+is_na(double in){
 	if (!ref) return 0;  //set_na was never called==>no NAs yet.
 
 	char *cc = (char *)(&in);
@@ -28,7 +29,8 @@ int is_na(double in){
 	return 1;
 }
 
-int main(){
+int 
+main() {
 
 	double x = 1.0;//set_na();
 
