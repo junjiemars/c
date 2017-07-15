@@ -13,10 +13,12 @@ hi_version(void) {
          HI_VERSION_PATCH * 0x00001;
 }
 
-int main(int argc, const char *argv[]) {
-
+int 
+main(int argc, const char *argv[]) {
 	if (argc > 1) {
-		printf("Hi, %s, Version:%d\n", argv[1], HI_VERSION);
+		printf("Hi, %s, Version:%d\n", 
+			argv[1], 
+			HI_VERSION/* defined in nm_auto_config.h */);
 	} else {
 		unsigned long ver = hi_version();
 		printf("Hello, world!, Version:%lu<=[major:%lu minor:%lu patch:%lu]\n"
