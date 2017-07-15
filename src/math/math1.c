@@ -4,54 +4,34 @@
 #include <stdio.h>
 #include <string.h>
 
-
-double ref;
-
-//double set_na(){
-//	if (!ref) {
-//		ref = 0./0.;
-//		char *cr = (char *)(&ref);
-//		cr[2]='a';
-//	}
-//	return ref;
-//}
-
-int 
-is_na(double in){
-	if (!ref) return 0;  //set_na was never called==>no NAs yet.
-
-	char *cc = (char *)(&in);
-	char *cr = (char *)(&ref);
-
-	for (size_t i = 0; i < sizeof(double); i++)
-		if (cc[i] != cr[i]) return 0;
-
-	return 1;
-}
-
 int 
 main() {
-
-	double x = 1.0;//set_na();
-
-	printf("8 is not a number = %i\n", is_na(8));
-	//printf("0/0. is not a number = %i\n", isnan(0/0.));
-
-	// strict-aliasing warning 
-	// unsigned long lu = *(unsigned long*)&x;
-	unsigned long lu;
-	memcpy(&lu, &x, sizeof(x));	
-
-	printf("nan spec: 0x%lx\n", lu);
-	printf("0x%lx is not a number = %i, via self:is_na\n", 
-		lu, is_na(x));
-
-	printf("0x%lx is not a number = %i, via stdc:isnan\n", 
-		lu, isnan(x));
-
 	double a = area_of_rect(4., 5.);
 	printf("area of rect(%f, %f) = %f\n", 4., 5., a);
 
+	// trunc toward to zero	
+	printf("trunc(%f) = %f\n", 1.5, trunc(1.5));
+	printf("trunc(%f) = %f\n", -1.5, trunc(-1.5));
+
+	// floor toward to -infinite
+	printf("floor(%f) = %f\n", 1.5, floor(1.5));
+	printf("floor(%f) = %f\n", -1.5, floor(-1.5));
+
+	// ceil toward to +infinite
+	printf("ceil(%f) = %f\n", 1.5, ceil(1.5));
+	printf("ceil(%f) = %f\n", -1.5, ceil(-1.5));
+
+	/*
+		round: return the integral value nearest to x rounding 
+					 half-way cases away from zero, regardless of the 
+					 current rounding direction.
+	*/
+	printf("round(%f) = %f\n", 1.4, round(1.4));
+	printf("round(%f) = %f\n", -1.4, round(-1.4));
+	printf("round(%f) = %f\n", 1.5, round(1.5));
+	printf("round(%f) = %f\n", -1.5, round(-1.5));
+	printf("round(%f) = %f\n", 2.5, round(2.5));
+	printf("round(%f) = %f\n", -2.5, round(-2.5));
 
 	return 0;
 }
