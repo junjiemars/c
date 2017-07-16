@@ -8,7 +8,7 @@ geo_test: $(geo_binout)
 	$(geo_binout)
 
 geo_cflags := $(CFLAGS) $(nm_pic_opt) $(INC) -I$(src_path)
-geo_ldflags := $(LDFLAGS) 
+geo_ldflags := $(LDFLAGS) $(nm_shared_opt)
 
 
 $(tmp_path)geo$(obj_ext): $(src_path)geo.c 
