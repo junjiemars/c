@@ -1,8 +1,5 @@
-#include <nm_auto_config.h>
-#include <nm_auto_header.h>
+#include <lang.h>
 #include <stdio.h>
-
-#define _unused_(x) ((void)(x))
 
 int
 add1(int n) {
