@@ -1,6 +1,6 @@
-# Preprocessor, Compiler, Assembler, Linker and Loader
+# Stage
+Preprocessor, Compiler, Assembler, Linker and Loader
 
-## Stages
 
 ### Preprocessor
 * cc -E calr.c -o calr.i

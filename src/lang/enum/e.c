@@ -1,6 +1,6 @@
+#include <lang.h>
 #include <stdio.h>
 
-#define _unused_(x) ((void)(x))
 
 #define CORVID_MAP(XX)                                                                         \
 	XX(101, BEGIN,    "BEGIN")                                                                   \
