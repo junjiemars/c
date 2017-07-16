@@ -1,9 +1,13 @@
 
-lang: enum \
+lang: array \ 
+			assert \
+			enum \
 			env \
 			fn \
 			stage
-lang_test: enum_test \
+lang_test: array_test \ 
+					 assert_test \
+					 enum_test \
 					 env_test \
 					 fn_test \
 					 stage_test
@@ -13,6 +17,41 @@ ifneq ($(NM_SYSTEM), MSYS_NT)
 CFLAGS += -std=c99
 endif
 
+# array
+array_binout := $(bin_path)array$(bin_ext)
+
+array: $(array_binout)
+array_test: array
+	$(array_binout)
+
+$(array_binout): $(src_path)array/a.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# assert at runtime
+# static_assert at compile time
+# ./configure --without-debug --has-assert
+assert_binout := $(bin_path)assert$(bin_ext)
+
+assert_cflags = $(CFLAGS)
+ifeq ($(CC_NAME), gcc)
+	assert_cflags += -std=c11
+endif
+
+assert: $(assert_binout)
+
+$(assert_binout): $(src_path)assert/a.c
+	$(CC) $(assert_cflags) $(INC) $^ $(bin_out)$@
+
+ifeq ($(CC_NAME), msvc)
+assert_test: assert
+		-$(assert_binout) 49
+		-$(assert_binout) 0 # will raise assert failed dialog box
+else
+assert_test: assert
+		-$(assert_binout) 0
+		-$(assert_binout) 100
+		-$(assert_binout) 49
+endif
 
 # enum 
 enum_binout := $(bin_path)enum$(bin_ext)
