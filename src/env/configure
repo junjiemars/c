@@ -1,6 +1,0 @@
-
-if [ "$NM_SYSTEM" != "MSYS_NT" ]; then
-
-	flag=env_cflags value=-std=c99 . ${NM_HOME}auto/cflags
-
-fi

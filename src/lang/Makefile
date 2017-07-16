@@ -1,10 +1,15 @@
 
 lang: enum \
+			env \
 			stage
 lang_test: enum_test \
+					 env_test \
 					 stage_test
 
 INC += -I$(src_path)
+ifneq ($(NM_SYSTEM), MSYS_NT)
+CFLAGS += -std=c99
+endif
 
 
 # enum 
@@ -21,6 +26,19 @@ $(enum_binout): $(enum_cppout)
 $(enum_cppout): $(src_path)enum/e.c
 	$(CPP) $(CPPFLAGS) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
 
+# env
+env_binout := $(bin_path)env$(bin_ext)
+env_cflags := $(CFLAGS) $(INC) -I$(src_path)env/
+
+$(env_binout): $(src_path)env/env.c
+	$(CC) $(env_cflags) $^ $(bin_out)$@ 
+
+env: $(env_binout)
+env_test: env
+	$(env_binout) --COUNT=2 --TEXT=Bonjour
+	COUNT=2 $(env_binout)
+	COUNT=3 TEXT="Bonjor" $(env_binout)
+	COUNT=2 $(env_binout) --TEXT=Bonjour
 
 # stage
 stage_binout := $(bin_path)stage$(bin_ext)

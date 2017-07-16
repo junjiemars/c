@@ -2,8 +2,7 @@
 #ifndef _ENV_H_
 #define _ENV_H_
 
-#include <nm_auto_config.h>
-#include <nm_auto_header.h>
+#include <lang.h>
 
 #if (MSYS_NT)
 
