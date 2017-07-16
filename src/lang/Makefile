@@ -13,9 +13,9 @@ lang_test: array_test \
 					 stage_test
 
 INC += -I$(src_path)
-ifneq ($(NM_SYSTEM), MSYS_NT)
-CFLAGS += -std=c99
-endif
+#ifneq ($(NM_SYSTEM), MSYS_NT)
+#CFLAGS += -std=c11
+#endif
 
 # array
 array_binout := $(bin_path)array$(bin_ext)
