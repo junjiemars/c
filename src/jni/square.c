@@ -1,4 +1,4 @@
-#include <nm_auto_headers.h>
+#include <nm_auto_header.h>
 #include <square.h>
 #include <stdio.h>
 

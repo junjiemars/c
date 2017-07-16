@@ -15,7 +15,7 @@ main(int argc, char *argv[]) {
 	a[i] = (i + 4) * (2 + 6);
 	g_x2 = a[i+1];
 	
-	printf("Hello, %s: %d\n", "calr", 
+	printf("Hello, %s: %d\n", "stage", 
 		a[i] + g_x1 + g_x2 + s_x3);
 	return 0;
 }

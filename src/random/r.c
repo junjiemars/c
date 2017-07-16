@@ -1,5 +1,5 @@
 #include <nm_auto_config.h>
-#include <nm_auto_headers.h>
+#include <nm_auto_header.h>
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
