@@ -1,9 +1,11 @@
 
 lang: enum \
 			env \
+			fn \
 			stage
 lang_test: enum_test \
 					 env_test \
+					 fn_test \
 					 stage_test
 
 INC += -I$(src_path)
@@ -39,6 +41,16 @@ env_test: env
 	COUNT=2 $(env_binout)
 	COUNT=3 TEXT="Bonjor" $(env_binout)
 	COUNT=2 $(env_binout) --TEXT=Bonjour
+
+# fn
+fn_binout := $(bin_path)fn$(bin_ext)
+
+fn: $(fn_binout)
+fn_test: fn
+	$(fn_binout)
+
+$(fn_binout): $(src_path)fn/f.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # stage
 stage_binout := $(bin_path)stage$(bin_ext)
