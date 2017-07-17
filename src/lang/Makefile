@@ -10,7 +10,8 @@ lang: array					\
 			scope					\
 			sizeof				\
 			stage					\
-			type	
+			type					\
+			pointer
 
 lang_test: 	array_test					\
 						assert_test					\
@@ -23,7 +24,8 @@ lang_test: 	array_test					\
 						scope_test					\
 						sizeof_test					\
 						stage_test					\
-						type_test
+						type_test						\
+						pointer_test
 
 INC += -I$(src_path)
 
@@ -182,4 +184,14 @@ type_test: type
 	$(type_binout)
 
 $(type_binout): $(src_path)type/t.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# pointer
+pointer_binout := $(bin_path)pointer$(bin_ext)
+
+pointer: $(pointer_binout)
+pointer_test: pointer
+	$(pointer_binout)
+
+$(pointer_binout): $(src_path)ptr/pp.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
