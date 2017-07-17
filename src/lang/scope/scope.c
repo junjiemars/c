@@ -1,8 +1,8 @@
-#include <stdio.h>
+#include <lang.h>
 #include "scope.h"
+#include <stdio.h>
 #include <assert.h>
 
-#define _unused_(x) ((void)(x))
 
 /* file scope, declaration, definition with initializer  */
 int i0 = 123;
@@ -16,19 +16,22 @@ extern int i2;
 /* function sub forward declaration */
 void sub(int, int);
 
-int inc() {
+int 
+inc() {
 	static int i=0;
 	return i++;
 }
 
-int map(int (*fn)(int n), int a[static 4]) {
+int 
+map(int (*fn)(int n), int a[static 4]) {
 	for (int i=0; i<4; ++i) {
 		a[i] = (*fn)(a[i]);
 	}
 	return 4;
 }
 
-int main(int argc, char *argv[]) {
+int
+ main(int argc, char *argv[]) {
 	_unused_(argv);
 
 	printf("epoch: i0=%i, i1=%i, i2=%i\n", i0, i1, i2);
@@ -105,7 +108,8 @@ int main(int argc, char *argv[]) {
 	printf("=>main{for:register:1~5}=%i\n", sum);
 }
 
-void sub(int i0, int i1) {
+void 
+sub(int i0, int i1) {
   printf("=>sub{i0=%i+%i}=%i\n", i0, i1, i0+i1);
 
   /* well, the i0 from function parameter i0, so u can't redefined it */

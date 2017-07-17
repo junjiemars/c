@@ -6,6 +6,7 @@ lang: array					\
 			fn						\
 			goto					\
 			macro					\
+			scope					\
 			sizeof				\
 			stage
 
@@ -16,6 +17,7 @@ lang_test: 	array_test					\
 						fn_test							\
 						goto_test						\
 						macro_test					\
+						scope_test					\
 						sizeof_test					\
 						stage_test
 
@@ -109,6 +111,22 @@ $(macro_binout): $(macro_cppout)
 
 $(macro_cppout): $(src_path)macro/macro.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+# scope
+scope_binout := $(bin_path)scope$(bin_ext)
+
+scope_cflags = $(CFLAGS)
+
+ifeq ($(CC_NAME), msvc)
+	scope_cflags += -Wv:18
+endif
+
+scope: $(scope_binout)
+scope_test: scope
+	$(scope_binout)
+
+$(scope_binout): $(src_path)scope/scope.c
+	$(CC) $(scope_cflags) $(INC) $^ $(bin_out)$@
 
 # sizeof
 sizeof_binout := $(bin_path)sizeof$(bin_ext)
