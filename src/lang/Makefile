@@ -6,6 +6,7 @@ lang: array					\
 			fn						\
 			goto					\
 			macro					\
+			sizeof				\
 			stage
 
 lang_test: 	array_test					\
@@ -15,6 +16,7 @@ lang_test: 	array_test					\
 						fn_test							\
 						goto_test						\
 						macro_test					\
+						sizeof_test					\
 						stage_test
 
 INC += -I$(src_path)
@@ -107,6 +109,16 @@ $(macro_binout): $(macro_cppout)
 
 $(macro_cppout): $(src_path)macro/macro.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+# sizeof
+sizeof_binout := $(bin_path)sizeof$(bin_ext)
+
+sizeof: $(sizeof_binout)
+sizeof_test: sizeof
+	$(sizeof_binout)
+
+$(sizeof_binout): $(src_path)sizeof/sizeof.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # stage
 stage_binout := $(bin_path)stage$(bin_ext)
