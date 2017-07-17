@@ -6,6 +6,7 @@ lang: array					\
 			fn						\
 			goto					\
 			macro					\
+			main					\
 			scope					\
 			sizeof				\
 			stage
@@ -17,6 +18,7 @@ lang_test: 	array_test					\
 						fn_test							\
 						goto_test						\
 						macro_test					\
+						main_test						\
 						scope_test					\
 						sizeof_test					\
 						stage_test
@@ -111,6 +113,16 @@ $(macro_binout): $(macro_cppout)
 
 $(macro_cppout): $(src_path)macro/macro.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+# main
+main_binout := $(bin_path)main$(bin_ext)
+
+main: $(main_binout)
+main_test: main
+	$(main_binout) a bb ccc 
+
+$(main_binout): $(src_path)main/m.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # scope
 scope_binout := $(bin_path)scope$(bin_ext)
