@@ -65,7 +65,7 @@ $(enum_binout): $(enum_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(enum_cppout): $(src_path)enum/e.c
-	$(CPP) $(CPPFLAGS) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
+	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
 
 # env
 env_binout := $(bin_path)env$(bin_ext)
