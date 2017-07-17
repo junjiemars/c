@@ -32,19 +32,13 @@ $(array_binout): $(src_path)array/a.c
 assert_binout := $(bin_path)assert$(bin_ext)
 
 assert: $(assert_binout)
-
-$(assert_binout): $(src_path)assert/a.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-ifneq ($(CC_NAME), msvc)
 assert_test: assert
 		-$(assert_binout) 0
 		-$(assert_binout) 100
 		-$(assert_binout) 49
-else
-assert_test: assert
-		-$(assert_binout) 49
-endif
+
+$(assert_binout): $(src_path)assert/a.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # enum 
 enum_binout := $(bin_path)enum$(bin_ext)
