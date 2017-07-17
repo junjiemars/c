@@ -4,6 +4,7 @@ lang: array					\
 			enum					\
 			env						\
 			fn						\
+			goto					\
 			stage
 
 lang_test: 	array_test					\
@@ -11,6 +12,7 @@ lang_test: 	array_test					\
 						enum_test						\
 						env_test						\
 						fn_test							\
+						goto_test						\
 						stage_test
 
 INC += -I$(src_path)
@@ -76,6 +78,16 @@ fn_test: fn
 	$(fn_binout)
 
 $(fn_binout): $(src_path)fn/f.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# goto
+goto_binout := $(bin_path)goto$(bin_ext)
+
+goto: $(goto_binout)
+goto_test: goto
+	$(goto_binout)
+
+$(goto_binout): $(src_path)goto/g.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # stage

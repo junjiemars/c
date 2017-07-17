@@ -1,3 +1,4 @@
+#include <lang.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -6,7 +7,8 @@
  * 2) use longjmp jump to other function;
  */
 
-int sum(int *v, size_t size) {
+int 
+sum(int *v, size_t size) {
     int c = 0;
 
     for (size_t i = 0; i < size; i++) {
@@ -19,7 +21,8 @@ clean_exit:
     return c;
 }
 
-void loop() {
+void 
+loop() {
   int a[] = {0, 1, 2, 3, 4, 5};
   int i = 0;
 
@@ -36,7 +39,11 @@ end:
 
 
 
-int main(int argc, char *argv[]) {
+int 
+main(int argc, char *argv[]) {
+	_unused_(argc);
+	_unused_(argv);
+
 	size_t size = 10;
 	int *v = (int*)malloc(sizeof(int) * size);
 	for (size_t i = 0; i < size; i++) {
