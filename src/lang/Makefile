@@ -1,21 +1,20 @@
 
-lang: array \ 
-			assert \
-			enum \
-			env \
-			fn \
+lang: array					\
+			assert				\
+			enum					\
+			env						\
+			fn						\
 			stage
-lang_test: array_test \ 
-					 assert_test \
-					 enum_test \
-					 env_test \
-					 fn_test \
-					 stage_test
+
+lang_test: 	array_test					\
+						assert_test					\
+						enum_test						\
+						env									\
+						fn									\
+						stage
 
 INC += -I$(src_path)
-#ifneq ($(NM_SYSTEM), MSYS_NT)
-#CFLAGS += -std=c11
-#endif
+
 
 # array
 array_binout := $(bin_path)array$(bin_ext)
@@ -29,7 +28,7 @@ $(array_binout): $(src_path)array/a.c
 
 # assert at runtime
 # static_assert at compile time
-# ./configure --without-debug --has-assert
+# ./configure --without-debug --has-lang
 assert_binout := $(bin_path)assert$(bin_ext)
 
 assert_cflags = $(CFLAGS)
@@ -42,14 +41,13 @@ assert: $(assert_binout)
 $(assert_binout): $(src_path)assert/a.c
 	$(CC) $(assert_cflags) $(INC) $^ $(bin_out)$@
 
-ifeq ($(CC_NAME), msvc)
-assert_test: assert
-		-$(assert_binout) 49
-		-$(assert_binout) 0 # will raise assert failed dialog box
-else
+ifneq ($(CC_NAME), msvc)
 assert_test: assert
 		-$(assert_binout) 0
 		-$(assert_binout) 100
+		-$(assert_binout) 49
+else
+assert_test: assert
 		-$(assert_binout) 49
 endif
 
@@ -108,7 +106,7 @@ $(stage_objout): $(stage_asmout)
 	$(AS) $(ASFLAGS) $(nm_stage_c) $^ $(obj_out)$@
 
 $(stage_asmout): $(stage_cppout)
-	$(CAS) $(nm_stage_asm) $^ $(asm_out)$@
+	$(CAS) $(CFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
 
 $(stage_cppout): $(src_path)stage/s.c
-	$(CPP) $(CFLAGS) $(nm_stage_pre) $(INC) $^ > $@
+	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
