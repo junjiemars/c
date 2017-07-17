@@ -9,7 +9,8 @@ lang: array					\
 			main					\
 			scope					\
 			sizeof				\
-			stage
+			stage					\
+			type	
 
 lang_test: 	array_test					\
 						assert_test					\
@@ -21,7 +22,8 @@ lang_test: 	array_test					\
 						main_test						\
 						scope_test					\
 						sizeof_test					\
-						stage_test
+						stage_test					\
+						type_test
 
 INC += -I$(src_path)
 
@@ -171,3 +173,13 @@ $(stage_asmout): $(stage_cppout)
 
 $(stage_cppout): $(src_path)stage/s.c
 	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
+
+# type
+type_binout := $(bin_path)type$(bin_ext)
+
+type: $(type_binout)
+type_test: type
+	$(type_binout)
+
+$(type_binout): $(src_path)type/t.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
