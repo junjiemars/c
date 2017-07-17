@@ -5,6 +5,7 @@ lang: array					\
 			env						\
 			fn						\
 			goto					\
+			macro					\
 			stage
 
 lang_test: 	array_test					\
@@ -13,6 +14,7 @@ lang_test: 	array_test					\
 						env_test						\
 						fn_test							\
 						goto_test						\
+						macro_test					\
 						stage_test
 
 INC += -I$(src_path)
@@ -89,6 +91,22 @@ goto_test: goto
 
 $(goto_binout): $(src_path)goto/g.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# macro
+macro_binout := $(bin_path)macro$(bin_ext)
+macro_cppout := $(tmp_path)macro$(cpp_ext)
+
+macro: $(macro_binout)
+macro_test: macro
+	$(macro_binout)
+
+macro_cflags += $(cflags) $(inc) -i$(src_path)
+
+$(macro_binout): $(macro_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(macro_cppout): $(src_path)macro/macro.c
+	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # stage
 stage_binout := $(bin_path)stage$(bin_ext)
