@@ -9,9 +9,9 @@ lang: array					\
 lang_test: 	array_test					\
 						assert_test					\
 						enum_test						\
-						env									\
-						fn									\
-						stage
+						env_test						\
+						fn_test							\
+						stage_test
 
 INC += -I$(src_path)
 
@@ -31,15 +31,10 @@ $(array_binout): $(src_path)array/a.c
 # ./configure --without-debug --has-lang
 assert_binout := $(bin_path)assert$(bin_ext)
 
-assert_cflags = $(CFLAGS)
-ifeq ($(CC_NAME), gcc)
-	assert_cflags += -std=c11
-endif
-
 assert: $(assert_binout)
 
 $(assert_binout): $(src_path)assert/a.c
-	$(CC) $(assert_cflags) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 ifneq ($(CC_NAME), msvc)
 assert_test: assert
