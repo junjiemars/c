@@ -22,8 +22,11 @@ inc() {
 	return i++;
 }
 
-int 
-map(int (*fn)(int n), int a[static 4]) {
+#ifdef CC_MSVC
+int map(int (*fn)(int n), int *a) {
+#else
+int map(int (*fn)(int n), int a[static 4]) {
+#endif
 	for (int i=0; i<4; ++i) {
 		a[i] = (*fn)(a[i]);
 	}
@@ -61,12 +64,7 @@ int
   if (i0 > 0) {
 		printf("=>main{{goto i0}}=>{{i0:}}\n");
     goto i0;
-		#ifdef CC_MSVC 
-			#pragma warning(push)
-			#pragma warning(disable: 4702)
-			printf("this line bypassed via goto\n");
-			#pragma warning(pop)
-		#endif
+    printf("this line bypassed via goto\n");
   }
 
   {
