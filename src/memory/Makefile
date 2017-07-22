@@ -1,6 +1,6 @@
 
 memory: alloc
-memory: alloc_test
+memory_test: alloc_test
 
 INC += -I$(src_path)
 

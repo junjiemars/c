@@ -24,10 +24,15 @@ the redundant parentheses with ```sizeof()```; they are only needed when the arg
 is a type name. Many people seem to not know or ignore this, which makes their code
 move verbose. Remember: ```sizeof``` is not a function!
 
+> While moving length to the front may increase visibility in some
+rare cases, one should also pay attention that in the general case, 
+it should be better to write the expression as:
+```int *x = malloc(sizeof *x * length);```
+
 > Compare with ```malloc(sizeof *x * length * width)``` vs. 
 ```malloc(length * width * sizeof *x)``` the second may overflow the 
 ```length * width``` when ```length``` and ```width``` are smaller types than 
 ```size_t```.
 
 ## References
-[Do I cast the result of malloc](http://stackoverflow.com/questions/605845/do-i-cast-the-result-of-malloc)
+[Do I cast the result of malloc](https://stackoverflow.com/questions/605845/do-i-cast-the-result-of-malloc)
