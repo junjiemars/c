@@ -1,11 +1,15 @@
 
-memory_binout := $(bin_path)memory$(bin_ext)
+memory: alloc
+memory: alloc_test
 
-memory_cflags := $(CFLAGS) $(INC) -I$(src_root)utils
+INC += -I$(src_path)
 
-memory: $(memory_binout)
-memory_test: memory
-	$(memory_binout)
+# alloc
+alloc_binout := $(bin_path)alloc$(bin_ext)
 
-$(memory_binout): $(src_path)mem.c
-	$(CC) $(memory_cflags) $^ $(bin_out)$@
+alloc: $(alloc_binout)
+alloc_test: alloc
+	$(alloc_binout)
+
+$(alloc_binout): $(src_path)alloc/a.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

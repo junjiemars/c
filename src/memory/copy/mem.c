@@ -19,7 +19,8 @@ memory_move() {
             ,(char*)memmove(&s[2], s, strlen(s)/2));
 }
 
-int main(int argc, const char *argv[]) {
+int 
+main(int argc, const char *argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 

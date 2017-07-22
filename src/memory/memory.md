@@ -19,8 +19,8 @@ relevant since there's no automatic assumption that undeclared functions return
 can cause errors. It's better to dereference the pointer being used to store the 
 return value, to __lock__ the two together:
 > ```int *x = malloc(length * sizeof *x);```
-> This also moves the ```lenght``` to the front for increased visibility, and drops
-the redundant parentheses with ```sizeof```; they are only needed when the argument 
+> This also moves the ```lengh``` to the front for increased visibility, and drops
+the redundant parentheses with ```sizeof()```; they are only needed when the argument 
 is a type name. Many people seem to not know or ignore this, which makes their code
 move verbose. Remember: ```sizeof``` is not a function!
 
