@@ -1,17 +1,17 @@
-#include <utils.h>
+#include <_memory_.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
 void 
-memory_copy() {
+copy() {
     char d[16] = {0};
     char *s = "abc123";
     printf("s=%s memcpy(d,s)=%s\n",s ,(char*)memcpy(d, s, strlen(s)));
 }
 
 void 
-memory_move() {
+move() {
     char s[] = "abc123";
     printf("s=%s strlen(s)=%lu memmove(s,s)=%s\n"
             ,s
@@ -24,6 +24,6 @@ main(int argc, const char *argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 
-	memory_copy();
-	memory_move();
+	copy();
+	move();
 }
