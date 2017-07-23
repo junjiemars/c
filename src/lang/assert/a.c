@@ -1,4 +1,4 @@
-#include <lang.h>
+#include <_lang_.h>
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,10 +12,7 @@ sqr(int x) {
 
 int
 main(int argc, const char* argv[]) {
-	if (argc <= 1) {
-		printf("%s usage:\n\t <int>", argv[0]);
-		return 0;
-	}
+	assert((argc > 1) && "usage: one <int>");
 	
 	#if (NM_HAVE_STATIC_ASSERT)
 		static_assert(4 == sizeof(int), "sizeof(int) != 4 bytes");

@@ -1,4 +1,4 @@
-#include <lang.h>
+#include <_lang_.h>
 #include <stdio.h>
 
 int g_x1 = 0x11223344;

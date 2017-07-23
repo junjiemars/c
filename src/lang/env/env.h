@@ -2,7 +2,7 @@
 #ifndef _ENV_H_
 #define _ENV_H_
 
-#include <lang.h>
+#include <_lang_.h>
 
 #if (MSYS_NT)
 
