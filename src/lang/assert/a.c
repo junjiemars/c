@@ -12,9 +12,6 @@ sqr(int x) {
 
 int
 main(int argc, const char* argv[]) {
-	_unused_(argc);
-	_unused_(argv);
-
 	assert((argc > 1) && "usage: one <int>");
 	
 	#if (NM_HAVE_STATIC_ASSERT)
