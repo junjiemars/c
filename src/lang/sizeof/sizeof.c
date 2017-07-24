@@ -1,6 +1,4 @@
-/* Compile with:
-make sizesof CFLAGS="-g -Wall -std=gnu11 -O3"
-*/
+#include <_lang_.h>
 #include <stdio.h>
 
 /*
@@ -11,7 +9,11 @@ make sizesof CFLAGS="-g -Wall -std=gnu11 -O3"
  *
  */
 
-#define peval(expr) printf(#expr ": %lu\n", expr);
+#ifdef CC_GCC
+	#define peval(expr) printf(#expr ": %4u\n", expr);
+#else
+	#define peval(expr) printf(#expr ": %lu\n", expr);
+#endif
 
 int main(){
     peval(sizeof(double));
