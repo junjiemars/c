@@ -1,4 +1,4 @@
-# C Standard
+# C Standards
 
 ## Introduction
 
@@ -16,4 +16,5 @@ There has an good answer of [What is the difference between C, C99, ANSI C and G
 > In 2011, the C standard was again changed (ISO 9899:2011). This version is called C11. It is currently the definition of "the C language".
 
 
-[C11](https://en.wikipedia.org/wiki/C11_(C_standard_revision))
+## References
+* [C11](https://en.wikipedia.org/wiki/C11_(C_standard_revision))
