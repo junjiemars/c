@@ -1,6 +1,30 @@
 # Memory
 
-## malloc
+## Bits and Bytes
+
+### Bits
+
+The smallest unit of memory is the *bi*. A bit can be in one of two states
+-- *on* vs. *off*, or alternately, *1* vs. *0*.
+
+Most computers don't work with bits individually, but instead group eight 
+bits together to form a *byte*. Eash byte maintains one eight-bit pattern.
+A group of N bits can be arranged in 2^N different patterns.
+
+Strictly speaking, a program can interpret a bit pattern any way it chooses.
+
+### Bytes
+
+The byte is sometimes defined as the *smallest addressable unit* of memory.
+Most computers also support reading and writting larger units of memory-- 2bytes *half-words* (sometimes known as a *short* word) and 4 byte *word*.
+
+Most computers restrict half-word and word accesses to be *aligned*-- 
+
+
+## Allocation
+
+
+### malloc
 > don't cast the result of malloc
 > It is unneccessary, as ```void *``` is automatically and safely prompted to any
 other pointer type in this case.
@@ -34,5 +58,8 @@ it should be better to write the expression as:
 ```length * width``` when ```length``` and ```width``` are smaller types than 
 ```size_t```.
 
+### free
+
 ## References
-[Do I cast the result of malloc](https://stackoverflow.com/questions/605845/do-i-cast-the-result-of-malloc)
+* [Programming Paradigms](https://see.stanford.edu/Course/CS107)
+* [Do I cast the result of malloc](https://stackoverflow.com/questions/605845/do-i-cast-the-result-of-malloc)
