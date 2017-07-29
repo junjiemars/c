@@ -48,7 +48,21 @@ known as a **word**.
 IEEE representation for floating point numbers that is a system much more
 complex than the scheme for integers. The important thing to note is that
 the bit pattern for the floating point number 1.0 is not the same as the 
-pattern for integer 1.
+pattern for integer 1. IEEE floats are in a form of scientific notation.
+A 4-byte float uses 23 bits for the mantissa, 8 bits for the exponent, and
+1 bit for the sign. Some processors have a special hardware Floating Point
+Unit, FPU, that substantially speeds up floating point operations.
+With separate integer and floating point processing units, it is often 
+possible that an integer and a floating point computation can proceed in
+parallel to an extent. The exponent field contains 127 plus the true 
+exponent for sigle-precision, or 1023 plus the true exponent for double
+precision. The first bit of the mantissa is typically assumed to be 1._f_,
+where _f_ is the field of fraction bits.
+|                   |   sign   |   exponent (base 2)` |   mantissa   |
+|:-----------------:|---------:|---------------------:|-------------:|
+| signle precision  | 1 \[31\] | 8 \[30-23\]          | 23 \[22-00\] |
+| double precision  | 1 \[63\] | 8 \[62-52\]          | 52 \[51-00\] |
+
 
 
 ## Allocation
@@ -92,4 +106,5 @@ it should be better to write the expression as:
 
 ## References
 * [Programming Paradigms](https://see.stanford.edu/Course/CS107)
+* [IEEE Standard 754 Floating Point Numbers](http://steve.hollasch.net/cgindex/coding/ieeefloat.html)
 * [Do I cast the result of malloc](https://stackoverflow.com/questions/605845/do-i-cast-the-result-of-malloc)
