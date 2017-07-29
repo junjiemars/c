@@ -43,8 +43,8 @@ ieee_float() {
 	ufloat32_t x4fs = { .f = -3.14f };
 	printf("float: %f \t= #b"BIT_FMT_32"\n", x4fs.f, BIT_32(x4fs.u));
 
-	printf("   sign     = #b"BIT_FMT_8"\n", BIT_8(x4fs.layout.sign));
-	printf("   exponent = #b"BIT_FMT_8"\n", BIT_8(x4fs.layout.exponent));
+	printf("   sign     = #b"BIT_FMT_32"\n", BIT_32(x4fs.layout.sign));
+	printf("   exponent = #b"BIT_FMT_32"\n", BIT_32(x4fs.layout.exponent));
 	printf("   mantissa = #b"BIT_FMT_32"\n", BIT_32(x4fs.layout.mantissa));
 }
 

@@ -47,9 +47,9 @@ typedef union {
 	float f;
 	uint32_t u;
 	struct {
-		uint32_t sign : 1; /* (u >> 31) */
-		uint32_t exponent : 8; /* ((u & 0x07800000) >> 23) */
 		uint32_t mantissa : 23; /* (u & 0x007fffff) */
+		uint32_t exponent : 8; /* ((u & 0x07800000) >> 23) */
+		uint32_t sign : 1; /* (u >> 31) */
 	} layout;
 } ufloat32_t;
 
