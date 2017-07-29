@@ -1,7 +1,9 @@
 
 memory: alloc								\
+				bytes								\
 				copy
 memory_test: 	alloc_test								\
+							bytes_test								\
 							copy_test
 
 INC += -I$(src_path)
@@ -15,6 +17,20 @@ alloc_test: alloc
 
 $(alloc_binout): $(src_path)alloc/a.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# bytes
+bytes_binout := $(bin_path)bytes$(bin_ext)
+bytes_cppout := $(tmp_path)bytes$(cpp_ext)
+
+bytes: $(bytes_binout)
+bytes_test: bytes
+	$(bytes_binout)
+
+$(bytes_binout): $(bytes_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(bytes_cppout): $(src_path)bytes/b.c
+	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
 
 # copy
 copy_binout := $(bin_path)copy$(bin_ext)

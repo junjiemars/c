@@ -9,7 +9,7 @@ The smallest unit of memory is the *bi*. A bit can be in one of two states
 
 Most computers don't work with bits individually, but instead group eight 
 bits together to form a **byte**. Eash byte maintains one eight-bit pattern.
-A group of N bits can be arranged in 2^N^ different patterns.
+A group of N bits can be arranged in 2^N different patterns.
 
 Strictly speaking, a program can interpret a bit pattern any way it chooses.
 
@@ -19,16 +19,17 @@ The byte is sometimes defined as the **smallest addressable unit** of memory.
 Most computers also support reading and writting larger units of memory-- 2bytes **half-words** (sometimes known as a **short** word) and 4 byte **word**.
 
 Most computers restrict half-word and word accesses to be **aligned**-- 
-a half-word must start at an even address and a word must start at an address that is a multiple of 4.
+a half-word must start at an even address and a word must start at an 
+address that is a multiple of 4.
 
 
 ### Basic Types
 
 * Character: The ASCII code defines 128 characters and a mapping of those
-characters onto the numbers 0..127. The letter 'A' is assigned 65 in the ASCII table. Expressed in binary, that's 2^6^ + 2^0^ (64 + 1). All standard ASCII 
+characters onto the numbers 0..127. The letter 'A' is assigned 65 in the ASCII table. Expressed in binary, that's 2^6 + 2^0 (64 + 1). All standard ASCII 
 characters have zero in the uppermost bit (the *most significant* bit) sincethey only span the range 0..127.
 
-* Short Integer: 2 bytes or 16 bits. 16 bits provide 2^16^ = 65536 patterns.
+* Short Integer: 2 bytes or 16 bits. 16 bits provide 2^16 = 65536 patterns. This number is known as **64k**, where 1 **k** of something is 2^10 = 1024. For non-negative numbers these patterns map to the numbers 0..65535.
 
 
 ## Allocation
