@@ -4,7 +4,7 @@
 
 ### Bits
 
-The smallest unit of memory is the *bi*. A bit can be in one of two states
+The smallest unit of memory is the *bit*. A bit can be in one of two states
 -- **on** vs. **off**, or alternately, **1** vs. **0**.
 
 Most computers don't work with bits individually, but instead group eight 
@@ -26,10 +26,29 @@ address that is a multiple of 4.
 ### Basic Types
 
 * Character: The ASCII code defines 128 characters and a mapping of those
-characters onto the numbers 0..127. The letter 'A' is assigned 65 in the ASCII table. Expressed in binary, that's 2^6 + 2^0 (64 + 1). All standard ASCII 
-characters have zero in the uppermost bit (the *most significant* bit) sincethey only span the range 0..127.
+characters onto the numbers 0..127. The letter 'A' is assigned 65 in the 
+ASCII table. Expressed in binary, that's 2^6 + 2^0 (64 + 1). 
+All standard ASCII characters have zero in the uppermost 
+bit (the *most significant* bit) since they only span the range 0..127.
 
-* Short Integer: 2 bytes or 16 bits. 16 bits provide 2^16 = 65536 patterns. This number is known as **64k**, where 1 **k** of something is 2^10 = 1024. For non-negative numbers these patterns map to the numbers 0..65535.
+* Short Integer: 2 bytes or 16 bits. 16 bits provide 2^16 = 65536 patterns. 
+This number is known as **64k**, where **1k** of something is 2^10 = 1024. 
+For non-negative numbers these patterns map to the numbers 0..65535. Systems
+that are _big-endian_ store the most-significant byte at the lower address. 
+A _litter-endian_ (Intel x86) system arranges the bytes in the opposite 
+order. This means when exchanging data through files or over a network 
+between different endian machines, there is often a substantial amount of
+**byte-swapping** required to rearrange the data.
+
+* Long Integer: 4 bytes or 32 bits. 32 bits provide 2^32 = 4294967296 
+patterns. 4 bytes is the contemporary default size for an integer. Also 
+known as a **word**.
+
+* Floating Point: 4,8, or 16 bytes. Almost all computers use the standard 
+IEEE representation for floating point numbers that is a system much more
+complex than the scheme for integers. The important thing to note is that
+the bit pattern for the floating point number 1.0 is not the same as the 
+pattern for integer 1.
 
 
 ## Allocation
