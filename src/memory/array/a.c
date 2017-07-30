@@ -15,6 +15,17 @@
 #endif
 
 void 
+bracket_syntax() {
+	int a[] = { 1, 2, 3, };
+
+	printf("[] OPERATOR\n");
+	printf("----------\n");
+	printf("a[1] == *(a+1) \t=> %d\n", a[1] == *(a+1));
+	printf("&a[1] == (a+1) \t=> %d\n", &a[1] == (a+1));
+	printf("a[1] == 1[a] \t=> %d\n", a[1] == 1[a]);
+}
+
+void 
 iter_a(int *a, size_t n) {
 	for (size_t i=0; i<n; ++i) {
 		printf("%d ", a[i]);
@@ -93,57 +104,58 @@ int
 main(int argc, const char* argv[]) {
 	_unused_(argc);
 	_unused_(argv);
-	
-	printf("----------\n");
-	int a0[] = { 1, 10, 20 };
-	printf("a0[3/%zu]\n", _array_size_(a0));
-	for (size_t i=0; i < _array_size_(a0); ++i) {
-		printf("%d ", a0[i]);
-	}
 
-	printf("\n----------\n");
-	printf("a0[1]=%i\n1[a0]=%i\n", a0[1], 1[a0]);
+	bracket_syntax();	
+	//printf("----------\n");
+	//int a0[] = { 1, 10, 20 };
+	//printf("a0[3/%zu]\n", _array_size_(a0));
+	//for (size_t i=0; i < _array_size_(a0); ++i) {
+	//	printf("%d ", a0[i]);
+	//}
 
-	/* c99 */
-	printf("\n----------\n");
-	int a1[] = { [2]=20, [1]=10, [0]=1 };
-	printf("a1[3/%zu]\n", _array_size_(a1));
-	for (size_t i=0; i < _array_size_(a1); ++i) {
-		printf("%d ", a1[i]);
-	}
+	//printf("\n----------\n");
+	//printf("a0[1]=%i\n1[a0]=%i\n", a0[1], 1[a0]);
 
-	printf("\n----------\n");
-	int a2[5] = { [2]=20, [1]=10, [0]=1 };
-	printf("a2[3/%zu]\n", _array_size_(a2));
-	for (size_t i=0; i < _array_size_(a2); ++i) {
-		printf("%d ", a2[i]);
-	}
+	///* c99 */
+	//printf("\n----------\n");
+	//int a1[] = { [2]=20, [1]=10, [0]=1 };
+	//printf("a1[3/%zu]\n", _array_size_(a1));
+	//for (size_t i=0; i < _array_size_(a1); ++i) {
+	//	printf("%d ", a1[i]);
+	//}
 
-	printf("\n----------\n");
-	printf("a2[3/%zu]\n", _array_size_(a2));
-	iter_a(a2, _array_size_(a2));
-	
-	printf("----------\n");
-	srand((unsigned int)time(0));
-	size_t aa1[M][N];
-	printf("aa1<[%zu][%zu]/%zu>\n", M, N, _array_size_(aa1));
-	iter_aa(M, N, aa1, &randomize, 100);	
+	//printf("\n----------\n");
+	//int a2[5] = { [2]=20, [1]=10, [0]=1 };
+	//printf("a2[3/%zu]\n", _array_size_(a2));
+	//for (size_t i=0; i < _array_size_(a2); ++i) {
+	//	printf("%d ", a2[i]);
+	//}
 
-	printf("----------\n");
-	size_t aa2[M*N];
-	printf("aa2<[%zu*%zu]/%zu>\n", M, N, _array_size_(aa2));
-	iter_aa1(M, N, aa2, &randomize, 100);
+	//printf("\n----------\n");
+	//printf("a2[3/%zu]\n", _array_size_(a2));
+	//iter_a(a2, _array_size_(a2));
+	//
+	//printf("----------\n");
+	//srand((unsigned int)time(0));
+	//size_t aa1[M][N];
+	//printf("aa1<[%zu][%zu]/%zu>\n", M, N, _array_size_(aa1));
+	//iter_aa(M, N, aa1, &randomize, 100);	
 
-	printf("----------\n");
-	size_t aa3[M*N*Z];
-	printf("aa2<[%zu*%zu*%zu]/%zu>\n", M, N, Z, _array_size_(aa3));
-	iter_aaa1(M, N, Z, aa3, &randomize, 100);
+	//printf("----------\n");
+	//size_t aa2[M*N];
+	//printf("aa2<[%zu*%zu]/%zu>\n", M, N, _array_size_(aa2));
+	//iter_aa1(M, N, aa2, &randomize, 100);
 
-	size_t aa4[M][N];
-	fn1(aa4);
-		
-	int* aa5[M];
-	fn2(aa5);
+	//printf("----------\n");
+	//size_t aa3[M*N*Z];
+	//printf("aa2<[%zu*%zu*%zu]/%zu>\n", M, N, Z, _array_size_(aa3));
+	//iter_aaa1(M, N, Z, aa3, &randomize, 100);
+
+	//size_t aa4[M][N];
+	//fn1(aa4);
+	//	
+	//int* aa5[M];
+	//fn2(aa5);
 
 	
 	return 0;
