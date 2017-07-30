@@ -25,6 +25,69 @@ bracket_syntax() {
 	printf("a[1] == 1[a] \t=> %d\n", a[1] == 1[a]);
 }
 
+char *
+strcpy1(char * dst, const char * src) {
+	int i;
+
+	for (i=0; src[i] != '\0'; i++) {
+		dst[i] = src[i];
+	}
+	dst[i] = '\0';
+	return dst;	
+}
+
+char *
+strcpy2(char * dst, const char * src) {
+	int i = 0;
+	
+	while ((dst[i] = src[i]) != '\0') {
+		i++;
+	}
+	return dst;
+}
+
+char *
+strcpy3(char * dst, const char * src) {
+	char * v = dst;
+
+	while ((*dst++ = *src++) != '\0') ;	
+	return v;
+}
+
+char * 
+strcpy4(char * dst, const char * src) {
+	char * v = dst;
+	/* -Wparentheses: ./configure --has-memory --without-error */
+
+	while ( *dst++ = *src++ ) ;
+	return v;
+}
+
+void pointer_syntax() {
+	printf("POINTER++ SYNTAX\n");
+	printf("----------\n");
+
+	const char *ss = "strcpy foo++";
+	int n = 12;
+
+	char *s = malloc(n * sizeof s);
+	printf("strcpy1: '%s' = '%s'\n", ss, strcpy1(s, ss));
+	free(s);
+
+	s = malloc(n * sizeof s);	
+	printf("strcpy2: '%s' = '%s'\n", ss, strcpy2(s, ss));
+	free(s);
+
+	s = malloc(n * sizeof s);	
+	printf("strcpy3: '%s' = '%s'\n", ss, strcpy3(s, ss));
+	free(s);
+
+	s = malloc(n * sizeof s);	
+	printf("strcpy4: '%s' = '%s'\n", ss, strcpy4(s, ss));
+	free(s);
+
+}
+
 void 
 iter_a(int *a, size_t n) {
 	for (size_t i=0; i<n; ++i) {
@@ -106,6 +169,8 @@ main(int argc, const char* argv[]) {
 	_unused_(argv);
 
 	bracket_syntax();	
+	pointer_syntax();
+
 	//printf("----------\n");
 	//int a0[] = { 1, 10, 20 };
 	//printf("a0[3/%zu]\n", _array_size_(a0));

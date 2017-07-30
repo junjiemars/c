@@ -140,6 +140,26 @@ needed a pointer to the element instread of the element itself.
 
 ### Pointer++
 
+If ```p``` is a pointer to an element in an array, then ```(p+1)``` points to the 
+next element in the array. Code can exploit this using the construct ```p++``` to 
+step a pointer over the elements in an array. It doesn't help readability any.
+
+
+### Pointer Type Effects
+
+Both ```[]``` and ```++``` implicitly use the compile time type of the pointer to 
+compute the element size which effects the offset arithmetic. 
+
+```c
+	int *p;
+	p = p + 12; /* p + (12 * sizeof(int)) */
+
+	p = (int*) ((char*)p + 12); /* add 12 sizeof(char) */
+```
+
+Each ```int``` takes 4 bytes, so at runtime the code will effectively increment the
+address in ```p``` by 48. The compiler figures all this out based on the type of the
+pointer.
 
 
 ### Passing multidimensional arrays to a function
