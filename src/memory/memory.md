@@ -58,12 +58,37 @@ parallel to an extent. The exponent field contains 127 plus the true
 exponent for sigle-precision, or 1023 plus the true exponent for double
 precision. The first bit of the mantissa is typically assumed to be 1._f_,
 where _f_ is the field of fraction bits.
+
 |                   |   sign   |   exponent (base 2)` |   mantissa   |
 |:-----------------:|---------:|---------------------:|-------------:|
 | signle precision  | 1 \[31\] | 8 \[30-23\]          | 23 \[22-00\] |
 | double precision  | 1 \[63\] | 8 \[62-52\]          | 52 \[51-00\] |
 
+* Records: The size of a record is equal to at least the sum of the size
+of its component fields. The record is laid out by allocating the components 
+sequentially in a contiguous block, working from low memory to high. 
+Sometimes a compiler will add invisible pad fields in a record to comply
+with processor alignment rectrictions.
 
+* Arrays: The size of an array is at least equal to the size of each element 
+multiplied by the number of components. The elements in the array are laid
+out consecutively starting with the first element and working from low
+memory to high. Given the base address of the array, the compiler can generate
+constant-time code to figure the address of any element. As with records,
+there may be pad bytes added to the size of each element to comply with
+alignment retrictions.
+
+* Pointer: A pointer is an address. The size of the pointer depends on the 
+range of addresses on the machine. Currently almost all machines use 4 bytes
+to store an address, creating a 4GB addressable range. There is actually
+very little distinction between a pointer and a 4 byte unsigned integer.
+They both just store integers-- the difference is in whether the number is 
+_interpreted_ as a number or as an address.
+
+* Instruction: Machine instructions themselves are also encoded using bit
+patterns, most often using the same 4-byte native word size. The different
+bits in the instruction encoding indicate things such as what type of 
+instruction it is (load, store, multiply, etc) and registers involved.
 
 ## Allocation
 
