@@ -1,11 +1,9 @@
-#include <nm_auto_config.h>
-#include <nm_auto_header.h>
+#include <_memory_.h>
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
 #include <assert.h>
 
-#define _unused_(x) ((void)(x))
 #define _array_size_(a) sizeof((a))/sizeof((a)[0])
 
 #ifdef CC_MSVC

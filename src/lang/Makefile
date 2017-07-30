@@ -1,6 +1,5 @@
 
-lang: array					\
-			assert				\
+lang:	assert				\
 			enum					\
 			env						\
 			fn						\
@@ -13,8 +12,7 @@ lang: array					\
 			type					\
 			pointer
 
-lang_test: 	array_test					\
-						assert_test					\
+lang_test:	assert_test					\
 						enum_test						\
 						env_test						\
 						fn_test							\
@@ -30,15 +28,6 @@ lang_test: 	array_test					\
 INC += -I$(src_path)
 
 
-# array
-array_binout := $(bin_path)array$(bin_ext)
-
-array: $(array_binout)
-array_test: array
-	$(array_binout)
-
-$(array_binout): $(src_path)array/a.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # assert at runtime
 # static_assert at compile time
