@@ -131,6 +131,7 @@ offset computation, but leaves the result as a pointer. The square bracket synta
 dereferences that pointer to access the _nth_ element while the ```+``` syntax just 
 computes the pointer to the _nth_ element.
 
+
 Any ```[]``` expression can be written with the ```+``` syntax instead. We just need 
 to add in the pointer dereference. For most purposes, it's easiest and most readable 
 to use the ```[]``` syntax. Every once in a while the ```+``` is convenient if you 
@@ -191,5 +192,5 @@ it should be better to write the expression as:
 * [Programming Paradigms](https://see.stanford.edu/Course/CS107)
 * [IEEE Standard 754 Floating Point Numbers](http://steve.hollasch.net/cgindex/coding/ieeefloat.html)
 * [The Ins and Outs of C Arrays](https://see.stanford.edu/materials/icsppcs107/07-Arrays-The-Full-Story.pdf)
-* [Array](http://stackoverflow.com/documentation/c/322/arrays#t=20170207121645271737)
+* [Arrays](http://stackoverflow.com/documentation/c/322/arrays#t=20170207121645271737)
 * [Do I cast the result of malloc](https://stackoverflow.com/questions/605845/do-i-cast-the-result-of-malloc)
