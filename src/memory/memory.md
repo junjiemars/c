@@ -59,7 +59,7 @@ exponent for sigle-precision, or 1023 plus the true exponent for double
 precision. The first bit of the mantissa is typically assumed to be 1._f_,
 where _f_ is the field of fraction bits.
 
-|                   |   sign   |   exponent (base 2)` |   mantissa   |
+|                   |   sign   |   exponent (base 2)  |   mantissa   |
 |:-----------------:|---------:|---------------------:|-------------:|
 | signle precision  | 1 \[31\] | 8 \[30-23\]          | 23 \[22-00\] |
 | double precision  | 1 \[63\] | 8 \[62-52\]          | 52 \[51-00\] |
