@@ -6,15 +6,22 @@
 
 #define _array_size_(a) sizeof((a))/sizeof((a)[0])
 
+
 #ifdef CC_MSVC
 	#define M 3
 	#define N 2
 	#define Z 2
-
-	#pragma warning(disable:4706) /* strcpy4: assignment within conditional expression */
-
 #else
 	size_t M=3, N=2, Z=2;
+#endif
+
+
+#if CC_MSVC == 1
+	#pragma warning(disable:4706) /* strcpy4: assignment within conditional expression */
+#elif CC_GCC == 1
+	#pragma GCC diagnostic ignored "-Wparentheses"  /* strcp4: */
+#elif CC_CLANG == 1
+	#pragma clang diagnostic ignored "-Wparentheses"  /* strcp4: */
 #endif
 
 void 
