@@ -10,6 +10,9 @@
 	#define M 3
 	#define N 2
 	#define Z 2
+
+	#pragma warning(disable:4706) /* strcpy4: assignment within conditional expression */
+
 #else
 	size_t M=3, N=2, Z=2;
 #endif

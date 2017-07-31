@@ -13,7 +13,7 @@ basic_types() {
 	uint16_t x2 = 'A';
 	printf("uint16_t: %hu \t\t= #b"BIT_FMT_16"\n", x2, BIT_16(x2));
 
-	uint16_t x2s = -65;
+	uint16_t x2s = (uint16_t)-65;
 	printf("uint16_t-: %hu \t= #b"BIT_FMT_16"\n", x2s, BIT_16(x2s));
 
 	uint32_t x4 = 'A';
