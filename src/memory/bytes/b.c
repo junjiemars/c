@@ -20,7 +20,7 @@ basic_types() {
 	printf("uint32_t: %u \t\t= #b"BIT_FMT_32"\n", x4, BIT_32(x4));
 
 	uint64_t x8 = 'A';
-	printf("uint64_t: %llu \t\t= #b"BIT_FMT_64"\n", x8, BIT_64(x8));
+	printf("uint64_t: %lu \t\t= #b"BIT_FMT_64"\n", x8, BIT_64(x8));
 
 	ufloat32_t x4f = { .f = 65.0f };
 	printf("float: %f \t= #b"BIT_FMT_32"\n", x4f.f, BIT_32(x4f.u));
