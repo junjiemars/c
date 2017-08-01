@@ -1,10 +1,12 @@
 
 memory: alloc								\
 				array								\
+				bits								\
 				bytes								\
 				copy
 memory_test: 	alloc_test								\
 							array_test								\
+							bits_test									\
 							bytes_test								\
 							copy_test
 
@@ -20,6 +22,7 @@ alloc_test: alloc
 $(alloc_binout): $(src_path)alloc/a.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 # array
 array_binout := $(bin_path)array$(bin_ext)
 
@@ -28,6 +31,19 @@ array_test: array
 	$(array_binout)
 
 $(array_binout): $(src_path)array/a.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+#bits
+bits_binout := $(bin_path)bits$(bin_ext)
+
+bits: $(bits_binout)
+bits_test: bits
+	$(bits_binout)
+
+bits_lflags += $(LFLAGS) $(INC)
+
+$(bits_binout): $(src_path)bits/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
