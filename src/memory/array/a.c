@@ -58,19 +58,19 @@ strcpy2(char * dst, const char * src) {
 
 char *
 strcpy3(char * dst, const char * src) {
-	char * v = dst;
+	char * p = dst;
 
-	while ((*dst++ = *src++) != '\0') ;	
-	return v;
+	while ((*p++ = *src++) != '\0') ;	
+	return dst;
 }
 
 char * 
 strcpy4(char * dst, const char * src) {
-	char * v = dst;
+	char * p = dst;
 	/* -Wparentheses: ./configure --has-memory --without-error */
 
-	while ( *dst++ = *src++ ) ;
-	return v;
+	while ( *p++ = *src++ ) ;
+	return dst;
 }
 
 void pointer_syntax() {
