@@ -1,5 +1,6 @@
 # Bits
 
+
 ## Shift
 Logical shift always fill discarded bits with 0s while arithmetic shift fills it with
 0s only for left shift, but for right shift it copies the most significant bit (MSB)
