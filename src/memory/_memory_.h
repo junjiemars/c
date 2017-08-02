@@ -58,6 +58,7 @@ typedef union {
 	uint64_t u;
 } ufloat64_t;
 
+#include <inttypes.h>
 
 
 #endif /* end of _MEMORY_H_ */

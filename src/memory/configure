@@ -1,0 +1,8 @@
+nm_feature="c99 inttypes.h header file"
+nm_feature_name="nm_have_inttypes_h"
+nm_feature_run=no
+nm_feature_incs="#include <inttypes.h>"
+nm_feature_path=
+nm_feature_libs=
+nm_feature_test="char *s = PRIu8;"
+. ${NM_HOME}auto/feature
