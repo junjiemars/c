@@ -28,6 +28,14 @@ void signed_right_shift() {
 } 
 
 void math() {
+	uint16_t x2 = 0x1122;
+	assert( ((x2 << 2) == (x2 * 4)) && "u << x == u * 2^x" );
+	assert( ((x2 >> 2) == (x2 / 4)) && "u >> x == u > 2^x" );
+
+	int16_t x2i = 0x1122;
+	assert( ((x2i << 2) == (x2i * 4)) && "i << x == i * 2^x" );
+	assert( ((x2i >> 2) == (int16_t)((uint16_t)x2i >> 2 | ~(~0u >> 2))) \
+		&& "i >> x == ((unsigned)i >> x | ~(~0u >> x))" );
 }
 
 

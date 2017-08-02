@@ -64,6 +64,7 @@ typedef union {
 	uint64_t u;
 } ufloat64_t;
 
+#include <assert.h>
 
 
 #endif /* end of _MEMORY_H_ */
