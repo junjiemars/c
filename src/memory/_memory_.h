@@ -11,6 +11,8 @@
 
 #ifdef NM_HAVE_INTTYPES_H
 #include <inttypes.h>
+#else
+
 #endif
 
 #ifdef NM_HAVE_STDINT_H

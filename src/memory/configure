@@ -6,3 +6,5 @@ nm_feature_path=
 nm_feature_libs=
 nm_feature_test="char *s = PRIu8;"
 . ${NM_HOME}auto/feature
+
+
