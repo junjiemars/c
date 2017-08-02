@@ -9,6 +9,10 @@
 #define _unused_(x) (void)(x)
 
 
+#ifdef NM_HAVE_INTTYPES_H
+#include <inttypes.h>
+#endif
+
 #ifdef NM_HAVE_STDINT_H
 #include <stdint.h>
 #else
@@ -58,7 +62,6 @@ typedef union {
 	uint64_t u;
 } ufloat64_t;
 
-#include <inttypes.h>
 
 
 #endif /* end of _MEMORY_H_ */
