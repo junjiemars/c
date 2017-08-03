@@ -66,5 +66,8 @@ typedef union {
 
 #include <assert.h>
 
+#include <assert.h>
+
+
 
 #endif /* end of _MEMORY_H_ */

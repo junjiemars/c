@@ -1,4 +1,16 @@
 
+nm_feature="c11 type-generic expression"
+nm_feature_name="nm_have_generic_keyword"
+nm_feature_run=no
+nm_feature_incs="#include <math.h>
+#define cbrt(x) _Generic((x), long double: cbrtl, \
+                              default: cbrt, \
+                              float: cbrtf)(x)"
+nm_feature_path=
+nm_feature_libs=
+nm_feature_test="long double x=cbrt(3.1415L);double y=cbrt(2.718);"
+. ${NM_HOME}auto/feature
+
 
 nm_feature="C11 static assertion"
 nm_feature_name="nm_have_static_assert"
