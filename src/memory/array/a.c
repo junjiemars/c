@@ -232,6 +232,7 @@ main(int argc, const char* argv[]) {
 	void_pointer();
 	array_vs_pointer();
 	array_name_as_const();
+	dynamic_arrays();
 
 	//printf("----------\n");
 	//int a0[] = { 1, 10, 20 };
