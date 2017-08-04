@@ -3,12 +3,15 @@ memory: alloc								\
 				array								\
 				bits								\
 				bytes								\
-				copy
+				copy								\
+				pointer
+
 memory_test: 	alloc_test								\
 							array_test								\
 							bits_test									\
 							bytes_test								\
-							copy_test
+							copy_test									\
+							pointer_test
 
 INC += -I$(src_path)
 
@@ -61,6 +64,7 @@ $(bytes_binout): $(bytes_cppout)
 $(bytes_cppout): $(src_path)bytes/b.c
 	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
 
+
 # copy
 copy_binout := $(bin_path)copy$(bin_ext)
 
@@ -70,3 +74,14 @@ copy_test: copy
 
 $(copy_binout): $(src_path)copy/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# pointer
+pointer_binout := $(bin_path)pointer$(bin_ext)
+
+pointer: $(pointer_binout)
+pointer_test: pointer
+	$(pointer_binout)
+
+$(pointer_binout): $(src_path)pointer/p.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+

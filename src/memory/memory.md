@@ -162,6 +162,17 @@ address in ```p``` by 48. The compiler figures all this out based on the type of
 pointer.
 
 
+## Arithmetic on a void pointer
+
+What is ```sizeof(void)```? Unknown! Some compilers assume that it should be treat it
+like a ```(char*)```, but if you were to depend on this you would be creating 
+non-portable code.
+
+Note that you do not need to cast the result back to ```(void*)```, a ```(void*)``` is
+the **universal recipient** of pinter type and can be freely assigned any type of pointer.
+
+
+
 ### Passing multidimensional arrays to a function
 
 
