@@ -3,15 +3,13 @@ memory: alloc								\
 				array								\
 				bits								\
 				bytes								\
-				copy								\
-				pointer
+				copy
 
 memory_test: 	alloc_test								\
 							array_test								\
 							bits_test									\
 							bytes_test								\
-							copy_test									\
-							pointer_test
+							copy_test
 
 INC += -I$(src_path)
 
@@ -75,13 +73,4 @@ copy_test: copy
 $(copy_binout): $(src_path)copy/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-# pointer
-pointer_binout := $(bin_path)pointer$(bin_ext)
-
-pointer: $(pointer_binout)
-pointer_test: pointer
-	$(pointer_binout)
-
-$(pointer_binout): $(src_path)pointer/p.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 

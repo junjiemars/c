@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#define _array_size_(a) sizeof((a))/sizeof((a)[0])
-
 
 #ifdef CC_MSVC
 	#define M 3
@@ -98,6 +96,56 @@ void pointer_syntax() {
 
 }
 
+void void_pointer() {
+	int x = 0x1122;
+	void* p = (void*)&x;
+	int* y = p;
+
+	printf("\nSIGNED LEFT SHIFT\n");
+	printf("----------\n");
+	printf("sizeof(void*) = %" PRIu32 "\n", NM_PR_VOIDP);
+	printf("(void*) = %p, (int*) = %p, (int*) = %p\n", p, &x, y);
+}
+
+void array_vs_pointer() {
+	int a[4];
+	int *p;
+	int i = 0x1122;
+
+	a[2] = i;
+	p = &i;
+	p[0] = *p + 1;
+
+	printf("\nARRAY vs. POINTER\n");
+	printf("----------\n");
+}
+
+void array_name_as_const() {
+	int a[2];
+	_unused_(a);
+
+	//a = 0;	
+	//a++;
+	//a = a+1;
+
+	printf("\nARRAY NAME as CONST\n");
+	printf("----------\n");
+}
+
+void dynamic_arrays() {
+	printf("\nDYNAMIC ARRAYS\n");
+	printf("----------\n");
+
+	int stack[100];
+	printf("alloc on stack int[]: %zu\n", _sizeof_array_(stack));
+
+	size_t l = 100;
+	int *b = malloc(sizeof b * l);
+	printf("alloc on heap int*: %zu\n", l);
+	free(b);
+}
+
+
 void 
 iter_a(int *a, size_t n) {
 	for (size_t i=0; i<n; ++i) {
@@ -180,6 +228,10 @@ main(int argc, const char* argv[]) {
 
 	bracket_syntax();	
 	pointer_syntax();
+
+	void_pointer();
+	array_vs_pointer();
+	array_name_as_const();
 
 	//printf("----------\n");
 	//int a0[] = { 1, 10, 20 };

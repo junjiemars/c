@@ -7,7 +7,7 @@
 
 
 #define _unused_(x) (void)(x)
-
+#define _sizeof_array_(a) sizeof((a))/sizeof((a)[0])
 
 #ifdef NM_HAVE_INTTYPES_H
 #include <inttypes.h>

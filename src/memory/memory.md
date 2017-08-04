@@ -172,6 +172,25 @@ Note that you do not need to cast the result back to ```(void*)```, a ```(void*)
 the **universal recipient** of pinter type and can be freely assigned any type of pointer.
 
 
+### Arrays and Pointers
+
+One effect of the C array scheme is that the compiler does not meaningfully distinguish
+between arrays and pointers.
+
+### Array Names are Const
+
+One subtle distinction between an array and a pointer, is that the pointer which represents
+the base address of an array cannot be changed in the code. Technically, the array base 
+address is a ```const``` pointer. The constraint applies to the name of the array where
+it is declared in the code.
+
+
+### Dynamic Arrays
+
+Since arrays are just contiguous areas of bytes, you can allocate your own arrays in the
+heap using ```malloc```. And you can change the size of the ```malloc```ed array at will
+at run time using ```realloc```.
+
 
 ### Passing multidimensional arrays to a function
 

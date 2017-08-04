@@ -8,12 +8,21 @@ nm_feature_test="char *s = PRIu8;"
 . ${NM_HOME}auto/feature
 
 nm_feature="sizeof void* pointer"
-nm_feature_name="nm_have_sizeof_void_pointer"
+nm_feature_name="nm_pr_voidp"
 nm_feature_run=value
 nm_feature_incs="#include <stdio.h>"
 nm_feature_path=
 nm_feature_libs=
 nm_feature_test='void* p; printf("%uu", sizeof p);'
+. ${NM_HOME}auto/feature
+
+nm_feature="sizeof size_t"
+nm_feature_name="nm_size_t_len"
+nm_feature_run=value
+nm_feature_incs="#include <stdio.h>"
+nm_feature_path=
+nm_feature_libs=
+nm_feature_test='printf("%u", sizeof(size_t)*8);'
 . ${NM_HOME}auto/feature
 
 
