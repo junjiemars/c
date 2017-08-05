@@ -13,7 +13,7 @@ copy() {
 void 
 move() {
     char s[] = "abc123";
-    printf("s=%s strlen(s)=%lu memmove(s,s)=%s\n"
+    printf("s=%s strlen(s)=%zu memmove(s,s)=%s\n"
             ,s
             ,strlen(s)
             ,(char*)memmove(&s[2], s, strlen(s)/2));
