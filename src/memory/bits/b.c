@@ -29,12 +29,14 @@ void signed_right_shift() {
 
 void math() {
   uint16_t u = 2;
-  assert( ((u << 2) == (u * 4)) && "u << x == u * 2^x" );
-  assert( ((u >> 2) == (u / 4)) && "u >> x == u * 2^(-x)" );
+	printf("u << x == u * 2^x \t\t\t\t=> %s\n", _bool_((u << 2) == (u * 4)) );
+  printf("u >> x == u * 2^(-x) \t\t\t\t=> %s\n", _bool_((u >> 2) == (u / 4)) );
 
   int16_t i = 2;
-  assert( ((i << 2) == (i * 4)) && "i << x == i * 2^x" );
-  assert( ((i >> 2) == (int16_t)(((uint16_t)i >> 2) | ~(~0u >> 2)) && "i >> x == (unsigned)i >> x | ~(~0u >> x)" ));
+  printf("i << x == i * 2^x \t\t\t\t=> %s\n", _bool_((i << 2) == (i * 4)) );
+  printf("i >> x == (unsigned)i >> x | ~(~0u >> x) \t=> %s\n", _bool_((i >> 2) == (int16_t)(((uint16_t)i >> 2) | ~(~0u >> 2))) );
+
+	printf("-x == ~x + 1 \t\t\t\t\t=> %s\n", _bool_(-i == (~i + 1)) );	
 }
 
 

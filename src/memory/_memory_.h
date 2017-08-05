@@ -5,9 +5,12 @@
 #include <nm_auto_config.h>
 #include <nm_auto_header.h>
 
+#include <assert.h>
+
 
 #define _unused_(x) (void)(x)
 #define _sizeof_array_(a) sizeof((a))/sizeof((a)[0])
+#define _bool_(p) ((p) ? "true" : "false")
 
 #ifdef NM_HAVE_INTTYPES_H
 #include <inttypes.h>
@@ -64,9 +67,12 @@ typedef union {
 	uint64_t u;
 } ufloat64_t;
 
-#include <assert.h>
 
-#include <assert.h>
+
+#ifdef NM_HAVE_STDBOOL_H
+#include <stdbool.h>
+#else
+#endif
 
 
 

@@ -1,6 +1,5 @@
 #include <_memory_.h>
 #include <stdio.h>
-#include <stdint.h>
 
 void 
 basic_types() {
