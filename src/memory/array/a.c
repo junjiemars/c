@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
-#include <assert.h>
 
 
 #ifdef CC_MSVC
@@ -118,6 +117,7 @@ void array_vs_pointer() {
 
 	printf("\nARRAY vs. POINTER\n");
 	printf("----------\n");
+	printf("a[2] == p[0]  => %s\n", _bool_(a[2] == p[0]-1));
 }
 
 void array_name_as_const() {

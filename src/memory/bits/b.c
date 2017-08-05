@@ -34,7 +34,8 @@ void math() {
 
   int16_t i = 2;
   printf("i << x == i * 2^x \t\t\t\t=> %s\n", _bool_((i << 2) == (i * 4)) );
-  printf("i >> x == (unsigned)i >> x | ~(~0u >> x) \t=> %s\n", _bool_((i >> 2) == (int16_t)(((uint16_t)i >> 2) | ~(~0u >> 2))) );
+  printf("i >> x == (unsigned)i >> x | ~(~0u >> x) \t=> %s\n", 
+		_bool_((i >> 2) == (int16_t)(((uint16_t)i >> 2) | ~(~0u >> 2))) );
 
 	printf("-x == ~x + 1 \t\t\t\t\t=> %s\n", _bool_(-i == (~i + 1)) );	
 }
