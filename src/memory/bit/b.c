@@ -46,6 +46,9 @@ main(int argc, const char *argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 
+	printf("\n*%s ENDIAN*\n", NM_HAVE_LITTLE_ENDIAN ? "LITTLE" : "BIG");
+	printf("----------\n");
+
 	printf("\nUNSIGNED LEFT SHIFT\n");
 	printf("----------\n");
   unsigned_left_shift();

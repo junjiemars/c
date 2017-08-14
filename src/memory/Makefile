@@ -1,14 +1,14 @@
 
 memory: alloc								\
 				array								\
-				bits								\
-				bytes								\
+				bit		  						\
+				byte								\
 				copy
 
 memory_test: 	alloc_test								\
 							array_test								\
-							bits_test									\
-							bytes_test								\
+							bit_test									\
+							byte_test	   							\
 							copy_test
 
 INC += -I$(src_path)
@@ -35,31 +35,31 @@ $(array_binout): $(src_path)array/a.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
-#bits
-bits_binout := $(bin_path)bits$(bin_ext)
+#bit
+bit_binout := $(bin_path)bit$(bin_ext)
 
-bits: $(bits_binout)
-bits_test: bits
-	$(bits_binout)
+bit: $(bit_binout)
+bit_test: bit
+	$(bit_binout)
 
-bits_lflags += $(LFLAGS) $(INC)
+bit_lflags += $(LFLAGS) $(INC)
 
-$(bits_binout): $(src_path)bits/b.c
+$(bit_binout): $(src_path)bit/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
-# bytes
-bytes_binout := $(bin_path)bytes$(bin_ext)
-bytes_cppout := $(tmp_path)bytes$(cpp_ext)
+# byte
+byte_binout := $(bin_path)byte$(bin_ext)
+byte_cppout := $(tmp_path)byte$(cpp_ext)
 
-bytes: $(bytes_binout)
-bytes_test: bytes
-	$(bytes_binout)
+byte: $(byte_binout)
+byte_test: byte
+	$(byte_binout)
 
-$(bytes_binout): $(bytes_cppout)
+$(byte_binout): $(byte_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(bytes_cppout): $(src_path)bytes/b.c
+$(byte_cppout): $(src_path)byte/b.c
 	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
 
 
