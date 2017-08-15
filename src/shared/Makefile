@@ -4,8 +4,6 @@ shared_test: geo_test math_test
 
 
 INC += -I$(src_path)
-LDLIBS = -lgeo
-
 
 # geo
 geo_libout := $(lib_path)libgeo$(lib_ext)
@@ -29,13 +27,17 @@ math: geo $(math_binout)
 
 ifeq ($(CC_NAME), msvc)
 math_lib_path := PATH
+math_ldflags =
+LDLIBS = $(lib_path)libgeo.lib
 else
 math_lib_path := LD_LIBRARY_PATH
+math_ldflags = $(LDFLAGS)
+LDLIBS = -lgeo
 endif
 
 math_test: math
 	$(math_lib_path)=$(lib_path) $(math_binout)
 
 $(math_binout): $(src_path)math/math1.c 
-	$(CC) $(CFLAGS) $(INC) $(LDFLAGS) $^ $(bin_out)$@ $(LDLIBS) 
+	$(CC) $(CFLAGS) $(INC) $(math_ldflags) $(LDLIBS) $^ $(bin_out)$@ 
 
