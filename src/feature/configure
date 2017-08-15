@@ -25,7 +25,7 @@ nm_feature_test="long double x=cbrt(3.1415L);double y=cbrt(2.718);"
 . ${NM_HOME}auto/feature
 
 
-nm_feature="C11 static assertion"
+nm_feature="c11 static assertion"
 nm_feature_name="nm_have_static_assert"
 nm_feature_run=no
 nm_feature_incs="#include <assert.h>"
@@ -36,7 +36,7 @@ nm_feature_test="enum {N=5}; static_assert(N==5, \"N is not equal 5\");"
 . ${NM_HOME}auto/feature
 
 
-nm_feature="C11 strcpy_s function"
+nm_feature="c11 strcpy_s function"
 nm_feature_name="nm_have_strcpy_s_fn"
 nm_feature_run=no
 nm_feature_incs="#include <string.h>"
@@ -47,7 +47,7 @@ nm_feature_test="char s[16]; strcpy_s(s,sizeof(s),\"hello strcpy_s\");"
 . ${NM_HOME}auto/feature
 
 
-nm_feature="C11 threads.h header file"
+nm_feature="c11 threads.h header file"
 nm_feature_name="nm_have_threads_h"
 nm_feature_run=no
 nm_feature_incs="#include <threads.h>"
@@ -80,7 +80,7 @@ nm_feature_test="int8_t c='X';"
 . ${NM_HOME}auto/feature
 
 
-nm_feature="C99 #pragma once"
+nm_feature="c99 #pragma once"
 nm_feature_name="nm_pragma_once"
 nm_feature_run=no
 nm_feature_incs="#pragma once"
@@ -90,7 +90,7 @@ nm_feature_test=
 . ${NM_HOME}auto/feature
 
 
-nm_feature="C99 stdbool.h header file"
+nm_feature="c99 stdbool.h header file"
 nm_feature_name="nm_have_stdbool_h"
 nm_feature_run=no
 nm_feature_incs="#include <stdbool.h>"
@@ -100,7 +100,7 @@ nm_feature_test="bool t=true,f=false;"
 . ${NM_HOME}auto/feature
 
 
-nm_feature="C99 tgmath.h header file"
+nm_feature="c99 tgmath.h header file"
 nm_feature_name="nm_have_tgmath_h"
 nm_feature_run=no
 nm_feature_incs="#include <tgmath.h>"
