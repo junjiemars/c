@@ -39,5 +39,5 @@ math_test: math
 	$(math_lib_path)=$(lib_path) $(math_binout)
 
 $(math_binout): $(src_path)math/math1.c 
-	$(CC) $(CFLAGS) $(INC) $(math_ldflags) $(LDLIBS) $^ $(bin_out)$@ 
+	$(CC) $(CFLAGS) $(INC) $(math_ldflags) $^ $(bin_out)$@ $(LDLIBS) 
 
