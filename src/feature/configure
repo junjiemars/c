@@ -114,7 +114,7 @@ case "$CC_NAME" in
 	clang)
 		;;
 	gcc)
-		nm_feature="-std=c99 switch"
+		nm_feature="$CC_NAME -std=c99 switch"
 		nm_feature_name=nm_have_${CC_NAME}_std_c99
 		nm_feature_run=no
 		nm_feature_incs=
@@ -128,7 +128,7 @@ case "$CC_NAME" in
 			CFLAGS=${CFLAGS:+$CFLAGS}${nm_feature_flags:+ $nm_feature_flags}
 		fi
 
-		nm_feature="-Wl,-E|--export-dynamic"
+		nm_feature="$CC_NAME -Wl,-E|--export-dynamic"
 		nm_feature_name=
 		nm_feature_run=no
 		nm_feature_incs=
