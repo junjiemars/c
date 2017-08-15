@@ -16,7 +16,9 @@ Strictly speaking, a program can interpret a bit pattern any way it chooses.
 ### Bytes
 
 The byte is sometimes defined as the **smallest addressable unit** of memory.
-Most computers also support reading and writting larger units of memory-- 2bytes **half-words** (sometimes known as a **short** word) and 4 byte **word**.
+Most computers also support reading and writting larger units of 
+memory-- 2bytes **half-words** (sometimes known as a **short** word) 
+and 4 byte **word**.
 
 Most computers restrict half-word and word accesses to be **aligned**-- 
 a half-word must start at an even address and a word must start at an 

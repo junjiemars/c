@@ -1,3 +1,27 @@
+
+nm_feature="endian"
+nm_feature_name="nm_have_little_endian"
+nm_feature_run=value
+nm_feature_incs="#include <stdio.h>"
+nm_feature_path=
+nm_feature_libs=
+nm_feature_test='int i=0x11223344;
+                 char *p = (char *)&i;
+            		 int le = (0x44 == *p);
+                 printf("%d", le);'
+. ${NM_HOME}auto/feature
+
+
+nm_feature="c99 stdint.h header file"
+nm_feature_name="nm_have_stdint_h"
+nm_feature_run=no
+nm_feature_incs="#include <stdint.h>"
+nm_feature_path=
+nm_feature_libs=
+nm_feature_test="int8_t c='X';"
+. ${NM_HOME}auto/feature
+
+
 nm_feature="c99 inttypes.h header file"
 nm_feature_name="nm_have_inttypes_h"
 nm_feature_run=no
@@ -8,7 +32,7 @@ nm_feature_test="char *s = PRIu8;"
 . ${NM_HOME}auto/feature
 
 
-nm_feature="C99 stdbool.h header file"
+nm_feature="c99 stdbool.h header file"
 nm_feature_name="nm_have_stdbool_h"
 nm_feature_run=no
 nm_feature_incs="#include <stdbool.h>"
