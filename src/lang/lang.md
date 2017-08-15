@@ -9,5 +9,5 @@ bug in the program.
 
 ## Run
 ```sh
-./configure --has-lang --with-std=NO
+./configure --has-lang --with-std=c11
 ```
