@@ -1,5 +1,5 @@
 
-nm_feature="C11 static assertion"
+nm_feature="c11 static assertion"
 nm_feature_name="nm_have_static_assert"
 nm_feature_run=no
 nm_feature_incs="#include <assert.h>"
