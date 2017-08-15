@@ -114,20 +114,6 @@ case "$CC_NAME" in
 	clang)
 		;;
 	gcc)
-		nm_feature="$CC_NAME -std=c99 switch"
-		nm_feature_name=nm_have_${CC_NAME}_std_c99
-		nm_feature_run=no
-		nm_feature_incs=
-		nm_feature_path=
-		nm_feature_flags=-std=c99
-		nm_feature_libs=
-		nm_feature_test="for (int i=0; i<3; i++) {}"
-		. ${NM_HOME}auto/feature
-
-		if [ $nm_found = yes ]; then
-			CFLAGS=${CFLAGS:+$CFLAGS}${nm_feature_flags:+ $nm_feature_flags}
-		fi
-
 		nm_feature="$CC_NAME -Wl,-E|--export-dynamic"
 		nm_feature_name=
 		nm_feature_run=no
