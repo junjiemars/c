@@ -1,4 +1,17 @@
 
+nm_feature="endian"
+nm_feature_name="nm_have_little_endian"
+nm_feature_run=value
+nm_feature_incs="#include <stdio.h>"
+nm_feature_path=
+nm_feature_libs=
+nm_feature_test='int i=0x11223344;
+                 char *p = (char *)&i;
+            		 int le = (0x44 == *p);
+                 printf("%d", le);'
+. ${NM_HOME}auto/feature
+
+
 nm_feature="c11 type-generic expression"
 nm_feature_name="nm_have_generic_keyword"
 nm_feature_run=no
@@ -41,6 +54,29 @@ nm_feature_incs="#include <threads.h>"
 nm_feature_path=
 nm_feature_libs=
 nm_feature_test=
+. ${NM_HOME}auto/feature
+
+
+nm_feature="c99 variadic macro"
+nm_feature_name="nm_have_variadic_macro"
+nm_feature_run=yes
+nm_feature_incs="#include <stdio.h>
+#define var(dummy, ...)  sprintf(__VA_ARGS__)"
+nm_feature_path=
+nm_feature_libs=
+nm_feature_test="char  buf[30]; buf[0] = '0';
+               	 var(0, buf, \"%d\", 1);
+        			   if (buf[0] != '1') return 1;"
+. ${NM_HOME}auto/feature
+
+
+nm_feature="c99 stdint.h header file"
+nm_feature_name="nm_have_stdint_h"
+nm_feature_run=no
+nm_feature_incs="#include <stdint.h>"
+nm_feature_path=
+nm_feature_libs=
+nm_feature_test="int8_t c='X';"
 . ${NM_HOME}auto/feature
 
 
