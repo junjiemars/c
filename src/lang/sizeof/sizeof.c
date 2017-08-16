@@ -9,11 +9,7 @@
  *
  */
 
-#ifdef CC_GCC
-	#define peval(expr) printf(#expr ": %4u\n", expr);
-#else
-	#define peval(expr) printf(#expr ": %lu\n", expr);
-#endif
+#define peval(expr) printf(#expr ": %zu\n", expr);
 
 int main(){
     peval(sizeof(double));
