@@ -4,7 +4,8 @@
 #include <nm_auto_config.h>
 #include <nm_auto_header.h>
 
-#if (MSYS_NT)
+// make CFLAGS=-DSHARED=1
+#if (MSYS_NT && SHARED)
 
 #define GEO_API __declspec(dllexport) __stdcall
 
