@@ -3,13 +3,15 @@ memory: alloc								\
 				array								\
 				bit		  						\
 				byte								\
-				copy
+				copy								\
+				convert
 
 memory_test: 	alloc_test								\
 							array_test								\
 							bit_test									\
 							byte_test	   							\
-							copy_test
+							copy_test									\
+							convert_test
 
 INC += -I$(src_path)
 
@@ -71,6 +73,17 @@ copy_test: copy
 	$(copy_binout)
 
 $(copy_binout): $(src_path)copy/c.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# convert
+convert_binout := $(bin_path)convert$(bin_ext)
+
+convert: $(convert_binout)
+convert_test: convert
+	$(convert_binout)
+
+$(convert_binout): $(src_path)convert/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
