@@ -10,7 +10,18 @@ Demostrates how to link the shared libraries, standard or non-standard, and how 
 ### View Dependents of Executable
 * on Windows:
 ```sh
-dumpbin -dependents objs/bin/math
+dumpbin -dependents objs/bin/math_shared
+```
+* on Darwin:
+```sh
+otool -L objs/bin/math_shared
+```
+* on Linux:
+```sh
+# safe
+objdump -p objs/bin/math_shared
+# or 
+ldd objs/bin/math_shared
 ```
 
 ## References
