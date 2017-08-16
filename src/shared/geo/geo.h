@@ -8,6 +8,12 @@
 
 #define GEO_API __declspec(dllexport) __stdcall
 
+#else
+
+#define GEO_API
+
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -17,15 +23,6 @@ double GEO_API area_of_rect(double, double);
 #ifdef __cplusplus
 }
 #endif
-
-#else
-
-#define GEO_API
-
-double GEO_API area_of_rect(double, double);
-
-#endif // MSYS_NT
-
 
 
 #endif // _GEO_H_
