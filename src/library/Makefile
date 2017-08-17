@@ -5,7 +5,7 @@ library_test: geo_test math_test
 
 INC += -I$(src_path)
 
-geo: geo_static geo_shared
+geo: geo_static 
 geo_test: geo_static_test 
 
 
@@ -31,13 +31,26 @@ $(geo_objout): $(src_path)geo/geo.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(bin_out)$@ 
 
 $(geo_libout): $(src_path)geo/geo.c
-	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $(nm_pic_opt) $(nm_shared_opt) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) -DSHARED=0 $(INC) $(nm_pic_opt) $(nm_shared_opt) $^ $(bin_out)$@
 	cp $(src_path)geo/geo.h $(inc_path)
 	
 
 ## math
+
+ifeq ($(CC_NAME), msvc)
+math_lib_path := PATH
+math_ldflags =
+LDLIBS = $(lib_path)libgeo$(ar_ext)
+else
+math_lib_path := LD_LIBRARY_PATH
+math_ldflags = $(LDFLAGS)
+LDLIBS = -lgeo
+endif
+
+
 math: math_static math_shared
 math_test: math_static_test math_shared_test
+
 
 math_static_binout := $(bin_path)math_static$(bin_ext)
 
@@ -49,17 +62,6 @@ $(math_static_binout): $(src_path)math/math1.c $(geo_arout)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
-ifeq ($(CC_NAME), msvc)
-math_lib_path := PATH
-math_ldflags =
-LDLIBS = $(lib_path)libgeo.lib
-else
-math_lib_path := LD_LIBRARY_PATH
-math_ldflags = $(LDFLAGS)
-LDLIBS = -lgeo
-endif
-
-
 math_shared_binout := $(bin_path)math_shared$(bin_ext)
 
 math_shared: geo_shared $(math_shared_binout)
@@ -67,5 +69,5 @@ math_shared_test: math_shared
 	$(math_lib_path)=$(lib_path) $(math_shared_binout)
 
 $(math_shared_binout): $(src_path)math/math1.c 
-	$(CC) $(CFLAGS) $(INC) $(math_ldflags) $^ $(bin_out)$@ $(LDLIBS) 
+	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $(math_ldflags) $^ $(bin_out)$@ $(LDLIBS) 
 

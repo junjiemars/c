@@ -4,16 +4,26 @@
 #include <nm_auto_config.h>
 #include <nm_auto_header.h>
 
+
 // make CFLAGS=-DSHARED=1
-#if (MSYS_NT && SHARED)
+#if ( MSYS_NT )
 
-#define GEO_API __declspec(dllexport) __stdcall
+	#if ( 0 == SHARED )
 
-#else
+		#define GEO_API __declspec(dllexport) __stdcall
 
-#define GEO_API
+	#elif ( 1 == SHARED )
 
-#endif
+		#define GEO_API __declspec(dllimport) __stdcall
+
+	#else
+
+		#define GEO_API
+
+	#endif // end of SHARED
+
+#endif // end of MSYS_NT
+
 
 #ifdef __cplusplus
 extern "C" {
