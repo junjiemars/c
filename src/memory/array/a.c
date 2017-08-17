@@ -25,7 +25,7 @@ void
 bracket_syntax() {
 	int a[] = { 1, 2, 3, };
 
-	printf("[] OPERATOR\n");
+	printf("\n[] OPERATOR\n");
 	printf("----------\n");
 	printf("a[1] == *(a+1) \t=> %d\n", a[1] == *(a+1));
 	printf("&a[1] == (a+1) \t=> %d\n", &a[1] == (a+1));
@@ -71,7 +71,7 @@ strcpy4(char * dst, const char * src) {
 }
 
 void pointer_syntax() {
-	printf("POINTER++ SYNTAX\n");
+	printf("\nPOINTER++ SYNTAX\n");
 	printf("----------\n");
 
 	const char *ss = "strcpy foo++";

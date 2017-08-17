@@ -48,7 +48,7 @@ nm_feature_run=value
 nm_feature_incs="#include <stdio.h>"
 nm_feature_path=
 nm_feature_libs=
-nm_feature_test='void* p; printf("%uu", sizeof p);'
+nm_feature_test='void* p; printf("%zuu", sizeof p);'
 . ${NM_HOME}auto/feature
 
 
@@ -58,7 +58,7 @@ nm_feature_run=value
 nm_feature_incs="#include <stdio.h>"
 nm_feature_path=
 nm_feature_libs=
-nm_feature_test='printf("%u", sizeof(size_t)*8);'
+nm_feature_test='printf("%zu", sizeof(size_t)*8);'
 . ${NM_HOME}auto/feature
 
 
