@@ -109,7 +109,7 @@ array.
 
 ### [] Operator
 The square bracket syntax ```[]``` deals with this address arithmetic for you, but 
-it's useful to know what it's doing. The ```[]``` multiplies the integer index byt 
+it's useful to know what it's doing. The ```[]``` multiplies the integer index by  
 the element size, adds the resulting offset to the array base address, and finally
 deferences the resulting pointer to get to the desired element.
 
