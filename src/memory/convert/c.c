@@ -10,7 +10,7 @@ char_short() {
   printf("char: %" PRIu8 " \t\t =  " BIT_FMT_8 "\n", c, BIT_8(c));
 	printf("char -> short: %" PRIu16 "\t =  " BIT_FMT_16 "\n", s, BIT_16(s));
 
-	s = (2<<7) + 1;
+	s = (2<<7) + 3;
 	c = s;
 	printf("short: %" PRIu16 "\t\t =  " BIT_FMT_16 "\n", s, BIT_16(s));
   printf("short -> char: %" PRIu8 " \t =  " BIT_FMT_8 "\n", c, BIT_8(c));
