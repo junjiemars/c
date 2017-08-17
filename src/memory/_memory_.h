@@ -81,5 +81,10 @@ typedef union {
 #endif
 
 
+#ifdef CC_MSVC
+#pragma warning(disable : 4244)
+#endif
+
+
 
 #endif /* end of _MEMORY_H_ */

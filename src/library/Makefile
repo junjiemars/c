@@ -24,7 +24,7 @@ $(geo_binout): $(src_path)geo/test.c $(geo_arout)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(geo_arout): $(geo_objout)
-	$(AR) $(ar_out)$@ $^
+	$(AR) $(ARFLAGS) $(ar_out)$@ $^
 	cp $(src_path)geo/geo.h $(inc_path)
 
 $(geo_objout): $(src_path)geo/geo.c
