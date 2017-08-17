@@ -16,11 +16,12 @@
 
 		#define GEO_API __declspec(dllimport) __stdcall
 
+	#endif // end of SHARED
+
+	
 	#else
 
 		#define GEO_API
-
-	#endif // end of SHARED
 
 #endif // end of MSYS_NT
 
