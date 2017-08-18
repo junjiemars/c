@@ -83,6 +83,7 @@ typedef union {
 
 #ifdef CC_MSVC
 #pragma warning(disable : 4244)
+#pragma warning(disable : 4204) /* or Compiler Option: -Ze */
 #endif
 
 

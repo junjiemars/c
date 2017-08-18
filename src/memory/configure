@@ -62,3 +62,4 @@ nm_feature_test='printf("%zu", sizeof(size_t)*8);'
 . ${NM_HOME}auto/feature
 
 
+
