@@ -9,14 +9,6 @@ typedef struct fraction_s {
 
 #define _VAL_ 0x11223344
 
-int*
-find_val(int *a, int x) {
-	while (*a++ == x) {
-		return --a;
-	}
-	return 0;
-}
-
 
 void
 basic_layout() {
@@ -39,9 +31,7 @@ basic_layout() {
 	assert(f.numerator == f.denominator);
 
 	((fraction_s*)&f.denominator)->denominator = _VAL_;
-	int *h = find_val(head, _VAL_);	
-	int *t = find_val(tail, _VAL_);
-	assert( h || t);	 
+	assert(_VAL_ == *((int*)&f.denominator+1));
 }
 
 int 
