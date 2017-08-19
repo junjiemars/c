@@ -32,28 +32,30 @@ char_short() {
 void
 int_float() {
 	uint32_t i = 5;
-	ufloat32_t f = { .u = i };
+	float f = i;
 
 	printf("\nINT => FLOAT\n");
 	printf("----------\n");
 
   printf("int: %" PRIu32 " \t\t\t =  " BIT_FMT_32 "\n", i, BIT_32(i));
-	printf("int -> float: %f\n\t\t\t =  " BIT_FMT_32 "\n", f.f, BIT_32(f.u));
+	printf("int -> float: %f\n\t\t\t =  " BIT_FMT_32 "\n", f, BIT_32(*(uint32_t*)&f));
 	printf("int -> *(float*)&int: %f\n\t\t\t =  " BIT_FMT_32 "\n", 
-		*(float*)&(f.u), BIT_32(*(uint32_t*)&f.f));
+		*(float*)&i, BIT_32(*(uint32_t*)((float*)&i)));
 }
 
 void 
 float_short() {
-	ufloat32_t f = { .f=3.14159f };
-	uint16_t s = *(uint16_t*)&f.f;
+	float f = 3.14159f;	
+	int16_t s = f;
 	
 	printf("\nFLOAT => SHORT\n");
 	printf("----------\n");
 
-  printf("float: %f\n \t\t\t =  " BIT_FMT_32 "\n", f.f, BIT_32(f.u));
-	printf("float -> *(short*)&float: %" PRIu16 "\n\t\t\t =  " BIT_FMT_16 "\n", 
-		s, BIT_16(s));
+  printf("float: %f\n \t\t\t =  " BIT_FMT_32 "\n", f, BIT_32(*(uint32_t*)&f));
+  printf("float -> short: %" PRIi16 "\n \t\t\t =  " BIT_FMT_16 "\n", 
+		s, BIT_16(*(uint16_t*)&s));
+	printf("float -> *(short*)&float: %" PRIi16 "\n\t\t\t =  " BIT_FMT_16 "\n", 
+		*(short*)&f, BIT_16(*(uint16_t*)(float*)&f));
 }
 
 void
