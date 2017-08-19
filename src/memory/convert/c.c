@@ -73,9 +73,6 @@ main(int argc, char *argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 
-	printf("\n*%s ENDIAN*\n", NM_HAVE_LITTLE_ENDIAN ? "LITTLE" : "BIG");
-	printf("----------\n");
-
 	char_short();
 	int_float();
 	float_short();
