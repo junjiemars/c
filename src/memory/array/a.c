@@ -27,9 +27,9 @@ bracket_syntax() {
 
 	printf("\n[] OPERATOR\n");
 	printf("----------\n");
-	printf("a[1] == *(a+1) \t=> %d\n", a[1] == *(a+1));
-	printf("&a[1] == (a+1) \t=> %d\n", &a[1] == (a+1));
-	printf("a[1] == 1[a] \t=> %d\n", a[1] == 1[a]);
+	printf(" a[b] == *(a+b) \t=> \t%s\n", _bool_(a[1] == *(a+1)));
+	printf("&a[b] == (a+b) \t\t=> \t%s\n", _bool_(&a[1] == (a+1)));
+	printf(" a[b] == b[a] \t\t=> \t%s\n", _bool_(a[1] == 1[a]));
 }
 
 char *
@@ -95,45 +95,29 @@ void pointer_syntax() {
 
 }
 
-void void_pointer() {
-	int x = 0x1122;
-	void* p = (void*)&x;
-	int* y = p;
-
-	printf("\nSIGNED LEFT SHIFT\n");
-	printf("----------\n");
-	printf("sizeof(void*) = %" PRIu32 "\n", NM_PR_VOIDP);
-	printf("(void*) = %p, (int*) = %p, (int*) = %p\n", p, &x, y);
-}
-
 void array_vs_pointer() {
-	int a[4];
-	int *p;
-	int i = 0x1122;
+	uint32_t head[10] = {0};
+	uint32_t a[8];
+	uint32_t tail[10] = {0};
 
-	a[2] = i;
-	p = &i;
-	p[0] = *p + 1;
+	_unused_(head);
+	_unused_(tail);
 
 	printf("\nARRAY vs. POINTER\n");
 	printf("----------\n");
-	printf("a[2] == p[0]  => %s\n", _bool_(a[2] == p[0]-1));
+
+	a[3] = 0xffff0000;
+  printf("a[3]: 0x%x" PRIu32 " \t\t =  " BIT_FMT_32 "\n", a[3], BIT_32(a[3]));
+
+	uint16_t *s = (uint16_t*)a + 6; // &(((unt16_t*)a)[6])
+	*s = 0x1234;
+  printf("((unt16_t*)a)[6]: 0x%x" PRIu16 " \t =  " BIT_FMT_16 "\n", *s, BIT_16((uint16_t)*s));
+
+  printf("a[3]: 0x%x" PRIu32 " \t\t =  " BIT_FMT_32 "\n", a[3], BIT_32(a[3]));
 }
 
-void array_name_as_const() {
-	int a[2];
-	_unused_(a);
-
-	//a = 0;	
-	//a++;
-	//a = a+1;
-
-	printf("\nARRAY NAME as CONST\n");
-	printf("----------\n");
-}
-
-void dynamic_arrays() {
-	printf("\nDYNAMIC ARRAYS\n");
+void dynamic_array() {
+	printf("\nDYNAMIC ARRAY\n");
 	printf("----------\n");
 
 	int stack[100];
@@ -229,10 +213,8 @@ main(int argc, const char* argv[]) {
 	bracket_syntax();	
 	pointer_syntax();
 
-	void_pointer();
 	array_vs_pointer();
-	array_name_as_const();
-	dynamic_arrays();
+	dynamic_array();
 
 	//printf("----------\n");
 	//int a0[] = { 1, 10, 20 };
