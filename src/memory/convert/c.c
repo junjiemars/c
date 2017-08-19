@@ -10,23 +10,23 @@ char_short() {
 	printf("\nCHAR <=> SHORT\n");
 	printf("----------\n");
 
-  printf("char: %" PRIu8 " \t\t =  " BIT_FMT_8 "\n", c, BIT_8(c));
-	printf("char -> short: %" PRIu16 "\t =  " BIT_FMT_16 "\n", s, BIT_16(s));
+  printf("char: %" PRIi8 " \t\t =  " BIT_FMT_8 "\n", c, BIT_8(c));
+	printf("char -> short: %" PRIi16 "\t =  " BIT_FMT_16 "\n", s, BIT_16(s));
 
 	s = 0xff + 4;
 	c = s;
-	printf("short: %" PRIu16 "\t\t =  " BIT_FMT_16 "\n", s, BIT_16(s));
-  printf("short -> char: %" PRIu8 " \t =  " BIT_FMT_8 "\n", c, BIT_8(c));
+	printf("short: %" PRIi16 "\t\t =  " BIT_FMT_16 "\n", s, BIT_16(s));
+  printf("short -> char: %" PRIi8 " \t =  " BIT_FMT_8 "\n", c, BIT_8(c));
 
 	c = -2;
 	s = c;
-  printf("char: %i\t\t =  " BIT_FMT_8 "\n", c, BIT_8((uint8_t)c));
-	printf("char -> short: %i\t =  " BIT_FMT_16 "\n", s, BIT_16((uint16_t)s));
+  printf("char: %" PRIi8 "\t\t =  " BIT_FMT_8 "\n", c, BIT_8((uint8_t)c));
+	printf("char -> short: %" PRIi16 "\t =  " BIT_FMT_16 "\n", s, BIT_16((uint16_t)s));
 
 	s = 0xff01;
 	c = s;
-  printf("short: %i\t\t =  " BIT_FMT_16 "\n", s, BIT_16((uint16_t)s));
-	printf("short -> char: %i\t =  " BIT_FMT_8 "\n", c, BIT_8((uint8_t)c));
+  printf("short: %" PRIi16 "\t\t =  " BIT_FMT_16 "\n", s, BIT_16((uint16_t)s));
+	printf("short -> char: %" PRIi8 "\t =  " BIT_FMT_8 "\n", c, BIT_8((uint8_t)c));
 }
 
 void
