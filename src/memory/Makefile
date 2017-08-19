@@ -4,14 +4,16 @@ memory: alloc								\
 				bit		  						\
 				byte								\
 				copy								\
-				convert
+				convert							\
+				struct
 
 memory_test: 	alloc_test								\
 							array_test								\
 							bit_test									\
 							byte_test	   							\
 							copy_test									\
-							convert_test
+							convert_test							\
+							struct_test
 
 INC += -I$(src_path)
 
@@ -87,3 +89,12 @@ $(convert_binout): $(src_path)convert/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
+# struct
+struct_binout := $(bin_path)struct$(bin_ext)
+
+struct: $(struct_binout)
+struct_test: struct
+	$(struct_binout)
+
+$(struct_binout): $(src_path)struct/s.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

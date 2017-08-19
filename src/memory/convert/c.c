@@ -40,7 +40,7 @@ int_float() {
   printf("int: %" PRIu32 " \t\t\t =  " BIT_FMT_32 "\n", i, BIT_32(i));
 	printf("int -> float: %f\n\t\t\t =  " BIT_FMT_32 "\n", f, BIT_32(*(uint32_t*)&f));
 	printf("int -> *(float*)&int: %f\n\t\t\t =  " BIT_FMT_32 "\n", 
-		*(float*)&i, BIT_32(*(uint32_t*)((float*)&i)));
+		*(float*)&i, BIT_32(*(uint32_t*)&i));
 }
 
 void 
@@ -55,7 +55,7 @@ float_short() {
   printf("float -> short: %" PRIi16 "\n \t\t\t =  " BIT_FMT_16 "\n", 
 		s, BIT_16(*(uint16_t*)&s));
 	printf("float -> *(short*)&float: %" PRIi16 "\n\t\t\t =  " BIT_FMT_16 "\n", 
-		*(short*)&f, BIT_16(*(uint16_t*)(float*)&f));
+		*(short*)&f, BIT_16(*(uint16_t*)&f));
 }
 
 void
