@@ -1,0 +1,54 @@
+#include <_memory_.h>
+#include <stdio.h>
+
+typedef struct fraction_s {
+	int numerator;
+	int denominator;
+} fraction_s;
+
+
+#define _VAL_ 0x11223344
+
+int*
+find_val(int *a, int x) {
+	while (*a++ == x) {
+		return --a;
+	}
+	return 0;
+}
+
+
+void
+basic_layout() {
+	int head[10] = {0};
+	fraction_s f = { .numerator = 22, .denominator = 7 };
+	int tail[10] = {0};
+
+	_unused_(head);
+	_unused_(tail);
+
+	printf("\nBASIC LAYOUT\n");
+	printf("----------\n");
+
+  printf("&(struct) == &(struct->1st) \t\t=> %s (%p)\n", 
+		_bool_(&f == (fraction_s*)&f.numerator), &f);
+
+	// dangerous:
+
+	((fraction_s*)&f.denominator)->numerator = f.numerator;
+	assert(f.numerator == f.denominator);
+
+	((fraction_s*)&f.denominator)->denominator = _VAL_;
+	int *h = find_val(head, _VAL_);	
+	int *t = find_val(tail, _VAL_);
+	assert( h || t);	 
+}
+
+int 
+main(int argc, char *argv[]) {
+	_unused_(argc);
+	_unused_(argv);
+
+	basic_layout();
+
+}
