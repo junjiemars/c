@@ -4,6 +4,16 @@
 #include <stdlib.h>
 
 
+
+#if CC_MSVC == 1
+	#pragma warning(disable:4706) /* strcpy4: assignment within conditional expression */
+#elif CC_GCC == 1
+	#pragma GCC diagnostic ignored "-Wparentheses"  /* strcp4: */
+#elif CC_CLANG == 1
+	#pragma clang diagnostic ignored "-Wparentheses"  /* strcp4: */
+#endif
+
+
 #ifdef CC_MSVC
 	#define M 3
 	#define N 2
@@ -13,13 +23,7 @@
 #endif
 
 
-#if CC_MSVC == 1
-	#pragma warning(disable:4706) /* strcpy4: assignment within conditional expression */
-#elif CC_GCC == 1
-	#pragma GCC diagnostic ignored "-Wparentheses"  /* strcp4: */
-#elif CC_CLANG == 1
-	#pragma clang diagnostic ignored "-Wparentheses"  /* strcp4: */
-#endif
+#define _GAP_ 4
 
 void 
 bracket_syntax() {
@@ -96,9 +100,9 @@ void pointer_syntax() {
 }
 
 void array_vs_pointer() {
-	uint32_t head[10] = {0};
-	uint32_t a[8];
-	uint32_t tail[10] = {0};
+	uint16_t head[_GAP_] = { 0 };
+	uint16_t a[8];
+	uint16_t tail[_GAP_] = { 0 };
 
 	_unused_(head);
 	_unused_(tail);
@@ -106,14 +110,23 @@ void array_vs_pointer() {
 	printf("\nARRAY vs. POINTER\n");
 	printf("----------\n");
 
-	a[3] = 0xffff0000;
-  printf("a[3]: 0x%x" PRIu32 " \t\t =  " BIT_FMT_32 "\n", a[3], BIT_32(a[3]));
+	a[3] = 0xff00;
+  printf("a[3]: 0x%x" PRIu16 " \t\t\t =  " BIT_FMT_16 "\n", a[3], BIT_16(a[3]));
 
-	uint16_t *s = (uint16_t*)a + 6; // &(((unt16_t*)a)[6])
-	*s = 0x1234;
-  printf("((unt16_t*)a)[6]: 0x%x" PRIu16 " \t =  " BIT_FMT_16 "\n", *s, BIT_16((uint16_t)*s));
+	uint8_t *s = (uint8_t*)a + 6; // &((unt8_t*)a)[6]
+	*s = 0x12;
+  printf("((uint8_t*)a)[6]: 0x%x" PRIu8 " \t =  " BIT_FMT_8 "\n", *s, BIT_8((uint8_t)*s));
+  printf("a[3]: 0x%x" PRIu16 " \t\t\t =  " BIT_FMT_16 "\n", a[3], BIT_16(a[3]));
 
-  printf("a[3]: 0x%x" PRIu32 " \t\t =  " BIT_FMT_32 "\n", a[3], BIT_32(a[3]));
+	// dangerous
+
+	a[0] = 0x4433;
+  printf("a[0]: 0x%x" PRIu16 " \t\t\t =  " BIT_FMT_16 "\n", a[3], BIT_16(a[0]));
+	*(a-1) = 0x1122;
+  printf("a[-1]: 0x%x" PRIu16 " \t\t =  " BIT_FMT_16 "\n", *(a-1), BIT_16(*(a-1)));
+
+  printf("a[-1,0]: 0x%x" PRIu32 " \t\t =  " BIT_FMT_32 "\n", 
+		*(uint32_t*)(a-1), BIT_32(*(uint32_t*)(a-1)));
 }
 
 void dynamic_array() {
