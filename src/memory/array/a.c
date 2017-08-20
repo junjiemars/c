@@ -111,7 +111,7 @@ void array_vs_pointer() {
 	printf("----------\n");
 
 	a[3] = 0xff00;
-  printf("a[3]: 0x%x" PRIu16 " \t\t\t =  " BIT_FMT_16 "\n", a[3], BIT_16(a[3]));
+  printf("a[3|8]: 0x%x" PRIu16 " \t\t =  " BIT_FMT_16 "\n", a[3], BIT_16(a[3]));
 
 	uint8_t *s = (uint8_t*)a + 6; // &((unt8_t*)a)[6]
 	*s = 0x12;
@@ -119,6 +119,9 @@ void array_vs_pointer() {
   printf("a[3]: 0x%x" PRIu16 " \t\t\t =  " BIT_FMT_16 "\n", a[3], BIT_16(a[3]));
 
 	// dangerous
+
+	*(a+8) = 0x4433;
+  printf("a[9]: 0x%x" PRIu16 " \t\t\t =  " BIT_FMT_16 "\n", *(a+8), BIT_16(*(a+8)));
 
 	a[0] = 0x4433;
   printf("a[0]: 0x%x" PRIu16 " \t\t\t =  " BIT_FMT_16 "\n", a[3], BIT_16(a[0]));
