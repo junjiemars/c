@@ -33,6 +33,8 @@ basic_layout() {
 
 	((fraction_s*)&f.denominator)->denominator = _VAL_;
 	assert(_VAL_ == *((int*)&f.denominator+1));
+
+	assert(f.denominator == ((fraction_s*)&f.denominator)[0].numerator);
 }
 
 int 
