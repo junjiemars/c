@@ -8,13 +8,14 @@ typedef struct fraction_s {
 
 
 #define _VAL_ 0x11223344
+#define _GAP_ 4
 
 
 void
 basic_layout() {
-	int head[10] = {0};
+	int head[_GAP_] = {0};
 	fraction_s f = { .numerator = 22, .denominator = 7 };
-	int tail[10] = {0};
+	int tail[_GAP_] = {0};
 
 	_unused_(head);
 	_unused_(tail);
