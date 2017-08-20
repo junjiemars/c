@@ -5,6 +5,7 @@ memory: alloc								\
 				byte								\
 				copy								\
 				convert							\
+				endian							\
 				struct
 
 memory_test: 	alloc_test								\
@@ -13,6 +14,7 @@ memory_test: 	alloc_test								\
 							byte_test	   							\
 							copy_test									\
 							convert_test							\
+							endian_test								\
 							struct_test
 
 INC += -I$(src_path)
@@ -86,6 +88,17 @@ convert_test: convert
 	$(convert_binout)
 
 $(convert_binout): $(src_path)convert/c.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# endian
+endian_binout := $(bin_path)endian$(bin_ext)
+
+endian: $(endian_binout)
+endian_test: endian
+	$(endian_binout)
+
+$(endian_binout): $(src_path)endian/e.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
