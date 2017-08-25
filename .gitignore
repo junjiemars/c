@@ -39,6 +39,7 @@ erf
 
 # objs directory
 objs/
+out/
 
 # makefiles
 /Makefile
@@ -63,3 +64,7 @@ nore/
 # etags/ctags
 /TAGS
 /tags
+
+# darwin
+.DS_Store
+
