@@ -2,8 +2,7 @@
 #ifndef _MACRO_H_
 #define _MACRO_H_
 
-#include <nm_auto_config.h>
-#include <nm_auto_header.h>
+#include <_lang_.h>
 
 #if (MSYS_NT)
 	
