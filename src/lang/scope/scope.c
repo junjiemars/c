@@ -22,7 +22,7 @@ inc() {
 	return i++;
 }
 
-#ifdef CC_MSVC
+#ifdef MSVC
 int map(int (*fn)(int n), int *a) {
 #else
 int map(int (*fn)(int n), int a[static 4]) {

@@ -6,7 +6,7 @@
 
 #if (MSYS_NT)
 	
-	#if (CC_MSVC)
+	#if (MSVC)
 		#define W_C4100(a) { (a); }
 	#endif
 

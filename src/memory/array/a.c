@@ -5,16 +5,16 @@
 
 
 
-#if CC_MSVC == 1
+#if MSVC == 1
 	#pragma warning(disable:4706) /* strcpy4: assignment within conditional expression */
-#elif CC_GCC == 1
+#elif GCC == 1
 	#pragma GCC diagnostic ignored "-Wparentheses"  /* strcp4: */
-#elif CC_CLANG == 1
+#elif CLANG == 1
 	#pragma clang diagnostic ignored "-Wparentheses"  /* strcp4: */
 #endif
 
 
-#ifdef CC_MSVC
+#ifdef MSVC
 	#define M 3
 	#define N 2
 	#define Z 2
@@ -167,7 +167,7 @@ randomize(size_t n) {
 }
 
 void
-#ifdef CC_MSVC
+#ifdef MSVC
 iter_aa(size_t m, size_t n, size_t a[M][N], size_t (*fn)(size_t), size_t r) {
 #else
 iter_aa(size_t m, size_t n, size_t a[m][n], size_t (*fn)(size_t), size_t r) {

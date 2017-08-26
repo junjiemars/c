@@ -6,7 +6,7 @@
 
 #define _unused_(x) ((void)(x))
 
-#ifdef CC_MSVC
+#ifdef MSVC
 #pragma warning(disable : 4702)
 #endif
 

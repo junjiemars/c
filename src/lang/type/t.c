@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 
-#if CC_GCC == 1
+#if GCC == 1
 	/* (unsigned init*)&f: */
 	#pragma GCC diagnostic ignored "-Wstrict-aliasing"  
 #endif

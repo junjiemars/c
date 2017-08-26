@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 /*
-#ifdef CC_GCC
+#ifdef GCC
 #define __cdecl __attribute__((cdecl))
 #define __stdcall __attribute__((stdcall))
 #endif

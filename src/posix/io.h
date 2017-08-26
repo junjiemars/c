@@ -5,7 +5,7 @@
 #include <string.h>
 #include <errno.h>
 
-#ifdef CC_MSVC
+#ifdef MSVC
 
 	#define io_fopen(e, f, n, m) { e = fopen_s(&f, n, m); }
 	#define io_fprintf(e, f, ...) { e = fprintf_s(f, __VA_ARGS__); }

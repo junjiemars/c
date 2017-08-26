@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-#ifdef CC_MSVC
+#ifdef MSVC
 	#define io_fopen(f, n, m) fopen_s(&f, n, m);
 	#define io_fprintf(f, ...) fprintf_s(f, __VA_ARGS__);
 	#define io_fscanf(f, ...) fscanf_s(f, __VA_ARGS__);

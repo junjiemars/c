@@ -118,7 +118,7 @@ static const char illoptstring[] = "unknown option -- %s";
 
 static int env_posix() {
 	int v = -1;
-#ifdef CC_MSVC
+#ifdef MSVC
 	char *b;
 	size_t l;
 	if (!_dupenv_s(&b, &l, "POSIXLY_CORRECT") && 0 < l) {

@@ -24,7 +24,7 @@
 
 #ifdef NM_HAVE_VARIADIC_MACRO
 
-	#ifdef CC_MSVC
+	#ifdef MSVC
 		#define io_sprintf(b, ...) sprintf_s(b, sizeof(b), __VA_ARGS__)
 	#else
 		#define io_sprintf(b, ...) sprintf(b, __VA_ARGS__)
@@ -63,7 +63,7 @@ main(int argc, char *argv[]) {
 	printf("out=%i, total=%i, |-- sum(%i)\n", out, total, i);
 
 	printf("----------\n");
-#ifndef CC_MSVC
+#ifndef MSVC
 	/* C2168 msvc */
 	printf("'%s' is blank strlen=%zu\n", "", check_blank());
 #endif

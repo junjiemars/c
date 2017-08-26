@@ -4,7 +4,7 @@
 #include <nm_auto_config.h>
 #include <nm_auto_header.h>
 
-#ifdef CC_MSVC
+#ifdef MSVC
 #pragma warning(disable:4996) /*_CRT_SECURE_NO_WARNINGS*/
 #endif
 

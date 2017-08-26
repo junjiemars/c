@@ -6,7 +6,7 @@
 /* #include <stdbool.h> bool: true/false */
 
 
-#ifdef CC_MSVC
+#ifdef MSVC
 int main(int argc, char* argv[]) {
 #else
 int main(int argc, char* argv[argc+1]) {
