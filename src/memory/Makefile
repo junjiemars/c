@@ -6,6 +6,7 @@ memory: alloc								\
 				copy								\
 				convert							\
 				endian							\
+				generic							\
 				struct
 
 memory_test: 	alloc_test								\
@@ -15,6 +16,7 @@ memory_test: 	alloc_test								\
 							copy_test									\
 							convert_test							\
 							endian_test								\
+							generic										\
 							struct_test
 
 INC += -I$(src_path)
@@ -99,6 +101,17 @@ endian_test: endian
 	$(endian_binout)
 
 $(endian_binout): $(src_path)endian/e.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# generic
+generic_binout := $(bin_path)generic$(bin_ext)
+
+generic: $(generic_binout)
+generic_test: generic
+	$(generic_binout)
+
+$(generic_binout): $(src_path)generic/g.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
