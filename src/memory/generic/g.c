@@ -17,15 +17,18 @@ swap_test() {
 	swap(&i1, &i2, sizeof(int));
 	printf("0x%x \t 0x%x\n", i1, i2);
 
+	// dangerous
+
 	int32_t i32 = 0x11223344;
-	int16_t i16 = 0x7788;
+	int32_t _gap_ = 0; _unused_(_gap_);
+	int16_t i16 = 0x7788; 
 	printf("swap(0x%x, 0x%x, %zu) \t\t => ", i32, i16, sizeof(int16_t));
 	swap(&i32, &i16, sizeof(int16_t));
 	printf("0x%x \t 0x%x\n", i32, i16);
 
 	printf("swap(0x%x, 0x%x, %zu) \t\t => ", i32, i16, sizeof(int32_t));
 	swap(&i32, &i16, sizeof(int32_t));
-	printf("0x%x \t 0x%x\n", i32, i16);
+	printf("0x%x \t 0x%x | 0x%x\n", i32, i16, _gap_);
 
 
 	char c1[64] = "hello", c2[64] = "world";
