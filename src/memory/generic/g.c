@@ -37,6 +37,11 @@ swap_test() {
 	printf("swap(%s, %s, %zu) \t\t\t => ", c1, c2, sizeof(char)*64);
 	swap(c1, c2, sizeof(char)*64);
 	printf("%s \t %s\n", c1, c2);
+
+	// smart: no memory swapping
+	printf("swap(%p, %p, %zu)  => ", &c1, &c2, sizeof(char*));
+	swap(&c1, &c2, sizeof(char*));
+	printf("%s \t %s\n", c1, c2);
 }
 
 
