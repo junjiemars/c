@@ -45,8 +45,8 @@ swap_test() {
 }
 
 void* 
-lsearch(void *key, void *base, size_t n, size_t size, 
-				int (*test)(const void *x, const void*y, size_t size)) {
+linear_search(void *key, void *base, size_t n, size_t size, 
+	int (*test)(const void *x, const void*y, size_t size)) {
 
 	for (size_t i = 0; i < n; i++) {
 		void *a = (uint8_t*)base + i*size;
@@ -58,19 +58,32 @@ lsearch(void *key, void *base, size_t n, size_t size,
 	return 0;
 }
 
+int
+test_str(const void *x, const void *y, size_t size) {
+	const char* a = *(const char**)x;
+	const char* b = *(const char**)y;
+	return strncmp(a, b, size);
+}
+
 void
-lsearch_test() {
+linear_search_test() {
 	int ia[] = { 1, 9, 7, 0, 4, 5 };
 	int ikey = 7;
-	printf("lsearch(%i) \t\t => ", ikey);
-	int *i = lsearch(&ikey, ia, _sizeof_array_(ia), sizeof(int), memcmp);
+	printf("linear_search(%i) \t\t => ", ikey);
+	int *i = linear_search(&ikey, ia, _sizeof_array_(ia), sizeof(int), memcmp);
 	printf("%i \t\t|\t %p\n", *i, i);
 
 	char ca[] = "hello, world!";
 	char ckey = 'r';
-	printf("lsearch('%c') \t\t => ", ckey);
-	char *c = lsearch(&ckey, ca, _sizeof_array_(ca), sizeof(char), memcmp);
+	printf("linear_search('%c') \t\t => ", ckey);
+	char *c = linear_search(&ckey, ca, _sizeof_array_(ca), sizeof(char), memcmp);
 	printf("'%c' \t|\t %p\n", *c, c);
+
+	char *sa[] = {"Lisp", "MaCarthy", "Russell"};
+	char *skey = "MaCarthy";
+	printf("linear_search(\"%s\") \t => ", skey);
+	char **s = linear_search(&skey, &sa, _sizeof_array_(sa), sizeof(char*), test_str);
+	printf("\"%s\" \t|\t %p\n", *s, s);
 }
 
 
@@ -83,5 +96,5 @@ main(int argc, char *argv[]) {
 	printf("----------\n");
 
 	swap_test();
-	lsearch_test();
+	linear_search_test();
 }
