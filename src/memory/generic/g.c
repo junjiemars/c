@@ -45,10 +45,12 @@ swap_test() {
 }
 
 void* 
-lsearch(void *key, void *base, size_t n, size_t size) {
+lsearch(void *key, void *base, size_t n, size_t size, 
+				int (*test)(const void *x, const void*y, size_t size)) {
+
 	for (size_t i = 0; i < n; i++) {
 		void *a = (uint8_t*)base + i*size;
-		if (0 == memcmp(key, a, size)) {
+		if (0 == test(key, a, size)) {
 			return a;
 		}
 	}
@@ -61,13 +63,13 @@ lsearch_test() {
 	int ia[] = { 1, 9, 7, 0, 4, 5 };
 	int ikey = 7;
 	printf("lsearch(%i) \t\t => ", ikey);
-	int *i = lsearch(&ikey, ia, _sizeof_array_(ia), sizeof(int));
+	int *i = lsearch(&ikey, ia, _sizeof_array_(ia), sizeof(int), memcmp);
 	printf("%i \t\t|\t %p\n", *i, i);
 
 	char ca[] = "hello, world!";
 	char ckey = 'r';
 	printf("lsearch('%c') \t\t => ", ckey);
-	char *c = lsearch(&ckey, ca, _sizeof_array_(ca), sizeof(char));
+	char *c = lsearch(&ckey, ca, _sizeof_array_(ca), sizeof(char), memcmp);
 	printf("'%c' \t|\t %p\n", *c, c);
 }
 
