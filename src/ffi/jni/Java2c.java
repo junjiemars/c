@@ -17,6 +17,9 @@ public class Java2c {
 		}
 
     public static void main(String[] args) {
+				out.println("JNI");
+				out.println("----------");
+
 				final String arch = System.getProperty("os.arch");
         out.println("Ho, Azorg@" + arch);
 

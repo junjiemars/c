@@ -1,0 +1,51 @@
+
+# jni
+
+[ -z "$JAVAC" ] && flag=JAVAC value=javac . ${NM_HOME}auto/make_define
+[ -z "$JAVAH" ] && flag=JAVAH value=javah . ${NM_HOME}auto/make_define
+[ -z "$JAVA" ] && flag=JAVA value=java . ${NM_HOME}auto/make_define
+
+flag=jni_binout value=-o . ${NM_HOME}auto/make_define
+if [ "$NM_SYMBOL" == "YES" ]; then
+	flag=jni_symbol value=-g . ${NM_HOME}auto/make_define
+fi
+
+nt_to_posix_path() {
+	echo "\\$1" | \
+		sed -e 's#^\\\([a-zA-Z]\):\\#\\\l\1\\#' | \
+		sed -e 's#\\#\/#g' 
+}
+
+case ${NM_SYSTEM} in
+	Darwin)
+		flag=jni_inc value="-I$JAVA_HOME/include -I$JAVA_HOME/include/darwin" \
+			. ${NM_HOME}auto/make_define
+
+		flag=jni_ldflags value="-L$JAVA_HOME/jre/lib/server" \
+			. ${NM_HOME}auto/make_define
+
+		flag=jni_ldlibs value="-ljvm" . ${NM_HOME}auto/make_define
+	;;
+
+	Linux)
+		flag=jni_inc value="-I$JAVA_HOME/include -I$JAVA_HOME/include/linux" \
+		. ${NM_HOME}auto/make_define
+
+		case ${NM_MACHINE} in
+			x86_64)
+				_cpu_="amd64"
+			;;
+		esac
+	
+		flag=jni_ldflags value="-L$JAVA_HOME/jre/lib/${_cpu_}/server -ljvm $LDLIBS" \
+		. ${NM_HOME}auto/make_define
+	;;
+
+	MSYS_NT)
+		JAVA_HOME=`nt_to_posix_path "$JAVA_HOME"`
+		flag=jni_inc value="-I\"$JAVA_HOME/include\" -I\"$JAVA_HOME/include/win32\"" \
+		. ${NM_HOME}auto/make_define
+	;;
+
+esac
+
