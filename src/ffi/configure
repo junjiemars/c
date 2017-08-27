@@ -37,8 +37,10 @@ case ${NM_SYSTEM} in
 			;;
 		esac
 	
-		flag=jni_ldflags value="-L$JAVA_HOME/jre/lib/${_cpu_}/server -ljvm $LDLIBS" \
-		. ${NM_HOME}auto/make_define
+		flag=jni_ldflags value="-L$JAVA_HOME/jre/lib/${_cpu_}/server" \
+			. ${NM_HOME}auto/make_define
+
+		flag=jni_ldlibs value="-ljvm" . ${NM_HOME}auto/make_define
 	;;
 
 	MSYS_NT)
