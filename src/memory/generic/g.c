@@ -44,6 +44,33 @@ swap_test() {
 	printf("%s \t %s\n", c1, c2);
 }
 
+void* 
+lsearch(void *key, void *base, size_t n, size_t size) {
+	for (size_t i = 0; i < n; i++) {
+		void *a = (uint8_t*)base + i*size;
+		if (0 == memcmp(key, a, size)) {
+			return a;
+		}
+	}
+
+	return 0;
+}
+
+void
+lsearch_test() {
+	int ia[] = { 1, 9, 7, 0, 4, 5 };
+	int ikey = 7;
+	printf("lsearch(%i) \t\t => ", ikey);
+	int *i = lsearch(&ikey, ia, _sizeof_array_(ia), sizeof(int));
+	printf("%i \t\t|\t %p\n", *i, i);
+
+	char ca[] = "hello, world!";
+	char ckey = 'r';
+	printf("lsearch('%c') \t\t => ", ckey);
+	char *c = lsearch(&ckey, ca, _sizeof_array_(ca), sizeof(char));
+	printf("'%c' \t|\t %p\n", *c, c);
+}
+
 
 int
 main(int argc, char *argv[]) {
@@ -54,5 +81,5 @@ main(int argc, char *argv[]) {
 	printf("----------\n");
 
 	swap_test();
-
+	lsearch_test();
 }
