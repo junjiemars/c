@@ -29,7 +29,7 @@ case ${NM_SYSTEM} in
 
 	Linux)
 		flag=jni_inc value="-I$JAVA_HOME/include -I$JAVA_HOME/include/linux" \
-		. ${NM_HOME}auto/make_define
+			. ${NM_HOME}auto/make_define
 
 		case ${NM_MACHINE} in
 			x86_64)
@@ -45,8 +45,9 @@ case ${NM_SYSTEM} in
 
 	MSYS_NT)
 		JAVA_HOME=`nt_to_posix_path "$JAVA_HOME"`
+
 		flag=jni_inc value="-I\"$JAVA_HOME/include\" -I\"$JAVA_HOME/include/win32\"" \
-		. ${NM_HOME}auto/make_define
+			. ${NM_HOME}auto/make_define
 	;;
 
 esac
