@@ -42,6 +42,8 @@ swap_test() {
 	printf("swap(%p, %p, %zu)  => ", &c1, &c2, sizeof(char*));
 	swap(&c1, &c2, sizeof(char*));
 	printf("%s \t %s\n", c1, c2);
+
+	putchar('\n');
 }
 
 void* 
@@ -83,7 +85,9 @@ linear_search_test() {
 	char *skey = "MaCarthy";
 	printf("linear_search(\"%s\") \t => ", skey);
 	char **s = linear_search(&skey, &sa, _sizeof_array_(sa), sizeof(char*), test_str);
-	printf("\"%s\" \t|\t %p\n", *s, s);
+	printf("\"%s\" \t|\t %p\n", *s, *s);
+
+	putchar('\n');
 }
 
 
@@ -93,7 +97,7 @@ main(int argc, char *argv[]) {
 	_unused_(argv);
 
 	printf("\n*%s ENDIAN*\n", NM_HAVE_LITTLE_ENDIAN ? "LITTLE" : "BIG");
-	printf("----------\n");
+	printf("----------\n\n");
 
 	swap_test();
 	linear_search_test();
