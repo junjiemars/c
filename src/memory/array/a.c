@@ -5,11 +5,11 @@
 
 
 
-#if MSVC == 1
+#if MSVC 
 	#pragma warning(disable:4706) /* strcpy4: assignment within conditional expression */
-#elif GCC == 1
+#elif GCC
 	#pragma GCC diagnostic ignored "-Wparentheses"  /* strcp4: */
-#elif CLANG == 1
+#elif CLANG
 	#pragma clang diagnostic ignored "-Wparentheses"  /* strcp4: */
 #endif
 
