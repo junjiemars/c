@@ -61,8 +61,8 @@ $(enum_cppout): $(src_path)enum/e.c
 env_binout := $(bin_path)env$(bin_ext)
 env_cflags := $(CFLAGS) $(INC) -I$(src_path)env/
 
-$(env_binout): $(src_path)env/env.c
-	$(CC) $(env_cflags) $^ $(bin_out)$@ 
+$(env_binout): $(src_path)env/env.c $(src_path)env/env.h
+	$(CC) $(env_cflags) $< $(bin_out)$@ 
 
 env: $(env_binout)
 env_test: env
