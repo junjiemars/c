@@ -4,7 +4,7 @@
 
 #include <_lang_.h>
 
-#if (MSYS_NT)
+#if MSVC
 
 	#define _CRT_SECURE_NO_WARNING
 	#define _CRT_SECURE_NO_DEPRECATE
