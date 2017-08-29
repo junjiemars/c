@@ -7,6 +7,10 @@
  * 2) use longjmp jump to other function;
  */
 
+#if MSVC
+#pragma warning(disable:4267) /* conversion possible loss of data */
+#endif
+
 int 
 sum(int *v, size_t size) {
     int c = 0;
