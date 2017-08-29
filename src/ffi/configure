@@ -43,7 +43,7 @@ case ${NM_SYSTEM} in
 		flag=jni_ldlibs value="-ljvm" . ${NM_HOME}auto/make_define
 	;;
 
-	MSYS_NT)
+	WinNT)
 		JAVA_HOME=`nt_to_posix_path "$JAVA_HOME"`
 
 		flag=jni_inc value="-I\"$JAVA_HOME/include\" -I\"$JAVA_HOME/include/win32\"" \
