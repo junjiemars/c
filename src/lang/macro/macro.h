@@ -4,7 +4,7 @@
 
 #include <_lang_.h>
 
-#if (MSYS_NT)
+#if (WINNT)
 	
 	#if (MSVC)
 		#define W_C4100(a) { (a); }
