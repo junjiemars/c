@@ -1,11 +1,22 @@
+#include <nore.h>
 #include <stdio.h>
 #include <locale.h>
+
+#define _unused_(x) (void)(x)
+
 
 #define TO_BASE_N (sizeof(unsigned)*8 + 1)
 #define TO_BASE(n, b) to_base((unsigned char [TO_BASE_N]){""}, (n), (b))
 #define OUT_SIZE(t) {printf("sizeof(%s) \t= %lu bytes\n", #t, sizeof(t));}
 
-const unsigned char *to_base(unsigned char *o, unsigned i, unsigned base) {
+
+#if MSVC
+#pragma warning(disable:4244) /* conversion possible loss of data */
+#endif
+
+
+const unsigned char*
+to_base(unsigned char *o, unsigned i, unsigned base) {
 	unsigned char *s = &o[TO_BASE_N - 1];
 	*s = 0;
 	do {
@@ -46,7 +57,11 @@ void out(const char *s, unsigned c) {
 	}
 }
 
-int main(int argc, const char *argv[]) {
+int 
+main(int argc, const char *argv[]) {
+	_unused_(argc);
+	_unused_(argv);
+
 	OUT_SIZE(unsigned);
 	OUT_SIZE(unsigned char);
 	out("$", 0x0024u);
