@@ -1,10 +1,19 @@
 #include <_memory_.h>
 #include <stdio.h>
+#include <string.h>
 
-typedef struct fraction_s {
+
+typedef struct {
 	int numerator;
 	int denominator;
 } fraction_s;
+
+
+typedef struct {
+	char *name;
+	char suid[8];
+	int units;
+} student_s;
 
 
 #define _VAL_ 0x11223344
@@ -13,9 +22,9 @@ typedef struct fraction_s {
 
 void
 basic_layout() {
-	int head[_GAP_] = {0};
+	int head[_GAP_] = { 0 };
 	fraction_s f = { .numerator = 22, .denominator = 7 };
-	int tail[_GAP_] = {0};
+	int tail[_GAP_] = { 0 };
 
 	_unused_(head);
 	_unused_(tail);
@@ -37,11 +46,25 @@ basic_layout() {
 	assert(f.denominator == ((fraction_s*)&f.denominator)[0].numerator);
 }
 
+void 
+complex_layout() {
+	student_s friends[4];
+	int _tail_[_GAP_] = { 0 };
+
+	_unused_(_tail_);
+
+	friends[0].name = friends[2].suid + 3;
+	friends[5].units = 21;
+	strcpy(friends[1].suid, "1122334");
+	strcpy(friends->name, "Tiger Woods");
+	
+}
+
 int 
 main(int argc, char *argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 
 	basic_layout();
-
+	complex_layout();
 }
