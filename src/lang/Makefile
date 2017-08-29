@@ -154,7 +154,7 @@ stage_test: stage
 	$(stage_binout)
 
 $(stage_binout): $(stage_objout)
-	$(LINK) $(LDFLAGS) $^ $(bin_out)$@
+	$(LINK) $^ $(bin_out)$@
 
 $(stage_objout): $(stage_asmout)
 	$(AS) $(ASFLAGS) $(nm_stage_c) $^ $(obj_out)$@
