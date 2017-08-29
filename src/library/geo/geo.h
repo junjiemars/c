@@ -5,7 +5,7 @@
 
 
 // make CFLAGS=-DSHARED=1
-#if ( MSYS_NT )
+#if ( WINNT )
 
 	#if ( 0 == SHARED )
 
@@ -22,7 +22,7 @@
 
 		#define GEO_API
 
-#endif // end of MSYS_NT
+#endif // end of WINNT
 
 
 #ifdef __cplusplus
