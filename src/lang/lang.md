@@ -17,6 +17,51 @@ No, there's nothing wrong with ```assert``` as long as  you use it as intended.
 * Error Handling: An erroneous input or system state not due to a
 bug in the program.
 
+Assertions are primarily intended for use during debugging and are generally
+turned off before code is deployed by defining the ```NDEBUG``` macro.
+
+
+## Error 
+
+* __fail safe__ pertaining to a system or component that automatically places
+itself in a safe operating mode in the event of a failue:
+> a traffic light that reverts to blinking red in all directions when normal
+operation fails.
+* __fail soft__ pertaining to a system or component that continues to provide
+partial operational capability in the event of certain failues:
+> a traffic light that continues to alternate between red and green if the 
+yellow light fails.
+A static variable ```errno``` (or data structure ```feraiseexcept```) indicating
+the error status of a function call or object. These indicators are __fail soft__.
+* __fail hard__ aka fail fast or fail stop. The reaction to a detected fault
+is to immediately halt the system.
+Termination is __fail hard__.
+
+
+Error handling is often separated into detection and recovery:
+* __detection__: discovering that an error has occurred.
+* __recovery__: determining how to handle the error.
+
+### errno
+Before C11, ```errno``` was a global variable, with all the inherent disadvantages:
+* later system calls overwrote earlier system calls;
+* global map of values to error conditions (```ENOMEM```, ```ERANGE```, etc);
+* behavior is underspecified in ISO C and POSIX;
+* technically ```errno``` is a __modifiable lvalue__ rather than a global variable, 
+so expressions like ```&errno``` may not be well-defined;
+* thread-unsafe;
+
+In C11, ```errno``` is thread-local, so it is thread-safe.
+
+
+### Disadvantages of Function Return Values
+* functions that return error indicators cannot use return value 
+for other uses;
+* checking every function call for an error condition increases code
+by 30%-40%;
+* impossible for library function to enforce that callers check for 
+error condition.
+
 
 ## Type
 All C types be represented as binary numbers in memory, the way how to interprete those numbers is what type does.
@@ -49,4 +94,4 @@ same type;
 
 ## References
 * [C data types](https://en.wikipedia.org/wiki/C_data_types)
-* [printf format string](https://en.wikipedia.org/wiki/Printf_format_string)
+* [Beyond errno Error Handling in C](https://resources.sei.cmu.edu/asset_files/Presentation/2016_017_101_484207.pdf)

@@ -21,7 +21,7 @@ main(int argc, const char* argv[]) {
 
 	if (argc > 1) {
 		int n = atoi(argv[1]);
-		printf("sqr(%u)=%u\n", 2u, sqr(n));
+		printf("sqr(%i)=%u\n", n, sqr(n));
 		printf("after call sqr()\n");
 	}
 

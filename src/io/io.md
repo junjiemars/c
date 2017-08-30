@@ -5,12 +5,12 @@
 provide a flexible and efficient means of I/O.
 
 > A Stream is a file or a physical device (e.g. printer or monitor) 
-which is manipulated with a _pointer_ to the stream.
+which is manipulated with a __pointer__ to the stream.
 
-> There exists an internal C data structure, *FILE*, which represents
+> There exists an internal C data structure, __FILE__, which represents
 all streams and is defined in ```stdio.h```. 
 
-> Stream I/O is *BUFFERED*: That is to say a fixed _chunk_ is read
+> Stream I/O is __BUFFERED__: That is to say a fixed __chunk__ is read
 from or written to a file via some temporary storage area (the buffer).
 
 ### Predefined Streams
@@ -40,3 +40,4 @@ works on both buffered and unbuffered steams. Unbuffered IO writes don't gurante
 
 ## References
 * [Input and Output:stdio.h](https://users.cs.cf.ac.uk/Dave.Marshall/C/node18.html)
+* [printf format string](https://en.wikipedia.org/wiki/Printf_format_string)
