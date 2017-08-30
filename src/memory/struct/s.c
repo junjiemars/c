@@ -12,12 +12,16 @@ typedef struct {
 typedef struct {
 	char *name;
 	char suid[8];
-	int units;
+	int32_t units;
 } student_s;
 
 
 #define _VAL_ 0x11223344
 #define _GAP_ 4
+
+#if MSVC
+#pragma warning(disable : 4996) /* _CRT_SECURE_NO_WARNINGS */
+#endif
 
 
 void
@@ -54,7 +58,14 @@ complex_layout() {
 	_unused_(_tail_);
 
 	friends[0].name = friends[2].suid + 3;
+
+	// risky
+
+#ifdef RISKY
+#pragma warning(disable : 4789) /* will be overrun */ 
 	friends[5].units = 21;
+#endif
+
 	strcpy(friends[1].suid, "1122334");
 	strcpy(friends->name, "Tiger Woods");
 	
