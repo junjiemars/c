@@ -22,12 +22,12 @@ nm_include="stdbool.h" . ${NM_HOME}auto/include
 
 
 nm_feature="sizeof(void*)"
-nm_feature_name="nm_pr_voidp"
+nm_feature_name="nm_ptr_len"
 nm_feature_run=value
 nm_feature_incs="#include <stdio.h>"
 nm_feature_path=
 nm_feature_libs=
-nm_feature_test='void* p; printf("%zuu", sizeof p);'
+nm_feature_test='void* p; printf("%zu", sizeof p);'
 . ${NM_HOME}auto/feature
 
 

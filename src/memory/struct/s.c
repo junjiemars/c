@@ -11,7 +11,7 @@ typedef struct {
 
 typedef struct {
 	char *name;
-	char suid[8];
+	char suid[NM_PTR_LEN];
 	int32_t units;
 } student_s;
 
@@ -62,7 +62,9 @@ complex_layout() {
 	// risky
 
 #ifdef RISKY
-#pragma warning(disable : 4789) /* will be overrun */ 
+	#ifdef MSVC
+		#pragma warning(disable : 4789) /* will be overrun */ 
+	#endif
 	friends[5].units = 21;
 #endif
 
