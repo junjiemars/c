@@ -12,6 +12,7 @@ sqr(int x) {
 
 int
 main(int argc, const char* argv[]) {
+
 	assert((argc > 1) && "usage: one <int>");
 	
 	#if (NM_HAVE_STATIC_ASSERT)
@@ -22,7 +23,6 @@ main(int argc, const char* argv[]) {
 	if (argc > 1) {
 		int n = atoi(argv[1]);
 		printf("sqr(%i)=%u\n", n, sqr(n));
-		printf("after call sqr()\n");
 	}
 
 	return 0;
