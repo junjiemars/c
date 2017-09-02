@@ -1,12 +1,10 @@
 
 nm_feature="endian"
 nm_feature_name="nm_have_little_endian"
-nm_feature_flags=
 nm_feature_run=value
 nm_feature_h="#include <stdio.h>"
-nm_feature_cflags=
+nm_feature_flags=
 nm_feature_inc=
-nm_feature_ldflags=
 nm_feature_ldlibs=
 nm_feature_test='int i=0x11223344;
                  char *p = (char *)&i;
@@ -26,12 +24,10 @@ nm_include="stdbool.h" . ${NM_HOME}auto/include
 
 nm_feature="sizeof(void*)"
 nm_feature_name="nm_ptr_len"
-nm_feature_flags=
 nm_feature_run=value
 nm_feature_h="#include <stdio.h>"
-nm_feature_cflags=
+nm_feature_flags=
 nm_feature_inc=
-nm_feature_ldflags=
 nm_feature_ldlibs=
 nm_feature_test='void* p; printf("%zu", sizeof p);'
 . ${NM_HOME}auto/feature
@@ -42,9 +38,8 @@ nm_feature_name="nm_size_t_len"
 nm_feature_flags=
 nm_feature_run=value
 nm_feature_h="#include <stdio.h>"
-nm_feature_cflags=
+nm_feature_flags=
 nm_feature_inc=
-nm_feature_ldflags=
 nm_feature_ldlibs=
 nm_feature_test='printf("%zu", sizeof(size_t)*8);'
 . ${NM_HOME}auto/feature

@@ -3,11 +3,9 @@ nm_feature="c11 static_assert()"
 nm_feature_name="nm_have_c11_static_assert"
 nm_feature_run=no
 nm_feature_h="#include <assert.h>"
-nm_feature_cflags=
-nm_feature_inc=
-nm_feature_ldflags=
-nm_feature_ldlibs=
 nm_feature_flags=
+nm_feature_inc=
+nm_feature_ldlibs=
 nm_feature_test="enum {N=5}; static_assert(N==5, \"N is not equal 5\");"
 . ${NM_HOME}auto/feature
 
