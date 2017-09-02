@@ -2,9 +2,11 @@
 nm_feature="endian"
 nm_feature_name="nm_have_little_endian"
 nm_feature_run=value
-nm_feature_incs="#include <stdio.h>"
-nm_feature_path=
-nm_feature_libs=
+nm_feature_h="#include <stdio.h>"
+nm_feature_cflags=
+nm_feature_inc=
+nm_feature_ldflags=
+nm_feature_ldlibs=
 nm_feature_test='int i=0x11223344;
                  char *p = (char *)&i;
             		 int le = (0x44 == *p);
@@ -15,12 +17,14 @@ nm_feature_test='int i=0x11223344;
 nm_feature="c11 type-generic expression"
 nm_feature_name="nm_have_generic_keyword"
 nm_feature_run=no
-nm_feature_incs="#include <math.h>
+nm_feature_h="#include <math.h>
 #define cbrt(x) _Generic((x), long double: cbrtl, \
                               default: cbrt, \
                               float: cbrtf)(x)"
-nm_feature_path=
-nm_feature_libs=
+nm_feature_cflags=
+nm_feature_inc=
+nm_feature_ldflags=
+nm_feature_ldlibs=
 nm_feature_test="long double x=cbrt(3.1415L);double y=cbrt(2.718);"
 . ${NM_HOME}auto/feature
 
@@ -28,9 +32,11 @@ nm_feature_test="long double x=cbrt(3.1415L);double y=cbrt(2.718);"
 nm_feature="c11 static assertion"
 nm_feature_name="nm_have_static_assert"
 nm_feature_run=no
-nm_feature_incs="#include <assert.h>"
-nm_feature_path=
-nm_feature_libs=
+nm_feature_h="#include <assert.h>"
+nm_feature_cflags=
+nm_feature_inc=
+nm_feature_ldflags=
+nm_feature_ldlibs=
 nm_feature_flags=
 nm_feature_test="enum {N=5}; static_assert(N==5, \"N is not equal 5\");"
 . ${NM_HOME}auto/feature
@@ -39,9 +45,11 @@ nm_feature_test="enum {N=5}; static_assert(N==5, \"N is not equal 5\");"
 nm_feature="c11 strcpy_s function"
 nm_feature_name="nm_have_strcpy_s_fn"
 nm_feature_run=no
-nm_feature_incs="#include <string.h>"
-nm_feature_path=
-nm_feature_libs=
+nm_feature_h="#include <string.h>"
+nm_feature_cflags=
+nm_feature_inc=
+nm_feature_ldflags=
+nm_feature_ldlibs=
 nm_feature_flags=
 nm_feature_test="char s[16]; strcpy_s(s,sizeof(s),\"hello strcpy_s\");"
 . ${NM_HOME}auto/feature
@@ -50,9 +58,10 @@ nm_feature_test="char s[16]; strcpy_s(s,sizeof(s),\"hello strcpy_s\");"
 nm_feature="c11 threads.h header file"
 nm_feature_name="nm_have_threads_h"
 nm_feature_run=no
-nm_feature_incs="#include <threads.h>"
-nm_feature_path=
-nm_feature_libs=
+nm_feature_h="#include <threads.h>"
+nm_feature_inc=
+nm_feature_ldflags=
+nm_feature_ldlibs=
 nm_feature_test=
 . ${NM_HOME}auto/feature
 
@@ -60,10 +69,11 @@ nm_feature_test=
 nm_feature="c99 variadic macro"
 nm_feature_name="nm_have_variadic_macro"
 nm_feature_run=yes
-nm_feature_incs="#include <stdio.h>
+nm_feature_h="#include <stdio.h>
 #define var(dummy, ...)  sprintf(__VA_ARGS__)"
-nm_feature_path=
-nm_feature_libs=
+nm_feature_inc=
+nm_feature_ldflags=
+nm_feature_ldlibs=
 nm_feature_test="char  buf[30]; buf[0] = '0';
                	 var(0, buf, \"%d\", 1);
         			   if (buf[0] != '1') return 1;"
@@ -73,9 +83,11 @@ nm_feature_test="char  buf[30]; buf[0] = '0';
 nm_feature="c99 stdint.h header file"
 nm_feature_name="nm_have_stdint_h"
 nm_feature_run=no
-nm_feature_incs="#include <stdint.h>"
-nm_feature_path=
-nm_feature_libs=
+nm_feature_h="#include <stdint.h>"
+nm_feature_cflags=
+nm_feature_inc=
+nm_feature_ldflags=
+nm_feature_ldlibs=
 nm_feature_test="int8_t c='X';"
 . ${NM_HOME}auto/feature
 
@@ -83,9 +95,10 @@ nm_feature_test="int8_t c='X';"
 nm_feature="c99 #pragma once"
 nm_feature_name="nm_pragma_once"
 nm_feature_run=no
-nm_feature_incs="#pragma once"
-nm_feature_path=
-nm_feature_libs=
+nm_feature_h="#pragma once"
+nm_feature_inc=
+nm_feature_ldflags=
+nm_feature_ldlibs=
 nm_feature_test=
 . ${NM_HOME}auto/feature
 
@@ -93,9 +106,11 @@ nm_feature_test=
 nm_feature="c99 stdbool.h header file"
 nm_feature_name="nm_have_stdbool_h"
 nm_feature_run=no
-nm_feature_incs="#include <stdbool.h>"
-nm_feature_path=
-nm_feature_libs=
+nm_feature_h="#include <stdbool.h>"
+nm_feature_cflags=
+nm_feature_inc=
+nm_feature_ldflags=
+nm_feature_ldlibs=
 nm_feature_test="bool t=true,f=false;"
 . ${NM_HOME}auto/feature
 
@@ -103,36 +118,42 @@ nm_feature_test="bool t=true,f=false;"
 nm_feature="c99 tgmath.h header file"
 nm_feature_name="nm_have_tgmath_h"
 nm_feature_run=no
-nm_feature_incs="#include <tgmath.h>"
-nm_feature_path=
-nm_feature_libs=
+nm_feature_h="#include <tgmath.h>"
+nm_feature_inc=
+nm_feature_ldflags=
+nm_feature_ldlibs=
 nm_feature_test="sqrt(1);sqrt(1.0f);sqrt(1.0);"
 . ${NM_HOME}auto/feature
 
 
-case "$CC_NAME" in
+
+case $CC_NAME in
 	clang)
 		;;
 	gcc)
 		nm_feature="$CC_NAME -Wl,-E|--export-dynamic"
 		nm_feature_name=
 		nm_feature_run=no
-		nm_feature_incs=
-		nm_feature_path=
-		nm_feature_libs=-Wl,-E
+		nm_feature_h=
+		nm_feature_cflags=
+		nm_feature_inc=
+		nm_feature_ldflags=-Wl,-E
+		nm_feature_ldlibs=
 		nm_feature_test=
 		. ${NM_HOME}auto/feature
 
 		if [ $nm_found = yes ]; then
-			LDFLAGS=${LDFLAGS:+$LDFLAGS}${nm_feature_libs:+ $nm_feature_libs}
+			flag=LDFLAGS op="+=" value=$nm_feature_ldflags . ${NM_HOME}auto/make_define
 		fi
 
 		nm_feature="gcc builtin atomic operations"
 		nm_feature_name=NM_HAVE_GCC_ATOMIC
 		nm_feature_run=yes
-		nm_feature_incs=
-		nm_feature_path=
-		nm_feature_libs=
+		nm_feature_h=
+		nm_feature_cflags=
+		nm_feature_inc=
+		nm_feature_ldflags=
+		nm_feature_ldlibs=
 		nm_feature_test="long  n = 0;
 									 if (!__sync_bool_compare_and_swap(&n, 0, 1))
 										 return 1;
@@ -146,9 +167,11 @@ case "$CC_NAME" in
 		nm_feature="gcc builtin 64 bit byteswap"
 		nm_feature_name="NM_HAVE_GCC_BSWAP64"
 		nm_feature_run=no
-		nm_feature_incs=
-		nm_feature_path=
-		nm_feature_libs=
+		nm_feature_h=
+		nm_feature_cflags=
+		nm_feature_inc=
+		nm_feature_ldflags=
+		nm_feature_ldlibs=
 		nm_feature_test="if (__builtin_bswap64(0)) return 1"
 		. ${NM_HOME}auto/feature
 
@@ -156,3 +179,28 @@ case "$CC_NAME" in
 	msvc)
 		;;
 esac
+
+case $NM_SYSTEM in
+	Darwin)
+		nm_feature="libuv"
+		nm_feature_name="nm_have_uv_h"
+		nm_feature_run=no
+		nm_feature_h="#include <uv.h>"
+		nm_feature_inc=-I/opt/local/include
+		nm_feature_ldflags=-L/opt/local/lib
+		nm_feature_ldlibs=-luv
+		nm_feature_test=
+		. ${NM_HOME}auto/feature
+	;;
+
+	Linux)
+	;;
+
+	WinNT)
+	;;
+
+	*)
+	;;
+esac
+
+
