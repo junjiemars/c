@@ -7,7 +7,7 @@
 #include <assert.h>
 
 
-#define _unused_(x) (void)(x)
+#define _unused_(x) ((void)(x))
 #define _sizeof_array_(a) sizeof((a))/sizeof((a)[0])
 #define _bool_(p) ((p) ? "true" : "false")
 

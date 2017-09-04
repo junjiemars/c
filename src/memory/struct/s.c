@@ -11,13 +11,13 @@ typedef struct {
 
 typedef struct {
 	char *name;
-	char suid[NM_PTR_LEN];
-	int32_t units;
+	char suid[8];
+	int units;
 } student_s;
 
 
 #define _VAL_ 0x11223344
-#define _GAP_ 4
+#define _GAP_ NM_PTR_LEN
 
 #if MSVC
 #pragma warning(disable : 4996) /* _CRT_SECURE_NO_WARNINGS */
@@ -62,15 +62,19 @@ complex_layout() {
 	// risky
 
 #ifdef RISKY
+
 	#ifdef MSVC
 		#pragma warning(disable : 4789) /* will be overrun */ 
-	#endif
+	#endif 
+
 	friends[5].units = 21;
-#endif
+
+#endif /* end of RISK */
 
 	strcpy(friends[1].suid, "1122334");
 	strcpy(friends->name, "Tiger Woods");
-	
+	strcpy((char*)&friends[0].units, (const char*)&friends[2].units);	
+	*(char***)&(((fraction_s*)&friends)[3].denominator) = &friends[0].name+1;
 }
 
 int 
