@@ -246,3 +246,5 @@ it should be better to write the expression as:
 * [The Ins and Outs of C Arrays](https://see.stanford.edu/materials/icsppcs107/07-Arrays-The-Full-Story.pdf)
 * [Arrays](http://stackoverflow.com/documentation/c/322/arrays#t=20170207121645271737)
 * [Do I cast the result of malloc](https://stackoverflow.com/questions/605845/do-i-cast-the-result-of-malloc)
+* [The Lost Art of C Structure Packing](http://www.catb.org/esr/structure-packing/)
+* [Structure padding and packing](https://stackoverflow.com/questions/4306186/structure-padding-and-packing)

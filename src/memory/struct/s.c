@@ -73,7 +73,13 @@ complex_layout() {
 
 	strcpy(friends[1].suid, "1122334");
 	strcpy(friends->name, "Tiger Woods");
+
+#ifdef CLANG
+	memcpy((char*)&friends[0].units, (const char*)&friends[2].units, strlen((const char*)&friends[2].units));
+#else
 	strcpy((char*)&friends[0].units, (const char*)&friends[2].units);	
+#endif
+
 	*(char***)&(((fraction_s*)&friends)[3].denominator) = &friends[0].name+1;
 }
 
