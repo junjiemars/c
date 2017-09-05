@@ -1,9 +1,11 @@
 
 # jni
 
-[ -z "$JAVAC" ] && flag=JAVAC value=javac . ${NM_HOME}auto/make_define
-[ -z "$JAVAH" ] && flag=JAVAH value=javah . ${NM_HOME}auto/make_define
-[ -z "$JAVA" ] && flag=JAVA value=java . ${NM_HOME}auto/make_define
+flag="# jni" op=":" value="-----------"  . ${NM_HOME}auto/make_define
+
+flag=JAVAC value=javac . ${NM_HOME}auto/make_define
+flag=JAVAH value=javah . ${NM_HOME}auto/make_define
+flag=JAVA  value=java  . ${NM_HOME}auto/make_define
 
 flag=jni_binout value=-o . ${NM_HOME}auto/make_define
 if [ "$NM_SYMBOL" == "YES" ]; then
