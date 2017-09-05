@@ -5,8 +5,8 @@ fibo_cflags := $(CFLAGS) $(INC) -I$(src_path)
 fibo_getopt_c :=
 
 ifeq ($(CC_NAME), msvc)
-	fibo_cflags += -I$(src_root)posix
-	fibo_getopt_c := $(src_root)posix/getopt.c
+	fibo_cflags += -I$(root)posix
+	fibo_getopt_c := $(root)posix/getopt.c
 endif
 
 fibo: $(fibo_binout)

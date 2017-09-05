@@ -5,7 +5,7 @@ memory_test: alloc_test
 
 memory_binout := $(bin_path)memory$(bin_ext)
 
-memory_cflags := $(CFLAGS) $(INC) -I$(src_root)utils
+memory_cflags := $(CFLAGS) $(INC) -I$(root)utils
 
 memory: $(memory_binout)
 memory_test: memory

@@ -8,7 +8,7 @@ error: $(error_binout)
 error_test: error
 	$(error_binout) /tmp/xyz
 
-error_cflags := $(CFLAGS) $(INC) -I$(src_root)utils
+error_cflags := $(CFLAGS) $(INC) -I$(root)utils
 
 $(error_binout): $(error_cppout)
 	$(LINK) $(LFLAGS) $^ $(bin_out)$@

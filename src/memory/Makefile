@@ -19,7 +19,8 @@ memory_test: 	alloc_test								\
 							generic										\
 							struct_test
 
-INC += -I$(src_path)
+src_root := $(memory_root)
+INC += -I$(src_root)
 
 # alloc
 alloc_binout := $(bin_path)alloc$(bin_ext)
@@ -28,7 +29,7 @@ alloc: $(alloc_binout)
 alloc_test: alloc
 	$(alloc_binout)
 
-$(alloc_binout): $(src_path)alloc/a.c
+$(alloc_binout): $(memory_root)alloc/a.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -39,7 +40,7 @@ array: $(array_binout)
 array_test: array
 	$(array_binout)
 
-$(array_binout): $(src_path)array/a.c
+$(array_binout): $(src_root)array/a.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -52,7 +53,7 @@ bit_test: bit
 
 bit_lflags += $(LFLAGS) $(INC)
 
-$(bit_binout): $(src_path)bit/b.c
+$(bit_binout): $(src_root)bit/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -67,7 +68,7 @@ byte_test: byte
 $(byte_binout): $(byte_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(byte_cppout): $(src_path)byte/b.c
+$(byte_cppout): $(src_root)byte/b.c
 	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
 
 
@@ -78,7 +79,7 @@ copy: $(copy_binout)
 copy_test: copy
 	$(copy_binout)
 
-$(copy_binout): $(src_path)copy/c.c
+$(copy_binout): $(src_root)copy/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -89,7 +90,7 @@ convert: $(convert_binout)
 convert_test: convert
 	$(convert_binout)
 
-$(convert_binout): $(src_path)convert/c.c
+$(convert_binout): $(src_root)convert/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -100,7 +101,7 @@ endian: $(endian_binout)
 endian_test: endian
 	$(endian_binout)
 
-$(endian_binout): $(src_path)endian/e.c
+$(endian_binout): $(src_root)endian/e.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -111,7 +112,7 @@ generic: $(generic_binout)
 generic_test: generic
 	$(generic_binout)
 
-$(generic_binout): $(src_path)generic/g.c
+$(generic_binout): $(src_root)generic/g.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -122,5 +123,5 @@ struct: $(struct_binout)
 struct_test: struct
 	$(struct_binout)
 
-$(struct_binout): $(src_path)struct/s.c
+$(struct_binout): $(src_root)struct/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

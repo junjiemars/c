@@ -2,7 +2,7 @@
 ffi: jni
 ffi_test: jni_test
 
-INC += -I$(src_path)
+INC += -I$(ffi_root)
 
 
 # jni
@@ -20,12 +20,12 @@ square_h := $(inc_path)square.h
 java2c_classout := $(bin_path)Java2c.class
 
 # square_libout does not need link with -ljvm
-$(square_libout): $(square_h) $(src_path)jni/square.c
-	$(CC) $(jni_cflags) $(jni_inc) $(src_path)jni/square.c $(bin_out)$@ 
+$(square_libout): $(square_h) $(ffi_root)jni/square.c
+	$(CC) $(jni_cflags) $(jni_inc) $(ffi_root)jni/square.c $(bin_out)$@ 
 
 $(square_h): $(java2c_classout)
 	$(JAVAH) $(jni_binout) $@ -cp $(jni_classpath) Java2c
 
-$(java2c_classout): $(src_path)jni/Java2c.java
+$(java2c_classout): $(ffi_root)jni/Java2c.java
 	$(JAVAC) $(jni_symbol) -d $(bin_path) $^
 

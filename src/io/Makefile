@@ -22,8 +22,8 @@ $(basic_binout): $(src_path)basic/b.c
 #io_c := $(src_path)file/sum.c
 #
 #ifeq ($(CC_NAME), msvc)
-#	io_inc += -I$(src_root)posix
-#	io_c += $(src_root)posix/getopt.c
+#	io_inc += -I$(root)posix
+#	io_c += $(root)posix/getopt.c
 #endif
 #
 #ifeq ($(CC_NAME), gcc)
