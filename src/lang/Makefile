@@ -25,8 +25,8 @@ lang_test:	assert_test					\
 						type_test						\
 						pointer_test
 
-src_root := $(lang_root)
-INC += -I$(src_root)
+
+INC += -I$(lang_root)
 
 
 
@@ -41,7 +41,7 @@ assert_test: assert
 		-$(assert_binout) 100
 		-$(assert_binout) 49
 
-$(assert_binout): $(src_root)assert/a.c
+$(assert_binout): $(lang_root)assert/a.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # enum 
@@ -55,14 +55,14 @@ enum_test: enum
 $(enum_binout): $(enum_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(enum_cppout): $(src_root)enum/e.c
+$(enum_cppout): $(lang_root)enum/e.c
 	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
 
 # env
 env_binout := $(bin_path)env$(bin_ext)
-env_cflags := $(CFLAGS) $(INC) -I$(src_root)env/
+env_cflags := $(CFLAGS) $(INC) -I$(lang_root)env/
 
-$(env_binout): $(src_root)env/env.c $(src_root)env/env.h
+$(env_binout): $(lang_root)env/env.c $(lang_root)env/env.h
 	$(CC) $(env_cflags) $< $(bin_out)$@ 
 
 env: $(env_binout)
@@ -79,7 +79,7 @@ fn: $(fn_binout)
 fn_test: fn
 	$(fn_binout)
 
-$(fn_binout): $(src_root)fn/f.c
+$(fn_binout): $(lang_root)fn/f.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # goto
@@ -89,7 +89,7 @@ goto: $(goto_binout)
 goto_test: goto
 	$(goto_binout)
 
-$(goto_binout): $(src_root)goto/g.c
+$(goto_binout): $(lang_root)goto/g.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # macro
@@ -100,12 +100,12 @@ macro: $(macro_binout)
 macro_test: macro
 	$(macro_binout)
 
-macro_cflags += $(cflags) $(inc) -i$(src_root)
+macro_cflags += $(cflags) $(inc) -i$(lang_root)
 
 $(macro_binout): $(macro_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(macro_cppout): $(src_root)macro/macro.c
+$(macro_cppout): $(lang_root)macro/macro.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # main
@@ -115,7 +115,7 @@ main: $(main_binout)
 main_test: main
 	$(main_binout) a bb ccc 
 
-$(main_binout): $(src_root)main/m.c
+$(main_binout): $(lang_root)main/m.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # scope
@@ -131,7 +131,7 @@ scope: $(scope_binout)
 scope_test: scope
 	$(scope_binout)
 
-$(scope_binout): $(src_root)scope/scope.c
+$(scope_binout): $(lang_root)scope/scope.c
 	$(CC) $(scope_cflags) $(INC) $^ $(bin_out)$@
 
 # sizeof
@@ -141,7 +141,7 @@ sizeof: $(sizeof_binout)
 sizeof_test: sizeof
 	$(sizeof_binout)
 
-$(sizeof_binout): $(src_root)sizeof/sizeof.c
+$(sizeof_binout): $(lang_root)sizeof/sizeof.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # stage
@@ -163,7 +163,7 @@ $(stage_objout): $(stage_asmout)
 $(stage_asmout): $(stage_cppout)
 	$(CAS) $(CFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
 
-$(stage_cppout): $(src_root)stage/s.c
+$(stage_cppout): $(lang_root)stage/s.c
 	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
 
 # type
@@ -173,7 +173,7 @@ type: $(type_binout)
 type_test: type
 	$(type_binout)
 
-$(type_binout): $(src_root)type/t.c
+$(type_binout): $(lang_root)type/t.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # pointer
@@ -183,5 +183,5 @@ pointer: $(pointer_binout)
 pointer_test: pointer
 	$(pointer_binout)
 
-$(pointer_binout): $(src_root)ptr/pp.c
+$(pointer_binout): $(lang_root)ptr/pp.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
