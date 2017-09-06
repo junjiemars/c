@@ -1,5 +1,13 @@
 # Memory
 
+
+* [Bits and Bytes](#bits-and-bytes)
+* [Basic Types](#basic-types)
+* [Pointer Basics](#pointer-basics)
+* [C Array](#c-array)
+* [References](#references)
+
+
 ## Bits and Bytes
 
 ### Bits
@@ -24,8 +32,40 @@ Most computers restrict half-word and word accesses to be **aligned**--
 a half-word must start at an even address and a word must start at an 
 address that is a multiple of 4.
 
+### Shift
 
-### Basic Types
+Logical shift always fill discarded bits with 0s while arithmetic shift fills it with
+0s only for left shift, but for right shift it copies the most significant bit (MSB)
+thereby preserving the sign of the operand.
+
+
+Left shift on unsigned integers. ```x << y```
+* shift bit-vector ```x``` left by ```y``` positions
+* throw away extra bits on left
+* fill with 0s on right
+
+Right shift on unsigned integers. ```x >> y```
+* shift bit-vector ```x``` right by ```y``` positions
+* throw away extra bits on right
+* fill with 0s on left
+
+
+Left shift, ```x << y```
+* equivalent to multiplying by ```2^y```
+* if resulting value fits, no 1s are lost
+
+Right shift, ```x >> y```
+* logical shift for unsigned values
+	* fill with 0s on left
+* arithmetic shift for signed values
+	* replicate most significant on left
+	* maintains sign of ```x```
+* equivalent to ```floor(2^y)```
+	* correct rounding towards 0 requires some care with signed numbers.
+	* ```(unsigned)x >> y | ~(~0u >> y)```
+
+
+## Basic Types
 
 * Character: The ASCII code defines 128 characters and a mapping of those
 characters onto the numbers 0..127. The letter 'A' is assigned 65 in the 
@@ -91,6 +131,37 @@ _interpreted_ as a number or as an address.
 patterns, most often using the same 4-byte native word size. The different
 bits in the instruction encoding indicate things such as what type of 
 instruction it is (load, store, multiply, etc) and registers involved.
+
+
+## Pointer Basics
+
+### Pointers and Pointees
+
+We use the term __pointee__ for the thing that the pointer points to,
+and we stick to the basic properties of the pointer/pointee relationship
+which are true in all languages.
+
+Allocating a pointer and allocating a pointee for it to point to are two
+separate steps. You can think of the pointer/pointee structure are operating
+at two levles. Both the levels must be setup for things to work.
+
+
+### Dereferencing
+
+The __dereference__ operation starts at the pointer and follows its arrow
+over to access its pointee. The goal may be to look at the pointee state
+or to change the state.
+
+The dereference operation on a pointer only works if the pointer has a 
+pointee -- the pointee must be allocated and the pointer must be set to 
+point to it.
+
+### Pointer Assignment
+
+__Pointer assignment__ between two pointers makes them point to the same
+pointee. Pointer assignment does not touch the pointees. It just changes
+one pointer to have the same refrence as another pointer. After pointer
+assignment, the two pointers are said to be "sharing" the pointee.
 
 
 ## C Array
@@ -241,6 +312,9 @@ it should be better to write the expression as:
 ### free
 
 ## References
+* [Logical shift](https://en.wikipedia.org/wiki/Logical_shift)
+* [Arithmetic shift](https://en.wikipedia.org/wiki/Arithmetic_shift)
+* [Are the shift operators arithmetic or logical in C?](https://stackoverflow.com/questions/7622/are-the-shift-operators-arithmetic-or-logical-in-c)
 * [Programming Paradigms](https://see.stanford.edu/Course/CS107)
 * [IEEE Standard 754 Floating Point Numbers](http://steve.hollasch.net/cgindex/coding/ieeefloat.html)
 * [The Ins and Outs of C Arrays](https://see.stanford.edu/materials/icsppcs107/07-Arrays-The-Full-Story.pdf)
