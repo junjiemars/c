@@ -14,6 +14,7 @@ geo_arout := $(lib_path)geo$(ar_ext)
 geo_binout := $(tmp_path)geo$(bin_ext)
 geo_objout := $(tmp_path)geo$(obj_ext)
 geo_libout := $(lib_path)libgeo$(lib_ext)
+geo_h := $(inc_path)geo.h
 
 geo_static: $(geo_arout)
 geo_static_test: $(geo_binout)
@@ -23,17 +24,18 @@ geo_shared: $(geo_libout)
 $(geo_binout): $(library_root)geo/test.c $(geo_arout)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(geo_arout): $(geo_objout)
-	$(AR) $(ARFLAGS) $(ar_out)$@ $^
-	cp $(library_root)geo/geo.h $(inc_path)
+$(geo_arout): $(geo_objout) $(geo_h)
+	$(AR) $(ARFLAGS) $(ar_out)$@ $<
 
 $(geo_objout): $(library_root)geo/geo.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(bin_out)$@ 
 
-$(geo_libout): $(library_root)geo/geo.c
-	$(CC) $(CFLAGS) -DSHARED=0 $(INC) $(nm_pic_opt) $(nm_shared_opt) $^ $(bin_out)$@
-	cp $(library_root)geo/geo.h $(inc_path)
+$(geo_libout): $(library_root)geo/geo.c $(geo_h)
+	$(CC) $(CFLAGS) -DSHARED=0 $(INC) $(nm_pic_opt) $(nm_shared_opt) $< $(bin_out)$@
 	
+$(geo_h): $(library_root)geo/geo.h
+	cp $< $(inc_path)
+
 
 ## math
 
