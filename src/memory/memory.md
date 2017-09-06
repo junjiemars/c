@@ -249,3 +249,4 @@ it should be better to write the expression as:
 * [The Lost Art of C Structure Packing](http://www.catb.org/esr/structure-packing/)
 * [Structure padding and packing](https://stackoverflow.com/questions/4306186/structure-padding-and-packing)
 * [How Endianness Effects Bitfield Packing](http://mjfrazer.org/mjfrazer/bitfields/)
+* [Pointer Basics](http://cslibrary.stanford.edu/106/)
