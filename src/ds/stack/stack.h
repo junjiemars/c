@@ -29,4 +29,4 @@ void stack_pop(stack *stack, void **val);
 
 #define stack_empty(s) (0 == (s) || 0 == (s)->_c || 0 == (s)->_c->size)
 
-#endif
+#endif /* end of _STACK_H_ */

@@ -26,6 +26,7 @@ $(list_binout): $(ds_root)list/test.c \
 # stack
 
 stack_binout := $(bin_path)stack$(bin_ext)
+stack_inc += $(INC) -I$(ds_root)list
 
 stack: $(stack_binout)
 stack_test: stack
@@ -36,5 +37,11 @@ stack_valgrind_test: stack
 
 $(stack_binout): $(ds_root)stack/test.c \
 								 $(ds_root)stack/stack.c \
-								 $(ds_root)list/list.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+								 $(ds_root)list/list.c \
+								 $(ds_root)stack/stack.h
+	$(CC) $(CFLAGS) $(stack_inc) \
+		$(ds_root)stack/test.c \
+		$(ds_root)stack/stack.c \
+		$(ds_root)list/list.c \
+		$(bin_out)$@
+

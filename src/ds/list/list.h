@@ -41,4 +41,4 @@ node* list_insert(list *lst, node *after, void *val, node_new new_node);
 
 #define _unused_(x) ((void)(x))
 
-#endif
+#endif /* end of _LIST_H_ */
