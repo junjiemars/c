@@ -75,7 +75,8 @@ complex_layout() {
 	strcpy(friends->name, "Tiger Woods");
 
 #ifdef CLANG
-	memcpy((char*)&friends[0].units, (const char*)&friends[2].units, strlen((const char*)&friends[2].units));
+	memcpy((char*)&friends[0].units, (const char*)&friends[2].units, 
+		strlen((const char*)&friends[2].units));
 #else
 	strcpy((char*)&friends[0].units, (const char*)&friends[2].units);	
 #endif
