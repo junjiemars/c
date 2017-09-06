@@ -66,10 +66,10 @@ $(math_static_binout): $(library_root)math/math1.c $(geo_arout)
 
 math_shared_binout := $(bin_path)math_shared$(bin_ext)
 
-math_shared: geo_shared $(math_shared_binout)
+math_shared: $(math_shared_binout)
 math_shared_test: math_shared
 	$(math_lib_path)=$(lib_path) $(math_shared_binout)
 
-$(math_shared_binout): $(library_root)math/math1.c 
-	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $(math_ldflags) $^ $(bin_out)$@ $(LDLIBS) 
+$(math_shared_binout): $(library_root)math/math1.c geo_shared
+	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $(math_ldflags) $< $(bin_out)$@ $(LDLIBS) 
 
