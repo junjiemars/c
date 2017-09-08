@@ -154,11 +154,18 @@ stage: $(stage_binout)
 stage_test: stage
 	$(stage_binout)
 
-$(stage_binout): $(stage_objout)
-	$(LINK) $^ $(bin_out)$@
+ifeq ($(CC_NAME), msvc)
+stage_ldflags := -link -FORCE:MULTIPLE
+ifeq ($(NM_VERBOSE), YES)
+stage_ldflags += -VERBOSE:LIB
+endif
+endif
 
-$(stage_objout): $(stage_asmout)
-	$(AS) $(ASFLAGS) $(nm_stage_c) $^ $(obj_out)$@
+$(stage_binout): $(stage_objout)
+	$(LINK) $^ $(bin_out)$@ $(stage_ldflags)
+
+$(stage_objout): $(stage_asmout) 
+	$(AS) $(ASFLAGS) $(obj_out)$@ $(nm_stage_c) $^
 
 $(stage_asmout): $(stage_cppout)
 	$(CAS) $(CFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
