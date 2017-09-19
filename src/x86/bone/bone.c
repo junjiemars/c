@@ -1,15 +1,15 @@
-#include <x86.h>
+#include <_x86_.h>
 
-int
+void
 foo() {
 	int a;
 	int b;
 	b = 1;
 	a = b + 2;	
-	return a;
+	_unused_(a);
 }
 
 int 
 main() {
-	return foo();
+	foo();
 }

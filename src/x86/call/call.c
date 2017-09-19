@@ -1,13 +1,7 @@
-#include <nore.h>
+#include <_x86_.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-/*
-#ifdef GCC
-#define __cdecl __attribute__((cdecl))
-#define __stdcall __attribute__((stdcall))
-#endif
-*/
 
 long
 factorial(long n, long acc) {
