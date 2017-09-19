@@ -34,7 +34,7 @@ $(retval_binout): $(x86_root)retval/retval.c
 
 
 # call
-call_binout := $(bin_path)call$(bin_ext)
+call_binout := $(bin_path)x86_call$(bin_ext)
 
 call: $(call_binout)
 call_test: call
