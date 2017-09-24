@@ -1,5 +1,7 @@
 # C Lessons
 
+[![build status](https://api.travis-ci.org/junjiemars/c.svg?branch=master)](https://api.travis-ci.org/junjiemars/c)
+
 It is not **C Lessons** at all :). I'd programming in C long long time ago, 
 sometimes I want to pick something up, but I cannot find the peice of code 
 somewhere or cannot run the code on a machine that been wrote in another machine. 
