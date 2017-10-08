@@ -1,22 +1,22 @@
 
 memory: alloc								\
-				array								\
-				bit		  						\
-				byte								\
-				copy								\
-				convert							\
-				endian							\
-				generic							\
+				array						\
+				bit		  					\
+				byte						\
+				copy						\
+				convert						\
+				endian						\
+				generic						\
 				struct
 
 memory_test: 	alloc_test								\
-							array_test								\
-							bit_test									\
-							byte_test	   							\
-							copy_test									\
-							convert_test							\
-							endian_test								\
-							generic										\
+							array_test					\
+							bit_test					\
+							byte_test	   				\
+							copy_test					\
+							convert_test				\
+							endian_test					\
+							generic						\
 							struct_test
 
 
