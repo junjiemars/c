@@ -1,10 +1,17 @@
 
+str: str1
+
+str_test: str_test
+
+
+INC += -I$(str_root)
+
+# str
 str_binout := $(bin_path)str$(bin_ext)
 
-str: $(str_binout)
-
-$(str_binout): $(src_path)str.c
-	$(CC) $(CFLAGS) $^ $(bin_out)$@
-
-str_test: str
+str1: $(str_binout)
+str_test: str1
 	$(str_binout)
+
+$(str_binout): $(str_root)str.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

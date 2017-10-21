@@ -1,3 +1,4 @@
+#include <_str_.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -47,7 +48,11 @@ void str_cmp() {
     printf("strcmp(%s, %s) = %i\n", l, r1, strcmp(l, r1));
 }
 
-int main(int argc, const char *argv[]) {
+int 
+main(int argc, const char *argv[]) {
+	_unused_(argc);
+	_unused_(argv);
+
     str_len();
     str_copy();
     str_cat();
