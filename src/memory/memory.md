@@ -58,7 +58,7 @@ Right shift, ```x >> y```
 * logical shift for unsigned values
 	* fill with 0s on left
 * arithmetic shift for signed values
-	* replicate most significant on left
+	* replicate most significant bit on left
 	* maintains sign of ```x```
 * equivalent to ```floor(2^y)```
 	* correct rounding towards 0 requires some care with signed numbers.
