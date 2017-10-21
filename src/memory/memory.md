@@ -5,6 +5,7 @@
 * [Basic Types](#basic-types)
 * [Pointer Basics](#pointer-basics)
 * [C Array](#c-array)
+* [Stack Implementation](#stack-implementation)
 * [References](#references)
 
 
@@ -310,6 +311,24 @@ it should be better to write the expression as:
 ```size_t```.
 
 ### free
+
+## Stack Implementation
+
+Writing a generic container in pure C is hard, and it's hard for two reasons:
+
+* The language doesn't offer any real support for _encapsulation_ or 
+_information hiding_. That means that the data structures expose information about
+_internal representation_ right there in the interface file for everyone to see
+and manipulate. The best we can do is document that the data structure should be
+treated as an abstract data type, and the client shouldn't directly manage 
+the fields. Instead, he should just rely on the fuctions provided to manage the 
+internals for him.
+
+* C doesn't allow data types to be passed as parameters. That means a generic 
+container needs to manually manage memory in terms of the client element size, not
+client data type. This translates to a bunch of _malloc_, _realloc_, _free_, 
+_memcpy_, and _memmove_ calls involving _void *s_.
+
 
 ## References
 * [Logical shift](https://en.wikipedia.org/wiki/Logical_shift)

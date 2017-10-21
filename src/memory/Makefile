@@ -7,6 +7,7 @@ memory: alloc						\
 				convert					\
 				endian					\
 				generic					\
+				stack						\
 				struct
 
 memory_test: 	alloc_test				\
@@ -16,7 +17,8 @@ memory_test: 	alloc_test				\
 							copy_test					\
 							convert_test			\
 							endian_test				\
-							generic						\
+							generic_test			\
+							stack_test				\
 							struct_test
 
 
@@ -113,6 +115,17 @@ generic_test: generic
 	$(generic_binout)
 
 $(generic_binout): $(memory_root)generic/g.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# stack
+stack_binout := $(bin_path)stack$(bin_ext)
+
+stack: $(stack_binout)
+stack_test: stack
+	$(stack_binout)
+
+$(stack_binout): $(memory_root)stack/c.c \
+								 $(memory_root)stack/stack.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
