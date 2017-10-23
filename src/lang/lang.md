@@ -20,6 +20,19 @@ bug in the program.
 Assertions are primarily intended for use during debugging and are generally
 turned off before code is deployed by defining the ```NDEBUG``` macro.
 
+```sh
+# erase assertions: simple way
+./configure --has-lang --with-std=c11 --without-debug
+# or via make
+make NDEBUG=1
+```
+
+An _assertions_ specifies that a program statisfies certain conditions at 
+particular points in its execution. There are three types of assertion:
+* Preconditions: specify conditions at the start of a function.
+* Postconditions: specify conditions at the end of a function.
+* Invaiants: specify conditions over a defined region of a program.
+
 
 ## Error 
 
@@ -42,7 +55,9 @@ Error handling is often separated into detection and recovery:
 * __detection__: discovering that an error has occurred.
 * __recovery__: determining how to handle the error.
 
+
 ### errno
+
 Before C11, ```errno``` was a global variable, with all the inherent disadvantages:
 * later system calls overwrote earlier system calls;
 * global map of values to error conditions (```ENOMEM```, ```ERANGE```, etc);
@@ -93,5 +108,6 @@ same type;
 * ```f``` for ```float```, ```2.718f```;
 
 ## References
+* [How to use assertions in C](https://ptolemy.eecs.berkeley.edu/~johnr/tutorials/assertions.html)
 * [C data types](https://en.wikipedia.org/wiki/C_data_types)
 * [Beyond errno Error Handling in C](https://resources.sei.cmu.edu/asset_files/Presentation/2016_017_101_484207.pdf)

@@ -15,9 +15,8 @@ main(int argc, const char* argv[]) {
 
 	assert((argc > 1) && "usage: one <int>");
 	
-	#if (NM_HAVE_STATIC_ASSERT)
+	#if (NM_HAVE_C11_STATIC_ASSERT)
 		static_assert(4 == sizeof(int), "sizeof(int) != 4 bytes");
-		printf("sizeof(int)=%lu\n", sizeof(int));
 	#endif
 
 	if (argc > 1) {
