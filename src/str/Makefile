@@ -1,17 +1,17 @@
 
-str: str1
+str: basic
 
-str_test: str_test
+str_test: basic_test
 
 
 INC += -I$(str_root)
 
 # str
-str_binout := $(bin_path)str$(bin_ext)
+basic_binout := $(bin_path)string-basic$(bin_ext)
 
-str1: $(str_binout)
-str_test: str1
-	$(str_binout)
+basic: $(basic_binout)
+basic_test: basic 
+	$(basic_binout)
 
-$(str_binout): $(str_root)str.c
+$(basic_binout): $(str_root)basic/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
