@@ -123,6 +123,8 @@ stack_binout := $(bin_path)stack$(bin_ext)
 stack: $(stack_binout)
 stack_test: stack
 	$(stack_binout)
+stack_valgrind_test: stack
+	valgrind --leak-check=full --track-origins=yes $(stack_binout)
 
 $(stack_binout): $(memory_root)stack/c.c \
 								 $(memory_root)stack/stack.c

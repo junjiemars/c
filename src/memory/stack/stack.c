@@ -7,7 +7,7 @@
 
 void 
 stack_new(stack *s, size_t elem_size) {
-	assert(elem_size > 0);
+	assert(0 < elem_size);
 
 	s->elem_size = elem_size;
 	s->log_length = 0;
