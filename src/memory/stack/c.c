@@ -72,12 +72,12 @@ str_dup_stack() {
 	printf("----------\n");
 
 	stack s;
-	char *ss[] = { "aa", "bb", "cc", "dd", "ee", "ff", 0 };
+	const char *ss[] = { "aa", "bb", "cc", "dd", "ee", "ff", 0 };
 	
 	printf("pushed:\t");
 
 	stack_new(&s, sizeof(char*), str_free);
-	char **p;	
+	const char **p;	
 	for (p = ss; *p != 0; p++) {
 		char *dup = strdup(*p);
 		stack_push(&s, &dup);
@@ -90,6 +90,7 @@ str_dup_stack() {
 	for (size_t i = 0; i < 3; i++) {
 		stack_pop(&s, p);
 		printf(" %s", *p);
+		str_free(p);
 	}	
 
 	putchar('\n');
