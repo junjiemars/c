@@ -1,6 +1,12 @@
 #include <_memory_.h>
 #include "stack.h"
 #include <stdio.h>
+
+#ifdef GCC
+/* strdup is not standard C function */
+#define __USE_SVID
+#endif
+
 #include <string.h>
 
 void 
