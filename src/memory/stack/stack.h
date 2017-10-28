@@ -10,12 +10,13 @@
 
 typedef struct {
 	void *elems;
+	void (*free_fn)(void *elem_addr);
 	size_t elem_size;
 	size_t log_length;
 	size_t alloc_length;
 } stack;
 
-void stack_new(stack *s, size_t elem_size);
+void stack_new(stack *s, size_t elem_size, void (*free_fn)(void*));
 void stack_dispose(stack *s);
 int stack_empty(const stack *s);
 void stack_push(stack *s, const void *elem_addr);

@@ -5,19 +5,27 @@
 
 
 void 
-stack_new(stack *s, size_t elem_size) {
+stack_new(stack *s, size_t elem_size, void (*free_fn)(void *)) {
 	assert(0 < elem_size);
 
 	s->elem_size = elem_size;
 	s->log_length = 0;
 	s->alloc_length = STACK_INIT_SIZE;
 	s->elems = malloc(elem_size * STACK_INIT_SIZE);
+	s->free_fn = free_fn;
 
 	assert(0 != s->elems);
 }
 
 void
 stack_dispose(stack *s) {
+	assert( 0 != s);
+
+	if (s->free_fn) {
+		for (size_t i=0; i < s->log_length; i++) {
+			s->free_fn((char*)s->elems + i * s->elem_size);
+		}
+	}
 	free(s->elems);
 }
 
