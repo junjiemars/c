@@ -3,7 +3,6 @@
 #include <assert.h>
 #include <string.h>
 
-#define ALLOCATION_SIZE 4u
 
 void 
 stack_new(stack *s, size_t elem_size) {
@@ -11,8 +10,8 @@ stack_new(stack *s, size_t elem_size) {
 
 	s->elem_size = elem_size;
 	s->log_length = 0;
-	s->alloc_length = ALLOCATION_SIZE;
-	s->elems = malloc(elem_size * ALLOCATION_SIZE);
+	s->alloc_length = STACK_INIT_SIZE;
+	s->elems = malloc(elem_size * STACK_INIT_SIZE);
 
 	assert(0 != s->elems);
 }
@@ -30,6 +29,7 @@ stack_empty(const stack *s) {
 void
 stack_push(stack *s, const void *elem_addr) {
 	void *dest;
+
 	if (s->alloc_length == s->log_length) {
 		s->alloc_length *= 2;
 		s->elems = realloc(s->elems, s->alloc_length * s->elem_size);

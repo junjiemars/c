@@ -4,6 +4,9 @@
 
 #include <stdlib.h>
 
+#ifndef STACK_INIT_SIZE
+#define STACK_INIT_SIZE 4ul
+#endif
 
 typedef struct {
 	void *elems;

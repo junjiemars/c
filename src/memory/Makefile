@@ -126,9 +126,12 @@ stack_test: stack
 stack_valgrind_test: stack
 	valgrind --leak-check=full --track-origins=yes $(stack_binout)
 
-$(stack_binout): $(memory_root)stack/c.c \
+$(stack_binout): $(memory_root)stack/stack.h \
+								 $(memory_root)stack/c.c \
 								 $(memory_root)stack/stack.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ \
+		$(memory_root)stack/stack.c \
+		$(memory_root)stack/c.c
 
 
 # struct
