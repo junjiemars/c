@@ -7,6 +7,7 @@ memory: alloc						\
 				convert					\
 				endian					\
 				generic					\
+				rotate					\
 				stack						\
 				struct
 
@@ -18,6 +19,7 @@ memory_test: 	alloc_test				\
 							convert_test			\
 							endian_test				\
 							generic_test			\
+							rotate_test				\
 							stack_test				\
 							struct_test
 
@@ -116,6 +118,22 @@ generic_test: generic
 
 $(generic_binout): $(memory_root)generic/g.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# rotate
+rotate_binout := $(bin_path)rotate$(bin_ext)
+
+rotate: $(rotate_binout)
+rotate_test: rotate
+	$(rotate_binout)
+
+$(rotate_binout): $(memory_root)rotate/rotate.h \
+									$(memory_root)rotate/rotate.c \
+									$(memory_root)rotate/r.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ \
+		$(memory_root)rotate/rotate.c \
+		$(memory_root)rotate/r.c
+
 
 # stack
 stack_binout := $(bin_path)stack$(bin_ext)
