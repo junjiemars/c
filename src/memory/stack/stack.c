@@ -3,18 +3,17 @@
 #include <assert.h>
 #include <string.h>
 
-
 void 
-stack_new(stack *s, size_t elem_size, void (*free_fn)(void *)) {
-	assert(0 < elem_size);
+stack_new(stack *s, size_t size, void (*free_fn)(void *)) {
+	assert(0 < size);
 
-	s->elem_size = elem_size;
-	s->log_length = 0;
-	s->alloc_length = STACK_INIT_SIZE;
-	s->elems = malloc(elem_size * STACK_INIT_SIZE);
+	s->size = size;
+	s->top = 0;
+	s->capacity = STACK_INIT_CAPACITY;
+	s->elements = malloc(size * STACK_INIT_CAPACITY);
 	s->free_fn = free_fn;
 
-	assert(0 != s->elems);
+	assert(0 != s->elements);
 }
 
 void
@@ -22,39 +21,39 @@ stack_dispose(stack *s) {
 	assert( 0 != s);
 
 	if (s->free_fn) {
-		for (size_t i=0; i < s->log_length; i++) {
-			s->free_fn((char*)s->elems + i * s->elem_size);
+		for (size_t i=0; i < s->top; i++) {
+			s->free_fn((char*)s->elements + i * s->size);
 		}
 	}
-	free(s->elems);
+	free(s->elements);
 }
 
 int
 stack_empty(const stack *s) {
-	return 0 == s->log_length;
+	return 0 == s->top;
 }
 
 void
-stack_push(stack *s, const void *elem_addr) {
+stack_push(stack *s, const void *e) {
 	void *dst;
 
-	if (s->alloc_length == s->log_length) {
-		s->alloc_length *= 2;
-		s->elems = realloc(s->elems, s->alloc_length * s->elem_size);
-		assert(0 != s->elems);
+	if (s->capacity == s->top) {
+		s->capacity *= 2;
+		s->elements = realloc(s->elements, s->capacity * s->size);
+		assert(0 != s->elements);
 	}
 	
-	dst = (char*)s->elems + s->log_length * s->elem_size;
-	memcpy(dst, elem_addr, s->elem_size);
-	s->log_length++;
+	dst = (char*)s->elements + s->top * s->size;
+	memcpy(dst, e, s->size);
+	s->top++;
 }
 
 void
-stack_pop(stack *s, void *elem_addr) {
+stack_pop(stack *s, void *e) {
 	const void *src;
 	assert(!stack_empty(s));
 
-	s->log_length--;
-	src = (const char*)s->elems + s->log_length * s->elem_size;
-	memcpy(elem_addr, src, s->elem_size);
+	s->top--;
+	src = (const char*)s->elements + s->top * s->size;
+	memcpy(e, src, s->size);
 }

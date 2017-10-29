@@ -8,6 +8,8 @@
 #endif
 
 #include <string.h>
+#include <stdlib.h>
+
 
 void 
 int_stack() {

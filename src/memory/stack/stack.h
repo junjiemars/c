@@ -2,24 +2,27 @@
 #ifndef _STACK_H_
 #define _STACK_H_
 
-#include <stdlib.h>
+/* include size_t declaration */
+#include <stddef.h>
 
-#ifndef STACK_INIT_SIZE
-#	define STACK_INIT_SIZE 4ul
+#ifndef STACK_INIT_CAPACITY
+#	define STACK_INIT_CAPACITY 4ul
 #endif
 
+
 typedef struct {
-	void *elems;
-	void (*free_fn)(void *elem_addr);
-	size_t elem_size;
-	size_t log_length;
-	size_t alloc_length;
+	void *elements;
+	void (*free_fn)(void *element);
+	size_t size;
+	size_t top;
+	size_t capacity;
 } stack;
 
-void stack_new(stack *s, size_t elem_size, void (*free_fn)(void*));
-void stack_dispose(stack *s);
-int stack_empty(const stack *s);
-void stack_push(stack *s, const void *elem_addr);
-void stack_pop(stack *s, void *elem_addr);
+void stack_new(stack *stack, size_t size, void (*free_fn)(void*));
+void stack_dispose(stack *stack);
+int stack_empty(const stack *stack);
+void stack_push(stack *stack, const void *element);
+void stack_pop(stack *stack, void *element);
+
 
 #endif /* end of _STACK_H_ */
