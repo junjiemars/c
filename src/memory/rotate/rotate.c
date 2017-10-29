@@ -10,7 +10,7 @@ rotate(void *front, void *middle, void *end) {
 	size_t front_size = (char*)middle - (char*)front;	
 	size_t middle_size = (char*)end - (char*)middle;
 
-	char buffer[front_size + 1];	
+	char buffer[front_size];	
 	memcpy(buffer, front, front_size);
 	memmove(front, middle, middle_size);
 	memcpy((char*)front + middle_size, buffer, front_size);	 
