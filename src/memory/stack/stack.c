@@ -36,7 +36,7 @@ stack_empty(const stack *s) {
 
 void
 stack_push(stack *s, const void *elem_addr) {
-	void *dest;
+	void *dst;
 
 	if (s->alloc_length == s->log_length) {
 		s->alloc_length *= 2;
@@ -44,8 +44,8 @@ stack_push(stack *s, const void *elem_addr) {
 		assert(0 != s->elems);
 	}
 	
-	dest = (char*)s->elems + s->log_length * s->elem_size;
-	memcpy(dest, elem_addr, s->elem_size);
+	dst = (char*)s->elems + s->log_length * s->elem_size;
+	memcpy(dst, elem_addr, s->elem_size);
 	s->log_length++;
 }
 

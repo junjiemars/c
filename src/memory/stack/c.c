@@ -2,9 +2,9 @@
 #include "stack.h"
 #include <stdio.h>
 
-#ifdef GCC
 /* strdup is not standard C function */
-#define __USE_SVID
+#ifdef GCC
+#	define __USE_SVID
 #endif
 
 #include <string.h>
@@ -93,7 +93,7 @@ str_dup_stack() {
 	putchar('\n');
 	printf("poped:\t");
 	
-	for (size_t i = 0; i < 3; i++) {
+	for (size_t i = 0; i < _sizeof_array_(ss)/2; i++) {
 		stack_pop(&s, p);
 		printf(" %s", *p);
 		str_free(p);
