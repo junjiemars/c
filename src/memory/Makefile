@@ -126,6 +126,8 @@ rotate_binout := $(bin_path)rotate$(bin_ext)
 rotate: $(rotate_binout)
 rotate_test: rotate
 	$(rotate_binout)
+rotate_valgrind_test: rotate
+	valgrind --leak-check=full --track-origins=yes $(rotate_binout)
 
 $(rotate_binout): $(memory_root)rotate/rotate.h \
 									$(memory_root)rotate/rotate.c \
