@@ -14,8 +14,8 @@ typedef struct {
 	void *elements;
 	void (*free_fn)(void *element);
 	size_t size;
-	size_t top;
 	size_t capacity;
+	size_t top;
 } stack;
 
 void stack_new(stack *stack, size_t size, void (*free_fn)(void*));
