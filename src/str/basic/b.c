@@ -54,9 +54,10 @@ void str_cat() {
 }
 
 void str_chr() {
-	 const char *s = "abc123";
-	 printf("strchr(s, %c) = %s\n", 'b', strchr(s, 'b'));
-	 printf("strchr(s, %c) = %s\n", '\0', strchr(s, '\0'));
+	 const char *s = "abc123ABC";
+	 printf("strchr(%s, '%c') = %s\n", s, 'b', strchr(s, 'b'));
+	 printf("strrchr(%s, '%c') = %s\n", s, 'B', strrchr(s, 'B'));
+	 printf("strchr(%s, '%c') = %s\n", s, '\0', strchr(s, '\0'));
 }
 
 
@@ -64,6 +65,8 @@ void str_cmp() {
 	const char *l = "abc123";
 	const char *r = "abc1234";
 	const char *r1 = "abc122";
+	
+	printf("strcmp(%s, %s) = %i\n", l, l, strcmp(l, l));
 	printf("strcmp(%s, %s) = %i\n", l, r, strcmp(l, r));
 	printf("strcmp(%s, %s) = %i\n", l, r1, strcmp(l, r1));
 }
@@ -81,15 +84,15 @@ main(int argc, const char *argv[]) {
 	printf("----------\n");
 	str_copy();
 
-	printf("\nSTRING LENGTH\n");
+	printf("\nSTRING CONCATENATE\n");
 	printf("----------\n");
 	str_cat();
 
-	printf("\nSTRING LENGTH\n");
+	printf("\nSTRING LOCATE CHAR\n");
 	printf("----------\n");
 	str_chr();
 
-	printf("\nSTRING LENGTH\n");
+	printf("\nSTRING COMPARE\n");
 	printf("----------\n");
 	str_cmp();
 }
