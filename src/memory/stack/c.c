@@ -4,7 +4,12 @@
 
 /* strdup is not standard C function */
 #ifdef GCC
-#	define __USE_SVID
+#	ifndef __USE_SVID
+#   define __USE_SVID
+# endif
+# ifndef __USE_XOPEN_EXTENDED
+#   define __USE_XOPEN_EXTENDED
+# endif 
 #endif
 
 #include <string.h>
