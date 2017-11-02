@@ -4,13 +4,13 @@
 #include <string.h>
 
 void 
-stack_new(stack *s, size_t size, void (*free_fn)(void *)) {
-	assert(0 < size);
+stack_new(stack *s, size_t width, void (*free_fn)(void *)) {
+	assert(0 < width);
 
-	s->size = size;
+	s->width = width;
 	s->top = 0;
 	s->capacity = STACK_INIT_CAPACITY;
-	s->elements = malloc(size * STACK_INIT_CAPACITY);
+	s->elements = malloc(width * STACK_INIT_CAPACITY);
 	s->free_fn = free_fn;
 
 	assert(0 != s->elements);
@@ -22,7 +22,7 @@ stack_dispose(stack *s) {
 
 	if (s->free_fn) {
 		for (size_t i=0; i < s->top; i++) {
-			s->free_fn((char*)s->elements + i * s->size);
+			s->free_fn((char*)s->elements + i * s->width);
 		}
 	}
 	free(s->elements);
@@ -39,12 +39,12 @@ stack_push(stack *s, const void *e) {
 
 	if (s->capacity == s->top) {
 		s->capacity *= 2;
-		s->elements = realloc(s->elements, s->capacity * s->size);
+		s->elements = realloc(s->elements, s->capacity * s->width);
 		assert(0 != s->elements);
 	}
 	
-	dst = (char*)s->elements + s->top * s->size;
-	memcpy(dst, e, s->size);
+	dst = (char*)s->elements + s->top * s->width;
+	memcpy(dst, e, s->width);
 	s->top++;
 }
 
@@ -54,6 +54,6 @@ stack_pop(stack *s, void *e) {
 	assert(!stack_empty(s));
 
 	s->top--;
-	src = (const char*)s->elements + s->top * s->size;
-	memcpy(e, src, s->size);
+	src = (const char*)s->elements + s->top * s->width;
+	memcpy(e, src, s->width);
 }

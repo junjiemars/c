@@ -13,12 +13,12 @@
 typedef struct {
 	void *elements;
 	void (*free_fn)(void *element);
-	size_t size;
+	size_t width;
 	size_t capacity;
 	size_t top;
 } stack;
 
-void stack_new(stack *stack, size_t size, void (*free_fn)(void*));
+void stack_new(stack *stack, size_t width, void (*free_fn)(void*));
 void stack_dispose(stack *stack);
 int stack_empty(const stack *stack);
 void stack_push(stack *stack, const void *element);
