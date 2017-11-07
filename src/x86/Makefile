@@ -2,12 +2,14 @@
 x86: 	bone                \
 			call                \
 			loop								\
-			retval
+			retval							\
+			type
 
 x86_test: bone_test       \
 					call_test				\
 					loop						\
-					retval_test
+					retval_test			\
+					type_test
 
 
 INC += -I$(x86_root)
@@ -52,6 +54,17 @@ loop_test: loop
 	$(loop_binout)
 
 $(loop_binout): $(x86_root)loop/loop.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# type convertion
+type_binout := $(bin_path)x86_type$(bin_ext)
+
+type: $(type_binout)
+type_test: type
+	$(type_binout)
+
+$(type_binout): $(x86_root)type/type.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
