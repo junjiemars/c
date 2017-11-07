@@ -1,7 +1,10 @@
 #include "rotate.h"
 #include <string.h>
-#include <stdlib.h>
 #include <assert.h>
+
+#ifndef NM_HAVE_VLA
+#include <stdlib.h>
+#endif
 
 void
 rotate(void *front, void *middle, void *end) {
