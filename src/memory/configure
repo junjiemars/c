@@ -45,3 +45,13 @@ nm_feature_test='printf("%zu", sizeof(size_t)*8);'
 . ${NM_HOME}auto/feature
 
 
+nm_feature="variable-length array"
+nm_feature_name="nm_have_vla"
+nm_feature_flags=
+nm_feature_run=value
+nm_feature_h=
+nm_feature_flags=
+nm_feature_inc=
+nm_feature_ldlibs=
+nm_feature_test='int size; int buffer[size];'
+. ${NM_HOME}auto/feature
