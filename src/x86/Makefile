@@ -1,5 +1,6 @@
 
 x86: 	bone                \
+			branch							\
 			call                \
 			convert							\
 			loop								\
@@ -7,6 +8,7 @@ x86: 	bone                \
 			var	
 
 x86_test: bone_test       \
+					branch_test			\
 					call_test				\
 					convert_test		\
 					loop						\
@@ -24,6 +26,16 @@ bone: $(bone_binout)
 bone_test: bone
 
 $(bone_binout): $(x86_root)bone/bone.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# branch
+branch_binout := $(bin_path)x86_branch$(bin_ext)
+
+branch: $(branch_binout)
+branch_test: branch
+
+$(branch_binout): $(x86_root)branch/branch.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
