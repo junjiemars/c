@@ -5,6 +5,7 @@ x86: 	bone                \
 			convert							\
 			loop								\
 			retval							\
+			structure						\
 			var	
 
 x86_test: bone_test       \
@@ -13,6 +14,7 @@ x86_test: bone_test       \
 					convert_test		\
 					loop						\
 					retval_test			\
+					structure_test	\
 					var_test
 
 
@@ -61,6 +63,17 @@ $(convert_binout): $(x86_root)convert/convert.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
+# loop 
+loop_binout := $(bin_path)x86_loop$(bin_ext)
+
+loop: $(loop_binout)
+loop_test: loop
+	$(loop_binout)
+
+$(loop_binout): $(x86_root)loop/loop.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 # retval
 retval_binout := $(bin_path)x86_retval$(bin_ext)
 
@@ -71,14 +84,13 @@ $(retval_binout): $(x86_root)retval/retval.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
-# loop 
-loop_binout := $(bin_path)x86_loop$(bin_ext)
+# structure
+structure_binout := $(bin_path)x86_structure$(bin_ext)
 
-loop: $(loop_binout)
-loop_test: loop
-	$(loop_binout)
+structure: $(structure_binout)
+structure_test: structure
 
-$(loop_binout): $(x86_root)loop/loop.c
+$(structure_binout): $(x86_root)structure/structure.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
