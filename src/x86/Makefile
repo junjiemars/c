@@ -1,15 +1,17 @@
 
 x86: 	bone                \
 			call                \
+			convert							\
 			loop								\
 			retval							\
-			type
+			var	
 
 x86_test: bone_test       \
 					call_test				\
+					convert_test		\
 					loop						\
 					retval_test			\
-					type_test
+					var_test
 
 
 INC += -I$(x86_root)
@@ -25,16 +27,6 @@ $(bone_binout): $(x86_root)bone/bone.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
-# retval
-retval_binout := $(bin_path)x86_retval$(bin_ext)
-
-retval: $(retval_binout)
-retval_test: retval
-
-$(retval_binout): $(x86_root)retval/retval.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-
 # call
 call_binout := $(bin_path)x86_call$(bin_ext)
 
@@ -43,6 +35,27 @@ call_test: call
 	$(call_binout) 1 2 3
 
 $(call_binout): $(x86_root)call/call.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# convert
+convert_binout := $(bin_path)x86_convert$(bin_ext)
+
+convert: $(convert_binout)
+convert_test: convert
+	$(convert_binout)
+
+$(convert_binout): $(x86_root)convert/convert.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# retval
+retval_binout := $(bin_path)x86_retval$(bin_ext)
+
+retval: $(retval_binout)
+retval_test: retval
+
+$(retval_binout): $(x86_root)retval/retval.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -57,14 +70,14 @@ $(loop_binout): $(x86_root)loop/loop.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
-# type convertion
-type_binout := $(bin_path)x86_type$(bin_ext)
+# variable
+var_binout := $(bin_path)x86_var$(bin_ext)
 
-type: $(type_binout)
-type_test: type
-	$(type_binout)
+var: $(var_binout)
+var_test: var 
+	$(var_binout)
 
-$(type_binout): $(x86_root)type/type.c
+$(var_binout): $(x86_root)var/var.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
