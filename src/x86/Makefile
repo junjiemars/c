@@ -1,5 +1,6 @@
 
-x86: 	bone                \
+x86: 	array								\
+			bone                \
 			branch							\
 			call                \
 			convert							\
@@ -8,7 +9,8 @@ x86: 	bone                \
 			structure						\
 			var	
 
-x86_test: bone_test       \
+x86_test: array_test			\
+					bone_test       \
 					branch_test			\
 					call_test				\
 					convert_test		\
@@ -19,6 +21,23 @@ x86_test: bone_test       \
 
 
 INC += -I$(x86_root)
+
+
+# array
+array_binout := $(bin_path)x86_array$(bin_ext)
+
+array: $(array_binout)
+array_test: array
+	$(array_binout)
+
+ifeq ($(CC_NAME), msvc)
+CFLAGS += -GS-
+else
+CFLAGS += -fno-stack-protector
+endif
+
+$(array_binout): $(x86_root)array/array.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # bone
