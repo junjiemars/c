@@ -1,4 +1,5 @@
 #include <_x86_.h>
+#include <stdio.h>
 
 struct binky {
 	int a;
@@ -19,5 +20,6 @@ main(int argc, const char *argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 
+	printf("sizeof(struct binky)=%lu\n", sizeof(struct binky));
 	structure();
 }
