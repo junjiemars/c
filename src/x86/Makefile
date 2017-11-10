@@ -30,10 +30,12 @@ array: $(array_binout)
 array_test: array
 	$(array_binout)
 
+ifdef RISKY
 ifeq ($(CC_NAME), msvc)
 CFLAGS += -GS-
 else
 CFLAGS += -fno-stack-protector
+endif
 endif
 
 $(array_binout): $(x86_root)array/array.c
