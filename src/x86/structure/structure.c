@@ -20,6 +20,6 @@ main(int argc, const char *argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 
-	printf("sizeof(struct binky)=%lu\n", sizeof(struct binky));
+	printf("sizeof(struct binky)=%zu\n", sizeof(struct binky));
 	structure();
 }

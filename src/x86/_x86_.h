@@ -8,8 +8,9 @@
 
 #ifdef MSVC
 #pragma warning(disable : 4996) /*_CRT_SECURE_NO_WARNINGS*/
-#pragma warning(disable : 4244)
-#pragma warning(disable : 4305)
+#pragma warning(disable : 4244) /* possiable loss of data */
+#pragma warning(disable : 4305) /* truncation from 'double' to 'float' */
+#pragma warning(disable : 4700) /* uninitialize local variable */
 #endif
 
 #ifdef GCC
