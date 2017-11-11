@@ -32,14 +32,14 @@ array_test: array
 
 ifdef RISKY
 ifeq ($(CC_NAME), msvc)
-CFLAGS += -GS-
+array_cflags := -GS-
 else
-CFLAGS += -fno-stack-protector
+array_cflags := -fno-stack-protector
 endif
 endif
 
 $(array_binout): $(x86_root)array/array.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(array_cflags) $(INC) $^ $(bin_out)$@
 
 
 # bone
