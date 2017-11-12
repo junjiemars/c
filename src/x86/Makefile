@@ -22,6 +22,18 @@ x86_test: array_test			\
 
 INC += -I$(x86_root)
 
+ifdef RISKY
+ifeq ($(CC_NAME), msvc)
+# struct pack 1
+CFLAGS += -Zp1
+# no stack protector
+CFLAGS += -GS-
+else
+CFLAGS += -fpack-struct=1
+CFLAGS += -fno-stack-protector
+endif
+endif
+
 
 # array
 array_binout := $(bin_path)x86_array$(bin_ext)
@@ -30,16 +42,8 @@ array: $(array_binout)
 array_test: array
 	$(array_binout)
 
-ifdef RISKY
-ifeq ($(CC_NAME), msvc)
-array_cflags := -GS-
-else
-array_cflags := -fno-stack-protector
-endif
-endif
-
 $(array_binout): $(x86_root)array/array.c
-	$(CC) $(CFLAGS) $(array_cflags) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # bone
