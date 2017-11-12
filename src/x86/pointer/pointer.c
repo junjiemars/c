@@ -2,9 +2,10 @@
 
 void
 dereference() {
-  int i = 0, *ptr;
+  int i;
+  int *ptr;
   ptr = &i;
-  *ptr = 120;
+  *ptr = 0x22;
 }
 
 void

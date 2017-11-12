@@ -25,16 +25,24 @@ x86_test: array_test			\
 INC += -I$(x86_root)
 
 ifdef RISKY
-NO_STACK_PADDING = 1
+NO_STRUCT_ALIGN = 1
+#NO_STACK_ALIGN = 1
 NO_STACK_PROTECTOR = 1
 NO_FRAME_POINTER = 1
 endif
 
-ifdef NO_STACK_PADDING
+ifdef NO_STRUCT_ALIGN
 ifeq ($(CC_NAME), msvc)
 CFLAGS += -Zp1
 else
 CFLAGS += -fpack-struct=1
+endif
+endif
+
+ifdef NO_STACK_ALIGN
+ifeq ($(CC_NAME), msvc)
+else
+CFLAGS += -mstack-alignment=1
 endif
 endif
 
