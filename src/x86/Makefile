@@ -1,4 +1,4 @@
-
+ 
 x86: 	array								\
 			bone                \
 			branch							\
@@ -23,15 +23,28 @@ x86_test: array_test			\
 INC += -I$(x86_root)
 
 ifdef RISKY
+NO_STACK_PADDING = 1
+NO_STACK_PROTECTOR = 1
+NO_FRAME_POINTER = 1
+endif
+
+ifdef NO_STACK_PADDING
 ifeq ($(CC_NAME), msvc)
-# struct pack 1
 CFLAGS += -Zp1
-# no stack protector
-CFLAGS += -GS-
 else
 CFLAGS += -fpack-struct=1
+endif
+endif
+
+ifdef NO_STACK_PROTECTOR
+ifeq ($(CC_NAME), msvc)
+CFLAGS += -GS-
+else
 CFLAGS += -fno-stack-protector
 endif
+endif
+
+ifdef NO_FRAME_POINTER
 endif
 
 
