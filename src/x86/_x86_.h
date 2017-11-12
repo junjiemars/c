@@ -19,4 +19,11 @@
 #endif
 
 
+struct binky {
+  int a;
+  char b, c, d, e;
+  short f;
+};
+
+
 #endif

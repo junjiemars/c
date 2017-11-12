@@ -5,6 +5,7 @@ x86: 	array								\
 			call                \
 			convert							\
 			loop								\
+			pointer 						\
 			retval							\
 			structure						\
 			var	
@@ -15,6 +16,7 @@ x86_test: array_test			\
 					call_test				\
 					convert_test		\
 					loop						\
+					pointer_test 		\
 					retval_test			\
 					structure_test	\
 					var_test
@@ -109,6 +111,17 @@ loop_test: loop
 	$(loop_binout)
 
 $(loop_binout): $(x86_root)loop/loop.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# pointer
+pointer_binout := $(bin_path)x86_pointer$(bin_ext)
+
+pointer: $(pointer_binout)
+pointer_test: pointer
+	$(pointer_binout)
+
+$(pointer_binout): $(x86_root)pointer/pointer.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

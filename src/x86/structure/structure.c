@@ -1,12 +1,6 @@
 #include <_x86_.h>
 #include <stdio.h>
 
-struct binky {
-	int a;
-	char b, c, d, e;
-	short f;
-};
-
 void
 structure() {
 	struct binky x;

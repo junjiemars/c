@@ -7,12 +7,6 @@ array() {
 	a[19] = 7;
 }
 
-struct binky {
-	int a;
-	char b, c, d, e;
-	short f;
-};
-
 void
 structure() {
 	int i;
