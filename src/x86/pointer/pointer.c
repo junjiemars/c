@@ -31,8 +31,8 @@ void structure() {
   struct binky **pp;
   p = &x;
   pp = &p;
-  p->f = 6;
-  (**pp).f = 7;
+  p->f = 0x0f;
+  (**pp).f = 0xff;
 }
 
 
