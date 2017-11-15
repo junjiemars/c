@@ -4,8 +4,9 @@
 void
 structure() {
 	struct binky x;
-	
-	x.e = 'A';
+	x.a = 'A';
+	x.e = 'E';
+	x.d = 'D';
 	x.f = x.a;
 }
 
