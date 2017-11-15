@@ -19,10 +19,10 @@ address() {
 
 void array() {
   int a[] = { 1,2,3,4,5,6,7,8,9, };
-  int *p;
-  p = a; 
-  *(p + 3) = 0x11;
-  a[3] = 0x22;
+  *(a + 3) = 0x33;
+  a[2] = 0x22;
+  *a = 0x00;
+  *(a + 8) = 0x88;
 }
 
 void structure() {
