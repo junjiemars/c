@@ -8,6 +8,7 @@ x86: 	array								\
 			pointer 						\
 			retval							\
 			structure						\
+			typecast						\
 			var	
 
 x86_test: array_test			\
@@ -19,6 +20,7 @@ x86_test: array_test			\
 					pointer_test 		\
 					retval_test			\
 					structure_test	\
+					typecast_test		\
 					var_test
 
 
@@ -150,6 +152,16 @@ structure: $(structure_binout)
 structure_test: structure
 
 $(structure_binout): $(x86_root)structure/structure.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# typecast
+typecast_binout := $(bin_path)x86_typecast$(bin_ext)
+
+typecast: $(typecast_binout)
+typecast_test: typecast
+
+$(typecast_binout): $(x86_root)typecast/typecast.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
