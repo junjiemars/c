@@ -32,6 +32,7 @@ NO_STRUCT_ALIGN = 1
 NO_STACK_PROTECTOR = 1
 NO_FRAME_POINTER = 1
 NO_INT_TO_POINTER_WARN = 1
+NO_POINTER_TO_INT_WARN = 1
 endif
 
 ifdef NO_STRUCT_ALIGN
@@ -64,6 +65,13 @@ ifdef NO_INT_TO_POINTER_WARN
 ifeq ($(CC_NANME), msvc)
 else
 CFLAGS += -Wno-int-to-pointer-cast
+endif
+endif
+
+ifdef NO_POINTER_TO_INT_WARN
+ifeq ($(CC_NAME), msvc)
+else
+CFLAGS += -Wno-pointer-to-int-cast
 endif
 endif
 

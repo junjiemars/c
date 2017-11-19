@@ -16,7 +16,7 @@ average() {
 }
 
 void
-pointer2() {
+pointer_to_int() {
   char c;
   int *p;
   p = (int *)&c;
@@ -38,6 +38,6 @@ main(int argc, const char *argv[]) {
 
   pointer1();
   average();
-  pointer2();
+  pointer_to_int();
   int_to_pointer();
 }
