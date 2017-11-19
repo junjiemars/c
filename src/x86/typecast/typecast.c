@@ -2,9 +2,10 @@
 
 
 void
-pointer1() {
+dereference() {
   int i;
-  int *p = &i;
+  int *p;
+  p = &i;
   *(char *)p = 'A';
 }
 
@@ -36,7 +37,7 @@ main(int argc, const char *argv[]) {
   _unused_(argc);
   _unused_(argv);
 
-  pointer1();
+  dereference();
   average();
   pointer_to_int();
   int_to_pointer();

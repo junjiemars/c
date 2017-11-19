@@ -11,7 +11,7 @@ case "$TRAVIS_OS_NAME" in
 			--has-x86 \
 			--has-ds \
 			--has-lang
-    make -j4
+    make -j4 RISKY=1
   ;;
 
   linux|*)
@@ -22,7 +22,7 @@ case "$TRAVIS_OS_NAME" in
 			--has-x86 \
 			--has-ds \
 			--has-lang
-    make -j4
+    make -j4 RISKY=1
   ;;
 esac
 
