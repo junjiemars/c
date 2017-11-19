@@ -9,7 +9,7 @@ for_loop() {
 	for (i = 0; i < 10; i++) {
 		ch = 'a';
 	}
-	i = 25;
+	i = 0x11223344;
 }
 
 void
@@ -22,7 +22,23 @@ while_loop() {
 		ch = 'a';
 		i++;
 	}
-	i =25;
+	i = 0x11223344;
+}
+
+void
+goto_loop() {
+	char ch;
+	int i;
+	i = 0;
+
+loop:
+	if (i < 10) {
+		ch = 'a';
+		i++;	
+		goto loop;
+	} 
+
+	i = 0x11223344;
 }
 
 int
@@ -32,5 +48,6 @@ main(int argc, char* argv[]) {
 
 	for_loop();
 	while_loop();
+	goto_loop();
 }
 
