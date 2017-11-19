@@ -24,12 +24,10 @@ pointer2() {
 }
 
 void 
-pointer3() {
-  struct binky x;
+int_to_pointer() {
   int i;
-  _unused_(x);
   i = 0x11223344;
-  ((struct binky *)&i)->b = 'A';
+  ((struct binky *)i)->b = 'A';
 }
 
 
@@ -41,5 +39,5 @@ main(int argc, const char *argv[]) {
   pointer1();
   average();
   pointer2();
-  pointer3();
+  int_to_pointer();
 }

@@ -31,6 +31,7 @@ NO_STRUCT_ALIGN = 1
 #NO_STACK_ALIGN = 1
 NO_STACK_PROTECTOR = 1
 NO_FRAME_POINTER = 1
+NO_INT_TO_POINTER_WARN = 1
 endif
 
 ifdef NO_STRUCT_ALIGN
@@ -59,6 +60,12 @@ endif
 ifdef NO_FRAME_POINTER
 endif
 
+ifdef NO_INT_TO_POINTER_WARN
+ifeq ($(CC_NANME), msvc)
+else
+CFLAGS += -Wno-int-to-pointer-cast
+endif
+endif
 
 
 # array
