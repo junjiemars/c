@@ -25,9 +25,11 @@ pointer2() {
 
 void 
 pointer3() {
+  struct binky x;
   int i;
+  _unused_(x);
   i = 0x11223344;
-  ((struct binky *)&i)->a = 'A';
+  ((struct binky *)&i)->b = 'A';
 }
 
 
