@@ -23,6 +23,13 @@ pointer2() {
   *p = (int)p;
 }
 
+void 
+pointer3() {
+  int i;
+  i = 0x11223344;
+  ((struct binky *)&i)->a = 'A';
+}
+
 
 int
 main(int argc, const char *argv[]) {
@@ -32,4 +39,5 @@ main(int argc, const char *argv[]) {
   pointer1();
   average();
   pointer2();
+  pointer3();
 }
