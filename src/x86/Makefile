@@ -45,6 +45,7 @@ endif
 
 ifdef NO_STACK_ALIGN
 ifeq ($(CC_NAME), msvc)
+CFLAGS += -F1
 else
 CFLAGS += -mstack-alignment=1
 endif
@@ -58,11 +59,13 @@ CFLAGS += -fno-stack-protector
 endif
 endif
 
-ifdef NO_FRAME_POINTER
-endif
+#ifdef NO_FRAME_POINTER
+#endif
 
 ifdef NO_INT_TO_POINTER_WARN
-ifeq ($(CC_NANME), msvc)
+ifeq ($(CC_NAME), msvc)
+#C4312: 'type cast': conversion from 'int' to 'binky *' of greater size
+CFLAGS += -wd4312
 else
 CFLAGS += -Wno-int-to-pointer-cast
 endif
@@ -70,6 +73,8 @@ endif
 
 ifdef NO_POINTER_TO_INT_WARN
 ifeq ($(CC_NAME), msvc)
+#C4311: 'type cast': pointer truncation from 'int *' to 'int'
+CFLAGS += -wd4311 
 else
 CFLAGS += -Wno-pointer-to-int-cast
 endif
