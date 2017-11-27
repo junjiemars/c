@@ -1,40 +1,25 @@
 #include <_x86_.h>
 #include <stdio.h>
-#include <stdlib.h>
 
-
-long
-factorial(long n, long acc) {
-	if (n < 1) {
-		return acc;
-	} else {
-		return factorial(n-1, n*acc);
-	}
+static int
+add(int one, int two) {
+	int sum;
+	sum = one + two;
+	return sum;
 }
 
-long
-add(long a, long b, long *c) {
-	long v = a + b + *c;
-	v = factorial(v, 1);
-	*c += 1;
-	return v;
+static void
+caller(void) {
+	int n = 0x22;
+	n = add(n, 0x1100);
+	n = 0x1f;
 }
 
 int
 main(int argc, char* argv[]) {
-	if (argc < 4) {
-		printf("input 2 integer oprands\n");
-		return -1;
-	}
+	_unused_(argc);
+	_unused_(argv);
 
-	long a, b, c, v;
-
-	a = atol(argv[1]);
-	b = atol(argv[2]);
-	c = atol(argv[3]);
-
-	v = add(a, b, &c);
-	
-	printf("cdecl=> add(%li,%li,%li)=%li\nc=%li\n", a, b, c, v, c);		
-	
+	add(0x1100, 0x22);
+	caller();	
 }
