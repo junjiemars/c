@@ -32,7 +32,7 @@ ptr_caller_p(void) {
 static void
 ptr_callee_pp(int **pp) {
 	*pp = malloc(sizeof(int*));
-	**pp += 0x1100;
+	**pp = 0x1133;
 }
 
 static void
