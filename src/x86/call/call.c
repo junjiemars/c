@@ -47,6 +47,19 @@ ptr_caller_pp(void) {
 	free(p);
 }
 
+static void
+struct_callee(struct fraction i) {
+	struct fraction local;
+	local.denominator = 0x33;
+	i.denominator = 0x44;
+}
+
+static void
+struct_caller(void) {
+	struct fraction actual = { 0x11, 0x22 };
+	struct_callee(actual);
+}
+
 int
 main(int argc, char* argv[]) {
 	_unused_(argc);
@@ -57,4 +70,6 @@ main(int argc, char* argv[]) {
 
 	ptr_caller_p();
 	ptr_caller_pp();
+
+	struct_caller();
 }

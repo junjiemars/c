@@ -25,5 +25,10 @@ struct binky {
   short f;
 };
 
+struct fraction {
+	int numerator;
+	int denominator;
+};
+
 
 #endif
