@@ -1,4 +1,5 @@
 #include <_x86_.h>
+#include <stdio.h>
 
 void
 dereference() {
@@ -40,6 +41,8 @@ int
 main(int argc, const char *argv[]) {
   _unused_(argc);
   _unused_(argv);
+
+	printf("sizeof(int)=%lu, sizeof(int*)=%lu\n", sizeof(int), sizeof(int*));
 
   dereference();
   address();
