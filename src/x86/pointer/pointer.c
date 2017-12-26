@@ -42,7 +42,7 @@ main(int argc, const char *argv[]) {
   _unused_(argc);
   _unused_(argv);
 
-	printf("sizeof(int)=%lu, sizeof(int*)=%lu\n", sizeof(int), sizeof(int*));
+	printf("sizeof(int)=%zu, sizeof(int*)=%zu\n", sizeof(int), sizeof(int*));
 
   dereference();
   address();
