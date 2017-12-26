@@ -4,9 +4,11 @@
 void
 structure() {
 	struct binky x;
-	x.a = 'A';
-	x.e = 'E';
+	x.a = 0x22334441;
+	x.b = 'B';
+	x.c = 'C';
 	x.d = 'D';
+	x.e = 'E';
 	x.f = x.a;
 }
 
