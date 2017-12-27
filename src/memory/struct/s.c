@@ -32,8 +32,8 @@ basic_layout() {
 	/* f.numerator == f.denominator) => true */
 
   gap[0] = 0x33;
-	((fraction_s*)&f.denominator)->denominator = gap[0];
-	/* gap[0] == *((int*)&f.denominator+1) => true */
+	((fraction_s*)&gap[1])->denominator = gap[0];
+	/* gap[0] == f.numerator => true */
 
   gap[0] = ((fraction_s*)&f.denominator)[0].numerator;
   /* gap[0] == f.denominator => true */
