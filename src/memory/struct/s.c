@@ -16,9 +16,6 @@ typedef struct {
 } student_s;
 
 
-#define _VAL_ 0x11223344
-#define _GAP_ NM_PTR_LEN
-
 #if MSVC
 #pragma warning(disable : 4996) /* _CRT_SECURE_NO_WARNINGS */
 #endif
@@ -26,42 +23,36 @@ typedef struct {
 
 void
 basic_layout() {
-	int head[_GAP_] = { 0 };
-	fraction_s f = { .numerator = 22, .denominator = 7 };
-	int tail[_GAP_] = { 0 };
+	fraction_s f = { .numerator = 0x1100, .denominator = 0x22 };
+	int gap[sizeof(fraction_s)/sizeof(int)];
 
-	_unused_(head);
-	_unused_(tail);
-
-	printf("\nBASIC LAYOUT\n");
-	printf("----------\n");
-
-  printf("&(struct) == &(struct->1st) \t\t=> %s (%p)\n", 
-		_bool_(&f == (fraction_s*)&f.numerator), &f);
-
-	// dangerous:
+	// risky:
 
 	((fraction_s*)&f.denominator)->numerator = f.numerator;
-	assert(f.numerator == f.denominator);
+	/* f.numerator == f.denominator) => true */
 
-	((fraction_s*)&f.denominator)->denominator = _VAL_;
-	assert(_VAL_ == *((int*)&f.denominator+1));
+  gap[0] = 0x33;
+	((fraction_s*)&f.denominator)->denominator = gap[0];
+	/* gap[0] == *((int*)&f.denominator+1) => true */
 
-	assert(f.denominator == ((fraction_s*)&f.denominator)[0].numerator);
+  gap[0] = ((fraction_s*)&f.denominator)[0].numerator;
+  /* gap[0] == f.denominator => true */
 }
 
 void 
 complex_layout() {
 	student_s friends[4];
-	int _tail_[_GAP_] = { 0 };
-
-	_unused_(_tail_);
 
 	friends[0].name = friends[2].suid + 3;
 
-	// risky
+	// risky:
 
 #ifdef RISKY
+
+  student_s gap;
+
+  _unused_(gap);
+
 
 	#ifdef MSVC
 		#pragma warning(disable : 4789) /* will be overrun */ 
@@ -69,25 +60,31 @@ complex_layout() {
 
 	friends[5].units = 21;
 
-#endif /* end of RISK */
+#endif /* end of RISKY */
 
 	strcpy(friends[1].suid, "1122334");
 	strcpy(friends->name, "Tiger Woods");
 
 #ifdef CLANG
-	memcpy((char*)&friends[0].units, (const char*)&friends[2].units, 
-		strlen((const char*)&friends[2].units));
+	memcpy((char*)&friends[0].units,
+         (const char*)&friends[2].units, 
+         strlen((const char*)&friends[2].units));
 #else
-	strcpy((char*)&friends[0].units, (const char*)&friends[2].units);	
+	strcpy((char*)&friends[0].units,
+         (const char*)&friends[2].units);	
 #endif
 
-	*(char***)&(((fraction_s*)&friends)[3].denominator) = &friends[0].name+1;
+	*(char***)&(((fraction_s*)&friends)[3].denominator)
+    = &friends[0].name+1;
 }
 
 int 
 main(int argc, char *argv[]) {
 	_unused_(argc);
 	_unused_(argv);
+
+	printf("sizeof(struct fraction_s)=%zu\n", sizeof(fraction_s));
+	printf("sizeof(struct student_s)=%zu\n", sizeof(student_s));
 
 	basic_layout();
 	complex_layout();
