@@ -26,8 +26,65 @@ memory_test: 	alloc_test				\
 
 INC += -I$(memory_root)
 
+ifdef RISKY
+NO_STRUCT_ALIGN = 1
+#NO_STACK_ALIGN = 1
+NO_STACK_PROTECTOR = 1
+NO_FRAME_POINTER = 1
+NO_INT_TO_POINTER_WARN = 1
+NO_POINTER_TO_INT_WARN = 1
+endif
+
+ifdef NO_STRUCT_ALIGN
+ifeq ($(CC_NAME), msvc)
+CFLAGS += -Zp1
+else
+CFLAGS += -fpack-struct=1
+endif
+endif
+
+ifdef NO_STACK_ALIGN
+ifeq ($(CC_NAME), msvc)
+CFLAGS += -F1
+else
+CFLAGS += -mstack-alignment=1
+endif
+endif
+
+ifdef NO_STACK_PROTECTOR
+ifeq ($(CC_NAME), msvc)
+CFLAGS += -GS-
+else
+CFLAGS += -fno-stack-protector
+endif
+endif
+
+#ifdef NO_FRAME_POINTER
+#endif
+
+ifdef NO_INT_TO_POINTER_WARN
+ifeq ($(CC_NAME), msvc)
+#C4312: 'type cast': conversion from 'int' to 'binky *' of greater size
+CFLAGS += -wd4312
+else
+CFLAGS += -Wno-int-to-pointer-cast
+endif
+endif
+
+ifdef NO_POINTER_TO_INT_WARN
+ifeq ($(CC_NAME), msvc)
+#C4311: 'type cast': pointer truncation from 'int *' to 'int'
+CFLAGS += -wd4311 
+else
+CFLAGS += -Wno-pointer-to-int-cast
+endif
+endif
+
+
+bin_prefix := memory_
+
 # alloc
-alloc_binout := $(bin_path)alloc$(bin_ext)
+alloc_binout := $(bin_path)$(bin_prefix)alloc$(bin_ext)
 
 alloc: $(alloc_binout)
 alloc_test: alloc
@@ -38,7 +95,7 @@ $(alloc_binout): $(memory_root)alloc/a.c
 
 
 # array
-array_binout := $(bin_path)array$(bin_ext)
+array_binout := $(bin_path)$(bin_prefix)array$(bin_ext)
 
 array: $(array_binout)
 array_test: array
@@ -49,7 +106,7 @@ $(array_binout): $(memory_root)array/a.c
 
 
 #bit
-bit_binout := $(bin_path)bit$(bin_ext)
+bit_binout := $(bin_path)$(bin_prefix)bit$(bin_ext)
 
 bit: $(bit_binout)
 bit_test: bit
@@ -62,7 +119,7 @@ $(bit_binout): $(memory_root)bit/b.c
 
 
 # byte
-byte_binout := $(bin_path)byte$(bin_ext)
+byte_binout := $(bin_path)$(bin_prefix)byte$(bin_ext)
 byte_cppout := $(tmp_path)byte$(cpp_ext)
 
 byte: $(byte_binout)
@@ -77,7 +134,7 @@ $(byte_cppout): $(memory_root)byte/b.c
 
 
 # copy
-copy_binout := $(bin_path)copy$(bin_ext)
+copy_binout := $(bin_path)$(bin_prefix)copy$(bin_ext)
 
 copy: $(copy_binout)
 copy_test: copy
@@ -88,7 +145,7 @@ $(copy_binout): $(memory_root)copy/c.c
 
 
 # convert
-convert_binout := $(bin_path)convert$(bin_ext)
+convert_binout := $(bin_path)$(bin_prefix)convert$(bin_ext)
 
 convert: $(convert_binout)
 convert_test: convert
@@ -99,7 +156,7 @@ $(convert_binout): $(memory_root)convert/c.c
 
 
 # endian
-endian_binout := $(bin_path)endian$(bin_ext)
+endian_binout := $(bin_path)$(bin_prefix)endian$(bin_ext)
 
 endian: $(endian_binout)
 endian_test: endian
@@ -110,7 +167,7 @@ $(endian_binout): $(memory_root)endian/e.c
 
 
 # generic
-generic_binout := $(bin_path)generic$(bin_ext)
+generic_binout := $(bin_path)$(bin_prefix)generic$(bin_ext)
 
 generic: $(generic_binout)
 generic_test: generic
@@ -121,7 +178,7 @@ $(generic_binout): $(memory_root)generic/g.c
 
 
 # rotate
-rotate_binout := $(bin_path)rotate$(bin_ext)
+rotate_binout := $(bin_path)$(bin_prefix)rotate$(bin_ext)
 
 rotate: $(rotate_binout)
 rotate_test: rotate
@@ -138,7 +195,7 @@ $(rotate_binout): $(memory_root)rotate/rotate.h \
 
 
 # stack
-stack_binout := $(bin_path)stack$(bin_ext)
+stack_binout := $(bin_path)$(bin_prefix)stack$(bin_ext)
 
 stack: $(stack_binout)
 stack_test: stack
@@ -155,7 +212,7 @@ $(stack_binout): $(memory_root)stack/stack.h \
 
 
 # struct
-struct_binout := $(bin_path)struct$(bin_ext)
+struct_binout := $(bin_path)$(bin_prefix)struct$(bin_ext)
 
 struct: $(struct_binout)
 struct_test: struct
