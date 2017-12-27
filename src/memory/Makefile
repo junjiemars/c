@@ -33,6 +33,7 @@ NO_STACK_PROTECTOR = 1
 NO_FRAME_POINTER = 1
 NO_INT_TO_POINTER_WARN = 1
 NO_POINTER_TO_INT_WARN = 1
+NO_FORTIFY_SOURCE = 1
 endif
 
 ifdef NO_STRUCT_ALIGN
@@ -77,6 +78,12 @@ ifeq ($(CC_NAME), msvc)
 CFLAGS += -wd4311 
 else
 CFLAGS += -Wno-pointer-to-int-cast
+endif
+endif
+
+ifdef NO_FORTIFY_SOURCE
+ifeq ($(CC_NAME), clang)
+CFLAGS += -D_USE_FORTIFY_LEVEL=0
 endif
 endif
 
