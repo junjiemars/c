@@ -83,7 +83,7 @@ endif
 
 ifdef NO_FORTIFY_SOURCE
 ifeq ($(CC_NAME), clang)
-CFLAGS += -D_USE_FORTIFY_LEVEL=0
+CFLAGS += -D_FORTIFY_SOURCE=0
 endif
 endif
 
