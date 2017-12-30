@@ -27,14 +27,17 @@ memory_test: 	alloc_test				\
 INC += -I$(memory_root)
 
 ifdef RISKY
-NO_STRUCT_ALIGN = 1
 #NO_STACK_ALIGN = 1
+NO_STRUCT_ALIGN = 1
 NO_STACK_PROTECTOR = 1
 NO_FRAME_POINTER = 1
 NO_INT_TO_POINTER_WARN = 1
 NO_POINTER_TO_INT_WARN = 1
 NO_FORTIFY_SOURCE = 1
 endif
+
+# ifdef NO_STRUCT_ALIGN
+# endif
 
 ifdef NO_STRUCT_ALIGN
 ifeq ($(CC_NAME), msvc)

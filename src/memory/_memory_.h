@@ -80,9 +80,15 @@ typedef union {
 #endif
 
 
+#ifdef RISKY
+
 #ifdef MSVC
 #pragma warning(disable : 4244)
 #pragma warning(disable : 4204) /* or Compiler Option: -Ze */
+#pragma warning(disable : 4789) /* will be overrun */
+#pragma warning(disable : 4996) /* _CRT_SECURE_NO_WARNINGS */
+#endif /* end of MSVC */
+
 #endif
 
 
