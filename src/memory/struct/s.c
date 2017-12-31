@@ -43,7 +43,7 @@ complex_layout() {
 
 	friends[0].name = friends[2].suid + 3;
 
-	strcpy(friends[1].suid, "aabbccdd");
+	strcpy(friends[1].suid, "aabbccd");
 	strcpy(friends->name, "Tiger Woods");
 
   friends[2].units = 0x11223344;
