@@ -27,6 +27,7 @@ x86_test: array_test			\
 INC += -I$(x86_root)
 
 ifdef RISKY
+CFLAGS += -DRISKY=$(RISKY)
 #NO_STACK_ALIGN = 1
 NO_STRUCT_ALIGN = 1
 NO_STACK_PROTECTOR = 1

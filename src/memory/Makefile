@@ -27,6 +27,7 @@ memory_test: 	alloc_test				\
 INC += -I$(memory_root)
 
 ifdef RISKY
+CFLAGS += -DRISKY=$(RISKY)
 #NO_STACK_ALIGN = 1
 NO_STRUCT_ALIGN = 1
 NO_STACK_PROTECTOR = 1

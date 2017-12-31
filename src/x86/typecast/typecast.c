@@ -22,7 +22,7 @@ pointer_to_int() {
   int *p;
   p = (int *)&c;
 
-#ifdef RISKY
+#if defined (RISKY) && (RISKY) > 0
 
   *p = (int)p;
 
@@ -34,8 +34,10 @@ int_to_pointer() {
   int i;
   i = 0x11223344;
 
-#ifdef RISKY
+#if defined (RISKY) && (RISKY) > 0
+
   ((struct binky *)i)->b = 'A';
+
 #endif
 }
 

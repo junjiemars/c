@@ -23,7 +23,7 @@ basic_layout() {
 	((fraction_s*)&f.denominator)->numerator = f.numerator;
 	/* f.numerator == f.denominator) => true */
 
-#ifdef RISKY
+#if defined (RISKY) && (RISKY) > 0
 	int gap[sizeof(fraction_s)/sizeof(int)];
 
 
@@ -57,7 +57,7 @@ complex_layout() {
          (const char*)&friends[2].units);
 #endif
 
-#ifdef RISKY
+#if defined (RISKY) && (RISKY) > 0
 
   student_s gap;
   _unused_(gap);
