@@ -28,7 +28,10 @@ void
 int_to_pointer() {
   int i;
   i = 0x11223344;
+
+#ifdef RISKY
   ((struct binky *)i)->b = 'A';
+#endif
 }
 
 
