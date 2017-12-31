@@ -21,7 +21,12 @@ pointer_to_int() {
   char c;
   int *p;
   p = (int *)&c;
+
+#ifdef RISKY
+
   *p = (int)p;
+
+#endif
 }
 
 void 
