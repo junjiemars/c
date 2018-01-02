@@ -101,9 +101,9 @@ str_dup_stack() {
 	printf("poped:\t");
 	
 	for (size_t i = 0; i < _sizeof_array_(ss)/2; i++) {
-		stack_pop(&s, p);
+		stack_pop(&s, (char **)p);
 		printf(" %s", *p);
-		str_free(p);
+		str_free((char **)p);
 	}	
 
 	putchar('\n');
