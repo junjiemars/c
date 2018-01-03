@@ -1,12 +1,9 @@
 
-library: geo math
-library_test: geo_test math_test
+library: geo math_static math_shared
+library_test: geo_test math_static_test math_shared_test
 
 
 INC += -I$(library_root)
-
-geo: geo_static 
-geo_test: geo_static_test 
 
 
 # geo
@@ -16,10 +13,9 @@ geo_objout := $(tmp_path)geo$(obj_ext)
 geo_libout := $(lib_path)libgeo$(lib_ext)
 geo_h := $(inc_path)geo.h
 
-geo_static: $(geo_arout)
-geo_static_test: $(geo_binout)
+geo: $(geo_binout)
+geo_test: geo
 	$(geo_binout)
-geo_shared: $(geo_libout)
 
 $(geo_binout): $(library_root)geo/test.c $(geo_arout)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -49,27 +45,21 @@ math_ldflags = $(LDFLAGS)
 LDLIBS = -lgeo
 endif
 
-
-math: math_static math_shared
-math_test: math_static_test math_shared_test
-
-
 math_static_binout := $(bin_path)math_static$(bin_ext)
+math_shared_binout := $(bin_path)math_shared$(bin_ext)
 
 math_static: $(math_static_binout)
+math_shared: $(math_shared_binout)
 math_static_test: math_static
 	$(math_static_binout)
+math_shared_test: math_shared
+	$(math_lib_path)=$(lib_path) $(math_shared_binout)
 
 $(math_static_binout): $(library_root)math/math1.c $(geo_arout)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-
-math_shared_binout := $(bin_path)math_shared$(bin_ext)
-
-math_shared: $(math_shared_binout)
-math_shared_test: math_shared
-	$(math_lib_path)=$(lib_path) $(math_shared_binout)
-
-$(math_shared_binout): $(library_root)math/math1.c geo_shared
+$(math_shared_binout): $(library_root)math/math1.c $(geo_libout)
 	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $(math_ldflags) $< $(bin_out)$@ $(LDLIBS) 
 
+
+.PHONY: geo geo_test math_static math_static_test math_shared math_shared_test
