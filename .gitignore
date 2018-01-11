@@ -68,3 +68,5 @@ nore/
 # darwin
 .DS_Store
 
+# materials
+.materials
