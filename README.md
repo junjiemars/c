@@ -29,9 +29,3 @@ $ make install
 $ ./configure --update --has-<what>
 ```
 
-
-## Vim Basic Skills 
-
-* show variable state: ```:verbose set <var>?```
-* open ```:clist``` after ```grep```: ```:copen```
-* switch to previous/next buffer: ```:bp``` and ```:bn```
