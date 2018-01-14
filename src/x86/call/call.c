@@ -61,6 +61,12 @@ struct_caller(void) {
 }
 
 int
+fact(int n) {
+  if (0 == n) return 1;
+  return n * fact(n-1);
+}
+
+int
 main(int argc, char* argv[]) {
 	_unused_(argc);
 	_unused_(argv);
@@ -72,4 +78,6 @@ main(int argc, char* argv[]) {
 	ptr_caller_pp();
 
 	struct_caller();
+
+  fact(3);
 }
