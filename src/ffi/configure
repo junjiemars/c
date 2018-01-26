@@ -13,9 +13,13 @@ if [ "$NM_SYMBOL" == "YES" ]; then
 fi
 
 nt_to_posix_path() {
-	echo "\\$1" | \
-		sed -e 's#^\\\([a-zA-Z]\):\\#\\\l\1\\#' | \
-		sed -e 's#\\#\/#g' 
+	if [[ $1 =~ ^[a-zA-Z]:\\.* ]]; then
+		echo "\\$1" | \
+			sed -e 's#^\\\([a-zA-Z]\):\\#\\\l\1\\#' | \
+			sed -e 's#\\#\/#g' 
+	else
+		echo "$1"
+	fi
 }
 
 case ${NM_SYSTEM} in
