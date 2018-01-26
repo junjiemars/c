@@ -20,7 +20,8 @@ main(int argc, const char *argv[]) {
 			HI_VERSION/* defined in nore.h */);
 	} else {
 		unsigned long ver = hi_version();
-		printf("Hello, world!, Version:%lu<=[major:%lu minor:%lu patch:%lu]\n"
+		printf("Hello, world!, Version:0x%lx(%lu)<=[major:%lu minor:%lu patch:%lu]\n"
+					, ver
 					, ver
 					, (ver >> 16) & 0xff
 					, (ver >> 8) & 0xff
