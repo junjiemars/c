@@ -1,27 +1,27 @@
 
-memory: alloc						\
-				array						\
-				bit		  				\
-				byte						\
-				copy						\
-				convert					\
-				endian					\
-				generic					\
-				rotate					\
-				stack						\
-				struct
+memory: memory_alloc									\
+				memory_array									\
+				memory_bit		  							\
+				memory_byte										\
+				memory_copy										\
+				memory_convert								\
+				memory_endian									\
+				memory_generic								\
+				memory_rotate									\
+				memory_stack									\
+				memory_struct
 
-memory_test: 	alloc_test				\
-							array_test				\
-							bit_test					\
-							byte_test	   			\
-							copy_test					\
-							convert_test			\
-							endian_test				\
-							generic_test			\
-							rotate_test				\
-							stack_test				\
-							struct_test
+memory_test: 	memory_alloc_test				\
+							memory_array_test				\
+							memory_bit_test					\
+							memory_byte_test	   		\
+							memory_copy_test				\
+							memory_convert_test			\
+							memory_endian_test			\
+							memory_generic_test			\
+							memory_rotate_test			\
+							memory_stack_test				\
+							memory_struct_test
 
 
 INC += -I$(memory_root)
@@ -97,8 +97,8 @@ bin_prefix := memory_
 # alloc
 alloc_binout := $(bin_path)$(bin_prefix)alloc$(bin_ext)
 
-alloc: $(alloc_binout)
-alloc_test: alloc
+memory_alloc: $(alloc_binout)
+memory_alloc_test: memory_alloc
 	$(alloc_binout)
 
 $(alloc_binout): $(memory_root)alloc/a.c
@@ -108,8 +108,8 @@ $(alloc_binout): $(memory_root)alloc/a.c
 # array
 array_binout := $(bin_path)$(bin_prefix)array$(bin_ext)
 
-array: $(array_binout)
-array_test: array
+memory_array: $(array_binout)
+memory_array_test: memory_array
 	$(array_binout)
 
 $(array_binout): $(memory_root)array/a.c
@@ -119,8 +119,8 @@ $(array_binout): $(memory_root)array/a.c
 #bit
 bit_binout := $(bin_path)$(bin_prefix)bit$(bin_ext)
 
-bit: $(bit_binout)
-bit_test: bit
+memory_bit: $(bit_binout)
+memory_bit_test: memory_bit
 	$(bit_binout)
 
 bit_lflags += $(LFLAGS) $(INC)
@@ -133,8 +133,8 @@ $(bit_binout): $(memory_root)bit/b.c
 byte_binout := $(bin_path)$(bin_prefix)byte$(bin_ext)
 byte_cppout := $(tmp_path)byte$(cpp_ext)
 
-byte: $(byte_binout)
-byte_test: byte
+memory_byte: $(byte_binout)
+memory_byte_test: memory_byte
 	$(byte_binout)
 
 $(byte_binout): $(byte_cppout)
@@ -147,8 +147,8 @@ $(byte_cppout): $(memory_root)byte/b.c
 # copy
 copy_binout := $(bin_path)$(bin_prefix)copy$(bin_ext)
 
-copy: $(copy_binout)
-copy_test: copy
+memory_copy: $(copy_binout)
+memory_copy_test: memory_copy
 	$(copy_binout)
 
 $(copy_binout): $(memory_root)copy/c.c
@@ -158,8 +158,8 @@ $(copy_binout): $(memory_root)copy/c.c
 # convert
 convert_binout := $(bin_path)$(bin_prefix)convert$(bin_ext)
 
-convert: $(convert_binout)
-convert_test: convert
+memory_convert: $(convert_binout)
+memory_convert_test: memory_convert
 	$(convert_binout)
 
 $(convert_binout): $(memory_root)convert/c.c
@@ -169,8 +169,8 @@ $(convert_binout): $(memory_root)convert/c.c
 # endian
 endian_binout := $(bin_path)$(bin_prefix)endian$(bin_ext)
 
-endian: $(endian_binout)
-endian_test: endian
+memory_endian: $(endian_binout)
+memory_endian_test: memory_endian
 	$(endian_binout)
 
 $(endian_binout): $(memory_root)endian/e.c
@@ -180,8 +180,8 @@ $(endian_binout): $(memory_root)endian/e.c
 # generic
 generic_binout := $(bin_path)$(bin_prefix)generic$(bin_ext)
 
-generic: $(generic_binout)
-generic_test: generic
+memory_generic: $(generic_binout)
+memory_generic_test: memory_generic
 	$(generic_binout)
 
 $(generic_binout): $(memory_root)generic/g.c
@@ -191,8 +191,8 @@ $(generic_binout): $(memory_root)generic/g.c
 # rotate
 rotate_binout := $(bin_path)$(bin_prefix)rotate$(bin_ext)
 
-rotate: $(rotate_binout)
-rotate_test: rotate
+memory_rotate: $(rotate_binout)
+memory_rotate_test: memory_rotate
 	$(rotate_binout)
 rotate_valgrind_test: rotate
 	valgrind --leak-check=full --track-origins=yes $(rotate_binout)
@@ -208,8 +208,8 @@ $(rotate_binout): $(memory_root)rotate/rotate.h \
 # stack
 stack_binout := $(bin_path)$(bin_prefix)stack$(bin_ext)
 
-stack: $(stack_binout)
-stack_test: stack
+memory_stack: $(stack_binout)
+memory_stack_test: memory_stack
 	$(stack_binout)
 stack_valgrind_test: stack
 	valgrind --leak-check=full --track-origins=yes $(stack_binout)
@@ -225,8 +225,8 @@ $(stack_binout): $(memory_root)stack/stack.h \
 # struct
 struct_binout := $(bin_path)$(bin_prefix)struct$(bin_ext)
 
-struct: $(struct_binout)
-struct_test: struct
+memory_struct: $(struct_binout)
+memory_struct_test: memory_struct
 	$(struct_binout)
 
 $(struct_binout): $(memory_root)struct/s.c

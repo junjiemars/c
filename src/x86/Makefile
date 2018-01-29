@@ -1,27 +1,27 @@
  
-x86: 	array								\
-			bone                \
-			branch							\
-			call                \
-			convert							\
-			loop								\
-			pointer 						\
-			retval							\
-			structure						\
-			typecast						\
-			var	
+x86: 	x86_array											\
+			x86_bone           			      \
+			x86_branch										\
+			x86_call          		        \
+			x86_convert								    \
+			x86_loop											\
+			x86_pointer 									\
+			x86_retval										\
+			x86_structure									\
+			x86_typecast									\
+			x86_var	
 
-x86_test: array_test			\
-					bone_test       \
-					branch_test			\
-					call_test				\
-					convert_test		\
-					loop						\
-					pointer_test 		\
-					retval_test			\
-					structure_test	\
-					typecast_test		\
-					var_test
+x86_test: x86_array_test						\
+					x86_bone_test       			\
+					x86_branch_test						\
+					x86_call_test							\
+					x86_convert_test					\
+					x86_loop									\
+					x86_pointer_test 					\
+					x86_retval_test						\
+					x86_structure_test				\
+					x86_typecast_test					\
+					x86_var_test
 
 
 INC += -I$(x86_root)
@@ -85,8 +85,8 @@ endif
 # array
 array_binout := $(bin_path)x86_array$(bin_ext)
 
-array: $(array_binout)
-array_test: array
+x86_array: $(array_binout)
+x86_array_test: x86_array
 	$(array_binout)
 
 $(array_binout): $(x86_root)array/array.c
@@ -96,8 +96,8 @@ $(array_binout): $(x86_root)array/array.c
 # bone
 bone_binout := $(bin_path)x86_bone$(bin_ext)
 
-bone: $(bone_binout)
-bone_test: bone
+x86_bone: $(bone_binout)
+x86_bone_test: x86_bone
 
 $(bone_binout): $(x86_root)bone/bone.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -106,8 +106,8 @@ $(bone_binout): $(x86_root)bone/bone.c
 # branch
 branch_binout := $(bin_path)x86_branch$(bin_ext)
 
-branch: $(branch_binout)
-branch_test: branch
+x86_branch: $(branch_binout)
+x86_branch_test: x86_branch
 
 $(branch_binout): $(x86_root)branch/branch.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -116,8 +116,8 @@ $(branch_binout): $(x86_root)branch/branch.c
 # call
 call_binout := $(bin_path)x86_call$(bin_ext)
 
-call: $(call_binout)
-call_test: call
+x86_call: $(call_binout)
+x86_call_test: x86_call
 	$(call_binout) 1 2 3
 
 $(call_binout): $(x86_root)call/call.c
@@ -127,8 +127,8 @@ $(call_binout): $(x86_root)call/call.c
 # convert
 convert_binout := $(bin_path)x86_convert$(bin_ext)
 
-convert: $(convert_binout)
-convert_test: convert
+x86_convert: $(convert_binout)
+x86_convert_test: x86_convert
 	$(convert_binout)
 
 $(convert_binout): $(x86_root)convert/convert.c
@@ -138,8 +138,8 @@ $(convert_binout): $(x86_root)convert/convert.c
 # loop 
 loop_binout := $(bin_path)x86_loop$(bin_ext)
 
-loop: $(loop_binout)
-loop_test: loop
+x86_loop: $(loop_binout)
+x86_loop_test: x86_loop
 	$(loop_binout)
 
 $(loop_binout): $(x86_root)loop/loop.c
@@ -149,8 +149,8 @@ $(loop_binout): $(x86_root)loop/loop.c
 # pointer
 pointer_binout := $(bin_path)x86_pointer$(bin_ext)
 
-pointer: $(pointer_binout)
-pointer_test: pointer
+x86_pointer: $(pointer_binout)
+x86_pointer_test: x86_pointer
 	$(pointer_binout)
 
 $(pointer_binout): $(x86_root)pointer/pointer.c
@@ -160,8 +160,8 @@ $(pointer_binout): $(x86_root)pointer/pointer.c
 # retval
 retval_binout := $(bin_path)x86_retval$(bin_ext)
 
-retval: $(retval_binout)
-retval_test: retval
+x86_retval: $(retval_binout)
+x86_retval_test: x86_retval
 
 $(retval_binout): $(x86_root)retval/retval.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -170,8 +170,8 @@ $(retval_binout): $(x86_root)retval/retval.c
 # structure
 structure_binout := $(bin_path)x86_structure$(bin_ext)
 
-structure: $(structure_binout)
-structure_test: structure
+x86_structure: $(structure_binout)
+x86_structure_test: x86_structure
 
 $(structure_binout): $(x86_root)structure/structure.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -180,8 +180,8 @@ $(structure_binout): $(x86_root)structure/structure.c
 # typecast
 typecast_binout := $(bin_path)x86_typecast$(bin_ext)
 
-typecast: $(typecast_binout)
-typecast_test: typecast
+x86_typecast: $(typecast_binout)
+x86_typecast_test: x86_typecast
 
 $(typecast_binout): $(x86_root)typecast/typecast.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -190,8 +190,8 @@ $(typecast_binout): $(x86_root)typecast/typecast.c
 # variable
 var_binout := $(bin_path)x86_var$(bin_ext)
 
-var: $(var_binout)
-var_test: var 
+x86_var: $(var_binout)
+x86_var_test: x86_var 
 	$(var_binout)
 
 $(var_binout): $(x86_root)var/var.c
