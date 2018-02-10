@@ -42,7 +42,7 @@ LDLIBS = $(lib_path)libgeo$(ar_ext)
 else
 math_lib_path := LD_LIBRARY_PATH
 math_ldflags = $(LDFLAGS)
-LDLIBS = -lgeo
+LDLIBS = -lgeo -lm
 endif
 
 math_static_binout := $(bin_path)math_static$(bin_ext)
