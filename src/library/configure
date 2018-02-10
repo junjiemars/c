@@ -50,15 +50,16 @@ case $NM_SYSTEM in
 	  ;;
 
 	Linux)
-		nm_feature="link with math lib"
+		nm_feature="math lib"
 		nm_feature_name="nm_have_math_lib"
-		nm_feature_run=no
+		nm_feature_run=yes
 		nm_feature_h="#include <math.h>"
 		nm_feature_flags=
 		nm_feature_inc=
 		nm_feature_ldlibs=-lm
 		nm_feature_test='int x = round(2.5);
 										 return (2 == x);'
+		. ${NM_HOME}auto/feature
 
 		if [ yes = $nm_found ]; then
 			flag=LDLIBS op="+=" value=$nm_feature_ldlibs . ${NM_HOME}auto/make_define
