@@ -57,7 +57,8 @@ case $NM_SYSTEM in
 		nm_feature_flags=
 		nm_feature_inc=
 		nm_feature_ldlibs=-lm
-		nm_feature_test='int x=round(2.5);'
+		nm_feature_test='int x = round(2.5);
+										 return (2 == x);'
 
 		if [ yes = $nm_found ]; then
 			flag=LDLIBS op="+=" value=$nm_feature_ldlibs . ${NM_HOME}auto/make_define
