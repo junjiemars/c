@@ -59,7 +59,7 @@ $(math_static_binout): $(library_root)math/math1.c $(geo_arout)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(LDLIBS)
 
 $(math_shared_binout): $(library_root)math/math1.c $(geo_libout)
-	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $(math_ldflags) $< $(bin_out)$@ $(ld_geo_lib) 
+	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $(math_ldflags) $< $(bin_out)$@ $(LDLIBS) $(ld_geo_lib) 
 
 
 .PHONY: geo geo_test math_static math_static_test math_shared math_shared_test
