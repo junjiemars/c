@@ -1,3 +1,4 @@
+# ./configure --without-debug --has-lang
 
 lang:	assert				\
 			enum					\
@@ -28,11 +29,9 @@ lang_test:	assert_test					\
 
 INC += -I$(lang_root)
 
-
-
 # assert at runtime
 # static_assert at compile time
-# ./configure --without-debug --has-lang
+
 assert_binout := $(bin_path)assert$(bin_ext)
 
 assert: $(assert_binout)

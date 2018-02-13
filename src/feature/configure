@@ -1,68 +1,93 @@
 
-nm_feature="endian"
-nm_feature_name="nm_have_little_endian"
-nm_feature_run=value
-nm_feature_h="#include <stdio.h>"
-nm_feature_flags=
-nm_feature_inc=
-nm_feature_ldlibs=
-nm_feature_test='int i=0x11223344;
-                 char *p = (char *)&i;
-            		 int le = (0x44 == *p);
-                 printf("%d", le);'
-. ${NM_HOME}auto/feature
+echo " # view https://en.wikipedia.org/wiki/C_standard_library"
+
+echo " + checking C99 header files ..."
+nm_include="complex.h" . /opt/apps/nore/auto/include
+nm_include="fenv.h" . /opt/apps/nore/auto/include
+nm_include="inttypes.h" . /opt/apps/nore/auto/include
+nm_include="stdint.h" . /opt/apps/nore/auto/include
+nm_include="tgmath.h" . /opt/apps/nore/auto/include
+
+echo " + checking C11 header files ..."
+nm_include="stdalign.h" . /opt/apps/nore/auto/include
+nm_include="stdatomic.h" . /opt/apps/nore/auto/include
+nm_include="stdnoreturn.h" . /opt/apps/nore/auto/include
+nm_include="threads.h" . /opt/apps/nore/auto/include
+nm_include="uchar.h" . /opt/apps/nore/auto/include
+
+echo " + checking NA1 header files ..."
+nm_include="iso646.h" . /opt/apps/nore/auto/include
+nm_include="wchar.h" . /opt/apps/nore/auto/include
+nm_include="wctype.h" . /opt/apps/nore/auto/include
+
+echo " + checking nonstandard posix header files ..."
+nm_include="unistd.h" . /opt/apps/nore/auto/include
+nm_include="signal.h" . /opt/apps/nore/auto/include
 
 
-nm_feature="c11 type-generic expression"
-nm_feature_name="nm_have_generic_keyword"
+nm_feature="C99 manipulating complex numbers"
+nm_feature_name="nm_have_complex_h"
 nm_feature_run=no
-nm_feature_h="#include <math.h>
-#define cbrt(x) _Generic((x), long double: cbrtl, \
-                              default: cbrt, \
-                              float: cbrtf)(x)"
+nm_feature_h="#include <complex.h>"
 nm_feature_flags=
 nm_feature_inc=
 nm_feature_ldlibs=
-nm_feature_test="long double x=cbrt(3.1415L);double y=cbrt(2.718);"
+nm_feature_test='double d = cabs(1.0 + 1.0*I);'
 . ${NM_HOME}auto/feature
 
-
-nm_feature="c11 static assertion"
-nm_feature_name="nm_have_static_assert"
+nm_feature="C99 controlling floating-point environment"
+nm_feature_name="nm_have_fenv_h"
 nm_feature_run=no
-nm_feature_h="#include <assert.h>"
+nm_feature_h="#include <fenv.h>"
 nm_feature_flags=
 nm_feature_inc=
 nm_feature_ldlibs=
-nm_feature_flags=
-nm_feature_test="enum {N=5}; static_assert(N==5, \"N is not equal 5\");"
+nm_feature_test='fetestexcept(FE_DIVBYZERO);'
 . ${NM_HOME}auto/feature
 
-
-nm_feature="c11 strcpy_s function"
-nm_feature_name="nm_have_strcpy_s_fn"
+nm_feature="C99 defines exact width integer types"
+nm_feature_name="nm_have_inttypes_h"
 nm_feature_run=no
-nm_feature_h="#include <string.h>"
+nm_feature_h='#include <inttypes.h>
+#include <stdio.h>'
 nm_feature_flags=
 nm_feature_inc=
 nm_feature_ldlibs=
-nm_feature_flags=
-nm_feature_test="char s[16]; strcpy_s(s,sizeof(s),\"hello strcpy_s\");"
+nm_feature_test='printf("%"PRIu32, 1u);'
 . ${NM_HOME}auto/feature
 
-
-nm_feature="c11 threads.h header file"
-nm_feature_name="nm_have_threads_h"
+nm_feature="C99 defines a boolean data type"
+nm_feature_name="nm_have_stdbool_h"
 nm_feature_run=no
-nm_feature_h="#include <threads.h>"
+nm_feature_h="#include <stdbool.h>"
 nm_feature_flags=
 nm_feature_inc=
 nm_feature_ldlibs=
-nm_feature_test=
+nm_feature_test='bool a = true, b = false;
+                 return (a || b);'
 . ${NM_HOME}auto/feature
 
+nm_feature="C99 defines exact width integer types "
+nm_feature_name="nm_have_stdint_h"
+nm_feature_run=no
+nm_feature_h="#include <stdint.h>"
+nm_feature_flags=
+nm_feature_inc=
+nm_feature_ldlibs=
+nm_feature_test='uint8_t x = 1;'
+. ${NM_HOME}auto/feature
 
-nm_feature="c99 variadic macro"
+nm_feature="C99 type-generic mathematical functions"
+nm_feature_name="nm_have_tgmath_h"
+nm_feature_run=no
+nm_feature_h="#include <tgmath.h>"
+nm_feature_flags=
+nm_feature_inc=
+nm_feature_ldlibs=
+nm_feature_test="sqrt(1);sqrt(1.0f);sqrt(1.0);"
+. ${NM_HOME}auto/feature
+
+nm_feature="C99 variadic macro"
 nm_feature_name="nm_have_variadic_macro"
 nm_feature_run=yes
 nm_feature_h="#include <stdio.h>
@@ -75,19 +100,7 @@ nm_feature_test="char  buf[30]; buf[0] = '0';
         			   if (buf[0] != '1') return 1;"
 . ${NM_HOME}auto/feature
 
-
-nm_feature="c99 stdint.h header file"
-nm_feature_name="nm_have_stdint_h"
-nm_feature_run=no
-nm_feature_h="#include <stdint.h>"
-nm_feature_flags=
-nm_feature_inc=
-nm_feature_ldlibs=
-nm_feature_test="int8_t c='X';"
-. ${NM_HOME}auto/feature
-
-
-nm_feature="c99 #pragma once"
+nm_feature="C99 #pragma once"
 nm_feature_name="nm_pragma_once"
 nm_feature_run=no
 nm_feature_h="#pragma once"
@@ -97,101 +110,76 @@ nm_feature_ldlibs=
 nm_feature_test=
 . ${NM_HOME}auto/feature
 
-
-nm_feature="c99 stdbool.h header file"
-nm_feature_name="nm_have_stdbool_h"
+nm_feature="C11 specifying the alignment of objects"
+nm_feature_name="nm_have_stdalign_h"
 nm_feature_run=no
-nm_feature_h="#include <stdbool.h>"
+nm_feature_h='#include <stdalign.h>
+struct S {
+  char c;
+  double d;
+};'
 nm_feature_flags=
 nm_feature_inc=
 nm_feature_ldlibs=
-nm_feature_test="bool t=true,f=false;"
+nm_feature_test='offsetof(struct S, c);'
 . ${NM_HOME}auto/feature
 
-
-nm_feature="c99 tgmath.h header file"
-nm_feature_name="nm_have_tgmath_h"
+nm_feature="C11 for atomic operations"
+nm_feature_name="nm_have_stdatomic_h"
 nm_feature_run=no
-nm_feature_h="#include <tgmath.h>"
+nm_feature_h='#include <stdatomic.h>
+_Atomic struct A {
+  int x; 
+} a;'
 nm_feature_flags=
 nm_feature_inc=
 nm_feature_ldlibs=
-nm_feature_test="sqrt(1);sqrt(1.0f);sqrt(1.0);"
+nm_feature_test='atomic_is_lock_free(&a);'
 . ${NM_HOME}auto/feature
 
+nm_feature="C11 specifying non-returning functions"
+nm_feature_name="nm_have_stdnoreturn_h"
+nm_feature_run=no
+nm_feature_h='#include <stdnoreturn.h>
+#include <stdlib.h>
+noreturn void fatal() {
+  exit(0);
+}'
+nm_feature_flags=
+nm_feature_inc=
+nm_feature_ldlibs=
+nm_feature_test='fatal();'
+. ${NM_HOME}auto/feature
 
+nm_feature="C11 static assertion"
+nm_feature_name="nm_have_static_assert"
+nm_feature_run=no
+nm_feature_h="#include <assert.h>"
+nm_feature_flags=
+nm_feature_inc=
+nm_feature_ldlibs=
+nm_feature_flags=
+nm_feature_test="enum {N=5}; static_assert(N==5, \"N is not equal 5\");"
+. ${NM_HOME}auto/feature
 
-case $CC_NAME in
-	clang)
-		;;
-	gcc)
-		nm_feature="$CC_NAME -Wl,-E|--export-dynamic"
-		nm_feature_name=
-		nm_feature_run=no
-		nm_feature_h=
-		nm_feature_flags=-Wl,-E
-		nm_feature_inc=
-		nm_feature_ldlibs=
-		nm_feature_test=
-		. ${NM_HOME}auto/feature
+nm_feature="C11 strcpy_s function"
+nm_feature_name="nm_have_strcpy_s_fn"
+nm_feature_run=no
+nm_feature_h="#include <string.h>"
+nm_feature_flags=
+nm_feature_inc=
+nm_feature_ldlibs=
+nm_feature_flags=
+nm_feature_test="char s[16]; strcpy_s(s,sizeof(s),\"hello strcpy_s\");"
+. ${NM_HOME}auto/feature
 
-		if [ $nm_found = yes ]; then
-			flag=LDFLAGS op="+=" value=$nm_feature_flags . ${NM_HOME}auto/make_define
-		fi
-
-		nm_feature="gcc builtin atomic operations"
-		nm_feature_name=NM_HAVE_GCC_ATOMIC
-		nm_feature_run=yes
-		nm_feature_h=
-		nm_feature_flags=
-		nm_feature_inc=
-		nm_feature_ldlibs=
-		nm_feature_test="long  n = 0;
-									 if (!__sync_bool_compare_and_swap(&n, 0, 1))
-										 return 1;
-									 if (__sync_fetch_and_add(&n, 1) != 1)
-										 return 1;
-									 if (n != 2)
-										 return 1;
-									 __sync_synchronize();"
-		. ${NM_HOME}auto/feature
-
-		nm_feature="gcc builtin 64 bit byteswap"
-		nm_feature_name="NM_HAVE_GCC_BSWAP64"
-		nm_feature_run=no
-		nm_feature_h=
-		nm_feature_flags=
-		nm_feature_inc=
-		nm_feature_ldlibs=
-		nm_feature_test="if (__builtin_bswap64(0)) return 1"
-		. ${NM_HOME}auto/feature
-
-		;;
-	msvc)
-		;;
-esac
-
-case $NM_SYSTEM in
-	Darwin)
-		nm_feature="libuv"
-		nm_feature_name="nm_have_uv_h"
-		nm_feature_run=no
-		nm_feature_h="#include <uv.h>"
-		nm_feature_flags=-L/opt/local/lib
-		nm_feature_inc=-I/opt/local/include
-		nm_feature_ldlibs=-luv
-		nm_feature_test=
-		. ${NM_HOME}auto/feature
-	;;
-
-	Linux)
-	;;
-
-	WinNT)
-	;;
-
-	*)
-	;;
-esac
-
+nm_feature="NA1 defines macros for standard tokens"
+nm_feature_name="nm_have_iso646_h"
+nm_feature_run=value
+nm_feature_h="#include <iso646.h>"
+nm_feature_flags=
+nm_feature_inc=
+nm_feature_ldlibs=
+nm_feature_test='1 and 2;'
+. ${NM_HOME}auto/feature
 
