@@ -1,6 +1,22 @@
 
 echo " # view https://en.wikipedia.org/wiki/C_standard_library"
 
+nm_feature="__STDC_HOSTED__ macro"
+nm_feature_name="nm_have_stdc_hosted"
+nm_feature_run=yes
+nm_feature_h=
+nm_feature_flags=
+nm_feature_inc=
+nm_feature_ldlibs=
+nm_feature_test='#if (1 == __STDC_HOSTED__)
+  return 0;
+#else
+  return 1;
+#endif
+'
+. ${NM_HOME}auto/feature
+
+
 echo " + checking C99 header files ..."
 nm_include="complex.h" . /opt/apps/nore/auto/include
 nm_include="fenv.h" . /opt/apps/nore/auto/include
