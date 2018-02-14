@@ -101,7 +101,7 @@ nm_feature_test="char  buf[30]; buf[0] = '0';
 . ${NM_HOME}auto/feature
 
 nm_feature="C99 #pragma once"
-nm_feature_name="nm_pragma_once"
+nm_feature_name="nm_have_pragma_once"
 nm_feature_run=no
 nm_feature_h="#pragma once"
 nm_feature_flags=
