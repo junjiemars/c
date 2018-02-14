@@ -2,17 +2,17 @@
 #include <stdio.h>
 
 void 
-basic_types() {
+int_types() {
 	uint8_t  x1 = 'A';
 	printf("uint8_t: %c \t\t=  " BIT_FMT_8 "\n", x1, BIT_8(x1));
 
-	uint8_t x1s = (uint8_t)-65;
+	uint8_t x1s = (uint8_t)(~x1 + 1);
 	printf("uint8_t-: -%c \t\t=  " BIT_FMT_8 "\n", x1, BIT_8(x1s));
 
 	uint16_t x2 = 'A';
 	printf("uint16_t: %"PRIu16" \t\t=  " BIT_FMT_16 "\n", x2, BIT_16(x2));
 
-	uint16_t x2s = (uint16_t)-65;
+	uint16_t x2s = (uint16_t)(~x2 + 1);
 	printf("uint16_t-: %"PRIu16" \t=  " BIT_FMT_16 "\n", x2s, BIT_16(x2s));
 
 	uint32_t x4 = 'A';
@@ -20,7 +20,10 @@ basic_types() {
 
 	uint64_t x8 = 'A';
 	printf("uint64_t: %"PRIu64" \t\t=  " BIT_FMT_64 "\n", x8, BIT_64(x8));
+}
 
+void
+float_types() {
 	ufloat32_t x0f = { .f = 0.0f };
 	printf("float: %f \t=  " BIT_FMT_32 "\n", x0f.f, BIT_32(x0f.u));
 
@@ -58,9 +61,13 @@ main(int argc, char *argv[]) {
 	printf("\n*%s ENDIAN*\n", NM_HAVE_LITTLE_ENDIAN ? "LITTLE" : "BIG");
 	printf("----------\n");
 
-	printf("\nBASIC TYPES\n");
+	printf("\nINT TYPES\n");
 	printf("----------\n");
-	basic_types();
+	int_types();
+
+  printf("\nFLOAT TYPES\n");
+	printf("----------\n");
+	float_types();
 
 	printf("\nIEEE FLOAT\n");
 	printf("----------\n");

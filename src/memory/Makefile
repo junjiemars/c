@@ -125,7 +125,7 @@ memory_bit_test: memory_bit
 
 bit_lflags += $(LFLAGS) $(INC)
 
-$(bit_binout): $(memory_root)bit/b.c
+$(bit_binout): $(memory_root)bit/byte.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -140,7 +140,7 @@ memory_byte_test: memory_byte
 $(byte_binout): $(byte_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(byte_cppout): $(memory_root)byte/b.c
+$(byte_cppout): $(memory_root)byte/byte.c
 	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
 
 
