@@ -1,6 +1,3 @@
-/* Compile with:
-make errortuple CFLAGS="-g -Wall -std=gnu11 -O3"
-*/
 #include <stdio.h>
 #include <math.h> //NaN, pow
 

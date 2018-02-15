@@ -12,6 +12,7 @@ basic_binout := $(bin_path)error_basic$(bin_ext)
 
 error_basic: $(basic_binout)
 error_basic_test: error_basic
+	$(basic_binout) $(CURDIR)/Makefilex
 	$(basic_binout) $(CURDIR)/Makefile
 
 $(basic_binout): $(error_root)/basic/e.c
