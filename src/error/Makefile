@@ -16,7 +16,7 @@ error_basic_test: error_basic
 	$(basic_binout) $(CURDIR)/Makefile
 
 $(basic_binout): $(error_root)/basic/e.c
-	$(CC) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # tuple
 tuple_binout := $(bin_path)error_tuple$(bin_ext)
@@ -30,5 +30,5 @@ $(tuple_binout): $(tuple_cppout)
 	$(LINK) $^ $(bin_out)$@
 
 $(tuple_cppout): $(error_root)tuple/tuple.c
-	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
+	$(CPP) $(CFLAGS) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
 
