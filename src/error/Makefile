@@ -1,17 +1,17 @@
 
-error_binout := $(bin_path)error$(bin_ext)
-error_objout := $(obj_path)errro$(obj_ext)
-error_cppout := $(tmp_path)error$(cpp_ext)
+error: error_tuple
+error_test: error_tuple_test
 
+tuple_binout := $(bin_path)error_tuple$(bin_ext)
+tuple_cppout := $(tmp_path)error_tuple$(cpp_ext)
 
-error: $(error_binout)
-error_test: error
-	$(error_binout) /tmp/xyz
+error_tuple: $(tuple_binout)
+error_tuple_test: error_tuple
+	$(tuple_binout)
 
-error_cflags := $(CFLAGS) $(INC) -I$(root)utils
+$(tuple_binout): $(tuple_cppout)
+	$(LINK) $^ $(bin_out)$@
 
-$(error_binout): $(error_cppout)
-	$(LINK) $(LFLAGS) $^ $(bin_out)$@
+$(tuple_cppout): $(error_root)tuple/tuple.c
+	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
 
-$(error_cppout): $(src_path)e.c
-	$(CPP) $(error_cflags) $^ > $@ 
