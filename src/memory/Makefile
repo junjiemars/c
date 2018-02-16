@@ -125,7 +125,7 @@ memory_bit_test: memory_bit
 
 bit_lflags += $(LFLAGS) $(INC)
 
-$(bit_binout): $(memory_root)bit/byte.c
+$(bit_binout): $(memory_root)bit/bit.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
