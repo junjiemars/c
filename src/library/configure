@@ -20,27 +20,28 @@
 
 # check features based on Compiler
 #----------------------------------------
-#case $CC_NAME in
-#	clang)
-#		;;
-#	gcc)
-#		nm_feature="$CC_NAME -Wl,-E|--export-dynamic"
-#		nm_feature_name=
-#		nm_feature_run=no
-#		nm_feature_h=
-#		nm_feature_flags=-Wl,-E
-#		nm_feature_inc=
-#		nm_feature_ldlibs=
-#		nm_feature_test=
-#		. ${NM_HOME}auto/feature
-#
-#		if [ yes = $nm_found ]; then
-#			flag=LDFLAGS op="+=" value=$nm_feature_flags . ${NM_HOME}auto/make_define
-#		fi
-#		;;
-#	msvc)
-#		;;
-#esac
+case $CC_NAME in
+	clang|gcc)
+		nm_feature="$CC_NAME -fPIC switch"
+		nm_feature_name=
+		nm_feature_run=no
+		nm_feature_h=
+		nm_feature_flags=-fPIC
+		nm_feature_inc=
+		nm_feature_ldlibs=
+		nm_feature_test=
+		. ${NM_HOME}auto/feature
+
+		if [ yes = $nm_found ]; then
+			flag=nm_pic_opt op="=" value=-fPIC . ${NM_HOME}auto/make_define
+		fi
+	;;
+
+	msvc)
+    # msvc do not use position independent code
+  ;;
+
+esac
 
 
 # check features based on OS

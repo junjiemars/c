@@ -28,7 +28,7 @@ $(geo_objout): $(library_root)geo/geo.c
 
 $(geo_libout): $(library_root)geo/geo.c $(geo_h)
 	$(CC) $(CFLAGS) -DSHARED=0 $(INC) $(nm_pic_opt) $(nm_shared_opt) $< $(bin_out)$@
-	
+
 $(geo_h): $(library_root)geo/geo.h
 	cp $< $(inc_path)
 
