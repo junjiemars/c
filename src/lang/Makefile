@@ -26,7 +26,7 @@ lang_test:	assert_test					\
 						type_test						\
 						pointer_test
 
-APP := lang
+app_prefix := lang
 INC += -I$(lang_root)
 
 # assert at runtime
@@ -108,7 +108,7 @@ $(macro_cppout): $(lang_root)macro/macro.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # main
-main_binout := $(bin_path)$(APP)_main$(bin_ext)
+main_binout := $(bin_path)$(app_prefix)_main$(bin_ext)
 
 main: $(main_binout)
 main_test: main
