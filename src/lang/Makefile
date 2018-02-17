@@ -3,6 +3,7 @@
 lang:	assert				\
 			enum					\
 			env						\
+			exit          \
 			fn						\
 			goto					\
 			macro					\
@@ -16,6 +17,7 @@ lang:	assert				\
 lang_test:	assert_test					\
 						enum_test						\
 						env_test						\
+            exit_test           \
 						fn_test							\
 						goto_test						\
 						macro_test					\
@@ -70,6 +72,16 @@ env_test: env
 	COUNT=2 $(env_binout)
 	COUNT=3 TEXT="Bonjor" $(env_binout)
 	COUNT=2 $(env_binout) --TEXT=Bonjour
+
+# exit
+exit_binout := $(bin_path)$(app_prefix)$(bin_ext)
+
+exit: $(exit_binout)
+exit_test: exit
+	$(exit_binout)
+
+$(exit_binout): $(lang_root)exit/e.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # fn
 fn_binout := $(bin_path)fn$(bin_ext)

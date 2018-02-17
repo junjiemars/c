@@ -3,11 +3,7 @@
 #include <stdlib.h>
 
 
-void
-on_exit(void) {
-	printf("----------\n");
-	printf("exiting...\n");
-}
+
 
 
 int
