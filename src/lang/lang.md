@@ -97,7 +97,6 @@ int main(int argc, char **argv);
 int main(int argc, char *argv[]);
 
 /* classicaly, Unix system support a third variant */
-/* extern char **environ; */
 int main(int argc, char **argv, char**envp);
 ```
 
@@ -113,6 +112,9 @@ In arguments:
 whose meaning will be determined by the program.
 * ```argv[0]``` will be a string containing the program's name or a null 
 string if that is not avaiable.
+* ```envp``` is not specified by POSIX but widely supported, ```getenv``` is 
+the only one specified by the C standard, the ```putenv``` 
+and ```extern char **environ``` are POSIX-specific.
 
 
 ## Type

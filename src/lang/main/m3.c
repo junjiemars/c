@@ -7,7 +7,7 @@ main(int argc, char **argv, char **envp) {
   _unused_(argv);
 
   char **p = envp;
-  while (0 != *p) {
+  while (*p) {
     printf("%s\n", *p++);
   }
 

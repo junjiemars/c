@@ -31,10 +31,11 @@ main(int argc, char *argv[]) {
 	}
   printf("\n\n");
 
+
   printf("iterate **argv via while loop char**:\n");
   printf("----------\n");
   char **p = argv;
-  while (0 != *p) {
+  while (*p) {
     printf("%s ", *p++);
   }
   printf("\n\n");
