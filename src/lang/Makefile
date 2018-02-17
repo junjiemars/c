@@ -109,12 +109,17 @@ $(macro_cppout): $(lang_root)macro/macro.c
 
 # main
 main_binout := $(bin_path)$(app_prefix)_main$(bin_ext)
+main3_binout := $(bin_path)$(app_prefix)_main3$(bin_ext)
 
-main: $(main_binout)
+main: $(main_binout) $(main3_binout)
 main_test: main
-	$(main_binout) a bb ccc 
+	$(main_binout) a bb ccc
+	XXX=xyz $(main3_binout)
 
 $(main_binout): $(lang_root)main/m.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(main3_binout): $(lang_root)main/m3.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # scope

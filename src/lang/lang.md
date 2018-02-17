@@ -1,5 +1,12 @@
 # C Language
 
+[Build and Run](#build-and-run)
+[Assertion](#assertion)
+[Error](#error)
+[main Function](#main-function)
+[Type](#type)
+
+
 ## Build and Run
 * on Unix-like platform:
 ```sh
@@ -78,7 +85,38 @@ by 30%-40%;
 error condition.
 
 
+## main Function
+
+C90 ```main()``` declarations:
+```c
+int main(void);
+
+int main(int argc, char **argv);
+
+/* samed with above */
+int main(int argc, char *argv[]);
+
+/* classicaly, Unix system support a third variant */
+/* extern char **environ; */
+int main(int argc, char **argv, char**envp);
+```
+
+C99 the value ```return``` from ```main()```:
+* the ```int``` return type may not be omitted.
+* the ```return``` statement may be omitted, if so and ```main()``` 
+finished, there is an implicit ```return 0```.
+
+In arguments:
+* ```argc``` > 0
+* ```argv[argc]``` == 0
+* ```argv[0]``` through to ```argv[argc-1]``` are pointers to string 
+whose meaning will be determined by the program.
+* ```argv[0]``` will be a string containing the program's name or a null 
+string if that is not avaiable.
+
+
 ## Type
+
 All C types be represented as binary numbers in memory, the way how to interprete those numbers is what type does.
 
 ### Basic types
@@ -108,6 +146,7 @@ same type;
 * ```f``` for ```float```, ```2.718f```;
 
 ## References
-* [How to use assertions in C](https://ptolemy.eecs.berkeley.edu/~johnr/tutorials/assertions.html)
-* [C data types](https://en.wikipedia.org/wiki/C_data_types)
 * [Beyond errno Error Handling in C](https://resources.sei.cmu.edu/asset_files/Presentation/2016_017_101_484207.pdf)
+* [C data types](https://en.wikipedia.org/wiki/C_data_types)
+* [How to use assertions in C](https://ptolemy.eecs.berkeley.edu/~johnr/tutorials/assertions.html)
+* [What should main() return in C and C++?](https://stackoverflow.com/questions/204476/what-should-main-return-in-c-and-c)

@@ -1,7 +1,7 @@
+#include <_lang_.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#define _unused_(x) ((void)(x))
 
 void
 on_exit(void) {
@@ -39,5 +39,5 @@ main(int argc, char *argv[]) {
   }
   printf("\n\n");
 
-	/* return 0; */
+	/* C99: return 0; */
 }
