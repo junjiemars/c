@@ -11,8 +11,6 @@ main(int argc, char *argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 
-	atexit(&on_exit);
-
   printf("iterate **argv via for loop char[]:\n");
   printf("----------\n");
 	for (int i=0; i < argc; i++) {
