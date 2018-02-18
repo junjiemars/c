@@ -1,4 +1,4 @@
-#include <nore.h>
+#include "nore.h"
 #include <stdio.h>
 
 #define HI_VERSION_MAJOR 2
