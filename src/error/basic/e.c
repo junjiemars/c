@@ -1,4 +1,4 @@
-#include <_error_.h>
+#include "_error_.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -23,4 +23,6 @@ main(int argc, char* argv[]) {
   if (out) {
     fclose(out);
   }
+
+  printf("%i\n", XXX);
 }
