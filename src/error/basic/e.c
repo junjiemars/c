@@ -24,5 +24,4 @@ main(int argc, char* argv[]) {
     fclose(out);
   }
 
-  printf("%i\n", XXX);
 }

@@ -2,6 +2,7 @@
 
 [Build and Run](#build-and-run)
 [Assertion](#assertion)
+[Enum](#enum)
 [Error](#error)
 [main Function](#main-function)
 [Type](#type)
@@ -41,6 +42,10 @@ particular points in its execution. There are three types of assertion:
 * Invaiants: specify conditions over a defined region of a program.
 
 
+## enum
+
+
+
 ## Error 
 
 * __fail safe__ pertaining to a system or component that automatically places
@@ -69,8 +74,7 @@ Before C11, ```errno``` was a global variable, with all the inherent disadvantag
 * later system calls overwrote earlier system calls;
 * global map of values to error conditions (```ENOMEM```, ```ERANGE```, etc);
 * behavior is underspecified in ISO C and POSIX;
-* technically ```errno``` is a __modifiable lvalue__ rather than a global variable, 
-so expressions like ```&errno``` may not be well-defined;
+* technically ```errno``` is a __modifiable lvalue__ rather than a global variable, so expressions like ```&errno``` may not be well-defined;
 * thread-unsafe;
 
 In C11, ```errno``` is thread-local, so it is thread-safe.
@@ -151,4 +155,5 @@ same type;
 * [Beyond errno Error Handling in C](https://resources.sei.cmu.edu/asset_files/Presentation/2016_017_101_484207.pdf)
 * [C data types](https://en.wikipedia.org/wiki/C_data_types)
 * [How to use assertions in C](https://ptolemy.eecs.berkeley.edu/~johnr/tutorials/assertions.html)
+* [http parser](https://github.com/nodejs/http-parser)
 * [What should main() return in C and C++?](https://stackoverflow.com/questions/204476/what-should-main-return-in-c-and-c)
