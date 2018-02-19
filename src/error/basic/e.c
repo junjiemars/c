@@ -10,15 +10,15 @@ main(int argc, char* argv[]) {
 	}
 
 	FILE* out = 0;
-	int e = 0;
 
 	out = fopen(argv[1], "r");
-	e = errno;
-
-	if (e) {
-		fprintf(stderr, "open %s failed, caused by: %s\n",
-            argv[1], strerror(e));
-	}
+  if (0 == out) {
+    int e = errno;
+  	if (e) {
+  		fprintf(stderr, "open %s failed, caused by: %s\n",
+              argv[1], strerror(e));
+  	}
+  }
 
   if (out) {
     fclose(out);
