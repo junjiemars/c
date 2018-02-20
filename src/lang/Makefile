@@ -8,11 +8,12 @@ lang:	assert				\
 			goto					\
 			macro					\
 			main					\
+			pointer       \
 			scope					\
 			sizeof				\
 			stage					\
-			type					\
-			pointer
+			type
+
 
 lang_test:	assert_test					\
 						enum_test						\
@@ -22,11 +23,12 @@ lang_test:	assert_test					\
 						goto_test						\
 						macro_test					\
 						main_test						\
+						pointer_test        \
 						scope_test					\
 						sizeof_test					\
 						stage_test					\
-						type_test						\
-						pointer_test
+						type_test
+
 
 app_prefix := lang
 INC += -I$(lang_root)
@@ -140,6 +142,16 @@ $(main_binout): $(lang_root)main/m.c
 $(main_envp_binout): $(lang_root)main/m_envp.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+# pointer
+pointer_binout := $(bin_path)$(app_prefix)_pointer$(bin_ext)
+
+pointer: $(pointer_binout)
+pointer_test: pointer
+	$(pointer_binout)
+
+$(pointer_binout): $(lang_root)ptr/pp.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 # scope
 scope_binout := $(bin_path)scope$(bin_ext)
 
@@ -205,12 +217,3 @@ type_test: type
 $(type_binout): $(lang_root)type/t.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-# pointer
-pointer_binout := $(bin_path)pointer$(bin_ext)
-
-pointer: $(pointer_binout)
-pointer_test: pointer
-	$(pointer_binout)
-
-$(pointer_binout): $(lang_root)ptr/pp.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

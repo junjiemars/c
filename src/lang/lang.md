@@ -5,6 +5,7 @@
 [Enum](#enum)
 [Error](#error)
 [main Function](#main-function)
+[Pointer](#pointer)
 [Type](#type)
 
 
@@ -120,6 +121,110 @@ string if that is not avaiable.
 the only one specified by the C standard, the ```putenv``` 
 and ```extern char **environ``` are POSIX-specific.
 
+## Pointer
+
+
+### sizeof Pointer
+
+Depends on compiler and machine, all types of pointers on specified machine and 
+compiled via specified compiler has same the size, generally occupy one machine word.
+
+
+### Address of and Dereference 
+
+The ```*``` has two distinct meanings within C in relation to pointers, depending on where it's used. When used within a __variable declaration__, the value on the right hand side of the equals side should be a __pointer value__ to an __address__ in memory. When used with an already __declared variable__, the ```*``` will **deference** the pointer value, following it to the pointer-to place in memory, and allowing the value stored there to be assigned or retrived.
+
+
+### const and Pointer
+
+Threre is a technique known as the __Clockwise/Spiral Rule__ enables any C programmer to parse in their head any C declaration.
+
+* pointer to const object
+```c
+int v = 0x11223344;
+const int* p = &v;
+*p = (*p)+10; /* error: l-value specifies const object */
+**(int**)&p = *p+10; /* skip, dangerous */
+```
+
+* const pointer to object
+```c
+int v1=0x11223344, v2=0x44332211;
+int* const p = &v1;
+p = &v2; /* error: l-value specifies const object */
+*(int**)&p = &v2; /* skip, dangerous */
+```
+
+* const pointer to const object
+```c
+int v1=0x11223344, v2=0x44332211;
+const int* const p = &v1;
+*(int**)&p = &v2;
+**(int**)&p = v2;
+```
+
+* pointer to pointer to const object
+```c
+const int** p;
+```
+
+* pointer to const pointer to object
+```c
+int* const* p;
+```
+
+* const pointer to pointer to object
+```c
+int** const p;
+```
+
+* pointer to const pointer to const object
+```c
+const int* const* p;
+```
+
+* const pointer to pointer to const object
+```c
+const int* const* p;
+```
+
+* const pointer to const pointer to object
+```c
+int* const* const p;
+```
+
+### function Pointer
+
+```c
+return_type_of_fn (*fn)(type_of_arg1 arg1, type_of_arg2 arg2 ...);
+```
+
+### void Pointer
+The ```void*``` is a catch all type for pointers to object types, via __void__ pointer can get some ploymorphic behavior. see ```qsort``` in ```stdlib.h```
+
+### Dangling Pointer
+
+Pointers that point to invalid addresses are sometimes called dangling pointers.
+
+### Pointer and Array
+
+### Decay
+
+Decay refers to the implicit conversion of an expression from an array type to 
+a pointer type. In most contexts, when the compiler sees an array expression it 
+converts the type of the expression from __N-element array of T__ to __const pointer to T__ and set the value of the expression to the address of the first element of the array.
+The exceptions to this rule are when an array is an operand of either 
+the ```sizeof``` or ```&``` operators, or the array is a string literal being used as an initializer in a declaration. More importantly the term decay signifies loss of type and dimension.
+
+### volatile Pointer
+The ```volatile``` is to tell the compiler not to optimize the reference, so that every read/write does not use the value stored in register but does a real memory access.
+
+```c
+volatile int v1;
+int *p_v1 = &v1; /* bad */
+volatile int *p_v1 = &v1; /* better */
+```
+
 
 ## Type
 
@@ -152,8 +257,15 @@ same type;
 * ```f``` for ```float```, ```2.718f```;
 
 ## References
+* [array](../array/README.md)
 * [Beyond errno Error Handling in C](https://resources.sei.cmu.edu/asset_files/Presentation/2016_017_101_484207.pdf)
 * [C data types](https://en.wikipedia.org/wiki/C_data_types)
+* [Clockwise/Spiral Rule](http://c-faq.com/decl/spiral.anderson.html)
 * [How to use assertions in C](https://ptolemy.eecs.berkeley.edu/~johnr/tutorials/assertions.html)
 * [http parser](https://github.com/nodejs/http-parser)
+* [Pointers](http://stackoverflow.com/documentation/c/1108/pointers#t=201702060822544818513)
+* [printf size_t](http://stackoverflow.com/questions/2524611/how-can-one-print-a-size-t-variable-portably-using-the-printf-family)
+* [The Development of the C Lanuage](https://www.bell-labs.com/usr/dmr/www/chist.html)
+* [What is array decaying?](http://stackoverflow.com/questions/1461432/what-is-array-decaying)
 * [What should main() return in C and C++?](https://stackoverflow.com/questions/204476/what-should-main-return-in-c-and-c)
+

@@ -1,6 +1,6 @@
+#include "_lang_.h"
 #include <stdio.h>
 
-#define _unused_(x) ((void)(x))
 
 int
 main(int argc, char *argv[]) {
