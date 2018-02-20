@@ -1,7 +1,7 @@
 #ifndef _X86_H_
 #define _X86_H_
 
-#include <nore.h>
+#include "nore.h"
 
 #define _unused_(x) (void)(x)
 
@@ -16,6 +16,7 @@
 #ifdef GCC
 #pragma GCC diagnostic ignored "-Wunused-variable"
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
 #endif
 
 
@@ -31,4 +32,4 @@ struct fraction {
 };
 
 
-#endif
+#endif /* _X86_H_ */
