@@ -51,6 +51,8 @@ static void
 struct_callee(struct fraction i) {
 	struct fraction local;
 	local.denominator = 0x33;
+
+  _unused_(i);
 	i.denominator = 0x44;
 }
 
