@@ -60,7 +60,7 @@ $(enum_cppout): $(lang_root)enum/e.c
 	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
 
 # env
-env_binout := $(bin_path)env$(bin_ext)
+env_binout := $(bin_path)$(app_prefix)_env$(bin_ext)
 env_cflags := $(CFLAGS) $(INC) -I$(lang_root)env/
 
 $(env_binout): $(lang_root)env/env.c $(lang_root)env/env.h
