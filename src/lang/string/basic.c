@@ -18,7 +18,6 @@ str_cmp(const char *s1, const char *s2) {
   while (*s1 && (*s1 == *s2)) {
     s1++, s2++;
   }
-  /* On some systems char is signed (more common). On others, char is unsigned. Defining the "sign-ness" of the last comparison promotes portability. Note that fgetc() obtains characters as unsigned char */
   return *(const unsigned char*)s1 - *(const unsigned char*)s2;
 }
 
