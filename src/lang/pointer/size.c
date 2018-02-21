@@ -1,6 +1,13 @@
 #include "_lang_.h"
 #include <stdio.h>
 
+#ifdef NM_HAVE_STDINT_H
+#include <stdint.h>
+#else
+#include <stddef.h>
+typedef unsigned __int64 uint64_t;
+#endif
+
 
 int
 main(int argc, char **argv) {

@@ -145,24 +145,34 @@ $(main_envp_binout): $(lang_root)main/m_envp.c
 # pointer
 pointer_basic_binout := $(bin_path)$(app_prefix)_pointer_basic$(bin_ext)
 pointer_const_binout := $(bin_path)$(app_prefix)_pointer_const$(bin_ext)
+pointer_fn_binout := $(bin_path)$(app_prefix)_pointer_fn$(bin_ext)
 pointer_size_binout := $(bin_path)$(app_prefix)_pointer_size$(bin_ext)
+pointer_void_binout := $(bin_path)$(app_prefix)_pointer_void$(bin_ext)
 
 pointer_basic_test: $(pointer_basic_binout)
 	$(pointer_basic_binout)
 
-pointer_const_binout: $(pointer_const_binout)
+pointer_const_test: $(pointer_const_binout)
 	$(pointer_const_binout)
+
+pointer_fn_test: $(pointer_fn_binout)
+	$(pointer_fn_binout)
 
 pointer_size_test: $(pointer_size_binout)
 	$(pointer_size_binout)
 
+pointer_void_test: $(pointer_void_binout)
+	$(pointer_void_binout)
+
 pointer: $(pointer_basic_binout) \
 				 $(pointer_const_binout) \
-				 $(pointer_size_binout)
+				 $(pointer_size_binout) \
+				 $(pointer_void_binout)
 
 pointer_test: $(pointer_basic_test) \
 							$(pointer_const_test) \
-							$(pointer_size_test)
+							$(pointer_size_test) \
+							$(pointer_void_test)
 
 $(pointer_basic_binout): $(lang_root)pointer/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -170,7 +180,13 @@ $(pointer_basic_binout): $(lang_root)pointer/basic.c
 $(pointer_const_binout): $(lang_root)pointer/const.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+$(pointer_fn_binout): $(lang_root)pointer/fn.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 $(pointer_size_binout): $(lang_root)pointer/size.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(pointer_void_binout): $(lang_root)pointer/void.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # scope
