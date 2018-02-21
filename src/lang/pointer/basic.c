@@ -12,5 +12,5 @@ main(int argc, char *argv[]) {
 	int **ppi = &pi;
 	*ppi = pj;
 	
-	printf("ppi=%p\n", ppi);
+	printf("ppi@%p=%i\n", ppi, **ppi);
 }
