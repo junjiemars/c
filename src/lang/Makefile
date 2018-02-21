@@ -12,6 +12,7 @@ lang:	assert				\
 			scope					\
 			sizeof				\
 			stage					\
+			string        \
 			type
 
 
@@ -27,6 +28,7 @@ lang_test:	assert_test					\
 						scope_test					\
 						sizeof_test					\
 						stage_test					\
+						string_test         \
 						type_test
 
 
@@ -147,6 +149,7 @@ pointer_basic_binout := $(bin_path)$(app_prefix)_pointer_basic$(bin_ext)
 pointer_const_binout := $(bin_path)$(app_prefix)_pointer_const$(bin_ext)
 pointer_fn_binout := $(bin_path)$(app_prefix)_pointer_fn$(bin_ext)
 pointer_size_binout := $(bin_path)$(app_prefix)_pointer_size$(bin_ext)
+
 pointer_void_binout := $(bin_path)$(app_prefix)_pointer_void$(bin_ext)
 
 pointer_basic_test: $(pointer_basic_binout)
@@ -243,6 +246,19 @@ $(stage_asmout): $(stage_cppout)
 
 $(stage_cppout): $(lang_root)stage/s.c
 	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
+
+# string
+string_basic_binout := $(bin_path)$(app_prefix)_string_basic$(bin_ext)
+
+string_basic_test: $(string_basic_binout)
+	$(string_basic_binout)
+
+string: $(string_basic_binout)
+string_test: $(string_basic_test)
+
+$(string_basic_binout): $(lang_root)string/basic.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # type
 type_binout := $(bin_path)type$(bin_ext)
