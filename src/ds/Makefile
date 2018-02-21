@@ -1,27 +1,29 @@
 
 ds_prefix := ds
-
-ds: list stack
-ds_test: list_test stack_test
-
 INC += -I$(ds_root)
+
+ds: double_list              \
+		stack
+
+ds_test: double_list_test    \
+				 stack_test
 
 # list
 
-list_binout := $(bin_path)$(ds_prefix)_list$(bin_ext)
+double_list_binout := $(bin_path)$(ds_prefix)_double_list$(bin_ext)
 
-list: $(list_binout)
-list_test: list
-	$(list_binout)
-list_valgrind_test: list
-	valgrind --leak-check=full --track-origins=yes $(list_binout)
+double_list: $(double_list_binout)
+double_list_test: double_list
+	$(double_list_binout)
+double_list_valgrind_test: double_list
+	valgrind --leak-check=full --track-origins=yes $(double_list_binout)
 
-$(list_binout): $(ds_root)list/test.c \
-								$(ds_root)list/list.c \
-								$(ds_root)list/list.h
+$(double_list_binout): 	$(ds_root)double_list/test.c \
+							    			$(ds_root)double_list/list.c \
+												$(ds_root)double_list/list.h
 	$(CC) $(CFLAGS) $(INC)  \
-		$(ds_root)list/test.c \
-		$(ds_root)list/list.c \
+		$(ds_root)double_list/test.c \
+		$(ds_root)double_list/list.c \
 		$(bin_out)$@
 
 
