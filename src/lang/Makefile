@@ -149,7 +149,7 @@ pointer: $(pointer_binout)
 pointer_test: pointer
 	$(pointer_binout)
 
-$(pointer_binout): $(lang_root)ptr/pp.c
+$(pointer_binout): $(lang_root)pointer/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # scope
