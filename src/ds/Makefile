@@ -1,4 +1,6 @@
 
+ds_prefix := ds
+
 ds: list stack
 ds_test: list_test stack_test
 
@@ -6,7 +8,7 @@ INC += -I$(ds_root)
 
 # list
 
-list_binout := $(bin_path)list$(bin_ext)
+list_binout := $(bin_path)$(ds_prefix)_list$(bin_ext)
 
 list: $(list_binout)
 list_test: list
@@ -25,7 +27,7 @@ $(list_binout): $(ds_root)list/test.c \
 
 # stack
 
-stack_binout := $(bin_path)stack$(bin_ext)
+stack_binout := $(bin_path)$(ds_prefix)_stack$(bin_ext)
 stack_inc += $(INC) -I$(ds_root)list
 
 stack: $(stack_binout)
