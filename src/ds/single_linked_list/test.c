@@ -26,7 +26,7 @@ new_node(void *val) {
 }
 
 int
-node_str_cmp(const void *s1, const void *s2) {
+cmp_str_node(const void *s1, const void *s2) {
   if (s1 && s2) {
     return strcmp(s1, s2);
   }
@@ -40,15 +40,23 @@ test_static_str_list() {
 
 	list_append(head, "Bee", new_node);
   list_append(head, "Candy", new_node);
+  list_append(head, "Duck", new_node);
 
-  node_s *nil = list_find(0, "Bee", node_str_cmp);
+  node_s *nil = list_find(0, "Bee", cmp_str_node);
   assert(0 == nil);
 
-  node_s *tail = list_find(head, 0, node_str_cmp);
+  node_s *tail = list_find(head, 0, cmp_str_node);
   assert(0 == tail);
   
-  node_s *bee = list_find(head, "Bee", node_str_cmp);
+  node_s *bee = list_find(head, "Bee", cmp_str_node);
   assert(0 == strcmp(bee->val, "Bee"));
+
+  list_delete(&head, "Bee", cmp_str_node, free_node);
+  assert(0 == list_find(head, "Bee", cmp_str_node));
+  assert(0 != list_find(head, "Apple", cmp_str_node));
+
+  list_delete(&head, "Apple", cmp_str_node, free_node);
+  assert(0 == strcmp("Candy", head->val));
   
   list_free(head, free_node);
 }

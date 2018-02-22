@@ -20,4 +20,10 @@ node_s* list_find(node_s *head,
                   const void *val,
                   int (*node_cmp)(const void *val1, const void* val2));
 
+void list_delete(node_s **head,
+                 const void *val,
+                 int (*cmp)(const void *val1, const void* val2),
+                 void (*free)(node_s *node));
+
+
 #endif /* end of _SINGLE_LINKED_LIST_H_ */

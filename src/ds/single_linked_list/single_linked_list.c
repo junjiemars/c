@@ -5,41 +5,40 @@
 node_s*
 list_append(node_s *head,
             void *val,
-            node_s* (*node_new)(void *val)) {
+            node_s* (*new)(void *val)) {
 
-  assert(0 != node_new);
+  assert((0 != new) || "new fn cann not bu null");
   
   if (0 == head) {
-    return head = node_new(val);
+    return head = new(val);
   } 
 
   while (0 != head->next) {
     head = head->next;
   }
-  return head->next = node_new(val);
+  return head->next = new(val);
 }
 
 void
 list_free(node_s *head,
-          void (*node_free)(node_s *node)) {
-  assert(0 != node_free);
+          void (*free)(node_s *node)) {
 
-  while (0 != head) {
-    node_s *current = head;
-    head = head->next;
-    node_free(current);
+  assert((0 != free) || "free fn can not be null");
+
+  for (node_s *curr=head; curr; curr=curr->next) {
+    free(curr);
   }
 }
 
 node_s*
 list_find(node_s *head,
           const void *val,
-          int (*node_cmp)(const void *val1, const void *val2)) {
+          int (*cmp)(const void *val1, const void *val2)) {
 
-  assert((0 != node_cmp) || "node_cmp fn cannot be null");
+  assert((0 != cmp) || "cmp fn can not be null");
 
   while (0 != head) {
-    if (0 == node_cmp(head->val, val)) {
+    if (0 == cmp(head->val, val)) {
       return head;
     }
     head = head->next;
@@ -47,3 +46,29 @@ list_find(node_s *head,
 
   return 0;
 }
+
+void
+list_delete(node_s **head,
+            const void *val,
+            int (*cmp)(const void *val1, const void* val2),
+            void (*free)(node_s *node)) {
+
+  assert((0 != cmp) || "cmp fn can not be null");
+  assert((0 != free) || "free fn can not be null");
+
+  for (node_s *curr=*head, *prev=0; curr; prev=curr, curr=curr->next) {
+
+    if (0 == cmp(curr->val, val)) {
+
+      if (0 == prev) {
+        *head = curr->next;
+      } else {
+        prev->next = curr->next;
+      }
+
+      free(curr);
+      return;
+    }
+  }
+}
+
