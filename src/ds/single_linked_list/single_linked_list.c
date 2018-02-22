@@ -7,7 +7,7 @@ list_append(node_s *head,
             void *val,
             node_s* (*new)(void *val)) {
 
-  assert((0 != new) || "new fn cann not bu null");
+  assert((0 != new) || "new fn can not bu null");
   
   if (0 == head) {
     return head = new(val);
