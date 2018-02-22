@@ -34,6 +34,8 @@ single_linked_list_binout := $(bin_path)$(ds_prefix)_singled_linked_list$(bin_ex
 single_linked_list: $(single_linked_list_binout)
 single_linked_list_test: single_linked_list
 	$(single_linked_list_binout)
+single_linked_list_valgrind_test: single_linked_list
+	valgrind --leak-check=full --track-origins=yes $(single_linked_list_binout)
 
 $(single_linked_list_binout): $(ds_root)single_linked_list/test.c \
 												      $(ds_root)single_linked_list/single_linked_list.c \
