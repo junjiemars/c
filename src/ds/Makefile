@@ -38,11 +38,11 @@ single_linked_list_valgrind_test: single_linked_list
 	valgrind --leak-check=full --track-origins=yes $(single_linked_list_binout)
 
 $(single_linked_list_binout): $(ds_root)single_linked_list/test.c \
-												      $(ds_root)single_linked_list/single_linked_list.c \
-													 	  $(ds_root)single_linked_list/single_linked_list.h
+												      $(ds_root)single_linked_list/list.c \
+													 	  $(ds_root)single_linked_list/list.h
 	$(CC) $(CFLAGS) $(INC) \
 		$(ds_root)single_linked_list/test.c \
-		$(ds_root)single_linked_list/single_linked_list.c \
+		$(ds_root)single_linked_list/list.c \
 		$(bin_out)$@
 
 
