@@ -4,8 +4,8 @@
 
 node_s*
 list_append(node_s *head,
-            const void *val,
-            node_s* (*node_new)(const void *val)) {
+            void *val,
+            node_s* (*node_new)(void *val)) {
 
   assert(0 != node_new);
   

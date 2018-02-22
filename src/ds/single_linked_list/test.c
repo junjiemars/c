@@ -3,15 +3,20 @@
 #include <string.h>
 #include <assert.h>
 
-
 void
 free_node(node_s *node) {
+  free(node);
+}
+
+void
+free_alloc_node(node_s *node) {
 	if (0 == node) return;
+  free(node->val);
 	free(node);
 }
 
 node_s*
-new_node(const void *val) {
+new_node(void *val) {
 	node_s *n = malloc(sizeof(node_s));
 	assert(n);
 	memset(n, 0, sizeof(node_s));
@@ -23,14 +28,13 @@ new_node(const void *val) {
 
 void
 test_static_str_list() {
-  node_s *node = list_append(0, "Apple", new_node);
-  node_s *head = node;
+  node_s *head = list_append(0, "Apple", new_node);
   assert((0 != head) && (0 == strcmp(head->val, "Apple")));
 
-	list_append(node, "Bee", new_node);
-  list_append(node, "Candy", new_node);
+	list_append(head, "Bee", new_node);
+  list_append(head, "Candy", new_node);
   
-  free_node(head);
+  list_free(head, free_node);
 }
 
 int
