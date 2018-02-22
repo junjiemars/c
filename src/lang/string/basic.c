@@ -40,12 +40,12 @@ main(int argc, char **argv) {
 
   char *dst1 = malloc(len1+1);
   char *r1 = strcpy(dst1, argv[0]);
-  assert((0 == strcmp(r1, argv[0])) && (r1 == dst1) || "strcpy() failed");
+  assert(((0 == strcmp(r1, argv[0])) && (r1 == dst1)) || "strcpy() failed");
   free(dst1);
 
   char *dst2 = malloc(len2+1);
   char *r2 = str_cpy(dst2, argv[0]);
-  assert((0 == str_cmp(r2, argv[0])) && (r2 == dst2) || "str_cpy() failed");
+  assert(((0 == str_cmp(r2, argv[0])) && (r2 == dst2)) || "str_cpy() failed");
   free(dst2);
                     
 }
