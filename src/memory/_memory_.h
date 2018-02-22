@@ -2,7 +2,7 @@
 #ifndef _MEMORY_H_
 #define _MEMORY_H_
 
-#include <nore.h>
+#include "nore.h"
 
 #include <assert.h>
 

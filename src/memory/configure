@@ -10,16 +10,16 @@ nm_feature_test='int i=0x11223344;
                  char *p = (char *)&i;
             		 int le = (0x44 == *p);
                  printf("%d", le);'
-. ${NM_HOME}auto/feature
+. ${NORE_ROOT}/auto/feature
 
 
-nm_include="stdint.h" . ${NM_HOME}auto/include
+nm_include="stdint.h" . ${NORE_ROOT}/auto/include
 
 
-nm_include="inttypes.h" . ${NM_HOME}auto/include
+nm_include="inttypes.h" . ${NORE_ROOT}/auto/include
 
 
-nm_include="stdbool.h" . ${NM_HOME}auto/include
+nm_include="stdbool.h" . ${NORE_ROOT}/auto/include
 
 
 nm_feature="sizeof(void*)"
@@ -30,7 +30,7 @@ nm_feature_flags=
 nm_feature_inc=
 nm_feature_ldlibs=
 nm_feature_test='void* p; printf("%zu", sizeof p);'
-. ${NM_HOME}auto/feature
+. ${NORE_ROOT}/auto/feature
 
 
 nm_feature="sizeof(size_t)"
@@ -42,7 +42,7 @@ nm_feature_flags=
 nm_feature_inc=
 nm_feature_ldlibs=
 nm_feature_test='printf("%zu", sizeof(size_t)*8);'
-. ${NM_HOME}auto/feature
+. ${NORE_ROOT}/auto/feature
 
 
 nm_feature="variable-length array"
@@ -54,4 +54,4 @@ nm_feature_flags=
 nm_feature_inc=
 nm_feature_ldlibs=
 nm_feature_test='int size; int buffer[size];'
-. ${NM_HOME}auto/feature
+. ${NORE_ROOT}/auto/feature

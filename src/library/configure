@@ -15,7 +15,7 @@
 #                 char *p = (char *)&i;
 #             		int le = (0x44 == *p);
 #                 printf("%d", le);'
-#. ${NM_HOME}auto/feature
+#. ${NORE_ROOT}/auto/feature
 
 
 # check features based on Compiler
@@ -30,10 +30,10 @@ case $CC_NAME in
 		nm_feature_inc=
 		nm_feature_ldlibs=
 		nm_feature_test=
-		. ${NM_HOME}auto/feature
+		. ${NORE_ROOT}/auto/feature
 
 		if [ yes = $nm_found ]; then
-			flag=nm_pic_opt op="=" value=-fPIC . ${NM_HOME}auto/make_define
+			flag=nm_pic_opt op="=" value=-fPIC . ${NORE_ROOT}/auto/make_define
 		fi
 	;;
 
@@ -60,10 +60,10 @@ case $NM_SYSTEM in
 		nm_feature_ldlibs=-lm
 		nm_feature_test='int x = round(2.5);
 										 return (2 == x);'
-		. ${NM_HOME}auto/feature
+		. ${NORE_ROOT}/auto/feature
 
 		if [ yes = $nm_found ]; then
-			flag=LDLIBS op="+=" value=$nm_feature_ldlibs . ${NM_HOME}auto/make_define
+			flag=LDLIBS op="+=" value=$nm_feature_ldlibs . ${NORE_ROOT}/auto/make_define
 		fi
 
 	  ;;
