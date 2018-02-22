@@ -33,6 +33,16 @@ cmp_str_node(const void *s1, const void *s2) {
   return s1 - s2;
 }
 
+int
+cmp_int_node(const void *i1, const void *i2) {
+  if (i1 && i2) {
+    return *(int*)i1 - *(int*)i2;
+  }
+
+  return i1 - i2;
+}
+    
+
 void
 test_static_str_list() {
   node_s *head = list_append(0, "Apple", new_node);
@@ -95,8 +105,33 @@ test_dynamic_str_list() {
   list_free(head, free_alloc_node);
 }
 
+void
+test_int_list() {
+  int *one = malloc(sizeof(int));
+  *one = 1;
+  node_s *head = list_append(0, one, new_node);
+  assert((0 != head) && (1 == *(int*)(head->val)));
+
+  int *two = malloc(sizeof(int));
+  *two = 2;
+  list_append(head, two, new_node);
+
+  int *three = malloc(sizeof(int));
+  *three = 3;
+  list_append(head, three, new_node);
+
+  node_s *two_node = list_find(head, two, cmp_int_node);
+  assert((0 != two_node) && (2 == *(int*)(two_node->val)));
+
+  list_delete(&head, one, cmp_int_node, free_alloc_node);
+  assert(2 == *(int*)(head->val));
+
+  list_free(head, free_alloc_node);
+}
+
 int
 main() {
 	test_static_str_list();
   test_dynamic_str_list();
+  test_int_list();
 }
