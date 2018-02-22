@@ -11,19 +11,22 @@ typedef struct node_s {
 
 node_s* list_append(node_s *head,
                     void *val,
-                    node_s* (*node_new)(void *val));
+                    node_s* (*new)(void *val));
 
 void list_free(node_s *head,
-               void (*node_free)(node_s *node));
+               void (*free)(node_s *node));
 
 node_s* list_find(node_s *head,
                   const void *val,
-                  int (*node_cmp)(const void *val1, const void* val2));
+                  int (*cmp)(const void *val1, const void* val2));
 
 void list_delete(node_s **head,
                  const void *val,
                  int (*cmp)(const void *val1, const void* val2),
                  void (*free)(node_s *node));
+
+void list_iterate(node_s *head,
+                  void (*iter)(const node_s *node));
 
 
 #endif /* end of _SINGLE_LINKED_LIST_H_ */

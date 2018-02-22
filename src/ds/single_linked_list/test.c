@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <stdio.h>
 
 void
 free_node(node_s *node) {
@@ -41,7 +42,15 @@ cmp_int_node(const void *i1, const void *i2) {
 
   return i1 - i2;
 }
-    
+
+void
+iter_str_node(const node_s *node) {
+  if (0 == node) {
+    printf("NULL\n");
+  } else {
+    printf("n[%p|%s]->", node, (char*)node->val);
+  }
+}
 
 void
 test_static_str_list() {
@@ -60,13 +69,16 @@ test_static_str_list() {
   
   node_s *bee = list_find(head, "Bee", cmp_str_node);
   assert(0 == strcmp(bee->val, "Bee"));
+  list_iterate(head, iter_str_node);
 
   list_delete(&head, "Bee", cmp_str_node, free_node);
   assert(0 == list_find(head, "Bee", cmp_str_node));
   assert(0 != list_find(head, "Apple", cmp_str_node));
+  list_iterate(head, iter_str_node);
 
   list_delete(&head, "Apple", cmp_str_node, free_node);
   assert(0 == strcmp("Candy", head->val));
+  list_iterate(head, iter_str_node);
   
   list_free(head, free_node);
 }

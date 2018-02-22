@@ -74,3 +74,14 @@ list_delete(node_s **head,
   }
 }
 
+void
+list_iterate(node_s *head,
+             void (*iter)(const node_s *node)) {
+
+  assert((0 == iter) || "iter fn can not be null");
+
+  for (node_s *curr=head; curr; curr=curr->next) {
+    iter(curr);
+  }
+  iter(0);
+}
