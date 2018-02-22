@@ -46,9 +46,9 @@ cmp_int_node(const void *i1, const void *i2) {
 void
 iter_str_node(const node_s *node) {
   if (0 == node) {
-    printf("NULL\n");
+    printf("0\n");
   } else {
-    printf("n[%p|%s]->", node, (char*)node->val);
+    printf("[%p|%s]->", node, (char*)node->val);
   }
 }
 
