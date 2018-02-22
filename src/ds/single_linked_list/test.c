@@ -61,7 +61,42 @@ test_static_str_list() {
   list_free(head, free_node);
 }
 
+void
+test_dynamic_str_list() {
+  char *apple = malloc(32);
+  node_s *head = list_append(0, strcpy(apple, "Apple"), new_node);
+  assert((0 != head) && (0 == strcmp(apple, head->val)));
+
+  char *bee = malloc(32);
+  list_append(head, strcpy(bee, "Bee"), new_node);
+
+  char *candy = malloc(32);
+  list_append(head, strcpy(candy, "Candy"), new_node);
+
+  char *duck = malloc(32);
+  list_append(head, strcpy(duck, "Duck"), new_node);
+
+  node_s *nil = list_find(0, bee, cmp_str_node);
+  assert(0 == nil);
+
+  node_s *tail = list_find(head, 0, cmp_str_node);
+  assert(0 == tail);
+  
+  node_s *bee_node = list_find(head, bee, cmp_str_node);
+  assert(0 == strcmp(bee_node->val, bee));
+
+  list_delete(&head, bee, cmp_str_node, free_alloc_node);
+  assert(0 == list_find(head, bee, cmp_str_node));
+  assert(0 != list_find(head, apple, cmp_str_node));
+
+  list_delete(&head, apple, cmp_str_node, free_alloc_node);
+  assert(0 == strcmp(candy, head->val));
+
+  list_free(head, free_alloc_node);
+}
+
 int
 main() {
 	test_static_str_list();
+  test_dynamic_str_list();
 }
