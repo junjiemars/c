@@ -86,7 +86,7 @@ test_dynamic_str_list() {
   assert(0 == strcmp(bee_node->val, bee));
 
   list_delete(&head, bee, cmp_str_node, free_alloc_node);
-  assert(0 == list_find(head, bee, cmp_str_node));
+  assert(0 == list_find(head, "Bee", cmp_str_node));
   assert(0 != list_find(head, apple, cmp_str_node));
 
   list_delete(&head, apple, cmp_str_node, free_alloc_node);
