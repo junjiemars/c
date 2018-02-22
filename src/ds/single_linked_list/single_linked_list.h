@@ -16,4 +16,8 @@ node_s* list_append(node_s *head,
 void list_free(node_s *head,
                void (*node_free)(node_s *node));
 
+node_s* list_find(node_s *head,
+                  const void *val,
+                  int (*node_cmp)(const void *val1, const void* val2));
+
 #endif /* end of _SINGLE_LINKED_LIST_H_ */
