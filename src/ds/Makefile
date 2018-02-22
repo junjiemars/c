@@ -48,7 +48,7 @@ $(single_linked_list_binout): $(ds_root)single_linked_list/test.c \
 
 # stack
 stack_binout := $(bin_path)$(ds_prefix)_stack$(bin_ext)
-stack_inc += $(INC) -I$(ds_root)list
+stack_inc += $(INC) -I$(ds_root)double_list
 
 stack: $(stack_binout)
 stack_test: stack
@@ -59,11 +59,11 @@ stack_valgrind_test: stack
 
 $(stack_binout): $(ds_root)stack/test.c \
 								 $(ds_root)stack/stack.c \
-								 $(ds_root)list/list.c \
+								 $(ds_root)double_list/list.c \
 								 $(ds_root)stack/stack.h
 	$(CC) $(CFLAGS) $(stack_inc) \
 		$(ds_root)stack/test.c \
 		$(ds_root)stack/stack.c \
-		$(ds_root)list/list.c \
+		$(ds_root)double_list/list.c \
 		$(bin_out)$@
 
