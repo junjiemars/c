@@ -25,8 +25,10 @@ list_free(node_s *head,
 
   assert((0 != free) || "free fn can not be null");
 
-  for (node_s *curr=head; curr; curr=curr->next) {
-    free(curr);
+  while (0 != head) {
+    node_s *t = head;
+    head = head->next;
+    free(t);
   }
 }
 
