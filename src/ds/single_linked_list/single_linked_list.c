@@ -26,7 +26,7 @@ list_free(node_s *head,
 
   while (0 != head) {
     node_s *current = head;
-    node_free(current);
     head = head->next;
+    node_free(current);
   }
 }
