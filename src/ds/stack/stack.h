@@ -3,7 +3,7 @@
 #define _STACK_H_
 
 #include <stddef.h>
-#include <list.h>
+#include "double_linked_list/list.h"
 
 typedef struct stack {
 	size_t capacity;

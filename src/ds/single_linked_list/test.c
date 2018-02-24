@@ -1,3 +1,4 @@
+#include "_ds_.h"
 #include "list.h"
 #include <stdlib.h>
 #include <string.h>
@@ -31,7 +32,7 @@ cmp_str_node(const void *s1, const void *s2) {
   if (s1 && s2) {
     return strcmp(s1, s2);
   }
-  return s1 - s2;
+  return (int)((const char*)s1 - (const char*)s2);
 }
 
 int
@@ -40,7 +41,7 @@ cmp_int_node(const void *i1, const void *i2) {
     return *(int*)i1 - *(int*)i2;
   }
 
-  return i1 - i2;
+  return (int)((const int*)i1 - (const int*)i2);
 }
 
 void
