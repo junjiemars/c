@@ -2,13 +2,13 @@
 #include <string.h>
 #include <stdio.h>
 
-#if ! defined(NM_HAVE_VLA)
+#if ! defined( NM_HAVE_VLA )
 #include <stdlib.h>
 #endif
 
 void
 swap(void *a, void *b, size_t size) {
-#if ! defined(NM_HAVE_VLA)
+#if ! defined( NM_HAVE_VLA )
 	// current msvc does not support C99 variable length array 
 	// https://stackoverflow.com/questions/7303740/error-c2057-expected-constant-expression
 	uint8_t *buffer = malloc(size);
@@ -19,7 +19,7 @@ swap(void *a, void *b, size_t size) {
 	memcpy(a, b, size);
 	memcpy(b, buffer, size);
 
-#if ! defined(NM_HAVE_VLA)
+#if ! defined( NM_HAVE_VLA )
 	free(buffer);
 #endif
 }
