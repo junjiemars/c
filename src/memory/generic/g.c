@@ -1,14 +1,14 @@
-#include <_memory_.h>
+#include "_memory_.h"
 #include <string.h>
 #include <stdio.h>
 
-#if MSVC
+#if defined(MSVC)
 #include <stdlib.h>
 #endif
 
 void
 swap(void *a, void *b, size_t size) {
-#if MSVC
+#if defined(MSVC)
 	// current msvc does not support C99 variable length array 
 	// https://stackoverflow.com/questions/7303740/error-c2057-expected-constant-expression
 	uint8_t *buffer = malloc(size);
@@ -19,7 +19,7 @@ swap(void *a, void *b, size_t size) {
 	memcpy(a, b, size);
 	memcpy(b, buffer, size);
 
-#if MSVC
+#if defined(MSVC)
 	free(buffer);
 #endif
 }
