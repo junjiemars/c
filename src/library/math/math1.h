@@ -1,7 +1,7 @@
 
 #ifndef _MATH_H_
 
-#include <nore.h>
+#include "nore.h"
 
 
 

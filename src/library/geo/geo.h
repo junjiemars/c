@@ -1,7 +1,7 @@
 #ifndef _GEO_H_
 #define _GEO_H_
 
-#include <nore.h>
+#include "nore.h"
 
 
 // make CFLAGS=-DSHARED=1
