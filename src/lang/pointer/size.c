@@ -1,4 +1,4 @@
-#include "_lang_.h"
+#include <_lang_.h>
 #include <stdio.h>
 
 #ifdef NM_HAVE_STDINT_H

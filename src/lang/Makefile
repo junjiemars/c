@@ -235,6 +235,7 @@ stage_ldflags += -VERBOSE:LIB
 endif
 endif
 
+ifneq ($(CC_NAME), msvc)
 $(stage_binout): $(stage_objout)
 	$(LINK) $^ $(bin_out)$@ $(stage_ldflags)
 
@@ -246,6 +247,7 @@ $(stage_asmout): $(stage_cppout)
 
 $(stage_cppout): $(lang_root)stage/s.c
 	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
+endif
 
 # string
 string_basic_binout := $(bin_path)$(app_prefix)_string_basic$(bin_ext)
