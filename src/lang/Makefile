@@ -6,6 +6,7 @@ lang:	assert				\
 			exit          \
 			fn						\
 			goto					\
+			jmp           \
 			macro					\
 			main					\
 			pointer       \
@@ -22,6 +23,7 @@ lang_test:	assert_test					\
             exit_test           \
 						fn_test							\
 						goto_test						\
+            jmp_test            \
 						macro_test					\
 						main_test						\
 						pointer_test        \
@@ -111,6 +113,16 @@ goto_test: goto
 	$(goto_binout)
 
 $(goto_binout): $(lang_root)goto/g.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# jmp
+jmp_binout := $(bin_path)$(app_prefix)_jmp$(bin_ext)
+
+jmp: $(jmp_binout)
+jmp_test: jmp
+	$(jmp_binout)
+
+$(jmp_binout): $(lang_root)jmp/j.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # macro
