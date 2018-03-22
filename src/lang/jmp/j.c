@@ -12,7 +12,7 @@ a() {
 
 	printf("^setjmp() => ");
 	if (0 != (i = setjmp(env))) {
-		printf("$longjmp(%i)", i);
+		printf("$longjmp(%i)\n", i);
 		return i;
 	} else {
 		printf("b() => ");
