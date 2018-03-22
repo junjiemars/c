@@ -258,6 +258,8 @@ $(stage_cppout): $(lang_root)stage/s.c
 	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
 
 else
+stage:
+stage_test:
 stage_ldflags := -link -FORCE:MULTIPLE
 endif
 

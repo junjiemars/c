@@ -11,7 +11,7 @@ a() {
 	int i;
 
 	printf("^setjmp() => ");
-	if ((i = setjmp(env))) {
+	if (0 != (i = setjmp(env))) {
 		printf("$longjmp(%i)", i);
 		return i;
 	} else {
