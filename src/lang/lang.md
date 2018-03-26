@@ -5,6 +5,7 @@
 * [Assertion](#assertion)
 * [Enum](#enum)
 * [Error](#error)
+* [Function](#function)
 * [main Function](#main-function)
 * [Pointer](#pointer)
 * [Type](#type)
@@ -89,6 +90,8 @@ for other uses;
 by 30%-40%;
 * impossible for library function to enforce that callers check for 
 error condition.
+
+## Function
 
 
 ## main Function

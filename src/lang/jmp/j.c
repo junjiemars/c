@@ -12,7 +12,7 @@ a() {
 
 	printf("^setjmp() => ");
 	if (0 != (i = setjmp(env))) {
-		printf("$longjmp(%i)\n", i);
+		printf("$longjmp(0x%x)\n", i);
 		return i;
 	} else {
 		printf("b() => ");
@@ -30,7 +30,7 @@ b(jmp_buf env) {
 void
 c(jmp_buf env) {
 	printf("longjmp() => ");
-	longjmp(env, 1);
+	longjmp(env, 0x1234);
 }
 
 int
