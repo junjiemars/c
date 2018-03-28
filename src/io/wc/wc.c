@@ -8,7 +8,7 @@
 
 int
 count_file(const char * name, size_t *count, int (*test)(char)) {
-	FILE* file = fopen(name, "rb");
+	FILE* file = fopen(name, "r");
 	if (!file) {
 		return errno;
 	}
