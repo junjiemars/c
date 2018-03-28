@@ -1,11 +1,29 @@
 #include <_io_.h>
 #include <stdio.h>
-
+#include <errno.h>
 #include <getopt.h>
 
 void
 usage() {
   printf("usage: wc [-cl] [file ...]\n");
+}
+
+errno_t
+count_bytes(char const* name, size_t *count) {
+	FILE* file = fopen(name, "rb");
+	errno_t err = errno;
+	if (err) {
+		return err;
+	}
+
+	// todo:
+	
+ clean:
+	if (file) {
+		close(file);
+	}
+
+	return err;
 }
 
 int 
@@ -33,5 +51,10 @@ main(int argc, char **argv) {
     }
   }
 
-  
+
+	if (opt_count_bytes) {
+		size_t bytes = 0;
+		errno_t err = count_bytes(opt_filename, &bytes);
+		
+	}
 }
