@@ -10,11 +10,10 @@ io_prefix := io_
 
 INC += -I$(io_root)
 
-#ifeq ($(CC_NAME), msvc)
+ifeq ($(CC_NAME), msvc)
 INC += -I$(root)posix
-
 getopt_c := $(root)posix/getopt.c
-#endif
+endif
 
 
 # basic I/O
@@ -47,7 +46,7 @@ wc_binout := $(bin_path)$(io_prefix)wc$(bin_ext)
 
 wc: $(wc_binout)
 wc_test: wc
-	$(wc_binout) $(CURDIR)/Makefile
+	$(wc_binout) $(CURDIR)/Makefile $(CURDIR)/src/io/wc/wc.c
 
 $(wc_binout): $(io_root)wc/wc.c $(getopt_c)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

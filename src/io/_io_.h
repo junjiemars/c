@@ -4,7 +4,7 @@
 
 #include <nore.h>
 
-
 #define _unused_(x) (void)(x)
+
 
 #endif

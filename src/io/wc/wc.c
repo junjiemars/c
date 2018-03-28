@@ -2,35 +2,38 @@
 #include <stdio.h>
 #include <errno.h>
 #include <getopt.h>
+#include <string.h>
 
 void
 usage() {
   printf("usage: wc [-cl] [file ...]\n");
 }
 
-errno_t
-count_bytes(char const* name, size_t *count) {
+int
+count_bytes(const char * name, size_t *count) {
 	FILE* file = fopen(name, "rb");
-	errno_t err = errno;
-	if (err) {
-		return err;
+	if (!file) {
+		return errno;
 	}
 
-	// todo:
-	
- clean:
+	char byte;
+	while (1 == fread(&byte, sizeof(char), 1, file)) {
+		(*count)++;
+	}
+
 	if (file) {
-		close(file);
+		fclose(file);
 	}
 
-	return err;
+	return 0;
 }
 
 int 
 main(int argc, char **argv) {
   int opt_count_bytes = 1;
   int opt_count_lines = 1;
-  char *opt_filename = 0;
+	#define filename_size 16
+  char *opt_filename[filename_size] = {0};
 
   int ch;
   while (-1 != (ch = getopt(argc, argv, "cl"))) {
@@ -44,17 +47,32 @@ main(int argc, char **argv) {
       default:
         if ('-' == optarg[0]) {
           printf("%s: illegal option -- %s", argv[0], optarg);
-          usage();
-          return 1;
         }
-        opt_filename = optarg;
+				usage();
+				return -1;
     }
   }
 
-
-	if (opt_count_bytes) {
-		size_t bytes = 0;
-		errno_t err = count_bytes(opt_filename, &bytes);
-		
+	for (int i=optind, j=0; i < argc && j < filename_size; i++, j++) {
+		opt_filename[j] = argv[i];
 	}
+
+	size_t total = 0;
+	
+	if (opt_count_bytes) {
+		for (char **filename=opt_filename; *filename; filename++) {
+			size_t bytes = 0;
+			int e = count_bytes(*filename, &bytes);
+			if (e) {
+				printf("! %s [byte]=%s\n", *filename, strerror(e));
+			} else {
+				total += bytes;
+				printf("# %s [byte]=%zu\n", *filename, bytes);
+			}			
+		}
+
+		printf("# total [byte]=%zu\n", total);
+	}
+
+
 }
