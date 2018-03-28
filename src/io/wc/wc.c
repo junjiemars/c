@@ -4,13 +4,10 @@
 #include <getopt.h>
 #include <string.h>
 
-void
-usage() {
-  printf("usage: wc [-cl] [file ...]\n");
-}
+
 
 int
-count_bytes(const char * name, size_t *count) {
+count_file(const char * name, size_t *count, int (*test)(char)) {
 	FILE* file = fopen(name, "rb");
 	if (!file) {
 		return errno;
@@ -18,7 +15,9 @@ count_bytes(const char * name, size_t *count) {
 
 	char byte;
 	while (1 == fread(&byte, sizeof(char), 1, file)) {
-		(*count)++;
+		if (test(byte)) {
+			(*count)++;
+		}
 	}
 
 	if (file) {
@@ -28,21 +27,40 @@ count_bytes(const char * name, size_t *count) {
 	return 0;
 }
 
+void
+usage() {
+  printf("usage: wc [-cl] [file ...]\n");
+}
+
+int
+test_byte(char byte) {
+	_unused_(byte);
+	return 1;
+}
+
+int
+test_line(char line) {
+	return ('\n' == line);
+}
+
+#define filename_size 16
+#define fn_test(x) (2 == ((x) & 2) ? test_line : test_byte)
+#define str_test(x) (2 == ((x) & 2) ? "line" : "byte")
+
 int 
 main(int argc, char **argv) {
-  int opt_count_bytes = 1;
-  int opt_count_lines = 1;
-	#define filename_size 16
+	int opt_count_test = 0;
+
   char *opt_filename[filename_size] = {0};
 
   int ch;
   while (-1 != (ch = getopt(argc, argv, "cl"))) {
     switch (ch) {
       case 'c':
-        opt_count_bytes = 1;
+        opt_count_test = 1;
         break;
       case 'l':
-        opt_count_lines = 1;
+        opt_count_test = 2;
         break;
       default:
         if ('-' == optarg[0]) {
@@ -59,20 +77,16 @@ main(int argc, char **argv) {
 
 	size_t total = 0;
 	
-	if (opt_count_bytes) {
-		for (char **filename=opt_filename; *filename; filename++) {
-			size_t bytes = 0;
-			int e = count_bytes(*filename, &bytes);
-			if (e) {
-				printf("! %s [byte]=%s\n", *filename, strerror(e));
-			} else {
-				total += bytes;
-				printf("# %s [byte]=%zu\n", *filename, bytes);
-			}			
+	for (char **filename=opt_filename; *filename; filename++) {
+		size_t count = 0;
+		int e = count_file(*filename, &count, fn_test(opt_count_test));
+		if (e) {
+			printf("! %s [%s]=%s\n", *filename, str_test(opt_count_test), strerror(e));
+		} else {
+			total += count;
+			printf("# %s [%s]=%zu\n", *filename, str_test(opt_count_test), count);
 		}
-
-		printf("# total [byte]=%zu\n", total);
 	}
-
-
+		
+	printf("# total [%s]=%zu\n", str_test(opt_count_test), total);
 }
