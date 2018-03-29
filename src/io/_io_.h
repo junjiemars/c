@@ -6,5 +6,8 @@
 
 #define _unused_(x) (void)(x)
 
-
+#if MSVC
+	#pragma warning(disable:4996) /* _CRT_SECURE_NO_WARNINGS  */
 #endif
+
+#endif /* end of _IO_H_ */
