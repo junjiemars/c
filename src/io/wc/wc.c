@@ -23,7 +23,7 @@ count_file(const char * name,
 					 size_t (*count_delimeter)(FILE*, int (*)(char)),
 					 int (*test)(char)) {
 	
-	FILE* file = fopen(name, "r");
+	FILE* file = fopen(name, "rb");
 	if (!file) {
 		return errno;
 	}
