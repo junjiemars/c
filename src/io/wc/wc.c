@@ -43,21 +43,27 @@ usage() {
 }
 
 int
-test_byte(char byte) {
-	_unused_(byte);
+test_byte(char c) {
+	_unused_(c);
 	return 1;
 }
 
 int
-test_line(char line) {
-	return ('\n' == line);
+test_line(char c) {
+	return ('\n' == c);
+}
+
+int
+test_word(char c) {
+	return (' ' == c);
 }
 
 
 #define OP_MAP(XX)              \
-	XX(0, NONE, "none")						\
+	XX(0, NONE, "none")           \
 	XX(1, BYTE, "count bytes")    \
-	XX(2, LINE, "count lines")    \
+	XX(2, WORD, "count words")    \
+	XX(3, LINE, "count lines")    \
 
 enum op {
 #define XX(num, name, string) OP_##name = num,
@@ -65,34 +71,41 @@ enum op {
 #undef XX
 };
 
-#define filename_size 16
 
-#define fn_test(x)                                  \
-	(OP_LINE == ((x) & OP_LINE) ? test_line           \
-	 : (OP_BYTE == ((x) & OP_BYTE)) ? test_byte : 0)
-
-#define str_test(x)                                 \
-	(OP_LINE == ((x) & OP_LINE) ? "line"              \
-	 : (OP_BYTE == ((x) & OP_BYTE)) ? "byte" : 0)
+typedef struct test_fn_s {
+	const char *name;
+	int (*test)(char);
+} test_fn_s;
 
 
 int 
 main(int argc, char **argv) {
-	int opt_count_test = OP_NONE;
+	static test_fn_s test_fn_table[] = {
+		{0, 0},
+		{"byte", test_byte},
+		{"word", test_word},		
+		{"line", test_line},
+	};
 
+	#define filename_size 16
   char *opt_filename[filename_size] = {0};
-
+	test_fn_s *opt_count_test[sizeof(test_fn_table)/sizeof(test_fn_s)] = {0};
+	int opt_count_idx = 0;
+	
   int ch;
-  while (-1 != (ch = getopt(argc, argv, "hcl"))) {
+  while (-1 != (ch = getopt(argc, argv, "hcwl"))) {
     switch (ch) {
 		case 'h':
 			usage();
 			return 0;
 		case 'c':
-			opt_count_test = OP_BYTE;
+			opt_count_test[opt_count_idx++] = &test_fn_table[OP_BYTE];
+			break;
+		case 'w':
+			opt_count_test[opt_count_idx++] = &test_fn_table[OP_WORD];
 			break;
 		case 'l':
-			opt_count_test = OP_LINE;
+			opt_count_test[opt_count_idx++] = &test_fn_table[OP_LINE];
 			break;
 		default:
 			if ('-' == optarg[0]) {
@@ -108,23 +121,23 @@ main(int argc, char **argv) {
 	}
 
 	if (!*opt_filename) {
-		size_t count = count_delimeter(stdin, fn_test(opt_count_test));
-		printf("# [%s]=%zu\n", str_test(opt_count_test), count);
+    for (test_fn_s **p=opt_count_test; *p; p++) {
+			size_t count = count_delimeter(stdin, (*p)->test);
+			printf("# [%s]=%zu\n", (*p)->name, count);
+    }
 		return 0;
 	}
 
-	size_t total = 0;
 	
 	for (char **filename=opt_filename; *filename; filename++) {
-		size_t count = 0;
-		int e = count_file(*filename, &count, count_delimeter, fn_test(opt_count_test));
-		if (e) {
-			printf("! %s [%s]=%s\n", *filename, str_test(opt_count_test), strerror(e));
-		} else {
-			total += count;
-			printf("# %s [%s]=%zu\n", *filename, str_test(opt_count_test), count);
+		for (test_fn_s **p=opt_count_test; *p; p++) {
+			size_t count = 0;
+			int e = count_file(*filename, &count, count_delimeter, (*p)->test);
+			if (e) {
+				printf("! %s [%s]=%s\n", *filename, (*p)->name, strerror(e));
+			} else {
+				printf("# %s [%s]=%zu\n", *filename, (*p)->name, count);
+			}
 		}
 	}
-		
-	printf("# total [%s]=%zu\n", str_test(opt_count_test), total);
 }
