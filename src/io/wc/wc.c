@@ -128,16 +128,32 @@ main(int argc, char **argv) {
 		return 0;
 	}
 
-	
 	for (char **filename=opt_filename; *filename; filename++) {
+		char out_buf[2048] = {0};
+		int out_idx = 0;
+		int has_error = 0;
+
+		out_idx += sprintf(out_buf, "%s", *filename);
+		
 		for (test_fn_s **p=opt_count_test; *p; p++) {
 			size_t count = 0;
-			int e = count_file(*filename, &count, count_delimeter, (*p)->test);
+			int e = count_file(*filename,
+												 &count,
+												 count_delimeter,
+												 (*p)->test);
 			if (e) {
-				printf("! %s [%s]=%s\n", *filename, (*p)->name, strerror(e));
+				has_error += e;
+				out_idx += sprintf(out_buf+out_idx,
+													 " [%s]?%s",
+													 (*p)->name,
+													 strerror(e));
 			} else {
-				printf("# %s [%s]=%zu\n", *filename, (*p)->name, count);
+				out_idx += sprintf(out_buf+out_idx,
+													 " [%s]=%zu",
+													 (*p)->name,
+													 count);
 			}
 		}
+		printf("%s %s\n", (has_error ? "!" : "#"), out_buf);
 	}
 }
