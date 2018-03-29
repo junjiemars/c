@@ -43,6 +43,8 @@ $(format_binout): $(io_root)format/f.c
 
 # wc
 wc_binout := $(bin_path)$(io_prefix)wc$(bin_ext)
+wc_cppout := $(tmp_path)$(io_prefix)wc$(cpp_ext)
+
 
 wc: $(wc_binout)
 wc_test: wc
@@ -50,5 +52,8 @@ wc_test: wc
 	$(wc_binout) -c $(CURDIR)/Makefile $(CURDIR)/src/io/wc/wc.c
 	$(wc_binout) -l $(CURDIR)/Makefile $(CURDIR)/src/io/wc/wc.c
 
-$(wc_binout): $(io_root)wc/wc.c $(getopt_c)
+$(wc_binout): $(wc_cppout) $(getopt_c)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(wc_cppout): $(io_root)wc/wc.c
+	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
