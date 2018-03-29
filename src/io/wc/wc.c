@@ -63,7 +63,7 @@ test_word(char c) {
 	XX(0, NONE, "none")           \
 	XX(1, BYTE, "count bytes")    \
 	XX(2, WORD, "count words")    \
-	XX(3, LINE, "count lines")    \
+	XX(3, LINE, "count lines")
 
 enum op {
 #define XX(num, name, string) OP_##name = num,
