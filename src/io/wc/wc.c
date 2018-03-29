@@ -58,17 +58,11 @@ test_word(char c) {
 	return (' ' == c);
 }
 
-
-#define OP_MAP(XX)              \
-	XX(0, NONE, "none")           \
-	XX(1, BYTE, "count bytes")    \
-	XX(2, WORD, "count words")    \
-	XX(3, LINE, "count lines")
-
 enum op {
-#define XX(num, name, string) OP_##name = num,
-	OP_MAP(XX)
-#undef XX
+	OP_NONE,
+	OP_BYTE,
+	OP_WORD,
+	OP_LINE,
 };
 
 
