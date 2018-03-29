@@ -54,20 +54,23 @@ main(int argc, char **argv) {
   char *opt_filename[filename_size] = {0};
 
   int ch;
-  while (-1 != (ch = getopt(argc, argv, "cl"))) {
+  while (-1 != (ch = getopt(argc, argv, "hcl"))) {
     switch (ch) {
-      case 'c':
-        opt_count_test = 1;
-        break;
-      case 'l':
-        opt_count_test = 2;
-        break;
-      default:
-        if ('-' == optarg[0]) {
-          printf("%s: illegal option -- %s", argv[0], optarg);
-        }
-				usage();
-				return -1;
+		case 'h':
+			usage();
+			return 0;
+		case 'c':
+			opt_count_test = 1;
+			break;
+		case 'l':
+			opt_count_test = 2;
+			break;
+		default:
+			if ('-' == optarg[0]) {
+				printf("%s: illegal option -- %s", argv[0], optarg);
+			}
+			usage();
+			return -1;
     }
   }
 

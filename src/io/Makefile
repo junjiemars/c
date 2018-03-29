@@ -46,6 +46,7 @@ wc_binout := $(bin_path)$(io_prefix)wc$(bin_ext)
 
 wc: $(wc_binout)
 wc_test: wc
+	$(wc_binout) -h
 	$(wc_binout) -c $(CURDIR)/Makefile $(CURDIR)/src/io/wc/wc.c
 	$(wc_binout) -l $(CURDIR)/Makefile $(CURDIR)/src/io/wc/wc.c
 
