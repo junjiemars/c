@@ -17,13 +17,16 @@ typedef struct count_unit_s {
 	int error;
 	size_t lines;
 	size_t words;
-	size_t bytes;		
+	size_t bytes;
 } count_unit_s;
 
 typedef struct count_state_s {
 	int idx;
 	count_test_s test;
 	count_unit_s unit[filename_size];
+	size_t total_lines;
+	size_t total_words;
+	size_t total_bytes;
 } count_state_s;
 
 
@@ -82,18 +85,86 @@ test_byte(char c) {
 	return 1;
 }
 
-void print_state(const count_state_s *state) {
+void print_state(count_state_s *state) {
+	size_t max = 0;
+	size_t max_total = 0;
+	count_test_s *test = &state->test;
+	
 	for (int i=0; i<state->idx; i++) {
-		if (state->test.test_line) {
-			printf("%*zu ", 8, state->unit[i].lines);
+		count_unit_s *unit = &state->unit[i];
+		
+		if (test->test_line) {
+			state->total_lines += unit->lines;
+			if (max < unit->lines) {
+				max = unit->lines;
+			}
+			if (max_total < state->total_lines) {
+				max_total = state->total_lines;
+			}
 		}
-		if (state->test.test_word) {
-			printf("%*zu ", 8, state->unit[i].words);
+		
+		if (test->test_word) {
+			state->total_words += unit->words;
+			if (max < unit->words) {
+				max = unit->words;
+			}
+			if (max_total < state->total_words) {
+				max_total = state->total_words;
+			}
 		}
-		if (state->test.test_byte) {
-			printf("%*zu ", 8, state->unit[i].bytes);
+		
+		if (test->test_byte) {
+			state->total_bytes += unit->bytes;
+			if (max < unit->bytes) {
+				max = unit->bytes;
+			}
+			if (max_total < state->total_bytes) {
+				max_total = state->total_bytes;
+			}
 		}
-		printf("%s\n", state->unit[i].filename);
+	}
+
+	if (1 < state->idx && max < max_total) {
+		max = max_total;
+	}
+
+	int max_len = 1;
+	if (max < 10) {
+		max_len += 1;
+	} else {
+		size_t val = max;
+		while (val > 9) {
+			val /= 10;
+			max_len++;
+		}
+	}
+	
+	for (int i=0; i<state->idx; i++) {
+		count_unit_s *unit = &state->unit[i];
+		
+		if (test->test_line) {
+			printf("%*zu ", max_len, unit->lines);
+		}
+		if (test->test_word) {
+			printf("%*zu ", max_len, unit->words);
+		}
+		if (test->test_byte) {
+			printf("%*zu ", max_len, unit->bytes);
+		}
+		printf(" %s\n", unit->filename);
+	}
+
+	if (1 < state->idx) {
+		if (test->test_line) {
+			printf("%*zu ", max_len, state->total_lines);
+		}
+		if (test->test_word) {
+			printf("%*zu ", max_len, state->total_words);
+		}
+		if (test->test_byte) {
+			printf("%*zu ", max_len, state->total_bytes);
+		}
+		printf(" %s\n", "total");
 	}
 }
 
@@ -108,9 +179,9 @@ characters delimited by white space.\n");
 	printf("\nThe options below may be used to select which counts are printed, always in\n\
 the following order: newline, word, character, byte, maximum line length.\n");
 	printf("  -h, --help             print this message\n");
-	printf("  -c, --bytes            print the byte counts\n");
 	printf("  -l, --lines            print the newline counts\n");
 	printf("  -w, --words            print the word counts\n");
+	printf("  -c, --bytes            print the byte counts\n");
 }
 
 static int opt_has_lines = 0;
@@ -141,15 +212,15 @@ main(int argc, char **argv) {
 			return 0;
 		case 'c':
 			opt_has_bytes = 1;
-			opt_has_none = 1;
+			opt_has_none = 0;
 			break;
 		case 'w':
 			opt_has_words = 1;
-			opt_has_none = 1;
+			opt_has_none = 0;
 			break;
 		case 'l':
 			opt_has_lines = 1;
-			opt_has_none = 1;
+			opt_has_none = 0;
 			break;
 		case '-':
 			opt_has_from_stdin = 1;
