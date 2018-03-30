@@ -228,7 +228,7 @@ int
 main(int argc, char **argv) {
 	count_state_s state = {0};
   char *opt_filename[filename_size] = {0};
-	
+
   int ch;
   while (-1 != (ch = getopt_long(argc, argv, "hlwcL-", long_options, 0))) {
     switch (ch) {
