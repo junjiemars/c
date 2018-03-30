@@ -12,7 +12,7 @@ typedef struct count_test_s {
 	int (*test_line)(char);
 	int (*test_byte)(char);
 	int (*test_word)(char, char);
-	int test_max_line_length;
+	int (*test_max_line_length)(char, size_t*, size_t*);
 } count_test_s;
 
 typedef struct count_unit_s {
@@ -22,6 +22,7 @@ typedef struct count_unit_s {
 	size_t words;
 	size_t bytes;
 	size_t max_line_length;
+	size_t cur_line_length;
 } count_unit_s;
 
 typedef struct count_state_s {
@@ -66,6 +67,12 @@ count(count_state_s *state) {
 			unit->bytes++;
 		}
 
+		if (test->test_max_line_length) {
+			test->test_max_line_length(current,
+																 &unit->max_line_length,
+																 &unit->cur_line_length);
+		}
+
 		previous = current;
 	}
 
@@ -91,6 +98,21 @@ test_word(char c, char p) {
 int
 test_byte(char c) {
 	return (0 != c);
+}
+
+int
+test_max_line_length(char c, size_t *max, size_t *cur) {
+	if (test_line(c)) {
+		if (*max < *cur) {
+			*max = *cur;
+			*cur = 0;
+		}
+	} else if (test_byte(c)) {
+		(*cur)++;
+	} else {
+		return 0;
+	}
+	return 1;
 }
 
 void print_state(count_state_s *state) {
@@ -246,6 +268,7 @@ main(int argc, char **argv) {
 			break;
 		case 'L':
 			opt_has_max_line_length = 1;
+			opt_has_none = 0;
 			break;
 		case '-':
 			opt_has_from_stdin = 1;
@@ -271,7 +294,8 @@ main(int argc, char **argv) {
 		state.test.test_line = (opt_has_lines ? test_line : 0);
 		state.test.test_word = (opt_has_words ? test_word : 0);
 		state.test.test_byte = (opt_has_bytes ? test_byte : 0);
-		state.test.test_max_line_length = (opt_has_max_line_length ? 1 : 0);
+		state.test.test_max_line_length = (opt_has_max_line_length
+																			 ? test_max_line_length : 0);
 	}
 
 	if (!*opt_filename || opt_has_from_stdin) {
