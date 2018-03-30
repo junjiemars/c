@@ -58,10 +58,8 @@ count(count_state_s *state) {
 			unit->lines++;
 		}
 
-		if (test->test_word) {
-			if (test->test_word(current, previous)) {
-				unit->words++;
-			} 
+		if (test->test_word && test->test_word(current, previous)) {
+			unit->words++;
 		}
 
 		if (test->test_byte && test->test_byte(current)) {
@@ -74,6 +72,10 @@ count(count_state_s *state) {
 	if (!is_stdin && file) {
 		fclose(file);
 	}
+
+	if (test->test_word && test->test_word(EOF, previous)) {
+		unit->words++;
+	}
 }
 
 int
@@ -83,7 +85,7 @@ test_line(char c) {
 
 int
 test_word(char c, char p) {
-	return (0 != p && !isspace(p) && isspace(c));
+	return (0 != p && !isspace(p) && (isspace(c) || EOF == c));
 }
 
 int
