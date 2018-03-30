@@ -9,7 +9,8 @@
 typedef struct count_test_s {
 	int (*test_line)(char);
 	int (*test_byte)(char);
-	int (*test_word)(char);			
+	int (*test_word)(char);
+	int test_max_line_length;
 } count_test_s;
 
 typedef struct count_unit_s {
@@ -18,6 +19,7 @@ typedef struct count_unit_s {
 	size_t lines;
 	size_t words;
 	size_t bytes;
+	size_t max_line_length;
 } count_unit_s;
 
 typedef struct count_state_s {
@@ -27,6 +29,7 @@ typedef struct count_state_s {
 	size_t total_lines;
 	size_t total_words;
 	size_t total_bytes;
+	size_t max_max_line_length;
 } count_state_s;
 
 
@@ -36,6 +39,7 @@ count(count_state_s *state) {
 	int is_stdin = 0;
 	count_unit_s *unit = &state->unit[state->idx];
 	count_test_s *test = &state->test;
+	size_t max_line_length = 0;
 	
 	if (0 == unit->filename || '-' == unit->filename[0]) {
 		is_stdin = 1;
@@ -51,10 +55,11 @@ count(count_state_s *state) {
 	while (1 == fread(&byte, sizeof(char), 1, file)) {
 		if (test->test_line && test->test_line(byte)) {
 			unit->lines++;
-		}
-
-		if (test->test_byte && test->test_byte(byte)) {
-			unit->bytes++;
+			if (test->test_max_line_length
+					&& unit->max_line_length < max_line_length) {
+				unit->max_line_length = max_line_length;
+				max_line_length = 0;
+			}		
 		}
 
 		if (test->test_word) {
@@ -62,6 +67,12 @@ count(count_state_s *state) {
 				unit->words++;
 			} 
 		}
+
+		if (test->test_byte && test->test_byte(byte)) {
+			unit->bytes++;
+			max_line_length++;
+		}
+
 	}
 
 	if (!is_stdin && file) {
@@ -122,6 +133,11 @@ void print_state(count_state_s *state) {
 				max_total = state->total_bytes;
 			}
 		}
+
+		if (test->test_max_line_length
+				&& state->max_max_line_length < unit->max_line_length) {
+			state->max_max_line_length = unit->max_line_length;
+		}
 	}
 
 	if (1 < state->idx && max < max_total) {
@@ -151,6 +167,9 @@ void print_state(count_state_s *state) {
 		if (test->test_byte) {
 			printf("%*zu ", max_len, unit->bytes);
 		}
+		if (test->test_max_line_length) {
+			printf("%*zu ", max_len, unit->max_line_length);
+		}
 		printf(" %s\n", unit->filename);
 	}
 
@@ -164,14 +183,17 @@ void print_state(count_state_s *state) {
 		if (test->test_byte) {
 			printf("%*zu ", max_len, state->total_bytes);
 		}
+		if (test->test_max_line_length) {
+			printf("%*zu ", max_len, state->max_max_line_length);
+		}
 		printf(" %s\n", "total");
 	}
 }
 
 void
-usage() {
-  printf("Usage: /usr/bin/wc [OPTION]... [FILE]...\n");
-	printf("  or:  /usr/bin/wc [OPTION]... --files0-from=F\n");
+usage(const char *wc) {
+  printf("Usage: %s [OPTION]... [FILE]...\n", wc);
+	printf("\n");
 	printf("Print newline, word, and byte counts for each FILE, and a total line if\n\
 more than one FILE is specified.  A word is a non-zero-length sequence of\n\
 characters delimited by white space.\n");
@@ -182,11 +204,13 @@ the following order: newline, word, character, byte, maximum line length.\n");
 	printf("  -l, --lines            print the newline counts\n");
 	printf("  -w, --words            print the word counts\n");
 	printf("  -c, --bytes            print the byte counts\n");
+	printf("  -L, --max-line-length  print the maximum display width\n");
 }
 
 static int opt_has_lines = 0;
 static int opt_has_words = 0;
 static int opt_has_bytes = 0;
+static int opt_has_max_line_length = 0;
 static int opt_has_from_stdin = 0;
 static int opt_has_none = 1;
 
@@ -195,6 +219,7 @@ static struct option long_options[] = {
 			{"bytes",  no_argument,   0, 'c'},
 			{"lines",  no_argument,   0, 'l'},
 			{"words",  no_argument,   0, 'w'},
+			{"max-line-length", no_argument, 0, 'L'},
 			{0,        no_argument,   0, '-'},
 			{0,        0,             0,  0 },
 };
@@ -205,22 +230,25 @@ main(int argc, char **argv) {
   char *opt_filename[filename_size] = {0};
 	
   int ch;
-  while (-1 != (ch = getopt_long(argc, argv, "hcwl-", long_options, 0))) {
+  while (-1 != (ch = getopt_long(argc, argv, "hlwcL-", long_options, 0))) {
     switch (ch) {
 		case 'h':
-			usage();
+			usage(argv[0]);
 			return 0;
-		case 'c':
-			opt_has_bytes = 1;
+		case 'l':
+			opt_has_lines = 1;
 			opt_has_none = 0;
 			break;
 		case 'w':
 			opt_has_words = 1;
 			opt_has_none = 0;
 			break;
-		case 'l':
-			opt_has_lines = 1;
+		case 'c':
+			opt_has_bytes = 1;
 			opt_has_none = 0;
+			break;
+		case 'L':
+			opt_has_max_line_length = 1;
 			break;
 		case '-':
 			opt_has_from_stdin = 1;
@@ -229,7 +257,7 @@ main(int argc, char **argv) {
 			if ('-' == optarg[0]) {
 				printf("%s: illegal option -- %s", argv[0], optarg);
 			}
-			usage();
+			usage(argv[0]);
 			return -1;
     }
   }
@@ -246,6 +274,7 @@ main(int argc, char **argv) {
 		state.test.test_line = (opt_has_lines ? test_line : 0);
 		state.test.test_word = (opt_has_words ? test_word : 0);
 		state.test.test_byte = (opt_has_bytes ? test_byte : 0);
+		state.test.test_max_line_length = (opt_has_max_line_length ? 1 : 0);
 	}
 
 	if (!*opt_filename || opt_has_from_stdin) {
