@@ -226,7 +226,7 @@ static struct option long_options[] = {
 
 int 
 main(int argc, char **argv) {
-	count_state_s state = {0};
+	count_state_s state; memset(&state, 0, sizeof(state));
   char *opt_filename[filename_size] = {0};
 
   int ch;
