@@ -12,7 +12,7 @@ typedef struct count_test_s {
 	int (*test_line)(char);
 	int (*test_byte)(char);
 	int (*test_word)(char, char);
-	int (*test_max_line_length)(char, size_t*, size_t*);
+	void (*test_max_line_length)(char, size_t*, size_t*);
 } count_test_s;
 
 typedef struct count_unit_s {
@@ -80,7 +80,7 @@ count(count_state_s *state) {
 		fclose(file);
 	}
 
-	if (test->test_word && test->test_word(EOF, previous)) {
+	if (test->test_word && test->test_word(0, previous)) {
 		unit->words++;
 	}
 }
@@ -92,7 +92,7 @@ test_line(char c) {
 
 int
 test_word(char c, char p) {
-	return (0 != p && !isspace(p) && (isspace(c) || EOF == c));
+	return (0 != p && !isspace(p) && (isspace(c) || 0 == c));
 }
 
 int
@@ -100,19 +100,16 @@ test_byte(char c) {
 	return (0 != c);
 }
 
-int
+void
 test_max_line_length(char c, size_t *max, size_t *cur) {
 	if (test_line(c)) {
 		if (*max < *cur) {
 			*max = *cur;
-			*cur = 0;
 		}
-	} else if (test_byte(c)) {
-		(*cur)++;
+		*cur = 0;
 	} else {
-		return 0;
+		(*cur)++;
 	}
-	return 1;
 }
 
 void print_state(count_state_s *state) {
