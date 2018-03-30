@@ -3,13 +3,15 @@
 #include <errno.h>
 #include <getopt.h>
 #include <string.h>
+#include <ctype.h>
+
 
 #define filename_size 16
 
 typedef struct count_test_s {
 	int (*test_line)(char);
 	int (*test_byte)(char);
-	int (*test_word)(char);
+	int (*test_word)(char, char);
 	int test_max_line_length;
 } count_test_s;
 
@@ -39,7 +41,6 @@ count(count_state_s *state) {
 	int is_stdin = 0;
 	count_unit_s *unit = &state->unit[state->idx];
 	count_test_s *test = &state->test;
-	size_t max_line_length = 0;
 	
 	if (0 == unit->filename || '-' == unit->filename[0]) {
 		is_stdin = 1;
@@ -51,28 +52,23 @@ count(count_state_s *state) {
 		}
 	}
 
-	char byte;
-	while (1 == fread(&byte, sizeof(char), 1, file)) {
-		if (test->test_line && test->test_line(byte)) {
+	char current = 0, previous = 0;
+	while (1 == fread(&current, sizeof(char), 1, file)) {
+		if (test->test_line && test->test_line(current)) {
 			unit->lines++;
-			if (test->test_max_line_length
-					&& unit->max_line_length < max_line_length) {
-				unit->max_line_length = max_line_length;
-				max_line_length = 0;
-			}		
 		}
 
 		if (test->test_word) {
-			if (test->test_word(byte)) {
+			if (test->test_word(current, previous)) {
 				unit->words++;
 			} 
 		}
 
-		if (test->test_byte && test->test_byte(byte)) {
+		if (test->test_byte && test->test_byte(current)) {
 			unit->bytes++;
-			max_line_length++;
 		}
 
+		previous = current;
 	}
 
 	if (!is_stdin && file) {
@@ -86,14 +82,13 @@ test_line(char c) {
 }
 
 int
-test_word(char c) {
-	return (' ' == c);
+test_word(char c, char p) {
+	return (0 != p && !isspace(p) && isspace(c));
 }
 
 int
 test_byte(char c) {
-	_unused_(c);
-	return 1;
+	return (0 != c);
 }
 
 void print_state(count_state_s *state) {
