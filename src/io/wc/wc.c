@@ -6,7 +6,7 @@
 #include <ctype.h>
 
 
-#define filename_size 16
+#define filename_size 64
 
 typedef struct count_test_s {
 	int (*test_line)(char);
