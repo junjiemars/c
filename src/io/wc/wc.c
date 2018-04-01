@@ -187,10 +187,10 @@ void print_state(count_state_s *state) {
 		if (test->test_max_line_length) {
 			printf("%*zu ", max_len, unit->max_line_length);
 		}
-		if (!unit->error) {
-			printf(" %s\n", unit->filename);
+		if (unit->error) {
+			printf(" %s@%s\n", unit->filename, strerror(unit->error));			
 		} else {
-			printf(" %s@%s\n", unit->filename, strerror(unit->error));
+			printf(" %s\n", unit->filename);
 		}
 	}
 
