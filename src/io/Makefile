@@ -51,6 +51,10 @@ wc_test: wc
 	$(wc_binout) --help
 	echo -e "a\n b\n c" | $(wc_binout)
 	$(wc_binout) -c -w -c -L $(CURDIR)/Makefile $(CURDIR)/src/io/wc/wc.c
+wc_valgrind_test: wc
+	valgrind --leak-check=full \
+           --track-origins=yes \
+           $(wc_binout) $(CURDIR)/src/io/wc/wc.c
 
 $(wc_binout): $(io_root)wc/wc.c $(getopt_c)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
