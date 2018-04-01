@@ -246,7 +246,7 @@ static int opt_has_from_stdin = 0;
 static int opt_has_none = 1;
 
 static count_state_s state;
-count_unit_s unit[files_min_count] = {0};
+count_unit_s unit[files_min_count];
 
 void
 on_exit(void) {
@@ -307,6 +307,7 @@ main(int argc, char **argv) {
 			exit(errno);
 		}
 	} else {
+		memset(&unit, 0, sizeof(unit));
 		state.unit = unit;
 	}
 	
