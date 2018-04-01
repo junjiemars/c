@@ -54,7 +54,7 @@ wc_test: wc
 wc_valgrind_test: wc
 	valgrind --leak-check=full \
            --track-origins=yes \
-           $(wc_binout) $(CURDIR)/src/io/wc/wc.c
+           $(wc_binout) $(shell ls $(CURDIR)/src/*.c)
 
 $(wc_binout): $(io_root)wc/wc.c $(getopt_c)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
