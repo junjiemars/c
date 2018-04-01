@@ -187,7 +187,11 @@ void print_state(count_state_s *state) {
 		if (test->test_max_line_length) {
 			printf("%*zu ", max_len, unit->max_line_length);
 		}
-		printf(" %s\n", unit->filename);
+		if (!unit->error) {
+			printf(" %s\n", unit->filename);
+		} else {
+			printf(" %s@%s\n", unit->filename, strerror(unit->error));
+		}
 	}
 
 	if (1 < state->idx) {
@@ -246,7 +250,9 @@ count_unit_s unit[files_min_count] = {0};
 
 void
 on_exit(void) {
-	free(state.unit);
+	if (state.unit) {
+		free(state.unit);
+	}
 }
 
 int 
@@ -290,11 +296,12 @@ main(int argc, char **argv) {
 	if (optind == argc) {
 		opt_has_from_stdin++;
 	}
-	
-	if (files_min_count < (argc - optind)) {
-	  state.unit = malloc(sizeof(count_unit_s) * (argc - optind));
+
+	int files_count = argc - optind;
+	if (files_min_count < files_count) {
+	  state.unit = malloc(sizeof(count_unit_s) * files_count);
 		if (state.unit) {
-			memset(state.unit, 0, sizeof(count_unit_s) * (argc - optind));
+			memset(state.unit, 0, sizeof(count_unit_s) * files_count);
 			atexit(&on_exit);
 		} else {
 			exit(errno);
