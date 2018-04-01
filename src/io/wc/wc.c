@@ -4,9 +4,10 @@
 #include <getopt.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 
-#define filename_size 64
+#define files_min_count 16
 
 typedef struct count_test_s {
 	int (*test_line)(char);
@@ -28,7 +29,7 @@ typedef struct count_unit_s {
 typedef struct count_state_s {
 	int idx;
 	count_test_s test;
-	count_unit_s unit[filename_size];
+	count_unit_s *unit;
 	size_t total_lines;
 	size_t total_words;
 	size_t total_bytes;
@@ -223,13 +224,6 @@ the following order: newline, word, character, byte, maximum line length.\n");
 	printf("  -L, --max-line-length  print the maximum display width\n");
 }
 
-static int opt_has_lines = 0;
-static int opt_has_words = 0;
-static int opt_has_bytes = 0;
-static int opt_has_max_line_length = 0;
-static int opt_has_from_stdin = 0;
-static int opt_has_none = 1;
-
 static struct option long_options[] = {
 			{"help",   no_argument,   0, 'h'},
 			{"bytes",  no_argument,   0, 'c'},
@@ -240,11 +234,23 @@ static struct option long_options[] = {
 			{0,        0,             0,  0 },
 };
 
+static int opt_has_lines = 0;
+static int opt_has_words = 0;
+static int opt_has_bytes = 0;
+static int opt_has_max_line_length = 0;
+static int opt_has_from_stdin = 0;
+static int opt_has_none = 1;
+
+static count_state_s state;
+count_unit_s unit[files_min_count] = {0};
+
+void
+on_exit(void) {
+	free(state.unit);
+}
+
 int 
 main(int argc, char **argv) {
-	count_state_s state; memset(&state, 0, sizeof(state));
-  char *opt_filename[filename_size] = {0};
-
   int ch;
   while (-1 != (ch = getopt_long(argc, argv, "hlwcL-", long_options, 0))) {
     switch (ch) {
@@ -268,7 +274,7 @@ main(int argc, char **argv) {
 			opt_has_none = 0;
 			break;
 		case '-':
-			opt_has_from_stdin = 1;
+			opt_has_from_stdin++;
 			break;
 		default:
 			if ('-' == optarg[0]) {
@@ -279,10 +285,24 @@ main(int argc, char **argv) {
     }
   }
 
-	for (int i=optind, j=0; i < argc && j < filename_size; i++, j++) {
-		opt_filename[j] = argv[i];
-	}
+	memset(&state, 0, sizeof(state));
 
+	if (optind == argc) {
+		opt_has_from_stdin++;
+	}
+	
+	if (files_min_count < (argc - optind)) {
+	  state.unit = malloc(sizeof(count_unit_s) * (argc - optind));
+		if (state.unit) {
+			memset(state.unit, 0, sizeof(count_unit_s) * (argc - optind));
+			atexit(&on_exit);
+		} else {
+			exit(errno);
+		}
+	} else {
+		state.unit = unit;
+	}
+	
 	if (opt_has_none) {
 		state.test.test_line = test_line;
 		state.test.test_word = test_word;
@@ -295,14 +315,14 @@ main(int argc, char **argv) {
 																			 ? test_max_line_length : 0);
 	}
 
-	if (!*opt_filename || opt_has_from_stdin) {
+	if (opt_has_from_stdin) {
 		state.unit[state.idx].filename = "-";
 		count(&state);
 		state.idx++;
 	}
 
-	for (char **filename=opt_filename; *filename; filename++) {
-    state.unit[state.idx].filename = *filename;
+	for (int i=optind; i < argc; i++) {
+    state.unit[state.idx].filename = argv[i];
 		count(&state);
 		state.idx++;
 	}	
