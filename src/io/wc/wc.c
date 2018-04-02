@@ -33,6 +33,7 @@ typedef struct count_state_s {
 	size_t total_lines;
 	size_t total_words;
 	size_t total_bytes;
+	size_t max_total;
 	size_t max_max_line_length;
 } count_state_s;
 
@@ -58,20 +59,35 @@ count(count_state_s *state) {
 	while (1 == fread(&current, sizeof(char), 1, file)) {
 		if (test->test_line && test->test_line(current)) {
 			unit->lines++;
+			state->total_lines++;
+			if (state->max_total < state->total_lines) {
+				state->max_total = state->total_lines;
+			}
 		}
 
 		if (test->test_word && test->test_word(current, previous)) {
 			unit->words++;
+			state->total_words++;
+			if (state->max_total < state->total_words) {
+				state->max_total = state->total_words;
+			}
 		}
 
 		if (test->test_byte && test->test_byte(current)) {
 			unit->bytes++;
+			state->total_bytes++;
+			if (state->max_total < state->total_bytes) {
+				state->max_total = state->total_bytes;
+			}
 		}
 
 		if (test->test_max_line_length) {
 			test->test_max_line_length(current,
 																 &unit->max_line_length,
 																 &unit->cur_line_length);
+			if (state->max_max_line_length < unit->max_line_length) {
+				state->max_max_line_length = unit->max_line_length;
+			}
 		}
 
 		previous = current;
@@ -83,6 +99,10 @@ count(count_state_s *state) {
 
 	if (test->test_word && test->test_word(0, previous)) {
 		unit->words++;
+		state->total_words++;
+		if (state->max_total < state->total_words) {
+			state->max_total = state->total_words;
+		}
 	}
 }
 
@@ -114,58 +134,25 @@ test_max_line_length(char c, size_t *max, size_t *cur) {
 }
 
 void print_state(count_state_s *state) {
-	size_t max = 0;
-	size_t max_total = 0;
-	count_test_s *test = &state->test;
-	
-	for (int i=0; i<state->idx; i++) {
-		count_unit_s *unit = &state->unit[i];
-		
-		if (test->test_line) {
-			state->total_lines += unit->lines;
-			if (max < unit->lines) {
-				max = unit->lines;
-			}
-			if (max_total < state->total_lines) {
-				max_total = state->total_lines;
-			}
-		}
-		
-		if (test->test_word) {
-			state->total_words += unit->words;
-			if (max < unit->words) {
-				max = unit->words;
-			}
-			if (max_total < state->total_words) {
-				max_total = state->total_words;
-			}
-		}
-		
-		if (test->test_byte) {
-			state->total_bytes += unit->bytes;
-			if (max < unit->bytes) {
-				max = unit->bytes;
-			}
-			if (max_total < state->total_bytes) {
-				max_total = state->total_bytes;
-			}
-		}
-
-		if (test->test_max_line_length
-				&& state->max_max_line_length < unit->max_line_length) {
-			state->max_max_line_length = unit->max_line_length;
-		}
-	}
-
-	if (1 < state->idx && max < max_total) {
-		max = max_total;
-	}
-
 	int max_len = 1;
-	if (max < 10) {
+	count_test_s *test = &state->test;
+
+	/* just stdin and one option: easy to parse the result*/
+	if (1 == state->idx && '-' == state->unit[0].filename[0]
+			&& (1 == (test->test_line ? 1 : 0)
+					+ (test->test_word ? 1 : 0)
+					+ (test->test_byte ? 1 : 0)
+					+ (test->test_max_line_length ? 1 : 0))) {
+		size_t n = (test->test_max_line_length
+								? state->max_max_line_length : state->max_total);
+		printf("%zu\n", n);
+		return;
+	}
+
+	if (state->max_total < 10) {
 		max_len += 1;
 	} else {
-		size_t val = max;
+		size_t val = state->max_total;
 		while (val > 9) {
 			val /= 10;
 			max_len++;

@@ -49,8 +49,12 @@ wc_cppout := $(tmp_path)$(io_prefix)wc$(cpp_ext)
 wc: $(wc_binout)
 wc_test: wc
 	$(wc_binout) --help
+	echo -n "abc" | $(wc_binout) -c
 	echo -e "a\n b\n c" | $(wc_binout)
 	$(wc_binout) -l -w -c -L $(CURDIR)/Makefile $(CURDIR)/src/io/wc/wc.c
+	echo -n "abc" | \
+    $(wc_binout) -l -w -c -L \
+    $(CURDIR)/Makefile $(CURDIR)/src/io/wc/wc.c -
 wc_valgrind_test: wc
 	valgrind --leak-check=full \
            --track-origins=yes \
