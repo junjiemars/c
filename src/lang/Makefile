@@ -34,7 +34,7 @@ lang_test:	assert_test					\
 						type_test
 
 
-app_prefix := lang
+lang_prefix := lang
 INC += -I$(lang_root)
 
 # assert at runtime
@@ -66,7 +66,7 @@ $(enum_cppout): $(lang_root)enum/e.c
 	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
 
 # env
-env_binout := $(bin_path)$(app_prefix)_env$(bin_ext)
+env_binout := $(bin_path)$(lang_prefix)_env$(bin_ext)
 env_cflags := $(CFLAGS) $(INC) -I$(lang_root)env/
 
 $(env_binout): $(lang_root)env/env.c $(lang_root)env/env.h
@@ -80,8 +80,8 @@ env_test: env
 	COUNT=2 $(env_binout) --TEXT=Bonjour
 
 # exit
-exit_binout := $(bin_path)$(app_prefix)_exit$(bin_ext)
-exit_no_fn_binout := $(bin_path)$(app_prefix)_exit_no_fn$(bin_ext)
+exit_binout := $(bin_path)$(lang_prefix)_exit$(bin_ext)
+exit_no_fn_binout := $(bin_path)$(lang_prefix)_exit_no_fn$(bin_ext)
 
 exit: $(exit_binout) $(exit_no_fn_binout)
 exit_test: exit
@@ -96,7 +96,7 @@ $(exit_no_fn_binout): $(lang_root)exit/exit_no_fn.c
 
 
 # fn
-fn_binout := $(bin_path)fn$(bin_ext)
+fn_binout := $(bin_path)$(lang_prefix)_fn$(bin_ext)
 
 fn: $(fn_binout)
 fn_test: fn
@@ -116,7 +116,7 @@ $(goto_binout): $(lang_root)goto/g.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # jmp
-jmp_binout := $(bin_path)$(app_prefix)_jmp$(bin_ext)
+jmp_binout := $(bin_path)$(lang_prefix)_jmp$(bin_ext)
 
 jmp: $(jmp_binout)
 jmp_test: jmp
@@ -142,8 +142,8 @@ $(macro_cppout): $(lang_root)macro/macro.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # main
-main_binout := $(bin_path)$(app_prefix)_main$(bin_ext)
-main_envp_binout := $(bin_path)$(app_prefix)_main_envp$(bin_ext)
+main_binout := $(bin_path)$(lang_prefix)_main$(bin_ext)
+main_envp_binout := $(bin_path)$(lang_prefix)_main_envp$(bin_ext)
 
 main: $(main_binout) $(main_envp_binout)
 main_test: main
@@ -157,12 +157,12 @@ $(main_envp_binout): $(lang_root)main/m_envp.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # pointer
-pointer_basic_binout := $(bin_path)$(app_prefix)_pointer_basic$(bin_ext)
-pointer_const_binout := $(bin_path)$(app_prefix)_pointer_const$(bin_ext)
-pointer_fn_binout := $(bin_path)$(app_prefix)_pointer_fn$(bin_ext)
-pointer_size_binout := $(bin_path)$(app_prefix)_pointer_size$(bin_ext)
+pointer_basic_binout := $(bin_path)$(lang_prefix)_pointer_basic$(bin_ext)
+pointer_const_binout := $(bin_path)$(lang_prefix)_pointer_const$(bin_ext)
+pointer_fn_binout := $(bin_path)$(lang_prefix)_pointer_fn$(bin_ext)
+pointer_size_binout := $(bin_path)$(lang_prefix)_pointer_size$(bin_ext)
 
-pointer_void_binout := $(bin_path)$(app_prefix)_pointer_void$(bin_ext)
+pointer_void_binout := $(bin_path)$(lang_prefix)_pointer_void$(bin_ext)
 
 pointer_basic_test: $(pointer_basic_binout)
 	$(pointer_basic_binout)
@@ -265,7 +265,7 @@ endif
 
 
 # string
-string_basic_binout := $(bin_path)$(app_prefix)_string_basic$(bin_ext)
+string_basic_binout := $(bin_path)$(lang_prefix)_string_basic$(bin_ext)
 
 string_basic_test: $(string_basic_binout)
 	$(string_basic_binout)
