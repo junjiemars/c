@@ -212,7 +212,7 @@ the following order: newline, word, byte, maximum line length.\n");
 	printf("  -l, --lines            print the newline counts\n");
 	printf("  -w, --words            print the word counts\n");
 	printf("  -c, --bytes            print the byte counts\n");
-	printf("  -L, --max-line-length  print the maximum display width\n");
+	printf("  -L, --max-line-length  print the maximum width in bytes\n");
 }
 
 static struct option long_options[] = {
