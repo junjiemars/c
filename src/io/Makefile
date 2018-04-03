@@ -1,9 +1,11 @@
 
 io: basic  \
 		format \
+		scan   \
 		wc
 io_test: basic_test  \
 				 format_test \
+				 scan_test   \
 				 wc_test
 
 io_prefix := io_
@@ -39,6 +41,16 @@ format_test: format
 	$(format_binout)
 
 $(format_binout): $(io_root)format/f.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# scan
+scan_binout := $(bin_path)$(io_prefix)scan$(bin_ext)
+
+scan: $(scan_binout)
+scan_test: scan
+	echo -n "X" "1234" "5678" "3.1415" "2.718" | $(scan_binout)
+
+$(scan_binout): $(io_root)scan/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # wc
