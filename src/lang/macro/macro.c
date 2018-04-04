@@ -24,10 +24,12 @@
 
 #ifdef NM_HAVE_VARIADIC_MACRO
 
-	#ifdef MSVC
+	#if defined(NM_HAVE_SPRINTF_S)
 		#define io_sprintf(b, ...) sprintf_s(b, sizeof(b), __VA_ARGS__)
-	#else
-		#define io_sprintf(b, ...) sprintf(b, __VA_ARGS__)
+	#elif defined(NM_HAVE_SNPRINTF)
+		#define io_sprintf(b, ...) snprintf(b, sizeof(b), __VA_ARGS__)
+  #else
+    #define io_sprintf(b, ...) sprintf(b, __VA_ARGS__)
 	#endif
 
 #endif
