@@ -148,7 +148,7 @@ main_envp_binout := $(bin_path)$(lang_prefix)_main_envp$(bin_ext)
 main: $(main_binout) $(main_envp_binout)
 main_test: main
 	$(main_binout) a bb ccc
-	XXX=xyz $(main3_binout)
+	ZZZ=xyz $(main_envp_binout)
 
 $(main_binout): $(lang_root)main/m.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
