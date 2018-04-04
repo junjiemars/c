@@ -40,7 +40,7 @@ INC += -I$(lang_root)
 # assert at runtime
 # static_assert at compile time
 
-assert_binout := $(bin_path)assert$(bin_ext)
+assert_binout := $(bin_path)$(lang_prefix)_assert$(bin_ext)
 
 assert: $(assert_binout)
 assert_test: assert
