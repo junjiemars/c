@@ -106,7 +106,7 @@ $(fn_binout): $(lang_root)fn/f.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # goto
-goto_binout := $(bin_path)goto$(bin_ext)
+goto_binout := $(bin_path)$(lang_prefix)_goto$(bin_ext)
 
 goto: $(goto_binout)
 goto_test: goto
