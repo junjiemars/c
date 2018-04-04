@@ -205,7 +205,7 @@ $(pointer_void_binout): $(lang_root)pointer/void.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # scope
-scope_binout := $(bin_path)scope$(bin_ext)
+scope_binout := $(bin_path)$(lang_prefix)_scope$(bin_ext)
 
 scope_cflags = $(CFLAGS)
 

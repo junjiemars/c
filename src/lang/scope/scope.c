@@ -103,7 +103,7 @@ int
 	
 	register int k, sum;
 	for (k=1, sum=0; k < 6; sum += k, k++);
-	printf("=>main{for:register:1~5}=%i\n", sum);
+	printf("=>main{for:register:1+2...+5}=%i\n", sum);
 }
 
 void 
