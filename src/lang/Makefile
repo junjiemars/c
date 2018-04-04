@@ -52,8 +52,8 @@ $(assert_binout): $(lang_root)assert/a.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # enum 
-enum_binout := $(bin_path)enum$(bin_ext)
-enum_cppout := $(tmp_path)enum$(cpp_ext)
+enum_binout := $(bin_path)$(lang_prefix)_enum$(bin_ext)
+enum_cppout := $(tmp_path)$(lang_prefix)_enum$(cpp_ext)
 
 enum: $(enum_binout)
 enum_test: enum
