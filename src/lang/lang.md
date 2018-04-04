@@ -169,7 +169,7 @@ just only ```b``` will be incremented. We can block it and convert it to block-t
 #define incr(a, b) { \
     (a)++;           \
     (b)++;           \
-}    
+}
 ```
 
 ### Name Clashs
