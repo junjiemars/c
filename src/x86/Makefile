@@ -2,7 +2,7 @@
 x86: 	x86_array											\
 			x86_bone           			      \
 			x86_branch										\
-			x86_call          		        \
+			call          		            \
 			x86_convert								    \
 			x86_loop											\
 			x86_pointer 									\
@@ -14,7 +14,7 @@ x86: 	x86_array											\
 x86_test: x86_array_test						\
 					x86_bone_test       			\
 					x86_branch_test						\
-					x86_call_test							\
+					call_test   							\
 					x86_convert_test					\
 					x86_loop									\
 					x86_pointer_test 					\
@@ -23,6 +23,7 @@ x86_test: x86_array_test						\
 					x86_typecast_test					\
 					x86_var_test
 
+x86_prefix = x86
 
 INC += -I$(x86_root)
 
@@ -114,10 +115,10 @@ $(branch_binout): $(x86_root)branch/branch.c
 
 
 # call
-call_binout := $(bin_path)x86_call$(bin_ext)
+call_binout := $(bin_path)$(x86_prefix)_call$(bin_ext)
 
-x86_call: $(call_binout)
-x86_call_test: x86_call
+call: $(call_binout)
+call_test: call
 	$(call_binout) 1 2 3
 
 $(call_binout): $(x86_root)call/call.c

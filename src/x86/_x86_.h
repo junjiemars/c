@@ -1,7 +1,7 @@
 #ifndef _X86_H_
 #define _X86_H_
 
-#include "nore.h"
+#include <nore.h>
 
 #define _unused_(x) (void)(x)
 
