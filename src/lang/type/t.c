@@ -12,7 +12,7 @@ integer_type() {
   int i0 = 10;
   long i1 = 123L;
   printf("ten %i stored as 0x%08x\n", i0, *(unsigned int*)&i0);
-  printf("hundred %li stored as 0x%08x\n", i1, *(unsigned int*)&i1);
+  printf("hundred %li stored as 0x%08x\n", i1, *(unsigned long*)&i1);
 }
 
 void 
@@ -20,7 +20,7 @@ float_type() {
   float f0 = 3.14f;
   double f1 = 2.7182L;
   printf("pi %f stored as 0x%8x\n", f0, *(unsigned int*)&f0);
-  printf("e %lf stored as 0x%8x\n", f1, *(unsigned int*)&f1);
+  printf("e %lf stored as 0x%8x\n", f1, *(unsigned long*)&f1);
 }
 
 
