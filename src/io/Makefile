@@ -1,10 +1,12 @@
 
 io: basic  \
+    binary \
 		format \
     flush  \
 		scan   \
 		wc
 io_test: basic_test  \
+         binary_test \
 				 format_test \
          flush_test  \
 				 scan_test   \
@@ -34,6 +36,19 @@ $(basic_binout): $(io_root)basic/b.c
 
 $(basic_stream_binout): $(io_root)basic/bs.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# binary I/O
+binary_binout := $(bin_path)$(io_prefix)_binary$(bin_ext)
+
+binary: $(binary_binout)
+binary_test: binary
+	$(binary_binout) "2*3" "2" "3"
+	$(binary_binout)
+
+$(binary_binout): $(io_root)binary/b.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # format I/O
 format_binout := $(bin_path)$(io_prefix)_format$(bin_ext)

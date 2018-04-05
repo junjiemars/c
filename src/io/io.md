@@ -66,8 +66,22 @@ reached the physical disk.
 
 ## ASCII vs. Binary
 
+### ASCII
+
+Terminals, keyboards, and printers deal with character data. When you want 
+to write a number like ```1234``` to the screen, it must be converted to 
+four characters ```{'1', '2', '3', '4'}``` and written. Similarly, when you 
+read a number from the keyboard, the data must be converted from characters 
+to integers. This is done by the ```sscanf``` routine.
+
+### Binary
+
+Binary files require no conversion. They also generally take up less space 
+than ASCII files. The drawback is that they cannot be directly printed on 
+a terminal or printer.
 
 
 ## References
+* [ASCII](https://en.wikipedia.org/wiki/ASCII)
 * [Input and Output:stdio.h](https://users.cs.cf.ac.uk/Dave.Marshall/C/node18.html)
 * [printf format string](https://en.wikipedia.org/wiki/Printf_format_string)
