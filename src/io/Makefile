@@ -1,14 +1,16 @@
 
 io: basic  \
 		format \
+    flush  \
 		scan   \
 		wc
 io_test: basic_test  \
 				 format_test \
+         flush_test  \
 				 scan_test   \
 				 wc_test
 
-io_prefix := io_
+io_prefix := io
 
 INC += -I$(io_root)
 
@@ -19,8 +21,8 @@ endif
 
 
 # basic I/O
-basic_binout := $(bin_path)$(io_prefix)basic$(bin_ext)
-basic_stream_binout := $(bin_path)$(io_prefix)basic_stream$(bin_ext)
+basic_binout := $(bin_path)$(io_prefix)_basic$(bin_ext)
+basic_stream_binout := $(bin_path)$(io_prefix)_basic_stream$(bin_ext)
 
 basic: $(basic_binout) $(basic_stream_binout)
 basic_test: basic
@@ -34,7 +36,7 @@ $(basic_stream_binout): $(io_root)basic/bs.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # format I/O
-format_binout := $(bin_path)$(io_prefix)format$(bin_ext)
+format_binout := $(bin_path)$(io_prefix)_format$(bin_ext)
 
 format: $(format_binout)
 format_test: format
@@ -43,8 +45,20 @@ format_test: format
 $(format_binout): $(io_root)format/f.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+# flush
+flush_binout := $(bin_path)$(io_prefix)_flush$(bin_ext)
+
+flush: $(flush_binout)
+flush_test: flush
+	echo "abc" | $(flush_binout)
+
+$(flush_binout): $(io_root)flush/f.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 # scan
-scan_binout := $(bin_path)$(io_prefix)scan$(bin_ext)
+scan_binout := $(bin_path)$(io_prefix)_scan$(bin_ext)
 
 scan: $(scan_binout)
 scan_test: scan
@@ -53,9 +67,10 @@ scan_test: scan
 $(scan_binout): $(io_root)scan/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 # wc
-wc_binout := $(bin_path)$(io_prefix)wc$(bin_ext)
-wc_cppout := $(tmp_path)$(io_prefix)wc$(cpp_ext)
+wc_binout := $(bin_path)$(io_prefix)_wc$(bin_ext)
+wc_cppout := $(tmp_path)$(io_prefix)_wc$(cpp_ext)
 
 
 wc: $(wc_binout)
