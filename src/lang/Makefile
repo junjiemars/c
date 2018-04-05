@@ -269,20 +269,24 @@ string_basic_binout := $(bin_path)$(lang_prefix)_string_basic$(bin_ext)
 string_n_binout := $(bin_path)$(lang_prefix)_string_n$(bin_ext)
 string_s_binout := $(bin_path)$(lang_prefix)_string_s$(bin_ext)
 string_dup_binout := $(bin_path)$(lang_prefix)_string_dup$(bin_ext)
+string_tok_binout := $(bin_path)$(lang_prefix)_string_tok$(bin_ext)
 
 string: $(string_basic_binout) \
         $(string_n_binout) \
         $(string_s_binout) \
-        $(string_dup_binout)
+        $(string_dup_binout) \
+        $(string_tok_binout)
 
 string_test: $(string_basic_binout) \
              $(string_n_binout) \
              $(string_s_binout) \
-             $(string_dup_binout)
+             $(string_dup_binout) \
+             $(string_tok_binout)
 	$(string_basic_binout)
 	$(string_n_binout)
 	$(string_s_binout)
 	$(string_dup_binout)
+	$(string_tok_binout) "this is a simple sample for strdup." " "
 
 $(string_basic_binout): $(lang_root)string/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -294,6 +298,9 @@ $(string_s_binout): $(lang_root)string/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(string_dup_binout): $(lang_root)string/dup.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(string_tok_binout): $(lang_root)string/tok.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
