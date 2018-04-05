@@ -8,7 +8,7 @@ main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
-#if defined(NM_HAVE_STRN_FN)
+#if defined(NM_HAVE_STRN__FN)
 
 	const char *xxx = "xxxxxxxx";
 	size_t len = strnlen(xxx, 16);

@@ -28,6 +28,7 @@ var(0, buf, \"%d\", 1);
 if (buf[0] != '1') return 1;"
 . ${NORE_ROOT}/auto/feature
 
+
 nm_feature="C11 sprintf_s fn"
 nm_feature_name="nm_have_sprintf_s"
 nm_feature_run=no
@@ -54,30 +55,32 @@ snprintf(buf, sizeof(buf), \"%s\", \"xyz\")";
 . ${NORE_ROOT}/auto/feature
 
 
-nm_feature="C11 strcpy_s fn"
-nm_feature_name="nm_have_strcpy_s"
-nm_feature_run=no
-nm_feature_h="#include <string.h>"
-nm_feature_flags=
-nm_feature_inc=
-nm_feature_ldlibs=
-nm_feature_test="
-char buf[32];
-strcpy_s(buf, sizeof(buf), \"xyz\")";
-. ${NORE_ROOT}/auto/feature
-
-
 nm_feature="C99 strn* fn"
-nm_feature_name="nm_have_strn_fn"
+nm_feature_name="nm_have_strn__fn"
 nm_feature_run=no
 nm_feature_h="#include <string.h>"
 nm_feature_flags=
 nm_feature_inc=
 nm_feature_ldlibs=
 nm_feature_test="
-char *xyz = "xyz";
+char *xyz = \"xyz\";
 char buf[16];
 size_t len = strnlen(xyz, 16);
 strncpy(buf, xyz, sizeof(buf));
 strncmp(buf, xyz, len)";
+. ${NORE_ROOT}/auto/feature
+
+
+nm_feature="C11 str*_s fn"
+nm_feature_name="nm_have_str__s_fn"
+nm_feature_run=no
+nm_feature_h="#include <string.h>"
+nm_feature_flags=
+nm_feature_inc=
+nm_feature_ldlibs=
+nm_feature_test="
+char *xyz = \"xyz\";
+char buf[16];
+size_t len = strlen(xyz);
+strcpy_s(buf, sizeof(buf), xyz);"
 . ${NORE_ROOT}/auto/feature
