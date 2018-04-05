@@ -436,8 +436,9 @@ object or function is defined.
 All C types be represented as binary numbers in memory, the way how to interprete those numbers is what type does.
 
 ### Basic types
-C provides the four basic arithmetic __type__ specifiers ```char```, ```int```, ```float``` and ```double```, and the __modifiers__ ```signed```, ```unsigned```,
-```short``` and ```long```.
+C provides the four basic arithmetic __type__ specifiers ```char```, ```int```, ```float``` and ```double```,
+and the __modifiers__ ```signed```, ```unsigned```, ```short```
+and ```long```.
 
 ### Size and pointer difference types
 The C language specification include the __typedefs__ ```size_t``` 

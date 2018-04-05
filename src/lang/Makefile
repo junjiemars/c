@@ -292,11 +292,14 @@ $(string_s_binout): $(lang_root)string/s.c
 
 # type
 type_binout := $(bin_path)$(lang_prefix)_type$(bin_ext)
+type_cppout := $(tmp_path)$(lang_prefix)_type$(cpp_ext)
 
 type: $(type_binout)
 type_test: type
 	$(type_binout)
 
-$(type_binout): $(lang_root)type/t.c
+$(type_binout): $(type_cppout)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+$(type_cppout): $(lang_root)type/t.c
+	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@

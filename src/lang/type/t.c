@@ -1,5 +1,6 @@
 #include <_lang_.h>
 #include <stdio.h>
+#include <stddef.h>
 
 
 #if GCC
@@ -31,4 +32,10 @@ main(int argc, const char *argv[]) {
 
   integer_type();
   float_type();
+
+	printf("sizeof(char) = %zu\n", sizeof(char));
+
+	ptrdiff_t d1 = 3, d2 = -1;
+	printf("[%td] of %s = %c\n", d1, argv[0], (argv[0]+d1)[0]);
+	printf("[%td] of %s = %c\n", d2, argv[0]+d1, (argv[0]+d1+d2)[0]);
 }
