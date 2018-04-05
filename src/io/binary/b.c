@@ -21,7 +21,7 @@ out(const rect_s *rect, const char *where) {
 		return;
 	}
 
-	size_t len = fwrite((char*)&rect, 1, sizeof(rect), f);
+	size_t len = fwrite((char*)rect, 1, sizeof(rect_s), f);
 	if (sizeof(rect) != len) {
 		fprintf(stderr, "%s\n", strerror(errno));
 		return;
@@ -38,7 +38,7 @@ in(rect_s *rect, const char *where) {
 		return;
 	}
 
-	size_t len = fread(rect, sizeof(rect_s), 1, f);
+	size_t len = fread((char*)rect, 1, sizeof(rect_s), f);
 	if (sizeof(rect_s) != len) {
 		fprintf(stderr, "%s\n", "! read rect_s from file failed");
 		return;
@@ -46,9 +46,9 @@ in(rect_s *rect, const char *where) {
 
 	fprintf(stdout,"\
 rect_s: {\n\
-  name: %s\n\
-  width: %i\n\
-  height:%i\n\
+  name: \"%s\",\n\
+  width: %i,\n\
+  height: %i\n\
 }\n", rect->name, rect->width, rect->height);
 
 	fclose(f);
