@@ -291,7 +291,7 @@ $(string_s_binout): $(lang_root)string/s.c
 
 
 # type
-type_binout := $(bin_path)type$(bin_ext)
+type_binout := $(bin_path)$(lang_prefix)_type$(bin_ext)
 
 type: $(type_binout)
 type_test: type
