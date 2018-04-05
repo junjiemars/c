@@ -6,11 +6,13 @@ nm_feature_h="#include <assert.h>"
 nm_feature_flags="$nm_std_opt"
 nm_feature_inc=
 nm_feature_ldlibs=
-nm_feature_test="enum {N=5}; static_assert(N==5, \"N is not equal 5\");"
-
+nm_feature_test="
+enum {N=5}; static_assert(N==5, \"N is not equal 5\");"
 . ${NORE_ROOT}/auto/feature
 
+
 nm_include="stdint.h" . ${NORE_ROOT}/auto/include
+
 
 nm_feature="C99 variadic macro"
 nm_feature_name="nm_have_variadic_macro"
@@ -20,9 +22,10 @@ nm_feature_h="#include <stdio.h>
 nm_feature_flags=
 nm_feature_inc=
 nm_feature_ldlibs=
-nm_feature_test="char buf[30]; buf[0] = '0';
-               	 var(0, buf, \"%d\", 1);
-        			   if (buf[0] != '1') return 1;"
+nm_feature_test="
+char buf[30]; buf[0] = '0';
+var(0, buf, \"%d\", 1);
+if (buf[0] != '1') return 1;"
 . ${NORE_ROOT}/auto/feature
 
 nm_feature="C11 sprintf_s fn"
@@ -32,9 +35,11 @@ nm_feature_h="#include <stdio.h>"
 nm_feature_flags=
 nm_feature_inc=
 nm_feature_ldlibs=
-nm_feature_test="char buf[32];
-                 sprintf_s(buf, sizeof(buf), \"%s\", \"xyz\")";
+nm_feature_test="
+char buf[32];
+sprintf_s(buf, sizeof(buf), \"%s\", \"xyz\")";
 . ${NORE_ROOT}/auto/feature
+
 
 nm_feature="C99 snprintf fn"
 nm_feature_name="nm_have_snprintf"
@@ -43,9 +48,11 @@ nm_feature_h="#include <stdio.h>"
 nm_feature_flags=
 nm_feature_inc=
 nm_feature_ldlibs=
-nm_feature_test="char buf[32];
-                 snprintf(buf, sizeof(buf), \"%s\", \"xyz\")";
+nm_feature_test="
+char buf[32];
+snprintf(buf, sizeof(buf), \"%s\", \"xyz\")";
 . ${NORE_ROOT}/auto/feature
+
 
 nm_feature="C11 strcpy_s fn"
 nm_feature_name="nm_have_strcpy_s"
@@ -54,6 +61,23 @@ nm_feature_h="#include <string.h>"
 nm_feature_flags=
 nm_feature_inc=
 nm_feature_ldlibs=
-nm_feature_test="char buf[32];
-                 strcpy_s(buf, sizeof(buf), \"xyz\")";
+nm_feature_test="
+char buf[32];
+strcpy_s(buf, sizeof(buf), \"xyz\")";
+. ${NORE_ROOT}/auto/feature
+
+
+nm_feature="C99 strn* fn"
+nm_feature_name="nm_have_strn_fn"
+nm_feature_run=no
+nm_feature_h="#include <string.h>"
+nm_feature_flags=
+nm_feature_inc=
+nm_feature_ldlibs=
+nm_feature_test="
+char *xyz = "xyz";
+char buf[16];
+size_t len = strnlen(xyz, 16);
+strncpy(buf, xyz, sizeof(buf));
+strncmp(buf, xyz, len)";
 . ${NORE_ROOT}/auto/feature
