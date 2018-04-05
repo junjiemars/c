@@ -8,8 +8,8 @@
 
 #ifdef MSVC
 #pragma warning(disable : 4702)
+#pragma warning(disable : 4996)
 #endif
-
 
 
 #endif /* _LANG_H_ */
