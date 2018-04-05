@@ -418,6 +418,7 @@ inside a block and are accessed with high frequency.
 
 
 #### static 
+
 The **static** storge class serves different purposes, depending on the location
 of the declaration in the file:
 * Confine the identifier to that **translation unit** only (scope=file);
@@ -425,22 +426,28 @@ of the declaration in the file:
 * >=C99, used in function parameters to denote an array is expected to have a 
 constant minimum number of elements and a non-null parameter.
 
+
 #### extern 
+
 **extern** keyword used to declare an object or function that is defined 
-elsewhere (and that has **external linkage**). In general, it is used to declare an object or function to be used in a module that is not the one in which the corresponding
-object or function is defined. 
+elsewhere (and that has **external linkage**). In general, it is used to
+declare an object or function to be used in a module that is not the one
+in which the corresponding object or function is defined. 
 
 
 ## Type
 
-All C types be represented as binary numbers in memory, the way how to interprete those numbers is what type does.
+All C types be represented as binary numbers in memory, the way how to
+interprete those numbers is what type does.
 
 ### Basic types
+
 C provides the four basic arithmetic __type__ specifiers ```char```, ```int```, ```float``` and ```double```,
 and the __modifiers__ ```signed```, ```unsigned```, ```short```
 and ```long```.
 
 ### Size and pointer difference types
+
 The C language specification include the __typedefs__ ```size_t``` 
 and ```ptrdiff_t``` to represent memory-related quantities. Their size 
 is defined according to the target processor's arithmetic capabilities, 
@@ -459,6 +466,7 @@ same type;
 
 
 ### Literal suffix
+
 * ```l``` or ```L``` for ```long```, ```123l```, ```3.14L```;
 * ```f``` for ```float```, ```2.718f```;
 
