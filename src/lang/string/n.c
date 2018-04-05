@@ -14,8 +14,8 @@ main(int argc, char **argv) {
 	size_t len = strnlen(xxx, 16);
 	char *x = malloc(sizeof(char)*(len+1));
 	
-	char *s = strncpy(x, argv[0], len+1);
-	assert((0 == strncmp(s, argv[0], len)) || "strncpy() failed");
+	char *s = strncpy(x, xxx, len+1);
+	assert((0 == strncmp(s, xxx, len)) || "strncpy() failed");
 
 	/* If count is reached before the entire array src was copied,
 		 the resulting character array is not null-terminated. */
