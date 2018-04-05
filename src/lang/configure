@@ -84,3 +84,15 @@ char buf[16];
 size_t len = strlen(xyz);
 strcpy_s(buf, sizeof(buf), xyz);"
 . ${NORE_ROOT}/auto/feature
+
+
+nm_feature="NA1 strdup fn"
+nm_feature_name="nm_have_strdup_fn"
+nm_feature_run=no
+nm_feature_h="#include <string.h>"
+nm_feature_flags=
+nm_feature_inc=
+nm_feature_ldlibs=
+nm_feature_test="
+char *xyz = strdup(\"xyz\");"
+. ${NORE_ROOT}/auto/feature
