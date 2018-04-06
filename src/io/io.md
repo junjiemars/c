@@ -35,6 +35,15 @@ streams.
 
 ## Buffered vs. Unbuffered
 
+All ```stdio.h``` functions for reading from ```FILE``` may exhibit 
+either __buffered__ or __unbuffered__ behavior, and either __echoing__ 
+or __non-echoing__ behavior.
+
+The standard library function ```setvbuf``` can be used to enable or 
+disable buffering of IO by the C library. There are three possible 
+modes: __block buffered__, __line_buffered__, and __unbuffered__.
+
+
 ### Buffered
 
 Buffered output streams will accumulate write result into immediate
@@ -64,6 +73,9 @@ reached the physical disk.
 
  ```close()``` will call ```flush()```.
 
+The ```open``` system call is used for opening an unbuffered file. 
+
+
 ## ASCII vs. Binary
 
 ### ASCII
@@ -83,5 +95,6 @@ a terminal or printer.
 
 ## References
 * [ASCII](https://en.wikipedia.org/wiki/ASCII)
+* [Buffered and Unbuffered inputs in C](https://stackoverflow.com/questions/20342772/buffered-and-unbuffered-inputs-in-c)
 * [Input and Output:stdio.h](https://users.cs.cf.ac.uk/Dave.Marshall/C/node18.html)
 * [printf format string](https://en.wikipedia.org/wiki/Printf_format_string)
