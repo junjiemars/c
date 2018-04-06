@@ -331,15 +331,17 @@ _memcpy_, and _memmove_ calls involving _void *s_.
 
 
 ## References
-* [Logical shift](https://en.wikipedia.org/wiki/Logical_shift)
-* [Arithmetic shift](https://en.wikipedia.org/wiki/Arithmetic_shift)
 * [Are the shift operators arithmetic or logical in C?](https://stackoverflow.com/questions/7622/are-the-shift-operators-arithmetic-or-logical-in-c)
-* [Programming Paradigms](https://see.stanford.edu/Course/CS107)
-* [IEEE Standard 754 Floating Point Numbers](http://steve.hollasch.net/cgindex/coding/ieeefloat.html)
-* [The Ins and Outs of C Arrays](https://see.stanford.edu/materials/icsppcs107/07-Arrays-The-Full-Story.pdf)
+* [Arithmetic shift](https://en.wikipedia.org/wiki/Arithmetic_shift)
 * [Arrays](http://stackoverflow.com/documentation/c/322/arrays#t=20170207121645271737)
 * [Do I cast the result of malloc](https://stackoverflow.com/questions/605845/do-i-cast-the-result-of-malloc)
-* [The Lost Art of C Structure Packing](http://www.catb.org/esr/structure-packing/)
-* [Structure padding and packing](https://stackoverflow.com/questions/4306186/structure-padding-and-packing)
 * [How Endianness Effects Bitfield Packing](http://mjfrazer.org/mjfrazer/bitfields/)
+* [IEEE Standard 754 Floating Point Numbers](http://steve.hollasch.net/cgindex/coding/ieeefloat.html)
+* [Logical shift](https://en.wikipedia.org/wiki/Logical_shift)
 * [Pointer Basics](http://cslibrary.stanford.edu/106/)
+* [Programming Paradigms](https://see.stanford.edu/Course/CS107)
+* [Structure padding and packing](https://stackoverflow.com/questions/4306186/structure-padding-and-packing)
+* [The Ins and Outs of C Arrays](https://see.stanford.edu/materials/icsppcs107/07-Arrays-The-Full-Story.pdf)
+* [The Lost Art of C Structure Packing](http://www.catb.org/esr/structure-packing/)
+
+
