@@ -401,6 +401,7 @@ a pointer addresses. Each pointer type is derived from another type, its
 base type, and each such derived type is a distinct new type.
 
 
+
 ## References
 * [Are the shift operators arithmetic or logical in C?](https://stackoverflow.com/questions/7622/are-the-shift-operators-arithmetic-or-logical-in-c)
 * [Arithmetic shift](https://en.wikipedia.org/wiki/Arithmetic_shift)
