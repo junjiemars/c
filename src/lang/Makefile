@@ -81,17 +81,12 @@ env_test: env
 
 # exit
 exit_binout := $(bin_path)$(lang_prefix)_exit$(bin_ext)
-exit_no_fn_binout := $(bin_path)$(lang_prefix)_exit_no_fn$(bin_ext)
 
-exit: $(exit_binout) $(exit_no_fn_binout)
+exit: $(exit_binout)
 exit_test: exit
 	$(exit_binout)
-	$(exit_no_fn_binout)
 
 $(exit_binout): $(lang_root)exit/e.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-$(exit_no_fn_binout): $(lang_root)exit/exit_no_fn.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
