@@ -1,6 +1,12 @@
 #include <_io_.h>
 #include <stdio.h>
 
+#if !defined(NM_HAVE_FPURGE_FN) && defined(NM_HAVE___FPURGE_FN)
+
+#include <stdio_ext.h>
+
+#endif
+
 int
 main(int argc, char **argv) {
 	_unused_(argc);
@@ -16,8 +22,12 @@ main(int argc, char **argv) {
 	fprintf(stdout, "[0] %c\n", ch);
 	ch = fgetc(stdin);
 	fprintf(stdout, "[1] %c\n", ch);
-	
+
+#if defined(NM_HAVE_FPURGE_FN)
 	fpurge(stdin);
+#elif defined(NM_HAVE___FPURGE_FN)
+	__fpurge(stdin);
+#endif
 	
 	ch = fgetc(stdin);
 	fprintf(stdout, "[2] %s\n", EOF == ch ? "EOF" : "!EOF");

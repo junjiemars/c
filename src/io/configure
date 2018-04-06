@@ -49,25 +49,37 @@
 #esac
 
 
+nm_feature="fpurge fn"
+nm_feature_name="nm_have_fpurge_fn"
+nm_feature_run=no
+nm_feature_h='#include <stdio.h>'
+nm_feature_flags=
+nm_feature_inc=
+nm_feature_ldlibs=
+nm_feature_test='fpurge(stdin);'
+. ${NORE_ROOT}/auto/feature
+
+
 # check features based on OS
 #----------------------------------------
-#case $NM_SYSTEM in
-#	Darwin)
-#		nm_feature="libuv"
-#		nm_feature_name="nm_have_uv_h"
-#		nm_feature_run=no
-#		nm_feature_h="#include <uv.h>"
-#		nm_feature_flags=-L/opt/local/lib
-#		nm_feature_inc=-I/opt/local/include
-#		nm_feature_ldlibs=-luv
-#		nm_feature_test=
-#		. ${NORE_ROOT}/auto/feature
-#	  ;;
-#	Linux)
-#	  ;;
-#	WinNT)
-#	  ;;
-#	*)
-#	  ;;
-#esac
+case $NM_SYSTEM in
+	Darwin)
+	  ;;
+	Linux)
+		nm_feature="__fpurge fn"
+		nm_feature_name="nm_have___fpurge_fn"
+		nm_feature_run=no
+		nm_feature_h='#include <stdio.h>
+                  #include <stdio_ext.h>'
+		nm_feature_flags=
+		nm_feature_inc=
+		nm_feature_ldlibs=
+		nm_feature_test='__fpurge(stdin);'
+		. ${NORE_ROOT}/auto/feature
+	  ;;
+	WinNT)
+	  ;;
+	*)
+	  ;;
+esac
 
