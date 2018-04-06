@@ -6,6 +6,8 @@
 * [Pointer Basics](#pointer-basics)
 * [C Array](#c-array)
 * [Stack Implementation](#stack-implementation)
+* [Endian](#endian)
+* [Memory Model](#memory-model)
 * [References](#references)
 
 
@@ -330,11 +332,82 @@ client data type. This translates to a bunch of _malloc_, _realloc_, _free_,
 _memcpy_, and _memmove_ calls involving _void *s_.
 
 
+## Endian
+
+Endianness refers to the sequential order used to numerically interpret 
+**a range of bytes** in **computer memory** as larger, composed word value.
+It also describes the order of byte transmission over a **digital link**.
+
+However, if you have a 32-bit register storing a 32-bit value, it makes no 
+to talk about endianness. The righmost bit is the least significant bit,
+and the leftmost bit is the most significant bit.
+
+
+### Big Endian
+
+![Big Endian](big-endian.png)
+
+
+### Little Endian
+
+![Little Endian](little-endian.png)
+
+The little-endian system has the property that the same value can be read
+from memory at different lengths without using different addresses. 
+For example, a 32-bit memory location with content 4A 00 00 00 can be read
+at the same address as either 8-bit (value = 4A), 16-bit (004A), 24-bit 
+(00004A), or 32-bit (0000004A), all of which retain the same numeric value.
+
+
+### Bit Swapping
+
+Some CPU instruction sets provide native support for endian swapping, 
+such as __bswap__ (x86 and later), and __rev__ (ARMv6 and later).
+
+Unicode text can optionally start with a __byte order mark__ (BOM) to 
+signal the endianness of the file or stream. Its code point is *U+FEFF*. 
+In UTF-32 for example, a big-endian file should start with ```00 00 FE FF```; a little endian should start with ```FF FE 00 00```.
+
+Endianness doesn't apply to everything. If you do bitwise or bitshift 
+operations on an int you don't notice the endianness.
+
+TCP/IP are defined to be big-endian. The multi-byte integer representation 
+used by the TCP/IP protocols is sometimes called __network byte order__.
+
+In ```<arpa/inet.h>```:
+* ```htons()```
+Reorder the bytes of a 16-bit unsigned value from processor order to network order. The macro name can be read as "host to network short."
+
+* ```htonl()```
+Reorder the bytes of a 32-bit unsigned value from processor order to network order. The macro name can be read as "host to network long."
+
+* ```ntohs()```
+Reorder the bytes of a 16-bit unsigned value from network order to processor order. The macro name can be read as "network to host short."
+
+* ```ntohl()```
+Reorder the bytes of a 32-bit unsigned value from network order to processor order. The macro name can be read as "network to host long."
+
+
+
+### Tools
+* [hexdump] on Unix-like system
+
+
+
+## Memory Model
+
+The only thing that C must care about is the __type__ of the object which 
+a pointer addresses. Each pointer type is derived from another type, its
+base type, and each such derived type is a distinct new type.
+
+
 ## References
 * [Are the shift operators arithmetic or logical in C?](https://stackoverflow.com/questions/7622/are-the-shift-operators-arithmetic-or-logical-in-c)
 * [Arithmetic shift](https://en.wikipedia.org/wiki/Arithmetic_shift)
 * [Arrays](http://stackoverflow.com/documentation/c/322/arrays#t=20170207121645271737)
+* [Big and Little Endian](https://www.cs.umd.edu/class/sum2003/cmsc311/Notes/Data/endian.html)
 * [Do I cast the result of malloc](https://stackoverflow.com/questions/605845/do-i-cast-the-result-of-malloc)
+* [Endianness](https://en.wikipedia.org/wiki/Endianness)
 * [How Endianness Effects Bitfield Packing](http://mjfrazer.org/mjfrazer/bitfields/)
 * [IEEE Standard 754 Floating Point Numbers](http://steve.hollasch.net/cgindex/coding/ieeefloat.html)
 * [Logical shift](https://en.wikipedia.org/wiki/Logical_shift)
@@ -343,5 +416,6 @@ _memcpy_, and _memmove_ calls involving _void *s_.
 * [Structure padding and packing](https://stackoverflow.com/questions/4306186/structure-padding-and-packing)
 * [The Ins and Outs of C Arrays](https://see.stanford.edu/materials/icsppcs107/07-Arrays-The-Full-Story.pdf)
 * [The Lost Art of C Structure Packing](http://www.catb.org/esr/structure-packing/)
-
+* [Understanding Big and Little Endian Byte Order](https://betterexplained.com/articles/understanding-big-and-little-endian-byte-order/)
+* [Writing endian-independent code in C](https://www.ibm.com/developerworks/aix/library/au-endianc/index.html?ca=drs-)
 
