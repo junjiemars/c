@@ -5,7 +5,7 @@
 
 #ifdef GCC
 #	ifndef __USE_SVID
-#		define __USE_SVID 0x1122
+#		define __USE_SVID
 #	endif
 #	include <stdio.h>
 #else
