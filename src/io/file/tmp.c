@@ -1,8 +1,16 @@
 #include <_io_.h>
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+
+#ifdef GCC
+#	ifndef __USE_SVID
+#		define __USE_SVID 0x1122
+#	endif
+#	include <stdio.h>
+#else
+#	include <stdio.h>
+#endif
 
 
 int
@@ -31,9 +39,11 @@ main(int argc, char **argv) {
 	}
 
 	fprintf(tf, "%s, tmp.c\n", argv[0]);
+	goto clean_exit;
 
  error_exit:
 	return 1;
+
  clean_exit:
 	if (tf) {
 		fclose(tf);

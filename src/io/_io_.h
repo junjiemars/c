@@ -16,4 +16,9 @@
 
 #endif
 
+#if GCC
+	#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
+#endif
+
 #endif /* end of _IO_H_ */
