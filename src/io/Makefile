@@ -1,12 +1,14 @@
 
 io: basic  \
     binary \
+    file   \
 		format \
     flush  \
 		scan   \
 		wc
 io_test: basic_test  \
          binary_test \
+         file        \
 				 format_test \
          flush_test  \
 				 scan_test   \
@@ -58,6 +60,17 @@ format_test: format
 	$(format_binout)
 
 $(format_binout): $(io_root)format/f.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# file
+file_tmp_binout := $(bin_path)$(io_prefix)_file_tmp$(bin_ext)
+
+file: $(file_tmp_binout)
+file_test: file
+	$(file_tmp_binout)
+
+$(file_tmp_binout): $(io_root)file/tmp.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
