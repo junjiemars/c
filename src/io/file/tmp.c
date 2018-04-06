@@ -12,6 +12,9 @@
 #	include <stdio.h>
 #endif
 
+#if defined(WINNT) && !defined(NM_HAVE_P_TMPDIR)
+# define P_tmpdir getenv("TMPDIR")
+#endif
 
 int
 main(int argc, char **argv) {

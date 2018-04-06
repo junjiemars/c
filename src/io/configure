@@ -78,6 +78,16 @@ case $NM_SYSTEM in
 		. ${NORE_ROOT}/auto/feature
 	  ;;
 	WinNT)
+		nm_feature="P_tmpdir definition"
+		nm_feature_name="nm_have_P_tmpdir"
+		nm_feature_run=no
+		nm_feature_h='#include <stdio.h>'
+		nm_feature_flags=
+		nm_feature_inc=
+		nm_feature_ldlibs=
+		nm_feature_test='printf("%s\n", P_tmpdir);'
+		. ${NORE_ROOT}/auto/feature
+
 	  ;;
 	*)
 	  ;;
