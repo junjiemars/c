@@ -16,9 +16,9 @@ main(int argc, const char* argv[]) {
 	assert((argc > 1) && "usage: one <int>");
 
 #ifdef NDEBUG
-	printf("in DEUBG mode\n");
-#else
 	printf("in RELEASE mode\n");
+#else
+	printf("in DEUBG mode\n");
 #endif
 
 #if (NM_HAVE_C11_STATIC_ASSERT)
