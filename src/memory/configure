@@ -55,3 +55,53 @@ nm_feature_inc=
 nm_feature_ldlibs=
 nm_feature_test='int size; int buffer[size];'
 . ${NORE_ROOT}/auto/feature
+
+
+# check features based on OS
+#----------------------------------------
+case $NM_SYSTEM in
+	Darwin)
+		nm_feature="malloc_size fn"
+		nm_feature_name="nm_have_malloc_size_fn"
+		nm_feature_run=no
+		nm_feature_h='#include <malloc/malloc.h>
+                  #include <stdlib.h>'
+		nm_feature_flags=
+		nm_feature_inc=
+		nm_feature_ldlibs=
+		nm_feature_test='int *p=malloc(16*sizeof(*p));
+                     malloc_size(p);
+                     free(p);'
+		. ${NORE_ROOT}/auto/feature
+	  ;;
+	Linux)
+		nm_feature="malloc_size fn"
+		nm_feature_name="nm_have_malloc_size_fn"
+		nm_feature_run=no
+		nm_feature_h='#include <malloc.h>
+                  #include <stdlib.h>'
+		nm_feature_flags=
+		nm_feature_inc=
+		nm_feature_ldlibs=
+		nm_feature_test='int *p=malloc(16*sizeof(*p));
+                     malloc_usable_size(p);
+                     free(p);'
+		. ${NORE_ROOT}/auto/feature
+	  ;;
+	WinNT)
+		nm_feature="malloc_size fn"
+		nm_feature_name="nm_have_malloc_size_fn"
+		nm_feature_run=no
+		nm_feature_h='#include <stdlib.h>'
+		nm_feature_flags=
+		nm_feature_inc=
+		nm_feature_ldlibs=
+		nm_feature_test='int *p=malloc(16*sizeof(*p));
+                     _mize(p);
+                     free(p);'
+		. ${NORE_ROOT}/auto/feature		
+	  ;;
+	*)
+	  ;;
+esac
+
