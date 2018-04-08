@@ -1,11 +1,13 @@
 #include <_io_.h>
 #include <stdio.h>
 
-#if !defined(NM_HAVE_FPURGE_FN) && defined(NM_HAVE___FPURGE_FN)
-
-#include <stdio_ext.h>
-#define fpurge(x) __fpurge((x))
-
+#if !defined(NM_HAVE_FPURGE_FN)
+#  if defined(NM_HAVE___FPURGE_FN)
+#    include <stdio_ext.h>
+#    define fpurge(x) __fpurge((x))
+#  else
+#    define fpurge(x) ((void)(x))
+#  endif
 #endif
 
 int
