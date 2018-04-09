@@ -31,16 +31,24 @@ main(int argc, char **argv) {
 
 	/* enlarge */
 	int *pii = realloc(pi, sizeof(*pi)*n*2);
-	/* assert((pii == pi) && strerror(errno)); */
+	assert((0 != pii) && strerror(errno));
 	assert((0x11223344 == pii[n-1]) && "0x11223344 not be copied");
+#ifdef WINNT
 	assert((0 != pii[n]) && "filled with zero");
+#else
+	assert((pii == pi) && "diff pointers");
+	assert((0 == pii[n]) && "filled with non-zero");
+#endif
 	printf("realloc() = %zu\n", malloc_size(pii));
 	pii[0] = 0x44332211;
 
 	/* shrink */
 	pi = realloc(pii, sizeof(*pi)*n/2);
-	/* assert((pii == pi) && strerror(errno)); */
+	assert((0 != pi) && strerror(errno));
 	assert((0x44332211 == pi[0]) && "0x44332211 not be copied");
+#ifndef WINNT	
+	assert((pii == pi) && "diff pointers");
+#endif
 	printf("realloc() = %zu\n", malloc_size(pi));
 
 	/* on Windows, double free: */
