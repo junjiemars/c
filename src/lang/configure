@@ -55,7 +55,7 @@ snprintf(buf, sizeof(buf), \"%s\", \"xyz\")";
 . ${NORE_ROOT}/auto/feature
 
 
-nm_feature="C99 strn* fn"
+nm_feature="strn* fn: strnlen,strncpy,strncmp"
 nm_feature_name="nm_have_strn__fn"
 nm_feature_run=no
 nm_feature_h="#include <string.h>"

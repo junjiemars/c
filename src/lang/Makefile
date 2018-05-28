@@ -37,6 +37,11 @@ lang_test:	assert_test					\
 lang_prefix := lang
 INC += -I$(lang_root)
 
+ifeq ($(NM_SYSTEM),Linux)
+# --with-std=gnu99
+CFLAGS += -D_GNU_SOURCE
+endif
+
 # assert at runtime
 # static_assert at compile time
 
@@ -44,8 +49,8 @@ assert_binout := $(bin_path)$(lang_prefix)_assert$(bin_ext)
 
 assert: $(assert_binout)
 assert_test: assert
-		-$(assert_binout) 0
-		-$(assert_binout) 100
+		# -$(assert_binout) 0
+		# -$(assert_binout) 100
 		-$(assert_binout) 49
 
 $(assert_binout): $(lang_root)assert/a.c
