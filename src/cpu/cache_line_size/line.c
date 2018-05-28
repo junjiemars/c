@@ -16,6 +16,27 @@ cache_line_size() {
 	#include <sys/sysctl.h>
 	size_t size_of = sizeof(size);
 	sysctlbyname("hw.cachelinesize", &size_of, &, 0, 0);
+
+#elif defined(WINNT)
+#define WIN32_LEAN_AND_MEAN
+#include <malloc.h>
+#include <windows.h>
+
+	DWORD buffer_size = 0;
+	SYSTEM_LOGICAL_PROCESSOR_INFORMATION *buffer = 0;
+
+	GetLogicalProcessorInformation(0, &buffer_size);
+	buffer = (SYSTEM_LOGICAL_PROCESSOR_INFORMATION *)malloc(buffer_size);
+	GetLogicalProcessorInformation(&buffer[0], &buffer_size);
+
+	for (DWORD i = 0; i != buffer_size / sizeof(SYSTEM_LOGICAL_PROCESSOR_INFORMATION); ++i) {
+		if (buffer[i].Relationship == RelationCache && buffer[i].Cache.Level == 1) {
+			size = buffer[i].Cache.LineSize;
+			break;
+		}
+	}
+	free(buffer);
+
 #endif
 
 	return size;
