@@ -1,27 +1,31 @@
 #include <_cpu_.h>
+
+#if defined(LINUX)
+#  include <stdio.h>
+#elif defined(DARWIN)
+#  include <sys/sysctl.h>
+#elif defined (WINNT)
+#  include <windows.h>
+#endif
+
 #include <stdio.h>
 
 size_t
 cache_line_size() {
-	size_t size = 0;
+	size_t line_size = 0;
 
 #if defined(LINUX)
 	FILE *f = fopen("/sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size", "r");
 	if (f) {
-		fscanf(f, "%zu", &size);
+		fscanf(f, "%zu", &line_size);
 		fclose(f);
 	}
 	
 #elif defined(DARWIN)
-	#include <sys/sysctl.h>
-	size_t size_of = sizeof(size);
-	sysctlbyname("hw.cachelinesize", &size_of, &, 0, 0);
+	size_t sizeof_line_size = sizeof(line_size);
+	sysctlbyname("hw.cachelinesize", &sizeof_line_size, &, 0, 0);
 
 #elif defined(WINNT)
-#define WIN32_LEAN_AND_MEAN
-#include <malloc.h>
-#include <windows.h>
-
 	DWORD buffer_size = 0;
 	SYSTEM_LOGICAL_PROCESSOR_INFORMATION *buffer = 0;
 
@@ -31,7 +35,7 @@ cache_line_size() {
 
 	for (DWORD i = 0; i != buffer_size / sizeof(SYSTEM_LOGICAL_PROCESSOR_INFORMATION); ++i) {
 		if (buffer[i].Relationship == RelationCache && buffer[i].Cache.Level == 1) {
-			size = buffer[i].Cache.LineSize;
+			line_size = buffer[i].Cache.LineSize;
 			break;
 		}
 	}
@@ -39,7 +43,7 @@ cache_line_size() {
 
 #endif
 
-	return size;
+	return line_size;
 }
 
 int
