@@ -72,3 +72,7 @@ nore/
 .materials
 .rect_s
 .symbol
+
+# org mode
+*.pdf
+*.tex
