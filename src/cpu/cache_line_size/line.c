@@ -23,14 +23,14 @@ cache_line_size() {
 	
 #elif defined(DARWIN)
 	size_t sizeof_line_size = sizeof(line_size);
-	sysctlbyname("hw.cachelinesize", &sizeof_line_size, &, 0, 0);
+	sysctlbyname("hw.cachelinesize", &line_size, &sizeof_line_size, 0, 0);
 
 #elif defined(WINNT)
 	DWORD buffer_size = 0;
 	SYSTEM_LOGICAL_PROCESSOR_INFORMATION *buffer = 0;
 
 	GetLogicalProcessorInformation(0, &buffer_size);
-	buffer = (SYSTEM_LOGICAL_PROCESSOR_INFORMATION *)malloc(buffer_size);
+	buffer = malloc(buffer_size);
 	GetLogicalProcessorInformation(&buffer[0], &buffer_size);
 
 	for (DWORD i = 0; i != buffer_size / sizeof(SYSTEM_LOGICAL_PROCESSOR_INFORMATION); ++i) {
