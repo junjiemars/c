@@ -8,22 +8,38 @@
 #  include <windows.h>
 #endif
 
+#include <string.h>
 #include <stdio.h>
 
-size_t
-cache_line_size() {
-	size_t line_size = 0;
+typedef struct cpu_s {
+	char machine[64];
+	int byte_order;
+	int ncpu;
+	size_t cache_line_size;
+} cpu_s;
+
+
+cpu_s *
+lscpu(cpu_s *cpu) {
 
 #if defined(LINUX)
 	FILE *f = fopen("/sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size", "r");
 	if (f) {
-		fscanf(f, "%zu", &line_size);
+		fscanf(f, "%zu", &cpu->cache_line_size);
 		fclose(f);
 	}
 	
 #elif defined(DARWIN)
-	size_t sizeof_line_size = sizeof(line_size);
-	sysctlbyname("hw.cachelinesize", &line_size, &sizeof_line_size, 0, 0);
+	size_t size = 0;
+
+	sysctlbyname("hw.machine", 0, &size, 0, 0);
+	sysctlbyname("hw.machine", cpu->machine, &size, 0, 0);
+
+	size = sizeof(cpu->byte_order);
+	sysctlbyname("hw.byteorder", &cpu->byte_order, &size, 0, 0);
+
+	size = sizeof(cpu->cache_line_size);
+	sysctlbyname("hw.cachelinesize", &cpu->cache_line_size, &size, 0, 0);
 
 #elif defined(WINNT)
 	DWORD buffer_size = 0;
@@ -35,7 +51,7 @@ cache_line_size() {
 
 	for (DWORD i = 0; i != buffer_size / sizeof(SYSTEM_LOGICAL_PROCESSOR_INFORMATION); ++i) {
 		if (buffer[i].Relationship == RelationCache && buffer[i].Cache.Level == 1) {
-			line_size = buffer[i].Cache.LineSize;
+			cpu->cache_line_size = buffer[i].Cache.LineSize;
 			break;
 		}
 	}
@@ -43,7 +59,7 @@ cache_line_size() {
 
 #endif
 
-	return line_size;
+	return cpu;
 }
 
 int
@@ -51,6 +67,14 @@ main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
-	printf("cache line size: %zu\n", cache_line_size());
+	cpu_s cpu;
+	memset(&cpu, 0, sizeof(cpu));
+
+	lscpu(&cpu);
+
+	printf("Architecture: %s\n", cpu.machine);
+	printf("Byte Order: %s\n", 
+				 (1234 == cpu.byte_order ? "Little Endian" : "Big Endian"));
+	printf("Cache Line Size: %zu\n", cpu.cache_line_size);
 }
 
