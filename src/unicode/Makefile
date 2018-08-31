@@ -1,0 +1,19 @@
+# src/unicode
+
+unicode: utf8
+unicode_test: utf8_test
+
+unicode_prefix := unicode
+INC += -I$(unicode_root)
+
+# utf8
+utf8_binout := $(bin_path)$(unicode_prefix)_utf8$(bin_ext)
+
+utf8: $(utf8_binout)
+utf8_test: utf8
+	$(utf8_binout)
+
+$(utf8_binout): $(unicode_root)utf8.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+

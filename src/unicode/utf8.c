@@ -7,7 +7,7 @@
 
 #define TO_BASE_N (sizeof(unsigned)*8 + 1)
 #define TO_BASE(n, b) to_base((unsigned char [TO_BASE_N]){""}, (n), (b))
-#define OUT_SIZE(t) {printf("sizeof(%s) \t= %lu bytes\n", #t, sizeof(t));}
+#define OUT_SIZE(t) {printf("sizeof(%s) \t= %zu bytes\n", #t, sizeof(t));}
 
 
 #if MSVC
