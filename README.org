@@ -33,3 +33,12 @@ $ make install
 $ ./configure --update --has-<what>
 #+END_SRC
 
+* Hello World
+* x86
+* Memory
+* CPU
+* POSIX
+* Language
+* Library
+* String
+* Unicode
