@@ -76,3 +76,5 @@ nore/
 # org mode
 *.pdf
 *.tex
+**/*.html
+**/*.odt
