@@ -18,7 +18,8 @@ Now, we had [[https://github.com/junjiemars/nore][Nore]], something changed and
 something not.
 
 
-## Hot to Play
+Let's start ...
+
 #+BEGIN_SRC sh
 # <where> to put nore down
 $ PREFIX=<where> bash <(curl https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh)
