@@ -5,6 +5,7 @@
 #include <getopt.h>
 #include <string.h>
 #include <arpa/inet.h>
+#include <stdio.h>
 
 static struct option longopts[] = {
 	{"help",    no_argument,		  		0,      				'h'},
