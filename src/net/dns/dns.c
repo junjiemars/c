@@ -19,16 +19,21 @@ usage(const char *p) {
 }
 
 
-static char opt_service[INET_ADDRSTRLEN] = "http";
+/* static char opt_service[INET_ADDRSTRLEN] = "http"; */
 
 
 void 
-get_ip_addr(const char* host, const char* service) {
-	struct addrinfo *res;
+get_ip_addr(const char* host) {
+	struct addrinfo hints, *res;
+
+	memset(&hints, 0, sizeof hints);
+	hints.ai_family = AF_UNSPEC; /* IPv4 or IPv6 */
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_protocol = IPPROTO_TCP;
 
 	printf("Hostname: %s\n", host);
 
-	int	e = getaddrinfo(host, service, 0, &res);		
+	int	e = getaddrinfo(host, 0, &hints, &res);		
 	if (e) {
 		fprintf(stderr, "  +get_ip_addr: %s\n", gai_strerror(e));
 		goto clean_exit;
@@ -75,7 +80,7 @@ main(int argc, char* argv[]) {
 	argv += optind;
 
 	for (int i=0; i < argc; ++i) {
-		get_ip_addr(argv[i], opt_service);
+		get_ip_addr(argv[i]);
 	}
 
 clean_exit:
