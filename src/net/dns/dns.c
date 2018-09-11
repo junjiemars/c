@@ -1,10 +1,6 @@
 #include <netl.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
 #include <getopt.h>
 #include <string.h>
-#include <arpa/inet.h>
 #include <stdio.h>
 
 static struct option longopts[] = {
@@ -25,15 +21,24 @@ usage(const char *p) {
 void 
 get_ip_addr(const char* host) {
 	struct addrinfo hints, *res;
-
-	memset(&hints, 0, sizeof hints);
+	int e; /* error no */
+	
+#ifdef WINNT
+	WSADATA wsa;
+	e = WSAStartup(MAKEWORD(2, 2), &wsa);
+	if (e) {
+		fprintf(stderr, "+WSAStartup failed\n");
+	}
+#endif
+	
+	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_UNSPEC; /* IPv4 or IPv6 */
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_TCP;
 
 	printf("Hostname: %s\n", host);
 
-	int	e = getaddrinfo(host, 0, &hints, &res);		
+	e = getaddrinfo(host, 0, &hints, &res);		
 	if (e) {
 		fprintf(stderr, "  +get_ip_addr: %s\n", gai_strerror(e));
 		goto clean_exit;
@@ -57,7 +62,10 @@ get_ip_addr(const char* host) {
 
 
 clean_exit:
-	freeaddrinfo(res);	
+	freeaddrinfo(res);
+#ifdef WINNT
+	WSACleanup();
+#endif
 }
 
 int 
