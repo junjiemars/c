@@ -33,5 +33,8 @@ $(dns_query_binout): $(net_root)dns/query.c $(getopt_c)
 	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@
 dns_query_test: $(dns_query_binout)
 	$(dns_query_binout)
+	$(dns_query_binout) -p32000
+	$(dns_query_binout) -p32000 -qwww.google.com @8.8.4.4
+	$(dns_query_binout) -p32000 @8.8.4.4 -qwww.bing.com
 
 

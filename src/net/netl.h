@@ -13,6 +13,7 @@
 # include <sys/socket.h>
 # include <netdb.h>
 # include <arpa/inet.h>
+# include <unistd.h>
 #endif
 
 #define _unused_(x) (void)(x)
