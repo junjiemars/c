@@ -15,12 +15,12 @@ ifeq ($(NM_SYSTEM), Linux)
 endif
 
 # dns
-dns_binout := $(bin_path)$(net_prefix)_dns$(bin_ext)
+dns_simple_binout := $(bin_path)$(net_prefix)_dns_simple$(bin_ext)
 
-dns: $(dns_binout)
-$(dns_binout): $(net_root)dns/dns.c $(getopt_c)
+dns: $(dns_simple_binout)
+$(dns_simple_binout): $(net_root)dns/simple.c $(getopt_c)
 	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@
 dns_test: dns
-	$(dns_binout)
-	$(dns_binout) www.google.com
-	$(dns_binout) www.bing.com
+	$(dns_simple_binout)
+	$(dns_simple_binout) www.google.com
+	$(dns_simple_binout) www.bing.com
