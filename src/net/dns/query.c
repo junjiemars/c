@@ -68,7 +68,6 @@ typedef struct s_dns_message {
 
 void 
 query(void) {
-	sock_t sockfd;
 #ifdef WINNT
 	WSADATA wsa;
 	int e = WSAStartup(MAKEWORD(2, 2), &wsa);
@@ -76,6 +75,9 @@ query(void) {
 		fprintf(stderr, "+WSAStartup failed\n");
 	}
 #endif
+
+	sock_t sockfd;
+	s_dns_message *msg = 0;
 
 	sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
 	if (0 > sockfd) {
@@ -104,11 +106,22 @@ query(void) {
 	/* 	goto clean_exit; */
 	/* } */
 
-	s_dns_header h = {0,};
-	fprintf(stderr, "sizeof(s_dns_header)=%zu\n", sizeof(h));
+	msg = malloc(sizeof(s_dns_message));
+	if (0 == msg) {
+		fprintf(stderr, "! malloc: %s\n", strerror(errno));
+		goto clean_exit;
+	}
+	memset(msg, 0, sizeof(s_dns_message));
+
+	msg->header.id = (uint16_t)htons(getpid());
+	msg->header.rd = 1;
+	msg->header.qdcount = (uint16_t)htons(1);
 	
 clean_exit:
 	close(sockfd);
+  if (msg) {
+		free(msg);
+	}
 #ifdef WINNT
 	WSACleanup();
 #endif
