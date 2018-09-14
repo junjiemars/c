@@ -27,21 +27,16 @@ static char opt_name[256] = {0,};
 static char opt_server[256] = {0,};
 
 void 
-query(char* server, int port, char* name) {
+query(void) {
 	int sockfd;
 
-	_unused_(server);
-	_unused_(port);
-	_unused_(name);
-	
-	sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
-	if (sockfd < 0) {
+	sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
+	if (0 > sockfd) {
 		fprintf(stderr, "! socket: %s\n", strerror(errno));
 		goto clean_exit;
 	}
 
-	struct hostent *host;
-	host = gethostbyname(server);
+	struct hostent *host = gethostbyname(opt_server);
 	if (0 == host) {
 		fprintf(stderr, "! gethostbyname: %s\n", strerror(errno));
 		goto clean_exit;
@@ -49,14 +44,19 @@ query(char* server, int port, char* name) {
 	
 	struct sockaddr_in server_addr;
 	memset(&server_addr, 0, sizeof(server_addr));
-	
 	server_addr.sin_family = AF_INET;
+	server_addr.sin_port = htons(opt_port);
 	memcpy((char*)&server_addr.sin_addr.s_addr,
 				 (const char*)host->h_addr,
 				 host->h_length);
-	server_addr.sin_port = htons(port);
 
-
+	char buffer[256] = "Hello, DNS resolver";
+	ssize_t n = sendto(sockfd, buffer, strlen(buffer), 0, (const struct sockaddr*)&server_addr, sizeof(server_addr));
+	if (256 != n) {
+		fprintf(stderr, "! sendto: %s\n", strerror(errno));
+		goto clean_exit;
+	}
+	
 clean_exit:
 	close(sockfd);
 }
@@ -96,7 +96,7 @@ main(int argc, char* argv[]) {
 	printf("--query=%s\n", opt_name);
 	printf("@server=%s\n", opt_server);
 
-	query(opt_server, opt_port, opt_name);
+	query();
 	
 clean_exit:
 	return 0;

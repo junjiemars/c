@@ -36,7 +36,6 @@ main(int argc, char **argv) {
 #ifdef WINNT
 	assert((0 != pii[n]) && "filled with zero");
 #else
-	assert((pii == pi) && "diff pointers");
 	assert((0 == pii[n]) && "filled with non-zero");
 #endif
 	printf("realloc() = %zu\n", malloc_size(pii));

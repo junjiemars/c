@@ -93,8 +93,6 @@ endif
 endif
 
 
-
-
 # alloc
 alloc_m_binout := $(bin_path)$(memory_prefix)_malloc$(bin_ext)
 alloc_c_binout := $(bin_path)$(memory_prefix)_calloc$(bin_ext)
