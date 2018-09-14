@@ -43,7 +43,7 @@ typedef struct s_dns_header {
 } s_dns_header;
 
 typedef struct s_dns_question {
-	char qname[48];
+	uint8_t qname[48];
 	uint16_t qtype;
 	uint16_t qclass;
 } s_dns_question;
@@ -65,6 +65,22 @@ typedef struct s_dns_message {
 	s_dns_resource_record authority;
 	s_dns_resource_record additional;
 } s_dns_message;
+
+void
+qname(uint8_t *dst, uint8_t *name) {
+	uint8_t dot = 0;
+
+	for (uint8_t i=0; i < strlen((char*)name); i++) {
+		if ('.' == name[i]) {
+			*dst++ = i - dot;
+			for (; dot < i; dot++) {
+				*dst++ = name[dot];
+			}
+			dot++;
+		}
+	}
+	*dst++ = 0;
+}
 
 void 
 query(void) {
@@ -116,7 +132,11 @@ query(void) {
 	msg->header.id = (uint16_t)htons(getpid());
 	msg->header.rd = 1;
 	msg->header.qdcount = (uint16_t)htons(1);
-	
+
+	qname(msg->question.qname, (uint8_t*)opt_name);
+	fprintf(stderr, "# name: %s\n", opt_name);
+	fprintf(stderr, "# qname: %s\n", msg->question.qname);
+
 clean_exit:
 	close(sockfd);
   if (msg) {
