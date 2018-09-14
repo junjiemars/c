@@ -22,20 +22,20 @@ usage(const char *p) {
 
 
 /* static char opt_service[INET_ADDRSTRLEN] = "http"; */
-static int opt_port = 53;
+static uint16_t opt_port = 53;
 static char opt_name[256] = {0,};
 static char opt_server[256] = {0,};
 
 typedef struct s_dns_header {
 	uint16_t id;
-	uint8_t qr     : 1;
-	uint8_t opcode : 4;
-	uint8_t aa     : 1;
-	uint8_t tc     : 1;
-	uint8_t rd     : 1;
-	uint8_t ra     : 1;
-	uint8_t z      : 3;
-	uint8_t rcode  : 4;
+	uint16_t qr     : 1;
+	uint16_t opcode : 4;
+	uint16_t aa     : 1;
+	uint16_t tc     : 1;
+	uint16_t rd     : 1;
+	uint16_t ra     : 1;
+	uint16_t z      : 3;
+	uint16_t rcode  : 4;
 	uint16_t qdcount;
 	uint16_t ancount;
 	uint16_t nscount;
@@ -68,7 +68,14 @@ typedef struct s_dns_message {
 
 void 
 query(void) {
-	int sockfd;
+	sock_t sockfd;
+#ifdef WINNT
+	WSADATA wsa;
+	int e = WSAStartup(MAKEWORD(2, 2), &wsa);
+	if (e) {
+		fprintf(stderr, "+WSAStartup failed\n");
+	}
+#endif
 
 	sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
 	if (0 > sockfd) {
@@ -102,6 +109,9 @@ query(void) {
 	
 clean_exit:
 	close(sockfd);
+#ifdef WINNT
+	WSACleanup();
+#endif
 }
 
 int 
@@ -115,7 +125,7 @@ main(int argc, char* argv[]) {
 	while (-1 != (ch = getopt_long(argc, argv, "hp:q:", longopts, 0))) {
 		switch (ch) {
 		case 'p':
-			opt_port = atoi(optarg);
+			opt_port = (uint16_t)atoi(optarg);
 			break;
 		case 'q':
 			strncpy(opt_name, optarg, strlen(optarg));
