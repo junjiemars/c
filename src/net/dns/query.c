@@ -26,6 +26,46 @@ static int opt_port = 53;
 static char opt_name[256] = {0,};
 static char opt_server[256] = {0,};
 
+typedef struct s_dns_header {
+	uint16_t id;
+	uint8_t qr     : 1;
+	uint8_t opcode : 4;
+	uint8_t aa     : 1;
+	uint8_t tc     : 1;
+	uint8_t rd     : 1;
+	uint8_t ra     : 1;
+	uint8_t z      : 3;
+	uint8_t rcode  : 4;
+	uint16_t qdcount;
+	uint16_t ancount;
+	uint16_t nscount;
+	uint16_t arcount;
+} s_dns_header;
+
+typedef struct s_dns_question {
+	char qname[48];
+	uint16_t qtype;
+	uint16_t qclass;
+} s_dns_question;
+
+typedef struct s_dns_resource_record {
+	char name[64];
+	uint16_t type;
+	uint16_t class;
+	uint16_t ttl;
+	uint16_t rdlength;
+	uint16_t rdata;
+} s_dns_resource_record;
+
+
+typedef struct s_dns_message {
+	s_dns_header header;
+	s_dns_question question;
+	s_dns_resource_record answer;
+	s_dns_resource_record authority;
+	s_dns_resource_record additional;
+} s_dns_message;
+
 void 
 query(void) {
 	int sockfd;
@@ -56,6 +96,9 @@ query(void) {
 	/* 	fprintf(stderr, "! sendto: %s\n", strerror(errno)); */
 	/* 	goto clean_exit; */
 	/* } */
+
+	s_dns_header h = {0,};
+	fprintf(stderr, "sizeof(s_dns_header)=%zu\n", sizeof(h));
 	
 clean_exit:
 	close(sockfd);

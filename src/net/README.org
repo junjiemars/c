@@ -10,5 +10,6 @@ on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see [[https://g
 
 * References
 - [[https://www.ietf.org/rfc/rfc1035.txt][RFC 1035]]
+- [[https://tools.ietf.org/html/rfc1536][RFC 1536]]
 - [[http://www.linuxhowtos.org/C_C++/socket.htm][Sockets Tutorial]]
 
