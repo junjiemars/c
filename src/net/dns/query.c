@@ -68,9 +68,7 @@ typedef struct s_dns_message {
 
 void
 qname(uint8_t *dst, uint8_t *name) {
-	uint8_t dot = 0;
-
-	for (uint8_t i=0; i < strlen((char*)name); i++) {
+	for (uint8_t i=0, dot=0; i < strlen((char*)name); i++) {
 		if ('.' == name[i]) {
 			*dst++ = i - dot;
 			for (; dot < i; dot++) {
