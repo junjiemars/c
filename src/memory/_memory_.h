@@ -12,23 +12,23 @@
 #define _bool_(p) ((p) ? "true" : "false")
 
 #ifdef NM_HAVE_INTTYPES_H
-#include <inttypes.h>
+# include <inttypes.h>
 #else
 
 #endif
 
 #ifdef NM_HAVE_STDINT_H
-#include <stdint.h>
+# include <stdint.h>
 #else
-#include <stddef.h>
-typedef __int8 int8_t;
-typedef unsigned __int8 uint8_t;
-typedef __int16 int16_t;
-typedef unsigned __int16 uint16_t;
-typedef __int32 int32_t;
-typedef unsigned __int32 uint32_t;
-typedef __int64 int64_t;
-typedef unsigned __int64 uint64_t;
+# include <stddef.h>
+  typedef __int8 int8_t;
+  typedef unsigned __int8 uint8_t;
+  typedef __int16 int16_t;
+  typedef unsigned __int16 uint16_t;
+  typedef __int32 int32_t;
+  typedef unsigned __int32 uint32_t;
+  typedef __int64 int64_t;
+  typedef unsigned __int64 uint64_t;
 #endif
 
 
@@ -75,22 +75,22 @@ typedef union {
 
 
 #ifdef NM_HAVE_STDBOOL_H
-#include <stdbool.h>
+#  include <stdbool.h>
 #else
 #endif
 
 
 #ifdef MSVC
-#pragma warning(disable : 4996) /* _CRT_SECURE_NO_WARNINGS */
+#  pragma warning(disable : 4996) /* _CRT_SECURE_NO_WARNINGS */
 #endif
 
 #ifdef RISKY
 
 #ifdef MSVC
-#pragma warning(disable : 4090) /* different const qualifiers */
-#pragma warning(disable : 4244)
-#pragma warning(disable : 4204) /* or Compiler Option: -Ze */
-#pragma warning(disable : 4789) /* will be overrun */
+#  pragma warning(disable : 4090) /* different const qualifiers */
+#  pragma warning(disable : 4244)
+#  pragma warning(disable : 4204) /* or Compiler Option: -Ze */
+#  pragma warning(disable : 4789) /* will be overrun */
 #endif /* end of MSVC */
 
 #endif
