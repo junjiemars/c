@@ -1,4 +1,4 @@
-#include <netl.h>
+#include <_net_.h>
 #include <getopt.h>
 #include <string.h>
 #include <stdio.h>
@@ -50,12 +50,12 @@ query(void) {
 				 (const char*)host->h_addr,
 				 host->h_length);
 
-	char buffer[256] = "Hello, DNS resolver";
-	ssize_t n = sendto(sockfd, buffer, strlen(buffer), 0, (const struct sockaddr*)&server_addr, sizeof(server_addr));
-	if (256 != n) {
-		fprintf(stderr, "! sendto: %s\n", strerror(errno));
-		goto clean_exit;
-	}
+	/* char buffer[256] = "Hello, DNS resolver"; */
+	/* ssize_t n = sendto(sockfd, buffer, strlen(buffer), 0, (const struct sockaddr*)&server_addr, sizeof(server_addr)); */
+	/* if (256 != n) { */
+	/* 	fprintf(stderr, "! sendto: %s\n", strerror(errno)); */
+	/* 	goto clean_exit; */
+	/* } */
 	
 clean_exit:
 	close(sockfd);

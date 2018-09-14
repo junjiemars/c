@@ -10,7 +10,7 @@
 #nm_include="complex.h" . ${NORE_ROOT}/auto/include
 #nm_include="fenv.h" . ${NORE_ROOT}/auto/include
 #nm_include="inttypes.h" . ${NORE_ROOT}/auto/include
-#nm_include="stdint.h" . ${NORE_ROOT}/auto/include
+nm_include="stdint.h" . ${NORE_ROOT}/auto/include
 #nm_include="tgmath.h" . ${NORE_ROOT}/auto/include
 #
 #echo " + checking C11 header files ..."
