@@ -24,9 +24,7 @@ dns_test: dns
 	$(dns_simple_binout) www.google.com
 	$(dns_simple_binout) www.bing.com
 	$(dns_query_binout)
-	$(dns_query_binout) -p32000
-	$(dns_query_binout) -p32000 -qwww.google.com @8.8.4.4
-	$(dns_query_binout) -p32000 @8.8.4.4 -qwww.bing.com
+	$(dns_query_binout) -p32000 @localhost -qwww.bing.com
 
 
 $(dns_simple_binout): $(net_root)dns/simple.c $(getopt_c)

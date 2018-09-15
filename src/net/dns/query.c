@@ -26,6 +26,15 @@ static uint16_t opt_port = 53;
 static char opt_name[256] = {0,};
 static char opt_server[256] = {0,};
 
+#define DNS_TYPE_A 1
+#define DNS_TYPE_NS 2
+#define DNS_TYPE_MD 3
+
+#define DNS_CLASS_IN 1
+#define DNS_CLASS_CS 2
+#define DNS_CLASS_CH 3
+#define DNS_CLASS_HS 4
+
 typedef struct s_dns_header {
 	uint16_t id;
 	uint16_t qr     : 1;
@@ -105,20 +114,13 @@ query(void) {
 		goto clean_exit;
 	}
 	
-	struct sockaddr_in server_addr;
-	memset(&server_addr, 0, sizeof(server_addr));
-	server_addr.sin_family = AF_INET;
-	server_addr.sin_port = htons(opt_port);
-	memcpy((char*)&server_addr.sin_addr.s_addr,
+	struct sockaddr_in dest;
+	memset(&dest, 0, sizeof(dest));
+	dest.sin_family = AF_INET;
+	dest.sin_port = htons(opt_port);
+	memcpy((char*)&dest.sin_addr.s_addr,
 				 (const char*)host->h_addr,
 				 host->h_length);
-
-	/* char buffer[256] = "Hello, DNS resolver"; */
-	/* ssize_t n = sendto(sockfd, buffer, strlen(buffer), 0, (const struct sockaddr*)&server_addr, sizeof(server_addr)); */
-	/* if (256 != n) { */
-	/* 	fprintf(stderr, "! sendto: %s\n", strerror(errno)); */
-	/* 	goto clean_exit; */
-	/* } */
 
 	msg = malloc(sizeof(s_dns_message));
 	if (0 == msg) {
@@ -134,6 +136,33 @@ query(void) {
 	qname(msg->question.qname, (uint8_t*)opt_name);
 	fprintf(stderr, "# name: %s\n", opt_name);
 	fprintf(stderr, "# qname: %s\n", msg->question.qname);
+	msg->question.qtype = DNS_TYPE_A;
+	msg->question.qclass = DNS_CLASS_IN;
+
+	ssize_t n = sendto(sockfd,
+										 msg,
+										 sizeof(*msg),
+										 0,
+										 (const struct sockaddr*)&dest,
+										 sizeof(dest));
+	if (0 > n) {
+		fprintf(stderr, "! sendto: %s\n", strerror(errno));
+		goto clean_exit;
+	}
+	printf("# sendto: %zu=%zu\n", sizeof(*msg), n);
+
+	socklen_t socklen = sizeof(dest);
+	n = recvfrom(sockfd,
+							 msg,
+							 sizeof(*msg),
+							 0,
+							 (struct sockaddr*)&dest,
+							 &socklen);
+	if (0 > n) {
+		fprintf(stderr, "! recvfrom: %s\n", strerror(errno));
+		goto clean_exit;
+	}
+	printf("+ recvfrom: %s\n", (char*)msg);
 
 clean_exit:
 	close(sockfd);
