@@ -32,10 +32,10 @@
 #endif
 
 #if WINNT
-  typedef SOCKET sock_t;
+  typedef SOCKET sockfd_t;
 # define close closesocket
 #else
-  typedef int sock_t;
+  typedef int sockfd_t;
 #endif
 
 #if MSVC

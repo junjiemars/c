@@ -99,7 +99,7 @@ query(void) {
 	}
 #endif
 
-	sock_t sockfd;
+	sockfd_t sockfd;
 	s_dns_message *msg = 0;
 
 	sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
@@ -115,6 +115,7 @@ query(void) {
 	}
 	
 	struct sockaddr_in dest;
+	socklen_t dest_len = sizeof(dest);
 	memset(&dest, 0, sizeof(dest));
 	dest.sin_family = AF_INET;
 	dest.sin_port = htons(opt_port);
@@ -132,10 +133,7 @@ query(void) {
 	msg->header.id = (uint16_t)htons(getpid());
 	msg->header.rd = 1;
 	msg->header.qdcount = (uint16_t)htons(1);
-
 	qname(msg->question.qname, (uint8_t*)opt_name);
-	fprintf(stderr, "# name: %s\n", opt_name);
-	fprintf(stderr, "# qname: %s\n", msg->question.qname);
 	msg->question.qtype = DNS_TYPE_A;
 	msg->question.qclass = DNS_CLASS_IN;
 
@@ -144,20 +142,19 @@ query(void) {
 										 sizeof(*msg),
 										 0,
 										 (const struct sockaddr*)&dest,
-										 sizeof(dest));
+										 dest_len);
 	if (0 > n) {
 		fprintf(stderr, "! sendto: %s\n", strerror(errno));
 		goto clean_exit;
 	}
 	printf("# sendto: %zu=%zu\n", sizeof(*msg), n);
 
-	socklen_t socklen = sizeof(dest);
 	n = recvfrom(sockfd,
 							 msg,
 							 sizeof(*msg),
 							 0,
 							 (struct sockaddr*)&dest,
-							 &socklen);
+							 &dest_len);
 	if (0 > n) {
 		fprintf(stderr, "! recvfrom: %s\n", strerror(errno));
 		goto clean_exit;

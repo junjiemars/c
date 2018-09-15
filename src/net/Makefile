@@ -26,7 +26,7 @@ dns_simple_test: $(dns_simple_binout)
 	$(dns_simple_binout) www.bing.com
 dns_query_test: $(dns_query_binout)
 	$(dns_query_binout)
-	$(dns_query_binout) -p32000 @localhost -qwww.bing.com
+	$(dns_query_binout) -p53 @8.8.4.4 -qwww.bing.com
 
 $(dns_simple_binout): $(net_root)dns/simple.c $(getopt_c)
 	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@
