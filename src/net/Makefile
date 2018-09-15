@@ -20,12 +20,13 @@ dns_simple_binout := $(bin_path)$(net_prefix)_dns_simple$(bin_ext)
 dns_query_binout := $(bin_path)$(net_prefix)_dns_query$(bin_ext)
 
 dns: $(dns_simple_binout) $(dns_query_binout)
-dns_test: dns
+dns_test: dns_simple_test dns_query_test
+dns_simple_test: $(dns_simple_binout)
 	$(dns_simple_binout) www.google.com
 	$(dns_simple_binout) www.bing.com
+dns_query_test: $(dns_query_binout)
 	$(dns_query_binout)
 	$(dns_query_binout) -p32000 @localhost -qwww.bing.com
-
 
 $(dns_simple_binout): $(net_root)dns/simple.c $(getopt_c)
 	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@
