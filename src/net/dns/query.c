@@ -77,11 +77,16 @@ typedef struct s_dns_message {
 
 void
 qname(uint8_t *dst, uint8_t *name) {
-	for (uint8_t i=0, dot=0; i < strlen((char*)name); i++) {
-		if ('.' == name[i]) {
+	uint8_t src[48] = {0};
+	size_t name_len = strlen((char*)name);
+	strncpy((char*)src, (char*)name, name_len);
+	src[name_len] = '.';
+
+	for (uint8_t i=0, dot=0; i < name_len+1; i++) {
+		if ('.' == src[i]) {
 			*dst++ = i - dot;
 			for (; dot < i; dot++) {
-				*dst++ = name[dot];
+				*dst++ = src[dot];
 			}
 			dot++;
 		}
@@ -135,6 +140,7 @@ query(void) {
 	msg->header.rd = 1;
 	msg->header.qdcount = (uint16_t)htons(1);
 	qname(msg->question.qname, (uint8_t*)opt_name);
+	fprintf(stdout, "# qname: %s\n", msg->question.qname);
 	msg->question.qtype = DNS_TYPE_A;
 	msg->question.qclass = DNS_CLASS_IN;
 
@@ -150,17 +156,17 @@ query(void) {
 	}
 	printf("# sendto: %zu=%zu\n", sizeof(*msg), n);
 
-	/* n = recvfrom(sockfd, */
-	/* 						 msg, */
-	/* 						 sizeof(*msg), */
-	/* 						 0, */
-	/* 						 (struct sockaddr*)&dest, */
-	/* 						 &dest_len); */
-	/* if (0 > n) { */
-	/* 	fprintf(stderr, "! recvfrom: %s\n", strerror(errno)); */
-	/* 	goto clean_exit; */
-	/* } */
-	/* printf("+ recvfrom: %s\n", (char*)msg); */
+	n = recvfrom(sockfd,
+							 msg,
+							 sizeof(*msg),
+							 0,
+							 (struct sockaddr*)&dest,
+							 &dest_len);
+	if (0 > n) {
+		fprintf(stderr, "! recvfrom: %s\n", strerror(errno));
+		goto clean_exit;
+	}
+	printf("+ recvfrom: %s\n", (char*)msg);
 
  clean_exit:
 	if (sockfd) {
