@@ -140,7 +140,6 @@ query(void) {
 	msg->header.rd = 1;
 	msg->header.qdcount = (uint16_t)htons(1);
 	qname(msg->question.qname, (uint8_t*)opt_name);
-	fprintf(stdout, "# qname: %s\n", msg->question.qname);
 	msg->question.qtype = DNS_TYPE_A;
 	msg->question.qclass = DNS_CLASS_IN;
 
@@ -154,7 +153,6 @@ query(void) {
 		fprintf(stderr, "! sendto: %s\n", strerror(errno));
 		goto clean_exit;
 	}
-	printf("# sendto: %zu=%zu\n", sizeof(*msg), n);
 
 	n = recvfrom(sockfd,
 							 msg,
@@ -166,9 +164,8 @@ query(void) {
 		fprintf(stderr, "! recvfrom: %s\n", strerror(errno));
 		goto clean_exit;
 	}
-	printf("+ recvfrom: %s\n", (char*)msg);
 
- clean_exit:
+clean_exit:
 	if (sockfd) {
 		close(sockfd);
 	}
@@ -210,13 +207,14 @@ main(int argc, char* argv[]) {
 	} else {
 		strncpy(opt_server, "127.0.0.53", 12);
 	}
-	
-	printf("--port=%d\n", opt_port);
-	printf("--query=%s\n", opt_name);
-	printf("@server=%s\n", opt_server);
+
+	printf("; <<>> dnsq <<>> -q%s -p%d @%s\n",
+				 opt_name,
+				 opt_port,
+				 opt_server);
 
 	query();
 	
-clean_exit:
+ clean_exit:
 	return 0;
 }
