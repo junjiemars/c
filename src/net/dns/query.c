@@ -91,37 +91,38 @@ qname(uint8_t *dst, uint8_t *name) {
 
 void 
 query(void) {
+	sockfd_t sockfd;
+	s_dns_message *msg = 0;
+	int e;
+
 #ifdef WINNT
 	WSADATA wsa;
-	int e = WSAStartup(MAKEWORD(2, 2), &wsa);
+	e = WSAStartup(MAKEWORD(2, 2), &wsa);
 	if (e) {
 		fprintf(stderr, "+WSAStartup failed\n");
+		goto clean_exit;
 	}
 #endif
 
-	sockfd_t sockfd;
-	s_dns_message *msg = 0;
-
-	sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
+	sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if (0 > sockfd) {
 		fprintf(stderr, "! socket: %s\n", strerror(errno));
 		goto clean_exit;
 	}
 
-	struct hostent *host = gethostbyname(opt_server);
-	if (0 == host) {
-		fprintf(stderr, "! gethostbyname: %s\n", strerror(errno));
+	struct in_addr host;
+	e = inet_pton(AF_INET, opt_server, &host);
+	if (0 >= e) {
+		fprintf(stderr, "! inet_pton: %s\n", strerror(errno));
 		goto clean_exit;
 	}
-	
+
 	struct sockaddr_in dest;
 	socklen_t dest_len = sizeof(dest);
 	memset(&dest, 0, sizeof(dest));
 	dest.sin_family = AF_INET;
 	dest.sin_port = htons(opt_port);
-	memcpy((char*)&dest.sin_addr.s_addr,
-				 (const char*)host->h_addr,
-				 host->h_length);
+	dest.sin_addr = host;
 
 	msg = malloc(sizeof(s_dns_message));
 	if (0 == msg) {
@@ -149,21 +150,23 @@ query(void) {
 	}
 	printf("# sendto: %zu=%zu\n", sizeof(*msg), n);
 
-	n = recvfrom(sockfd,
-							 msg,
-							 sizeof(*msg),
-							 0,
-							 (struct sockaddr*)&dest,
-							 &dest_len);
-	if (0 > n) {
-		fprintf(stderr, "! recvfrom: %s\n", strerror(errno));
-		goto clean_exit;
-	}
-	printf("+ recvfrom: %s\n", (char*)msg);
+	/* n = recvfrom(sockfd, */
+	/* 						 msg, */
+	/* 						 sizeof(*msg), */
+	/* 						 0, */
+	/* 						 (struct sockaddr*)&dest, */
+	/* 						 &dest_len); */
+	/* if (0 > n) { */
+	/* 	fprintf(stderr, "! recvfrom: %s\n", strerror(errno)); */
+	/* 	goto clean_exit; */
+	/* } */
+	/* printf("+ recvfrom: %s\n", (char*)msg); */
 
-clean_exit:
-	close(sockfd);
-  if (msg) {
+ clean_exit:
+	if (sockfd) {
+		close(sockfd);
+	}
+	if (msg) {
 		free(msg);
 	}
 #ifdef WINNT
