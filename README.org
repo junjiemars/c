@@ -44,3 +44,24 @@ $ ./configure --update --has-<what>
 * Unicode
 * IO
 * Network
+
+- [[#network-dns][DNS]]
+
+** DNS
+	 :PROPERTIES:
+	 :CUSTOM_ID: network-dns
+	 :END:
+
+*** Build
+
+- =getaddrinfo()= is a POSIX.1g extension and is not available in pure C99, 
+on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see [[https://github.com/droe/sslsplit/issues/2][c99 does not define getaddrinfo]]).
+
+*** References
+		:PROPERTIES:
+		:CUSTOM_ID: dns-refrences
+		:END:
+
+- [[https://www.ietf.org/rfc/rfc1035.txt][RFC 1035]]
+- [[https://tools.ietf.org/html/rfc1536][RFC 1536]]
+- [[http://www.linuxhowtos.org/C_C++/socket.htm][Sockets Tutorial]]
