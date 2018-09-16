@@ -18,9 +18,9 @@ usage(const char *p) {
 /* static char opt_service[INET_ADDRSTRLEN] = "http"; */
 
 
-void 
+void
 get_ip_addr(const char* host) {
-	struct addrinfo hints, *res;
+	struct addrinfo hints, *res = 0;
 	int e; /* error no */
 	
 #ifdef WINNT
@@ -28,6 +28,7 @@ get_ip_addr(const char* host) {
 	e = WSAStartup(MAKEWORD(2, 2), &wsa);
 	if (e) {
 		fprintf(stderr, "+WSAStartup failed\n");
+		goto clean_exit;
 	}
 #endif
 	
@@ -62,7 +63,9 @@ get_ip_addr(const char* host) {
 
 
 clean_exit:
-	freeaddrinfo(res);
+	if (res) {
+		freeaddrinfo(res);
+	}
 #ifdef WINNT
 	WSACleanup();
 #endif
