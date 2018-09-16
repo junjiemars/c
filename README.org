@@ -56,6 +56,7 @@ $ ./configure --update --has-<what>
 
 - =getaddrinfo()= is a POSIX.1g extension and is not available in pure C99, 
 on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see [[https://github.com/droe/sslsplit/issues/2][c99 does not define getaddrinfo]]).
+- =socklen_t= represents the size of an address structure, see [[https://yarchive.net/comp/linux/socklen_t.html][Linus Torvalds talk about socklen_t]].
 
 *** References
 		:PROPERTIES:
