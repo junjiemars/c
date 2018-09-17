@@ -37,14 +37,19 @@ static char opt_server[256] = {0,};
 
 typedef struct s_dns_header {
 	uint16_t id;
-	uint16_t qr     : 1;
-	uint16_t opcode : 4;
-	uint16_t aa     : 1;
-	uint16_t tc     : 1;
-	uint16_t rd     : 1;
-	uint16_t ra     : 1;
-	uint16_t z      : 3;
-	uint16_t rcode  : 4;
+	union {
+		uint16_t u_flags;
+		struct {
+		uint16_t qr     : 1;
+		uint16_t opcode : 4;
+		uint16_t aa     : 1;
+		uint16_t tc     : 1;
+		uint16_t rd     : 1;
+		uint16_t ra     : 1;
+		uint16_t z      : 3;
+		uint16_t rcode  : 4;
+		} s_flags;
+	} flags;
 	uint16_t qdcount;
 	uint16_t ancount;
 	uint16_t nscount;
@@ -67,13 +72,11 @@ typedef struct s_dns_resource_record {
 } s_dns_resource_record;
 
 
-typedef struct s_dns_message {
+typedef struct s_dns_request {
 	s_dns_header header;
 	s_dns_question question;
-	s_dns_resource_record answer;
-	s_dns_resource_record authority;
 	s_dns_resource_record additional;
-} s_dns_message;
+} s_dns_request;
 
 void
 qname(uint8_t *dst, uint8_t *name) {
@@ -97,7 +100,7 @@ qname(uint8_t *dst, uint8_t *name) {
 void 
 query(void) {
 	sockfd_t sockfd;
-	s_dns_message *msg = 0;
+	s_dns_request *msg = 0;
 	int e;
 
 #ifdef WINNT
@@ -129,19 +132,20 @@ query(void) {
 	dest.sin_port = htons(opt_port);
 	dest.sin_addr = host;
 
-	msg = malloc(sizeof(s_dns_message));
+	msg = malloc(sizeof(s_dns_request));
 	if (0 == msg) {
 		fprintf(stderr, "! malloc: %s\n", strerror(errno));
 		goto clean_exit;
 	}
-	memset(msg, 0, sizeof(s_dns_message));
+	memset(msg, 0, sizeof(s_dns_request));
 
-	msg->header.id = (uint16_t)htons(getpid());
-	msg->header.rd = 1;
-	msg->header.qdcount = (uint16_t)htons(1);
+	msg->header.id = htons(getpid());
+	msg->header.flags.s_flags.rd = 1;
+	msg->header.flags.u_flags = htons(msg->header.flags.u_flags);
+	msg->header.qdcount = htons(1);
 	qname(msg->question.qname, (uint8_t*)opt_name);
-	msg->question.qtype = DNS_TYPE_A;
-	msg->question.qclass = DNS_CLASS_IN;
+	msg->question.qtype = (uint16_t)DNS_TYPE_A;
+	msg->question.qclass = (uint16_t)DNS_CLASS_IN;
 
 	ssize_t n = sendto(sockfd,
 										 msg,
@@ -154,18 +158,18 @@ query(void) {
 		goto clean_exit;
 	}
 
-	n = recvfrom(sockfd,
-							 msg,
-							 sizeof(*msg),
-							 0,
-							 (struct sockaddr*)&dest,
-							 &dest_len);
-	if (0 > n) {
-		fprintf(stderr, "! recvfrom: %s\n", strerror(errno));
-		goto clean_exit;
-	}
+	/* n = recvfrom(sockfd, */
+	/* 						 msg, */
+	/* 						 sizeof(*msg), */
+	/* 						 0, */
+	/* 						 (struct sockaddr*)&dest, */
+	/* 						 &dest_len); */
+	/* if (0 > n) { */
+	/* 	fprintf(stderr, "! recvfrom: %s\n", strerror(errno)); */
+	/* 	goto clean_exit; */
+	/* } */
 
-clean_exit:
+ clean_exit:
 	if (sockfd) {
 		close(sockfd);
 	}
