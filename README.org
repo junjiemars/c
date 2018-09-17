@@ -591,7 +591,6 @@ and each such derived type is a distinct new type.
 - [[https://betterexplained.com/articles/understanding-big-and-little-endian-byte-order/)][Understanding Big and Little Endian Byte Order]]
 - [[https://www.ibm.com/developerworks/aix/library/au-endianc/index.html?ca=drs-)][Writing endian-independent code in C]]
 
-
 * CPU
 * POSIX
 * Language
