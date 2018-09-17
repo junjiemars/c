@@ -506,15 +506,19 @@ and the leftmost bit is the most significant bit.
 		:custom_id: memory-endian-big-endian
 		:END:
 
+#+CAPTION: Big Endian
+#+NAME: fig:big-endian
+[[file:src/memory/big-endian.png]]
 
-[[file:src/memory/big-endian.png][Big Endian]]
 
 *** Little Endian
 		:PROPERTIES:
 		:custom_id: memory-endian-little-endian
 		:END:
 
-[[file:src/memory/little-endian.png][Little Endian]]
+#+CAPTION: Little Endian
+#+NAME: fig:little-endian
+[[file:src/memory/little-endian.png]]
 
 
 The little-endian system has the property that the same value can be read
@@ -533,8 +537,8 @@ such as /bswap/ (x86 and later), and /rev/ (ARMv6 and later).
 
 Unicode text can optionally start with a /byte order mark/ (BOM) to 
 signal the endianness of the file or stream. Its code point is *U+FEFF*. 
-In UTF-32 for example, a big-endian file should start with ```00 00 FE FF```; 
-a little endian should start with ```FF FE 00 00```.
+In UTF-32 for example, a big-endian file should start with =00 00 FE FF=; 
+a little endian should start with =FF FE 00 00=.
 
 Endianness doesn't apply to everything. If you do bitwise or bitshift 
 operations on an int you don't notice the endianness.
@@ -599,9 +603,6 @@ and each such derived type is a distinct new type.
 * Unicode
 * IO
 * Network
-
-- [[#network-dns][DNS]]
-
 
 ** DNS
 	 :PROPERTIES:
