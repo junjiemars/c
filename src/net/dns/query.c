@@ -20,11 +20,12 @@ usage(const char *p) {
 	printf("  -q, --query   the domain name to query\n");
 }
 
+#define DNS_QNAME_LEN 256
 
 /* static char opt_service[INET_ADDRSTRLEN] = "http"; */
 static uint16_t opt_port = 53;
-static char opt_name[256] = {0,};
-static char opt_server[256] = {0,};
+static char opt_name[DNS_QNAME_LEN] = {0,};
+static char opt_server[DNS_QNAME_LEN] = {0,};
 
 #define DNS_TYPE_A 1
 #define DNS_TYPE_NS 2
@@ -67,7 +68,6 @@ typedef struct s_dns_header {
 } s_dns_header;
 
 typedef struct s_dns_question {
-	uint8_t qname[48];
 	uint32_t qtype    : 16;
 	uint32_t qclass   : 16;
 } s_dns_question;
@@ -82,14 +82,9 @@ typedef struct s_dns_resource_record {
 } s_dns_resource_record;
 
 
-typedef struct s_dns_request {
-	s_dns_header header;
-	s_dns_question question;
-	s_dns_resource_record additional;
-} s_dns_request;
 
 void
-qname(uint8_t *dst, uint8_t *name) {
+make_qname(uint8_t *dst, uint8_t *name) {
 	uint8_t src[48] = {0};
 	size_t name_len = strlen((char*)name);
 	strncpy((char*)src, (char*)name, name_len);
@@ -110,7 +105,7 @@ qname(uint8_t *dst, uint8_t *name) {
 void 
 query(void) {
 	sockfd_t sockfd;
-	s_dns_request *msg = 0;
+	uint8_t *msg = 0;
 	int e;
 
 #ifdef WINNT
@@ -121,6 +116,39 @@ query(void) {
 		goto clean_exit;
 	}
 #endif
+
+	s_dns_header header;
+	memset(&header, 0, sizeof(header));
+	header.id = htons(getpid());
+	header.h_flags.rd = 1;
+	header.qdcount = htons(1);
+
+	uint8_t qname[DNS_QNAME_LEN] = {0,};
+	make_qname(qname, (uint8_t*)opt_name);
+
+	s_dns_question question;
+	memset(&question, 0, sizeof(question));
+	question.qtype = htons(DNS_TYPE_A);
+	question.qclass = htons(DNS_CLASS_IN);
+
+	size_t msg_max_len = sizeof(s_dns_header)
+		+ DNS_QNAME_LEN
+		+ sizeof(s_dns_question);
+	msg = malloc(msg_max_len);
+	if (0 == msg) {
+		fprintf(stderr, "! malloc: %s\n", strerror(errno));
+		goto clean_exit;
+	}
+	memset(msg, 0, msg_max_len);
+
+	size_t qname_len = strlen((char*)qname)+1;
+	size_t msg_len = sizeof(header)
+		+ qname_len
+		+ sizeof(question);
+
+	memcpy(msg, &header, sizeof(header));
+	memcpy(msg+sizeof(header), qname, qname_len);
+	memcpy(msg+sizeof(header)+qname_len, &question, sizeof(question));
 
 	sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if (0 > sockfd) {
@@ -142,23 +170,9 @@ query(void) {
 	dest.sin_port = htons(opt_port);
 	dest.sin_addr = host;
 
-	msg = malloc(sizeof(s_dns_request));
-	if (0 == msg) {
-		fprintf(stderr, "! malloc: %s\n", strerror(errno));
-		goto clean_exit;
-	}
-	memset(msg, 0, sizeof(s_dns_request));
-
-	msg->header.id = htons(getpid());
-	msg->header.h_flags.rd = 1;
-	msg->header.qdcount = htons(1);
-	/* qname(msg->question.qname, (uint8_t*)opt_name); */
-	/* msg->question.qtype = (uint16_t)DNS_TYPE_A; */
-	/* msg->question.qclass = (uint16_t)DNS_CLASS_IN; */
-
 	ssize_t n = sendto(sockfd,
 										 msg,
-										 sizeof(*msg),
+										 msg_len,
 										 0,
 										 (const struct sockaddr*)&dest,
 										 dest_len);
