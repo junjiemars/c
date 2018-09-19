@@ -14,6 +14,12 @@ ifeq ($(NM_SYSTEM), Linux)
 	CFLAGS += -D_POSIX_SOURCE -D_GNU_SOURCE
 endif
 
+ifeq ($(CC_NAME), msvc)
+  no_struct_align := -Zp1
+else
+	no_struct_align := -fpack-struct=1
+endif
+
 
 # dns
 dns_simple_binout := $(bin_path)$(net_prefix)_dns_simple$(bin_ext)
@@ -32,7 +38,7 @@ $(dns_simple_binout): $(net_root)dns/simple.c $(getopt_c)
 	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@
 
 $(dns_query_binout): $(net_root)dns/query.c $(getopt_c)
-	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@
+	$(CC) $(INC) $(CFLAGS) $(no_struct_align) $^ $(bin_out)$@
 
 
 

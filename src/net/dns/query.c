@@ -37,19 +37,29 @@ static char opt_server[256] = {0,};
 
 typedef struct s_dns_header {
 	uint16_t id;
-	union {
-		uint16_t u_flags;
-		struct {
-		uint16_t qr     : 1;
-		uint16_t opcode : 4;
-		uint16_t aa     : 1;
-		uint16_t tc     : 1;
-		uint16_t rd     : 1;
-		uint16_t ra     : 1;
-		uint16_t z      : 3;
-		uint16_t rcode  : 4;
-		} s_flags;
-	} flags;
+	struct h_flags {
+#if (1 == NM_HAVE_LITTLE_ENDIAN)
+		uint8_t rd     : 1;
+		uint8_t tc     : 1;
+		uint8_t aa     : 1;
+		uint8_t opcode : 4;
+		uint8_t qr     : 1;
+
+		uint8_t rcode  : 4;
+		uint8_t z      : 3;
+		uint8_t ra     : 1;
+#else
+		uint8_t qr     : 1;
+		uint8_t opcode : 4;
+		uint8_t aa     : 1;
+		uint8_t tc     : 1;
+		uint8_t rd     : 1;
+
+		uint8_t ra     : 1;
+		uint8_t z      : 3;
+		uint8_t rcode  : 4;
+#endif
+	} h_flags;
 	uint16_t qdcount;
 	uint16_t ancount;
 	uint16_t nscount;
@@ -58,8 +68,8 @@ typedef struct s_dns_header {
 
 typedef struct s_dns_question {
 	uint8_t qname[48];
-	uint16_t qtype;
-	uint16_t qclass;
+	uint32_t qtype    : 16;
+	uint32_t qclass   : 16;
 } s_dns_question;
 
 typedef struct s_dns_resource_record {
@@ -140,12 +150,11 @@ query(void) {
 	memset(msg, 0, sizeof(s_dns_request));
 
 	msg->header.id = htons(getpid());
-	msg->header.flags.s_flags.rd = 1;
-	msg->header.flags.u_flags = htons(msg->header.flags.u_flags);
+	msg->header.h_flags.rd = 1;
 	msg->header.qdcount = htons(1);
-	qname(msg->question.qname, (uint8_t*)opt_name);
-	msg->question.qtype = (uint16_t)DNS_TYPE_A;
-	msg->question.qclass = (uint16_t)DNS_CLASS_IN;
+	/* qname(msg->question.qname, (uint8_t*)opt_name); */
+	/* msg->question.qtype = (uint16_t)DNS_TYPE_A; */
+	/* msg->question.qclass = (uint16_t)DNS_CLASS_IN; */
 
 	ssize_t n = sendto(sockfd,
 										 msg,
