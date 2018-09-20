@@ -620,6 +620,7 @@ on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see [[https://g
 		:CUSTOM_ID: dns-refrences
 		:END:
 
-- [[https://www.ietf.org/rfc/rfc1035.txt][RFC 1035]]
-- [[https://tools.ietf.org/html/rfc1536][RFC 1536]]
+- [[https://www.ietf.org/rfc/rfc1034.txt][RFC 1034: DOMAIN NAMES - CONCEPTS AND FACILITIES]]
+- [[https://www.ietf.org/rfc/rfc1035.txt][RFC 1035: DOMAIN NAMES - IMPLEMENTATION AND SPECIFICATION]]
+- [[https://tools.ietf.org/html/rfc1536][RFC 1536: Common DNS Implementation Errors and Suggested Fixes]]
 - [[http://www.linuxhowtos.org/C_C++/socket.htm][Sockets Tutorial]]
