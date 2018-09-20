@@ -609,6 +609,10 @@ and each such derived type is a distinct new type.
 	 :CUSTOM_ID: network-dns
 	 :END:
 
+=simple.c= using =getaddrinfo()= API call to query name.
+
+=query.c= using domain name protocol to query name directly without =-lresolv= library. 
+
 *** TIL
 		
 - =getaddrinfo()= is a POSIX.1g extension and is not available in pure C99, 
