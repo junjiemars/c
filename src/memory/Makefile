@@ -2,6 +2,7 @@
 memory: alloc				\
 				array				\
 				bit		  		\
+				bitfield    \
 				byte				\
 				copy				\
 				convert			\
@@ -14,6 +15,7 @@ memory: alloc				\
 memory_test: 	alloc_test				\
 							array_test				\
 							bit_test					\
+							bitfield_test		  \
 							byte_test	   		  \
 							copy_test				  \
 							convert_test			\
@@ -138,6 +140,17 @@ bit_test: bit
 bit_lflags += $(LFLAGS) $(INC)
 
 $(bit_binout): $(memory_root)bit/bit.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+#bitfield
+bitfield_binout := $(bin_path)$(memory_prefix)_bitfield$(bit_ext)
+
+bitfield: $(bitfield_binout)
+bitfield_test: bitfield
+	$(bitfield_binout)
+
+$(bitfield_binout): $(memory_root)bitfield/bitfield.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
