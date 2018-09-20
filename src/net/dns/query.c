@@ -104,7 +104,7 @@ make_qname(uint8_t *dst, uint8_t *name) {
 
 void 
 query(void) {
-	sockfd_t sockfd;
+	sockfd_t sockfd = 0;
 	uint8_t *msg = 0;
 	int e;
 
