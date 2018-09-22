@@ -1,4 +1,3 @@
-
 #ifndef _MEMORY_H_
 #define _MEMORY_H_
 
@@ -13,9 +12,7 @@
 
 #ifdef NM_HAVE_INTTYPES_H
 # include <inttypes.h>
-#else
-
-#endif
+#endif /* end of NM_HAVE_INTTYPES_H */
 
 #ifdef NM_HAVE_STDINT_H
 # include <stdint.h>
@@ -29,7 +26,7 @@
   typedef unsigned __int32 uint32_t;
   typedef __int64 int64_t;
   typedef unsigned __int64 uint64_t;
-#endif
+#endif /* end of NM_HAVE_STDINT_H */
 
 
 const char *BIT4[16] = {
@@ -76,8 +73,7 @@ typedef union {
 
 #ifdef NM_HAVE_STDBOOL_H
 #  include <stdbool.h>
-#else
-#endif
+#endif /* end of NM_HAVE_STDBOOL_H */
 
 
 #ifdef MSVC
@@ -85,16 +81,13 @@ typedef union {
 #endif
 
 #ifdef RISKY
-
-#ifdef MSVC
-#  pragma warning(disable : 4090) /* different const qualifiers */
-#  pragma warning(disable : 4244)
-#  pragma warning(disable : 4204) /* or Compiler Option: -Ze */
-#  pragma warning(disable : 4789) /* will be overrun */
-#endif /* end of MSVC */
-
-#endif
-
+#  ifdef MSVC
+#    pragma warning(disable : 4090) /* different const qualifiers */
+#    pragma warning(disable : 4244)
+#    pragma warning(disable : 4204) /* or Compiler Option: -Ze */
+#    pragma warning(disable : 4789) /* will be overrun */
+#  endif /* end of MSVC */
+#endif /* end of RISKY */
 
 
 #endif /* end of _MEMORY_H_ */

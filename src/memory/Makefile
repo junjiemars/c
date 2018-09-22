@@ -1,28 +1,29 @@
 
-memory: alloc				\
-				array				\
-				bit		  		\
-				bitfield    \
-				byte				\
-				copy				\
-				convert			\
-				endian			\
-				generic			\
-				rotate			\
-				stack				\
+memory: alloc \
+				array \
+				bitfield \
+				byte \
+				copy \
+				convert \
+				endian \
+				generic \
+				rotate \
+				shift \
+				stack \
 				struct
 
-memory_test: 	alloc_test				\
-							array_test				\
-							bit_test					\
-							bitfield_test		  \
-							byte_test	   		  \
-							copy_test				  \
-							convert_test			\
-							endian_test			  \
-							generic_test			\
-							rotate_test			  \
-							stack_test				\
+memory_test: 	alloc_test \
+							array_test \
+							bit_test \
+							bitfield_test \
+							byte_test \
+							copy_test \
+							convert_test \
+							endian_test \
+							generic_test \
+							rotate_test \
+							shift_test \
+							stack_test \
 							struct_test
 
 memory_prefix := memory
@@ -130,18 +131,6 @@ $(array_binout): $(memory_root)array/a.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
-#bit
-bit_binout := $(bin_path)$(memory_prefix)_bit$(bin_ext)
-
-bit: $(bit_binout)
-bit_test: bit
-	$(bit_binout)
-
-bit_lflags += $(LFLAGS) $(INC)
-
-$(bit_binout): $(memory_root)bit/bit.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
 
 #bitfield
 bitfield_binout := $(bin_path)$(memory_prefix)_bitfield$(bit_ext)
@@ -228,6 +217,17 @@ $(rotate_binout): $(memory_root)rotate/rotate.h \
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ \
 		$(memory_root)rotate/rotate.c \
 		$(memory_root)rotate/r.c
+
+
+# shift
+shift_binout := $(bin_path)$(memory_prefix)_shift$(bin_ext)
+
+shift: $(shift_binout)
+shift_test: shift
+	$(shift_binout)
+
+$(shift_binout): $(memory_root)shift/shift.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # stack

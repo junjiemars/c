@@ -40,15 +40,6 @@ $ ./configure --update --has-<what>
 	:CUSTOM_ID: memory
 	:END:
 
-- [[#memory-bits-and-bytes][Bits and Bytes]]
-- [[#memory-basic-types][Basic Types]]
-- [[#memory-pointer-basics][Pointer Basics]]
-- [[#memory-c-array][C Array]]
-- [[#memory-stack-implementation][Stack Implementation]]
-- [[#memory-endian][Endian]]
-- [[#memory-memory-model][Memory Model]]
-- [[#memory-references][References]]
-
 ** Bits and Bytes
 	 :PROPERTIES:
 	 :CUSTOM_ID: memory-bits-and-bytes
