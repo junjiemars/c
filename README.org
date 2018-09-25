@@ -155,7 +155,7 @@ that the identifier was not set at the top of that file.
 #endif
 #+END_SRC
 
-=#if !defined(identifier)= equals =#ifndef identifier=
+=#if !defined(identifier)= is equivalent to =#ifndef identifier=
 
 #+BEGIN_SRC c
 #if !defined(MIN)
