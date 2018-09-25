@@ -259,7 +259,7 @@ enum Color { RED, GREEN, BLUE };
 		:END:
 
 The =##= operator takes two separate tokens and pastes them together to
-form a single token. The resulting token could be a variable name,
+form a single identifier. The resulting identifier could be a variable name,
 or any other identifier.
 
 #+BEGIN_SRC c
