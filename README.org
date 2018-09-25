@@ -220,7 +220,7 @@ The =#pragma= directive can also be used for other compiler-specific purposes.
 #+END_SRC
 
 
-*** #__FILE__
+*** =__FILE__=
 		:PROPERTIES:
 		:CUSTOM_ID: language_preprocessor_file
 		:END:
