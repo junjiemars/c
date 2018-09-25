@@ -285,7 +285,7 @@ turned off before code is deployed by defining the =NDEBUG= macro.
 
 #+BEGIN_SRC sh
 # erase assertions: simple way
-./configure --has-lang --with-std=c11 --without-debug
+./configure --has-lang --without-debug
 # or via make
 make NDEBUG=1
 #+END_SRC
@@ -295,6 +295,25 @@ particular points in its execution. There are three types of assertion:
 - Preconditions: specify conditions at the start of a function.
 - Postconditions: specify conditions at the end of a function.
 - Invaiants: specify conditions over a defined region of a program.
+
+** Error
+	 :PROPERTIES:
+	 :CUSTOM_ID: language_error
+	 :END:
+
+
+- /fail safe/ pertaining to a system or component that automatically
+  places itself in a safe operating mode in the event of a failue: a
+  traffic light that reverts to blinking red in all directions when
+  normal operation fails.
+- /fail soft/ pertaining to a system or component that continues to
+  provide partial operational capability in the event of certain
+  failues: a traffic light that continues to alternate between red and
+  green if the yellow light fails. A static variable =errno=
+  indicating the error status of a function call or object. These
+  indicators are /fail soft/.
+- /fail hard/ aka fail fast or fail stop. The reaction to a detected
+  fault is to immediately halt the system. Termination is /fail hard/.
 
 
 * x86
