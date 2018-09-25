@@ -15,6 +15,15 @@ double e_squared = E * E;
 # error "compile failed: because _ERROR_==1 is true"
 #endif
 
+#ifdef MSVC
+# pragma warning(disable:4996) /*_CRT_SECURE_NO_WARNINGS*/
+#endif
+
+#if GCC
+# pragma GCC diagnostic ignored "-Wstrict-aliasing"  /* (unsigned init*)&f: */
+#endif
+
+
 int
 main(int argc, char *argv[]) {
 	_unused_(argc);

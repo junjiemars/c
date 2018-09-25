@@ -151,7 +151,7 @@ that the identifier was not set at the top of that file.
 
 #+BEGIN_SRC c
 #ifndef  _LANG_H_
-#define  _LANG_H_
+# define  _LANG_H_
 #endif
 #+END_SRC
 
@@ -182,6 +182,43 @@ is not true. For example:
 # error "compile failed: because _ERROR_==1 is true"
 #endif
 #+END_SRC
+
+*** pragma
+		:PROPERTIES:
+		:CUSTOM_ID: language_preprocessor_pragma
+		:END:
+		
+The =#pragma= directive is used to access compiler-specific preprocessor extensions. 
+
+
+A common use of =#pragma= is the =#pragma= once directive, which asks 
+the compiler to include a header file only a single time, no matter 
+how many times it has been imported.
+
+#+BEGIN_SRC c
+#pragma once
+/* header file code */
+
+/* #pragma once is equivalent to */
+#ifndef  _FILE_NAME_H_
+# define  _FILE_NAME_H_
+/* header file code */
+#endif
+#+END_SRC
+
+The =#pragma= directive can also be used for other compiler-specific purposes. 
+=#pragma= is commonly used to suppress warnings.
+
+#+BEGIN_SRC c
+#if MSVC 
+# pragma warning(disable:4706) /* assignment within conditional expression */
+#elif GCC
+# pragma GCC diagnostic ignored "-Wparentheses"
+#elif CLANG
+# pragma clang diagnostic ignored "-Wparentheses"
+#endif
+#+END_SRC
+
 
 * x86
 * Memory
