@@ -84,6 +84,31 @@ in this way.
 #+END_SRC
 
 
+*** undef
+		:PROPERTIES:
+		:CUSTOM_ID: language_undef
+		:END:
+
+
+#+BEGIN_SRC c
+#undef identifier
+#+END_SRC
+
+The =#undef= directive undefines a constant or preprocessor macro 
+defined previously using #define.
+
+For example:
+
+#+BEGIN_SRC c
+#define E 2.71828
+int e_squared = E * E;
+#undef E
+#+END_SRC
+
+Usually, =#undef= is used to scope a preprocessor constant into 
+a very limited region: this is done to avoid leaking the constant.
+=#undef= is the only way to create this scope since the preprocessor 
+does not understand block scope. 
 
 
 *** if vs. ifdef
