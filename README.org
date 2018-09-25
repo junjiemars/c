@@ -46,7 +46,7 @@ $ ./configure --update --has-<what>
 
 *** include
 		:PROPERTIES:
-		:CUSTOM_ID: language_include
+		:CUSTOM_ID: language_preprocessor_include
 		:END:
 		
 The =#include= directive instructs the preprocessor to paste the 
@@ -57,7 +57,7 @@ or a standard system directory.
 
 *** define
 		:PROPERTIES:
-		:CUSTOM_ID: language_define
+		:CUSTOM_ID: language_preprocessor_define
 		:END:
 
 The =#define= directive takes two forms: defining a /constant/ 
@@ -86,7 +86,7 @@ in this way.
 
 *** undef
 		:PROPERTIES:
-		:CUSTOM_ID: language_undef
+		:CUSTOM_ID: language_preprocessor_undef
 		:END:
 
 
@@ -113,7 +113,7 @@ does not understand block scope.
 
 *** if vs. ifdef
 		:PROPERTIES:
-		:CUSTOM_ID: language_if_vs_ifdef
+		:CUSTOM_ID: language_preprocessor_if_vs_ifdef
 		:END:
 
 		=#if= check the value of the symbol, =#ifdef= just check the 
@@ -132,7 +132,7 @@ Prefer =#if define(...)=, it's more flexible
 
 *** ifndef
 		:PROPERTIES:
-		:CUSTOM_ID: language_ifndef
+		:CUSTOM_ID: language_preprocessor_ifndef
 		:END:
 
 
@@ -156,12 +156,18 @@ that the identifier was not set at the top of that file.
 #+END_SRC
 
 =#if !defined(identifier)= equals =#ifndef identifier=
+
 #+BEGIN_SRC c
 #if !defined(MIN)
 # define MIN(a, b) ((a) < (b) ? (a) : (b))
 #endif
 #+END_SRC
-	 
+
+*** error	 
+		:PROPERTIES:
+		:CUSTOM_ID: language_preprocessor_error
+		:END:
+
 * x86
 * Memory
 	:PROPERTIES:
