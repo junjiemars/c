@@ -10,6 +10,7 @@ esac
 CC=$CC ./configure \
 	--has-ds \
 	--has-hi \
+	--has-lang \
 	--has-memory \
 	--has-x86
 make clean test

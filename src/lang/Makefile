@@ -328,7 +328,7 @@ type_test: type
 	$(type_binout)
 
 $(type_binout): $(type_cppout)
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(type_cppout): $(lang_root)type/t.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
