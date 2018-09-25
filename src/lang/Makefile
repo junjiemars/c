@@ -10,6 +10,7 @@ lang:	assert				\
 			macro					\
 			main					\
 			pointer       \
+			preprocessor  \
 			scope					\
 			sizeof				\
 			stage					\
@@ -27,6 +28,7 @@ lang_test:	assert_test					\
 						macro_test					\
 						main_test						\
 						pointer_test        \
+						preprocessor        \
 						scope_test					\
 						sizeof_test					\
 						stage_test					\
@@ -201,6 +203,20 @@ $(pointer_size_binout): $(lang_root)pointer/size.c
 
 $(pointer_void_binout): $(lang_root)pointer/void.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# preprocessor
+preprocessor_binout := $(bin_path)$(lang_prefix)_preprocessor$(bin_ext)
+preprocessor_cppout := $(tmp_path)$(lang_prefix)_preprocessor$(cpp_ext)
+
+preprocessor: $(preprocessor_binout)
+preprocessor_test: preprocessor
+	$(preprocessor_binout)
+
+$(preprocessor_binout): $(preprocessor_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(preprocessor_cppout): $(lang_root)preprocessor/p.c
+	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # scope
 scope_binout := $(bin_path)$(lang_prefix)_scope$(bin_ext)
