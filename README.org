@@ -44,6 +44,48 @@ $ ./configure --update --has-<what>
 	 :CUSTOM_ID: language_perprocessor
 	 :END:
 
+*** include
+		:PROPERTIES:
+		:CUSTOM_ID: language_include
+		:END:
+		
+The =#include= directive instructs the preprocessor to paste the 
+text of the given file into the current file. 
+Generally, it is necessary to tell the preprocessor where to look for 
+header files if they are not placed in the current directory 
+or a standard system directory. 
+
+*** define
+		:PROPERTIES:
+		:CUSTOM_ID: language_define
+		:END:
+
+The =#define= directive takes two forms: defining a /constant/ 
+and creating a /macro/. 
+
+- Defining a /constant/
+#+BEGIN_SRC c
+#define identifier [value]
+#+END_SRC
+
+When defining a /constant/, you may optionally elect not to provide 
+a value for that constant. In this case, the /identifier/ 
+will be replaced with blank text, but will be "defined" for the 
+purposes of =#ifdef= and =ifndef=. If a value is provided, 
+the given token will be replaced literally with the remainder of 
+the text on the line. You should be careful when using =#define=
+in this way.
+
+- Defining a /parameterized macro/
+#+BEGIN_SRC c
+#define identifier(<arg> [, <arg>s ...]) statement
+
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#+END_SRC
+
+
+
+
 *** if vs. ifdef
 		:PROPERTIES:
 		:CUSTOM_ID: language_if_vs_ifdef
@@ -52,14 +94,14 @@ $ ./configure --update --has-<what>
 		=#if= check the value of the symbol, =#ifdef= just check the 
 existence of the symbol.
 
-Prefer =#if define(...)=:
+Prefer =#if define(...)=, it's more flexible
 #+BEGIN_SRC c
 #if defined(LINUX) || defined(DARWIN)
-# ...
+/* code: when on LINUX or DARWIN platform */
 #endif
 
 #if defined(CLANG) && (1==NM_HAVE_LITTLE_ENDIAN)
-# ...
+/* code: when using clang compile and on little endian machine */
 #endif
 #+END_SRC
 	 
@@ -648,3 +690,4 @@ on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see [[https://g
 - [[https://www.ietf.org/rfc/rfc1035.txt][RFC 1035: DOMAIN NAMES - IMPLEMENTATION AND SPECIFICATION]]
 - [[https://tools.ietf.org/html/rfc1536][RFC 1536: Common DNS Implementation Errors and Suggested Fixes]]
 - [[http://www.linuxhowtos.org/C_C++/socket.htm][Sockets Tutorial]]
+	

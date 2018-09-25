@@ -1,3 +1,5 @@
+# -*- mode:sh -*- vim:ft=sh
+#
 
 nm_feature="c11 static_assert()"
 nm_feature_name="nm_have_c11_static_assert"
@@ -96,3 +98,4 @@ nm_feature_ldlibs=
 nm_feature_test="
 char *xyz = strdup(\"xyz\");"
 . ${NORE_ROOT}/auto/feature
+
