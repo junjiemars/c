@@ -237,7 +237,37 @@ The =#pragma= directive can also be used for other compiler-specific purposes.
   abbreviated month, =Date= is the current day of the month (1-31),
   and =yyyy= is the four digit year, such as "Tue Sep 25 16:44:08 2018"
 
+*** # macro operator
+		:PROPERTIES:
+		:CUSTOM_ID: language_preprocessor_sharp
+		:END:
+		
+Prefixing a macro token with =#= will quote that macro token. This
+allows you to turn bare words in your source code into text
+identifier. This can be particularly useful for writing a macro to convert
+an =enum= into a string.
 
+#+BEGIN_SRC c
+enum Color { RED, GREEN, BLUE };
+#define COLOR_STR(x) #x
+#+END_SRC
+
+
+*** ## macro operator
+		:PROPERTIES:
+		:CUSTOM_ID: language_preprocessor_sharp_sharp
+		:END:
+
+The =##= operator takes two separate tokens and pastes them together to
+form a single token. The resulting token could be a variable name,
+or any other identifier.
+
+#+BEGIN_SRC c
+#define DEFVAR(type, var, val) type var_##var = val;
+
+DEFVAR(int, x, 1);
+DEFVAR(float, y, 2.718);
+#+END_SRC
 
 * x86
 * Memory

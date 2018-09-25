@@ -28,6 +28,17 @@ _log_(const char *header, const char *message) {
 	fprintf(stderr, "%s: %s\n", header, message);
 }
 
+enum Color {
+						RED,
+						GREEN,
+						BLUE
+};
+#define COLOR_STR(x) #x
+
+
+#define DEFVAR(type, var, val) type var_##var = val;
+
+
 int
 main(int argc, char *argv[]) {
 	_unused_(argc);
@@ -57,4 +68,12 @@ main(int argc, char *argv[]) {
 	_log_("__DATE__", __DATE__);
 	_log_("__TIME__", __TIME__);
 	_log_("__TIMESTAMP__", __TIMESTAMP__);
+
+	printf("color: %s\n", COLOR_STR(RED));
+	printf("color: %s\n", COLOR_STR(BLUE));
+
+	DEFVAR(int, x, 1);
+	DEFVAR(float, y, e_squared);
+	printf("defvar x=%i\n", var_x);
+	printf("defvar y=%f\n", var_y);
 }
