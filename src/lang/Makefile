@@ -216,7 +216,7 @@ $(preprocessor_binout): $(preprocessor_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(preprocessor_cppout): $(lang_root)preprocessor/p.c
-	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) -D_ERROR_=$(_ERROR_) $^ $(cpp_out)$@
 
 # scope
 scope_binout := $(bin_path)$(lang_prefix)_scope$(bin_ext)

@@ -11,6 +11,10 @@ double e_squared = E * E;
 # define MIN(a, b) ((a) < (b) ? (a) : (b))
 #endif
 
+#if (1==_ERROR_)
+# error "compile failed: because _ERROR_==1 is true"
+#endif
+
 int
 main(int argc, char *argv[]) {
 	_unused_(argc);
