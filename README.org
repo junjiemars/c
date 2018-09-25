@@ -231,7 +231,7 @@ The =#pragma= directive can also be used for other compiler-specific purposes.
   =Mmm dd yyyy= as a string, such as "Tue Sep 25 2018"
 - =__TIME__= expands to current time at compile time in the form
   =hh::mm::ss= in 24 hour time as a string, such as "16:08:17"
-- =__TIMESTAMP__= hat expands to current time at compile time in the
+- =__TIMESTAMP__= expands to current time at compile time in the
   form =Ddd Mmm Date hh::mm::ss yyyy= as a string, where the time is
   in 24 hour time, =Ddd= is the abbreviated day, =Mmm= is the
   abbreviated month, =Date= is the current day of the month (1-31),
