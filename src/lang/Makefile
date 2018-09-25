@@ -133,8 +133,6 @@ macro: $(macro_binout)
 macro_test: macro
 	$(macro_binout)
 
-macro_cflags += $(cflags) $(inc) -i$(lang_root)
-
 $(macro_binout): $(macro_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
