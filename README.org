@@ -101,7 +101,7 @@ For example:
 
 #+BEGIN_SRC c
 #define E 2.71828
-int e_squared = E * E;
+double e_squared = E * E;
 #undef E
 #+END_SRC
 
