@@ -11,7 +11,7 @@ double e_squared = E * E;
 # define MIN(a, b) ((a) < (b) ? (a) : (b))
 #endif
 
-#if (1==_ERROR_)
+#if defined(_ERROR_) && (1 == _ERROR_)
 # error "compile failed: because _ERROR_==1 is true"
 #endif
 
@@ -23,6 +23,10 @@ double e_squared = E * E;
 # pragma GCC diagnostic ignored "-Wstrict-aliasing"  /* (unsigned init*)&f: */
 #endif
 
+void
+_log_(const char *header, const char *message) {
+	fprintf(stderr, "%s: %s\n", header, message);
+}
 
 int
 main(int argc, char *argv[]) {
@@ -42,4 +46,15 @@ main(int argc, char *argv[]) {
 	printf("max: %i in [%i %i]\n", MAX(0,1), 0, 1);
 	printf("E^2: %f\n", e_squared);
 	printf("min: %i in [%i %i]\n", MIN(0,1), 0, 1);
+
+	char s[256] = {0};
+	
+	_log_("__FILE__", __FILE__);
+	
+	snprintf(s, sizeof(s), "%i", __LINE__);
+	_log_("__LINE__", s);
+
+	_log_("__DATE__", __DATE__);
+	_log_("__TIME__", __TIME__);
+	_log_("__TIMESTAMP__", __TIMESTAMP__);
 }
