@@ -34,6 +34,35 @@ $ ./configure --update --has-<what>
 #+END_SRC
 
 * Hello World
+* Language
+	:PROPERTIES:
+	:CUSTOM_ID: language
+	:END:
+
+** Preprocessor	
+	 :PROPERTIES:
+	 :CUSTOM_ID: language_perprocessor
+	 :END:
+
+*** if vs. ifdef
+		:PROPERTIES:
+		:CUSTOM_ID: language_if_vs_ifdef
+		:END:
+
+		=#if= check the value of the symbol, =#ifdef= just check the 
+existence of the symbol.
+
+Prefer =#if define(...)=:
+#+BEGIN_SRC c
+#if defined(LINUX) || defined(DARWIN)
+# ...
+#endif
+
+#if defined(CLANG) && (1==NM_HAVE_LITTLE_ENDIAN)
+# ...
+#endif
+#+END_SRC
+	 
 * x86
 * Memory
 	:PROPERTIES:
