@@ -44,7 +44,7 @@ $ ./configure --update --has-<what>
 	 :CUSTOM_ID: language_perprocessor
 	 :END:
 
-*** include
+*** #include
 		:PROPERTIES:
 		:CUSTOM_ID: language_preprocessor_include
 		:END:
@@ -55,7 +55,7 @@ Generally, it is necessary to tell the preprocessor where to look for
 header files if they are not placed in the current directory 
 or a standard system directory. 
 
-*** define
+*** #define
 		:PROPERTIES:
 		:CUSTOM_ID: language_preprocessor_define
 		:END:
@@ -84,7 +84,7 @@ in this way.
 #+END_SRC
 
 
-*** undef
+*** #undef
 		:PROPERTIES:
 		:CUSTOM_ID: language_preprocessor_undef
 		:END:
@@ -111,7 +111,7 @@ a very limited region: this is done to avoid leaking the constant.
 does not understand block scope. 
 
 
-*** if vs. ifdef
+*** #if vs. #ifdef
 		:PROPERTIES:
 		:CUSTOM_ID: language_preprocessor_if_vs_ifdef
 		:END:
@@ -130,7 +130,7 @@ Prefer =#if define(...)=, it's more flexible
 #endif
 #+END_SRC
 
-*** ifndef
+*** #ifndef
 		:PROPERTIES:
 		:CUSTOM_ID: language_preprocessor_ifndef
 		:END:
@@ -163,7 +163,7 @@ that the identifier was not set at the top of that file.
 #endif
 #+END_SRC
 
-*** error	 
+*** #error	 
 		:PROPERTIES:
 		:CUSTOM_ID: language_preprocessor_error
 		:END:
@@ -183,7 +183,7 @@ is not true. For example:
 #endif
 #+END_SRC
 
-*** pragma
+*** #pragma
 		:PROPERTIES:
 		:CUSTOM_ID: language_preprocessor_pragma
 		:END:
