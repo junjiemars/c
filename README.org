@@ -235,7 +235,9 @@ The =#pragma= directive can also be used for other compiler-specific purposes.
   form =Ddd Mmm Date hh::mm::ss yyyy= as a string, where the time is
   in 24 hour time, =Ddd= is the abbreviated day, =Mmm= is the
   abbreviated month, =Date= is the current day of the month (1-31),
-  and =yyyy= is the four digit year, such as ""
+  and =yyyy= is the four digit year, such as "Tue Sep 25 16:44:08 2018"
+
+
 
 * x86
 * Memory
