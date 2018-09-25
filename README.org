@@ -333,6 +333,14 @@ Before C11, =errno= was a global variable, with all the inherent disadvantages:
 In C11, =errno= is thread-local, so it is thread-safe.
 
 
+Disadvantages of /Function Return Value/:
+- functions that return error indicators cannot use return value for
+  other uses;
+- checking every function call for an error condition increases code
+  by 30%-40%;
+- impossible for library function to enforce that callers check for
+  error condition.
+
 * x86
 * Memory
 	:PROPERTIES:
