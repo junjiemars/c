@@ -244,7 +244,7 @@ The =#pragma= directive can also be used for other compiler-specific purposes.
 		
 Prefixing a macro token with =#= will quote that macro token. This
 allows you to turn bare words in your source code into text
-identifier. This can be particularly useful for writing a macro to convert
+token. This can be particularly useful for writing a macro to convert
 an =enum= into a string.
 
 #+BEGIN_SRC c
