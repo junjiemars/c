@@ -316,6 +316,23 @@ particular points in its execution. There are three types of assertion:
   fault is to immediately halt the system. Termination is /fail hard/.
 
 
+** errno
+	 :PROPERTIES:
+	 :CUSTOM_ID: language_errno
+	 :END:
+
+Before C11, =errno= was a global variable, with all the inherent disadvantages:
+- later system calls overwrote earlier system calls;
+- global map of values to error conditions (=ENOMEM=, =ERANGE=, etc);
+- behavior is underspecified in ISO C and POSIX;
+- technically =errno= is a /modifiable lvalue/ rather than a global
+  variable, so expressions like =&errno= may not be well-defined;
+- thread-unsafe;
+
+
+In C11, =errno= is thread-local, so it is thread-safe.
+
+
 * x86
 * Memory
 	:PROPERTIES:
