@@ -14,7 +14,6 @@ memory: alloc \
 
 memory_test: 	alloc_test \
 							array_test \
-							bit_test \
 							bitfield_test \
 							byte_test \
 							copy_test \
