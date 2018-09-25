@@ -4,7 +4,6 @@ memory: alloc \
 				bitfield \
 				byte \
 				copy \
-				convert \
 				endian \
 				generic \
 				rotate \
@@ -17,7 +16,6 @@ memory_test: 	alloc_test \
 							bitfield_test \
 							byte_test \
 							copy_test \
-							convert_test \
 							endian_test \
 							generic_test \
 							rotate_test \
@@ -165,17 +163,6 @@ copy_test: copy
 	$(copy_binout)
 
 $(copy_binout): $(memory_root)copy/c.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-
-# convert
-convert_binout := $(bin_path)$(memory_prefix)_convert$(bin_ext)
-
-convert: $(convert_binout)
-convert_test: convert
-	$(convert_binout)
-
-$(convert_binout): $(memory_root)convert/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

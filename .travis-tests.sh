@@ -12,5 +12,5 @@ CC=$CC ./configure \
 	--has-hi \
 	--has-memory \
 	--has-x86
-make -j4 RISKY=1 clean test
+make clean test
 

@@ -3,7 +3,7 @@ x86: 	array   											\
 			x86_bone           			      \
 			x86_branch										\
 			call          		            \
-			x86_convert								    \
+			convert \
 			x86_loop											\
 			x86_pointer 									\
 			x86_retval										\
@@ -15,7 +15,7 @@ x86_test: array_test    						\
 					x86_bone_test       			\
 					x86_branch_test						\
 					call_test   							\
-					x86_convert_test					\
+					convert_test \
 					x86_loop									\
 					x86_pointer_test 					\
 					x86_retval_test						\
@@ -126,10 +126,10 @@ $(call_binout): $(x86_root)call/call.c
 
 
 # convert
-convert_binout := $(bin_path)x86_convert$(bin_ext)
+convert_binout := $(bin_path)$(x86_prefix)_convert$(bin_ext)
 
-x86_convert: $(convert_binout)
-x86_convert_test: x86_convert
+convert: $(convert_binout)
+convert_test: convert
 	$(convert_binout)
 
 $(convert_binout): $(x86_root)convert/convert.c
