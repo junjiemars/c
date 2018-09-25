@@ -129,6 +129,38 @@ Prefer =#if define(...)=, it's more flexible
 /* code: when using clang compile and on little endian machine */
 #endif
 #+END_SRC
+
+*** ifndef
+		:PROPERTIES:
+		:CUSTOM_ID: language_ifndef
+		:END:
+
+
+#+BEGIN_SRC c
+#ifndef identifer
+/* code: when the identifier had not been defined */
+#endif
+#+END_SRC
+
+=#ifndef= checks whether the given identifier has been =#defined= earlier 
+in the file or in an included file; if not, it includes the code 
+between it and the closing =#else= or, if no =#else= is present, 
+=#endif= statement. =#ifndef= is often used to make header files idempotent 
+by defining a identifier once the file has been included and checking 
+that the identifier was not set at the top of that file.
+
+#+BEGIN_SRC c
+#ifndef  _LANG_H_
+#define  _LANG_H_
+#endif
+#+END_SRC
+
+=#if !defined(identifier)= equals =#ifndef identifier=
+#+BEGIN_SRC c
+#if !defined(MIN)
+# define MIN(a, b) ((a) < (b) ? (a) : (b))
+#endif
+#+END_SRC
 	 
 * x86
 * Memory

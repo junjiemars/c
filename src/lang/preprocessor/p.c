@@ -7,6 +7,9 @@
 double e_squared = E * E;
 #undef E
 
+#if !defined(MIN)
+# define MIN(a, b) ((a) < (b) ? (a) : (b))
+#endif
 
 int
 main(int argc, char *argv[]) {
@@ -25,4 +28,5 @@ main(int argc, char *argv[]) {
 	printf("platform: %s\n", platform);
 	printf("max: %i in [%i %i]\n", MAX(0,1), 0, 1);
 	printf("E^2: %f\n", e_squared);
+	printf("min: %i in [%i %i]\n", MIN(0,1), 0, 1);
 }
