@@ -473,6 +473,150 @@ arguments to new symbols.
 $ cc -E <source-file>
 #+END_SRC
 
+** Pointer
+	 :PROPERTIES:
+	 :CUSTOM_ID: language_pointer
+	 :END:
+
+
+*** =&= and =*=
+		:PROPERTIES:
+		:CUSTOM_ID: language_pointer_address_of_and_dereference
+		:END:
+
+The =&= address of.
+
+The =*= has two distinct meanings within C in relation to pointers,
+depending on where it's used. When used within a /variable
+declaration/, the value on the right hand side of the equals side
+should be a /pointer value/ to an *address* in memory. When used with
+an already /declared variable/, the =*= will *deference* the pointer
+value, following it to the pointer-to place in memory, and allowing
+the value stored there to be assigned or retrieved.
+
+*** =sizeof= Pointer
+		:PROPERTIES:
+		:CUSTOM_ID: language_pointer_sizeof_pointer
+		:END:
+
+Depends on compiler and machine, all types of pointers on specified
+machine and compiled via specified compiler has same the size,
+generally occupy one machine word.
+
+
+*** =const= Pointer
+		:PROPERTIES:
+		:CUSTOM_ID: language_pointer_const_pointer
+		:END:
+
+
+Threre is a technique known as the *Clockwise/Spiral Rule* enables any
+C programmer to parse in their head any C declaration.
+
+- pointer to =const= object
+#+BEGIN_SRC c
+int v = 0x11223344;
+const int* p = &v;
+*p = (*p)+10; /* error: l-value specifies const object */
+**(int**)&p = *p+10; /* skip, dangerous */
+#+END_SRC
+
+- =const= pointer to object
+#+BEGIN_SRC c
+int v1=0x11223344, v2=0x44332211;
+int* const p = &v1;
+p = &v2; /* error: l-value specifies const object */
+*(int**)&p = &v2; /* skip, dangerous */
+#+END_SRC
+
+- =const= pointer to =const= object
+#+BEGIN_SRC c
+int v1=0x11223344, v2=0x44332211;
+const int* const p = &v1;
+*(int**)&p = &v2;
+**(int**)&p = v2;
+#+END_SRC
+
+- pointer to pointer to =const= object
+#+BEGIN_SRC c
+const int** p;
+#+END_SRC
+
+- pointer to =const= pointer to object
+#+BEGIN_SRC c
+int* const* p;
+#+END_SRC
+
+- =const= pointer to pointer to object
+#+BEGIN_SRC c
+int** const p;
+#+END_SRC
+
+- pointer to =const= pointer to =const= object
+#+BEGIN_SRC c
+const int* const* p;
+#+END_SRC
+
+- =const= pointer to pointer to =const= object
+#+BEGIN_SRC c
+const int* const* p;
+#+END_SRC
+
+- =const= pointer to =const= pointer to object
+#+BEGIN_SRC c
+int* const* const p;
+#+END_SRC
+
+
+*** =volatile= Pointer
+		:PROPERTIES:
+		:CUSTOM_ID: language_pointer_volatile_pointer
+		:END:
+
+The =volatile= is to tell the compiler not to optimize the reference,
+so that every read or write does not use the value stored in register but
+does a real memory access.
+
+#+BEGIN_SRC c
+volatile int v1;
+int *p_v1 = &v1; /* bad */
+volatile int *p_v1 = &v1; /* better */
+#+END_SRC
+
+*** function Pointer
+		:PROPERTIES:
+		:CUSTOM_ID: language_pointer_function_pointer
+		:END:
+
+#+BEGIN_SRC c
+return_type_of_fn (*fn)(type_of_arg1 arg1, type_of_arg2 arg2 ...);
+#+END_SRC
+
+- =void= Pointer
+The =void*= is a catch all type for pointers to object types, via
+~void~ pointer can get some ploymorphic behavior. see =qsort= in
+=stdlib.h=
+
+*** Dangling Pointer
+
+Pointers that point to invalid addresses are sometimes called dangling
+pointers.
+
+*** Pointer decay
+		:PROPERTIES:
+		:CUSTOM_ID: language_pointer_pointer_decay
+		:END:
+		
+
+Decay refers to the implicit conversion of an expression from an array
+type to a pointer type. In most contexts, when the compiler sees an
+array expression it converts the type of the expression from
+*N-element array of T* to *const pointer to T* and set the value of
+the expression to the address of the first element of the array.  The
+exceptions to this rule are when an array is an operand of either the
+=sizeof= or =&= operators, or the array is a string literal being used
+as an initializer in a declaration. More importantly the term decay
+signifies loss of type and dimension.
 
 ** References
 	 :PROPERTIES:
