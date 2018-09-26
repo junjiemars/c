@@ -478,7 +478,6 @@ $ cc -E <source-file>
 	 :CUSTOM_ID: language_pointer
 	 :END:
 
-
 *** =&= and =*=
 		:PROPERTIES:
 		:CUSTOM_ID: language_pointer_address_of_and_dereference
@@ -503,14 +502,13 @@ Depends on compiler and machine, all types of pointers on specified
 machine and compiled via specified compiler has same the size,
 generally occupy one machine word.
 
-
 *** =const= Pointer
 		:PROPERTIES:
 		:CUSTOM_ID: language_pointer_const_pointer
 		:END:
 
 
-Threre is a technique known as the *Clockwise/Spiral Rule* enables any
+Threre is a technique known as the /Clockwise/Spiral Rule/ enables any
 C programmer to parse in their head any C declaration.
 
 - pointer to =const= object
@@ -567,7 +565,6 @@ const int* const* p;
 int* const* const p;
 #+END_SRC
 
-
 *** =volatile= Pointer
 		:PROPERTIES:
 		:CUSTOM_ID: language_pointer_volatile_pointer
@@ -611,7 +608,7 @@ pointers.
 Decay refers to the implicit conversion of an expression from an array
 type to a pointer type. In most contexts, when the compiler sees an
 array expression it converts the type of the expression from
-*N-element array of T* to *const pointer to T* and set the value of
+/N-element array of T/ to /const pointer to T/ and set the value of
 the expression to the address of the first element of the array.  The
 exceptions to this rule are when an array is an operand of either the
 =sizeof= or =&= operators, or the array is a string literal being used
