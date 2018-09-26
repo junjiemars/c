@@ -350,7 +350,6 @@ Disadvantages of /Function Return Value/:
 		:CUSTOM_ID: language_error_strerror
 		:END:
 
-
 ** Function
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_function
@@ -616,7 +615,6 @@ as an initializer in a declaration. More importantly the term decay
 signifies loss of type and dimension.
 
 
- 
 ** Scope
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_scope
@@ -841,6 +839,53 @@ elsewhere (and that has [[#language_scope_linkage_external_linkage][external lin
 declare an object or function to be used in a module that is not the
 one in which the corresponding object or function is defined.
 
+** Type
+	 :PROPERTIES:
+	 :CUSTOM_ID: language_type
+	 :END:
+
+
+All C types be represented as binary numbers in memory, the way how to
+interprete those numbers is what type does.
+
+*** Basic types
+		:PROPERTIES:
+		:CUSTOM_ID: language_type_basic_types
+		:END:
+
+C provides the four basic /arithmetic type specifiers/ =char=, =int=,
+=float= and =double=, and the /modifiers/ =signed=, =unsigned=,
+=short= and =long=.
+
+*** Size type and Pointer difference types
+		:PROPERTIES:
+		:CUSTOM_ID: language_type_size_type_and_pointer_difference_type
+		:END:
+
+The C language specification include the /typedefs/ =size_t= and
+=ptrdiff_t= to represent memory-related quantities. Their size is
+defined according to the target processor's arithmetic capabilities,
+not the memory capabilities, such as avaialable address space. Both of
+these types are defined in the =<stddef.h>= header.
+
+- =size_t= is an unsigned integeral type used to represent the size of
+  any object in the particular implementation. The =sizeof= operator
+  yields a value of the type =size_t=. The maximum size of =size_t= is
+  provided via =SIZE_MAX=, a macro constant which is defined in the
+  =<stdint.h>= header.
+
+- =ptrdiff_t= is a signed integral type used to reprensent the
+  difference between pointers. It is only guranteed to be valid
+  against pointers of the same type.
+
+
+*** Literal suffix
+		:PROPERTIES:
+		:CUSTOM_ID: language_type_literal_suffix
+		:END:
+
+- =l= or =L= for =long=, such as =123l=, =3.14L=
+- =f= for =float=, such as =2.718f=
 
 ** References
 	 :PROPERTIES:
@@ -859,7 +904,6 @@ one in which the corresponding object or function is defined.
 - [[https://www.bell-labs.com/usr/dmr/www/chist.html][The Development of the C Lanuage]]
 - [[http://stackoverflow.com/questions/1461432/what-is-array-decaying][What is array decaying?]]
 - [[https://stackoverflow.com/questions/204476/what-should-main-return-in-c-and-c][What should main() return in C and C++?]]
-
 
 * x86
 * Memory
