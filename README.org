@@ -615,6 +615,104 @@ exceptions to this rule are when an array is an operand of either the
 as an initializer in a declaration. More importantly the term decay
 signifies loss of type and dimension.
 
+## Scope
+
+### Declarations and Definitions
+* All declarations with no [linkage](#linkage) are also definitions. Other 
+declarations are definitions if they have an initializer.
+* A [file scope](#file-scope) variable declaration without the 
+[extern](#extern) storage class specifier or initializer is a tentative definition.
+* All definitions are declarations but not vice-versa.
+* A definition of an identifier is a declaration for that identifier that:
+for an object, causes storage to be reserved for that object.
+ 
+** Scope
+	 :PROPERTIES:
+	 :CUSTOM_ID: language_scope
+	 :END:
+
+
+The scope of a [declaration](#declaration-and-definition) is the part
+of the code where the declaration is seen and can be used. Note that
+this says nothing about whether the object associated to the
+declaration can be accessed from some other part of the code via
+another declaration. We uniquely identify an object by its memory: the
+storage for a variable or the function code.
+
+Finally, note that a [declaration](#declaration-and-definition) in a
+nested scope can hide a declaration in an outer scope; but only if one
+of two has no [linkage](#linkage).
+
+
+*** Duration
+		:PROPERTIES:
+		:CUSTOM_ID: language_scope_duration
+		:END:
+
+Indicates whether the object associated to the
+[declaration](#declaration-and-definition) persists throughout the
+program's execution or whether it is allocated dynamically when the
+declaration's scope is entered.
+
+*** Linkage
+		:PROPERTIES:
+		:CUSTOM_ID: language_scope_linkage
+		:END:
+
+*Linkage* is what determines if multiple declarations of the same object refer to
+the same object, or to separate ones. Each declaration can only have one of five 
+[storage](#storage) class specifier: 
+=static=, =extern=, =auto=, =register= and =typedef=.
+
+- No Linkage: A declaration with no linkage is associated to an object
+  that is not shared with any other declaration. All declarations with
+  no linkage happen at block scope: all block scope declarations
+  without the extern storage class specifier have no linkage.
+
+- Internal Linkage: within the compilation unit, all declarations with
+  internal linkage for the same identifier refer to the same object.
+
+- External Linkage-: within the whole program, all declarations with
+  external linkage for the same identifier refer to the same object.
+
+
+*** Block scope 
+		:PROPERTIES:
+		:CUSTOM_ID: language_scope_block_scope
+		:END:
+
+Every variable or function declaration that appears inside a block
+(including a function body) has block scope. The scope goes from the declaration to
+the end of the innermost block in which the declaration appears. Function parameter
+declarations in function definitions (but not in prototypes) also have block scope.
+The scope of a parameter declaration therefore includes the parameter declarations
+that appears after it.
+
+*** Function scope
+		:PROPERTIES:
+		:CUSTOM_ID: language_scope_function_scope
+		:END:
+
+=goto <label>= is a bit special, which are implicitly declared at the
+place where they appears, but they are visible throughout the
+function, even if they appear inside a block.
+
+*function prototype scope* is the scope for function parameters that
+appears inside a function prototype. It extends until the end of the
+prototype. This scope exists to ensure that function parameters have
+distinct names.
+
+*** File scope
+		:PROPERTIES:
+		:CUSTOM_ID: language_scope_file_scope
+		:END:
+
+All vairables and functions defined ouside functions have [file
+scope](#file-scope).  They are visible from their
+[declaration](#declaration-and-definition) until the end of the
+file. Here, the term /file/ should be understood as the source file
+being compiled, after all includes have been resolved.
+
 ** References
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_references
