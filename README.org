@@ -320,9 +320,9 @@ particular points in its execution. There are three types of assertion:
 - /fail hard/ aka fail fast or fail stop. The reaction to a detected
   fault is to immediately halt the system. Termination is /fail hard/.
 
-** errno
+*** errno
 	 :PROPERTIES:
-	 :CUSTOM_ID: language_errno
+	 :CUSTOM_ID: language_error_errno
 	 :END:
 
 Before C11, =errno= was a global variable, with all the inherent disadvantages:
@@ -344,6 +344,53 @@ Disadvantages of /Function Return Value/:
   by 30%-40%;
 - impossible for library function to enforce that callers check for
   error condition.
+
+*** strerror
+		:PROPERTIES:
+		:CUSTOM_ID: language_error_strerror
+		:END:
+
+
+** Function
+	 :PROPERTIES:
+	 :CUSTOM_ID: language_function
+	 :END:
+
+*** main
+		:PROPERTIES:
+		:CUSTOM_ID: language_function_main
+		:END:
+
+
+C90 =main()= declarations:
+#+BEGIN_SRC c
+int main(void);
+
+int main(int argc, char **argv);
+
+/* samed with above */
+int main(int argc, char *argv[]);
+
+/* classicaly, Unix system support a third variant */
+int main(int argc, char **argv, char**envp);
+#+END_SRC
+
+
+C99 the value =return= from =main()=:
+- the =int= return type may not be omitted.
+- the =return= statement may be omitted, if so and =main()= finished,
+  there is an implicit =return 0=.
+
+In arguments:
+- ~argc > 0~
+- ~argv[argc] == 0~
+- ~argv[0]~ through to ~argv[argc-1]~ are pointers to string whose
+  meaning will be determined by the program.
+- ~argv[0]~ will be a string containing the program's name or a null
+  string if that is not avaiable.
+- ~envp~ is not specified by POSIX but widely supported, =getenv= is
+  the only one specified by the C standard, the =putenv=
+	and ~extern char **environ~ are POSIX-specific.
 
 ** References
 	 :PROPERTIES:
