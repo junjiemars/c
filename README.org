@@ -424,7 +424,6 @@ But, =max= macro has side-effect that eval the argument twice
 #+END_SRC
 when call it with ~max(a, b++)~ .
 
-
 *** Block
 		:PROPERTIES:
 		:CUSTOM_ID: language_macro_block
@@ -649,7 +648,6 @@ declaration in an outer scope; but only if one of two has [[#language_scope_link
   identifier that: for an object, causes storage to be reserved for
   that object.
 
-
 *** Duration
 		:PROPERTIES:
 		:CUSTOM_ID: language_scope_duration
@@ -698,7 +696,6 @@ for the same identifier refer to the same object.
 
 within the whole program, all declarations with external linkage for
 the same identifier refer to the same object.
-
 
 *** Block scope 
 		:PROPERTIES:
@@ -762,7 +759,6 @@ this keyword is mostly of historical interest and should not be used.
 - automatic variables includes global_auto_i0/i1, i0/i1;
 - uninitialized variables will be set to 0;
 
-
 *** =register=
 		:PROPERTIES:
 		:CUSTOM_ID: language_storage_register
@@ -814,7 +810,6 @@ without =register= keyword.
 The =register= storage class is more appropriate for variables that
 are defined inside a block and are accessed with high frequency.
 
-
 *** =static=
 		:PROPERTIES:
 		:CUSTOM_ID: language_storage_static
@@ -826,7 +821,6 @@ location of the declaration in the file:
 - Save data for use with the next call of a function (scope=block); 
 - >=C99, used in function parameters to denote an array is expected to
   have a constant minimum number of elements and a non-null parameter.
-
 
 *** =extern=
 		:PROPERTIES:
