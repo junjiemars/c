@@ -837,7 +837,7 @@ location of the declaration in the file:
 		:END:
 
 =extern= keyword used to declare an object or function that is defined
-elsewhere (and that has /external linkage/). In general, it is used to
+elsewhere (and that has [[#language_scope_linkage_external_linkage][external linkage]]). In general, it is used to
 declare an object or function to be used in a module that is not the
 one in which the corresponding object or function is defined.
 
