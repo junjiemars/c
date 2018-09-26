@@ -3,4 +3,4 @@
 #+STARTUP: overview
 
 
-[[file:~/apps/c/README.org::*language][Language]]
+[[https://github.com/junjiemars/c/blob/master/README.org#language][Language]]
