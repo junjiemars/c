@@ -392,6 +392,88 @@ In arguments:
   the only one specified by the C standard, the =putenv=
 	and ~extern char **environ~ are POSIX-specific.
 
+** Macro
+	 :PROPERTIES:
+	 :CUSTOM_ID: language_macro
+	 :END:
+	 
+*** Expression
+		:PROPERTIES:
+		:CUSTOM_ID: language_macro_expression
+		:END:
+
+Expression-type macro will expand to expression, such as the following
+macro definition 
+#+BEGIN_SRC c
+#define double_v1(x) 2*x
+#+END_SRC
+
+But =double_v1= has drawback, call ~double_v1(1+1)*8~ expands to wrong
+expression ~2*1+1*8~ .
+
+
+Use parens to quoted input arguments and final expression:
+#+BEGIN_SRC c
+#define double_v2(x) (2*(x))
+#+END_SRC
+
+Now, it expands to ~(2*(1+1))*8~
+
+But, =max= macro has side-effect that eval the argument twice
+#+BEGIN_SRC c
+#define max(a, b) ((a) > (b) ? (a) : (b))
+#+END_SRC
+when call it with ~max(a, b++)~ .
+
+
+*** Block
+		:PROPERTIES:
+		:CUSTOM_ID: language_macro_block
+		:END:
+
+If the macro definition includes =;= statatment ending character, we
+need to block it.
+
+#+BEGIN_SRC c
+#define incr(a, b)   \
+    (a)++;           \
+    (b)++;
+#+END_SRC
+
+Call it with
+#+BEGIN_SRC c
+int a=2, b=3;
+if (a > b) incr(a, b);
+#+END_SRC
+
+just only =b= will be incremented. We can block it and convert it to
+block-type macro
+
+#+BEGIN_SRC c
+#define incr(a, b) { \
+    (a)++;           \
+    (b)++;           \
+}
+#+END_SRC
+
+*** Name clash
+		:PROPERTIES:
+		:CUSTOM_ID: language_macro_name_clash
+		:END:
+
+We can use same machinism like Lisp's ~(gensym)~ to rebind the input
+arguments to new symbols.
+
+*** Check expansion
+		:PROPERTIES:
+		:CUSTOM_ID: language_macro_check_expansion
+		:END:
+
+#+BEGIN_SRC c
+$ cc -E <source-file>
+#+END_SRC
+
+
 ** References
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_references
