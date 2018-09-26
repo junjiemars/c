@@ -269,9 +269,9 @@ DEFVAR(int, x, 1);
 DEFVAR(float, y, 2.718);
 #+END_SRC
 
-** Assertion
+** assert
 	 :PROPERTIES:
-	 :CUSTOM_ID: language_assertion
+	 :CUSTOM_ID: language_assert
 	 :END:
 
 
@@ -314,7 +314,6 @@ particular points in its execution. There are three types of assertion:
   indicators are /fail soft/.
 - /fail hard/ aka fail fast or fail stop. The reaction to a detected
   fault is to immediately halt the system. Termination is /fail hard/.
-
 
 ** errno
 	 :PROPERTIES:
