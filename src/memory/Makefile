@@ -1,6 +1,5 @@
 
 memory: alloc \
-				array \
 				bitfield \
 				byte \
 				copy \
@@ -8,11 +7,9 @@ memory: alloc \
 				generic \
 				rotate \
 				shift \
-				stack \
 				struct
 
 memory_test: 	alloc_test \
-							array_test \
 							bitfield_test \
 							byte_test \
 							copy_test \
@@ -20,7 +17,6 @@ memory_test: 	alloc_test \
 							generic_test \
 							rotate_test \
 							shift_test \
-							stack_test \
 							struct_test
 
 memory_prefix := memory
@@ -117,18 +113,6 @@ $(alloc_re_binout): $(memory_root)alloc/re.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
-# array
-array_binout := $(bin_path)$(memory_prefix)_array$(bin_ext)
-
-array: $(array_binout)
-array_test: array
-	$(array_binout)
-
-$(array_binout): $(memory_root)array/a.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-
-
 #bitfield
 bitfield_binout := $(bin_path)$(memory_prefix)_bitfield$(bit_ext)
 
@@ -214,23 +198,6 @@ shift_test: shift
 
 $(shift_binout): $(memory_root)shift/shift.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-
-# stack
-stack_binout := $(bin_path)$(memory_prefix)_stack$(bin_ext)
-
-stack: $(stack_binout)
-stack_test: stack
-	$(stack_binout)
-stack_valgrind_test: stack
-	valgrind --leak-check=full --track-origins=yes $(stack_binout)
-
-$(stack_binout): $(memory_root)stack/stack.h \
-								 $(memory_root)stack/c.c \
-								 $(memory_root)stack/stack.c
-	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ \
-		$(memory_root)stack/stack.c \
-		$(memory_root)stack/c.c
 
 
 # struct
