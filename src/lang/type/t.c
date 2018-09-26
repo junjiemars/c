@@ -18,10 +18,10 @@ integer_type() {
 
 void 
 float_type() {
-  float f0 = 3.14f;
-  double f1 = 2.7182L;
-  printf("pi %f stored as 0x%8x\n", f0, *(unsigned int*)&f0);
-  printf("e %lf stored as 0x%8zx\n", f1, *(unsigned long*)&f1);
+  float f = 3.14f;
+  double d = 2.7182L;
+  printf("pi %f stored as 0x%8x\n", f, *(unsigned int*)&f);
+  printf("e %lf stored as 0x%8zx\n", d, *(unsigned long*)&d);
 }
 
 

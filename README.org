@@ -614,7 +614,6 @@ exceptions to this rule are when an array is an operand of either the
 as an initializer in a declaration. More importantly the term decay
 signifies loss of type and dimension.
 
-
 ** Scope
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_scope
@@ -877,7 +876,6 @@ these types are defined in the =<stddef.h>= header.
 - =ptrdiff_t= is a signed integral type used to reprensent the
   difference between pointers. It is only guranteed to be valid
   against pointers of the same type.
-
 
 *** Literal suffix
 		:PROPERTIES:
