@@ -16,6 +16,7 @@ lang:	assert \
 			scope \
 			sizeof \
 			stage \
+			storage \
 			string \
 			type
 
@@ -36,6 +37,7 @@ lang_test:	assert_test \
 						scope_test \
 						sizeof_test \
 						stage_test \
+						storage_test \
 						string_test \
 						type_test
 
@@ -320,6 +322,17 @@ stage:
 stage_test:
 stage_ldflags := -link -FORCE:MULTIPLE
 endif
+
+
+# storage
+storage_binout := $(bin_path)$(lang_prefix)_storage$(bin_ext)
+
+storage: $(storage_binout)
+storage_test: storage
+	$(storage_binout)
+
+$(storage_binout): $(lang_root)storage/s.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # string

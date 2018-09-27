@@ -767,19 +767,17 @@ optimizations:
 
 #+BEGIN_SRC c
 /* error: address of register variable requested */
-register int i4 = 0x10;
-int* p = &i4;
-sqr(*(&i4));
-
+register int i = 0x10;
+int* p = &i;
 #+END_SRC
 
-=i4= that can never alias because no code can pass its address to
+=i= that can never alias because no code can pass its address to
 another function where it might be changed unexpectedly
 
 
 This property also implies that an array
 #+BEGIN_SRC c
-register int a[2];
+register int a[] = { 0x11, 0x22, 0x33, 0x44, };
 #+END_SRC
 
 cannot decay into a pointer to its first element (i.e. turning into
