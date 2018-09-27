@@ -709,6 +709,9 @@ scope]]) has static duration.
 	 :CUSTOM_ID: language_storage
 	 :END:
 
+Each declaration can only have one of five /storage/ class specifier:
+=static=, =extern=, =auto=, =register= and =typedef=.
+
 *** =auto=
 		:PROPERTIES:
 		:CUSTOM_ID: language_storage_auto
@@ -806,11 +809,8 @@ one in which the corresponding object or function is defined.
 		:CUSTOM_ID: language_linkage
 		:END:
 
-*Linkage* describes how names can or can not refer to the same entity
-throughout the whole program or one single translation unit.
-
-Each declaration can only have one of five [[#language_storage][storage]] class specifier:
-=static=, =extern=, =auto=, =register= and =typedef=.
+*Linkage* describes how identifiers can or can not refer to the same
+entity throughout the whole program or one single translation unit.
 
 *** Translation unit
 		:PROPERTIES:
