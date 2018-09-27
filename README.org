@@ -627,7 +627,7 @@ identify an object by its memory: the storage for a variable or the
 function code.
 
 Finally, note that a [[#language_scope_declaration_and_definition][declaration]] in a nested scope can hide a
-declaration in an outer scope; but only if one of two has [[#language_scope_linkage_no_linkage][no linkage]].
+declaration in an outer scope; but only if one of two has [[#language_linkage_no_linkage][no linkage]].
 
 
 *** Declarations and Definitions
@@ -636,10 +636,10 @@ declaration in an outer scope; but only if one of two has [[#language_scope_link
 		:END:
 
 
-- All /declarations/ with [[#language_scope_linkage_no_linkage][no linkage]] are also /definitions/. Other
+- All /declarations/ with [[#language_linkage_no_linkage][no linkage]] are also /definitions/. Other
   /declarations/ are /definitions/ if they have an initializer.
 
-- A [[#language_scope_file_scope][file scope]] variable /declaration/ without the [[#language_scope_linkage_external_linkage][external linkage]]
+- A [[#language_scope_file_scope][file scope]] variable /declaration/ without the [[#language_linkage_external_linkage][external linkage]]
   storage class specifier or initializer is a tentative /definition/.
 
 - All /definitions/ are /declarations/ but not vice-versa.
@@ -648,44 +648,6 @@ declaration in an outer scope; but only if one of two has [[#language_scope_link
   identifier that: for an object, causes storage to be reserved for
   that object.
 
-*** Linkage
-		:PROPERTIES:
-		:CUSTOM_ID: language_scope_linkage
-		:END:
-
-*Linkage* is what determines if multiple declarations of the same
-object refer to the same object, or to separate ones. Each declaration
-can only have one of five [[#language_storage][storage]] class specifier: =static=, =extern=,
-=auto=, =register= and =typedef=.
-
-**** /No Linkage/
-		 :PROPERTIES:
-		 :CUSTOM_ID: language_scope_linkage_no_linkage
-		 :END:
-
-
-A declaration with no linkage is associated to an object that is not
-shared with any other declaration. All declarations with no linkage
-happen at block scope: all block scope declarations without the extern
-storage class specifier have no linkage.
-
-**** /Internal Linkage/
-		 :PROPERTIES:
-		 :CUSTOM_ID: language_scope_linkage_internal_linkage
-		 :END:
-
-
-Within the compilation unit, all declarations with /internal linkage/
-for the same identifier refer to the same object.
-
-**** /External Linkage/
-		 :PROPERTIES:
-		 :CUSTOM_ID: language_scope_linkage_external_linkage
-		 :END:
-
-
-Within the whole program, all declarations with /external linkage/ for
-the same identifier refer to the same object.
 
 *** Block scope 
 		:PROPERTIES:
@@ -834,9 +796,48 @@ location of the declaration in the file:
 		:END:
 
 =extern= keyword used to declare an object or function that is defined
-elsewhere (and that has [[#language_scope_linkage_external_linkage][external linkage]]). In general, it is used to
+elsewhere (and that has [[#language_linkage_external_linkage][external linkage]]). In general, it is used to
 declare an object or function to be used in a module that is not the
 one in which the corresponding object or function is defined.
+
+** Linkage
+		:PROPERTIES:
+		:CUSTOM_ID: language_linkage
+		:END:
+
+*Linkage* is what determines if multiple declarations of the same
+object refer to the same object, or to separate ones. Each declaration
+can only have one of five [[#language_storage][storage]] class specifier: =static=, =extern=,
+=auto=, =register= and =typedef=.
+
+*** No Linkage
+		 :PROPERTIES:
+		 :CUSTOM_ID: language_linkage_no_linkage
+		 :END:
+
+
+A declaration with no linkage is associated to an object that is not
+shared with any other declaration. All declarations with no linkage
+happen at block scope: all block scope declarations without the extern
+storage class specifier have no linkage.
+
+*** Internal Linkage
+		 :PROPERTIES:
+		 :CUSTOM_ID: language_linkage_internal_linkage
+		 :END:
+
+
+Within the compilation unit, all declarations with /internal linkage/
+for the same identifier refer to the same object.
+
+*** External Linkage
+		 :PROPERTIES:
+		 :CUSTOM_ID: language_linkage_external_linkage
+		 :END:
+
+
+Within the whole program, all declarations with /external linkage/ for
+the same identifier refer to the same object.
 
 ** Type
 	 :PROPERTIES:
