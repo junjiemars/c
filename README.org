@@ -717,7 +717,7 @@ the parameter declarations that appears after it.
 place where they appears, but they are visible throughout the
 function, even if they appear inside a block.
 
-*function prototype scope* is the scope for function parameters that
+/function prototype scope/ is the scope for function parameters that
 appears inside a function prototype. It extends until the end of the
 prototype. This scope exists to ensure that function parameters have
 distinct names.
@@ -727,11 +727,10 @@ distinct names.
 		:CUSTOM_ID: language_scope_file_scope
 		:END:
 
-All vairables and functions defined ouside functions have [file
-scope](#file-scope).  They are visible from their
-[declaration](#declaration-and-definition) until the end of the
-file. Here, the term /file/ should be understood as the source file
-being compiled, after all includes have been resolved.
+All vairables and functions defined ouside functions have scope.  They
+are visible from their [[#language_scope_declaration_and_definition][declaration]] until the end of the file. Here,
+the term /file/ should be understood as the source file being
+compiled, after all includes have been resolved.
 
 ** Storage
 	 :PROPERTIES:
