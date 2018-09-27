@@ -618,6 +618,7 @@ signifies loss of type and dimension.
 	 :CUSTOM_ID: language_scope
 	 :END:
 
+In C, all identifiers are lexically (or statically) scoped.
 
 The scope of a [[#language_scope_declaration_and_definition][declaration]] is the part of the code where the
 declaration is seen and can be used. Note that this says nothing about
@@ -810,6 +811,19 @@ object refer to the same object, or to separate ones. Each declaration
 can only have one of five [[#language_storage][storage]] class specifier: =static=, =extern=,
 =auto=, =register= and =typedef=.
 
+*** Translation unit
+		:PROPERTIES:
+		:CUSTOM_ID: language_linkage_translation_unit
+		:END:
+
+A /translation unit/ is the ultimate input to a C compiler from which
+an object file is generated. In casual usage it is sometimes referred
+to as a compilation unit. A translation unit roughly consists of a
+source file after it has been processed by the C preprocessor, meaning
+that header files listed in =#include= directives are literally
+included, sections of code within =#ifdef= may be included, and macros
+have been expanded.
+
 *** No Linkage
 		 :PROPERTIES:
 		 :CUSTOM_ID: language_linkage_no_linkage
@@ -898,6 +912,7 @@ these types are defined in the =<stddef.h>= header.
 - [[http://stackoverflow.com/documentation/c/1108/pointers#t=201702060822544818513][Pointers]]
 - [[http://stackoverflow.com/questions/2524611/how-can-one-print-a-size-t-variable-portably-using-the-printf-family][printf size_t]]
 - [[https://www.bell-labs.com/usr/dmr/www/chist.html][The Development of the C Lanuage]]
+- [[https://en.wikipedia.org/wiki/Translation_unit_(programming)][Wiki: Translation unit]]
 - [[http://stackoverflow.com/questions/1461432/what-is-array-decaying][What is array decaying?]]
 - [[https://stackoverflow.com/questions/204476/what-should-main-return-in-c-and-c][What should main() return in C and C++?]]
 
