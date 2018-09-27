@@ -4,16 +4,21 @@
 
 
 #if GCC
-	/* (unsigned init*)&f: */
-	#pragma GCC diagnostic ignored "-Wstrict-aliasing"  
+	/* (unsigned int*)&float: */
+/* # pragma GCC diagnostic ignored "-Wstrict-aliasing" */
 #endif
 
 void 
 integer_type() {
-  int i0 = 10;
-  long i1 = 123L;
-  printf("ten %i stored as 0x%08x\n", i0, *(unsigned int*)&i0);
-  printf("hundred %li stored as 0x%08zx\n", i1, *(unsigned long*)&i1);
+	char c = 'a';
+	short int s = 0x1122; /* eq: short s = 0x1122; */
+  int i = 10;
+  long int l = 100L; /* eq: long l = 100L; */
+
+	printf("a %i stored as 0x%02x\n", c, *(unsigned char*)&c);
+	printf("0x1122 %i stored as 0x%04x\n", s, *(unsigned short*)&s);
+  printf("ten %i stored as 0x%08x\n", i, *(unsigned int*)&i);
+  printf("hundred %li stored as 0x%08zx\n", l, *(unsigned long*)&l);
 }
 
 void 
@@ -30,12 +35,24 @@ main(int argc, const char *argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 
+	printf("\ninteger type\n");
+	printf("------------\n");
   integer_type();
+
+	printf("\nfloat type\n");
+	printf("------------\n");
   float_type();
 
+	printf("\nsize_t\n");
+	printf("------------\n");	
 	printf("sizeof(char) = %zu\n", sizeof(char));
 
-	ptrdiff_t d1 = 3, d2 = -1;
-	printf("[%td] of %s = %c\n", d1, argv[0], (argv[0]+d1)[0]);
-	printf("[%td] of %s = %c\n", d2, argv[0]+d1, (argv[0]+d1+d2)[0]);
+	printf("\nptrdiff_t\n");
+	printf("------------\n");
+	char s[] = "language/type";
+	ptrdiff_t p20 = &s[2]-&s[0];
+	ptrdiff_t p02 = &s[0]-&s[2];
+	printf("char s[%zu] = \"%s\"\n", sizeof(s)/sizeof(char), s);
+	printf("ptrdiff_t of (&s[2]-&s[0]) is %td\n", p20);
+	printf("ptrdiff_t of (&s[0]-&s[1]) is %td\n", p02);
 }
