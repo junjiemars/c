@@ -815,7 +815,6 @@ can only have one of five [[#language_storage][storage]] class specifier: =stati
 		 :CUSTOM_ID: language_linkage_no_linkage
 		 :END:
 
-
 A declaration with no linkage is associated to an object that is not
 shared with any other declaration. All declarations with no linkage
 happen at block scope: all block scope declarations without the extern
@@ -826,7 +825,6 @@ storage class specifier have no linkage.
 		 :CUSTOM_ID: language_linkage_internal_linkage
 		 :END:
 
-
 Within the compilation unit, all declarations with /internal linkage/
 for the same identifier refer to the same object.
 
@@ -834,7 +832,6 @@ for the same identifier refer to the same object.
 		 :PROPERTIES:
 		 :CUSTOM_ID: language_linkage_external_linkage
 		 :END:
-
 
 Within the whole program, all declarations with /external linkage/ for
 the same identifier refer to the same object.
