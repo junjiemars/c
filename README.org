@@ -839,7 +839,7 @@ storage class specifier have no linkage.
 		 :CUSTOM_ID: language_linkage_internal_linkage
 		 :END:
 
-Within the compilation unit, all declarations with /internal linkage/
+Within the translation unit, all declarations with /internal linkage/
 for the same identifier refer to the same object.
 
 *** External Linkage
