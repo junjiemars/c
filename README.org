@@ -809,7 +809,7 @@ one in which the corresponding object or function is defined.
 		:CUSTOM_ID: language_linkage
 		:END:
 
-*Linkage* describes how identifiers can or can not refer to the same
+/Linkage/ describes how identifiers can or can not refer to the same
 entity throughout the whole program or one single translation unit.
 
 *** Translation unit
@@ -825,31 +825,37 @@ that header files listed in =#include= directives are literally
 included, sections of code within =#ifdef= may be included, and macros
 have been expanded.
 
-*** No Linkage
+*** No linkage
 		 :PROPERTIES:
 		 :CUSTOM_ID: language_linkage_no_linkage
 		 :END:
 
-A declaration with no linkage is associated to an object that is not
-shared with any other declaration. All declarations with no linkage
-happen at block scope: all block scope declarations without the extern
-storage class specifier have no linkage.
+A declaration with /no linkage/ is associated to an object that is not
+shared with any other declaration. All declarations with /no linkage/
+happen at [[#language_scope_block_scope][block scope]]: all block scope declarations without the extern
+storage class specifier have /no linkage/.
 
-*** Internal Linkage
+*** Internal linkage
 		 :PROPERTIES:
 		 :CUSTOM_ID: language_linkage_internal_linkage
 		 :END:
 
-Within the translation unit, all declarations with /internal linkage/
-for the same identifier refer to the same object.
+/Internal linkage/ means that the variable must be defined in your
+translation unit scope, which means it should either be defined in any
+of the included libraries, or in the same file scope. Within the
+translation unit, all declarations with /internal linkage/ for the
+same identifier refer to the same object.
 
-*** External Linkage
+*** External linkage
 		 :PROPERTIES:
 		 :CUSTOM_ID: language_linkage_external_linkage
 		 :END:
 
-Within the whole program, all declarations with /external linkage/ for
-the same identifier refer to the same object.
+/External linkage/ means that the variable could be defined somewhere
+else outside the file you are working on, which means you can define
+it inside any other translation unit rather your current one. Within
+the whole program, all declarations with /external linkage/ for the
+same identifier refer to the same object.
 
 ** Type
 	 :PROPERTIES:
