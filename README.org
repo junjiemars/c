@@ -700,9 +700,9 @@ There are two kind of duration:
 - automatic
 - static
 
-Within functions (at [[#language_scope_block_scope][block scope]]), declarations without =extern= or
-=static= have automatic duration. Any other declaration (at [[#language_scope_file_scope][file
-scope]]) has static duration.
+Within functions at [[#language_scope_block_scope][block scope]], declarations without =extern= or
+=static= have automatic duration. Any other declaration at [[#language_scope_file_scope][file scope]]
+has static duration.
 
 ** Storage
 	 :PROPERTIES:

@@ -65,14 +65,21 @@ $(assert_binout): $(lang_root)assert/a.c
 
 # duration
 duration_binout := $(bin_path)$(lang_prefix)_duration$(bin_ext)
+duration_extern_objout := $(bin_path)$(lang_prefix)_duration_extern$(obj_ext)
+duration_d_objout := $(bin_path)$(lang_prefix)_duration_d$(obj_ext)
 
 duration: $(duration_binout)
 duration_test: duration
 	$(duration_binout)
 
-$(duration_binout): $(lang_root)duration/d.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(duration_binout): $(duration_extern_objout) $(duration_d_objout)
+	$(LINK) $^ $(bin_out)$@
 
+$(duration_extern_objout): $(lang_root)duration/extern.c
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
+
+$(duration_d_objout): $(lang_root)duration/d.c
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
 # enum 
 enum_binout := $(bin_path)$(lang_prefix)_enum$(bin_ext)
@@ -154,7 +161,7 @@ linkage_test: linkage
 	$(linkage_binout)
 
 $(linkage_binout): $(linkage_a_objout) $(linkage_c_objout)
-	$(LINK) $^ $(bin_out)$@ $(stage_ldflags)
+	$(LINK) $^ $(bin_out)$@
 
 $(linkage_a_objout): $(lang_root)linkage/a.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
