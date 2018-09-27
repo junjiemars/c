@@ -684,7 +684,7 @@ storage class specifier have no linkage.
 		 :END:
 
 
-within the compilation unit, all declarations with internal linkage
+Within the compilation unit, all declarations with /internal linkage/
 for the same identifier refer to the same object.
 
 **** /External Linkage/
@@ -693,7 +693,7 @@ for the same identifier refer to the same object.
 		 :END:
 
 
-within the whole program, all declarations with external linkage for
+Within the whole program, all declarations with /external linkage/ for
 the same identifier refer to the same object.
 
 *** Block scope 
