@@ -1,38 +1,40 @@
 # ./configure --without-debug --has-lang
 
-lang:	assert				\
-			enum					\
-			env						\
-			exit          \
-			fn						\
-			goto					\
-			jmp           \
-			macro					\
-			main					\
-			pointer       \
-			preprocessor  \
-			scope					\
-			sizeof				\
-			stage					\
-			string        \
+lang:	assert \
+			enum \
+			env \
+			exit \
+			fn \
+			goto \
+			jmp \
+			linkage \
+			macro \
+			main \
+			pointer \
+			preprocessor \
+			scope \
+			sizeof \
+			stage \
+			string \
 			type
 
 
-lang_test:	assert_test					\
-						enum_test						\
-						env_test						\
-            exit_test           \
-						fn_test							\
-						goto_test						\
-            jmp_test            \
-						macro_test					\
-						main_test						\
-						pointer_test        \
-						preprocessor        \
-						scope_test					\
-						sizeof_test					\
-						stage_test					\
-						string_test         \
+lang_test:	assert_test \
+						enum_test \
+						env_test \
+            exit_test \
+						fn_test \
+						goto_test \
+            jmp_test \
+						linkage_test \
+						macro_test \
+						main_test \
+						pointer_test \
+						preprocessor \
+						scope_test \
+						sizeof_test \
+						stage_test \
+						string_test \
 						type_test
 
 
@@ -126,6 +128,26 @@ jmp_test: jmp
 
 $(jmp_binout): $(lang_root)jmp/j.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# linkage
+linkage_binout := $(bin_path)$(lang_prefix)_linkage$(bin_ext)
+linkage_a_objout := $(obj_path)$(lang_prefix)_linkage_a$(obj_ext)
+linkage_c_objout := $(obj_path)$(lang_prefix)_linkage_c$(obj_ext)
+
+linkage: $(linkage_binout)
+linkage_test: linkage
+	$(linkage_binout)
+
+$(linkage_binout): $(linkage_a_objout) $(linkage_c_objout)
+	$(LINK) $^ $(bin_out)$@ $(stage_ldflags)
+
+$(linkage_a_objout): $(lang_root)linkage/a.c
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
+
+$(linkage_c_objout): $(lang_root)linkage/c.c
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
+
 
 # macro
 macro_binout := $(bin_path)$(lang_prefix)_macro$(bin_ext)
