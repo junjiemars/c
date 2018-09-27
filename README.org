@@ -701,12 +701,12 @@ the same identifier refer to the same object.
 		:CUSTOM_ID: language_scope_block_scope
 		:END:
 
-Every variable or function declaration that appears inside a block
-(including a function body) has block scope. The scope goes from the declaration to
-the end of the innermost block in which the declaration appears. Function parameter
-declarations in function definitions (but not in prototypes) also have block scope.
-The scope of a parameter declaration therefore includes the parameter declarations
-that appears after it.
+Every variable or function declaration that appears inside a block has
+block scope. The scope goes from the declaration to the end of the
+innermost block in which the declaration appears. Function parameter
+declarations in function definitions (but not in prototypes) also have
+block scope.  The scope of a parameter declaration therefore includes
+the parameter declarations that appears after it.
 
 *** Function scope
 		:PROPERTIES:
