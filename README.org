@@ -649,7 +649,6 @@ declaration in an outer scope; but only if one of two has [[#language_linkage_no
   identifier that: for an object, causes storage to be reserved for
   that object.
 
-
 *** Block scope 
 		:PROPERTIES:
 		:CUSTOM_ID: language_scope_block_scope
@@ -681,10 +680,10 @@ distinct names.
 		:CUSTOM_ID: language_scope_file_scope
 		:END:
 
-All vairables and functions defined ouside functions have scope.  They
-are visible from their [[#language_scope_declaration_and_definition][declaration]] until the end of the file. Here,
-the term /file/ should be understood as the source file being
-compiled, after all includes have been resolved.
+All vairables and functions defined ouside functions have /file
+scope/.  They are visible from their [[#language_scope_declaration_and_definition][declaration]] until the end of the
+file. Here, the term /file/ should be understood as the source file
+being compiled, after all includes have been resolved.
 
 ** Duration
 	 :PROPERTIES:
@@ -692,8 +691,9 @@ compiled, after all includes have been resolved.
    :END:
 
 Indicates whether the object associated to the [[#language_scope_declaration_and_definition][declaration]] persists
-throughout the program's execution or whether it is allocated
-dynamically when the declaration's scope is entered.
+throughout the program's execution (/static/) or whether it is
+allocated dynamically when the declaration's scope is entered
+(/automatic/).
 
 
 There are two kind of duration:

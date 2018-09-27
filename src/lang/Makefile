@@ -1,6 +1,7 @@
 # ./configure --without-debug --has-lang
 
 lang:	assert \
+			duration \
 			enum \
 			env \
 			exit \
@@ -20,6 +21,7 @@ lang:	assert \
 
 
 lang_test:	assert_test \
+						duration_test \
 						enum_test \
 						env_test \
             exit_test \
@@ -59,6 +61,18 @@ assert_test: assert
 
 $(assert_binout): $(lang_root)assert/a.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# duration
+duration_binout := $(bin_path)$(lang_prefix)_duration$(bin_ext)
+
+duration: $(duration_binout)
+duration_test: duration
+	$(duration_binout)
+
+$(duration_binout): $(lang_root)duration/d.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # enum 
 enum_binout := $(bin_path)$(lang_prefix)_enum$(bin_ext)

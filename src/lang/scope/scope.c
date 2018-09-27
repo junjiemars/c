@@ -7,7 +7,8 @@
 /* file scope, declaration, definition with initializer  */
 int i0 = 123;
 
-/* file scope, declaration, tentative definition with initializer to 0 */
+/* file scope, declaration, tentative definition with initializer to
+	 0 */
 int i1;
 
 /* file scope, extern declaration, must without initializer */
