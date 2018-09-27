@@ -648,15 +648,6 @@ declaration in an outer scope; but only if one of two has [[#language_scope_link
   identifier that: for an object, causes storage to be reserved for
   that object.
 
-*** Duration
-		:PROPERTIES:
-		:CUSTOM_ID: language_scope_duration
-		:END:
-
-Indicates whether the object associated to the [[#language_scope_declaration_and_definition][declaration]] persists
-throughout the program's execution or whether it is allocated
-dynamically when the declaration's scope is entered.
-
 *** Linkage
 		:PROPERTIES:
 		:CUSTOM_ID: language_scope_linkage
@@ -732,11 +723,28 @@ are visible from their [[#language_scope_declaration_and_definition][declaration
 the term /file/ should be understood as the source file being
 compiled, after all includes have been resolved.
 
+** Duration
+	 :PROPERTIES:
+	 :CUSTOM_ID: language_duration
+   :END:
+
+Indicates whether the object associated to the [[#language_scope_declaration_and_definition][declaration]] persists
+throughout the program's execution or whether it is allocated
+dynamically when the declaration's scope is entered.
+
+
+There are two kind of duration:
+- automatic
+- static
+
+Within functions (at [[#language_scope_block_scope][block scope]]), declarations without =extern= or
+=static= have automatic duration. Any other declaration (at [[#language_scope_file_scope][file
+scope]]) has static duration.
+
 ** Storage
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_storage
 	 :END:
-
 
 *** =auto=
 		:PROPERTIES:
