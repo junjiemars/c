@@ -653,10 +653,9 @@ declaration in an outer scope; but only if one of two has [[#language_scope_link
 		:CUSTOM_ID: language_scope_duration
 		:END:
 
-Indicates whether the object associated to the
-[declaration](#declaration-and-definition) persists throughout the
-program's execution or whether it is allocated dynamically when the
-declaration's scope is entered.
+Indicates whether the object associated to the [[#language_scope_declaration_and_definition][declaration]] persists
+throughout the program's execution or whether it is allocated
+dynamically when the declaration's scope is entered.
 
 *** Linkage
 		:PROPERTIES:
