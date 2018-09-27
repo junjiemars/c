@@ -806,10 +806,11 @@ one in which the corresponding object or function is defined.
 		:CUSTOM_ID: language_linkage
 		:END:
 
-*Linkage* is what determines if multiple declarations of the same
-object refer to the same object, or to separate ones. Each declaration
-can only have one of five [[#language_storage][storage]] class specifier: =static=, =extern=,
-=auto=, =register= and =typedef=.
+*Linkage* describes how names can or can not refer to the same entity
+throughout the whole program or one single translation unit.
+
+Each declaration can only have one of five [[#language_storage][storage]] class specifier:
+=static=, =extern=, =auto=, =register= and =typedef=.
 
 *** Translation unit
 		:PROPERTIES:
@@ -912,9 +913,9 @@ these types are defined in the =<stddef.h>= header.
 - [[http://stackoverflow.com/documentation/c/1108/pointers#t=201702060822544818513][Pointers]]
 - [[http://stackoverflow.com/questions/2524611/how-can-one-print-a-size-t-variable-portably-using-the-printf-family][printf size_t]]
 - [[https://www.bell-labs.com/usr/dmr/www/chist.html][The Development of the C Lanuage]]
-- [[https://en.wikipedia.org/wiki/Translation_unit_(programming)][Wiki: Translation unit]]
 - [[http://stackoverflow.com/questions/1461432/what-is-array-decaying][What is array decaying?]]
 - [[https://stackoverflow.com/questions/204476/what-should-main-return-in-c-and-c][What should main() return in C and C++?]]
+- [[https://en.wikipedia.org/wiki/Translation_unit_(programming)][Wiki: Translation unit]]
 
 * x86
 * Memory
