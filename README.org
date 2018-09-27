@@ -709,17 +709,32 @@ has static duration.
 	 :CUSTOM_ID: language_storage
 	 :END:
 
-Each declaration can only have one of five /storage/ class specifier:
+/Storage class/ in C decides the part of storage to be allocated for a
+variable, it also determines the scope of a variable.  Memory and CPU
+registers are types of locations where a variable's value can be
+stored. There are four storage classes in C those are /automatic/,
+/register/, /static/, and /external/.
+
+Each declaration can only have one of five /storage class specifier/:
 =static=, =extern=, =auto=, =register= and =typedef=.
 
-*** =auto=
+=typedef= storage class specifier does not reserve storage and is
+called a storage class specifier only for syntatic convenience.
+
+The general declaration that use a /storage class/ is show here:
+#+BEGIN_SRC c
+<storage-class-specifier> <type> <identifer>
+#+END_SRC
+
+*** Automatic storage class
 		:PROPERTIES:
-		:CUSTOM_ID: language_storage_auto
+		:CUSTOM_ID: language_storage_automatic_storage_class
 		:END:
 
-This storage class denotes that an identifier has automatic storage
-duration. This means once the scope in which the identifier was
-defined ends, the object denoted by the identifier is no longer valid.
+=auto= storage class specifier denotes that an identifier has
+/automatic storage duration/. This means once the scope in which the
+identifier was defined ends, the object denoted by the identifier is
+no longer valid.
 
 Since all objects, not living in global scope or being declared
 =static=, have automatic storage duration by default when defined,
@@ -731,9 +746,9 @@ this keyword is mostly of historical interest and should not be used.
 - automatic variables includes global_auto_i0/i1, i0/i1;
 - uninitialized variables will be set to 0;
 
-*** =register=
+*** Register storage class
 		:PROPERTIES:
-		:CUSTOM_ID: language_storage_register
+		:CUSTOM_ID: language_storage_register_storage_class
 		:END:
 
 Hints to the compiler that access to an object should as fast as
@@ -782,21 +797,21 @@ without =register= keyword.
 The =register= storage class is more appropriate for variables that
 are defined inside a block and are accessed with high frequency.
 
-*** =static=
+*** Static storage class
 		:PROPERTIES:
-		:CUSTOM_ID: language_storage_static
+		:CUSTOM_ID: language_storage_static_storage_class
 		:END:
 
-The *static* storge class serves different purposes, depending on the
+The /static storge class/ serves different purposes, depending on the
 location of the declaration in the file:
 - Confine the identifier to that /translation unit/ only (scope=file);
 - Save data for use with the next call of a function (scope=block); 
 - >=C99, used in function parameters to denote an array is expected to
   have a constant minimum number of elements and a non-null parameter.
 
-*** =extern=
+*** External storage class
 		:PROPERTIES:
-		:CUSTOM_ID: language_storage_extern
+		:CUSTOM_ID: language_storage_external_storage_class
 		:END:
 
 =extern= keyword used to declare an object or function that is defined
