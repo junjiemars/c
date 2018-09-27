@@ -749,7 +749,7 @@ This storage class denotes that an identifier has automatic storage
 duration. This means once the scope in which the identifier was
 defined ends, the object denoted by the identifier is no longer valid.
 
-Since all objects, not living in *global* scope or being declared
+Since all objects, not living in global scope or being declared
 =static=, have automatic storage duration by default when defined,
 this keyword is mostly of historical interest and should not be used.
 
