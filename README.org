@@ -921,6 +921,7 @@ these types are defined in the =<stddef.h>= header.
 - [[https://www.bell-labs.com/usr/dmr/www/chist.html][The Development of the C Lanuage]]
 - [[http://stackoverflow.com/questions/1461432/what-is-array-decaying][What is array decaying?]]
 - [[https://stackoverflow.com/questions/204476/what-should-main-return-in-c-and-c][What should main() return in C and C++?]]
+- [[https://en.wikipedia.org/wiki/Linkage_(software)][Wiki: Linkage]]
 - [[https://en.wikipedia.org/wiki/Translation_unit_(programming)][Wiki: Translation unit]]
 
 * x86
