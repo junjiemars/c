@@ -818,7 +818,7 @@ can only have one of five [[#language_storage][storage]] class specifier: =stati
 
 A /translation unit/ is the ultimate input to a C compiler from which
 an object file is generated. In casual usage it is sometimes referred
-to as a compilation unit. A translation unit roughly consists of a
+to as a /compilation unit/. A translation unit roughly consists of a
 source file after it has been processed by the C preprocessor, meaning
 that header files listed in =#include= directives are literally
 included, sections of code within =#ifdef= may be included, and macros
