@@ -25,7 +25,11 @@ register_storage_class(void) {
 
 	register short a[] = {0x11, 0x22, 0x33, 0x44, };
 	printf("a[0/%zu] = 0x%04x\n", sizeof(a)/sizeof(short), a[0]);
+#if CLANG
 	decay(a);
+#else
+	/* GCC error: address of register variable ‘a’ requested */
+#endif
 }
 
 void
