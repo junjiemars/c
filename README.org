@@ -707,9 +707,9 @@ The =register= storage class is more appropriate for variables that
 are defined inside a block and are accessed with high frequency.
 
 
-- /scope/: [[#language_scope_function_scope][function scope]]
-- /duration/: [[#language_duration][automatic]], till the end of [[#language_scope_function_scope][function scope]] in which the
-  variable is defined
+- /scope/: [[#language_scope_function_scope][function scope]] or [[#language_scope_block_scope][block scope]]
+- /duration/: [[#language_duration][automatic]], till the end of [[#language_scope_function_scope][function scope]] or [[#language_scope_block_scope][block scope]]
+  in which the variable is defined
 - /default initial value/: garbage value
 
 *** Static storage class

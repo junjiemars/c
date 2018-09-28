@@ -165,7 +165,7 @@ linkage_test: linkage
 $(linkage_binout): $(linkage_a_objout) $(linkage_c_objout)
 	$(LINK) $^ $(bin_out)$@
 
-$(linkage_a_objout): $(lang_root)linkage/a.c
+$(linkage_a_objout): $(lang_root)linkage/extern.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
 $(linkage_c_objout): $(lang_root)linkage/c.c

@@ -3,6 +3,7 @@
 
 /* external linkage */
 extern int g_var_x;
+extern const int g_const_x;
 
 /* internal linkage */
 static int f_var_y = 0xaabbccdd;
@@ -22,6 +23,7 @@ main(int argc, char *argv[]) {
 	printf("\nexternal linkage\n");
 	printf("------------------\n");
 	printf("g_var_x = 0x%08x\n", g_var_x);
+	printf("g_const_x = 0x%08x\n", g_const_x);
 
 	printf("\ninternal linkage\n");
 	printf("------------------\n");
