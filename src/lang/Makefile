@@ -326,14 +326,21 @@ endif
 
 # storage
 storage_binout := $(bin_path)$(lang_prefix)_storage$(bin_ext)
+storage_extern_objout := $(obj_path)$(lang_prefix)_storage_extern$(obj_ext)
+storage_s_objout := $(obj_path)$(lang_prefix)_storage_s$(obj_ext)
 
 storage: $(storage_binout)
 storage_test: storage
 	$(storage_binout)
 
-$(storage_binout): $(lang_root)storage/s.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(storage_binout): $(storage_extern_objout) $(storage_s_objout)
+	$(LINK) $^ $(bin_out)$@
 
+$(storage_s_objout): $(lang_root)storage/s.c
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
+
+$(storage_extern_objout): $(lang_root)storage/extern.c
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
 # string
 string_basic_binout := $(bin_path)$(lang_prefix)_string_basic$(bin_ext)

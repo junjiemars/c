@@ -720,6 +720,11 @@ location of the declaration in the file:
 - >=C99, used in function parameters to denote an array is expected to
   have a constant minimum number of elements and a non-null parameter.
 
+
+- /scope/: global
+- /duration/: static
+- /default initial value/: 0
+
 *** External storage class
 		:PROPERTIES:
 		:CUSTOM_ID: language_storage_external_storage_class
