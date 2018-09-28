@@ -23,8 +23,8 @@ register_storage_class(void) {
 	/* error: address of register variable requested */
 	/* int *p = &i; */
 
-	register short a[] = {0x11, 0x22, 0x33, 0x44, };
-	printf("a[0/%zu] = 0x%04x\n", sizeof(a)/sizeof(short), a[0]);
+	register char a[] = {0x11, 0x22, 0x33, 0x44, };
+	printf("a[0/%zu] = 0x%02x\n", sizeof(a)/sizeof(a[0]), a[0]);
 #if CLANG
 	decay(a);
 #else
