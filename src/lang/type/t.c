@@ -4,8 +4,13 @@
 
 
 #if GCC
-	/* (unsigned int*)&float: */
+/* (unsigned int*)&float: */
 /* # pragma GCC diagnostic ignored "-Wstrict-aliasing" */
+#elif MSVC
+/* C4477: 'printf' : format string '%llu' requires 
+   an argument of type 'unsigned __int64', but variadic 
+   argument 2 has type 'unsigned long' */
+# pragma warning(disable:4477)
 #endif
 
 void 

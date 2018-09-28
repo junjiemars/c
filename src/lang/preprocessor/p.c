@@ -73,7 +73,7 @@ main(int argc, char *argv[]) {
 	printf("color: %s\n", COLOR_STR(BLUE));
 
 	DEFVAR(int, x, 1);
-	DEFVAR(float, y, e_squared);
+	DEFVAR(double, y, e_squared);
 	printf("defvar x=%i\n", var_x);
 	printf("defvar y=%f\n", var_y);
 }

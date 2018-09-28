@@ -1,6 +1,10 @@
 #include <_lang_.h>
 #include <stdio.h>
 
+#if MSVC
+ /* C4456: declaration of 'i' hides previous local declaration */
+# pragma warning(disable:4456)
+#endif
 void
 automatic_storage_class(void) {
 	auto int x; /* garbage value */
@@ -36,9 +40,13 @@ register_storage_class(register int x) {
 	/* int *p = &i; */
 
 	register char a[] = {0x11, 0x22, 0x33, 0x44, };
+#if MSVC
+	printf("a[0/%zu]\n", sizeof(a));
+#elif defined(CLANG) || defined(GCC)
 	printf("a[0/%zu] = 0x%02x\n", sizeof(a)/sizeof(a[0]), a[0]);
-#if CLANG
+# if CLANG
 	decay(a);
+# endif
 #else
 	/* GCC error: address of register variable ‘a’ requested */
 #endif
