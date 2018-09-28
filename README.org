@@ -940,7 +940,6 @@ these types are defined in the =<stddef.h>= header.
 	 :END:
 
 - [[https://resources.sei.cmu.edu/asset_files/Presentation/2016_017_101_484207.pdf][Beyond errno Error Handling in C]]
-- [[https://en.wikipedia.org/wiki/C_data_types][C data types]]
 - [[http://stackoverflow.com/documentation/c/3597/storage-classes#t=201702091201208256422][C Language: Storage Classes]]
 - [[http://norswap.com/c_scope_duration_linkage/][C: Scope, Duration & Linkage]]
 - [[http://c-faq.com/decl/spiral.anderson.html][Clockwise/Spiral Rule]]
@@ -951,6 +950,7 @@ these types are defined in the =<stddef.h>= header.
 - [[https://www.bell-labs.com/usr/dmr/www/chist.html][The Development of the C Lanuage]]
 - [[http://stackoverflow.com/questions/1461432/what-is-array-decaying][What is array decaying?]]
 - [[https://stackoverflow.com/questions/204476/what-should-main-return-in-c-and-c][What should main() return in C and C++?]]
+- [[https://en.wikipedia.org/wiki/C_data_types][Wiki: C data types]]
 - [[https://en.wikipedia.org/wiki/Linkage_(software)][Wiki: Linkage]]
 - [[https://en.wikipedia.org/wiki/Translation_unit_(programming)][Wiki: Translation unit]]
 
