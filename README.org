@@ -631,9 +631,7 @@ Each declaration can only have one of five /storage class specifier/:
 called a storage class specifier only for syntatic convenience.
 
 The general declaration that use a /storage class/ is show here:
-#+BEGIN_SRC c
-<storage-class-specifier> <type> <identifer>
-#+END_SRC
+~<storage-class-specifier> <type> <identifer>~
 
 *** Automatic storage class
 		:PROPERTIES:
@@ -655,9 +653,9 @@ leftover from C predecessor's B.
 
 - /scope/: variable defined with auto storage class are local to the
   [[#language_scope_function_scope][function scope]] or [[#language_scope_block_scope][block scope]] inside which they are defined.
-- /duration/: till the end of the [[#language_scope_function_scope][function scope]] or [[#language_scope_block_scope][block scope]] where
-  the variable is defined
-- /default initial value/: garbage value;
+- /duration/: [[#language_duration][automatic]], till the end of the [[#language_scope_function_scope][function scope]] or [[#language_scope_block_scope][block
+  scope]] where the variable is defined
+- /default initial value/: garbage value
 
 *** Register storage class
 		:PROPERTIES:
@@ -708,21 +706,27 @@ without =register= keyword.
 The =register= storage class is more appropriate for variables that
 are defined inside a block and are accessed with high frequency.
 
+
+- /scope/: [[#language_scope_function_scope][function scope]]
+- /duration/: [[#language_duration][automatic]], till the end of [[#language_scope_function_scope][function scope]] in which the
+  variable is defined
+- /default initial value/: garbage value
+
 *** Static storage class
 		:PROPERTIES:
 		:CUSTOM_ID: language_storage_static_storage_class
 		:END:
 
 The /static storge class/ serves different purposes, depending on the
-location of the declaration in the file:
-- Confine the identifier to that /translation unit/ only (scope=file);
-- Save data for use with the next call of a function (scope=block); 
-- >=C99, used in function parameters to denote an array is expected to
-  have a constant minimum number of elements and a non-null parameter.
+location of the declaration in the file. >=C99, used in function
+parameters to denote an array is expected to have a constant minimum
+number of elements and a non-null parameter.
 
 
-- /scope/: global
-- /duration/: static
+- /scope/: [[#language_scope_file_scope][file scope]] (confine the identifier to that /translation
+  unit/ only) or [[#language_scope_function_scope][function scope]] (save data for use with the next call
+  of a function)
+- /duration/: [[#language_duration][static]]
 - /default initial value/: 0
 
 *** External storage class
@@ -734,6 +738,11 @@ location of the declaration in the file:
 elsewhere (and that has [[#language_linkage_external_linkage][external linkage]]). In general, it is used to
 declare an object or function to be used in a module that is not the
 one in which the corresponding object or function is defined.
+
+
+- /scope/: global
+- /duration/: [[#language_duration][static]]
+- /default initial value/: 0
 
 ** Scope
 	 :PROPERTIES:
