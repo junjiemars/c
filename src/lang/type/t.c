@@ -4,8 +4,10 @@
 
 
 #if GCC
-/* (unsigned int*)&float: */
-/* # pragma GCC diagnostic ignored "-Wstrict-aliasing" */
+/* error: format ‘%zx’ expects argument of type ‘size_t’,
+   but argument 3 has type ‘long unsigned int’ 
+	 [-Werror=format] */
+# pragma GCC diagnostic ignored "-Wformat"
 #elif MSVC
 /* C4477: 'printf' : format string '%llu' requires 
    an argument of type 'unsigned __int64', but variadic 
