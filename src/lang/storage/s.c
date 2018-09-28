@@ -3,6 +3,14 @@
 
 void
 automatic_storage_class(void) {
+	auto int x; /* garbage value */
+#if GCC
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wuninitialized"
+	printf("x = 0x%08x\n", x);
+# pragma GCC diagnostic pop
+#endif
+
 	auto int i = 0x1122;
 	{
 		auto int i = 0x11223344;
