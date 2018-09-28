@@ -9,25 +9,29 @@ automatic_storage_class(void) {
 # pragma GCC diagnostic ignored "-Wuninitialized"
 	printf("x = 0x%08x\n", x);
 # pragma GCC diagnostic pop
+#else
+	_unused_(x);
 #endif
 
 	auto int i = 0x1122;
 	{
 		auto int i = 0x11223344;
-		printf("inner i = 0x%08x\n", i);
+		printf("inner i = 0x%08x\n", i++);
 	}
-	printf("outer i = 0x%08x\n", i);
+	printf("outer i = 0x%08x\n", i++);
 }
 
+#if CLANG
 void
-decay(short *a) {
-	printf("a[0] = 0x%04x\n", a[0]);
+decay(char *a) {
+	printf("a[0] = 0x%02x\n", a[0]);
 }
+#endif
 
 void
-register_storage_class(void) {
-	register int i = 0x11223344;
-	printf("i = 0x%08x\n", i);
+register_storage_class(register int x) {
+	register int i = x;
+	printf("i = 0x%08x\n", i++);
 	/* error: address of register variable requested */
 	/* int *p = &i; */
 
@@ -64,10 +68,11 @@ main(int argc, char *argv[]) {
 	printf("\nautomatic storage class\n");
 	printf("-------------------------\n");
 	automatic_storage_class();
+	automatic_storage_class();
 
 	printf("\nregister storage class\n");
 	printf("-----------------------\n");
-	register_storage_class();
+	register_storage_class(0x11223344);
 
 	printf("\nstatic storage class\n");
 	printf("---------------------\n");

@@ -647,8 +647,9 @@ keyword is mostly of historical interest and should not be used.
 variable declared inside a function body, and is in fact a historic
 leftover from C predecessor's B.
 
-- /scope/: variable defined with auto storage class are local to the
-  [[#language_scope_function_scope][function scope]] or [[#language_scope_block_scope][block scope]] inside which they are defined.
+- /scope/: variable defined with =auto= storage class specifier are
+  local to the [[#language_scope_function_scope][function scope]] or [[#language_scope_block_scope][block scope]] inside which they are
+  defined.
 - /duration/: [[#language_duration][automatic]], till the end of the [[#language_scope_function_scope][function scope]] or [[#language_scope_block_scope][block
   scope]] where the variable is defined
 - /default initial value/: garbage value
@@ -684,7 +685,9 @@ another function where it might be changed unexpectedly
 
 This property also implies that an array
 #+BEGIN_SRC c
-register int a[] = { 0x11, 0x22, 0x33, 0x44, };
+void decay(char *a);
+register char a[] = { 0x11, 0x22, 0x33, 0x44, };
+decay(a);
 #+END_SRC
 
 cannot decay into a pointer to its first element (i.e. turning into
