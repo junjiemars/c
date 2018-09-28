@@ -653,11 +653,11 @@ keyword is mostly of historical interest and should not be used.
 variable declared inside a function body, and is in fact a historic
 leftover from C predecessor's B.
 
-- *scope*: variable defined with auto storage class are local to the
+- /scope/: variable defined with auto storage class are local to the
   [[#language_scope_function_scope][function scope]] or [[#language_scope_block_scope][block scope]] inside which they are defined.
-- *duration*: till the end of the [[#language_scope_function_scope][function scope]] or [[#language_scope_block_scope][block scope]] where
+- /duration/: till the end of the [[#language_scope_function_scope][function scope]] or [[#language_scope_block_scope][block scope]] where
   the variable is defined
-- *default initial value*: garbage value;
+- /default initial value/: garbage value;
 
 *** Register storage class
 		:PROPERTIES:
