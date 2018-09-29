@@ -934,6 +934,15 @@ these types are defined in the =<stddef.h>= header.
 - =l= or =L= for =long=, such as =123l=, =3.14L=
 - =f= for =float=, such as =2.718f=
 
+** Standard libraries
+	 :PROPERTIES:
+	 :CUSTOM_ID: language_standard_libraries
+	 :END:
+
+The /C standar library/ is a standardized collection of header files
+and library routines used to implement common operations.
+
+
 ** References
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_references
@@ -950,9 +959,10 @@ these types are defined in the =<stddef.h>= header.
 - [[https://www.bell-labs.com/usr/dmr/www/chist.html][The Development of the C Lanuage]]
 - [[http://stackoverflow.com/questions/1461432/what-is-array-decaying][What is array decaying?]]
 - [[https://stackoverflow.com/questions/204476/what-should-main-return-in-c-and-c][What should main() return in C and C++?]]
-- [[https://en.wikipedia.org/wiki/C_data_types][Wiki: C data types]]
-- [[https://en.wikipedia.org/wiki/Linkage_(software)][Wiki: Linkage]]
-- [[https://en.wikipedia.org/wiki/Translation_unit_(programming)][Wiki: Translation unit]]
+- [[https://en.wikibooks.org/wiki/C_Programming/Standard_libraries][wikibooks: C Programming/Standard libraries]]
+- [[https://en.wikipedia.org/wiki/C_data_types][wikipedia: C data types]]
+- [[https://en.wikipedia.org/wiki/Linkage_(software)][wikipedia: Linkage]]
+- [[https://en.wikipedia.org/wiki/Translation_unit_(programming)][wikipedia: Translation unit]]
 
 * x86
 * Memory
