@@ -887,19 +887,14 @@ it inside any other translation unit rather your current one. Within
 the whole program, all declarations with /external linkage/ for the
 same identifier refer to the same object.
 
-** Type
+** Basic types
 	 :PROPERTIES:
-	 :CUSTOM_ID: language_type
+	 :CUSTOM_ID: language_basic_types
 	 :END:
 
 
 All C types be represented as binary numbers in memory, the way how to
 interprete those numbers is what type does.
-
-*** Basic types
-		:PROPERTIES:
-		:CUSTOM_ID: language_type_basic_types
-		:END:
 
 C provides the four basic /arithmetic type specifiers/ =char=, =int=,
 =float= and =double=, and the /modifiers/ =signed=, =unsigned=,
