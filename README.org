@@ -937,7 +937,6 @@ these types are defined in the =<stddef.h>= header.
 The /C standar library/ is a standardized collection of header files
 and library routines used to implement common operations.
 
-
 ** References
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_references

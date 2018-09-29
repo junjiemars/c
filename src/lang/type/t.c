@@ -1,31 +1,37 @@
 #include <_lang_.h>
 #include <stdio.h>
 #include <stddef.h>
+#include <limits.h>
+#include <inttypes.h> /* C99 */
 
 
 #if GCC
 /* error: format ‘%zx’ expects argument of type ‘size_t’,
    but argument 3 has type ‘long unsigned int’ 
 	 [-Werror=format] */
-# pragma GCC diagnostic ignored "-Wformat"
+#  pragma GCC diagnostic ignored "-Wformat"
+#elif CLANG
+#  pragma clang diagnostic ignored "-Wformat"
 #elif MSVC
 /* C4477: 'printf' : format string '%llu' requires 
    an argument of type 'unsigned __int64', but variadic 
    argument 2 has type 'unsigned long' */
-# pragma warning(disable:4477)
+#  pragma warning(disable:4477)
 #endif
 
 void 
-integer_type() {
+integer_basic_type() {
 	char c = 'a';
-	short int s = 0x1122; /* eq: short s = 0x1122; */
-  int i = 10;
-  long int l = 100L; /* eq: long l = 100L; */
+	short s = 0x1122;
+  int i = 0x11223344;
+	long l = 0x11223344;
+	/* long int l = 100L; /\* eq: long l = 100L; *\/ */
+	/* long long ll = 100L;  */
 
-	printf("a %i stored as 0x%02x\n", c, *(unsigned char*)&c);
-	printf("0x1122 %i stored as 0x%04x\n", s, *(unsigned short*)&s);
-  printf("ten %i stored as 0x%08x\n", i, *(unsigned int*)&i);
-  printf("hundred %li stored as 0x%08zx\n", l, *(unsigned long*)&l);
+	printf("char c = %c, 0x%"PRIx8"\n", c, *(unsigned char*)&c);
+	printf("short s = %i, 0x%"PRIx16"\n", s, *(unsigned short*)&s);
+	printf("int i = %i, 0x%"PRIx32"\n", i, *(unsigned int*)&i);
+  printf("long l = %li, 0x%"PRIx64"\n", l, *(unsigned long*)&l);
 }
 
 void 
@@ -42,9 +48,9 @@ main(int argc, const char *argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 
-	printf("\ninteger type\n");
-	printf("------------\n");
-  integer_type();
+	printf("\ninteger basic type\n");
+	printf("--------------------\n");
+  integer_basic_type();
 
 	printf("\nfloat type\n");
 	printf("------------\n");
