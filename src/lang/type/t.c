@@ -20,26 +20,37 @@
 #endif
 
 void 
-integer_basic_type() {
+integer_type() {
 	char c = 'a';
 	short s = 0x1122;
   int i = 0x11223344;
 	long l = 0x11223344;
-	/* long int l = 100L; /\* eq: long l = 100L; *\/ */
-	/* long long ll = 100L;  */
+	long long ll = 0x11223344aabbccdd;
 
-	printf("char c = %c, 0x%"PRIx8"\n", c, *(unsigned char*)&c);
-	printf("short s = %i, 0x%"PRIx16"\n", s, *(unsigned short*)&s);
-	printf("int i = %i, 0x%"PRIx32"\n", i, *(unsigned int*)&i);
-  printf("long l = %li, 0x%"PRIx64"\n", l, *(unsigned long*)&l);
+	printf("char c/%zu = %zi, 0x%zx\n", 
+				 sizeof(c), c, *(unsigned char*)&c);
+	printf("short s/%zu = %zi, 0x%zx\n", 
+				 sizeof(s), s, *(unsigned short*)&s);
+	printf("int i/%zu = %zi, 0x%zx\n", 
+				 sizeof(i), i, *(unsigned int*)&i);
+	printf("long l/%zu = %zi, 0x%zx\n", 
+				 sizeof(l), l, *(unsigned long*)&l);
+	printf("long long ll/%zu = %zi, 0x%zx\n",
+				 sizeof(ll), ll, *(unsigned long long*)&ll);
 }
 
 void 
 float_type() {
   float f = 3.14f;
   double d = 2.7182L;
-  printf("pi %f stored as 0x%8x\n", f, *(unsigned int*)&f);
-  printf("e %lf stored as 0x%8zx\n", d, *(unsigned long*)&d);
+	long double ld = 2.1782;
+
+	printf("float f/%zu = %f, 0x%zx\n", 
+				 sizeof(f), f, *(unsigned int*)&f);
+	printf("double d/%zu = %lf, 0x%zx\n", 
+				 sizeof(d), d, *(unsigned long*)&d);
+	printf("long double ld/%zu = %lf, 0x%zx\n",
+				 sizeof(ld), ld, *(unsigned long long*)&ld);
 }
 
 
@@ -50,7 +61,7 @@ main(int argc, const char *argv[]) {
 
 	printf("\ninteger basic type\n");
 	printf("--------------------\n");
-  integer_basic_type();
+  integer_type();
 
 	printf("\nfloat type\n");
 	printf("------------\n");
