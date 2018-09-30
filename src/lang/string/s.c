@@ -18,7 +18,9 @@ main(int argc, char **argv) {
 
 	errno_t e = strcpy_s(x, sizeof(char)*(len+1), xxx);
 	assert((0 == e) && (0 == strcmp(x, xxx)) || "strcpy_s() failed");
-
+#if NDEBUG
+	_unused_(e);
+#endif
 	free(x);
 
 #endif

@@ -40,14 +40,19 @@ main(int argc, char **argv) {
 
   char *dst1 = malloc(len1+1);
   char *r1 = strcpy(dst1, argv[0]);
-  assert(((0 == strcmp(r1, argv[0])) && (r1 == dst1)) \
-				 || "strcpy() failed");
+  assert(((0 == strcmp(r1, argv[0]))
+					&& (r1 == dst1)) || "strcpy() failed");
+#if NDEBUG
+	_unused_(r1);
+#endif
   free(dst1);
 
   char *dst2 = malloc(len2+1);
   char *r2 = self_strcpy(dst2, argv[0]);
-  assert(((0 == self_strcmp(r2, argv[0])) && (r2 == dst2)) \
-				 || "self_strcpy() failed");
+  assert(((0 == self_strcmp(r2, argv[0]))
+					&& (r2 == dst2)) || "self_strcpy() failed");
+#if NDEBUG
+	_unused_(r2);
+#endif
   free(dst2);
-                    
 }

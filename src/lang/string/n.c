@@ -16,7 +16,10 @@ main(int argc, char **argv) {
 	
 	char *s = strncpy(x, xxx, len+1);
 	assert((0 == strncmp(s, xxx, len)) || "strncpy() failed");
-
+#if NDEBUG
+	_unused_(s);
+#endif
+	
 	/* If count is reached before the entire array src was copied,
 		 the resulting character array is not null-terminated. */
 	memset(x, 0, len+1);
