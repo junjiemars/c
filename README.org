@@ -943,7 +943,6 @@ and library routines used to implement common operations.
 	 :END:
 
 - [[https://resources.sei.cmu.edu/asset_files/Presentation/2016_017_101_484207.pdf][Beyond errno Error Handling in C]]
-- [[http://stackoverflow.com/documentation/c/3597/storage-classes#t=201702091201208256422][C Language: Storage Classes]]
 - [[http://norswap.com/c_scope_duration_linkage/][C: Scope, Duration & Linkage]]
 - [[http://c-faq.com/decl/spiral.anderson.html][Clockwise/Spiral Rule]]
 - [[https://ptolemy.eecs.berkeley.edu/~johnr/tutorials/assertions.html][How to use assertions in C]]
