@@ -41,8 +41,18 @@ $ ./configure --update --has-<what>
 
 ** Preprocessor	
 	 :PROPERTIES:
-	 :CUSTOM_ID: language_perprocessor
+	 :CUSTOM_ID: language_preprocessor
 	 :END:
+
+The /preprocessor/ runs first, as the name implies. It performs some
+text manipulations, such as:
+- stripping comments
+- resolving =#include= directives and replacing them with the contents
+  of the included file
+- evaluating =#if= and =#ifdef= directives
+- evaluating =#define=
+- expanding the macros found in the rest of the code according to
+  those =#define=
 
 *** =#include=
 		:PROPERTIES:
