@@ -9,9 +9,14 @@
 
 #define max(a, b) ((a) > (b) ? (a) : (b))
 
-#define incr(a, b)      \
-    (a)++;              \
-    (b)++;
+#define incr_v1(a, b)      \
+	(a)++;									 \
+	(b)++;
+
+#define incr_v2(a, b) {    \
+	(a)++;                   \
+	(b)++;                   \
+}
 
 #define sum(max, out) {              								\
 	int total_g123 = 0, max_g124=max;  								\
@@ -37,21 +42,33 @@ main(int argc, char *argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 
-	printf("----------\n");
+	printf("\ndouble macro\n");
+	printf("--------------\n");
 	printf("double_v1(1+1)*8=%i\n", double_v1(1+1)*8);
 	printf("double_v2(1+1)*8=%i\n", double_v2(1+1)*8);
 
-	printf("----------\n");
+	printf("\nmax macro\n");
+	printf("-----------\n");
 	int a = 1, b = 2;
 	printf("a=%i, b=%i, |+ max\n", a, b);
 	printf("max(a,b++)=%i\n", max(a,b++));
 	printf("a=%i, b=%i, |- max\n", a, b);
 
-	printf("----------\n");
-	printf("a=%i, b=%i, |+ incr\n", a, b);
-	if (a > b) incr(a, b);
-	printf("a=%i, b=%i, |- incr\n", a, b);
-
+	printf("\nincr macro\n");
+	printf("------------\n");
+	a = 1, b = 2;
+	printf("a=%i, b=%i, |+ incr_v1\n", a, b);
+	if (a > b) incr_v1(a, b);
+	printf("if (a > b) incr_v1(a, b)\n");
+	printf("a=%i, b=%i, |- incr_v1\n", a, b);
+	
+	printf("------------\n");
+	a = 1, b = 2;
+	printf("a=%i, b=%i, |+ incr_v2\n", a, b);
+	if (a > b) incr_v2(a, b);
+	printf("if (a > b) incr_v2(a, b)\n");
+	printf("a=%i, b=%i, |- incr_v2\n", a, b);
+	
 	printf("----------\n");
 	int total = 5, out;
   printf("sum(5, out)\n");
