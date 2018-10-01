@@ -68,8 +68,9 @@ main(int argc, char *argv[]) {
 	if (a > b) incr_v2(a, b);
 	printf("if (a > b) incr_v2(a, b)\n");
 	printf("a=%i, b=%i, |- incr_v2\n", a, b);
-	
-	printf("----------\n");
+
+	printf("\nsum macro\n");
+	printf("-----------\n");
 	int total = 5, out;
   printf("sum(5, out)\n");
 	sum(5, out);
@@ -78,16 +79,18 @@ main(int argc, char *argv[]) {
 	sum(i, out);
 	printf("out=%i, total=%i, |-- sum(%i)\n", out, total, i);
 
-	printf("----------\n");
+	printf("\ncheck_blank macro\n");
+	printf("-------------------\n");
 #ifndef MSVC
-	/* C2168 msvc */
+	/* C4003: not enough actual parameters for macro 'check_blank' */
 	printf("'%s' is blank strlen=%zu\n", "", check_blank());
 #endif
-	printf("%s is blank strlen=%zu\n", "123", check_blank(123));
-	printf("%s is blank strlen=%zu\n", "abc", check_blank(abc));
+	printf("strlen(%s)=%zu\n", "123", check_blank(123));
+	printf("strlen(%s)=%zu\n", "abcd", check_blank(abcd));
 
 #ifdef NM_HAVE_VARIADIC_MACRO
-	printf("----------\n");
+	printf("\nio_sprintf macro\n");
+	printf("------------------\n");
 	char strbuf[32];
 	io_sprintf(strbuf, "0x%x", 0xff00);
 	printf("sprintf out=%s\n", strbuf);
