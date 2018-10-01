@@ -281,7 +281,7 @@ DEFVAR(float, y, 2.718);
 	 :END:
 
 
-No, there's nothing wrong with *assert* as long as you use it as intended.
+No, there's nothing wrong with /assert/ as long as you use it as intended.
 - Assert: A failure in the program's logic itself.
 - Error Handling: An erroneous input or system state not due to a bug
   in the program.
@@ -300,7 +300,7 @@ An /assertion/ specifies that a program statisfies certain conditions at
 particular points in its execution. There are three types of assertion:
 - Preconditions: specify conditions at the start of a function.
 - Postconditions: specify conditions at the end of a function.
-- Invaiants: specify conditions over a defined region of a program.
+- Invariants: specify conditions over a defined region of a program.
 
 ** enum
 	 :PROPERTIES:
