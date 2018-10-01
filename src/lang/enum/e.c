@@ -2,6 +2,9 @@
 #include <stdio.h>
 
 
+enum { RED, GREEN, BLUE, };
+
+	
 #define CORVID_MAP(XX)                                                                         \
 	XX(101, BEGIN,    "BEGIN")                                                                   \
 	XX(101, MAGPIE,   "Including the black and white Eurasian magpie")                           \
@@ -20,6 +23,8 @@ main(int argc, const char* argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 
+	printf("RED = %zi, sizeof(RED) = %zu\n", RED, sizeof(RED));
+	
 	for (int i = CORVID_BEGIN; i < CORVID_END; i++) {
 		printf("corvid#: %i\n", i);
 	}

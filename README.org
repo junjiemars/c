@@ -307,6 +307,18 @@ particular points in its execution. There are three types of assertion:
 	 :CUSTOM_ID: language_enum
 	 :END:
 
+=enumerators= is a comma-separated list, tailing comma permitted since
+C99, =identifier= is optional. If =enumerator= is followed by
+/constant expression/, its value is the value of that /constant
+expression/. If =enumerator= is not followed by /constant-expression/,
+its value is the value one greater than the value of the previous
+enumerator in the same enumeration. The value of the first enumerator
+if it does not use /constant-expression/ is zero.
+
+
+Unlike =struct= and =union=, there are no forward-declared =enum= in
+C.
+
 ** Error
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_error
@@ -953,7 +965,6 @@ and library routines used to implement common operations.
 	 :END:
 
 - [[https://resources.sei.cmu.edu/asset_files/Presentation/2016_017_101_484207.pdf][Beyond errno Error Handling in C]]
-- [[https://www.pixelstech.net/article/1335872945-C-Macro-Tips-and-Tricks][C Macro Tips and Tricks]]
 - [[http://norswap.com/c_scope_duration_linkage/][C: Scope, Duration & Linkage]]
 - [[http://c-faq.com/decl/spiral.anderson.html][Clockwise/Spiral Rule]]
 - [[https://ptolemy.eecs.berkeley.edu/~johnr/tutorials/assertions.html][How to use assertions in C]]
