@@ -10,7 +10,7 @@ main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
-#if defined(NM_HAVE_STR__S_FN)
+#if defined(NM_HAVE_STR_S_ANY_FN)
 
 	const char *xxx = "xxxxxxxx";
 	size_t len = strlen(xxx);

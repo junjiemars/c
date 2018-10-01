@@ -19,8 +19,9 @@
 }
 
 #define sum(max, out) {              								\
-	int total_g123 = 0, max_g124=max;  								\
-	for (int i_g125=0; i_g125<max_g124; i_g125++)    	\
+	/* avoid name clash */                            \
+  int total_g123 = 0, max_g124 = max;	              \
+	for (int i_g125=0; i_g125 < max_g124; i_g125++)   \
 		total_g123 += i_g125;              							\
 	out = total_g123;                  								\
 }
@@ -28,9 +29,9 @@
 #define check_blank(a) strlen(#a)
 
 #ifdef NM_HAVE_VARIADIC_MACRO
-#  if defined(NM_HAVE_SPRINTF_S)
+#  if defined(NM_HAVE_SPRINTF_S_FN)
 #    define io_sprintf(b, ...) sprintf_s(b, sizeof(b), __VA_ARGS__)
-#  elif defined(NM_HAVE_SNPRINTF)
+#  elif defined(NM_HAVE_SNPRINTF_FN)
 #    define io_sprintf(b, ...) snprintf(b, sizeof(b), __VA_ARGS__)
 #  else
 #    define io_sprintf(b, ...) sprintf(b, __VA_ARGS__)
