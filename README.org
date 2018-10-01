@@ -953,6 +953,7 @@ and library routines used to implement common operations.
 	 :END:
 
 - [[https://resources.sei.cmu.edu/asset_files/Presentation/2016_017_101_484207.pdf][Beyond errno Error Handling in C]]
+- [[https://www.pixelstech.net/article/1335872945-C-Macro-Tips-and-Tricks][C Macro Tips and Tricks]]
 - [[http://norswap.com/c_scope_duration_linkage/][C: Scope, Duration & Linkage]]
 - [[http://c-faq.com/decl/spiral.anderson.html][Clockwise/Spiral Rule]]
 - [[https://ptolemy.eecs.berkeley.edu/~johnr/tutorials/assertions.html][How to use assertions in C]]
