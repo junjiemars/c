@@ -951,6 +951,18 @@ these types are defined in the =<stddef.h>= header.
 - =l= or =L= for =long=, such as =123l=, =3.14L=
 - =f= for =float=, such as =2.718f=
 
+** typedef
+	 :PROPERTIES:
+	 :CUSTOM_ID: language_typedef
+	 :END:
+
+The /typedef/ used to create an alias name for another types. As such,
+it is often used to simplify the syntax of declaring complex data
+structure consisting of /struct/ and /union/ types, but is just as
+common in providing specific descriptive type names for integer types
+of varying lengths. The C standard library and POSIX reserve the
+suffix =_t=, for example as in =size_t= and =time_t=.
+
 ** Standard libraries
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_standard_libraries
@@ -978,6 +990,7 @@ and library routines used to implement common operations.
 - [[https://en.wikipedia.org/wiki/C_data_types][wikipedia: C data types]]
 - [[https://en.wikipedia.org/wiki/Linkage_(software)][wikipedia: Linkage]]
 - [[https://en.wikipedia.org/wiki/Translation_unit_(programming)][wikipedia: Translation unit]]
+- [[https://en.wikipedia.org/wiki/Typedef][wikipedia: typedef]]
 
 * x86
 * Memory

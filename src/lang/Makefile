@@ -18,7 +18,8 @@ lang:	assert \
 			stage \
 			storage \
 			string \
-			type
+			type \
+			typedef
 
 
 lang_test:	assert_test \
@@ -39,7 +40,8 @@ lang_test:	assert_test \
 						stage_test \
 						storage_test \
 						string_test \
-						type_test
+						type_test \
+						typedef_test
 
 
 lang_prefix := lang
@@ -395,3 +397,14 @@ $(type_binout): $(type_cppout)
 
 $(type_cppout): $(lang_root)type/t.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+
+# typedef
+typedef_binout := $(bin_path)$(lang_prefix)_typedef$(bin_ext)
+
+typedef: $(typedef_binout)
+typedef_test: typedef
+	$(typedef_binout)
+
+$(typedef_binout): $(lang_root)typedef/t.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
