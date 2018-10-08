@@ -157,8 +157,8 @@ $(jmp_binout): $(lang_root)jmp/j.c
 
 # linkage
 linkage_binout := $(bin_path)$(lang_prefix)_linkage$(bin_ext)
-linkage_a_objout := $(obj_path)$(lang_prefix)_linkage_a$(obj_ext)
-linkage_c_objout := $(obj_path)$(lang_prefix)_linkage_c$(obj_ext)
+linkage_a_objout := $(tmp_path)$(lang_prefix)_linkage_a$(obj_ext)
+linkage_c_objout := $(tmp_path)$(lang_prefix)_linkage_c$(obj_ext)
 
 linkage: $(linkage_binout)
 linkage_test: linkage
@@ -328,8 +328,8 @@ endif
 
 # storage
 storage_binout := $(bin_path)$(lang_prefix)_storage$(bin_ext)
-storage_extern_objout := $(obj_path)$(lang_prefix)_storage_extern$(obj_ext)
-storage_s_objout := $(obj_path)$(lang_prefix)_storage_s$(obj_ext)
+storage_extern_objout := $(tmp_path)$(lang_prefix)_storage_extern$(obj_ext)
+storage_s_objout := $(tmp_path)$(lang_prefix)_storage_s$(obj_ext)
 
 storage: $(storage_binout)
 storage_test: storage
