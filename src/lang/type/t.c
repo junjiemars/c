@@ -1,6 +1,6 @@
 #include <_lang_.h>
 #include <stdio.h>
-/* #include <stddef.h> */
+#include <stddef.h>
 /* #include <limits.h> */
 /* #include <inttypes.h> /\* C99 *\/ */
 
