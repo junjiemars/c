@@ -54,6 +54,7 @@ register_storage_class(register int x) {
 #endif
 }
 
+
 void
 static_storage_class(void) {
 	static int i;
@@ -64,11 +65,13 @@ static_storage_class(void) {
 	printf("outer i = 0x%08x\n", i++);
 }
 
+
 void
 external_storage_class(void) {
 	extern int g_var_x;
 	printf("g_var_x = 0x%08x\n", g_var_x++);
 }
+
 
 int
 main(int argc, char *argv[]) {
