@@ -24,6 +24,12 @@ main(int argc, char *argv[]) {
 	printf("------------------\n");
 	printf("g_var_x = 0x%08x\n", g_var_x);
 	printf("g_const_x = 0x%08x\n", g_const_x);
+	
+	extern int g_var_y;
+	printf("g_var_y = 0x%08x\n", g_var_y);
+
+	g_var_y = 0x44332211;
+	printf("g_var_y = 0x%08x\n", g_var_y);
 
 	printf("\ninternal linkage\n");
 	printf("------------------\n");
