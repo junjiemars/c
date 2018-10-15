@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 
+
 typedef union u_bitfield {
 	uint16_t u16;
 	uint8_t u8[sizeof(uint32_t)/sizeof(uint8_t)];
