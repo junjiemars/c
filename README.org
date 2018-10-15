@@ -538,58 +538,59 @@ Threre is a technique known as the /Clockwise/Spiral Rule/ enables any
 C programmer to parse in their head any C declaration.
 
 - pointer to =const= object
-#+BEGIN_SRC c
-int v = 0x11223344;
-const int* p = &v;
-*p = (*p)+10; /* error: l-value specifies const object */
-**(int**)&p = *p+10; /* skip, dangerous */
-#+END_SRC
-
+  #+BEGIN_SRC c
+  int v = 0x11223344;
+  const int* p = &v;
+  *p = (*p)+10; /* error: l-value specifies const object */
+  **(int**)&p = *p+10; /* skip, dangerous */
+  #+END_SRC
+ 
 - =const= pointer to object
-#+BEGIN_SRC c
-int v1=0x11223344, v2=0x44332211;
-int* const p = &v1;
-p = &v2; /* error: l-value specifies const object */
-*(int**)&p = &v2; /* skip, dangerous */
-#+END_SRC
-
+  #+BEGIN_SRC c
+  int v1=0x11223344, v2=0x44332211;
+  int* const p = &v1;
+  p = &v2; /* error: l-value specifies const object */
+  *(int**)&p = &v2; /* skip, dangerous */
+  #+END_SRC
+ 
 - =const= pointer to =const= object
-#+BEGIN_SRC c
-int v1=0x11223344, v2=0x44332211;
-const int* const p = &v1;
-*(int**)&p = &v2;
-**(int**)&p = v2;
-#+END_SRC
+ 
+ #+BEGIN_SRC c
+  int v1=0x11223344, v2=0x44332211;
+  const int* const p = &v1;
+  *(int**)&p = &v2;
+  **(int**)&p = v2;
+  #+END_SRC
 
 - pointer to pointer to =const= object
-#+BEGIN_SRC c
-const int** p;
-#+END_SRC
+  #+BEGIN_SRC c
+  const int** p;
+  #+END_SRC
 
 - pointer to =const= pointer to object
-#+BEGIN_SRC c
-int* const* p;
-#+END_SRC
+  #+BEGIN_SRC c
+  int* const* p;
+  #+END_SRC
 
 - =const= pointer to pointer to object
-#+BEGIN_SRC c
-int** const p;
-#+END_SRC
+  #+BEGIN_SRC c
+  int** const p;
+  #+END_SRC
 
 - pointer to =const= pointer to =const= object
-#+BEGIN_SRC c
-const int* const* p;
-#+END_SRC
+  #+BEGIN_SRC c
+  const int* const* p;
+  #+END_SRC
 
 - =const= pointer to pointer to =const= object
-#+BEGIN_SRC c
-const int* const* p;
-#+END_SRC
+  #+BEGIN_SRC c
+  const int* const* p;
+  #+END_SRC
 
 - =const= pointer to =const= pointer to object
-#+BEGIN_SRC c
-int* const* const p;
-#+END_SRC
+  #+BEGIN_SRC c
+  int* const* const p;
+  #+END_SRC
 
 *** =volatile= Pointer
 		:PROPERTIES:
