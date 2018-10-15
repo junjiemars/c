@@ -310,8 +310,15 @@ assertion:
 	 :CUSTOM_ID: language_enum
 	 :END:
 
-=enumerators= is a comma-separated list, tailing comma permitted since
-C99, =identifier= is optional. If =enumerator= is followed by
+
+#+BEGIN_SRC c
+enum [identifier] { enumerator-list };
+
+enumerator = constant-expression;
+#+END_SRC
+
+=enumerator-list= is a comma-separated list, tailing comma permitted
+since C99, =identifier= is optional. If =enumerator= is followed by
 /constant expression/, its value is the value of that /constant
 expression/. If =enumerator= is not followed by /constant-expression/,
 its value is the value one greater than the value of the previous
