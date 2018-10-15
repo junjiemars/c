@@ -15,6 +15,7 @@ int i1;
 extern int i2;
 
 /* function sub forward declaration */
+/* extern keyword is optional */
 void sub(int, int);
 
 int 

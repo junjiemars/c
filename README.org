@@ -817,6 +817,7 @@ the compiler to analyse the modules of the program and decide.
   that object.
 
 
+
 A /declaration/ specifies the interpretation and attributes of a set
 of identifiers. A /definition/ of an identifier is a declaration for
 that identifier that:
@@ -824,6 +825,15 @@ that identifier that:
 - for a function, includes the function body;
 - for an enumeration constant or typedef name, is the only declaration
   of the identifier.
+
+	
+In the following example we declared a function. Using =extern=
+keyword is optional while declaring function. If we don't write
+=exern= keyword while declaring function, it is automatically appended
+before it.
+#+BEGIN_SRC c
+int add(int, int);
+#+END_SRC
 
 *** Block scope 
 		:PROPERTIES:
