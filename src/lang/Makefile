@@ -59,8 +59,6 @@ assert_binout := $(bin_path)$(lang_prefix)_assert$(bin_ext)
 
 assert: $(assert_binout)
 assert_test: assert
-		# -$(assert_binout) 0
-		# -$(assert_binout) 100
 		-$(assert_binout) 49
 
 $(assert_binout): $(lang_root)assert/a.c
