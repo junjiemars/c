@@ -4,6 +4,7 @@
 
 enum { RED, GREEN, BLUE, };
 
+enum order { first, second, third, };
 	
 #define CORVID_MAP(XX)                                                                         \
 	XX(101, BEGIN,    "BEGIN")                                                                   \
@@ -24,6 +25,7 @@ main(int argc, const char* argv[]) {
 	_unused_(argv);
 
 	printf("RED = %zi, sizeof(RED) = %zu\n", RED, sizeof(RED));
+	printf("sizeof(enum order) = %zu\n", sizeof(enum order));
 	
 	for (int i = CORVID_BEGIN; i < CORVID_END; i++) {
 		printf("corvid#: %i\n", i);
