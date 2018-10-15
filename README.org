@@ -195,11 +195,12 @@ if some condition is not true. For example:
 		:CUSTOM_ID: language_preprocessor_pragma
 		:END:
 		
-The =#pragma= directive is used to access compiler-specific preprocessor extensions. 
+The =#pragma= directive is used to access compiler-specific
+preprocessor extensions.
 
 
-A common use of =#pragma= is the =#pragma= once directive, which asks 
-the compiler to include a header file only a single time, no matter 
+A common use of =#pragma= is the =#pragma once= directive, which asks
+the compiler to include a header file only a single time, no matter
 how many times it has been imported.
 
 #+BEGIN_SRC c
@@ -213,8 +214,8 @@ how many times it has been imported.
 #endif
 #+END_SRC
 
-The =#pragma= directive can also be used for other compiler-specific purposes. 
-=#pragma= is commonly used to suppress warnings.
+The =#pragma= directive can also be used for other compiler-specific
+purposes.  =#pragma= is commonly used to suppress warnings.
 
 #+BEGIN_SRC c
 #if MSVC 
