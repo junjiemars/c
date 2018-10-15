@@ -1,10 +1,13 @@
 #include <_lang_.h>
 #include <stdio.h>
 
+
 #if MSVC
  /* C4456: declaration of 'i' hides previous local declaration */
 # pragma warning(disable:4456)
 #endif
+
+
 void
 automatic_storage_class(void) {
 	auto int x; /* garbage value */
