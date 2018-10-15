@@ -799,6 +799,10 @@ declaration in an outer scope; but only if one of two has [[#language_linkage_no
 		:CUSTOM_ID: language_scope_declaration_and_definition
 		:END:
 
+If neither the =extern= keyword nor an initializer are present, the
+statement can be either a /declaration/ or a /definition/. It is up to
+the compiler to analyse the modules of the program and decide.
+
 
 - All /declarations/ with [[#language_linkage_no_linkage][no linkage]] are also /definitions/. Other
   /declarations/ are /definitions/ if they have an initializer.
@@ -811,6 +815,15 @@ declaration in an outer scope; but only if one of two has [[#language_linkage_no
 - A /definition/ of an identifier is a /declaration/ for that
   identifier that: for an object, causes storage to be reserved for
   that object.
+
+
+A /declaration/ specifies the interpretation and attributes of a set
+of identifiers. A /definition/ of an identifier is a declaration for
+that identifier that:
+- for an object, causes storage to be reserved for that object;
+- for a function, includes the function body;
+- for an enumeration constant or typedef name, is the only declaration
+  of the identifier.
 
 *** Block scope 
 		:PROPERTIES:
