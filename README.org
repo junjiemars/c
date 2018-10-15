@@ -264,9 +264,9 @@ enum Color { RED, GREEN, BLUE };
 		:CUSTOM_ID: language_preprocessor_sharp_sharp
 		:END:
 
-The =##= operator takes two separate tokens and pastes them together to
-form a single identifier. The resulting identifier could be a variable name,
-or any other identifier.
+The =##= operator takes two separate tokens and pastes them together
+to form a single identifier. The resulting identifier could be a
+variable name, or any other identifier.
 
 #+BEGIN_SRC c
 #define DEFVAR(type, var, val) type var_##var = val;
