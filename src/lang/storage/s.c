@@ -28,12 +28,12 @@ automatic_storage_class(void) {
 	printf("outer i = 0x%08x\n", i++);
 }
 
-#if CLANG
+
 void
 decay(char *a) {
 	printf("a[0] = 0x%02x\n", a[0]);
 }
-#endif
+
 
 void
 register_storage_class(register int x) {
@@ -45,13 +45,12 @@ register_storage_class(register int x) {
 	register char a[] = {0x11, 0x22, 0x33, 0x44, };
 #if MSVC
 	printf("a[0/%zu]\n", sizeof(a));
-#elif defined(CLANG) || defined(GCC)
+#elif CLANG || GCC
 	printf("a[0/%zu] = 0x%02x\n", sizeof(a)/sizeof(a[0]), a[0]);
 # if CLANG
+	/* GCC error: address of register variable ‘a’ requested */
 	decay(a);
 # endif
-#else
-	/* GCC error: address of register variable ‘a’ requested */
 #endif
 }
 
