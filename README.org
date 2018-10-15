@@ -179,10 +179,10 @@ that the identifier was not set at the top of that file.
 #error "[description]"
 #+END_SRC
 
-The =#error= macro allows you to make compilation fail and issue a statement
- that will appear in the list of compilation errors. It is most useful 
-when combined with =#if/#elif/#else= to fail compilation if some condition 
-is not true. For example:
+The =#error= macro allows you to make compilation fail and issue a
+statement that will appear in the list of compilation errors. It is
+most useful when combined with =#if/#elif/#else= to fail compilation
+if some condition is not true. For example:
 
 #+BEGIN_SRC c
 #if (1==_ERROR_)
