@@ -110,7 +110,7 @@ int
 
 void 
 sub(int i0, int i1) {
-  printf("=>sub{i0=%i+%i}=%i\n", i0, i1, i0+i1);
+  printf("=>sub{i0=%i+i1=%i}=%i\n", i0, i1, i0+i1);
 
   /* well, the i0 from function parameter i0, so u can't redefined it */
   /* int i0 += 1; */
