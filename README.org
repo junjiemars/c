@@ -103,7 +103,7 @@ in this way.
 #+END_SRC
 
 The =#undef= directive undefines a constant or preprocessor macro 
-defined previously using #define.
+defined previously using =#define=.
 
 For example:
 
