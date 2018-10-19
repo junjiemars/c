@@ -95,7 +95,7 @@ $(enum_binout): $(enum_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(enum_cppout): $(lang_root)enum/e.c
-	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
+	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # env
 env_binout := $(bin_path)$(lang_prefix)_env$(bin_ext)
@@ -262,7 +262,7 @@ $(preprocessor_binout): $(preprocessor_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(preprocessor_cppout): $(lang_root)preprocessor/p.c
-	$(CPP) $(INC) $(nm_stage_pre) -D_ERROR_=$(_ERROR_) $^ $(cpp_out)$@
+	$(CPP) $(CPPFLAGS) $(INC) -D_ERROR_=$(_ERROR_) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # scope
 scope_binout := $(bin_path)$(lang_prefix)_scope$(bin_ext)
