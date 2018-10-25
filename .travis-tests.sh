@@ -1,16 +1,14 @@
 #!/bin/bash
 
-CC=
+if [ -z "$TRAVIS_OS_NAME" ]; then
+	TRAVIS_OS_NAME="`uname -s`"
+fi
+
 case "$TRAVIS_OS_NAME" in
-  osx) CC=clang ;;
-  linux) CC=gcc ;;
-	*)
-		# just for testing on Windows and it's not part of Travis.
-		case "`uname -s`" in
-			MSYS_NT-*|MINGW??_NT-*) CC=cl ;;
-			*) CC=gcc ;;
-		esac
-		;;
+  osx|Darwin) CC=clang ;;
+  linux|Linux) CC=gcc ;;
+	MSYS_NT-*|MINGW??_NT-*) CC=cl ;;
+	*) CC=gcc ;;
 esac
 
 CC=$CC ./configure \
