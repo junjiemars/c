@@ -56,13 +56,17 @@ endif
 # static_assert at compile time
 
 assert_binout := $(bin_path)$(lang_prefix)_assert$(bin_ext)
+assert_cppout := $(tmp_path)$(lang_prefix)_assert$(cpp_ext)
 
 assert: $(assert_binout)
 assert_test: assert
 		-$(assert_binout) 49
 
-$(assert_binout): $(lang_root)assert/a.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(assert_binout): $(assert_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(assert_cppout): $(lang_root)assert/a.c
+	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(obj_out)$@
 
 
 # duration
