@@ -1250,7 +1250,7 @@ point to it.
 		:custom_id: memory-pointer-basics-pointer-assignment
 		:END:
 
-*Pointer assignment* between two pointers makes them point to the same
+/Pointer assignment/ between two pointers makes them point to the same
 pointee. Pointer assignment does not touch the pointees. It just changes
 one pointer to have the same refrence as another pointer. After pointer
 assignment, the two pointers are said to be /sharing/ the pointee.
