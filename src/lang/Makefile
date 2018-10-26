@@ -296,10 +296,10 @@ $(sizeof_binout): $(lang_root)sizeof/sizeof.c
 
 # stage
 ifneq ($(CC_NAME), msvc)
-stage_binout := $(bin_path)stage$(bin_ext)
-stage_objout := $(tmp_path)stage$(obj_ext)
-stage_asmout := $(tmp_path)stage$(asm_ext)
-stage_cppout := $(tmp_path)stage$(cpp_ext)
+stage_binout := $(bin_path)$(lang_prefix)_stage$(bin_ext)
+stage_objout := $(tmp_path)$(lang_prefix)_stage$(obj_ext)
+stage_asmout := $(tmp_path)$(lang_prefix)_stage$(asm_ext)
+stage_cppout := $(tmp_path)$(lang_prefix)_stage$(cpp_ext)
 
 stage: $(stage_binout)
 stage_test: stage
@@ -319,7 +319,7 @@ $(stage_asmout): $(stage_cppout)
 	$(CAS) $(CFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
 
 $(stage_cppout): $(lang_root)stage/s.c
-	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
+	$(CPP) $(CPPFLAGS) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
 
 else
 stage:
