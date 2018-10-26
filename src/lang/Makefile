@@ -66,7 +66,7 @@ $(assert_binout): $(assert_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(assert_cppout): $(lang_root)assert/a.c
-	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(obj_out)$@
+	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
 # duration
