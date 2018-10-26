@@ -6,17 +6,7 @@
 
 #define _unused_(x) ((void)(x))
 
-#if GCC
-/* error: format ‘%zx’ expects argument of type ‘size_t’,
-   but argument 3 has type ‘long unsigned int’ 
-	 [-Werror=format] */
-#  pragma GCC diagnostic ignored "-Wformat"
-/* error: dereferencing type-punned pointer will break strict-aliasing
-	 rules [-Werror=strict-aliasing] */
-#  pragma GCC diagnostic ignored "-Wstrict-aliasing"
-#elif CLANG
-#  pragma clang diagnostic ignored "-Wformat"
-#elif MSVC
+#if MSVC
 /* C4477: 'printf' : format string '%llu' requires 
    an argument of type 'unsigned __int64', but variadic 
    argument 2 has type 'unsigned long' */

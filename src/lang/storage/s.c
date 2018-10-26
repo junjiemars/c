@@ -4,7 +4,7 @@
 
 #if MSVC
  /* C4456: declaration of 'i' hides previous local declaration */
-# pragma warning(disable:4456)
+# pragma warning(disable : 4456)
 #endif
 
 

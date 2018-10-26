@@ -4,6 +4,16 @@
 /* #include <limits.h> */
 /* #include <inttypes.h> /\* C99 *\/ */
 
+#if GCC
+/* error: dereferencing type-punned pointer will break strict-aliasing
+	 rules [-Werror=strict-aliasing] */
+#  pragma GCC diagnostic ignored "-Wstrict-aliasing"
+/* format ‘%zi’ expects argument of type ‘signed size_t’, but argument
+	 3 has type ‘int’ [-Werror=format=] */
+#  pragma GCC diagnostic ignored "-Wformat"
+#elif CLANG
+#  pragma clang diagnostic ignored "-Wformat"
+#endif
 
 
 void 

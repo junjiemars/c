@@ -2,6 +2,16 @@
 #include <stdio.h>
 
 
+#if GCC
+/* error: format ‘%zi’ expects argument of type ‘signed size_t’, but
+	 argument 2 has type ‘int’ [-Werror=format=] */
+#  pragma GCC diagnostic ignored "-Wformat"
+#elif CLANG
+/* error: format specifies type 'ssize_t' (aka 'long') but the
+	 argument has type 'int' [-Werror,-Wformat] */
+#  pragma clang diagnostic ignored "-Wformat"
+#endif
+
 enum { RED, GREEN, BLUE, };
 
 enum order { first, second, third, };
