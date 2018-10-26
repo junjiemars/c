@@ -13,6 +13,11 @@
 #  pragma GCC diagnostic ignored "-Wformat"
 #elif CLANG
 #  pragma clang diagnostic ignored "-Wformat"
+#elif MSVC
+/* warning C4477: 'printf' : format string '%zi' requires an argument
+	 of type 'unsigned __int64', but variadic argument 2 has type
+	 'int' */
+#  pragma warning(disable : 4477)
 #endif
 
 

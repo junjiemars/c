@@ -4,6 +4,12 @@
 #include <assert.h>
 
 
+#if MSVC
+/* warning C4702: unreachable code */
+#  pragma warning(disable : 4702)
+#endif
+
+
 /* file scope, declaration, definition with initializer  */
 int i0 = 123;
 

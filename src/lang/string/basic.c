@@ -3,6 +3,14 @@
 #include <string.h>
 #include <assert.h>
 
+
+#if MSVC
+/* warning C4996: 'strcpy': This function or variable may be
+	 unsafe. Consider using strcpy_s instead. To disable deprecation,
+	 use _CRT_SECURE_NO_WARNINGS. */
+#  pragma warning(disable : 4996)
+#endif
+
 size_t
 self_strlen(const char *s) {
   size_t len = 0;

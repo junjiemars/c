@@ -10,6 +10,10 @@
 /* error: format specifies type 'ssize_t' (aka 'long') but the
 	 argument has type 'int' [-Werror,-Wformat] */
 #  pragma clang diagnostic ignored "-Wformat"
+#elif MSVC
+/* C4477: 'printf' : format string '%zi' requires an argument of type
+	 'unsigned __int64', but variadic argument 1 has type 'int' */
+#  pragma warning(disable : 4477)
 #endif
 
 enum { RED, GREEN, BLUE, };

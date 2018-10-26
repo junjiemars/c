@@ -4,6 +4,14 @@
 #include <stdlib.h>
 
 
+#if MSVC
+/* warning C4996: 'strdup': The POSIX name for this item is
+	 deprecated. Instead, use the ISO C and C++ conformant name:
+	 _strdup */
+#  pragma warning(disable : 4996)
+#endif
+
+
 #ifndef NM_HAVE_STRDUP_FN
 #include <stdlib.h>
 char*
