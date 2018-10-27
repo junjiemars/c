@@ -257,7 +257,6 @@ $(pointer_void_binout): $(lang_root)pointer/void.c
 preprocessor_binout := $(bin_path)$(lang_prefix)_preprocessor$(bin_ext)
 preprocessor_cppout := $(tmp_path)$(lang_prefix)_preprocessor$(cpp_ext)
 
-_ERROR_ := 0
 preprocessor: $(preprocessor_binout)
 preprocessor_test: preprocessor
 	$(preprocessor_binout)

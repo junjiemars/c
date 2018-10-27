@@ -8,19 +8,19 @@ double e_squared = E * E;
 #undef E
 
 #if !defined(MIN)
-# define MIN(a, b) ((a) < (b) ? (a) : (b))
+#  define MIN(a, b) ((a) < (b) ? (a) : (b))
 #endif
 
 #if defined(_ERROR_) && (1 == _ERROR_)
-# error "compile failed: because _ERROR_==1 is true"
+#  error "compile failed: because _ERROR_==1 is true"
 #endif
 
 #ifdef MSVC
-# pragma warning(disable:4996) /*_CRT_SECURE_NO_WARNINGS*/
+#  pragma warning(disable:4996) /*_CRT_SECURE_NO_WARNINGS*/
 #endif
 
 #if GCC
-# pragma GCC diagnostic ignored "-Wstrict-aliasing"  /* (unsigned init*)&f: */
+#  pragma GCC diagnostic ignored "-Wstrict-aliasing"  /* (unsigned init*)&f: */
 #endif
 
 void
