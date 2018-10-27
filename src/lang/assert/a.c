@@ -4,6 +4,15 @@
 #include <stdlib.h>
 
 
+#if !(NM_HAVE_C11_STATIC_ASSERT)
+#  ifdef static_assert
+#    undef static_assert
+#  endif
+#  define sa_cat_(a, b) a##b
+#  define sa_cat(a, b) sa_cat_(a, b)
+#  define static_assert(e, m)  enum {sa_cat(static_assert_, __LINE__) = 1/!!(e)}
+#endif
+
 int
 sqr(int x) {
 	assert((0 < x) && (x < 100));
@@ -21,9 +30,7 @@ main(int argc, const char* argv[]) {
 	printf("in DEUBG mode\n");
 #endif
 
-#if (NM_HAVE_C11_STATIC_ASSERT)
 	static_assert(4 == sizeof(int), "sizeof(int) != 4 bytes");
-#endif
 
 	if (argc > 1) {
 		int n = atoi(argv[1]);
