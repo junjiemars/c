@@ -305,6 +305,10 @@ assertion:
 - Postconditions: specify conditions at the end of a function.
 - Invariants: specify conditions over a defined region of a program.
 
+
+The =static_assert= macro, which expands to the =_Static_assert_=,
+a keyword added in C11 to provide compile-time assertion.
+
 ** enum
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_enum
