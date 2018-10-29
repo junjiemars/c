@@ -38,6 +38,19 @@
 #  endif
 #endif
 
+
+#define field_sizeof(t, f) (sizeof(((t*)0)->f))
+
+
+struct point_s {
+	short x;
+	int y;
+} point_s;
+
+
+#define array_size(x) (sizeof(x) / sizeof((x)[0]))
+
+
 int 
 main(int argc, char *argv[]) {
 	_unused_(argc);
@@ -97,4 +110,14 @@ main(int argc, char *argv[]) {
 	printf("sprintf out=%s\n", strbuf);
 #endif
 
+	printf("\nfield_sizeof macro\n");
+	printf("------------------\n");
+	printf("sizeof(point_s->x)=%zu\n", field_sizeof(struct point_s, x));
+	printf("sizeof(point_s->y)=%zu\n", field_sizeof(struct point_s, y));
+
+	int natural[] = { 1, 2, 3, 4, 5, };
+	printf("\narray_size macro\n");
+	printf("------------------\n");
+	printf("array_sizeof(natural)=%zu\n", array_size(natural));
+	
 }
