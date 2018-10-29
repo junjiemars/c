@@ -1019,6 +1019,7 @@ and library routines used to implement common operations.
 - [[http://c-faq.com/decl/spiral.anderson.html][Clockwise/Spiral Rule]]
 - [[https://ptolemy.eecs.berkeley.edu/~johnr/tutorials/assertions.html][How to use assertions in C]]
 - [[https://github.com/nodejs/http-parser][http parser]]
+- [[https://www.kernel.org/doc/html/latest/process/coding-style.html][Linux kernel coding style]]
 - [[http://stackoverflow.com/documentation/c/1108/pointers#t=201702060822544818513][Pointers]]
 - [[http://stackoverflow.com/questions/2524611/how-can-one-print-a-size-t-variable-portably-using-the-printf-family][printf size_t]]
 - [[https://www.bell-labs.com/usr/dmr/www/chist.html][The Development of the C Lanuage]]
