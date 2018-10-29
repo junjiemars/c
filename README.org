@@ -1002,11 +1002,6 @@ of varying lengths. The C standard library and POSIX reserve the
 suffix =_t=, for example as in =size_t= and =time_t=.
 
 
-*** =typedef= vs. =#define=
-		:PROPERTIES:
-		:CUSTOM_ID: typedef_vs_define
-		:END:
-
 =#define= is a C directive which is also used to define the aliases
 for various data types similar to =typedef= but with the following
 differences:
@@ -1014,6 +1009,11 @@ differences:
   =#define= can be used to define alias for values as well.
 - =typedef= interpretation is performed by the compiler whereas
   =#define= statements are processed by the preprocessor.
+
+
+Using =typedef= to hide =struct= is considered a bad idea in [[https://www.kernel.org/doc/html/latest/process/coding-style.html#typedefs][Linux
+kernel coding style]]
+
 
 ** Standard libraries
 	 :PROPERTIES:
@@ -1044,6 +1044,7 @@ and library routines used to implement common operations.
 - [[https://en.wikipedia.org/wiki/Linkage_(software)][wikipedia: Linkage]]
 - [[https://en.wikipedia.org/wiki/Translation_unit_(programming)][wikipedia: Translation unit]]
 - [[https://en.wikipedia.org/wiki/Typedef][wikipedia: typedef]]
+- [[https://stackoverflow.com/questions/252780/why-should-we-typedef-a-struct-so-often-in-c][Why should we typedef a struct so often in C?]]
 
 * x86
 * Memory
