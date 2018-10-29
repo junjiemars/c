@@ -52,6 +52,8 @@ ifeq ($(NM_SYSTEM),Linux)
 CFLAGS += -D_GNU_SOURCE
 endif
 
+_ERROR_ ?= 0
+
 # assert at runtime
 # static_assert at compile time
 
