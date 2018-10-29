@@ -1001,6 +1001,20 @@ common in providing specific descriptive type names for integer types
 of varying lengths. The C standard library and POSIX reserve the
 suffix =_t=, for example as in =size_t= and =time_t=.
 
+
+*** =typedef= vs. =#define=
+		:PROPERTIES:
+		:CUSTOM_ID: typedef_vs_define
+		:END:
+
+=#define= is a C directive which is also used to define the aliases
+for various data types similar to =typedef= but with the following
+differences:
+- =typedef= is limited to givien symbolic names to types only where as
+  =#define= can be used to define alias for values as well.
+- =typedef= interpretation is performed by the compiler whereas
+  =#define= statements are processed by the preprocessor.
+
 ** Standard libraries
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_standard_libraries
