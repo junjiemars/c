@@ -960,6 +960,16 @@ C provides the four basic /arithmetic type specifiers/ =char=, =int=,
 =float= and =double=, and the /modifiers/ =signed=, =unsigned=,
 =short= and =long=.
 
+=long= and =long int= are identical. So are =long long= and =long long
+int=. In both case, the =int= is optional.
+
+| specifier       | type            |
+|-----------------+-----------------|
+| =long long int= | =long long int= |
+| =long long=     | =long long int= |
+| =long=          | =long int=      |
+|                 |                 |
+
 *** Size type and Pointer difference types
 		:PROPERTIES:
 		:CUSTOM_ID: language_type_size_type_and_pointer_difference_type
@@ -1013,7 +1023,6 @@ differences:
 
 Using =typedef= to hide =struct= is considered a bad idea in [[https://www.kernel.org/doc/html/latest/process/coding-style.html#typedefs][Linux
 kernel coding style]]
-
 
 ** Standard libraries
 	 :PROPERTIES:
