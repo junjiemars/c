@@ -75,7 +75,7 @@ main(int argc, const char *argv[]) {
 
 	printf("\nptrdiff_t\n");
 	printf("------------\n");
-	char s[] = "language/type";
+	char s[] = "lang/type";
 	ptrdiff_t p20 = &s[2]-&s[0];
 	ptrdiff_t p02 = &s[0]-&s[2];
 	printf("char s[%zu] = \"%s\"\n", sizeof(s)/sizeof(char), s);
