@@ -1642,3 +1642,19 @@ on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see [[https://g
 - [[https://tools.ietf.org/html/rfc1536][RFC 1536: Common DNS Implementation Errors and Suggested Fixes]]
 - [[http://www.linuxhowtos.org/C_C++/socket.htm][Sockets Tutorial]]
 	
+* Tools
+	:PROPERTIES:
+	:CUSTOM_ID: tools
+	:END:
+
+** readelf
+	 :PROPERTIES:
+	 :CUSTOM_ID: readelf
+	 :END:
+
+/readelf/ displays information about one or more ELF format object
+files. 
+
+This /readelf/ program performs a similar function to /objdump/ but it
+goes into more detail and it exists independently of the BFD library,
+so if there is a bug in BFD then /readelf/ will not be affected.
