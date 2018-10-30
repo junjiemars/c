@@ -602,8 +602,8 @@ C programmer to parse in their head any C declaration.
 		:END:
 
 The =volatile= is to tell the compiler not to optimize the reference,
-so that every read or write does not use the value stored in register but
-does a real memory access.
+so that every read or write does not use the value stored in register
+but does a real memory access.
 
 #+BEGIN_SRC c
 volatile int v1;
@@ -1047,6 +1047,7 @@ and library routines used to implement common operations.
 - [[http://stackoverflow.com/questions/2524611/how-can-one-print-a-size-t-variable-portably-using-the-printf-family][printf size_t]]
 - [[https://www.bell-labs.com/usr/dmr/www/chist.html][The Development of the C Lanuage]]
 - [[http://stackoverflow.com/questions/1461432/what-is-array-decaying][What is array decaying?]]
+- [[https://stackoverflow.com/questions/3323445/what-is-the-difference-between-asm-asm-and-asm][What is the difference between 'asm', '__asm' and '__asm__'?]]
 - [[https://stackoverflow.com/questions/204476/what-should-main-return-in-c-and-c][What should main() return in C and C++?]]
 - [[https://en.wikibooks.org/wiki/C_Programming/Standard_libraries][wikibooks: C Programming/Standard libraries]]
 - [[https://en.wikipedia.org/wiki/C_data_types][wikipedia: C data types]]
