@@ -31,12 +31,16 @@ integer_type() {
 
 	printf("char c/%zu = %zi, 0x%zx\n", 
 				 sizeof(c), c, *(unsigned char*)&c);
+	
 	printf("short s/%zu = %zi, 0x%zx\n", 
 				 sizeof(s), s, *(unsigned short*)&s);
+	
 	printf("int i/%zu = %zi, 0x%zx\n", 
 				 sizeof(i), i, *(unsigned int*)&i);
+	
 	printf("long l/%zu = %zi, 0x%zx\n", 
 				 sizeof(l), l, *(unsigned long*)&l);
+	
 	printf("long long ll/%zu = %zi, 0x%zx\n",
 				 sizeof(ll), ll, *(unsigned long long*)&ll);
 }
@@ -49,8 +53,10 @@ float_type() {
 
 	printf("float f/%zu = %f, 0x%zx\n", 
 				 sizeof(f), f, *(unsigned int*)&f);
+	
 	printf("double d/%zu = %lf, 0x%zx\n", 
 				 sizeof(d), d, *(unsigned long*)&d);
+	
 	printf("long double ld/%zu = %lf, 0x%zx\n",
 				 sizeof(ld), ld, *(unsigned long long*)&ld);
 }
