@@ -9,8 +9,6 @@ nm_feature_name="nm_have_little_endian"
 nm_feature_run=value
 nm_feature_h="#include <stdio.h>"
 nm_feature_flags=
-nm_feature_inc=
-nm_feature_ldlibs=
 nm_feature_test='int i=0x11223344;
                  char *p = (char *)&i;
             		 int le = (0x44 == *p);
@@ -32,8 +30,6 @@ nm_feature_name="nm_ptr_len"
 nm_feature_run=value
 nm_feature_h="#include <stdio.h>"
 nm_feature_flags=
-nm_feature_inc=
-nm_feature_ldlibs=
 nm_feature_test='void* p; printf("%zu", sizeof p);'
 . ${NORE_ROOT}/auto/feature
 
@@ -44,8 +40,6 @@ nm_feature_flags=
 nm_feature_run=value
 nm_feature_h="#include <stdio.h>"
 nm_feature_flags=
-nm_feature_inc=
-nm_feature_ldlibs=
 nm_feature_test='printf("%zu", sizeof(size_t)*8);'
 . ${NORE_ROOT}/auto/feature
 
@@ -56,8 +50,6 @@ nm_feature_flags=
 nm_feature_run=no
 nm_feature_h=
 nm_feature_flags=
-nm_feature_inc=
-nm_feature_ldlibs=
 nm_feature_test='int size; int buffer[size];'
 . ${NORE_ROOT}/auto/feature
 
@@ -72,8 +64,6 @@ case $NM_SYSTEM in
 		nm_feature_h='#include <malloc/malloc.h>
                   #include <stdlib.h>'
 		nm_feature_flags=
-		nm_feature_inc=
-		nm_feature_ldlibs=
 		nm_feature_test='int *p=malloc(16*sizeof(*p));
                      malloc_size(p);
                      free(p);'
@@ -86,8 +76,6 @@ case $NM_SYSTEM in
 		nm_feature_h='#include <malloc.h>
                   #include <stdlib.h>'
 		nm_feature_flags=
-		nm_feature_inc=
-		nm_feature_ldlibs=
 		nm_feature_test='int *p=malloc(16*sizeof(*p));
                      malloc_usable_size(p);
                      free(p);'
@@ -99,8 +87,6 @@ case $NM_SYSTEM in
 		nm_feature_run=no
 		nm_feature_h='#include <malloc.h>'
 		nm_feature_flags=
-		nm_feature_inc=
-		nm_feature_ldlibs=
 		nm_feature_test='int *p=malloc(16*sizeof(*p));
                      _msize(p);
                      free(p);'

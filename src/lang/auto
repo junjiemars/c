@@ -11,8 +11,6 @@ nm_feature_name="nm_have_c11_static_assert"
 nm_feature_run=no
 nm_feature_h="#include <assert.h>"
 nm_feature_flags="$nm_std_opt"
-nm_feature_inc=
-nm_feature_ldlibs=
 nm_feature_test="
 enum {N=5}; static_assert(N==5, \"N is not equal 5\");"
 . ${NORE_ROOT}/auto/feature
@@ -24,8 +22,6 @@ nm_feature_run=yes
 nm_feature_h="#include <stdio.h>
 #define var(dummy, ...)  sprintf(__VA_ARGS__)"
 nm_feature_flags=
-nm_feature_inc=
-nm_feature_ldlibs=
 nm_feature_test="
 char buf[30]; buf[0] = '0';
 var(0, buf, \"%d\", 1);
@@ -38,8 +34,6 @@ nm_feature_name="nm_have_sprintf_s_fn"
 nm_feature_run=no
 nm_feature_h="#include <stdio.h>"
 nm_feature_flags=
-nm_feature_inc=
-nm_feature_ldlibs=
 nm_feature_test="
 char buf[32];
 sprintf_s(buf, sizeof(buf), \"%s\", \"xyz\")";
@@ -51,8 +45,6 @@ nm_feature_name="nm_have_snprintf_fn"
 nm_feature_run=no
 nm_feature_h="#include <stdio.h>"
 nm_feature_flags=
-nm_feature_inc=
-nm_feature_ldlibs=
 nm_feature_test="
 char buf[32];
 snprintf(buf, sizeof(buf), \"%s\", \"xyz\")";
@@ -64,8 +56,6 @@ nm_feature_name="nm_have_strn_any_fn"
 nm_feature_run=no
 nm_feature_h="#include <string.h>"
 nm_feature_flags=
-nm_feature_inc=
-nm_feature_ldlibs=
 nm_feature_test="
 char *xyz = \"xyz\";
 char buf[16];
@@ -80,8 +70,6 @@ nm_feature_name="nm_have_str_s_any_fn"
 nm_feature_run=no
 nm_feature_h="#include <string.h>"
 nm_feature_flags=
-nm_feature_inc=
-nm_feature_ldlibs=
 nm_feature_test="
 char *xyz = \"xyz\";
 char buf[16];
@@ -95,8 +83,6 @@ nm_feature_name="nm_have_strdup_fn"
 nm_feature_run=no
 nm_feature_h="#include <string.h>"
 nm_feature_flags=
-nm_feature_inc=
-nm_feature_ldlibs=
 nm_feature_test="
 char *xyz = strdup(\"xyz\");"
 . ${NORE_ROOT}/auto/feature
