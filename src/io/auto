@@ -6,7 +6,7 @@
 
 # check header file existing
 #----------------------------------------
-#nm_include="stdint.h" . ${NORE_ROOT}/auto/include
+#include="stdint.h" . ${NORE_ROOT}/auto/include
 
 
 # check features

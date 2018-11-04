@@ -7,7 +7,7 @@
 # check header file existing
 #----------------------------------------
 #echo " + checking C99 header files ..."
-nm_include="stdint.h" . ${NORE_ROOT}/auto/include
+include="stdint.h" . ${NORE_ROOT}/auto/include
 
 
 # check machine features

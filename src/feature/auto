@@ -1,3 +1,4 @@
+# -*- mode:sh -*- vim:ft=sh
 
 echo " # view https://en.wikipedia.org/wiki/C_standard_library"
 
@@ -18,27 +19,27 @@ nm_feature_test='#if (1 == __STDC_HOSTED__)
 
 
 echo " + checking C99 header files ..."
-nm_include="complex.h" . ${NORE_ROOT}/auto/include
-nm_include="fenv.h" . ${NORE_ROOT}/auto/include
-nm_include="inttypes.h" . ${NORE_ROOT}/auto/include
-nm_include="stdint.h" . ${NORE_ROOT}/auto/include
-nm_include="tgmath.h" . ${NORE_ROOT}/auto/include
+include="complex.h" . ${NORE_ROOT}/auto/include
+include="fenv.h" . ${NORE_ROOT}/auto/include
+include="inttypes.h" . ${NORE_ROOT}/auto/include
+include="stdint.h" . ${NORE_ROOT}/auto/include
+include="tgmath.h" . ${NORE_ROOT}/auto/include
 
 echo " + checking C11 header files ..."
-nm_include="stdalign.h" . ${NORE_ROOT}/auto/include
-nm_include="stdatomic.h" . ${NORE_ROOT}/auto/include
-nm_include="stdnoreturn.h" . ${NORE_ROOT}/auto/include
-nm_include="threads.h" . ${NORE_ROOT}/auto/include
-nm_include="uchar.h" . ${NORE_ROOT}/auto/include
+include="stdalign.h" . ${NORE_ROOT}/auto/include
+include="stdatomic.h" . ${NORE_ROOT}/auto/include
+include="stdnoreturn.h" . ${NORE_ROOT}/auto/include
+include="threads.h" . ${NORE_ROOT}/auto/include
+include="uchar.h" . ${NORE_ROOT}/auto/include
 
 echo " + checking NA1 header files ..."
-nm_include="iso646.h" . ${NORE_ROOT}/auto/include
-nm_include="wchar.h" . ${NORE_ROOT}/auto/include
-nm_include="wctype.h" . ${NORE_ROOT}/auto/include
+include="iso646.h" . ${NORE_ROOT}/auto/include
+include="wchar.h" . ${NORE_ROOT}/auto/include
+include="wctype.h" . ${NORE_ROOT}/auto/include
 
 echo " + checking nonstandard posix header files ..."
-nm_include="unistd.h" . ${NORE_ROOT}/auto/include
-nm_include="signal.h" . ${NORE_ROOT}/auto/include
+include="unistd.h" . ${NORE_ROOT}/auto/include
+include="signal.h" . ${NORE_ROOT}/auto/include
 
 
 nm_feature="C99 manipulating complex numbers"

@@ -18,13 +18,13 @@ nm_feature_test='int i=0x11223344;
 . ${NORE_ROOT}/auto/feature
 
 
-nm_include="stdint.h" . ${NORE_ROOT}/auto/include
+include="stdint.h" . ${NORE_ROOT}/auto/include
 
 
-nm_include="inttypes.h" . ${NORE_ROOT}/auto/include
+include="inttypes.h" . ${NORE_ROOT}/auto/include
 
 
-nm_include="stdbool.h" . ${NORE_ROOT}/auto/include
+include="stdbool.h" . ${NORE_ROOT}/auto/include
 
 
 nm_feature="sizeof(void*)"

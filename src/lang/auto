@@ -2,8 +2,8 @@
 #
 
 
-nm_include="stdint.h" . ${NORE_ROOT}/auto/include
-nm_include="inttypes.h" . ${NORE_ROOT}/auto/include
+include="stdint.h" . ${NORE_ROOT}/auto/include
+include="inttypes.h" . ${NORE_ROOT}/auto/include
 
 
 nm_feature="c11 static_assert()"

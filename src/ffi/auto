@@ -1,4 +1,4 @@
-
+# -*- mode:sh -*- vim:ft=sh
 # jni
 
 flag="# jni" op=":" value="-----------"  . ${NORE_ROOT}/auto/make_define
