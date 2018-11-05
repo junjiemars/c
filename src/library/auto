@@ -15,7 +15,7 @@ case $CC_NAME in
 		. ${NORE_ROOT}/auto/feature
 
 		if [ yes = $nm_found ]; then
-			flag=nm_pic_opt op='=' value='-fPIC' . ${NORE_ROOT}/auto/make_define
+			flag=CFLAGS op='+=' value='-fPIC' . ${NORE_ROOT}/auto/make_define
 		fi
 	;;
 
