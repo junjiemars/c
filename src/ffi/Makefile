@@ -14,7 +14,7 @@ jni_test: jni
 	$(JAVA) $(jni_classpath) -Djava.library.path=$(lib_path) Java2c
 
 jni_inc += $(INC) $(jni_ldflags)
-jni_cflags += $(CFLAGS) $(nm_pic_opt) $(nm_shared_opt)
+jni_cflags += $(CFLAGS) $(nm_shared_opt)
 
 square_h := $(inc_path)square.h
 java2c_classout := $(bin_path)Java2c.class
