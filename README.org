@@ -1647,6 +1647,16 @@ ldd objs/bin/math_shared
 
 * STRING
 * Unicode
+	:PROPERTIES:
+	:CUSTOM_ID: unicode
+	:END:
+
+** References
+	 
+- [[http://www.ibm.com/developerworks/library/l-linuni/][Linux Unicode programming]]
+- [[http://www.joelonsoftware.com/articles/Unicode.html][The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Set]]
+- [[https://en.wikipedia.org/wiki/UTF-8][Wikipedia: UTF-8]] 
+
 * IO
 * Network
 

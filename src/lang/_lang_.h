@@ -2,7 +2,9 @@
 #ifndef _LANG_H_
 #define _LANG_H_
 
-#include <nore.h>
+#ifndef NORE_H
+#  include <nore.h>
+#endif
 
 #define _unused_(x) ((void)(x))
 
