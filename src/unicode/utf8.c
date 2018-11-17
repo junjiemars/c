@@ -1,8 +1,6 @@
-#include <nore.h>
+#include <_unicode_.h>
 #include <stdio.h>
 #include <locale.h>
-
-#define _unused_(x) (void)(x)
 
 
 #define TO_BASE_N (sizeof(unsigned)*8 + 1)
