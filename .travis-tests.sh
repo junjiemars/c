@@ -16,8 +16,10 @@ fi
 CC=$CC ./configure \
 	--has-ds \
 	--has-hi \
+	--has-io \
 	--has-lang \
 	--has-memory \
+	--has-unicode \
 	--has-x86
 make clean test
 
