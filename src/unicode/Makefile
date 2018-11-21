@@ -25,10 +25,14 @@ $(utf8_cppout): $(unicode_root)utf8/utf8.c
 
 # mb
 mb_binout := $(bin_path)$(unicode_prefix)_mb$(bin_ext)
+mb_cppout := $(tmp_path)$(unicode_prefix)_mb$(cpp_ext)
 
 mb: $(mb_binout)
 mb_test: mb
 	$(mb_binout)
 
-$(mb_binout): $(unicode_root)mb/mb.c
-	$(CC) $(CFLAGS) $(INC) $^ $(cpp_out)$@
+$(mb_binout): $(mb_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(mb_cppout): $(unicode_root)mb/mb.c
+	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@

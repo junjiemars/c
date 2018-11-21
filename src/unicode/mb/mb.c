@@ -2,6 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#if MSVC
+#  pragma warning(disable : 4996)
+#endif
+
 int
 main(int argc, char* argv[]) {
 	_unused_(argc);
@@ -9,7 +13,7 @@ main(int argc, char* argv[]) {
 
 	wchar_t s[] = L"abc中文def\n";
 	wchar_t *p = s;
-	char buffer[MB_CUR_MAX];
+	char buffer[MB_LEN_MAX];
 	
 	while (*p) {
 		int len = wctomb(buffer, *p);
