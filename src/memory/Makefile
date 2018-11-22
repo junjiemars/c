@@ -1,6 +1,7 @@
 
 memory: alloc \
 				bitfield \
+				bit \
 				byte \
 				copy \
 				endian \
@@ -11,6 +12,7 @@ memory: alloc \
 
 memory_test: 	alloc_test \
 							bitfield_test \
+							bit_test \
 							byte_test \
 							copy_test \
 							endian_test \
@@ -114,13 +116,24 @@ $(alloc_re_binout): $(memory_root)alloc/re.c
 
 
 #bitfield
-bitfield_binout := $(bin_path)$(memory_prefix)_bitfield$(bit_ext)
+bitfield_binout := $(bin_path)$(memory_prefix)_bitfield$(bin_ext)
 
 bitfield: $(bitfield_binout)
 bitfield_test: bitfield
 	$(bitfield_binout)
 
 $(bitfield_binout): $(memory_root)bitfield/bitfield.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# bit
+bit_binout := $(bin_path)$(memory_prefix)_bit$(bin_ext)
+
+bit: $(bit_binout)
+bit_test: bit
+	$(bit_binout)
+
+$(bit_binout): $(memory_root)bit/bit.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
