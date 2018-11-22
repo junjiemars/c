@@ -18,7 +18,7 @@ toggle_a_bit(uint8_t x, uint8_t n) {
 
 uint8_t
 change_a_bit(uint8_t x, uint8_t n, uint8_t v) {
-	return x^= (-!!v ^ x) & (1u << n);
+	return x ^= (-!!v ^ x) & (1u << n);
 }
 
 int
