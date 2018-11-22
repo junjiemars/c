@@ -3,8 +3,7 @@
 
 uint8_t
 set_a_bit(uint8_t x, uint8_t n) {
-	uint8_t z = x |= 1u << n;
-	return z;
+	return x |= 1u << n;
 }
 
 int
