@@ -1039,6 +1039,7 @@ and library routines used to implement common operations.
 
 - [[https://resources.sei.cmu.edu/asset_files/Presentation/2016_017_101_484207.pdf][Beyond errno Error Handling in C]]
 - [[http://norswap.com/c_scope_duration_linkage/][C: Scope, Duration & Linkage]]
+- [[https://cdecl.org/][cdecl]]
 - [[http://c-faq.com/decl/spiral.anderson.html][Clockwise/Spiral Rule]]
 - [[https://ptolemy.eecs.berkeley.edu/~johnr/tutorials/assertions.html][How to use assertions in C]]
 - [[https://github.com/nodejs/http-parser][http parser]]
