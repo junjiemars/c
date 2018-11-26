@@ -1032,7 +1032,7 @@ kernel coding style]]
 The /C standar library/ is a standardized collection of header files
 and library routines used to implement common operations.
 
-** References
+** Language References
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_references
 	 :END:
@@ -1045,6 +1045,7 @@ and library routines used to implement common operations.
 - [[https://www.kernel.org/doc/html/latest/process/coding-style.html][Linux kernel coding style]]
 - [[http://stackoverflow.com/documentation/c/1108/pointers#t=201702060822544818513][Pointers]]
 - [[http://stackoverflow.com/questions/2524611/how-can-one-print-a-size-t-variable-portably-using-the-printf-family][printf size_t]]
+- [[http://unixwiz.net/techtips/reading-cdecl.html][Steve Friedl's Unixwiz.net Tech Tips: Reading C type declarations]]
 - [[https://www.bell-labs.com/usr/dmr/www/chist.html][The Development of the C Lanuage]]
 - [[http://stackoverflow.com/questions/1461432/what-is-array-decaying][What is array decaying?]]
 - [[https://stackoverflow.com/questions/3323445/what-is-the-difference-between-asm-asm-and-asm][What is the difference between 'asm', '__asm' and '__asm__'?]]
@@ -1643,7 +1644,6 @@ ldd objs/bin/math_shared
 
 - [[https://en.wikipedia.org/wiki/Dynamic-link_library][Dynamic-link library]]
 - [[https://en.wikipedia.org/wiki/Static_library][Static library]]
-
 
 * STRING
 * Unicode
