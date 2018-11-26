@@ -1,6 +1,7 @@
 #include <_unicode_.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 #if MSVC
 #  pragma warning(disable : 4996)
