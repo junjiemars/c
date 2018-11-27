@@ -657,7 +657,7 @@ registers are types of locations where a variable's value can be
 stored. There are four storage classes in C those are /automatic/,
 /register/, /static/, and /external/.
 
-Each [[#language_scope_declaration_and_definition][declaration]] can only have one of five /storage class specifier/:
+Each [[#declaration_and_definition][declaration]] can only have one of five /storage class specifier/:
 =static=, =extern=, =auto=, =register= and =typedef=.
 
 =typedef= storage class specifier does not reserve storage and is
@@ -685,9 +685,9 @@ variable declared inside a function body, and is in fact a historic
 leftover from C predecessor's B.
 
 - /scope/: variable defined with =auto= storage class specifier are
-  local to the [[#language_scope_function_scope][function scope]] or [[#language_scope_block_scope][block scope]] inside which they are
+  local to the [[#language_scope_function_scope][function scope]] or [[#block_scope][block scope]] inside which they are
   defined.
-- /duration/: [[#language_duration][automatic]], till the end of the [[#language_scope_function_scope][function scope]] or [[#language_scope_block_scope][block
+- /duration/: [[#language_duration][automatic]], till the end of the [[#language_scope_function_scope][function scope]] or [[#block_scope][block
   scope]] where the variable is defined
 - /default initial value/: garbage value
 
@@ -743,8 +743,8 @@ The =register= storage class is more appropriate for variables that
 are defined inside a block and are accessed with high frequency.
 
 
-- /scope/: [[#language_scope_function_scope][function scope]] or [[#language_scope_block_scope][block scope]]
-- /duration/: [[#language_duration][automatic]], till the end of [[#language_scope_function_scope][function scope]] or [[#language_scope_block_scope][block scope]]
+- /scope/: [[#language_scope_function_scope][function scope]] or [[#block_scope][block scope]]
+- /duration/: [[#language_duration][automatic]], till the end of [[#language_scope_function_scope][function scope]] or [[#block_scope][block scope]]
   in which the variable is defined
 - /default initial value/: garbage value
 
@@ -782,25 +782,25 @@ one in which the corresponding object or function is defined.
 
 ** Scope
 	 :PROPERTIES:
-	 :CUSTOM_ID: language_scope
+	 :CUSTOM_ID: scope
 	 :END:
 
 In C, all identifiers are lexically (or statically) scoped.
 
-The scope of a [[#language_scope_declaration_and_definition][declaration]] is the part of the code where the
+The scope of a [[#declaration_and_definition][declaration]] is the part of the code where the
 declaration is seen and can be used. Note that this says nothing about
 whether the object associated to the declaration can be accessed from
 some other part of the code via another declaration. We uniquely
 identify an object by its memory: the storage for a variable or the
 function code.
 
-Finally, note that a [[#language_scope_declaration_and_definition][declaration]] in a nested scope can hide a
+Finally, note that a [[#declaration_and_definition][declaration]] in a nested scope can hide a
 declaration in an outer scope; but only if one of two has [[#language_linkage_no_linkage][no linkage]].
 
 
 *** Declarations and Definitions
 		:PROPERTIES:
-		:CUSTOM_ID: language_scope_declaration_and_definition
+		:CUSTOM_ID: declaration_and_definition
 		:END:
 
 If neither the =extern= keyword nor an initializer are present, the
@@ -841,7 +841,7 @@ int add(int, int);
 
 *** Block scope 
 		:PROPERTIES:
-		:CUSTOM_ID: language_scope_block_scope
+		:CUSTOM_ID: block_scope
 		:END:
 
 Every variable or function declaration that appears inside a block has
@@ -871,7 +871,7 @@ distinct names.
 		:END:
 
 All vairables and functions defined ouside functions have /file
-scope/.  They are visible from their [[#language_scope_declaration_and_definition][declaration]] until the end of the
+scope/.  They are visible from their [[#declaration_and_definition][declaration]] until the end of the
 file. Here, the term /file/ should be understood as the source file
 being compiled, after all includes have been resolved.
 
@@ -880,7 +880,7 @@ being compiled, after all includes have been resolved.
 	 :CUSTOM_ID: language_duration
    :END:
 
-Indicates whether the object associated to the [[#language_scope_declaration_and_definition][declaration]] persists
+Indicates whether the object associated to the [[#declaration_and_definition][declaration]] persists
 throughout the program's execution (/static/) or whether it is
 allocated dynamically when the declaration's scope is entered
 (/automatic/).
@@ -890,7 +890,7 @@ There are two kind of duration:
 - automatic
 - static
 
-Within functions at [[#language_scope_block_scope][block scope]], declarations without =extern= or
+Within functions at [[#block_scope][block scope]], declarations without =extern= or
 =static= have automatic duration. Any other declaration at [[#language_scope_file_scope][file scope]]
 has static duration.
 
@@ -922,7 +922,7 @@ have been expanded.
 
 A declaration with /no linkage/ is associated to an object that is not
 shared with any other declaration. All declarations with /no linkage/
-happen at [[#language_scope_block_scope][block scope]]: all block scope declarations without the extern
+happen at [[#block_scope][block scope]]: all block scope declarations without the extern
 storage class specifier have /no linkage/.
 
 *** Internal linkage
@@ -949,7 +949,7 @@ same identifier refer to the same object.
 
 ** Basic types
 	 :PROPERTIES:
-	 :CUSTOM_ID: language_basic_types
+	 :CUSTOM_ID: basic_types
 	 :END:
 
 
@@ -1023,6 +1023,18 @@ differences:
 
 Using =typedef= to hide =struct= is considered a bad idea in [[https://www.kernel.org/doc/html/latest/process/coding-style.html#typedefs][Linux
 kernel coding style]]
+
+** ~cdecl~
+	 :PROPERTIES:
+	 :CUSTOM_ID: cdecl
+	 :END:
+
+A declaration can have exactly one basic type. The [[#basic_types][basic types]] are
+argumented with /derived types/, can C has three of them:
+- ~function [(decl-list)] returning~: *()*
+- ~array [number] of~: *[]*
+- ~[const | volatile | noalias] pointer to~: ***
+
 
 ** Standard libraries
 	 :PROPERTIES:
