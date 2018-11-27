@@ -1035,6 +1035,8 @@ argumented with /derived types/, can C has three of them:
 - ~array [number] of~: *[]*
 - ~[const | volatile | noalias] pointer to~: ***
 
+The /array of []/ and /function returning ()/ type operators have
+higher precedence than /pointer to */.
 
 ** Standard libraries
 	 :PROPERTIES:
