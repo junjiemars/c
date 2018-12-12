@@ -1068,6 +1068,7 @@ and library routines used to implement common operations.
 - [[https://en.wikibooks.org/wiki/C_Programming/Standard_libraries][wikibooks: C Programming/Standard libraries]]
 - [[https://en.wikipedia.org/wiki/C_data_types][wikipedia: C data types]]
 - [[https://en.wikipedia.org/wiki/Linkage_(software)][wikipedia: Linkage]]
+- [[https://en.wikipedia.org/wiki/Maximal_munch][wikipedia: Maximal munch]]
 - [[https://en.wikipedia.org/wiki/Translation_unit_(programming)][wikipedia: Translation unit]]
 - [[https://en.wikipedia.org/wiki/Typedef][wikipedia: typedef]]
 - [[https://stackoverflow.com/questions/252780/why-should-we-typedef-a-struct-so-often-in-c][Why should we typedef a struct so often in C?]]
