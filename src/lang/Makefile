@@ -149,14 +149,23 @@ $(goto_binout): $(lang_root)goto/g.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # jmp
-jmp_binout := $(bin_path)$(lang_prefix)_jmp$(bin_ext)
+jmp_basic_binout := $(bin_path)$(lang_prefix)_jmp_basic$(bin_ext)
+jmp_try_binout := $(bin_path)$(lang_prefix)_jmp_try$(bin_ext)
+jmp_try_cppout := $(tmp_path)$(lang_prefix)_jmp_try$(cpp_ext)
 
-jmp: $(jmp_binout)
+jmp: $(jmp_basic_binout) $(jmp_try_binout)
 jmp_test: jmp
-	$(jmp_binout)
+	# $(jmp_basic_binout)
+	$(jmp_try_binout)
 
-$(jmp_binout): $(lang_root)jmp/j.c
+$(jmp_basic_binout): $(lang_root)jmp/j.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(jmp_try_binout): $(jmp_try_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(jmp_try_cppout): $(lang_root)jmp/try.c
+	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
 # linkage
