@@ -26,7 +26,7 @@ int f(void) {
 }
 
 
-int main(int argc, char **argv[]) {
+int main(int argc, char *argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 
