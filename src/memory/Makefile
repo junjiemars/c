@@ -94,18 +94,24 @@ endif
 
 
 # alloc
+alloc_a_binout := $(bin_path)$(memory_prefix)_alloca$(bin_ext)
 alloc_m_binout := $(bin_path)$(memory_prefix)_malloc$(bin_ext)
 alloc_c_binout := $(bin_path)$(memory_prefix)_calloc$(bin_ext)
 alloc_re_binout := $(bin_path)$(memory_prefix)_realloc$(bin_ext)
 
-alloc: $(alloc_m_binout) \
+alloc: $(alloc_a_binout) \
+			 $(alloc_m_binout) \
        $(alloc_c_binout) \
        $(alloc_re_binout)
 
 alloc_test: alloc
+	$(alloc_a_binout)
 	$(alloc_m_binout)
 	$(alloc_c_binout)
 	$(alloc_re_binout)
+
+$(alloc_a_binout): $(memory_root)alloc/a.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(alloc_m_binout): $(memory_root)alloc/m.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
