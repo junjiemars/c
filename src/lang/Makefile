@@ -14,6 +14,7 @@ lang:	assert \
 			pointer \
 			preprocessor \
 			scope \
+			signal \
 			sizeof \
 			stage \
 			storage \
@@ -36,6 +37,7 @@ lang_test:	assert_test \
 						pointer_test \
 						preprocessor \
 						scope_test \
+						signal_test \
 						sizeof_test \
 						stage_test \
 						storage_test \
@@ -293,6 +295,18 @@ scope_test: scope
 
 $(scope_binout): $(lang_root)scope/scope.c
 	$(CC) $(scope_cflags) $(INC) $^ $(bin_out)$@
+
+
+# signal
+signal_binout := $(bin_path)$(lang_prefix)_signal$(bin_ext)
+
+signal: $(signal_binout)
+signal_test: signal
+	$(signal_binout)
+
+$(signal_binout): $(lang_root)signal/sig.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # sizeof
 sizeof_binout := $(bin_path)sizeof$(bin_ext)
