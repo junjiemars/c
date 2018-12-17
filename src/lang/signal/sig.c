@@ -4,6 +4,7 @@
 
 #if WINNT
 #  include <windows.h>
+#  define sleep(x) Sleep((x) * 1000)
 #else
 #  include <unistd.h>
 #endif
@@ -29,6 +30,7 @@ int main(int argc, char **argv) {
 		fflush(stdout);
 		if (s_flag) {
 			printf("on_sigint, exit.\n");
+			fflush(stdout);
 			break;
 		}
 		sleep(1);
