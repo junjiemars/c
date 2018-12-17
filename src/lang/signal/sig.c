@@ -5,6 +5,8 @@
 #if WINNT
 #  include <windows.h>
 #  define sleep(x) Sleep((x) * 1000)
+#  include <process.h>
+#  define getpid() _getpid()
 #else
 #  include <unistd.h>
 #endif
@@ -22,6 +24,8 @@ int main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
+	printf("pid=%d\n", getpid());
+	
 	int n = 10;
 	signal(SIGINT, on_sigint);
 
