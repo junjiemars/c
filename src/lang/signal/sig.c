@@ -4,8 +4,8 @@
 
 #if WINNT
 #  include <windows.h>
-#  define sleep(x) Sleep((x) * 1000)
 #  include <process.h>
+#  define sleep(x) Sleep((x) * 1000)
 #  define getpid() _getpid()
 #else
 #  include <unistd.h>
@@ -15,9 +15,8 @@
 static volatile int s_flag = 0;
 
 void on_sigint(int sig) {
-	if (SIGINT == sig) {
-		s_flag = SIGINT;
-	}
+	signal(sig, on_sigint);
+	s_flag = sig;
 }
 
 int main(int argc, char **argv) {
@@ -26,7 +25,7 @@ int main(int argc, char **argv) {
 
 	printf("pid=%d\n", getpid());
 	
-	int n = 10;
+	int n = 5;
 	signal(SIGINT, on_sigint);
 
 	do {
