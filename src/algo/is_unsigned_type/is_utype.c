@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 
-#define IS_UNSIGNED_TYPE(t) ((t)(-1) > 0)
+#define IS_UNSIGNED_TYPE(t) ((t)~1 > 0)
 
 int main(int argc, char **argv) {
 	_unused_(argc);
