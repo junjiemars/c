@@ -11,8 +11,22 @@ struct token_s {
 };
 
 struct token_s stack[MAX_TOKEN_NUM];
+struct token_s token;
 
 void get_token(const char *);
+char classify_string(struct token_s *);
+
+char classify_string(struct token_s *token) {
+	if (strncmp("char", token->string, MAX_TOKEN_LEN)
+			|| strncmp("intp", token->string, MAX_TOKEN_LEN)) {
+		token->type = 't';
+	} else if (strncmp("const", token->string, MAX_TOKEN_LEN)
+						 || strncmp("volatile", token->string, MAX_TOKEN_LEN)) {
+		token->type = 'q';
+	} else {
+		token->type = 'i';
+	}
+}
 
 void get_token(const char *input, int *idx) {
 	if (0 == *pointer) {
@@ -20,7 +34,8 @@ void get_token(const char *input, int *idx) {
 	}
 	
 	const char *p;
-	
+	struct token t = stack[idx];
+
 	while (0 != (p = pointer++)) {
 		if (isalpha(*p)) {
 		}
