@@ -1,5 +1,5 @@
-#ifndef _PARSER_H_
-#define _PARSER_H_
+#ifndef _CC_H_
+#define _CC_H_
 
 #include <nore.h>
 
