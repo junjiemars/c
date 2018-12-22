@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdlib.h>
 #include <assert.h>
 
 struct entry_s { /* form of symbol table entry */
@@ -23,7 +24,15 @@ char lexemes[STRMAX];
 int lastchar = -1; /* last used position in lexemes */
 int lastentry = 0; /* last used position in symtable */
 
+void error(int, char*);
 int lookup(char*);
+
+/* generate all error message */
+void error(int at, char *m) {
+	fprintf(stderr, "at %d: %s\n", at, m);
+	exit(1);
+}
+
 
 /* return position of entry for s */
 int lookup(char *s) {
@@ -34,7 +43,11 @@ int lookup(char *s) {
 	}
 	return 0;
 }
-	
+
+void test_error(void) {
+	error(1, "Compilers: Principles, Techniques, and Tools");
+}
+
 void test_lookup(void) {
 	assert(0 == lookup((char*)0) && "lookup(nul) = 0");
 	assert(0 == lookup("int") && "lookup('int') = 0");
@@ -53,6 +66,7 @@ int main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
+/* 	test_error(); */
 	test_lookup();
 	return 0;
 }
