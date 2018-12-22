@@ -1,6 +1,8 @@
 #include <_parser_.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
+
 
 #define MAX_TOKEN_LEN 32
 #define MAX_TOKEN_NUM 32
@@ -13,7 +15,7 @@ struct token_s {
 struct token_s stack[MAX_TOKEN_NUM];
 struct token_s token;
 
-void get_token(const char *);
+void get_token(const char *, int*);
 char classify_string(struct token_s *);
 
 char classify_string(struct token_s *token) {
@@ -26,17 +28,18 @@ char classify_string(struct token_s *token) {
 	} else {
 		token->type = 'i';
 	}
+	return token->type;
 }
 
 void get_token(const char *input, int *idx) {
-	if (0 == *pointer) {
+	_unused_(idx);
+	if (0 == *input) {
 		return;
 	}
 	
 	const char *p;
-	struct token t = stack[idx];
 
-	while (0 != (p = pointer++)) {
+	while (0 != (p = input++)) {
 		if (isalpha(*p)) {
 		}
 	}
