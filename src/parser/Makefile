@@ -24,7 +24,7 @@ cdecl_binout := $(bin_path)$(parser_prefix)_cdecl$(bin_ext)
 
 cdecl: $(cdecl_binout)
 cdecl_test: cdecl
-	$(cdecl_binout)
+	$(cdecl_binout) "cons_t int"
 
 $(cdecl_binout): $(parser_root)cdecl/c1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
