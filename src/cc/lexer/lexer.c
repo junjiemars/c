@@ -6,22 +6,26 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#define DONE -1
+
 #define BSIZE 128
 #define STRMAX 64
 #define SYMMAX 64
 
-#define NUM 256
-#define PUL 257
-#define SUB 258
-#define MUL 259
-#define DIV 260
-
+enum token_t {
+	NUM = 256,
+	PUL,
+	SUB,
+	MUL,
+	DIV,
+	DONE,
+};
 
 char inbuf[BSIZE];
 char lexemes[STRMAX];
 char *inptr;
 int tokenval;
+
+
 
 void error(char *, ...);
 int lookahead(void);
