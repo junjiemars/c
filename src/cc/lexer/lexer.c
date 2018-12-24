@@ -18,9 +18,9 @@
 #define DIV 260
 
 
-char lexbuf[BSIZE];
+char inbuf[BSIZE];
 char lexemes[STRMAX];
-char *lexptr;
+char *inptr;
 int tokenval;
 
 void error(char *, ...);
@@ -37,15 +37,15 @@ void error(char *fmt, ...) {
 }
 
 int lookahead(void) {
-	if ('\0' == *lexptr || lexptr >= lexbuf + BSIZE - 1) {
+	if ('\0' == *inptr || inptr >= inbuf + BSIZE - 1) {
 		return EOF;
 	}
-	return *lexptr++;
+	return *inptr++;
 }
 
 void pushback(void) {
-	if (lexbuf < lexptr) {
-		lexptr--;
+	if (inbuf < inptr) {
+		inptr--;
 	}
 }
 
@@ -77,7 +77,7 @@ int lexan(void) {
 }
 
 void test_lookahead(char *buf) {
-	strncpy(lexbuf, buf, BSIZE);
+	strncpy(inbuf, buf, BSIZE);
 	int c;
 	while (EOF != (c = lookahead())) {
 		fprintf(stdout, "%c, ", (int)c);
@@ -85,7 +85,7 @@ void test_lookahead(char *buf) {
 }
 
 void test_pushback(char *buf) {
-	strncpy(lexbuf, buf, BSIZE);
+	strncpy(inbuf, buf, BSIZE);
 	int c, p;
 	c = lookahead();
 	pushback();
@@ -94,7 +94,7 @@ void test_pushback(char *buf) {
 }
 
 void test_lexan(char *buf) {
-	strncpy(lexbuf, buf, BSIZE);
+	strncpy(inbuf, buf, BSIZE);
 	int tok;
 	while (DONE != (tok = lexan())) {
 		fprintf(stdout, "%d |", tok);
@@ -107,11 +107,11 @@ int main(int argc, char **argv) {
 	_unused_(argv);
 
 	if (argc > 1) {
-		/* lexptr = lexbuf; */
+		/* inptr = inbuf; */
 		/* test_lookahead(argv[1]); */
-		/* lexptr = lexbuf; */
+		/* inptr = inbuf; */
 		/* test_pushback(argv[1]); */
-		lexptr = lexbuf;
+		inptr = inbuf;
 		test_lexan(argv[1]);
 	}
 	return 0;
