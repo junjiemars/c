@@ -61,7 +61,7 @@ void pushback(void) {
 int lexan(void) {
 	int c = lookahead();
 	while (1) {
-		if (isspace(c)) {
+		if (isblank(c)) {
 			; /* skip */
 		} else if (isdigit(c)) {
 			tokenval = c - '0';
@@ -74,7 +74,7 @@ int lexan(void) {
 		} else if (EOF == c) {
 			return DONE;
 		}
-	}
+  }
 }
 
 /* return position of entry for s */
