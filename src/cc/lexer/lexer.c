@@ -57,9 +57,24 @@ void pushback(void) {
 	}
 }
 
-/* int lexan(void) { */
-	
-/* } */
+int lexan(void) {
+	int c = lookahead();
+	while (1) {
+		if (isspace(c)) {
+			; /* skip */
+		} else if (isdigit(c)) {
+			int t[STRMAX] = {0};
+			int i = 0;
+			t[i++] = c;
+			while (isdigit(c = lookahead())) {
+				t[i++] = c;
+			}
+			return NUM;
+		} else if (EOF == c) {
+			return DONE;
+		}
+	}
+}
 
 /* return position of entry for s */
 int lookup(char *s) {
@@ -110,6 +125,14 @@ void test_pushback(char *buf) {
 	assert(c == p && "test_pushback failed");
 }
 
+void test_lexan(char *buf) {
+	strncpy(lexbuf, buf, BSIZE);
+	int tok;
+	while (DONE != (tok = lexan())) {
+		fprintf(stdout, "%d |", tok);
+	}
+}
+
 void test_lookup(void) {
 	memset(symtable, 0, sizeof(symtable));
 
@@ -151,10 +174,12 @@ int main(int argc, char **argv) {
 	/* test_lookup(); */
 	/* test_insert(); */
 	if (argc > 1) {
+		/* lexptr = lexbuf; */
+		/* test_lookahead(argv[1]); */
+		/* lexptr = lexbuf; */
+		/* test_pushback(argv[1]); */
 		lexptr = lexbuf;
-		test_lookahead(argv[1]);
-		lexptr = lexbuf;
-		test_pushback(argv[1]);
+		test_lexan(argv[1]);
 	}
 	return 0;
 }
