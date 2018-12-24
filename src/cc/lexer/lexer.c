@@ -7,11 +7,12 @@
 #include <assert.h>
 
 
-#define BSIZE 128
+#define BSIZE  128
+#define EOS    '\0'
 #define STRMAX 64
-#define SYMMAX 64
+#define SYMMAX 32
 
-enum token_t {
+enum token_e {
 	NUM = 256,
 	PUL,
 	SUB,
@@ -21,16 +22,25 @@ enum token_t {
 };
 
 char inbuf[BSIZE];
-char lexemes[STRMAX];
 char *inptr;
+
+char lexbuf[BSIZE];
+char lexemes[STRMAX];
 int tokenval;
+int lastentry = 0;
+int lastchar = -1;
 
 
+struct entry_s {
+	char *lexptr;
+	enum token_e token;
+} symtable[SYMMAX];
 
 void error(char *, ...);
 int lookahead(void);
 void pushback(void);
 int lexan(void);
+int insert(char *, enum token_e);
 
 void error(char *fmt, ...) {
 	va_list args;
@@ -78,6 +88,23 @@ int lexan(void) {
 			return DONE;
 		}
   }
+}
+
+
+int insert(char *s, enum token_e tok) {
+	int len = strlen(s);
+	if (lastentry + 1 >= SYMMAX) {
+		error("!panic, symbol table full\n");
+	}
+	if (lastchar + len + 1 >= STRMAX) {
+		error("!panic, lexemes array full\n");
+	}
+	lastentry++;
+	symtable[lastentry].token = tok;
+	symtable[lastentry].lexptr = &lexemes[lastchar+1];
+	lastchar += len+1;
+	strcpy(symtable[lastentry].lexptr, s);
+	return lastentry;
 }
 
 void test_lookahead(char *buf) {
