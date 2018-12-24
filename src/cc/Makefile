@@ -36,7 +36,7 @@ lexer_binout := $(bin_path)$(cc_prefix)_lexer$(bin_ext)
 
 lexer: $(lexer_binout)
 lexer_test: lexer
-	$(lexer_binout)
+	$(lexer_binout) "a b c"
 
 $(lexer_binout): $(cc_root)lexer/lexer.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

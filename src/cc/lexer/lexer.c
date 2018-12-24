@@ -10,21 +10,31 @@ struct entry_s { /* form of symbol table entry */
 	int token;
 };
 
+#define DONE -1
+#define NONE -1
+
+#define BSIZE 128
 #define STRMAX 64
 #define SYMMAX 64
 
 #define NUM 256
-#define ADD 257
+#define PUL 257
 #define SUB 258
 #define MUL 259
 #define DIV 260
 
+
+char lexbuf[BSIZE];
+char lexemes[STRMAX];
+char *lexptr;
 struct entry_s symtable[SYMMAX]; /* symbol table */
-char lexemes[STRMAX]; 
 int lastchar = -1; /* last used position in lexemes */
 int lastentry = 0; /* last used position in symtable, start from 1 */
 
 void error(int, char*);
+int lookahead(void);
+void pushback(void);
+int lexan(void);
 int lookup(char*);
 int insert(char*, int);
 
@@ -34,6 +44,22 @@ void error(int at, char *m) {
 	exit(1);
 }
 
+int lookahead(void) {
+	if ('\0' == *lexptr || lexptr >= lexbuf + BSIZE - 1) {
+		return EOF;
+	}
+	return *lexptr++;
+}
+
+void pushback(void) {
+	if (lexbuf < lexptr) {
+		lexptr--;
+	}
+}
+
+/* int lexan(void) { */
+	
+/* } */
 
 /* return position of entry for s */
 int lookup(char *s) {
@@ -48,7 +74,7 @@ int lookup(char *s) {
 
 /* return position of entry for s */
 int insert(char *s, int tok) {
-	int len = strnlen(s, STRMAX);
+	int len = (int)strnlen(s, STRMAX);
 	if (SYMMAX <= lastentry + 1) {
 		error(1, "symbol table full");
 	}
@@ -67,6 +93,23 @@ void test_error(void) {
 	error(1, "Compilers: Principles, Techniques, and Tools");
 }
 
+void test_lookahead(char *buf) {
+	strncpy(lexbuf, buf, BSIZE);
+	int c;
+	while (EOF != (c = lookahead())) {
+		fprintf(stdout, "%c |", (int)c);
+	}
+}
+
+void test_pushback(char *buf) {
+	strncpy(lexbuf, buf, BSIZE);
+	int c, p;
+	c = lookahead();
+	pushback();
+	p = lookahead();
+	assert(c == p && "test_pushback failed");
+}
+
 void test_lookup(void) {
 	memset(symtable, 0, sizeof(symtable));
 
@@ -80,7 +123,7 @@ void test_lookup(void) {
 
 	lastentry++;
 	symtable[lastentry].lexptr = "+";
-	symtable[lastentry].token = ADD;
+	symtable[lastentry].token = PUL;
 	assert(2 == lookup("+") && "lookup('+') = 2");
 
 	assert(1 == lookup("1234") && "lookup('1234') = 1");
@@ -96,8 +139,8 @@ void test_insert(void) {
 	assert(1 == p && 1 == lastentry && "insert('1234', NUM) = 1");
 
 	strncpy(lexemes, "+", STRMAX);
-	p = insert(lexemes, ADD);
-	assert(2 == p && 2 == lastentry && "insert('+', ADD) = 2");
+	p = insert(lexemes, PUL);
+	assert(2 == p && 2 == lastentry && "insert('+', PUL) = 2");
 }
 
 int main(int argc, char **argv) {
@@ -105,7 +148,13 @@ int main(int argc, char **argv) {
 	_unused_(argv);
 
 /* 	test_error(); */
-	test_lookup();
-	test_insert();
+	/* test_lookup(); */
+	/* test_insert(); */
+	if (argc > 1) {
+		lexptr = lexbuf;
+		test_lookahead(argv[1]);
+		lexptr = lexbuf;
+		test_pushback(argv[1]);
+	}
 	return 0;
 }
