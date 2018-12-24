@@ -36,7 +36,7 @@ lexer_binout := $(bin_path)$(cc_prefix)_lexer$(bin_ext)
 
 lexer: $(lexer_binout)
 lexer_test: lexer
-	$(lexer_binout) "123 234 345"
+	$(lexer_binout) "123 + 345 - 100 * 2 / 4"
 
 $(lexer_binout): $(cc_root)lexer/lexer.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
