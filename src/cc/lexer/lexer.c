@@ -27,6 +27,7 @@ struct entry_s { /* form of symbol table entry */
 char lexbuf[BSIZE];
 char lexemes[STRMAX];
 char *lexptr;
+int tokenval;
 struct entry_s symtable[SYMMAX]; /* symbol table */
 int lastchar = -1; /* last used position in lexemes */
 int lastentry = 0; /* last used position in symtable, start from 1 */
@@ -63,11 +64,11 @@ int lexan(void) {
 		if (isspace(c)) {
 			; /* skip */
 		} else if (isdigit(c)) {
-			int t[STRMAX] = {0};
-			int i = 0;
-			t[i++] = c;
-			while (isdigit(c = lookahead())) {
-				t[i++] = c;
+			tokenval = c - '0';
+			c = lookahead();
+			while (isdigit(c)) {
+				tokenval = tokenval * 10 + c - '0';
+				c = lookahead();
 			}
 			return NUM;
 		} else if (EOF == c) {
