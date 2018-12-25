@@ -1,52 +1,40 @@
 #include <_lang_.h>
 #include <string.h>
-#include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
-
-
-#if MSVC
-/* warning C4996: 'strncpy': This function or variable may be
-	 unsafe. Consider using strcpy_s instead. To disable deprecation,
-	 use _CRT_SECURE_NO_WARNINGS. */
-#  pragma warning(disable : 4996)
-#endif
-
-
-int
-main(int argc, char **argv) {
-	_unused_(argc);
-	_unused_(argv);
+#include <assert.h>
 
 #if defined(NM_HAVE_STRN_ANY_FN)
 
-	const char *xxx = "xxxxxxxx";
-	size_t len = strnlen(xxx, 16);
-	char *x = malloc(sizeof(char)*(len+1));
-	
-	char *s = strncpy(x, xxx, len+1);
-	assert((0 == strncmp(s, xxx, len)) || "strncpy() failed");
-#if NDEBUG
-	_unused_(s);
-#endif
-	
-	/* If count is reached before the entire array src was copied,
-		 the resulting character array is not null-terminated. */
-	memset(x, 0, len+1);
-	assert((0 == x[8]) || "0 not at end");
+void test_strnlen(void) {
+	char buf[8] = "abc";
+	size_t len = strnlen(buf, sizeof(buf)/sizeof(buf[0]));
+	assert(3 == len && "strnlen, 3 != len");
+	strncpy(buf, "abcdefgh", sizeof(buf)/sizeof(buf[0]));
+	len = strnlen(buf, sizeof(buf)/sizeof(buf[0]));
+	assert(8 == len && "strnlen, 8 != len");
+}
 
-	x[3] = 'Z';
-	strncpy(x, xxx, 3);
-	assert(('Z' == x[3]) || "copied 0 at end");
+void test_strncpy(void) {
+	char buf[8];
+	memset(buf, 0x11, sizeof(buf)/sizeof(buf[0]));
+	assert(0x11 == buf[7] && "strncpy, 0x11 != tailing");
+	
+	/* if num > src then padding 0
+		 If count is reached before the entire array src was copied,
+		 the resulting character array is not null-terminated. 
+	*/
+	strncpy(buf, "abc", sizeof(buf)/sizeof(buf[0]) /* num */);
+	assert(0 == buf[7] && "strncpy, 0 != padding");
 
-	/* If, after copying the terminating null character from src,
+	/* if num < strlen(src), dest will not null-terminated
+		 If, after copying the terminating null character from src,
 		 count is not reached, additional null characters
 		 are written to dest until the total of count characters
-		 have been written. */
-	memset(x, 'z', len+1);
-	assert(('z' == x[len+1]) || "'z' not at end");
-
-	strncpy(x, "xxx", len+1);
-	assert((0 == x[len+1]) || "0 not at end");
+		 have been written. 
+	*/
+	strncpy(buf, "abcdefgh", sizeof(buf)/sizeof(buf[0]));
+	assert('h' == buf[7] && "strncpy, 'h' != tailing");
 
 	/* The behavior is undefined:
 		 1) if the character arrays overlap,
@@ -55,9 +43,22 @@ main(int argc, char **argv) {
 		 3) if the size of the array pointed to by dest is
 		 less than count, or
 		 4) if the size of the array pointed to by src is less
-		 than count and it does not contain a null character */
+		 than count and it does not contain a null character 
+	*/
+}
 
-	free(x);
 
+#endif /* end of NM_HAVE_STRN_ANY_FN */
+
+int
+main(int argc, char **argv) {
+	_unused_(argc);
+	_unused_(argv);
+
+#if ! defined(NM_HAVE_STRN_ANY_FN)
+	printf("skip strn* fn testing\n");
+#else
+	test_strnlen();
+	test_strncpy();
 #endif	
 }
