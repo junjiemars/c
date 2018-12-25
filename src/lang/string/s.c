@@ -5,13 +5,9 @@
 #include <errno.h>
 
 
-int
-main(int argc, char **argv) {
-	_unused_(argc);
-	_unused_(argv);
+#if defined(NM_HAVE_STR_ANY_S_FN)
 
-#if defined(NM_HAVE_STR_S_ANY_FN)
-
+void test_str_any_s(void) {
 	const char *xxx = "xxxxxxxx";
 	size_t len = strlen(xxx);
 	char *x = malloc(sizeof(char)*(len+1));
@@ -22,6 +18,19 @@ main(int argc, char **argv) {
 	_unused_(e);
 #endif
 	free(x);
+}
 
+#endif /* end of NM_HAVE_STR_ANY_S_FN */
+
+
+int
+main(int argc, char **argv) {
+	_unused_(argc);
+	_unused_(argv);
+
+#if ! defined(NM_HAVE_STR_ANY_S_FN)
+	printf("skip str*_s fn testing\n");
+#else
+	test_str_any_s();
 #endif
 }

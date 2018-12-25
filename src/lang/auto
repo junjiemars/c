@@ -66,7 +66,7 @@ strncmp(buf, xyz, len)";
 
 
 nm_feature="C11 str*_s fn: strlen_s,strcpy_s"
-nm_feature_name="nm_have_str_s_any_fn"
+nm_feature_name="nm_have_str_any_s fn"
 nm_feature_run=no
 nm_feature_h="#include <string.h>"
 nm_feature_flags=
