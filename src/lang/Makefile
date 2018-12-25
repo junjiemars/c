@@ -383,7 +383,7 @@ string: $(string_basic_binout) \
         $(string_dup_binout) \
         $(string_tok_binout)
 
-string_test: $(string_basic_binout) \
+string_test: string_basic_test \
              string_n_test \
              string_s_test \
              $(string_dup_binout) \
@@ -394,6 +394,8 @@ string_test: $(string_basic_binout) \
 	$(string_dup_binout)
 	$(string_tok_binout) "this is a simple sample for strdup." " "
 
+string_basic_test: $(string_basic_binout)
+	$(string_basic_binout)
 string_n_test: $(string_n_binout)
 	$(string_n_binout)
 string_s_test: $(string_s_binout)

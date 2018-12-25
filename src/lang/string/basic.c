@@ -4,13 +4,6 @@
 #include <assert.h>
 
 
-#if MSVC
-/* warning C4996: 'strcpy': This function or variable may be
-	 unsafe. Consider using strcpy_s instead. To disable deprecation,
-	 use _CRT_SECURE_NO_WARNINGS. */
-#  pragma warning(disable : 4996)
-#endif
-
 size_t
 self_strlen(const char *s) {
   size_t len = 0;
@@ -37,6 +30,17 @@ self_strcpy(char *dst, const char *src) {
   return r;
 }
 
+#define STRCMP(a, R, b) (strcmp((a), (b)) R 0)
+/* 0 == strcmp(a, b)
+	 => !strcmp(a, b)
+	 => STRCMP(a, ==, "volatile")
+ */
+
+void test_STRCMP(void) {
+	char *a = "abcd";
+	char *b = "abcd";
+	assert(STRCMP(a, ==, b) && "STRCMP, a != b");
+}
 
 int
 main(int argc, char **argv) {
@@ -63,4 +67,6 @@ main(int argc, char **argv) {
 	_unused_(r2);
 #endif
   free(dst2);
+
+	test_STRCMP();
 }
