@@ -40,6 +40,7 @@ void error(char *, ...);
 int lookahead(void);
 void pushback(void);
 int lexan(void);
+int lookup(char *);
 int insert(char *, enum token_e);
 
 void error(char *fmt, ...) {
@@ -90,9 +91,17 @@ int lexan(void) {
   }
 }
 
+int lookup(char *s) {
+	for (int p = lastentry; p > 0; p--) {
+		if (0 == strncmp(symtable[p].lexptr, s, STRMAX)) {
+			return p;
+		}
+	}
+	return 0;
+}
 
 int insert(char *s, enum token_e tok) {
-	int len = strlen(s);
+	int len = (int)strlen(s);
 	if (lastentry + 1 >= SYMMAX) {
 		error("!panic, symbol table full\n");
 	}
@@ -133,17 +142,29 @@ void test_lexan(char *buf) {
 }
 
 
+void test_insert(void) {
+	if (0 == lookup("123")) {
+		insert("123", NUM);
+	}
+	if (0 == lookup("+")) {
+		insert("+", PUL);
+	}
+	assert(1 == lookup("123") && "lookup('123') == 1");
+	assert(2 == lookup("+") && "lookup('+') == 2");
+}
+
 int main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
 	if (argc > 1) {
-		/* inptr = inbuf; */
-		/* test_lookahead(argv[1]); */
-		/* inptr = inbuf; */
-		/* test_pushback(argv[1]); */
+		inptr = inbuf;
+		test_lookahead(argv[1]);
+		inptr = inbuf;
+		test_pushback(argv[1]);
 		inptr = inbuf;
 		test_lexan(argv[1]);
+		test_insert();
 	}
 	return 0;
 }
