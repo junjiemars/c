@@ -47,6 +47,17 @@ void test_strncpy(void) {
 	*/
 }
 
+void test_strncmp(void) {
+	char buf[8];
+	strncpy(buf, "abcdefg", sizeof(buf)/sizeof(buf[0]));
+	int cmp = strncmp(buf, "abcdefX", sizeof(buf)/sizeof(buf[0]));
+	assert(1 == cmp && "strncmp, 1 != cmp");
+	/* buf is not null-terminated */
+	strncpy(buf, "abcdefgh", sizeof(buf)/sizeof(buf[0]));
+	cmp = strncmp(buf, "abcdefgh", sizeof(buf)/sizeof(buf[0]));
+	assert(0 == cmp && "strncmp, 0 != cmp");
+}
+
 
 #endif /* end of NM_HAVE_STRN_ANY_FN */
 
@@ -60,5 +71,6 @@ main(int argc, char **argv) {
 #else
 	test_strnlen();
 	test_strncpy();
+	test_strncmp();
 #endif	
 }
