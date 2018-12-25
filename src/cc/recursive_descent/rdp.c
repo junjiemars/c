@@ -1,26 +1,28 @@
-#include <_parser_.h>
-#include <error.h>
-
+#include <_cc_.h>
+#include <stdarg.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 typedef enum {ident, number, lparen, rparen, times, slash, plus,
 							minus, eql, neq, lss, leq, gtr, geq, callsym, beginsym, semicolon,
 							endsym, ifsym, whilesym, becomes, thensym, dosym, constsym, comma,
 							varsym, procsym, period, oddsym} Symbol;
 
-enum parser_error {
-	no_error,
-	except_error,
-	factor_error,
-	condition_error,
-	statement_error
-};
-	
+
 static Symbol sym;
 void nextsym(void);
 void expression(void);
 
 static char *tape;
 static char *p_tape;
+
+void error(int status, const char *format, ...) {
+	va_list args;
+	va_start(args, format);
+	fprintf(stdout, format, args);
+	va_end(args);
+	exit(status);
+}
 
 void nextsym(void) {
 	if (0 == p_tape) {
@@ -39,7 +41,7 @@ int accept(Symbol s) {
 int expect(Symbol s) {
 	if (accept(s))
 		return 1;
-	error(1, except_error, "expect: unexpected symbol");
+	error(1, "expect: unexpected symbol");
 	return 0;
 }
 
@@ -52,7 +54,7 @@ void factor(void) {
 		expression();
 		expect(rparen);
 	} else {
-		error(1, factor_error, "factor: syntax error");
+		error(1, "factor: syntax error");
 		nextsym();
 	}
 }
@@ -84,7 +86,7 @@ void condition(void) {
 			nextsym();
 			expression();
 		} else {
-			error(1, condition_error, "condition: invalid operator");
+			error(1, "condition: invalid operator");
 			nextsym();
 		}
 	}
@@ -110,7 +112,7 @@ void statement(void) {
 		expect(dosym);
 		statement();
 	} else {
-		error(1, statement_error, "statement: syntax error");
+		error(1, "statement: syntax error");
 		nextsym();
 	}
 }

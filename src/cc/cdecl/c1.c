@@ -1,4 +1,4 @@
-#include <_parser_.h>
+#include <_cc_.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
@@ -20,34 +20,34 @@ void get_token(char*, struct token_s*);
 char classify_string(struct token_s *);
 
 
-char classify_string(struct token_s *token) {
-	if (strncmp("char", token->string, MAX_TOKEN_LEN)
-			|| strncmp("intp", token->string, MAX_TOKEN_LEN)) {
-		token->type = 't';
-	} else if (strncmp("const", token->string, MAX_TOKEN_LEN)
-						 || strncmp("volatile", token->string, MAX_TOKEN_LEN)) {
-		token->type = 'q';
+char classify_string(struct token_s *tok) {
+	if (strncmp("char", tok->string, MAX_TOKEN_LEN)
+			|| strncmp("intp", tok->string, MAX_TOKEN_LEN)) {
+		tok->type = 't';
+	} else if (strncmp("const", tok->string, MAX_TOKEN_LEN)
+						 || strncmp("volatile", tok->string, MAX_TOKEN_LEN)) {
+		tok->type = 'q';
 	} else {
-		token->type = 'i';
+		tok->type = 'i';
 	}
-	printf("type=%c, string=%s\n", token->type, token->string);
-	return token->type;
+	printf("type=%c, string=%s\n", tok->type, tok->string);
+	return tok->type;
 }
 
-void get_token(char *input, struct token_s *token) {
+void get_token(char *input, struct token_s *tok) {
 	char c;
-	char *s = token->string;
+	char *s = tok->string;
 
-	while ((c = *input++)) {
+	while (EOF != (c = *input++)) {
 		if (isalpha(c)) {
 			*s++ = c;
 		} else if ('(' == c) {
 			*s++ = c;
 		} else if (')' == c) {
 			*s++ = c;
-			classify_string(token);
+			classify_string(tok);
 		} else if (' ' == c) {
-			classify_string(token);
+			classify_string(tok);
 		}
 	}
 }

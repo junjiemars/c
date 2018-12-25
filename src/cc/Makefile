@@ -1,11 +1,11 @@
 cc: recursive_descent \
-				cdecl \
-				lexer
+		cdecl \
+		lexer
 
 
-cc_test: recursive_descent_test
-						 cdecl_test \
-						 lexer_test
+cc_test: recursive_descent_test \
+				 cdecl_test \
+				 lexer_test
 
 
 cc_prefix := cc
