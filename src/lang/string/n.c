@@ -51,7 +51,7 @@ void test_strncmp(void) {
 	char buf[8];
 	strncpy(buf, "abcdefg", sizeof(buf)/sizeof(buf[0]));
 	int cmp = strncmp(buf, "abcdefX", sizeof(buf)/sizeof(buf[0]));
-	assert(1 == cmp && "strncmp, 1 != cmp");
+	assert(0 < cmp && "strncmp, cmp > 0");
 	/* buf is not null-terminated */
 	strncpy(buf, "abcdefgh", sizeof(buf)/sizeof(buf[0]));
 	cmp = strncmp(buf, "abcdefghX", sizeof(buf)/sizeof(buf[0]));
