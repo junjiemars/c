@@ -139,6 +139,7 @@ void test_lexan(char *buf) {
 	while (DONE != (tok = lexan())) {
 		fprintf(stdout, "%d |", tok);
 	}
+	fprintf(stdout, "\n");
 }
 
 
