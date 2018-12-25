@@ -10,8 +10,8 @@ void throw(jmp_buf *env) {
 
 int f(void) {
 	jmp_buf env;
-	int x;
-	
+	int x = 0;
+
 	switch (setjmp(env)) {
 	case 0:
 		printf("throw exception: 0x%x\n", X_NO);

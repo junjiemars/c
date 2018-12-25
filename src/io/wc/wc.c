@@ -236,7 +236,7 @@ static count_state_s state;
 count_unit_s unit[files_min_count];
 
 void
-on_exit(void) {
+on_exiting(void) {
 	if (state.unit) {
 		free(state.unit);
 	}
@@ -289,7 +289,7 @@ main(int argc, char **argv) {
 	  state.unit = malloc(sizeof(count_unit_s) * files_count);
 		if (state.unit) {
 			memset(state.unit, 0, sizeof(count_unit_s) * files_count);
-			atexit(&on_exit);
+			atexit(&on_exiting);
 		} else {
 			exit(errno);
 		}
