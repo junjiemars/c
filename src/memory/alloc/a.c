@@ -4,6 +4,10 @@
 #include <assert.h>
 #include <string.h>
 
+#if MSVC
+#  include <malloc.h>
+#endif
+
 void foo() {
 	int *pi = alloca(sizeof(int) * 10);
 	assert((0 == pi) || strerror(errno));
