@@ -5,7 +5,9 @@
 #include <errno.h>
 
 
-#if defined(NM_HAVE_STR_ANY_S_FN)
+#if ! defined(NM_HAVE_STR_ANY_S_FN)
+#  include <stdio.h>
+#else
 
 void test_str_any_s(void) {
 	const char *xxx = "xxxxxxxx";
