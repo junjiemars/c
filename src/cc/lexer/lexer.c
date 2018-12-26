@@ -150,8 +150,12 @@ void test_insert(void) {
 	if (0 == lookup("+")) {
 		insert("+", PUL);
 	}
+	if (0 == lookup("345")) {
+		insert("345", NUM);
+	}
 	assert(1 == lookup("123") && "lookup('123') == 1");
 	assert(2 == lookup("+") && "lookup('+') == 2");
+	assert(3 == lookup("345") && "lookup('345') == 3");
 }
 
 int main(int argc, char **argv) {
