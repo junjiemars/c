@@ -6,7 +6,8 @@
 
 #if defined(NM_HAVE_STRN_ANY_FN)
 
-void test_strnlen(void) {
+void
+test_strnlen(void) {
 	char buf[8] = "abc";
 	size_t len = strnlen(buf, sizeof(buf)/sizeof(buf[0]));
 	assert(3 == len && "strnlen, 3 != len");
@@ -15,7 +16,8 @@ void test_strnlen(void) {
 	assert(8 == len && "strnlen, 8 != len");
 }
 
-void test_strncpy(void) {
+void
+test_strncpy(void) {
 	char buf[8];
 	memset(buf, 0x11, sizeof(buf)/sizeof(buf[0]));
 	assert(0x11 == buf[7] && "strncpy, 0x11 != tailing");
@@ -47,7 +49,8 @@ void test_strncpy(void) {
 	*/
 }
 
-void test_strncmp(void) {
+void
+test_strncmp(void) {
 	char buf[8];
 	strncpy(buf, "abcdefg", sizeof(buf)/sizeof(buf[0]));
 	int cmp = strncmp(buf, "abcdefX", sizeof(buf)/sizeof(buf[0]));
