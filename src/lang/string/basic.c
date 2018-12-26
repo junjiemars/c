@@ -52,7 +52,6 @@ test_strcpy(void) {
 	assert(0x11 == buf[len-1] && "strcpy(), 0x11 != tailing");
 
 	/* no null-terminated */
-#ifndef MSVC
 	/* msvc runtime error:
 		 Security check failure or stack buffer overrun - code c0000409 (!!! second chance !!!)
 		 *** WARNING: Unable to verify checksum for lang_string_basic.exe
@@ -60,9 +59,9 @@ test_strcpy(void) {
 		 lang_string_basic!__report_gsfailure+0x1c:
 		 00007ff6`8dc67788 cd29            int     29h
 	 */
-	strcpy(buf, "abcdefgh");
-	assert(0 != buf[len-1] && "strcpy(), 0 == tailing");
-#endif
+	/* lang_string_basic[2834:14486] detected buffer overflow */
+/* 	strcpy(buf, "abcdefgh"); */
+/* 	assert(0 != buf[len-1] && "strcpy(), 0 == tailing"); */
 }
 
 void
@@ -114,7 +113,7 @@ main(int argc, char **argv) {
 
 	test_strlen(argv[0]);
 	test_strcpy();
-	test_strcmp(argv[0]);
-	test_strcmp1();
-	test_STRCMP();
+/* 	test_strcmp(argv[0]); */
+/* 	test_strcmp1(); */
+/* 	test_STRCMP(); */
 }
