@@ -76,6 +76,7 @@ test_strcmp(char *s) {
 #if NDEBUG
 	_unused_(d2);
 #endif
+	free(d1);
 }
 
 #define STRCMP(a, R, b) (strcmp((a), (b)) R 0)
