@@ -79,6 +79,18 @@ test_strcmp(char *s) {
 	free(d1);
 }
 
+void
+test_strcmp1(void) {
+	char buf[8];
+	size_t len = sizeof(buf)/sizeof(buf[0]);
+	const char *s = "abx";
+	memset(buf, 0x11, len);
+  strcpy(buf, "abc");
+	assert(0 > strcmp(buf, s) && "strcmp(), failed");
+	assert(0 > self_strcmp(buf, s) && "self_strcmp(), failed");
+	assert(0 < self_strcmp(s, buf) && "self_strcmp(), failed");
+}
+
 #define STRCMP(a, R, b) (strcmp((a), (b)) R 0)
 /* 0 == strcmp(a, b)
 	 => !strcmp(a, b)
@@ -103,5 +115,6 @@ main(int argc, char **argv) {
 	test_strlen(argv[0]);
 	test_strcpy();
 	test_strcmp(argv[0]);
+	test_strcmp1();
 	test_STRCMP();
 }
