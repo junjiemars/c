@@ -26,7 +26,7 @@ cdecl_binout := $(bin_path)$(cc_prefix)_cdecl$(bin_ext)
 
 cdecl: $(cdecl_binout)
 cdecl_test: cdecl
-	$(cdecl_binout) "cons_t int"
+	$(cdecl_binout) "char foo(int, char*)"
 
 $(cdecl_binout): $(cc_root)cdecl/c1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
