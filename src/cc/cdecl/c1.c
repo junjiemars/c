@@ -93,7 +93,7 @@ classify_string(void) {
 	if (0 == strcmp(s, "struct")) return TYPE;
 	if (0 == strcmp(s, "union")) return TYPE;
 	if (0 == strcmp(s, "enum")) return TYPE;
-	return IDENTIFIER;
+ 	return IDENTIFIER;
 }
 
 void
@@ -140,8 +140,12 @@ on_pointer(void) {
 void
 on_declarator(void) {
 	switch (token.type) {
-	case '[': on_array(); break;
-	case '(': on_function_args();
+	case '[':
+		on_array();
+		break;
+	case '(':
+		on_function_args();
+		break;
 	}
 	on_pointer();
 	while (top >= 0) {
