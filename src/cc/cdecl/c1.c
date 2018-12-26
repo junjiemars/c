@@ -9,7 +9,9 @@
 #define MAX_TOKEN_NUM 32
 
 enum token_t {
-	IDENTIFIER, QUALIFIER, TYPE
+	IDENTIFIER,
+	QUALIFIER,
+	TYPE
 };
 
 struct token_s {
@@ -29,10 +31,16 @@ char *inptr;
 
 int lookahead(void);
 void pushback(void);
-enum token_t classify_string(void);
 void get_token(void);
+enum token_t classify_string(void);
+void on_first_identifier(void);
+void on_function_args(void);
+void on_array(void);
+void on_pointer(void);
+void on_declarator(void);
 
-int lookahead(void) {
+int
+lookahead(void) {
 	if ('\0' == *inptr || inptr >= inbuf + BSIZE - 1) {
 		return EOF;
 	}
@@ -43,25 +51,6 @@ void pushback(void) {
 	if (inbuf < inptr) {
 		inptr--;
 	}
-}
-
-enum token_t 
-classify_string(void) {
-	char *s = token.string;
-	if (0 == strcmp(s, "const")) return QUALIFIER;
-	if (0 == strcmp(s, "volatile")) return QUALIFIER;
-	if (0 == strcmp(s, "char")) return TYPE;
-	if (0 == strcmp(s, "signed")) return TYPE;
-	if (0 == strcmp(s, "unsigned")) return TYPE;
-	if (0 == strcmp(s, "short")) return TYPE;
-	if (0 == strcmp(s, "int")) return TYPE;
-	if (0 == strcmp(s, "long")) return TYPE;
-	if (0 == strcmp(s, "float")) return TYPE;
-	if (0 == strcmp(s, "double")) return TYPE;
-	if (0 == strcmp(s, "struct")) return TYPE;
-	if (0 == strcmp(s, "union")) return TYPE;
-	if (0 == strcmp(s, "enum")) return TYPE;
-	return IDENTIFIER;
 }
 
 void
@@ -88,8 +77,27 @@ get_token(void) {
 	return;
 }
 
+enum token_t 
+classify_string(void) {
+	char *s = token.string;
+	if (0 == strcmp(s, "const")) return QUALIFIER;
+	if (0 == strcmp(s, "volatile")) return QUALIFIER;
+	if (0 == strcmp(s, "char")) return TYPE;
+	if (0 == strcmp(s, "signed")) return TYPE;
+	if (0 == strcmp(s, "unsigned")) return TYPE;
+	if (0 == strcmp(s, "short")) return TYPE;
+	if (0 == strcmp(s, "int")) return TYPE;
+	if (0 == strcmp(s, "long")) return TYPE;
+	if (0 == strcmp(s, "float")) return TYPE;
+	if (0 == strcmp(s, "double")) return TYPE;
+	if (0 == strcmp(s, "struct")) return TYPE;
+	if (0 == strcmp(s, "union")) return TYPE;
+	if (0 == strcmp(s, "enum")) return TYPE;
+	return IDENTIFIER;
+}
+
 void
-read_to_first_identifier(void) {
+on_first_identifier(void) {
 	get_token();
 	while (IDENTIFIER != token.type) {
 		push(token);
@@ -100,7 +108,7 @@ read_to_first_identifier(void) {
 }
 
 void
-deal_with_arrays(void) {
+on_array(void) {
 	while ('[' == token.type) {
 		printf("array ");
 		get_token();
@@ -114,7 +122,7 @@ deal_with_arrays(void) {
 }
 
 void
-deal_with_function_args(void) {
+on_function_args(void) {
 	while (')' == token.type) {
 		get_token();
 	}
@@ -123,24 +131,24 @@ deal_with_function_args(void) {
 }
 
 void
-deal_with_pointers(void) {
+on_pointer(void) {
 	while ('*' == stack[top].type) {
 		printf("%s ", pop.string);
 	}
 }
 
 void
-deal_with_declarator(void) {
+on_declarator(void) {
 	switch (token.type) {
-	case '[': deal_with_arrays(); break;
-	case '(': deal_with_function_args();
+	case '[': on_array(); break;
+	case '(': on_function_args();
 	}
-	deal_with_pointers();
+	on_pointer();
 	while (top >= 0) {
 		if ('(' == stack[top].type) {
 			pop;
 			get_token();
-			deal_with_declarator();
+			on_declarator();
 		} else {
 			printf("%s ", pop.string);
 		}
@@ -154,8 +162,8 @@ int main(int argc, char **argv) {
 	if (argc > 1) {
 		strcpy(inbuf, argv[1]);
 		inptr = inbuf;
-		read_to_first_identifier();
-		deal_with_declarator();
+		on_first_identifier();
+		on_declarator();
 		printf("\n");
 	}
 
