@@ -23,13 +23,17 @@ $(rdp_binout): $(cc_root)recursive_descent/rdp.c
 
 # cdecl
 cdecl_binout := $(bin_path)$(cc_prefix)_cdecl$(bin_ext)
+cdecl_cppout := $(tmp_path)$(cc_prefix)_cdecl$(cpp_ext)
 
 cdecl: $(cdecl_binout)
 cdecl_test: cdecl
 	$(cdecl_binout) "char (* x(int))[3]"
 
-$(cdecl_binout): $(cc_root)cdecl/c1.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(cdecl_binout): $(cdecl_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(cdecl_cppout): $(cc_root)cdecl/c1.c
+	$(CC) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # lexer
 lexer_binout := $(bin_path)$(cc_prefix)_lexer$(bin_ext)

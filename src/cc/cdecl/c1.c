@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 #define BSIZE 128
 #define MAX_TOKEN_LEN 32
@@ -28,9 +29,13 @@ struct token_s token;
 
 char inbuf[BSIZE];
 char *inptr;
+char lexbuf[BSIZE*2];
+char *lexptr = lexbuf;
+
 
 char lookahead(void);
 void pushback(void);
+void _vsprintf_(char *, ...);
 void get_token(void);
 enum token_t classify_string(void);
 void on_first_identifier(void);
@@ -47,10 +52,19 @@ lookahead(void) {
 	return *inptr++;
 }
 
-void pushback(void) {
+void 
+pushback(void) {
 	if (inbuf < inptr) {
 		inptr--;
 	}
+}
+
+void _vsprintf_(char *fmt, ...) {
+	va_list args;
+	va_start(args, fmt);
+	int len = vsprintf(lexptr, fmt, args);
+	lexptr += len;
+	va_end(args);
 }
 
 void
@@ -103,21 +117,21 @@ on_first_identifier(void) {
 		push(token);
 		get_token();
 	}
-	printf("%s as ", token.string);
+	_vsprintf_("%s as ", token.string);
 	get_token();
 }
 
 void
 on_array(void) {
 	while ('[' == token.type) {
-		printf("array ");
+		_vsprintf_("%s ", "array");
 		get_token();
 		if (isdigit(token.string[0])) {
-			printf("0..%d ", atoi(token.string)-1);
+			_vsprintf_("0..%d ", atoi(token.string)-1);
 			get_token();
 		}
 		get_token();
-		printf("of ");
+		_vsprintf_("%s ", "of");
 	}
 }
 
@@ -127,13 +141,13 @@ on_function_args(void) {
 		get_token();
 	}
 	get_token();
-	printf("function returning ");
+	_vsprintf_("%s ", "function returning");
 }
 
 void
 on_pointer(void) {
 	while ('*' == stack[top].type) {
-		printf("%s ", pop.string);
+		_vsprintf_("%s ", pop.string);
 	}
 }
 
@@ -154,7 +168,7 @@ on_declarator(void) {
 			get_token();
 			on_declarator();
 		} else {
-			printf("%s ", pop.string);
+			_vsprintf_("%s ", pop.string);
 		}
 	}
 }
@@ -168,7 +182,8 @@ int main(int argc, char **argv) {
 		inptr = inbuf;
 		on_first_identifier();
 		on_declarator();
-		printf("\n");
+		_vsprintf_("%s", "\n");
+		fprintf(stdout, lexbuf);
 	}
 
 	return 0;
