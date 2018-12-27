@@ -145,9 +145,17 @@ on_function_args(void) {
 		char buf[MAX_TOKEN_LEN*4];
 		int idx = 0;
 		char c;
+		int depth = 0;
 		buf[idx++] = '(';
+	nested:
 		while (')' != (c = lookahead())) {
+			if ('(' == c) depth++;
 			buf[idx++] = c;
+		}
+		if (depth) {
+			depth--;
+			buf[idx++] = ')';
+			goto nested;
 		}
 		buf[idx++] = ')';
 		buf[idx++] = EOS;
