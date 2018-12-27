@@ -27,7 +27,7 @@ cdecl_cppout := $(tmp_path)$(cc_prefix)_cdecl$(cpp_ext)
 
 cdecl: $(cdecl_binout)
 cdecl_test: cdecl
-	$(cdecl_binout) "char (* x(int))[3]"
+	$(cdecl_binout) "char *(*x(char*, int))[3]"
 
 $(cdecl_binout): $(cdecl_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@

@@ -117,6 +117,7 @@ on_first_identifier(void) {
 	while (IDENTIFIER != token.type) {
 		push(token);
 		get_token();
+		/* error: no identifier found, such as cast case */
 	}
 	_vsprintf_("declare %s as ", token.string);
 	get_token();
@@ -138,11 +139,24 @@ on_array(void) {
 
 void
 on_function_args(void) {
-	while (')' == token.type) {
+	while ('(' == token.type) {
+		_vsprintf_("function ");
+		char buf[MAX_TOKEN_LEN*4];
+		int idx = 0;
+		char c;
+		buf[idx++] = '(';
+		while (')' != (c = lookahead())) {
+			buf[idx++] = c;
+		}
+		buf[idx++] = ')';
+		pushback();
+		if (0 != strcmp("()", buf)) {
+			_vsprintf_("%s ", buf);
+		}
 		get_token();
 	}
 	get_token();
-	_vsprintf_("%s ", "function returning");
+	_vsprintf_("returning ");
 }
 
 void
