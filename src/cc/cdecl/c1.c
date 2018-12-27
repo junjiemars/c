@@ -29,7 +29,7 @@ struct token_s token;
 char inbuf[BSIZE];
 char *inptr;
 
-int lookahead(void);
+char lookahead(void);
 void pushback(void);
 void get_token(void);
 enum token_t classify_string(void);
@@ -39,7 +39,7 @@ void on_array(void);
 void on_pointer(void);
 void on_declarator(void);
 
-int
+char
 lookahead(void) {
 	if ('\0' == *inptr || inptr >= inbuf + BSIZE - 1) {
 		return EOF;
