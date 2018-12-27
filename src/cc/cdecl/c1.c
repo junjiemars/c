@@ -108,6 +108,7 @@ classify_string(void) {
 	if (0 == strcmp(s, "struct")) return TYPE;
 	if (0 == strcmp(s, "union")) return TYPE;
 	if (0 == strcmp(s, "enum")) return TYPE;
+	if (0 == strcmp(s, "void")) return TYPE;
  	return IDENTIFIER;
 }
 
