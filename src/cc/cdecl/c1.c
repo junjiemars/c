@@ -149,6 +149,7 @@ on_function_args(void) {
 			buf[idx++] = c;
 		}
 		buf[idx++] = ')';
+		buf[idx++] = EOS;
 		pushback();
 		if (0 != strcmp("()", buf)) {
 			_vsprintf_("%s ", buf);
@@ -179,7 +180,7 @@ on_declarator(void) {
 	on_pointer();
 	while (top >= 0) {
 		if ('(' == stack[top].type) {
-			pop;
+			(void)pop;
 			get_token();
 			on_declarator();
 		} else {
@@ -198,7 +199,7 @@ int main(int argc, char **argv) {
 		on_first_identifier();
 		on_declarator();
 		_vsprintf_("%s", "\n");
-		fprintf(stdout, lexbuf);
+		fprintf(stdout, "%s", lexbuf);
 	}
 
 	return 0;
