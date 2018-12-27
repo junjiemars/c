@@ -27,8 +27,8 @@ struct token_s token;
 
 char inbuf[BSIZE];
 char *inptr;
-char lexbuf[BSIZE*2];
-char *lexptr = lexbuf;
+char outbuf[BSIZE*2];
+char *outptr;
 
 
 int lookahead(void);
@@ -65,8 +65,8 @@ pushback(void) {
 void _vsprintf_(char *fmt, ...) {
 	va_list args;
 	va_start(args, fmt);
-	int len = vsprintf(lexptr, fmt, args);
-	lexptr += len;
+	int len = vsprintf(outptr, fmt, args);
+	outptr += len;
 	va_end(args);
 }
 
@@ -207,10 +207,11 @@ int main(int argc, char **argv) {
 	if (argc > 1) {
 		strcpy(inbuf, argv[1]);
 		inptr = inbuf;
+		outptr = outbuf;
 		on_first_identifier();
 		on_declarator();
 		_vsprintf_("%s", "\n");
-		fprintf(stdout, "%s", lexbuf);
+		fprintf(stdout, "%s", outbuf);
 	}
 
 	return 0;
