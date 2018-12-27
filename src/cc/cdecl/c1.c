@@ -8,6 +8,7 @@
 #define BSIZE 128
 #define MAX_TOKEN_LEN 32
 #define MAX_TOKEN_NUM 32
+#define EOS '\0'
 
 enum token_t {
 	IDENTIFIER,
@@ -46,7 +47,7 @@ void on_declarator(void);
 
 char
 lookahead(void) {
-	if ('\0' == *inptr || inptr >= inbuf + BSIZE - 1) {
+	if (EOS == *inptr || inptr >= inbuf + BSIZE - 1) {
 		return EOF;
 	}
 	return *inptr++;
@@ -75,7 +76,7 @@ get_token(void) {
 	if (isalnum(*p)) {
 		while (isalnum(*++p = lookahead())) ;
 		pushback();
-		*p = '\0';
+		*p = EOS;
 		token.type = classify_string();
 		return;
 	}
@@ -86,7 +87,7 @@ get_token(void) {
 		return;
 	}
 
-	token.string[1] = '\0';
+	token.string[1] = EOS;
 	token.type = *p;
 	return;
 }
@@ -117,7 +118,7 @@ on_first_identifier(void) {
 		push(token);
 		get_token();
 	}
-	_vsprintf_("%s as ", token.string);
+	_vsprintf_("declare %s as ", token.string);
 	get_token();
 }
 
