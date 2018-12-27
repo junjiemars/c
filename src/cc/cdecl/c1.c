@@ -11,13 +11,13 @@
 #define EOS '\0'
 
 enum token_t {
-	IDENTIFIER,
+	IDENTIFIER = 256,
 	QUALIFIER,
 	TYPE
 };
 
 struct token_s {
-	char type;
+	int type;
 	char string[MAX_TOKEN_LEN];
 };
 
@@ -25,16 +25,13 @@ int top = -1;
 struct token_s stack[MAX_TOKEN_NUM];
 struct token_s token;
 
-#define pop stack[top--]
-#define push(s) stack[++top] = s
-
 char inbuf[BSIZE];
 char *inptr;
 char lexbuf[BSIZE*2];
 char *lexptr = lexbuf;
 
 
-char lookahead(void);
+int lookahead(void);
 void pushback(void);
 void _vsprintf_(char *, ...);
 void get_token(void);
@@ -45,7 +42,12 @@ void on_array(void);
 void on_pointer(void);
 void on_declarator(void);
 
-char
+
+#define pop stack[top--]
+#define push(s) stack[++top] = s
+
+
+int
 lookahead(void) {
 	if (EOS == *inptr || inptr >= inbuf + BSIZE - 1) {
 		return EOF;
