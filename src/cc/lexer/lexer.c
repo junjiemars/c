@@ -52,7 +52,7 @@ void error(char *fmt, ...) {
 }
 
 int lookahead(void) {
-	if ('\0' == *inptr || inptr >= inbuf + BSIZE - 1) {
+	if (EOS == *inptr || inptr >= inbuf + BSIZE - 1) {
 		return EOF;
 	}
 	return *inptr++;
