@@ -5,7 +5,7 @@
 
 #define _unused_(x) ((void)(x))
 
-#if WINNT
+#if MSVC
 #  pragma warning(disable:4996)
 #endif
 
