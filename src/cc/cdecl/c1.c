@@ -73,10 +73,9 @@ void _vsprintf_(char *fmt, ...) {
 void
 get_token(void) {
 	char *p = token.string;
-	while (isblank(*p = lookahead())) ;
-	
+	while (isblank(*p = (char)lookahead())) ;
 	if (isalnum(*p)) {
-		while (isalnum(*++p = lookahead())) ;
+		while (isalnum(*++p = (char)lookahead())) ;
 		pushback();
 		*p = EOS;
 		token.type = classify_string();
@@ -150,7 +149,7 @@ on_function_args(void) {
 		int depth = 0;
 		buf[idx++] = '(';
 	nested:
-		while (')' != (c = lookahead())) {
+		while (')' != (c = (char)lookahead())) {
 			if ('(' == c) depth++;
 			buf[idx++] = c;
 		}
