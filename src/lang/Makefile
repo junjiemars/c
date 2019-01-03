@@ -1,6 +1,7 @@
 # ./configure --without-debug --has-lang
 
-lang:	assert \
+lang: array \
+			assert \
 			duration \
 			enum \
 			env \
@@ -23,7 +24,8 @@ lang:	assert \
 			typedef
 
 
-lang_test:	assert_test \
+lang_test:  array_test \
+						assert_test \
 						duration_test \
 						enum_test \
 						env_test \
@@ -55,6 +57,17 @@ CFLAGS += -D_GNU_SOURCE
 endif
 
 _ERROR_ ?= 0
+
+# array
+array_binout := $(bin_path)$(lang_prefix)_array$(bin_ext)
+
+array: $(array_binout)
+array_test: array
+	$(array_binout)
+
+$(array_binout): $(lang_root)array/a1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # assert at runtime
 # static_assert at compile time
