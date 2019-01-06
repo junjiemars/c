@@ -1,12 +1,25 @@
-algo: is_unsigned_integer \
+algo: dynamic_array \
+			is_unsigned_integer \
 			is_unsigned_type
 
-algo_test: is_unsigned_integer_test \
+algo_test: dynamic_array_test \
+					 is_unsigned_integer_test \
 					 is_unsigned_type_test
 
 
 algo_prefix := algo
 INC += -I$(algo_root)
+
+
+# dynamic array
+dynamic_array_binout := $(bin_path)$(algo_prefix)_dynamic_array$(bin_ext)
+
+dynamic_array: $(dynamic_array_binout)
+dynamic_array_test: dynamic_array
+	$(dynamic_array_binout)
+
+$(dynamic_array_binout): $(algo_root)dynamic_array/da.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # is unsigned integer
