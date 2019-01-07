@@ -8,6 +8,17 @@ include="inttypes.h" . ${NORE_ROOT}/auto/include
 include="stdbool.h" . ${NORE_ROOT}/auto/include
 include="tgmath.h" . ${NORE_ROOT}/auto/include
 
+nm_feature="C99 defines a boolean data type"
+nm_feature_name="nm_have_stdbool_h"
+nm_feature_run=yes
+nm_feature_h='#include <stdbool.h>
+              #include <stdio.h>'
+nm_feature_flags=
+nm_feature_test='bool a = false, b = true;
+                 return !(a || b);'
+. ${NORE_ROOT}/auto/feature
+
+
 #nm_feature="__STDC_HOSTED__ macro"
 #nm_feature_name="nm_have_stdc_hosted"
 #nm_feature_run=yes
@@ -65,15 +76,7 @@ include="tgmath.h" . ${NORE_ROOT}/auto/include
 #nm_feature_test='printf("%"PRIu32, 1u);'
 #. ${NORE_ROOT}/auto/feature
 #
-#nm_feature="C99 defines a boolean data type"
-#nm_feature_name="nm_have_stdbool_h"
-#nm_feature_run=no
-#nm_feature_h="#include <stdbool.h>"
-#nm_feature_flags=
-#nm_feature_test='bool a = true, b = false;
-#                 return (a || b);'
-#. ${NORE_ROOT}/auto/feature
-#
+
 #nm_feature="C99 defines exact width integer types "
 #nm_feature_name="nm_have_stdint_h"
 #nm_feature_run=no
