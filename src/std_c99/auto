@@ -42,6 +42,15 @@ nm_feature_flags=
 nm_feature_test='printf("fn=%s", __func__);'
 . ${NORE_ROOT}/auto/feature
 
+nm_feature="%zu format specifier"
+nm_feature_name="nm_have_zu_format_specifier"
+nm_feature_run=yes
+nm_feature_h='#include <stdio.h>'
+nm_feature_flags=
+nm_feature_test='printf("%zu", sizeof(int));'
+. ${NORE_ROOT}/auto/feature
+
+
 #nm_feature="__STDC_HOSTED__ macro"
 #nm_feature_name="nm_have_stdc_hosted"
 #nm_feature_run=yes
