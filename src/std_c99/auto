@@ -74,6 +74,14 @@ struct S {
 } s = { .c='a', .i=0 };"
 . ${NORE_ROOT}/auto/feature
 
+nm_feature="variable-length array"
+nm_feature_name="nm_have_variable_length_array"
+nm_feature_run=
+nm_feature_h='#include <stddef.h>'
+nm_feature_flags=
+nm_feature_test='size_t n=4; int x[n];'
+. ${NORE_ROOT}/auto/feature
+
 #nm_feature="__STDC_HOSTED__ macro"
 #nm_feature_name="nm_have_stdc_hosted"
 #nm_feature_run=yes
