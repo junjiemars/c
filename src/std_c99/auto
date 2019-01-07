@@ -82,6 +82,15 @@ nm_feature_flags=
 nm_feature_test='size_t n=4; int x[n];'
 . ${NORE_ROOT}/auto/feature
 
+nm_feature="variadic macro"
+nm_feature_name="nm_have_variadic_macro"
+nm_feature_run=
+nm_feature_h='#include <stdio.h>'
+nm_feature_flags=
+nm_feature_test='#define PP(fmt, ...) printf(fmt, __VA_ARGS__)
+PP("variadic=%s", "yes");'
+. ${NORE_ROOT}/auto/feature
+
 #nm_feature="__STDC_HOSTED__ macro"
 #nm_feature_name="nm_have_stdc_hosted"
 #nm_feature_run=yes
