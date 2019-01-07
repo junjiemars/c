@@ -14,7 +14,7 @@ include="tgmath.h" . ${NORE_ROOT}/auto/include
 echo " + checking C99 new data types ..."
 #-----------------------------------
 nm_feature="boolean data type"
-nm_feature_name="nm_have_stdbool_h"
+nm_feature_name="nm_have_bool_type_h"
 nm_feature_run=yes
 nm_feature_h='#include <stdbool.h>
               #include <stdio.h>'
@@ -24,7 +24,7 @@ nm_feature_test='bool a = false, b = true;
 . ${NORE_ROOT}/auto/feature
 
 nm_feature="long long int data type"
-nm_feature_name=
+nm_feature_name="nm_have_long_long_int_type"
 nm_feature_run=yes
 nm_feature_h=
 nm_feature_flags=
@@ -34,8 +34,8 @@ nm_feature_test='long long int x=0;'
 
 echo " + checking C99 new identifiers ..."
 #-----------------------------------
-nm_feature="__func__ macro"
-nm_feature_name="nm_have_func_macro"
+nm_feature="__func__ predefined identifier"
+nm_feature_name="nm_have_func_identifier"
 nm_feature_run=yes
 nm_feature_h='#include <stdio.h>'
 nm_feature_flags=
