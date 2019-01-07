@@ -1,7 +1,6 @@
 #include <_lang_.h>
 #include <setjmp.h>
 #include <stdio.h>
-#include <string.h>
 
 /* https://en.wikipedia.org/wiki/Setjmp.h */
 
@@ -33,26 +32,22 @@ void g(jmp_buf *env) {
 	jmp_buf local_env;
 	fputs("entering g()...\n", stdout);
 	
-	memcpy(&local_env, env, sizeof(local_env));
-
-	switch (setjmp(*env)) {
+	switch (setjmp(local_env)) {
 	case 0x11000000:
 		exception_type |= 0x00220000;
 		printf("throw(), exception_type=0x%x remapping to 0x%x",
 					 0x11000000, exception_type);
 	default:
-		memcpy(env, &local_env, sizeof(*env));
 		longjmp(*env, exception_type);
 		break;
 	case 0:
 		fputs("calling throw()...\n", stdout);
-		throw(env);
+		throw(&local_env);
 		/* never reached */
 		break;
 	}
 
 	/* never reached when throw() jmp */
-	memcpy(env, &local_env, sizeof(*env));
 	fputs("leaving g()...\n", stdout);
 }
 
