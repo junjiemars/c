@@ -1046,6 +1046,36 @@ higher precedence than /pointer to */.
 The /C standar library/ is a standardized collection of header files
 and library routines used to implement common operations.
 
+** std
+	 :PROPERTIES:
+	 :CUSTOM_ID: language_std
+	 :END:
+
+There has an good answer of [[http://stackoverflow.com/questions/17206568/what-is-the-difference-between-c-c99-ansi-c-and-gnu-c-a-general-confusion-reg][What is the difference between C, C99, ANSI C and GNU C]]:
+- Everything before standardization is generally called "K&R C", after
+  the famous book, with Dennis Ritchie, the inventor of the C
+  language, as one of the authors. This was "the C language" from
+  1972-1989.
+- The first C standard was released 1989 nationally in USA, by their
+  national standard institute ANSI. This release is called C89 or
+  ANSI-C. From 1989-1990 this was "the C language".
+- The year after, the American standard was accepted internationally
+  and published by ISO (ISO 9899:1990). This release is called
+  C90. Technically, it is the same standard as C89/ANSI-C. Formally,
+  it replaced C89/ANSI-C, making them obsolete. From 1990-1999, C90
+  was "the C language".
+- Please note that since 1989, ANSI haven't had anything to do with
+  the C language. Programmers still speaking about "ANSI C" generally
+  haven't got a clue about what it means. ISO "owns" the C language,
+  through the standard ISO 9899.
+- In 1999, the C standard was revised, lots of things changed (ISO
+  9899:1999). This version of the standard is called C99. From
+  1999-2011, this was "the C language". Most C compilers still follow
+  this version.
+- In 2011, the C standard was again changed (ISO 9899:2011). This
+  version is called C11. It is currently the definition of "the C
+  language".
+	 
 ** Language References
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_references
@@ -1067,6 +1097,8 @@ and library routines used to implement common operations.
 - [[https://stackoverflow.com/questions/204476/what-should-main-return-in-c-and-c][What should main() return in C and C++?]]
 - [[https://en.wikibooks.org/wiki/C_Programming/Standard_libraries][wikibooks: C Programming/Standard libraries]]
 - [[https://en.wikipedia.org/wiki/C_data_types][wikipedia: C data types]]
+- [[https://en.wikipedia.org/wiki/C99][wikipedia: C99]]
+- [[https://en.wikipedia.org/wiki/C11_(C_standard_revision)][wikipedia: C11 (C standard revision)]]
 - [[https://en.wikipedia.org/wiki/Linkage_(software)][wikipedia: Linkage]]
 - [[https://en.wikipedia.org/wiki/Maximal_munch][wikipedia: Maximal munch]]
 - [[https://en.wikipedia.org/wiki/Translation_unit_(programming)][wikipedia: Translation unit]]
