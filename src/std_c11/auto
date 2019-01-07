@@ -1,0 +1,172 @@
+# -*- mode:sh -*- vim:ft=sh
+
+echo " # view https://en.wikipedia.org/wiki/C_standard_library"
+
+nm_feature="__STDC_HOSTED__ macro"
+nm_feature_name="nm_have_stdc_hosted"
+nm_feature_run=yes
+nm_feature_h=
+nm_feature_flags=
+nm_feature_test='#if (1 == __STDC_HOSTED__)
+  return 0;
+#else
+  return 1;
+#endif
+'
+. ${NORE_ROOT}/auto/feature
+
+
+echo " + checking C99 header files ..."
+include="complex.h" . ${NORE_ROOT}/auto/include
+include="fenv.h" . ${NORE_ROOT}/auto/include
+include="inttypes.h" . ${NORE_ROOT}/auto/include
+include="stdint.h" . ${NORE_ROOT}/auto/include
+include="tgmath.h" . ${NORE_ROOT}/auto/include
+
+echo " + checking C11 header files ..."
+include="stdalign.h" . ${NORE_ROOT}/auto/include
+include="stdatomic.h" . ${NORE_ROOT}/auto/include
+include="stdnoreturn.h" . ${NORE_ROOT}/auto/include
+include="threads.h" . ${NORE_ROOT}/auto/include
+include="uchar.h" . ${NORE_ROOT}/auto/include
+
+echo " + checking NA1 header files ..."
+include="iso646.h" . ${NORE_ROOT}/auto/include
+include="wchar.h" . ${NORE_ROOT}/auto/include
+include="wctype.h" . ${NORE_ROOT}/auto/include
+
+echo " + checking nonstandard posix header files ..."
+include="unistd.h" . ${NORE_ROOT}/auto/include
+include="signal.h" . ${NORE_ROOT}/auto/include
+
+
+nm_feature="C99 manipulating complex numbers"
+nm_feature_name="nm_have_complex_h"
+nm_feature_run=no
+nm_feature_h="#include <complex.h>"
+nm_feature_flags=
+nm_feature_test='double d = cabs(1.0 + 1.0*I);'
+. ${NORE_ROOT}/auto/feature
+
+nm_feature="C99 controlling floating-point environment"
+nm_feature_name="nm_have_fenv_h"
+nm_feature_run=no
+nm_feature_h="#include <fenv.h>"
+nm_feature_flags=
+nm_feature_test='fetestexcept(FE_DIVBYZERO);'
+. ${NORE_ROOT}/auto/feature
+
+nm_feature="C99 defines exact width integer types"
+nm_feature_name="nm_have_inttypes_h"
+nm_feature_run=no
+nm_feature_h='#include <inttypes.h>
+#include <stdio.h>'
+nm_feature_flags=
+nm_feature_test='printf("%"PRIu32, 1u);'
+. ${NORE_ROOT}/auto/feature
+
+nm_feature="C99 defines a boolean data type"
+nm_feature_name="nm_have_stdbool_h"
+nm_feature_run=no
+nm_feature_h="#include <stdbool.h>"
+nm_feature_flags=
+nm_feature_test='bool a = true, b = false;
+                 return (a || b);'
+. ${NORE_ROOT}/auto/feature
+
+nm_feature="C99 defines exact width integer types "
+nm_feature_name="nm_have_stdint_h"
+nm_feature_run=no
+nm_feature_h="#include <stdint.h>"
+nm_feature_flags=
+nm_feature_test='uint8_t x = 1;'
+. ${NORE_ROOT}/auto/feature
+
+nm_feature="C99 type-generic mathematical functions"
+nm_feature_name="nm_have_tgmath_h"
+nm_feature_run=no
+nm_feature_h="#include <tgmath.h>"
+nm_feature_flags=
+nm_feature_test="sqrt(1);sqrt(1.0f);sqrt(1.0);"
+. ${NORE_ROOT}/auto/feature
+
+nm_feature="C99 variadic macro"
+nm_feature_name="nm_have_variadic_macro"
+nm_feature_run=yes
+nm_feature_h="#include <stdio.h>
+#define var(dummy, ...)  sprintf(__VA_ARGS__)"
+nm_feature_flags=
+nm_feature_test="char  buf[30]; buf[0] = '0';
+               	 var(0, buf, \"%d\", 1);
+        			   if (buf[0] != '1') return 1;"
+. ${NORE_ROOT}/auto/feature
+
+nm_feature="C99 #pragma once"
+nm_feature_name="nm_have_pragma_once"
+nm_feature_run=no
+nm_feature_h="#pragma once"
+nm_feature_flags=
+nm_feature_test=
+. ${NORE_ROOT}/auto/feature
+
+nm_feature="C11 specifying the alignment of objects"
+nm_feature_name="nm_have_stdalign_h"
+nm_feature_run=no
+nm_feature_h='#include <stdalign.h>
+struct S {
+  char c;
+  double d;
+};'
+nm_feature_flags=
+nm_feature_test='offsetof(struct S, c);'
+. ${NORE_ROOT}/auto/feature
+
+nm_feature="C11 for atomic operations"
+nm_feature_name="nm_have_stdatomic_h"
+nm_feature_run=no
+nm_feature_h='#include <stdatomic.h>
+_Atomic struct A {
+  int x; 
+} a;'
+nm_feature_flags=
+nm_feature_test='atomic_is_lock_free(&a);'
+. ${NORE_ROOT}/auto/feature
+
+nm_feature="C11 specifying non-returning functions"
+nm_feature_name="nm_have_stdnoreturn_h"
+nm_feature_run=no
+nm_feature_h='#include <stdnoreturn.h>
+#include <stdlib.h>
+noreturn void fatal() {
+  exit(0);
+}'
+nm_feature_flags=
+nm_feature_test='fatal();'
+. ${NORE_ROOT}/auto/feature
+
+nm_feature="C11 static assertion"
+nm_feature_name="nm_have_static_assert"
+nm_feature_run=no
+nm_feature_h="#include <assert.h>"
+nm_feature_flags=
+nm_feature_flags=
+nm_feature_test="enum {N=5}; static_assert(N==5, \"N is not equal 5\");"
+. ${NORE_ROOT}/auto/feature
+
+nm_feature="C11 strcpy_s function"
+nm_feature_name="nm_have_strcpy_s_fn"
+nm_feature_run=no
+nm_feature_h="#include <string.h>"
+nm_feature_flags=
+nm_feature_flags=
+nm_feature_test="char s[16]; strcpy_s(s,sizeof(s),\"hello strcpy_s\");"
+. ${NORE_ROOT}/auto/feature
+
+nm_feature="NA1 defines macros for standard tokens"
+nm_feature_name="nm_have_iso646_h"
+nm_feature_run=value
+nm_feature_h="#include <iso646.h>"
+nm_feature_flags=
+nm_feature_test='1 and 2;'
+. ${NORE_ROOT}/auto/feature
+
