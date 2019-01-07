@@ -60,6 +60,20 @@ nm_feature_flags=
 nm_feature_test='int x = 0x11; int *restrict p = &x;'
 . ${NORE_ROOT}/auto/feature
 
+echo " + checking C99 new features ..."
+#-----------------------------------
+nm_feature="designated initializers"
+nm_feature_name="nm_have_designated_initializers"
+nm_feature_run=
+nm_feature_h=
+nm_feature_flags=
+nm_feature_test="char x[]={ [2]='c', [0]='a' };
+struct S {
+  char c;
+	int i;
+} s = { .c='a', .i=0 };"
+. ${NORE_ROOT}/auto/feature
+
 #nm_feature="__STDC_HOSTED__ macro"
 #nm_feature_name="nm_have_stdc_hosted"
 #nm_feature_run=yes
