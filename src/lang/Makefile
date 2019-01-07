@@ -170,7 +170,7 @@ jmp_try_cppout := $(tmp_path)$(lang_prefix)_jmp_try$(cpp_ext)
 
 jmp: $(jmp_basic_binout) $(jmp_try_binout)
 jmp_test: jmp
-	# $(jmp_basic_binout)
+	$(jmp_basic_binout)
 	$(jmp_try_binout)
 
 $(jmp_basic_binout): $(lang_root)jmp/j.c

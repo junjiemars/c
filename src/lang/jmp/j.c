@@ -2,33 +2,39 @@
 #include <setjmp.h>
 #include <stdio.h>
 
-void b(jmp_buf);
-void c(jmp_buf);
+jmp_buf env;
+volatile int flag = 0x11223344;
 
-int
-a() {
-	jmp_buf env;
+void a(void);
+void b(volatile int*);
+void c(volatile int*);
+
+void
+a(void) {
 	int i;
-
-	printf("^setjmp() => ");
+	volatile int flag_in_stack = flag;
+	
+	printf("^setjmp()\n[flag=0x%x, flag_in_stack=0x%x]\n=> ", 
+				 flag, flag_in_stack);
 	if (0 != (i = setjmp(env))) {
-		printf("$longjmp(0x%x)\n", i);
-		return i;
+		printf("\n$longjmp(0x%x)\n[flag=0x%x, flag_in_stack=0x%x]\n", 
+					 i, flag, flag_in_stack);
 	} else {
 		printf("b() => ");
-		b(env);
-		return 0;
+		b(&flag_in_stack);
 	}
 }
 
 void 
-b(jmp_buf env) {
+b(volatile int *flag_in_stack) {
 	printf("c() => ");
-	c(env);
+	c(flag_in_stack);
 }
 
 void
-c(jmp_buf env) {
+c(volatile int *flag_in_stack) {
+	flag = 0x44332211;
+	*flag_in_stack = flag;
 	printf("longjmp() => ");
 	longjmp(env, 0x1234);
 }
