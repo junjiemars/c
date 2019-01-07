@@ -91,6 +91,14 @@ nm_feature_test='#define PP(fmt, ...) printf(fmt, __VA_ARGS__)
 PP("variadic=%s", "yes");'
 . ${NORE_ROOT}/auto/feature
 
+nm_feature="compound literals"
+nm_feature_name="nm_have_compound_literals"
+nm_feature_run=
+nm_feature_h='#include <string.h>'
+nm_feature_flags=
+nm_feature_test='strcmp("abc", (char[]){"abc"});'
+. ${NORE_ROOT}/auto/feature
+
 #nm_feature="__STDC_HOSTED__ macro"
 #nm_feature_name="nm_have_stdc_hosted"
 #nm_feature_run=yes
