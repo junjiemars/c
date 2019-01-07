@@ -1,28 +1,64 @@
 #include <_lang_.h>
 #include <setjmp.h>
 #include <stdio.h>
+#include <string.h>
 
-#define X_NO  0x11223344
+/* https://en.wikipedia.org/wiki/Setjmp.h */
 
-void throw(jmp_buf *env) {
-	longjmp(*env, X_NO);
+static void throw(jmp_buf*);
+static void f(void);
+static void g(jmp_buf*);
+
+static volatile int exception_type;
+
+
+void f(void) {
+	jmp_buf exception_env;
+	exception_type = 0;
+
+	switch (setjmp(exception_env)) {
+	case 0:
+		fputs("calling g()...\n", stdout);
+		g(&exception_env);
+		break;
+	case 0x11220000:
+		printf("catch exception: 0x%x\n", 0x11220000);
+		break;
+	default:
+		break;
+	}
 }
 
-int f(void) {
-	jmp_buf env;
-	int x = 0;
+void g(jmp_buf *env) {
+	jmp_buf local_env;
+	fputs("entering g()...\n", stdout);
+	
+	memcpy(&local_env, env, sizeof(local_env));
 
-	switch (setjmp(env)) {
-	case 0:
-		printf("throw exception: 0x%x\n", X_NO);
-		throw(&env);
+	switch (setjmp(*env)) {
+	case 0x11000000:
+		exception_type |= 0x00220000;
+		printf("throw(), exception_type=0x%x remapping to 0x%x",
+					 0x11000000, exception_type);
+	default:
+		memcpy(env, &local_env, sizeof(*env));
+		longjmp(*env, exception_type);
 		break;
-	case X_NO:
-		printf("catch exception: 0x%x\n", X_NO);
+	case 0:
+		fputs("calling throw()...\n", stdout);
+		throw(env);
+		/* never reached */
 		break;
 	}
 
-	return x;
+	/* never reached when throw() jmp */
+	memcpy(env, &local_env, sizeof(*env));
+	fputs("leaving g()...\n", stdout);
+}
+
+void throw(jmp_buf *env) {
+	fputs("entering throw()...\n", stdout);
+	longjmp(*env, exception_type |= 0x11000000);
 }
 
 
