@@ -2,13 +2,16 @@
 
 echo " # view https://en.wikipedia.org/wiki/C99"
 
-echo " + checking C99 header files ..."
+echo " + checking C99 new header files ..."
 include="complex.h" . ${NORE_ROOT}/auto/include
+include="fenv.h" . ${NORE_ROOT}/auto/include
 include="inttypes.h" . ${NORE_ROOT}/auto/include
 include="stdbool.h" . ${NORE_ROOT}/auto/include
+include="stdint.h" . ${NORE_ROOT}/auto/include
 include="tgmath.h" . ${NORE_ROOT}/auto/include
 
-nm_feature="C99 defines boolean data type"
+echo " + checking C99 new data types ..."
+nm_feature="boolean data type"
 nm_feature_name="nm_have_stdbool_h"
 nm_feature_run=yes
 nm_feature_h='#include <stdbool.h>
@@ -18,7 +21,8 @@ nm_feature_test='bool a = false, b = true;
                  return !(a || b);'
 . ${NORE_ROOT}/auto/feature
 
-nm_feature="C99 defines __func__ macro"
+echo " + checking C99 new identifiers ..."
+nm_feature="__func__ macro"
 nm_feature_name="nm_have_func_macro"
 nm_feature_run=yes
 nm_feature_h='#include <stdio.h>'
