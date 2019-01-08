@@ -52,6 +52,14 @@ nm_feature_test='printf("%zu", sizeof(int));'
 
 echo " + checking C99 new keywords ..."
 #-----------------------------------
+nm_feature="inline keyword"
+nm_feature_name="nm_have_inline_keyword"
+nm_feature_run=
+nm_feature_h='static inline int f(int x) { return x*x; }'
+nm_feature_flags=
+nm_feature_test='f(10);'
+. ${NORE_ROOT}/auto/feature
+
 nm_feature="restrict keyword"
 nm_feature_name="nm_have_restrict_keyword"
 nm_feature_run=
