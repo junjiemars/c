@@ -107,13 +107,20 @@ nm_feature_flags=
 nm_feature_test='strcmp("abc", (char[]){"abc"});'
 . ${NORE_ROOT}/auto/feature
 
-# nm_feature="complex numbers"
-# nm_feature_name="nm_have_complex_cabs_fn"
-# nm_feature_run=no
-# nm_feature_h="#include <complex.h>"
-# nm_feature_flags=
-# nm_feature_test='double d = cabs(1.0 + 0.0I);'
-# . ${NORE_ROOT}/auto/feature
+nm_feature="complex numbers"
+nm_feature_name="nm_have_complex_creal_fn"
+nm_feature_run=no
+nm_feature_h="#include <complex.h>"
+nm_feature_flags=
+case "$CC_NAME" in
+	msvc)
+		nm_feature_test='double d = creal(_DCOMPLEX_(1.0, 2.0));'
+		;;
+	*)
+		nm_feature_test='double d = creal(1.0 + 2.0*I);'
+		;;
+esac
+. ${NORE_ROOT}/auto/feature
 
 #nm_feature="__STDC_HOSTED__ macro"
 #nm_feature_name="nm_have_stdc_hosted"
