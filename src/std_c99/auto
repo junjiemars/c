@@ -13,7 +13,7 @@ include="tgmath.h" . ${NORE_ROOT}/auto/include
 
 echo " + checking C99 new data types ..."
 #-----------------------------------
-nm_feature="boolean data type"
+nm_feature="boolean type"
 nm_feature_name="nm_have_bool_type_h"
 nm_feature_run=yes
 nm_feature_h='#include <stdbool.h>
@@ -23,7 +23,7 @@ nm_feature_test='bool a = false, b = true;
                  return !(a || b);'
 . ${NORE_ROOT}/auto/feature
 
-nm_feature="long long int data type"
+nm_feature="long long int type"
 nm_feature_name="nm_have_long_long_int_type"
 nm_feature_run=yes
 nm_feature_h=
@@ -107,6 +107,14 @@ nm_feature_flags=
 nm_feature_test='strcmp("abc", (char[]){"abc"});'
 . ${NORE_ROOT}/auto/feature
 
+# nm_feature="complex numbers"
+# nm_feature_name="nm_have_complex_cabs_fn"
+# nm_feature_run=no
+# nm_feature_h="#include <complex.h>"
+# nm_feature_flags=
+# nm_feature_test='double d = cabs(1.0 + 0.0I);'
+# . ${NORE_ROOT}/auto/feature
+
 #nm_feature="__STDC_HOSTED__ macro"
 #nm_feature_name="nm_have_stdc_hosted"
 #nm_feature_run=yes
@@ -139,13 +147,7 @@ nm_feature_test='strcmp("abc", (char[]){"abc"});'
 #include="signal.h" . ${NORE_ROOT}/auto/include
 #
 #
-#nm_feature="C99 manipulating complex numbers"
-#nm_feature_name="nm_have_complex_h"
-#nm_feature_run=no
-#nm_feature_h="#include <complex.h>"
-#nm_feature_flags=
-#nm_feature_test='double d = cabs(1.0 + 1.0*I);'
-#. ${NORE_ROOT}/auto/feature
+
 #
 #nm_feature="C99 controlling floating-point environment"
 #nm_feature_name="nm_have_fenv_h"
