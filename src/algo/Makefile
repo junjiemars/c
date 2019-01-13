@@ -1,10 +1,12 @@
 algo: dynamic_array \
 			is_unsigned_integer \
-			is_unsigned_type
+			is_unsigned_type \
+			reverse_string
 
 algo_test: dynamic_array_test \
 					 is_unsigned_integer_test \
-					 is_unsigned_type_test
+					 is_unsigned_type_test \
+					 reverse_string_test
 
 
 algo_prefix := algo
@@ -50,3 +52,13 @@ $(is_utype_binout): $(is_utype_cppout)
 
 $(is_utype_cppout): $(algo_root)is_unsigned_type/is_utype.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+# reverse string
+reverse_string_binout := $(bin_path)$(algo_prefix)_reverse_string$(bin_ext)
+
+reverse_string: $(reverse_string_binout)
+reverse_string_test: reverse_string
+	$(reverse_string_binout)
+
+$(reverse_string_binout): $(algo_root)reverse_string/rev_str.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
