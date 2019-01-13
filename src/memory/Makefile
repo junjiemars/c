@@ -4,7 +4,6 @@ memory: alloc \
 				bit \
 				byte \
 				copy \
-				duff \
 				endian \
 				generic \
 				rotate \
@@ -16,7 +15,6 @@ memory_test: 	alloc_test \
 							bit_test \
 							byte_test \
 							copy_test \
-							duff_test \
 							endian_test \
 							generic_test \
 							rotate_test \
@@ -169,27 +167,6 @@ copy_test: copy
 
 $(copy_binout): $(memory_root)copy/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-
-# duff
-duff_binout := $(bin_path)$(memory_prefix)_duff$(bin_ext)
-
-duff: $(duff_binout)
-duff_test: duff
-	$(duff_binout)
-	$(duff_binout) a
-	$(duff_binout) a b
-	$(duff_binout) a b c
-	$(duff_binout) a b c d
-	$(duff_binout) a b c d e
-	$(duff_binout) a b c d e f
-	$(duff_binout) a b c d e f g
-	$(duff_binout) a b c d e f g h
-	$(duff_binout) a b c d e f g h i
-
-$(duff_binout): $(memory_root)duff/duff.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
 
 # endian
 endian_binout := $(bin_path)$(memory_prefix)_endian$(bin_ext)

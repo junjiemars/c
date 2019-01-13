@@ -1,9 +1,11 @@
-algo: dynamic_array \
+algo: duff_device \
+			dynamic_array \
 			is_unsigned_integer \
 			is_unsigned_type \
 			reverse_string
 
-algo_test: dynamic_array_test \
+algo_test: duff_device_test \
+					 dynamic_array_test \
 					 is_unsigned_integer_test \
 					 is_unsigned_type_test \
 					 reverse_string_test
@@ -12,6 +14,24 @@ algo_test: dynamic_array_test \
 algo_prefix := algo
 INC += -I$(algo_root)
 
+# duff device
+duff_device_binout := $(bin_path)$(algo_prefix)_duff_device$(bin_ext)
+
+duff_device: $(duff_device_binout)
+duff_device_test: duff_device
+	$(duff_device_binout)
+	$(duff_device_binout) a
+	$(duff_device_binout) a b
+	$(duff_device_binout) a b c
+	$(duff_device_binout) a b c d
+	$(duff_device_binout) a b c d e
+	$(duff_device_binout) a b c d e f
+	$(duff_device_binout) a b c d e f g
+	$(duff_device_binout) a b c d e f g h
+	$(duff_device_binout) a b c d e f g h i
+
+$(duff_device_binout): $(algo_root)duff_device/duff.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # dynamic array
 dynamic_array_binout := $(bin_path)$(algo_prefix)_dynamic_array$(bin_ext)
