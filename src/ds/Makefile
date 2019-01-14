@@ -1,13 +1,12 @@
-
 ds_prefix := ds
 INC += -I$(ds_root)
 
-ds: double_linked_list              \
-		single_linked_list       \
+ds: double_linked_list \
+		single_linked_list \
 		stack
 
-ds_test: double_linked_list_test            \
-				 single_linked_list_test     \
+ds_test: double_linked_list_test \
+				 single_linked_list_test \
 				 stack_test
 
 # list
@@ -29,7 +28,7 @@ $(double_linked_list_binout): $(ds_root)double_linked_list/test.c \
 		$(bin_out)$@
 
 # single linked list
-single_linked_list_binout := $(bin_path)$(ds_prefix)_singled_linked_list$(bin_ext)
+single_linked_list_binout := $(bin_path)$(ds_prefix)_single_linked_list$(bin_ext)
 
 single_linked_list: $(single_linked_list_binout)
 single_linked_list_test: single_linked_list
