@@ -1150,9 +1150,10 @@ address that is a multiple of 4.
 		:CUSTOM_ID: memory-bits-and-bytes-shift
 		:END:
 
-Logical shift always fill discarded bits with 0s while arithmetic shift fills it with
-0s only for left shift, but for right shift it copies the Most Significant Bit
-thereby preserving the sign of the operand.
+Logical shift always fill discarded bits with 0s while arithmetic
+shift fills it with 0s only for left shift, but for right shift it
+copies the Most Significant Bit thereby preserving the sign of the
+operand.
 
 
 Left shift on unsigned integers, =x << y=
