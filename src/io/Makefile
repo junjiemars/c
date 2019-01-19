@@ -1,17 +1,19 @@
 
-io: basic  \
+io: basic \
     binary \
-    file   \
+    file \
 		format \
-    flush  \
-		scan   \
+    flush \
+		process \
+		scan \
 		wc
 io_test: basic_test  \
          binary_test \
-         file        \
+         file \
 				 format_test \
-         flush_test  \
-				 scan_test   \
+         flush_test \
+				 process_test \
+				 scan_test \
 				 wc_test
 
 io_prefix := io
@@ -84,6 +86,14 @@ flush_test: flush
 $(flush_binout): $(io_root)flush/f.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+process_binout := $(bin_path)$(io_prefix)_process$(bin_ext)
+
+process: $(process_binout)
+process_test: process
+	$(process_binout)
+
+$(process_binout): $(io_root)process/p.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # scan
 scan_binout := $(bin_path)$(io_prefix)_scan$(bin_ext)
