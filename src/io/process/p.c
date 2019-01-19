@@ -16,7 +16,7 @@ main(int argc, char **argv) {
 		printf("%s", s);
 	}
 	if (feof(out)) {
-		putc('\n', stdout);
+		fprintf(stdout, "!sucess\n");
 	} else {
 		fprintf(stderr, "!panic: ferror(out) = %d\n", ferror(out));
 	}
