@@ -1739,14 +1739,28 @@ on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see [[https://g
 	:CUSTOM_ID: tools
 	:END:
 
-** readelf
+** read ELF format
 	 :PROPERTIES:
-	 :CUSTOM_ID: readelf
+	 :CUSTOM_ID: read-elf-format
 	 :END:
 
 /readelf/ displays information about one or more ELF format object
-files. 
+files.
 
 This /readelf/ program performs a similar function to /objdump/ but it
 goes into more detail and it exists independently of the BFD library,
 so if there is a bug in BFD then /readelf/ will not be affected.
+
+** trace system call
+	 :PROPERTIES:
+	 :CUSTOM_ID: trace-system-call
+	 :END:
+
+- MacOSX: =dtruss=
+
+** display symbol table
+	 :PROPERTIES: 
+	 :CUSTOM_ID: display-symbol-table
+	 :END:
+
+- MacOSX: =nm=
