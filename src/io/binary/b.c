@@ -1,7 +1,6 @@
 #include <_io_.h>
 #include <stdio.h>
 #include <string.h>
-#include <errno.h>
 #include <stdlib.h>
 
 #define NAME_SIZE 16
