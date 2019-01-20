@@ -7,10 +7,8 @@
 #	ifndef __USE_SVID
 #		define __USE_SVID
 #	endif
-#	include <stdio.h>
-#else
-#	include <stdio.h>
 #endif
+#include <stdio.h>
 
 #if defined(WINNT) && !defined(NM_HAVE_P_TMPDIR)
 # define P_tmpdir getenv("TMPDIR")
@@ -37,7 +35,7 @@ main(int argc, char **argv) {
 
 	FILE *tf = tmpfile();
 	if (!tf) {
-		fprintf(stderr, "tmpfile() failed, %s\n", strerror(errno));
+		perror("call tmpfile() failed");
 		goto error_exit;
 	}
 
@@ -51,4 +49,5 @@ main(int argc, char **argv) {
 	if (tf) {
 		fclose(tf);
 	}
+	return 0;
 }

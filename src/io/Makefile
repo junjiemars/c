@@ -9,7 +9,7 @@ io: basic \
 		wc
 io_test: basic_test  \
          binary_test \
-         file \
+         file_test \
 				 format_test \
          flush_test \
 				 process_test \
