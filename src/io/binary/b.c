@@ -4,10 +4,10 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#define name_size 16
+#define NAME_SIZE 16
 
 typedef struct rect_s {
-	char name[name_size];
+	char name[NAME_SIZE];
 	int width;
 	int height;
 } rect_s;
@@ -17,16 +17,18 @@ void
 out(const rect_s *rect, const char *where) {
 	FILE *f = fopen(where, "w");
 	if (!f) {
-		fprintf(stderr, "%s\n", strerror(errno));
+		perror(where);
 		return;
 	}
 
 	size_t len = fwrite((char*)rect, 1, sizeof(rect_s), f);
-	if (sizeof(rect) != len) {
-		fprintf(stderr, "%s\n", strerror(errno));
-		return;
+	if (sizeof(rect_s) != len) {
+		if (ferror(f)) {
+			perror(where);
+		} 
+		fprintf(stderr, "!panic: read %zu bytes, but expect %zu bytes\n",
+						len, sizeof(rect_s));
 	}
-		
 	fclose(f);
 }
 
@@ -66,13 +68,12 @@ main(int argc, char **argv) {
 
 	} else {
 		/* write to binary file */
-		strncpy(rect.name, argv[1], name_size);
+		strncpy(rect.name, argv[1], NAME_SIZE);
 		rect.width = atoi(argv[2]);
 		rect.height = atoi(argv[3]);
 
 		out(&rect, filename);
 	}
-	
-	
-	
+
+	return 0;
 }
