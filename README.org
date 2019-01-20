@@ -1707,6 +1707,46 @@ ldd objs/bin/math_shared
 - [[https://en.wikipedia.org/wiki/UTF-8][Wikipedia: UTF-8]] 
 
 * IO
+	:PROPERTIES:
+	:CUSTOM_ID: io
+	:END:
+
+** Stream
+	 :PROPERTIES:
+	 :CUSTOM_ID: stream
+	 :END:
+
+*** Predefined streams
+		:PROPERTIES:
+		:CUSTOM_ID: predefined-streams
+		:END:
+
+*** Redirection
+		:PROPERTIES:
+		:CUSTOM_ID: redirection
+		:END:
+
+** Buffered vs. Unbuffered
+	 :PROPERTIES:
+	 :CUSTOM_ID: buffered-vs-unbuffered
+   :END:
+
+** ASCII vs. Binary
+	 :PROPERTIES:
+	 :CUSTOM_ID: ascii-vs-binary
+	 :END:
+
+** References
+	 :PROPERTIES:
+	 :CUSTOM_ID: io-references
+	 :END:
+
+- [[https://en.wikipedia.org/wiki/ASCII][ASCII]]
+- [[https://stackoverflow.com/questions/20342772/buffered-and-unbuffered-inputs-in-c][Buffered and Unbuffered inputs in C]]
+- [[https://users.cs.cf.ac.uk/Dave.Marshall/C/node18.html][Input and Output:stdio.h]]
+- [[https://en.wikipedia.org/wiki/Printf_format_string][printf format string]]
+	 
+ 
 * Network
 
 ** DNS
