@@ -1,4 +1,5 @@
 #include <_lang_.h>
+#include <stdio.h>
 
 void
 f1(int *p1, int *p2, int *val) {
@@ -24,8 +25,10 @@ main(int argc, char **argv) {
 	int z = argc * 100;
 	
 	f1(&x, &y, &z);
+	printf("x=%d, y=%d, z=%d\n", x, y, z);
 #if NM_HAVE_RESTRICT_KEYWORD
 	f2(&x, &y, &z);
+	printf("x=%d, y=%d, z=%d\n", x, y, z);
 #endif
 	return 0;
 }
