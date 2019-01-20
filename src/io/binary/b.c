@@ -24,6 +24,7 @@ out(const rect_s *rect, const char *where) {
 	if (sizeof(rect_s) != len) {
 		if (ferror(f)) {
 			perror(where);
+			clearerr(f);
 		} 
 		fprintf(stderr, "!panic: write %zu bytes, but expect %zu bytes\n",
 						len, sizeof(rect_s));
@@ -43,6 +44,7 @@ in(rect_s *rect, const char *where) {
 	if (sizeof(rect_s) != len) {
 		if (ferror(f)) {
 			perror(where);
+			clearerr(f);
 		}
 		fprintf(stderr, "!panic: read %zu bytes, but expect %zu bytes\n",
 						len, sizeof(rect_s));
