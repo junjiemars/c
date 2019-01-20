@@ -1033,7 +1033,7 @@ A declaration can have exactly one basic type. The [[#basic_types][basic types]]
 argumented with /derived types/, can C has three of them:
 - ~function [(decl-list)] returning~: *()*
 - ~array [number] of~: *[]*
-- ~[const | volatile | noalias] pointer to~: ***
+- ~[const | volatile | restrict] pointer to~: ***
 
 The /array of []/ and /function returning ()/ type operators have
 higher precedence than /pointer to */.

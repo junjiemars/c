@@ -12,6 +12,7 @@ lang: array \
 			linkage \
 			macro \
 			main \
+			restrict \
 			pointer \
 			preprocessor \
 			scope \
@@ -36,6 +37,7 @@ lang_test:  array_test \
 						linkage_test \
 						macro_test \
 						main_test \
+						restrict_test \
 						pointer_test \
 						preprocessor \
 						scope_test \
@@ -229,6 +231,16 @@ $(main_binout): $(lang_root)main/m.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(main_envp_binout): $(lang_root)main/m_envp.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# restrict
+restrict_binout := $(bin_path)$(lang_prefix)_restrict$(bin_ext)
+
+restrict: $(restrict_binout)
+restrict_test: restrict
+	$(restrict_binout)
+
+$(restrict_binout): $(lang_root)restrict/r1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # pointer
