@@ -17,7 +17,6 @@ f2(int *restrict p1, int *restrict p2, int *restrict val) {
 
 int
 main(int argc, char **argv) {
-	_unused_(argc);
 	_unused_(argv);
 
 	int x = argc;
