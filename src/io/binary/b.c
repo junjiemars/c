@@ -26,7 +26,7 @@ out(const rect_s *rect, const char *where) {
 		if (ferror(f)) {
 			perror(where);
 		} 
-		fprintf(stderr, "!panic: read %zu bytes, but expect %zu bytes\n",
+		fprintf(stderr, "!panic: write %zu bytes, but expect %zu bytes\n",
 						len, sizeof(rect_s));
 	}
 	fclose(f);
@@ -36,24 +36,27 @@ void
 in(rect_s *rect, const char *where) {
 	FILE *f = fopen(where, "r");
 	if (!f) {
-		fprintf(stderr, "%s\n", strerror(errno));
+		perror(where);
 		return;
 	}
 
 	size_t len = fread((char*)rect, 1, sizeof(rect_s), f);
 	if (sizeof(rect_s) != len) {
-		fprintf(stderr, "%s\n", "! read rect_s from file failed");
+		if (ferror(f)) {
+			perror(where);
+		}
+		fprintf(stderr, "!panic: read %zu bytes, but expect %zu bytes\n",
+						len, sizeof(rect_s));
 		return;
 	}
-
+	fclose(f);
+	
 	fprintf(stdout,"\
 rect_s: {\n\
   name: \"%s\",\n\
   width: %i,\n\
   height: %i\n\
 }\n", rect->name, rect->width, rect->height);
-
-	fclose(f);
 }
 
 int
