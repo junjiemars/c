@@ -646,6 +646,14 @@ exceptions to this rule are when an array is an operand of either the
 as an initializer in a declaration. More importantly the term decay
 signifies loss of type and dimension.
 
+*** Pointer aliasing
+		:PROPERTIES:
+		:CUSTOM_ID: pointer-aliasing
+		:END:
+
+In computer programming, *aliasing* refers to the situation where the
+same memory location can be accessed using different *names*.
+
 ** Storage
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_storage
@@ -1101,6 +1109,7 @@ There has an good answer of [[http://stackoverflow.com/questions/17206568/what-i
 - [[https://en.wikipedia.org/wiki/C11_(C_standard_revision)][wikipedia: C11 (C standard revision)]]
 - [[https://en.wikipedia.org/wiki/Linkage_(software)][wikipedia: Linkage]]
 - [[https://en.wikipedia.org/wiki/Maximal_munch][wikipedia: Maximal munch]]
+- [[https://en.wikipedia.org/wiki/Pointer_aliasing][wikipedia: Pointer aliasing]]
 - [[https://en.wikipedia.org/wiki/Translation_unit_(programming)][wikipedia: Translation unit]]
 - [[https://en.wikipedia.org/wiki/Typedef][wikipedia: typedef]]
 - [[https://stackoverflow.com/questions/252780/why-should-we-typedef-a-struct-so-often-in-c][Why should we typedef a struct so often in C?]]
