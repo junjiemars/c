@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 
-#if !(NM_HAVE_C11_STATIC_ASSERT)
+#if !(NM_HAVE_STATIC_ASSERT)
 #  ifdef static_assert
 #    undef static_assert
 #  endif
