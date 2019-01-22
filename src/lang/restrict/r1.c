@@ -7,7 +7,10 @@ f1(int *p1, int *p2, int *val) {
 	*p2 += *val;
 }
 
-#if NM_HAVE_RESTRICT_KEYWORD
+#if (NM_HAVE_RESTRICT_KEYWORD) || (NM_HAVE___RESTRICT_KEYWORD)
+#  if !defined(NM_HAVE_RESTRICT_KEYWORD) && (NM_HAVE___RESTRICT_KEYWORD)
+#    define restrict __restrict
+#  endif
 void
 f2(int *restrict p1, int *restrict p2, int *restrict val) {
 	*p1 += *val;
@@ -25,7 +28,7 @@ main(int argc, char **argv) {
 	
 	f1(&x, &y, &z);
 	printf("x=%d, y=%d, z=%d\n", x, y, z);
-#if NM_HAVE_RESTRICT_KEYWORD
+#if (NM_HAVE_RESTRICT_KEYWORD) || (NM_HAVE___RESTRICT_KEYWORD)
 	f2(&x, &y, &z);
 	printf("x=%d, y=%d, z=%d\n", x, y, z);
 #endif
