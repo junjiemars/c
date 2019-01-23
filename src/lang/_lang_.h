@@ -10,6 +10,8 @@
 	 unsafe. Consider using strcpy_s instead. To disable deprecation,
 	 use _CRT_SECURE_NO_WARNINGS. */
 #  pragma warning(disable : 4996)
+#elif GCC
+#  pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #endif
 
 
