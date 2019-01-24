@@ -1,12 +1,23 @@
 #include <_io_.h>
 #include <stdio.h>
 
+#if MSVC
+#  if !(NM_HAVE_POPEN_FN) && (NM_HAVE__POPEN_FN)
+#    define popen  _popen
+#    define pclose _pclose
+#  endif
+#  define COMMAND_LS "dir"
+#else
+#  define COMMAND_LS "ls"
+#endif
+
+
 int
 main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 	
-	FILE* out = popen("ls", "r");
+	FILE* out = popen(COMMAND_LS, "r");
 	if (!out) {
 		return ferror(out);
 	}
