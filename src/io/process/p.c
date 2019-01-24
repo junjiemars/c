@@ -16,6 +16,10 @@ int
 main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
+
+#if (NM_HAVE_POPEN_FN) || (NM_HAVE__POPEN_FN)
+	fprintf(stdout, "popen process i/o\n");
+	fprintf(stdout, "--------------------\n");
 	
 	FILE* out = popen(COMMAND_LS, "r");
 	if (!out) {
@@ -32,6 +36,9 @@ main(int argc, char **argv) {
 		fprintf(stderr, "!panic: ferror(out) = %d\n", ferror(out));
 	}
 	pclose(out);
-	
+#else
+	fprintf(stdout, "!panic: popen fn no found\n");
+#endif
+
 	return 0;
 }
