@@ -1,5 +1,4 @@
 #include <_io_.h>
-#include <stdio.h>
 
 #if MSVC
 #  if !(NM_HAVE_POPEN_FN) && (NM_HAVE__POPEN_FN)
@@ -11,6 +10,13 @@
 #  define COMMAND_LS "ls"
 #endif
 
+#if (GCC) && (NM_HAVE_POPEN_FN)
+#  ifndef _DEFAULT_SOURCE
+#    define _DEFAULT_SOURCE 1
+#  endif
+#endif
+
+#include <stdio.h>
 
 int
 main(int argc, char **argv) {
