@@ -11,8 +11,8 @@
 #endif
 
 #if (GCC) && (NM_HAVE_POPEN_FN)
-#  ifndef _DEFAULT_SOURCE
-#    define _DEFAULT_SOURCE 1
+#  ifndef _GNU_SOURCE
+#    define _GNU_SOURCE 1
 #  endif
 #endif
 
