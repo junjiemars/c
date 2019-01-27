@@ -238,7 +238,7 @@ purposes.  =#pragma= is commonly used to suppress warnings.
 - =__DATE__= expands to current date at compile time in the form
   =Mmm dd yyyy= as a string, such as "Tue Sep 25 2018"
 - =__TIME__= expands to current time at compile time in the form
-  =hh::mm::ss= in 24 hour time as a string, such as "16:08:17"
+  =hh:mm:ss= in 24 hour time as a string, such as "16:08:17"
 - =__TIMESTAMP__= expands to current time at compile time in the
   form =Ddd Mmm Date hh::mm::ss yyyy= as a string, where the time is
   in 24 hour time, =Ddd= is the abbreviated day, =Mmm= is the
