@@ -208,8 +208,8 @@ how many times it has been imported.
 /* header file code */
 
 /* #pragma once is equivalent to */
-#ifndef  _FILE_NAME_H_
-# define  _FILE_NAME_H_
+#ifndef    _FILE_NAME_H_
+#  define  _FILE_NAME_H_
 /* header file code */
 #endif
 #+END_SRC
@@ -219,11 +219,12 @@ purposes.  =#pragma= is commonly used to suppress warnings.
 
 #+BEGIN_SRC c
 #if MSVC 
-# pragma warning(disable:4706) /* assignment within conditional expression */
+#  pragma warning(disable:4706) /* assignment within conditional expression */
+#  pragma comment(lib, "Ws2_32.lib") /* link to Ws2_32.lib */
 #elif GCC
-# pragma GCC diagnostic ignored "-Wparentheses"
+#  pragma GCC diagnostic ignored "-Wparentheses"
 #elif CLANG
-# pragma clang diagnostic ignored "-Wparentheses"
+#  pragma clang diagnostic ignored "-Wparentheses"
 #endif
 #+END_SRC
 
