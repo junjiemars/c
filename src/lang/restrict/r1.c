@@ -11,7 +11,7 @@ f1(int *p1, int *p2, int *val) {
 #    define restrict __restrict
 #endif
 
-#if defined(NM_HAVE_RESTRICT_KEYWORD) && defined(NM_HAVE___RESTRICT_KEYWORD)
+#if defined(NM_HAVE_RESTRICT_KEYWORD) || defined(NM_HAVE___RESTRICT_KEYWORD)
 void
 f2(int *restrict p1, int *restrict p2, int *restrict val) {
 	*p1 += *val;
