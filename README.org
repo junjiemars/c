@@ -256,7 +256,7 @@ token. This can be particularly useful for writing a macro to convert
 an =enum= into a string.
 
 #+BEGIN_SRC c
-enum Color { RED, GREEN, BLUE };
+enum COLOR { RED, GREEN, BLUE };
 #define COLOR_STR(x) #x
 #+END_SRC
 
@@ -270,9 +270,9 @@ to form a single identifier. The resulting identifier could be a
 variable name, or any other identifier.
 
 #+BEGIN_SRC c
-#define DEFVAR(type, var, val) type var_##var = val;
+#define DEFVAR(type, var, val) type var_##var = val
 
-DEFVAR(int, x, 1);
+DEFVAR(int, x, 1); /* expand to: int var_x = 1; */
 DEFVAR(float, y, 2.718);
 #+END_SRC
 
