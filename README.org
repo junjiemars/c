@@ -186,7 +186,7 @@ if some condition is not true. For example:
 
 #+BEGIN_SRC c
 #if (1==_ERROR_)
-# error "compile failed: because _ERROR_==1 is true"
+#  error "compile failed: because _ERROR_==1 is true"
 #endif
 #+END_SRC
 
