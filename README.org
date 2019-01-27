@@ -129,11 +129,11 @@ of the symbol.
 Prefer =#if define(...)=, it's more flexible
 #+BEGIN_SRC c
 #if defined(LINUX) || defined(DARWIN)
-/* code: when on LINUX or DARWIN platform */
+#  /* code: when on LINUX or DARWIN platform */
 #endif
 
 #if defined(CLANG) && (1==NM_HAVE_LITTLE_ENDIAN)
-/* code: when using clang compile and on little endian machine */
+#  /* code: when using clang compile and on little endian machine */
 #endif
 #+END_SRC
 
@@ -145,7 +145,7 @@ Prefer =#if define(...)=, it's more flexible
 
 #+BEGIN_SRC c
 #ifndef identifer
-/* code: when the identifier had not been defined */
+#  /* code: when the identifier had not been defined */
 #endif
 #+END_SRC
 
