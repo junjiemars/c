@@ -157,8 +157,8 @@ by defining a identifier once the file has been included and checking
 that the identifier was not set at the top of that file.
 
 #+BEGIN_SRC c
-#ifndef  _LANG_H_
-# define  _LANG_H_
+#ifndef    _LANG_H_
+#  define  _LANG_H_
 #endif
 #+END_SRC
 
@@ -166,7 +166,7 @@ that the identifier was not set at the top of that file.
 
 #+BEGIN_SRC c
 #if !defined(MIN)
-# define MIN(a, b) ((a) < (b) ? (a) : (b))
+#  define MIN(a, b) ((a) < (b) ? (a) : (b))
 #endif
 #+END_SRC
 
