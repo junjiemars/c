@@ -482,9 +482,38 @@ block-type macro
 
 #+BEGIN_SRC c
 #define incr(a, b) { \
-    (a)++;           \
-    (b)++;           \
+   (a)++; (b)++;     \
 }
+#+END_SRC
+
+But the aboved block macro is not good enough: omit =;= is no
+intitutive and the tailing =;' will wrong in some cases, such as
+
+#+BEGIN_SRC c
+int a = 2, b = 3;
+if (a < b)
+  incr(a, b); /* tailing ; */
+else
+  a *= 10;
+
+/* expanded code, and should compile failed */
+if (a < b)
+  { (a)++; (b)++; };
+else
+  a *= 10;
+#+END_SRC
+
+So, =do { ... } while (0)= is more better.
+#+BEGIN_SRC c
+#define incr(a, b) do { \
+   (a)++; (b)++;        \
+} while (0) /* no tailing ; */
+
+/* expanded code */
+if (a < b)
+  do { (a)++; (b)++; } while (0); /* append ; */
+else
+  a *= 10;
 #+END_SRC
 
 *** Name clash

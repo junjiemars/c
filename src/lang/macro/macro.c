@@ -9,14 +9,12 @@
 
 #define max(a, b) ((a) > (b) ? (a) : (b))
 
-#define incr_v1(a, b)      \
-	(a)++;									 \
-	(b)++;
+#define incr_v1(a, b) \
+	(a)++; (b)++;
 
-#define incr_v2(a, b) {    \
-	(a)++;                   \
-	(b)++;                   \
-}
+#define incr_v2(a, b) do { \
+	(a)++; (b)++;            \
+} while (0) /* no ; at tail */
 
 #define sum(max, out) {              								\
 	/* avoid name clash */                            \
@@ -77,10 +75,12 @@ main(int argc, char *argv[]) {
 	printf("a=%i, b=%i, |- incr_v1\n", a, b);
 	
 	printf("------------\n");
-	a = 1, b = 2;
+	a = 2, b = 1;
 	printf("a=%i, b=%i, |+ incr_v2\n", a, b);
-	if (a > b) incr_v2(a, b);
-	printf("if (a > b) incr_v2(a, b)\n");
+	if (a > b)
+		incr_v2(a, b);
+	else
+		printf("a=%i, b=%i, when a > b is flase\n", a, b);
 	printf("a=%i, b=%i, |- incr_v2\n", a, b);
 
 	printf("\nsum macro\n");
