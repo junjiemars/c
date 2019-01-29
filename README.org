@@ -487,7 +487,7 @@ block-type macro
 #+END_SRC
 
 But the aboved block macro is not good enough: omit =;= is no
-intitutive and the tailing =;' will wrong in some cases, such as
+intitutive and the tailing =;= will wrong in some cases, such as
 
 #+BEGIN_SRC c
 int a = 2, b = 3;
@@ -503,7 +503,7 @@ else
   a *= 10;
 #+END_SRC
 
-So, =do { ... } while (0)= is more better.
+=do { ... } while (0)= resolved those issues.
 #+BEGIN_SRC c
 #define incr(a, b) do { \
    (a)++; (b)++;        \
