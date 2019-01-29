@@ -2,13 +2,15 @@ algo: duff_device \
 			dynamic_array \
 			is_unsigned_integer \
 			is_unsigned_type \
-			reverse_string
+			reverse_string \
+			sizeof
 
 algo_test: duff_device_test \
 					 dynamic_array_test \
 					 is_unsigned_integer_test \
 					 is_unsigned_type_test \
-					 reverse_string_test
+					 reverse_string_test \
+					 sizeof_test
 
 
 algo_prefix := algo
@@ -82,3 +84,17 @@ reverse_string_test: reverse_string
 
 $(reverse_string_binout): $(algo_root)reverse_string/rev_str.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# sizeof
+sizeof_binout := $(bin_path)$(algo_prefix)_sizeof$(bin_ext)
+sizeof_cppout := $(tmp_path)$(algo_prefix)_sizeof$(cpp_ext)
+
+sizeof: $(sizeof_binout)
+sizeof_test: sizeof
+	$(sizeof_binout)
+
+$(sizeof_binout): $(sizeof_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(sizeof_cppout): $(algo_root)sizeof/s.c
+	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
