@@ -8,7 +8,7 @@ f1(int *p1, int *p2, int *val) {
 }
 
 #if !(NM_HAVE_RESTRICT_KEYWORD) && (NM_HAVE___RESTRICT_KEYWORD)
-#    define restrict __restrict
+#  define restrict __restrict
 #endif
 
 #if (NM_HAVE_RESTRICT_KEYWORD) || (NM_HAVE___RESTRICT_KEYWORD)
