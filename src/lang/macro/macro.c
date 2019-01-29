@@ -27,9 +27,9 @@
 #define check_blank(a) strlen(#a)
 
 #ifdef NM_HAVE_VARIADIC_MACRO
-#  if defined(NM_HAVE_SPRINTF_S_FN)
+#  if NM_HAVE_SPRINTF_S_FN
 #    define io_sprintf(b, ...) sprintf_s(b, sizeof(b), __VA_ARGS__)
-#  elif defined(NM_HAVE_SNPRINTF_FN)
+#  elif NM_HAVE_SNPRINTF_FN
 #    define io_sprintf(b, ...) snprintf(b, sizeof(b), __VA_ARGS__)
 #  else
 #    define io_sprintf(b, ...) sprintf(b, __VA_ARGS__)
