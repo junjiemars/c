@@ -11,7 +11,9 @@
 	 use _CRT_SECURE_NO_WARNINGS. */
 #  pragma warning(disable : 4996)
 #elif GCC
-#  pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#  if NM_HAVE_CC_OPT_IMPLICIT_FALLTHROUGH
+#    pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#  endif
 #endif
 
 

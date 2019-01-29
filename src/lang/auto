@@ -104,3 +104,20 @@ nm_feature_h=
 nm_feature_flags=
 nm_feature_test='int x = 0x11; int *__restrict p = &x;'
 . ${NORE_ROOT}/auto/feature
+
+
+case "$CC_NAME" in
+	clang)
+		;;
+	gcc)
+		nm_feature="$CC_NAME -Wimplicit-fallthrough"
+		nm_feature_name='nm_have_cc_opt_implicit_fallthrough'
+		nm_feature_run=no
+		nm_feature_h=
+		nm_feature_flags='-Wimplicit-fallthrough'
+		nm_feature_test=
+		. ${NORE_ROOT}/auto/feature
+		;;
+	msvc)
+		;;
+esac
