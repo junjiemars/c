@@ -123,8 +123,8 @@ does not understand block scope.
 		:CUSTOM_ID: language_preprocessor_if_vs_ifdef
 		:END:
 
-=#if= check the value of the symbol, =#ifdef= just check the existence
-of the symbol.
+=#if= check the value of the symbol when the symbol had been defined,
+=#ifdef= just check the existence of the symbol.
 
 Prefer =#if define(...)=, it's more flexible
 #+BEGIN_SRC c
