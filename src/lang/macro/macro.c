@@ -16,13 +16,13 @@
 	(a)++; (b)++;            \
 } while (0) /* no ; at tail */
 
-#define sum(max, out) {              								\
+#define sum(max, out) do {              								\
 	/* avoid name clash */                            \
   int total_g123 = 0, max_g124 = max;	              \
 	for (int i_g125=0; i_g125 < max_g124; i_g125++)   \
 		total_g123 += i_g125;              							\
 	out = total_g123;                  								\
-}
+} while (0)
 
 #define check_blank(a) strlen(#a)
 
