@@ -6,6 +6,7 @@ io: basic \
     flush \
 		process \
 		scan \
+		wchar \
 		wc
 io_test: basic_test  \
          binary_test \
@@ -14,6 +15,7 @@ io_test: basic_test  \
          flush_test \
 				 process_test \
 				 scan_test \
+				 wchar_test \
 				 wc_test
 
 io_prefix := io
@@ -102,10 +104,24 @@ $(scan_binout): $(io_root)scan/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
+# wide char
+wchar_ws_binout := $(bin_path)$(io_prefix)_wchar_ws$(bin_ext)
+wchar_wc_binout := $(bin_path)$(io_prefix)_wchar_wc$(bin_ext)
+
+wchar: $(wchar_ws_binout) $(wchar_wc_binout)
+wchar_test: wchar
+	$(wchar_ws_binout) $(io_root)wchar/ws.c
+	$(wchar_wc_binout) $(io_root)wchar/wc.c
+
+$(wchar_ws_binout): $(io_root)wchar/ws.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(wchar_wc_binout): $(io_root)wchar/wc.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 # wc
 wc_binout := $(bin_path)$(io_prefix)_wc$(bin_ext)
 wc_cppout := $(tmp_path)$(io_prefix)_wc$(cpp_ext)
-
 
 wc: $(wc_binout)
 wc_test: wc
