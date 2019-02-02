@@ -1,6 +1,7 @@
 
 io: basic \
     binary \
+		error \
     file \
 		format \
     flush \
@@ -10,6 +11,7 @@ io: basic \
 		wc
 io_test: basic_test  \
          binary_test \
+				 error_test \
          file_test \
 				 format_test \
          flush_test \
@@ -51,6 +53,15 @@ binary_test: binary
 $(binary_binout): $(io_root)binary/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+# error
+error_binout := $(bin_path)$(io_prefix)_error$(bin_ext)
+
+error: $(error_binout)
+error_test: error
+	$(error_binout)
+
+$(error_binout): $(io_root)error/e1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # format I/O
 format_binout := $(bin_path)$(io_prefix)_format$(bin_ext)
