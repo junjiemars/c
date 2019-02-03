@@ -472,14 +472,22 @@ $(typedef_binout): $(lang_root)typedef/t.c
 # volatile
 volatile_basic_binout := $(bin_path)$(lang_prefix)_volatile_basic$(bin_ext)
 volatile_pointer_binout := $(bin_path)$(lang_prefix)_volatile_pointer$(bin_ext)
+volatile_struct_binout := $(bin_path)$(lang_prefix)_volatile_struct$(bin_ext)
 
 volatile: $(volatile_basic_binout) \
-					$(volatile_pointer_binout)
+					$(volatile_pointer_binout) \
+					$(volatile_struct_binout)
+
 volatile_test: volatile
 	$(volatile_basic_binout)
+	$(volatile_pointer_binout)
+	$(volatile_struct_binout)
 
 $(volatile_basic_binout): $(lang_root)volatile/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(volatile_pointer_binout): $(lang_root)volatile/pointer.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(volatile_struct_binout): $(lang_root)volatile/struct.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
