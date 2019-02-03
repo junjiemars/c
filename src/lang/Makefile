@@ -22,7 +22,8 @@ lang: array \
 			storage \
 			string \
 			type \
-			typedef
+			typedef \
+			volatile
 
 
 lang_test:  array_test \
@@ -47,7 +48,8 @@ lang_test:  array_test \
 						storage_test \
 						string_test \
 						type_test \
-						typedef_test
+						typedef_test \
+						volatile_test
 
 
 lang_prefix := lang
@@ -465,4 +467,14 @@ typedef_test: typedef
 	$(typedef_binout)
 
 $(typedef_binout): $(lang_root)typedef/t.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# volatile
+volatile_binout := $(bin_path)$(lang_prefix)_volatile$(bin_ext)
+
+volatile: $(volatile_binout)
+volatile_test: volatile
+	$(volatile_binout)
+
+$(volatile_binout): $(lang_root)volatile/v1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
