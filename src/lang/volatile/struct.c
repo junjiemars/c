@@ -62,7 +62,7 @@ main(int argc, char **argv) {
 
 	volatile struct f2_s *y = malloc(sizeof(struct f2_s));
 	sum = f2(y);
-	free((struct f2_s*)x);
+	free((struct f2_s*)y);
 	printf("sum(f2)=0x%04x\n", sum);
 
 	struct f3_s *z = malloc(sizeof(struct f3_s));
