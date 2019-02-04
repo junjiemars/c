@@ -24,28 +24,28 @@ raw_f1(struct f1_s *x) {
 
 int
 f1(volatile struct f1_s *x) {
-	x->a += 0x11;
+	x->a = 0x11;
 	return x->a;
 }
 
 int
 raw_f2(struct f2_s *x) {
-	x->a += 0x11;
-	x->b += 0x2200;
+	x->a = 0x11;
+	x->b = 0x2200;
 	return (x->a + x->b);
 }
 
 int
 f2(volatile struct f2_s *x) {
-	x->a += 0x11;
-	x->b += 0x2200;
+	x->a = 0x11;
+	x->b = 0x2200;
 	return (x->a + x->b);
 }
 
 int
 f3(struct f3_s *x) {
-	x->a += 0x11;
-	x->b += 0x2200;
+	x->a = 0x11;
+	x->b = 0x2200;
 	return (x->a + x->b);
 }
 
