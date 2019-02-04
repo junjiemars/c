@@ -1904,6 +1904,14 @@ This /readelf/ program performs a similar function to /objdump/ but it
 goes into more detail and it exists independently of the BFD library,
 so if there is a bug in BFD then /readelf/ will not be affected.
 
+** view symbol table
+	 :PROPERTIES:
+	 :CUSTOM_ID: view-symbol-table
+	 :END:
+
+On Unix-like platform, there are /nm/ program can view the symbol
+table in a executable.
+
 ** trace system call
 	 :PROPERTIES:
 	 :CUSTOM_ID: trace-system-call
