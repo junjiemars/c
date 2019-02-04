@@ -1904,6 +1904,8 @@ This /readelf/ program performs a similar function to /objdump/ but it
 goes into more detail and it exists independently of the BFD library,
 so if there is a bug in BFD then /readelf/ will not be affected.
 
+On Darwin, there are no readelf, but we can use /otool/ do the trick.
+
 ** view symbol table
 	 :PROPERTIES:
 	 :CUSTOM_ID: view-symbol-table
