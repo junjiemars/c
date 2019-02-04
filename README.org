@@ -1706,25 +1706,6 @@ and each such derived type is a distinct new type.
 
 ** Static Library
 ** Shared Library
-** View dependents of Executable
-	 :PROPERTIES:
-	 :CUSTOM_ID: view_dependents_of_exeutable
-	 :END:
-
-#+BEGIN_SRC sh
-# on Windows
-dumpbin -dependents out/bin/math_shared
-
-# on Darwin
-otool -L out/bin/math_shared
-
-# on Linux
-objdump -p out/bin/math_shared
-
-# or
-ldd objs/bin/math_shared
-#+END_SRC
-
 ** Library References
 	 :PROPERTIES:
 	 :CUSTOM_ID: library_references
@@ -1891,6 +1872,25 @@ on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see [[https://g
 	:PROPERTIES:
 	:CUSTOM_ID: tools
 	:END:
+
+** view dependents of Executable
+	 :PROPERTIES:
+	 :CUSTOM_ID: view_dependents_of_exeutable
+	 :END:
+
+#+BEGIN_SRC sh
+# on Windows
+dumpbin -dependents out/bin/math_shared
+
+# on Darwin
+otool -L out/bin/math_shared
+
+# on Linux
+objdump -p out/bin/math_shared
+
+# or
+ldd objs/bin/math_shared
+#+END_SRC
 
 ** read ELF format
 	 :PROPERTIES:
