@@ -1873,7 +1873,7 @@ on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see [[https://g
 	:CUSTOM_ID: tools
 	:END:
 
-** view dependents of Executable
+** view dependents of executable
 	 :PROPERTIES:
 	 :CUSTOM_ID: view_dependents_of_exeutable
 	 :END:
