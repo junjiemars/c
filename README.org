@@ -1860,7 +1860,6 @@ printed on a terminal or printer.
 - [[https://users.cs.cf.ac.uk/Dave.Marshall/C/node18.html][Input and Output:stdio.h]]
 - [[https://en.wikipedia.org/wiki/Printf_format_string][printf format string]]
 	 
- 
 * Network
 
 ** DNS
