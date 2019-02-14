@@ -8,6 +8,7 @@ io: basic \
     flush \
 		process \
 		scan \
+		variadic \
 		wchar \
 		wc
 io_test: basic_test  \
@@ -19,6 +20,7 @@ io_test: basic_test  \
          flush_test \
 				 process_test \
 				 scan_test \
+				 variadic_test \
 				 wchar_test \
 				 wc_test
 
@@ -125,6 +127,16 @@ scan_test: scan
 $(scan_binout): $(io_root)scan/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+# variadic
+variadic_binout := $(bin_path)$(io_prefix)_variadic$(bin_ext)
+
+variadic: $(variadic_binout)
+variadic_test: variadic
+	$(variadic_binout)
+	$(variadic_binout) "Hi, variadic function!"
+
+$(variadic_binout): $(io_root)variadic/v1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # wide char
 wchar_ws_binout := $(bin_path)$(io_prefix)_wchar_ws$(bin_ext)
