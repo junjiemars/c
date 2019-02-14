@@ -3,6 +3,7 @@ io: basic \
     binary \
 		error \
     file \
+		fileno \
 		format \
     flush \
 		process \
@@ -13,6 +14,7 @@ io_test: basic_test  \
          binary_test \
 				 error_test \
          file_test \
+				 fileno_test \
 				 format_test \
          flush_test \
 				 process_test \
@@ -84,6 +86,15 @@ file_test: file
 $(file_tmp_binout): $(io_root)file/tmp.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+# fileno
+fileno_binout := $(bin_path)$(io_prefix)_fileno$(bin_ext)
+
+fileno: $(fileno_binout)
+fileno_test: fileno
+	$(fileno_binout)
+
+$(fileno_binout): $(io_root)fileno/fn.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # flush
 flush_binout := $(bin_path)$(io_prefix)_flush$(bin_ext)
