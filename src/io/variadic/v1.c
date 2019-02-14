@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-
 void
 foo(const char *restrict format, ...) {
 	va_list args;
@@ -13,9 +12,6 @@ foo(const char *restrict format, ...) {
 
 int
 main(int argc, char **argv) {
-	_unused_(argc);
-	_unused_(argv);
-
 	switch (argc) {
 	case 1:
 		foo("%s\n", argv[0]);
