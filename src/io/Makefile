@@ -122,7 +122,7 @@ scan_binout := $(bin_path)$(io_prefix)_scan$(bin_ext)
 
 scan: $(scan_binout)
 scan_test: scan
-	echo -n "X" "1234" "5678" "3.1415" "2.718" | $(scan_binout)
+	echo "X, 1234, 5678, 3.1415, 2.718" | $(scan_binout)
 
 $(scan_binout): $(io_root)scan/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

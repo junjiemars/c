@@ -5,31 +5,19 @@ int
 main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
-	
-	int n = 0;
+
 	char c;
-	if (0 < (n = fscanf(stdin, "%c", &c))) {
-		printf("c=%c [%i]\n", c, c);
-	}
-
 	int i;
-	if (0 < (n = fscanf(stdin, "%i", &i))) {
-		printf("i=%i\n", i);
-	}
-
 	long l;
-	if (0 < (n = fscanf(stdin, "%li", &l))) {
-		printf("l=%li\n", l);
-	}
-
 	float f;
-	if (0 < (n = fscanf(stdin, "%f", &f))) {
-		printf("f=%f\n", f);
-	}
-
 	double d;
-	if (0 < (n = fscanf(stdin, "%lf", &d))) {
-		printf("d=%lf\n", d);
-	}
+	
+	int n = fscanf(stdin, "%c, %i, %li, %f, %lf",
+								 &c, &i, &l, &f, &d);
+	printf("scanned count: %d\n", n);
+	printf("c=%c, i=%i, li=%li, f=%f, lf=%lf\n",
+				 c, i, l, f, d);
+
+	return 0;
 }
 
