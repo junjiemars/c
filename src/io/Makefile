@@ -40,7 +40,6 @@ basic_binout := $(bin_path)$(io_prefix)_basic$(bin_ext)
 basic: $(basic_binout)
 basic_test: basic
 	echo "Hello, basic IO" | $(basic_binout)
-	echo "Hello, 基础 IO" | $(basic_binout)
 
 $(basic_binout): $(io_root)basic/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
