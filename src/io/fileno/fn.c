@@ -24,7 +24,12 @@ main(int argc, char **argv) {
 	}
 	fprintf(out, "end of %s\n", argv[0]);
 
+#ifdef MSVC
+	/* fclose stdout should: */
+  /* Security check failure or stack buffer overrun - code c0000409 */
+#else
 	fclose(out);
-	
+#endif
+
 	return 0;
 }
