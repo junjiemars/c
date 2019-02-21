@@ -2,6 +2,14 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#if !(NM_HAVE_RESTRICT_KEYWORD)
+#  if (NM_HAVE___RESTRICT_KEYWORD)
+#    define restrict __restrict
+#  else
+#    define restrict
+#  endif
+#endif
+
 void
 foo(const char *restrict format, ...) {
 	va_list args;
