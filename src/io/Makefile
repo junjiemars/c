@@ -2,24 +2,24 @@
 io: basic \
     binary \
 		error \
-    file \
 		fileno \
 		format \
     flush \
 		process \
 		scan \
+    tmp \
 		variadic \
 		wchar \
 		wc
 io_test: basic_test  \
          binary_test \
 				 error_test \
-         file_test \
 				 fileno_test \
 				 format_test \
          flush_test \
 				 process_test \
 				 scan_test \
+         tmp_test \
 				 variadic_test \
 				 wchar_test \
 				 wc_test
@@ -77,17 +77,6 @@ format_test: format
 $(format_binout): $(io_root)format/f.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-
-# file
-file_tmp_binout := $(bin_path)$(io_prefix)_file_tmp$(bin_ext)
-
-file: $(file_tmp_binout)
-file_test: file
-	$(file_tmp_binout)
-
-$(file_tmp_binout): $(io_root)file/tmp.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
 # fileno
 fileno_binout := $(bin_path)$(io_prefix)_fileno$(bin_ext)
 
@@ -125,6 +114,16 @@ scan_test: scan
 	echo "X, 1234, 5678, 3.1415, 2.718" | $(scan_binout)
 
 $(scan_binout): $(io_root)scan/s.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# tmp
+tmp_binout := $(bin_path)$(io_prefix)_tmp$(bin_ext)
+
+tmp: $(tmp_binout)
+tmp_test: tmp
+	$(tmp_binout)
+
+$(tmp_binout): $(io_root)tmp/tmp.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # variadic
