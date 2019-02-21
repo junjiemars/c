@@ -19,7 +19,6 @@
 int
 main(int argc, char **argv) {
 	_unused_(argc);
-	_unused_(argv);
 
 	printf("P_tmpdir=%s\n", P_tmpdir);
 	printf("L_tmpnam=%i\n", L_tmpnam);
@@ -27,7 +26,7 @@ main(int argc, char **argv) {
 	char *s = tmpnam(0);
 	printf("tmpname(0) = %s\n", s);
 
-	char nam[L_tmpnam];
+	char nam[L_tmpnam + sizeof(void*)];
 	tmpnam(nam);
 	printf("tmpnam(nam) = %s\n", nam);
 
