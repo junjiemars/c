@@ -16,8 +16,8 @@
 #endif
 
 #if GCC
-	#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-
+#  pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+/* #  include <features.h> */
 #endif
 
 #endif /* end of _IO_H_ */
