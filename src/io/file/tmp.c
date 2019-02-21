@@ -4,14 +4,16 @@
 #include <errno.h>
 
 #ifdef GCC
-#	ifndef __USE_SVID
-#		define __USE_SVID
-#	endif
+# ifndef __USE_XOPEN
+#   define __USE_XOPEN
+# endif
 #endif
 #include <stdio.h>
 
-#if defined(WINNT) && !defined(NM_HAVE_P_TMPDIR)
-# define P_tmpdir getenv("TMPDIR")
+#if !defined(NM_HAVE_P_TMPDIR)
+#  if defined(WINNT)
+#    define P_tmpdir getenv("TMPDIR")
+#  endif
 #endif
 
 int
