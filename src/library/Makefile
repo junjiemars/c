@@ -54,7 +54,7 @@ math_shared_test: math_shared
 	$(math_lib_path)=$(lib_path) $(math_shared_binout)
 
 $(math_static_binout): $(library_root)math/math1.c $(geo_arout)
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(LDLIBS)
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(math_shared_binout): $(library_root)math/math1.c $(geo_libout)
 	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $< $(bin_out)$@ $(LDFLAGS) $(LDLIBS)
