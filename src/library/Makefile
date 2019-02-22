@@ -37,12 +37,9 @@ $(geo_h): $(library_root)geo/geo.h
 
 ifeq ($(CC_NAME), msvc)
 math_lib_path := PATH
-math_ldflags =
-ld_geo_lib = $(lib_path)libgeo$(ar_ext)
+LDLIBS = libgeo$(ar_ext)
 else
 math_lib_path := LD_LIBRARY_PATH
-# math_ldflags = $(LDFLAGS)
-# ld_geo_lib = -lgeo
 LDLIBS = -lgeo
 endif
 
