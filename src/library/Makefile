@@ -41,8 +41,9 @@ math_ldflags =
 ld_geo_lib = $(lib_path)libgeo$(ar_ext)
 else
 math_lib_path := LD_LIBRARY_PATH
-math_ldflags = $(LDFLAGS)
-ld_geo_lib = -lgeo
+# math_ldflags = $(LDFLAGS)
+# ld_geo_lib = -lgeo
+LDLIBS = -lgeo
 endif
 
 math_static_binout := $(bin_path)math_static$(bin_ext)
@@ -59,7 +60,7 @@ $(math_static_binout): $(library_root)math/math1.c $(geo_arout)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(LDLIBS)
 
 $(math_shared_binout): $(library_root)math/math1.c $(geo_libout)
-	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $(math_ldflags) $< $(bin_out)$@ $(LDLIBS) $(ld_geo_lib) 
+	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $< $(bin_out)$@ $(LDFLAGS) $(LDLIBS)
 
 
 .PHONY: geo geo_test math_static math_static_test math_shared math_shared_test
