@@ -1,30 +1,26 @@
 #include <_lang_.h>
-#include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-size_t
-randomize(const size_t n /* RAND_MAX */) {
-	size_t r = rand() % n;	
-	return r;
+uint32_t
+randomize(const uint32_t n) {
+	return arc4random_uniform(n);
 }
 
 int
 main(int argc, char **argv) {
-	/* initialize random number generator */
-	srand(time(0));
+	_unused_(argc);
+	_unused_(argv);
 
 	size_t n = 10;
 	if (argc > 1) {
 		n = atoi(argv[1]);
 	}
-
-	printf("raw random [%i, %zu)\n", 0, n);
+	printf("arc random: [0, %zu)\n", n);
 	printf("--------------------\n");
 	for (size_t i = 0; i < n; i++) {
-		printf("%zu ", randomize(n));
+		printf("%u ", randomize(n));
 	}
 	putchar('\n');
-
 	return 0;
 }

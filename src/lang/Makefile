@@ -238,14 +238,21 @@ $(main_envp_binout): $(lang_root)main/m_envp.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # random
-random_binout := $(bin_path)$(lang_prefix)_random$(bin_ext)
+random_binout := $(bin_path)$(lang_prefix)_random_raw$(bin_ext)
+random_arc_binout := $(bin_path)$(lang_prefix)_random_arc$(bin_ext)
 
-random: $(random_binout)
+random: $(random_binout) \
+				$(random_arc_binout)
 random_test: random
 	$(random_binout)
 	$(random_binout) 20
+	$(random_arc_binout)
+	$(random_arc_binout) 20
 
 $(random_binout): $(lang_root)random/r.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(random_arc_binout): $(lang_root)random/arc.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # restrict
