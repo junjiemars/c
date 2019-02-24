@@ -1,5 +1,5 @@
 
-x86: 	array   											\
+x86: 	x86_array 										\
 			x86_bone           			      \
 			x86_branch										\
 			call          		            \
@@ -11,7 +11,7 @@ x86: 	array   											\
 			x86_typecast									\
 			x86_var	
 
-x86_test: array_test    						\
+x86_test: x86_array_test  					\
 					x86_bone_test       			\
 					x86_branch_test						\
 					call_test   							\
@@ -84,13 +84,13 @@ endif
 
 
 # array
-array_binout := $(bin_path)$(x86_prefix)_array$(bin_ext)
+x86_array_binout := $(bin_path)$(x86_prefix)_array$(bin_ext)
 
-array: $(array_binout)
-array_test: array
-	$(array_binout)
+x86_array: $(x86_array_binout)
+x86_array_test: x86_array
+	$(x86_array_binout)
 
-$(array_binout): $(x86_root)array/array.c
+$(x86_array_binout): $(x86_root)array/array.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
