@@ -52,11 +52,13 @@ hash_kr1_binout := $(bin_path)$(algo_prefix)_hash_kr1$(bin_ext)
 hash_kr2_binout := $(bin_path)$(algo_prefix)_hash_kr2$(bin_ext)
 hash_djb2_binout := $(bin_path)$(algo_prefix)_hash_djb2$(bin_ext)
 hash_sdbm_binout := $(bin_path)$(algo_prefix)_hash_sdbm$(bin_ext)
+hash_jenkins_binout := $(bin_path)$(algo_prefix)_hash_jenkins$(bin_ext)
 
 hash: $(hash_kr1_binout) \
 			$(hash_kr2_binout) \
 			$(hash_djb2_binout) \
-			$(hash_sdbm_binout)
+			$(hash_sdbm_binout) \
+			$(hash_jenkins_binout)
 hash_test: hash
 	$(hash_kr1_binout) "abcABC"
 	$(hash_kr1_binout) "ABCabc"
@@ -64,6 +66,8 @@ hash_test: hash
 	$(hash_kr2_binout) "ABCabc"
 	$(hash_djb2_binout) "abcABC"
 	$(hash_sdbm_binout) "abcABC"
+	$(hash_jenkins_binout) "a"
+	$(hash_jenkins_binout) "The quick brown"
 
 $(hash_kr1_binout): $(algo_root)hash/kr1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -75,6 +79,9 @@ $(hash_djb2_binout): $(algo_root)hash/djb2.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(hash_sdbm_binout): $(algo_root)hash/sdbm.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(hash_jenkins_binout): $(algo_root)hash/jenkins.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # is unsigned integer
