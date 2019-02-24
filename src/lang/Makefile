@@ -466,13 +466,19 @@ $(string_tok_binout): $(lang_root)string/tok.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # time
-time_binout := $(bin_path)$(lang_prefix)_time$(bin_ext)
+time_epoch_binout := $(bin_path)$(lang_prefix)_time_epoch$(bin_ext)
+time_local_binout := $(bin_path)$(lang_prefix)_time_local$(bin_ext)
 
-time: $(time_binout)
+time: $(time_epoch_binout) \
+			$(time_local_binout)
 time_test: time
-	$(time_binout)
+	$(time_epoch_binout)
+	$(time_local_binout)
 
-$(time_binout): $(lang_root)time/t.c
+$(time_epoch_binout): $(lang_root)time/t.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(time_local_binout): $(lang_root)time/lt.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # type
