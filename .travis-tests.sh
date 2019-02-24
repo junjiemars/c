@@ -16,7 +16,7 @@ fi
 ROOT="`cd $(dirname ${BASH_SOURCE}) && pwd -P`"
 pushd $ROOT
 
-CC=$CC /configure \
+CC=$CC ./configure \
 	--has-ds \
 	--has-hi \
 	--has-io \

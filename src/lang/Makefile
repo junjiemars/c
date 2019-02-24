@@ -367,7 +367,7 @@ $(stage_objout): $(stage_asmout)
 	$(AS) $(ASFLAGS) $(obj_out)$@ $(nm_stage_c) $^
 
 $(stage_asmout): $(stage_cppout)
-	$(CAS) $(CFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
+	$(AS) $(CFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
 
 $(stage_cppout): $(lang_root)stage/s.c
 	$(CPP) $(CPPFLAGS) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
