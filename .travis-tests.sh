@@ -13,7 +13,10 @@ if [ -z "$CC" ]; then
   esac
 fi
 
-CC=$CC ./configure \
+ROOT="`cd $(dirname ${BASH_SOURCE}) && pwd -P`"
+pushd $ROOT
+
+CC=$CC /configure \
 	--has-ds \
 	--has-hi \
 	--has-io \
@@ -23,3 +26,4 @@ CC=$CC ./configure \
 	--has-x86
 make clean test
 
+popd
