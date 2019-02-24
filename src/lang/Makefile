@@ -12,6 +12,7 @@ lang: array \
 			linkage \
 			macro \
 			main \
+			random \
 			restrict \
 			pointer \
 			preprocessor \
@@ -38,6 +39,7 @@ lang_test:  array_test \
 						linkage_test \
 						macro_test \
 						main_test \
+						random_test \
 						restrict_test \
 						pointer_test \
 						preprocessor \
@@ -233,6 +235,17 @@ $(main_binout): $(lang_root)main/m.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(main_envp_binout): $(lang_root)main/m_envp.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# random
+random_binout := $(bin_path)$(lang_prefix)_random$(bin_ext)
+
+random: $(random_binout)
+random_test: random
+	$(random_binout)
+	$(random_binout) 20
+
+$(random_binout): $(lang_root)random/r.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # restrict
