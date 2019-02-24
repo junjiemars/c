@@ -1,6 +1,7 @@
 #include <_algo_.h>
 #include <stdio.h>
 
+/* Dan Bernstein */
 unsigned long
 hash(const char *str) {
 	unsigned long h = 5381;

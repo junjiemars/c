@@ -1714,7 +1714,7 @@ and each such derived type is a distinct new type.
 - [[https://en.wikipedia.org/wiki/Dynamic-link_library][Dynamic-link library]]
 - [[https://en.wikipedia.org/wiki/Static_library][Static library]]
 
-* STRING
+* String
 * Unicode
 	:PROPERTIES:
 	:CUSTOM_ID: unicode
@@ -1868,6 +1868,11 @@ on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see [[https://g
 - [[https://tools.ietf.org/html/rfc1536][RFC 1536: Common DNS Implementation Errors and Suggested Fixes]]
 - [[http://www.linuxhowtos.org/C_C++/socket.htm][Sockets Tutorial]]
 	
+* Algorithm
+** Hash
+** Algorithm References
+- [[http://www.cse.yorku.ca/~oz/hash.html][Hash Functions]]
+
 * Tools
 	:PROPERTIES:
 	:CUSTOM_ID: tools
