@@ -1,5 +1,6 @@
 algo: duff_device \
 			dynamic_array \
+			hash \
 			is_unsigned_integer \
 			is_unsigned_type \
 			reverse_string \
@@ -7,6 +8,7 @@ algo: duff_device \
 
 algo_test: duff_device_test \
 					 dynamic_array_test \
+					 hash_test \
 					 is_unsigned_integer_test \
 					 is_unsigned_type_test \
 					 reverse_string_test \
@@ -45,6 +47,22 @@ dynamic_array_test: dynamic_array
 $(dynamic_array_binout): $(algo_root)dynamic_array/da.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+# hash
+hash_kr1_binout := $(bin_path)$(algo_prefix)_hash_kr1$(bin_ext)
+hash_kr2_binout := $(bin_path)$(algo_prefix)_hash_kr2$(bin_ext)
+
+hash: $(hash_kr1_binout) $(hash_kr2_binout)
+hash_test: hash
+	$(hash_kr1_binout) "abcABC"
+	$(hash_kr1_binout) "ABCabc"
+	$(hash_kr2_binout) "abcABC"
+	$(hash_kr2_binout) "ABCabc"
+
+$(hash_kr1_binout): $(algo_root)hash/kr1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(hash_kr2_binout): $(algo_root)hash/kr2.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # is unsigned integer
 is_uint_binout := $(bin_path)$(algo_prefix)_is_uint$(bin_ext)
