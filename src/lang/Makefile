@@ -22,6 +22,7 @@ lang: array \
 			stage \
 			storage \
 			string \
+			time \
 			type \
 			typedef \
 			volatile
@@ -49,6 +50,7 @@ lang_test:  array_test \
 						stage_test \
 						storage_test \
 						string_test \
+						time_test \
 						type_test \
 						typedef_test \
 						volatile_test
@@ -463,6 +465,15 @@ $(string_dup_binout): $(lang_root)string/dup.c
 $(string_tok_binout): $(lang_root)string/tok.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+# time
+time_binout := $(bin_path)$(lang_prefix)_time$(bin_ext)
+
+time: $(time_binout)
+time_test: time
+	$(time_binout)
+
+$(time_binout): $(lang_root)time/t.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # type
 type_binout := $(bin_path)$(lang_prefix)_type$(bin_ext)
