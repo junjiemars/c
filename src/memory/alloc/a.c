@@ -6,6 +6,8 @@
 
 #if MSVC
 #  include <malloc.h>
+#else
+#  include <alloca.h>
 #endif
 
 void foo() {
