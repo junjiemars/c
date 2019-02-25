@@ -4,7 +4,7 @@ algo: duff_device \
 			is_unsigned_integer \
 			is_unsigned_type \
 			reverse_string \
-			sizeof
+			algo_sizeof
 
 algo_test: duff_device_test \
 					 dynamic_array_test \
@@ -12,7 +12,7 @@ algo_test: duff_device_test \
 					 is_unsigned_integer_test \
 					 is_unsigned_type_test \
 					 reverse_string_test \
-					 sizeof_test
+					 algo_sizeof_test
 
 
 algo_prefix := algo
@@ -127,8 +127,8 @@ $(reverse_string_binout): $(algo_root)reverse_string/rev_str.c
 sizeof_binout := $(bin_path)$(algo_prefix)_sizeof$(bin_ext)
 sizeof_cppout := $(tmp_path)$(algo_prefix)_sizeof$(cpp_ext)
 
-sizeof: $(sizeof_binout)
-sizeof_test: sizeof
+algo_sizeof: $(sizeof_binout)
+algo_sizeof_test: algo_sizeof
 	$(sizeof_binout)
 
 $(sizeof_binout): $(sizeof_cppout)

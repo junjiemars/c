@@ -1,7 +1,7 @@
 
 io: basic \
     binary \
-		error \
+		io_error \
 		fileno \
 		format \
     flush \
@@ -13,7 +13,7 @@ io: basic \
 		wc
 io_test: basic_test  \
          binary_test \
-				 error_test \
+				 io_error_test \
 				 fileno_test \
 				 format_test \
          flush_test \
@@ -59,8 +59,8 @@ $(binary_binout): $(io_root)binary/b.c
 # error
 error_binout := $(bin_path)$(io_prefix)_error$(bin_ext)
 
-error: $(error_binout)
-error_test: error
+io_error: $(error_binout)
+io_error_test: io_error
 	$(error_binout)
 
 $(error_binout): $(io_root)error/e1.c

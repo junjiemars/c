@@ -9,7 +9,7 @@ int total_elements = 4;
 jmp_buf env;
 
 void
-add_element(char c) {
+add_element(int c) {
 	if (0 == current_element) {
 		dynamic = malloc(sizeof(char) * total_elements);
 	}
@@ -17,7 +17,7 @@ add_element(char c) {
 		total_elements *= 2;
 		dynamic = realloc(dynamic, total_elements);
 	}
-	dynamic[current_element++] = c;
+	dynamic[current_element++] = (char)c;
 }
 
 void

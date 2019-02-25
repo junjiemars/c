@@ -17,6 +17,7 @@ ROOT="`cd $(dirname ${BASH_SOURCE}) && pwd -P`"
 pushd $ROOT
 
 CC=$CC ./configure \
+  --has-algo \
 	--has-ds \
 	--has-hi \
 	--has-io \
