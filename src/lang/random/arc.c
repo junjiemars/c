@@ -19,7 +19,7 @@ main(int argc, char **argv) {
 	if (argc > 1) {
 		n = atoi(argv[1]);
 	}
-	printf("arc random: [0, %zu)\n", n);
+	printf("arc4random_uniform: [0, %zu)\n", n);
 	printf("--------------------\n");
 	for (size_t i = 0; i < n; i++) {
 		printf("%u ", randomize(n));
