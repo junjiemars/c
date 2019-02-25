@@ -46,7 +46,7 @@ test_strcpy(void) {
 	memset(buf, 0x11, len);
 	assert(0x11 == buf[len-1] && "strcpy(), 0x11 != tailing");
 
-	/* does not padding 0 */
+	/* does not pad tailing 0 */
 	strcpy(buf, "abc");
 	assert(0 == buf[strlen(buf)] && "strcpy(), 0 != tailing");
 	assert(0x11 == buf[len-1] && "strcpy(), 0x11 != tailing");
@@ -60,8 +60,8 @@ test_strcpy(void) {
 		 00007ff6`8dc67788 cd29            int     29h
 	 */
 	/* lang_string_basic[2834:14486] detected buffer overflow */
-/* 	strcpy(buf, "abcdefgh"); */
-/* 	assert(0 != buf[len-1] && "strcpy(), 0 == tailing"); */
+	strcpy(buf, "abcdefgh");
+	assert(0 != buf[len-1] && "strcpy(), 0 == tailing");
 }
 
 void
