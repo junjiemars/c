@@ -124,15 +124,15 @@ $(reverse_string_binout): $(algo_root)reverse_string/rev_str.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # sizeof
-sizeof_binout := $(bin_path)$(algo_prefix)_sizeof$(bin_ext)
-sizeof_cppout := $(tmp_path)$(algo_prefix)_sizeof$(cpp_ext)
+algo_sizeof_binout := $(bin_path)$(algo_prefix)_sizeof$(bin_ext)
+algo_sizeof_cppout := $(tmp_path)$(algo_prefix)_sizeof$(cpp_ext)
 
-algo_sizeof: $(sizeof_binout)
+algo_sizeof: $(algo_sizeof_binout)
 algo_sizeof_test: algo_sizeof
-	$(sizeof_binout)
+	$(algo_sizeof_binout)
 
-$(sizeof_binout): $(sizeof_cppout)
+$(algo_sizeof_binout): $(algo_sizeof_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(sizeof_cppout): $(algo_root)sizeof/s.c
+$(algo_sizeof_cppout): $(algo_root)sizeof/s.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
