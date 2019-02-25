@@ -60,8 +60,8 @@ test_strcpy(void) {
 		 00007ff6`8dc67788 cd29            int     29h
 	 */
 	/* lang_string_basic[2834:14486] detected buffer overflow */
-	strcpy(buf, "abcdefgh");
-	assert(0 != buf[len-1] && "strcpy(), 0 == tailing");
+	/* strcpy(buf, "abcdefgh"); */
+	/* assert(0 != buf[len-1] && "strcpy(), 0 == tailing"); */
 }
 
 void

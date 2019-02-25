@@ -111,7 +111,7 @@ nm_feature_name='nm_have_arc4random_uniform_fn'
 nm_feature_run=no
 nm_feature_h='#include <stdlib.h>'
 nm_feature_flags=
-nm_feature_test='arc4random_uniform();'
+nm_feature_test='arc4random_uniform(1);'
 . ${NORE_ROOT}/auto/feature
 
 nm_feature="rand_s fn"

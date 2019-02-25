@@ -547,3 +547,4 @@ $(volatile_pointer_binout): $(lang_root)volatile/pointer.c
 
 $(volatile_struct_binout): $(lang_root)volatile/struct.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
