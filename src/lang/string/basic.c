@@ -48,7 +48,7 @@ test_strcpy(void) {
 
 	/* does not padding 0 */
 	strcpy(buf, "abc");
-	assert(0 == buf[strlen(buf)] && "strcpy(), 0 != string tailing");
+	assert(0 == buf[strlen(buf)] && "strcpy(), 0 != tailing");
 	assert(0x11 == buf[len-1] && "strcpy(), 0x11 != tailing");
 
 	/* no null-terminated */
@@ -116,4 +116,6 @@ main(int argc, char **argv) {
 /* 	test_strcmp(argv[0]); */
 /* 	test_strcmp1(); */
 /* 	test_STRCMP(); */
+
+	return 0;
 }
