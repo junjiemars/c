@@ -114,6 +114,14 @@ nm_feature_flags=
 nm_feature_test='arc4random_uniform();'
 . ${NORE_ROOT}/auto/feature
 
+nm_feature="rand_s fn"
+nm_feature_name='nm_have_rand_s_fn'
+nm_feature_run=no
+nm_feature_h='#include <stdlib.h>'
+nm_feature_flags=
+nm_feature_test='unsigned int x; rand_s(&x);'
+. ${NORE_ROOT}/auto/feature
+
 		
 case "$CC_NAME" in
 	clang)

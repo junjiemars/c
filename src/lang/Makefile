@@ -242,19 +242,25 @@ $(main_envp_binout): $(lang_root)main/m_envp.c
 # random
 random_binout := $(bin_path)$(lang_prefix)_random_raw$(bin_ext)
 random_arc_binout := $(bin_path)$(lang_prefix)_random_arc$(bin_ext)
+random_s_binout := $(bin_path)$(lang_prefix)_random_s$(bin_ext)
 
 random: $(random_binout) \
-				$(random_arc_binout)
+				$(random_arc_binout) \
+				$(random_s_binout)
 random_test: random
 	$(random_binout) 10
 	$(random_binout) 10 -10 10
 	$(random_arc_binout)
 	$(random_arc_binout) 20
+	$(random_s_binout)
 
 $(random_binout): $(lang_root)random/r.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(random_arc_binout): $(lang_root)random/arc.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(random_s_binout): $(lang_root)random/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # restrict
