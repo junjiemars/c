@@ -10,9 +10,9 @@
 
 void foo() {
 	int *pi = alloca(sizeof(int) * 10);
-	assert((0 == pi) || strerror(errno));
+	assert((0 != pi) && strerror(errno));
 	pi[0] = 0x11223344;
-	assert((0 == pi[1]) || "filled with non-zero");
+	assert((0 == pi[1]) && "filled with non-zero");
 }
 
 int
