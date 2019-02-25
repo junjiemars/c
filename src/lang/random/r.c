@@ -3,6 +3,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#if MSVC
+#  pragma warning(disable: 4244)
+#endif
+
+
 size_t
 randomize(const size_t n /* RAND_MAX */) {
 	size_t r = rand() % n;	

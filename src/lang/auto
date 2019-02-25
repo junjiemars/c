@@ -106,6 +106,15 @@ if [ "yes" != $nm_found ]; then
 	. ${NORE_ROOT}/auto/feature
 fi
 
+nm_feature="arc4random_uniform fn"
+nm_feature_name='nm_have_arc4random_uniform_fn'
+nm_feature_run=no
+nm_feature_h='#include <stdlib.h>'
+nm_feature_flags=
+nm_feature_test='arc4random_uniform();'
+. ${NORE_ROOT}/auto/feature
+
+		
 case "$CC_NAME" in
 	clang)
 		;;
