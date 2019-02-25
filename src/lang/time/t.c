@@ -8,7 +8,7 @@ main(int argc, char **argv) {
 	_unused_(argv);
 
 	time_t epoch = time(0);
-	printf("epoch seconds: %ld\n", epoch);
+	printf("epoch seconds: %zu\n", epoch);
 
 	return 0;
 }
