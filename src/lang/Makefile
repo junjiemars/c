@@ -5,6 +5,7 @@ lang: array \
 			duration \
 			enum \
 			env \
+			error \
 			exit \
 			fn \
 			goto \
@@ -33,6 +34,7 @@ lang_test:  array_test \
 						duration_test \
 						enum_test \
 						env_test \
+						error_test \
             exit_test \
 						fn_test \
 						goto_test \
@@ -139,6 +141,17 @@ env_test: env
 	COUNT=2 $(env_binout)
 	COUNT=3 TEXT="Bonjor" $(env_binout)
 	COUNT=2 $(env_binout) --TEXT=Bonjour
+
+# error
+error_basic_binout := $(bin_path)$(lang_prefix)_error_basic$(bin_ext)
+
+error: $(error_basic_binout)
+error_test: error
+	$(error_basic_binout) $(CURDIR)/Makefilex
+	$(error_basic_binout) $(CURDIR)/Makefile
+
+$(error_basic_binout): $(lang_root)error/e.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # exit
 exit_binout := $(bin_path)$(lang_prefix)_exit$(bin_ext)

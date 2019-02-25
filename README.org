@@ -383,6 +383,34 @@ Disadvantages of /Function Return Value/:
 		:CUSTOM_ID: language_error_strerror
 		:END:
 
+=char * strerror(int errnum);=
+		
+Interprets the value of /errnum/, generating a string with a message
+that describes the error condition as if set to =errno= by a function
+of the library. The returned pointer points to a statically allocated
+string, which shall not be modified by the program. Further calls to
+this function may overwrite its content (particular library
+implementations are not required to avoid data races). The error
+strings produced by strerror may be specific to each system and
+library implementation.
+
+*** perror
+		:PROPERTIES:
+		:CUSTOM_ID: language_error_perror
+		:END:
+
+
+=void perror(const char *str);=
+
+Interprets the value of =errno= as an error message, and prints it to
+stderr (the standard error output stream, usually the console),
+optionally preceding it with the custom message specified in /str/. If
+the parameter str is not a null pointer, /str/ is printed followed by
+a colon =:= and a space. Then, whether /str/ was a null pointer or
+not, the generated error description is printed followed by a newline
+character ='\n'=. =perror= should be called right after the error was
+produced, otherwise it can be overwritten by calls to other functions.
+
 ** Function
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_function

@@ -1,5 +1,6 @@
-#include "_error_.h"
+#include <_lang_.h>
 #include <stdio.h>
+#include <errno.h>
 #include <string.h>
 
 int
@@ -15,6 +16,7 @@ main(int argc, char* argv[]) {
   if (0 == out) {
     int e = errno;
   	if (e) {
+			perror(argv[1]);
   		fprintf(stderr, "open %s failed, caused by: %s\n",
               argv[1], strerror(e));
   	}
