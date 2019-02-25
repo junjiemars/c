@@ -246,8 +246,8 @@ random_arc_binout := $(bin_path)$(lang_prefix)_random_arc$(bin_ext)
 random: $(random_binout) \
 				$(random_arc_binout)
 random_test: random
-	$(random_binout)
-	$(random_binout) 20
+	$(random_binout) 10
+	$(random_binout) 20 -10 10
 	$(random_arc_binout)
 	$(random_arc_binout) 20
 

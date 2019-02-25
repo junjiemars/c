@@ -9,8 +9,14 @@
 
 
 size_t
-randomize(const size_t n /* RAND_MAX */) {
+randomize(size_t n /* RAND_MAX */) {
 	size_t r = rand() % n;	
+	return r;
+}
+
+int
+ranged_randomize(int min, int max) {
+	int r = (double)rand() / (RAND_MAX + 1) * (max - min) + min;
 	return r;
 }
 
@@ -19,17 +25,29 @@ main(int argc, char **argv) {
 	/* initialize random number generator */
 	srand(time(0));
 
-	size_t n = 10;
-	if (argc > 1) {
-		n = atoi(argv[1]);
-	}
+	size_t n;
 
-	printf("raw random [%i, %zu)\n", 0, n);
-	printf("--------------------\n");
-	for (size_t i = 0; i < n; i++) {
-		printf("%zu ", randomize(n));
+	if (4 == argc) {
+		n = atoi(argv[1]);
+		int min = atoi(argv[2]);
+		int max = atoi(argv[3]);
+
+		printf("raw random [%i, %i)\n", min, max);
+		printf("--------------------\n");
+		for (size_t i = 0; i < n; i++) {
+			printf("%i ", ranged_randomize(min, max));
+		}
+		putchar('\n');
+	} else if (argc > 1) {
+		n = atoi(argv[1]);
+		printf("raw random [%i, %zu)\n", 0, n);
+		printf("--------------------\n");
+		for (size_t i = 0; i < n; i++) {
+			printf("%zu ", randomize(n));
+		}
+		putchar('\n');
 	}
-	putchar('\n');
+	
 
 	return 0;
 }
