@@ -20,7 +20,7 @@ int
 main(int argc, char **argv) {
 	if (argc > 1) {
 		unsigned long h = hash(argv[1]);
-		printf("jenkins hash(\"%s\") = \n0x%016zx\n", argv[1], h);
+		printf("jenkins hash(\"%s\") = \n0x%016lx\n", argv[1], h);
 	}
 	return 0;
 }

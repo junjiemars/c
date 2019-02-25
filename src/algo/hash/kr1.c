@@ -18,7 +18,7 @@ main(int argc, char **argv) {
 
 	if (argc > 1) {
 		unsigned long h = hash(argv[1]);
-		printf("K&R hash1(\"%s\") = %zu\n", argv[1], h);
+		printf("K&R hash1(\"%s\") = %lu\n", argv[1], h);
 	}
 	
 	return 0;
