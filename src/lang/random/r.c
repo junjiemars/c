@@ -16,7 +16,7 @@ randomize(size_t n /* RAND_MAX */) {
 
 int
 ranged_randomize(int min, int max) {
-	int r = (double)rand() / (RAND_MAX + 1) * (max - min) + min;
+	int r = rand() / (RAND_MAX + 1.0) * (max - min) + min;
 	return r;
 }
 

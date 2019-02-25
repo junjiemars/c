@@ -247,7 +247,7 @@ random: $(random_binout) \
 				$(random_arc_binout)
 random_test: random
 	$(random_binout) 10
-	$(random_binout) 20 -10 10
+	$(random_binout) 10 -10 10
 	$(random_arc_binout)
 	$(random_arc_binout) 20
 
