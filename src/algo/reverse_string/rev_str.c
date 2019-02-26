@@ -3,12 +3,16 @@
 #include <stdio.h>
 
 
+#if MSVC
+# pragma warning(disable: 4996)
+#endif
+
 void
 reverse_string(char *s) {
-	for (int i=0, j=strlen(s)-1; i<j; i++, j--) {
+	for (size_t i=0, j=strlen(s)-1; i<j; i++, j--) {
 		int t = s[i];
 		s[i] = s[j];
-		s[j] = t;
+		s[j] = (char)t;
 	}
 }
 
