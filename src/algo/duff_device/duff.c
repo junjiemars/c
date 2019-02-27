@@ -2,6 +2,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#if GCC
+#  pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#endif
+
 void
 raw_send(char *to, char *from, int count) {
 	do {
