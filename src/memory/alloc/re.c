@@ -22,7 +22,7 @@ main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
-	size_t n = sizeof(int)*sizeof(int);
+	size_t n = sizeof(int)*sizeof(n);
 	int *pi = calloc(n, sizeof(*pi));
 	assert((0 != pi) && strerror(errno));
 	assert((0 == pi[n-1]) && "fill with non-zero");

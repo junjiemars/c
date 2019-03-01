@@ -6,7 +6,7 @@
 
 void
 foo(void) {
-	int *pi = calloc(10, sizeof(int));
+	int *pi = calloc(10, sizeof(*pi));
 	assert((0 != pi) && strerror(errno));
 	pi[0] = 0x11223344;
 	assert((0 == pi[1]) && "filled with non-zero");
