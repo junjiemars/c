@@ -22,7 +22,7 @@ non_cast(const size_t length) {
 
 int*
 better(const short length) {
-	int *x = malloc(sizeof(*x) * length);
+	int *x = malloc(sizeof *x * length);
 	return x;
 }
 
