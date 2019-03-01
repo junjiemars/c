@@ -1144,8 +1144,18 @@ should be better to write the expression as: =int *x = malloc(sizeof
 =length * width= when =length= and =width= are smaller types than
 =size_t=.
 
-*** realloc
 *** calloc
+	 :PROPERTIES:
+	 :custom_id: alloc-calloc
+	 :END:
+
+=calloc= should zero intializes the allocated memory. Call =calloc= is
+not necessarily more expensive.
+		
+*** realloc
+	 :PROPERTIES:
+	 :custom_id: alloc-realloc
+	 :END:
 
 ** Standard libraries
 	 :PROPERTIES:
