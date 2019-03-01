@@ -43,9 +43,9 @@ main(int argc, const char *argv[]) {
 	int_ptr[9] = 0x2211;
 	free(int_ptr);
 
-	node_s *x = malloc(sizeof(node_s));
-	node_s *y = malloc(sizeof(node_s));
-	node_s *z = malloc(sizeof(node_s));
+	node_s *x = malloc(sizeof(*x));
+	node_s *y = malloc(sizeof(*y));
+	node_s *z = malloc(sizeof(*z));
 
 	x->val = 1;
 	y->val = 2;
