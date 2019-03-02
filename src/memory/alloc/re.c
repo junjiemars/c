@@ -21,6 +21,7 @@ void
 as_malloc(void) {
 	char *s = realloc(0, sizeof(*s)*8);
 	assert((0 != s) && strerror(errno));
+	s[0] = 'A';
 	if (0 == s[0]) {
 		printf("realloc: zero-initialized\n");
 	} else {
@@ -33,9 +34,11 @@ void
 as_free(void) {
 	char *s = calloc(8, sizeof(*s));
 	assert((0 != s) && strerror(errno));
-	char *s1 = realloc(s, 0);
 	printf("realloc: freed? = %i\n", (0 == malloc_size(s)));
+
+	char *s1 = realloc(s, 0);
 	printf("realloc: minimum size = %zu\n", malloc_size(s1));
+	printf("realloc: same? = %i\n", s == s1);
 	free(s1);
 }
 
@@ -44,13 +47,14 @@ enlarge(void) {
 	int *i = calloc(8, sizeof(*i));
 	assert((0 != i) && strerror(errno));
 	printf("calloc: allocated = %zu\n", malloc_size(i));
+	printf("realloc: freed? = %i\n", (0 == malloc_size(i)));
 	i[0] = 0x11223344;
 	
 	int *i1 = realloc(i, sizeof(*i1)*8*2);
 	assert((0 != i1) && strerror(errno));
 	assert((0x11223344 == i1[0]) && "realloc: copied");
-	printf("realloc: freed? = %i\n", (0 == malloc_size(i)));
 	printf("realloc: allocated = %zu\n", malloc_size(i1));
+	printf("realloc: same? = %i\n", i == i1);
 	free(i1);
 }
 
@@ -59,13 +63,14 @@ shrink(void) {
 	int *i = calloc(16, sizeof(*i));
 	assert((0 != i) && strerror(errno));
 	printf("calloc: allocated = %zu\n", malloc_size(i));
+	printf("realloc: freed? = %i\n", (0 == malloc_size(i)));
 	i[15] = 0x11223344;
 
 	int *i1 = realloc(i, sizeof(*i1)*8);
 	assert((0 != i1) && strerror(errno));
 	assert((0x11223344 != i1[7]) && "realloc: no copied");
-	printf("realloc: freed? = %i\n", (0 == malloc_size(i)));
 	printf("realloc: allocated = %zu\n", malloc_size(i1));
+	printf("realloc: same? = %i\n", i == i1);
 	free(i1);
 }
 
@@ -73,9 +78,9 @@ void
 same(void) {
 	char *s = calloc(8, sizeof(*s));
 	assert((0 != s) && strerror(errno));
+	printf("realloc: freed? = %i\n", (0 == malloc_size(s)));
 	char *s1 = realloc(s, sizeof(*s)*8);
 	assert((0 != s1) && strerror(errno));
-	printf("realloc: freed? = %i\n", (0 == malloc_size(s)));
 	printf("realloc: allocated = %zu\n", malloc_size(s1));
 	printf("realloc: same? = %i\n", s == s1);
 	free(s1);
