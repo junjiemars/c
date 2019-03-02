@@ -69,15 +69,37 @@ shrink(void) {
 	free(i1);
 }
 
+void
+same(void) {
+	char *s = calloc(8, sizeof(*s));
+	assert((0 != s) && strerror(errno));
+	char *s1 = realloc(s, sizeof(*s)*8);
+	assert((0 != s1) && strerror(errno));
+	printf("realloc: freed? = %i\n", (0 == malloc_size(s)));
+	printf("realloc: allocated = %zu\n", malloc_size(s1));
+	printf("realloc: same? = %i\n", s == s1);
+	free(s1);
+}
+
 int
 main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
+	printf("as_malloc\n--------------------\n");
 	as_malloc();
+
+	printf("as_free\n--------------------\n");
 	as_free();
+
+	printf("enlarge\n--------------------\n");
 	enlarge();
+
+	printf("shrink\n--------------------\n");
 	shrink();
 
+	printf("same\n--------------------\n");
+	same();
+	
 	return 0;
 }
