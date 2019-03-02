@@ -17,40 +17,67 @@
 #  endif
 #endif
 
+void
+as_malloc(void) {
+	char *s = realloc(0, sizeof(*s)*8);
+	assert((0 != s) && strerror(errno));
+	if (0 == s[0]) {
+		printf("realloc: zero-initialized\n");
+	} else {
+		printf("realloc: non zero-initialized\n");
+	}
+	free(s);
+}
+
+void
+as_free(void) {
+	char *s = calloc(8, sizeof(*s));
+	assert((0 != s) && strerror(errno));
+	char *s1 = realloc(s, 0);
+	printf("realloc: freed? = %i\n", (0 == malloc_size(s)));
+	printf("realloc: minimum size = %zu\n", malloc_size(s1));
+	free(s1);
+}
+
+void
+enlarge(void) {
+	int *i = calloc(8, sizeof(*i));
+	assert((0 != i) && strerror(errno));
+	printf("calloc: allocated = %zu\n", malloc_size(i));
+	i[0] = 0x11223344;
+	
+	int *i1 = realloc(i, sizeof(*i1)*8*2);
+	assert((0 != i1) && strerror(errno));
+	assert((0x11223344 == i1[0]) && "realloc: copied");
+	printf("realloc: freed? = %i\n", (0 == malloc_size(i)));
+	printf("realloc: allocated = %zu\n", malloc_size(i1));
+	free(i1);
+}
+
+void
+shrink(void) {
+	int *i = calloc(16, sizeof(*i));
+	assert((0 != i) && strerror(errno));
+	printf("calloc: allocated = %zu\n", malloc_size(i));
+	i[15] = 0x11223344;
+
+	int *i1 = realloc(i, sizeof(*i1)*8);
+	assert((0 != i1) && strerror(errno));
+	assert((0x11223344 != i1[7]) && "realloc: no copied");
+	printf("realloc: freed? = %i\n", (0 == malloc_size(i)));
+	printf("realloc: allocated = %zu\n", malloc_size(i1));
+	free(i1);
+}
+
 int
 main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
-	size_t n = sizeof(int)*sizeof(n);
-	int *pi = calloc(n, sizeof(*pi));
-	assert((0 != pi) && strerror(errno));
-	assert((0 == pi[n-1]) && "fill with non-zero");
-	printf("calloc() = %zu\n", malloc_size(pi));
-	pi[n-1] = 0x11223344;
+	as_malloc();
+	as_free();
+	enlarge();
+	shrink();
 
-	/* enlarge */
-	int *pii = realloc(pi, sizeof(*pi)*n*2);
-	assert((0 != pii) && strerror(errno));
-	assert((0x11223344 == pii[n-1]) && "0x11223344 not be copied");
-#ifdef WINNT
-	assert((0 != pii[n]) && "filled with zero");
-#else
-	assert((0 == pii[n]) && "filled with non-zero");
-#endif
-	printf("realloc() = %zu\n", malloc_size(pii));
-	pii[0] = 0x44332211;
-
-	/* shrink */
-	pi = realloc(pii, sizeof(*pi)*n/2);
-	assert((0 != pi) && strerror(errno));
-	assert((0x44332211 == pi[0]) && "0x44332211 not be copied");
-#ifndef WINNT	
-	assert((pii == pi) && "diff pointers");
-#endif
-	printf("realloc() = %zu\n", malloc_size(pi));
-
-	/* on Windows, double free: */
-	/* HEAP_CORRUPTION_ACTIONABLE_BlockNotBusy_DOUBLE_FREE_c0000374_memory_realloc.exe!main */
-	free(pi);
+	return 0;
 }
