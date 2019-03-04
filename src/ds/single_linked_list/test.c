@@ -4,6 +4,7 @@
 #include <string.h>
 #include <assert.h>
 #include <stdio.h>
+#include <errno.h>
 
 void
 free_node(node_s *node) {
@@ -19,10 +20,9 @@ free_alloc_node(node_s *node) {
 
 node_s*
 new_node(void *val) {
-	node_s *n = malloc(sizeof(node_s));
-	assert(n);
-	memset(n, 0, sizeof(node_s));
-
+	node_s *n = calloc(1, sizeof(*n));
+	assert(n && strerror(errno));
+	
 	n->val = val;
 	return n;
 }
