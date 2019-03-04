@@ -127,14 +127,16 @@ test_int_list() {
 
   int *two = malloc(sizeof(int));
   *two = 2;
-  list_append(head, two, new_node);
-
+  node_s *n = list_append(head, two, new_node);
+	assert((0 != n) && (2 == *(int*)(n->val)));
+	
   int *three = malloc(sizeof(int));
   *three = 3;
-  list_append(head, three, new_node);
+  n = list_append(head, three, new_node);
+	assert((0 != n) && (3 == *(int*)(n->val)));
 
-  node_s *two_node = list_find(head, two, cmp_int_node);
-  assert((0 != two_node) && (2 == *(int*)(two_node->val)));
+  n = list_find(head, two, cmp_int_node);
+  assert((0 != n) && (2 == *(int*)(n->val)));
 
   list_delete(&head, one, cmp_int_node, free_alloc_node);
   assert(2 == *(int*)(head->val));
