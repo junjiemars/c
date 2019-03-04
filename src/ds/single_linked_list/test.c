@@ -143,8 +143,10 @@ test_int_list() {
 }
 
 int
-main() {
+main(void) {
 	test_static_str_list();
   test_dynamic_str_list();
   test_int_list();
+
+	return 0;
 }
