@@ -18,11 +18,11 @@ void list_free(node_s *head,
 
 node_s* list_find(node_s *head,
                   const void *val,
-                  int (*cmp)(const void *val1, const void* val2));
+                  int (*cmp)(const void *n1, const void* n2));
 
 void list_delete(node_s **head,
                  const void *val,
-                 int (*cmp)(const void *val1, const void* val2),
+                 int (*cmp)(const void *n1, const void* n2),
                  void (*free)(node_s *node));
 
 void list_iterate(node_s *head,

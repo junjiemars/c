@@ -35,7 +35,7 @@ list_free(node_s *head,
 node_s*
 list_find(node_s *head,
           const void *val,
-          int (*cmp)(const void *val1, const void *val2)) {
+          int (*cmp)(const void *n1, const void *n2)) {
 
   assert((0 != cmp) && "cmp fn can not be null");
 
@@ -78,7 +78,7 @@ void
 list_iterate(node_s *head,
              void (*iter)(const node_s *node)) {
 
-  assert((0 == iter) && "iter fn can not be null");
+  assert((0 != iter) && "iter fn can not be null");
 
   for (node_s *curr=head; curr; curr=curr->next) {
     iter(curr);
