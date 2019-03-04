@@ -7,7 +7,7 @@ list_append(node_s *head,
             void *val,
             node_s* (*new)(void *val)) {
 
-  assert((0 != new) || "new fn can not bu null");
+  assert((0 != new) && "new fn can not bu null");
   
   if (0 == head) {
     return head = new(val);
@@ -23,7 +23,7 @@ void
 list_free(node_s *head,
           void (*free)(node_s *node)) {
 
-  assert((0 != free) || "free fn can not be null");
+  assert((0 != free) && "free fn can not be null");
 
   while (0 != head) {
     node_s *t = head;
@@ -37,7 +37,7 @@ list_find(node_s *head,
           const void *val,
           int (*cmp)(const void *val1, const void *val2)) {
 
-  assert((0 != cmp) || "cmp fn can not be null");
+  assert((0 != cmp) && "cmp fn can not be null");
 
   while (0 != head) {
     if (0 == cmp(head->val, val)) {
@@ -78,7 +78,7 @@ void
 list_iterate(node_s *head,
              void (*iter)(const node_s *node)) {
 
-  assert((0 == iter) || "iter fn can not be null");
+  assert((0 == iter) && "iter fn can not be null");
 
   for (node_s *curr=head; curr; curr=curr->next) {
     iter(curr);
