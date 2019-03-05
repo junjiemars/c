@@ -5,6 +5,7 @@ io: basic \
 		fileno \
 		format \
     flush \
+		line \
 		process \
 		scan \
     tmp \
@@ -17,6 +18,7 @@ io_test: basic_test  \
 				 fileno_test \
 				 format_test \
          flush_test \
+				 line_test \
 				 process_test \
 				 scan_test \
          tmp_test \
@@ -95,6 +97,18 @@ flush_test: flush
 
 $(flush_binout): $(io_root)flush/f.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# line
+line_binout := $(bin_path)$(io_prefix)_line$(bin_ext)
+
+line: $(line_binout)
+line_test: line
+	$(line_binout) $(CURDIR)/src/io/line/boards
+
+$(line_binout): $(io_root)line/l.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# process
 
 process_binout := $(bin_path)$(io_prefix)_process$(bin_ext)
 
