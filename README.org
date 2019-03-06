@@ -1967,3 +1967,10 @@ table in a executable.
 	 :END:
 
 - MacOSX: =nm=
+
+** memory leak detection
+	 
+
+** References
+
+- [[https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2008/e5ewb1h3(v=vs.90)][Microsoft: Memory Leak Detection Enabling]]
