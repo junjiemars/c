@@ -3,6 +3,7 @@ algo: duff_device \
 			hash \
 			is_unsigned_integer \
 			is_unsigned_type \
+			qsort \
 			reverse_string \
 			algo_sizeof
 
@@ -11,6 +12,7 @@ algo_test: duff_device_test \
 					 hash_test \
 					 is_unsigned_integer_test \
 					 is_unsigned_type_test \
+					 qsort_test \
 					 reverse_string_test \
 					 algo_sizeof_test
 
@@ -112,6 +114,16 @@ $(is_utype_binout): $(is_utype_cppout)
 
 $(is_utype_cppout): $(algo_root)is_unsigned_type/is_utype.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+# qsort
+qsort_binout := $(bin_path)$(algo_prefix)_qsort$(bin_ext)
+
+qsort: $(qsort_binout)
+qsort_test: qsort
+	$(qsort_binout)
+
+$(qsort_binout): $(algo_root)qsort/qs.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # reverse string
 reverse_string_binout := $(bin_path)$(algo_prefix)_reverse_string$(bin_ext)
