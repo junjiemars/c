@@ -5,9 +5,11 @@
 
 
 static char *ss[] = {
-	"ccc",
-	"bb",
-	"aaaaa",
+	"a1 9 2 3 1",
+	"g1 act car",
+	"zo4 4 7",
+	"ab1 off key dog",
+	"a8 act zoo",
 };
 
 static int ii[] = {
@@ -23,11 +25,40 @@ cmp_str(const void *s1, const void *s2) {
 }
 
 void
-sort_str(char **ss, const size_t size) {
-	qsort(ss, size, sizeof(*ss), cmp_str);
-	for (int i = 0; i < (int)size; i++) {
+show_ss(const char *title, char **ss, const size_t size) {
+	printf("%s ss\n----------\n", title);
+  for (size_t i = 0; i < size; i++) {
 		printf("%s\n", ss[i]);
 	}
+	printf("----------\n");
+}
+
+void
+sort_str(char **ss, const size_t size) {
+	show_ss("raw", ss, size);
+	qsort(ss, size, sizeof(*ss), cmp_str);
+	show_ss("sorted 1th", ss, size);
+}
+
+void
+sort_str_2th(char **ss, const size_t size) {
+	for (size_t i = 0; i < size; i++) {
+		int pre = 0, n = 0;
+		for (size_t j = 0; j < strlen(ss[i]); j++) {
+			if (' ' == ss[i][j]) {
+				if (n < 1) {
+					pre = j+1;
+					n++;
+				} else {
+					ss[i] = &ss[i][pre];
+					break;
+				}
+			}
+		}
+	}
+	show_ss("raw 2th", ss, size);
+	qsort(ss, size, sizeof(*ss), cmp_str);
+	show_ss("sorted 2th", ss, size);
 }
 
 int
@@ -48,6 +79,7 @@ main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 	sort_str(ss, sizeof(ss)/sizeof(*ss));
+	sort_str_2th(ss, sizeof(ss)/sizeof(*ss));
 	sort_int(ii, sizeof(ii)/sizeof(*ii));
 	return 0;
 }
