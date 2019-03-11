@@ -25,40 +25,40 @@ cmp_str(const void *s1, const void *s2) {
 }
 
 void
-show_ss(const char *title, char **ss, const size_t size) {
+show_ss(const char *title, char **aa, const size_t size) {
 	printf("%s ss\n----------\n", title);
   for (size_t i = 0; i < size; i++) {
-		printf("%s\n", ss[i]);
+		printf("%s\n", aa[i]);
 	}
 	printf("----------\n");
 }
 
 void
-sort_str(char **ss, const size_t size) {
-	show_ss("raw", ss, size);
-	qsort(ss, size, sizeof(*ss), cmp_str);
-	show_ss("sorted 1th", ss, size);
+sort_str(char **aa, const size_t size) {
+	show_ss("raw", aa, size);
+	qsort(aa, size, sizeof(*aa), cmp_str);
+	show_ss("sorted 1th", aa, size);
 }
 
 void
-sort_str_2th(char **ss, const size_t size) {
+sort_str_2th(char **aa, const size_t size) {
 	for (size_t i = 0; i < size; i++) {
-		int pre = 0, n = 0;
-		for (size_t j = 0; j < strlen(ss[i]); j++) {
-			if (' ' == ss[i][j]) {
+		size_t pre = 0, n = 0;
+		for (size_t j = 0; j < strlen(aa[i]); j++) {
+			if (' ' == aa[i][j]) {
 				if (n < 1) {
 					pre = j+1;
 					n++;
 				} else {
-					ss[i] = &ss[i][pre];
+					aa[i] = &aa[i][pre];
 					break;
 				}
 			}
 		}
 	}
-	show_ss("raw 2th", ss, size);
-	qsort(ss, size, sizeof(*ss), cmp_str);
-	show_ss("sorted 2th", ss, size);
+	show_ss("raw 2th", aa, size);
+	qsort(aa, size, sizeof(*aa), cmp_str);
+	show_ss("sorted 2th", aa, size);
 }
 
 int
@@ -67,10 +67,10 @@ cmp_int(const void *i1, const void *i2) {
 }
 
 void
-sort_int(int *ii, const size_t size) {
-	qsort(ii, size, sizeof(*ii), cmp_int);
+sort_int(int *aa, const size_t size) {
+	qsort(aa, size, sizeof(*aa), cmp_int);
 	for (int i = 0; i < (int)size; i++) {
-		printf("0x%x\n", ii[i]);
+		printf("0x%x\n", aa[i]);
 	}
 }
 
