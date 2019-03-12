@@ -122,22 +122,6 @@ nm_feature_flags=
 nm_feature_test='unsigned int x; rand_s(&x);'
 . ${NORE_ROOT}/auto/feature
 
-nm_feature="sscanf_s fn"
-nm_feature_name='nm_have_sscanf_s_fn'
-nm_feature_run=no
-nm_feature_h='#include <stdio.h>'
-nm_feature_flags=
-nm_feature_test='int i; sscanf_s("123", "%i", &i);'
-. ${NORE_ROOT}/auto/feature
-
-nm_feature="getenv_s fn"
-nm_feature_name='nm_have_getenv_s_fn'
-nm_feature_run=no
-nm_feature_h='#include <stdlib.h>'
-nm_feature_flags=
-nm_feature_test='size_t size; getenv_s(&size, 0, 0, "PATH");'
-. ${NORE_ROOT}/auto/feature
-
 		
 case "$CC_NAME" in
 	clang)
