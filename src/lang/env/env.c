@@ -1,8 +1,15 @@
-#include "env.h"
+#include <_env_.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
+#if NM_HAVE_SSCANF_S_FN
+#  define sscanf sscanf_s
+#endif
+
+#if MSVC
+#  pragma warning(disable: 4996)
+#endif
 
 int 
 main(int argc, const char* argv[]) {
@@ -14,7 +21,11 @@ main(int argc, const char* argv[]) {
 
 	for (int i=1; i < argc; ++i) {
 		sscanf(argv[i], "--COUNT=%i", &count);
+#if NM_HAVE_SSCANF_S_FN
+		sscanf(argv[i], "--TEXT=%s", text, (unsigned)sizeof(text));
+#else
 		sscanf(argv[i], "--TEXT=%s", text);
+#endif
 	}
 
 	char *c = getenv("COUNT");

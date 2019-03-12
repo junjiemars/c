@@ -132,7 +132,7 @@ $(enum_cppout): $(lang_root)enum/e.c
 env_binout := $(bin_path)$(lang_prefix)_env$(bin_ext)
 env_cflags := $(CFLAGS) $(INC) -I$(lang_root)env/
 
-$(env_binout): $(lang_root)env/env.c $(lang_root)env/env.h
+$(env_binout): $(lang_root)env/env.c $(lang_root)env/_env_.h
 	$(CC) $(env_cflags) $< $(bin_out)$@ 
 
 env: $(env_binout)
