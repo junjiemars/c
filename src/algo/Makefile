@@ -4,7 +4,7 @@ algo: duff_device \
 			is_unsigned_integer \
 			is_unsigned_type \
 			qsort \
-			reverse_string \
+			reverse \
 			algo_sizeof
 
 algo_test: duff_device_test \
@@ -13,7 +13,7 @@ algo_test: duff_device_test \
 					 is_unsigned_integer_test \
 					 is_unsigned_type_test \
 					 qsort_test \
-					 reverse_string_test \
+					 reverse_test \
 					 algo_sizeof_test
 
 
@@ -125,14 +125,22 @@ qsort_test: qsort
 $(qsort_binout): $(algo_root)qsort/qs.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-# reverse string
+# reverse
 reverse_string_binout := $(bin_path)$(algo_prefix)_reverse_string$(bin_ext)
+reverse_linked_list_binout := $(bin_path)$(algo_prefix)_reverse_linked_list$(bin_ext)
 
-reverse_string: $(reverse_string_binout)
-reverse_string_test: reverse_string
+reverse: $(reverse_string_binout) $(reverse_linked_list_binout)
+reverse_test: reverse_string_test reverse_linked_list_test
+
+reverse_string_test: $(reverse_string_binout)
 	$(reverse_string_binout)
+reverse_linked_list_test: $(reverse_linked_list_binout)
+	$(reverse_linked_list_binout)
 
-$(reverse_string_binout): $(algo_root)reverse_string/rev_str.c
+$(reverse_string_binout): $(algo_root)reverse/rev_str.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(reverse_linked_list_binout): $(algo_root)reverse/rev_linked_list.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # sizeof
