@@ -19,7 +19,8 @@ show_linked_list(struct node_s *head) {
 
 struct node_s*
 reverse1(struct node_s *head) {
-	struct node_s *previous = 0, *current = head;
+	struct node_s *previous = 0;
+	struct node_s *current = head;
 	while (current->next) {
 		struct node_s *next = current->next;
 		current->next = previous;
