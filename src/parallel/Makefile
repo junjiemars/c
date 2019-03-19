@@ -31,5 +31,5 @@ openmp_for_test: openmp_for
 	$(openmp_for_binout) 1000000
 
 $(openmp_for_binout): $(parallel_root)openmp/for.c
-	$(CC) $(CFLAGS) $(INC) $(nm_openmp_opt) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
