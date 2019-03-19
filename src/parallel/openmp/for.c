@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#if NM_HAVE_OMP_H
+#ifdef NM_HAVE_OPENMP
 #  include <omp.h>
 #endif
 
@@ -14,7 +14,7 @@ calc_pi(int n) {
 
 	step = 1.0 / (double) n;
 
-#if NM_HAVE_OMP_H
+#ifdef NM_HAVE_OPENMP
 /* msvc error C3015: initialization in OpenMP 'for' statement has
 	 improper form.
 	 openmp does not know c99's for loop.
