@@ -1902,7 +1902,14 @@ on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see [[https://g
 - [[https://www.ietf.org/rfc/rfc1035.txt][RFC 1035: DOMAIN NAMES - IMPLEMENTATION AND SPECIFICATION]]
 - [[https://tools.ietf.org/html/rfc1536][RFC 1536: Common DNS Implementation Errors and Suggested Fixes]]
 - [[http://www.linuxhowtos.org/C_C++/socket.htm][Sockets Tutorial]]
-	
+
+* Parallel
+
+** OpenMP
+*** References
+- [[https://en.wikipedia.org/wiki/OpenMP][wikipedia]]
+- [[https://www.openmp.org/][Office site]]
+
 * Algorithm
 ** Hash
 ** Algorithm References

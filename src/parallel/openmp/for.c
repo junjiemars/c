@@ -1,4 +1,4 @@
-#include <_mp_.h>
+#include <_parallel_.h>
 #include <stdlib.h>
 #include <stdio.h>
 

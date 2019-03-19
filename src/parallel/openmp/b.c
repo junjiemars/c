@@ -1,4 +1,4 @@
-#include <_mp_.h>
+#include <_parallel_.h>
 #include <stdio.h>
 
 #if NM_HAVE_OMP_H
