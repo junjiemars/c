@@ -1,6 +1,6 @@
-mp: basic
+mp: openmp
 
-mp_test: basic_test
+mp_test: openmp_test
 
 mp_prefix := mp
 
@@ -9,16 +9,17 @@ INC += -I$(mp_root)
 ifeq ($(CC_NAME), msvc)
 INC += -I$(root)posix
 getopt_c := $(root)posix/getopt.c
+CFLAGS += -openmp
 endif
 
 
-# basic I/O
-basic_binout := $(bin_path)$(mp_prefix)_basic$(bin_ext)
+# openmp
+openmp_binout := $(bin_path)$(mp_prefix)_openmp$(bin_ext)
 
-basic: $(basic_binout)
-basic_test: basic
-	$(basic_binout)
+openmp: $(openmp_binout)
+openmp_test: openmp
+	$(openmp_binout)
 
-$(basic_binout): $(mp_root)basic/b.c
+$(openmp_binout): $(mp_root)openmp/o.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 

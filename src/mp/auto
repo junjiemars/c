@@ -17,6 +17,7 @@
 #include="tgmath.h" . ${NORE_ROOT}/auto/include
 include="threads.h" . ${NORE_ROOT}/auto/include
 include="stdatomic.h" . ${NORE_ROOT}/auto/include
+include="omp.h" . ${NORE_ROOT}/auto/include
 #
 #echo " + checking C11 header files ..."
 #include="stdalign.h" . ${NORE_ROOT}/auto/include
