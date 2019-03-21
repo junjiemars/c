@@ -35,12 +35,18 @@ $(geo_h): $(library_root)geo/geo.h
 
 ## math
 
+ifeq ($(NM_SYSTEM), Linux)
+stdmath_lib := -lm
+else
+stdmath_lib :=
+endif
+
 ifeq ($(CC_NAME), msvc)
 math_lib_path := PATH
 LDLIBS = libgeo$(ar_ext)
 else
 math_lib_path := LD_LIBRARY_PATH
-LDLIBS = -lgeo
+LDLIBS = -lgeo $(stdmath_lib)
 endif
 
 math_static_binout := $(bin_path)math_static$(bin_ext)
@@ -53,7 +59,7 @@ math_static_test: math_static
 math_shared_test: math_shared
 	$(math_lib_path)=$(lib_path) $(math_shared_binout)
 
-$(math_static_binout): $(library_root)math/math1.c $(geo_arout)
+$(math_static_binout): $(library_root)math/math1.c $(geo_arout) $(stdmath_lib)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(math_shared_binout): $(library_root)math/math1.c $(geo_libout)
