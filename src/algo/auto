@@ -57,12 +57,11 @@ case "$CC_NAME" in
 		nm_feature_name='nm_have_w_implicit_fallthrough'
 		nm_feature_run=no
 		nm_feature_h=
-		nm_feature_flags=
+		nm_feature_flags='-Wimplicit-fallthrough'
 		nm_feature_test='int x = 0x11;
                      switch (x) {
-                     case 0x11:
-                     case 0x22:
-                     x++;
+                     case 0x11: break;
+                     default: x++; break;
                      }'
 		. ${NORE_ROOT}/auto/feature
 		;;
