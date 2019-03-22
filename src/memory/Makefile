@@ -102,11 +102,20 @@ alloc: $(alloc_a_binout) \
        $(alloc_c_binout) \
        $(alloc_re_binout)
 
-alloc_test: alloc
+alloc_test: alloca_test \
+					  malloc_test \
+						calloc_test \
+						realloc_test
+
+alloca_test: $(alloc_a_binout)
 	$(alloc_a_binout)
+malloc_test: $(alloc_m_binout)
 	$(alloc_m_binout)
+calloc_test: $(alloc_c_binout)
 	$(alloc_c_binout)
+realloc_test: $(alloc_re_binout)
 	$(alloc_re_binout)
+
 
 $(alloc_a_binout): $(memory_root)alloc/a.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

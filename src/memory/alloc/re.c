@@ -34,11 +34,14 @@ void
 as_free(void) {
 	char *s = calloc(8, sizeof(*s));
 	assert((0 != s) && strerror(errno));
+	s[0] = 'R';
+	char **p = &s;
+	printf("realloc: allocated = %zu\n", malloc_size(s));
+	printf("realloc: +realloc = 0x%x\n", **p);
 	char *s1 = realloc(s, 0);
-	printf("realloc: freed? = %i\n", (0 == malloc_size(s)));
-	printf("realloc: minimum size = %zu\n", malloc_size(s1));
-	printf("realloc: same? = %i\n", s == s1);
-	free(s1);
+	printf("realloc: -realloc = 0x%x\n", **p);
+	printf("realloc: freed? = %i\n", 0 == s1);
+	/* free(s1); */
 }
 
 void
@@ -47,12 +50,11 @@ enlarge(void) {
 	assert((0 != i) && strerror(errno));
 	printf("calloc: allocated = %zu\n", malloc_size(i));
 	i[0] = 0x11223344;
+	int **p = &i;
+	printf("realloc: +realloc = 0x%x, @0x%p\n", **p, *p);
 	int *i1 = realloc(i, sizeof(*i1)*8*2);
-	printf("realloc: freed? = %i\n", (0 == malloc_size(i)));
 	assert((0 != i1) && strerror(errno));
-	assert((0x11223344 == i1[0]) && "realloc: copied");
-	printf("realloc: allocated = %zu\n", malloc_size(i1));
-	printf("realloc: same? = %i\n", i == i1);
+	printf("realloc: -realloc = 0x%x, @0x%p\n", *i1, i1);
 	free(i1);
 }
 
@@ -62,12 +64,12 @@ shrink(void) {
 	assert((0 != i) && strerror(errno));
 	printf("calloc: allocated = %zu\n", malloc_size(i));
 	i[15] = 0x11223344;
+	int **p = &i;
+	printf("realloc: +realloc = 0x%x, @0x%p\n", **p, *p);
 	int *i1 = realloc(i, sizeof(*i1)*8);
-	printf("realloc: freed? = %i\n", (0 == malloc_size(i)));
 	assert((0 != i1) && strerror(errno));
-	assert((0x11223344 != i1[7]) && "realloc: no copied");
-	printf("realloc: allocated = %zu\n", malloc_size(i1));
-	printf("realloc: same? = %i\n", i == i1);
+	printf("realloc: -realloc = 0x%x, @0x%p\n", *i1, i1);
+	printf("realloc: copied? = %i\n", 0x11223344 == i1[7]);
 	free(i1);
 }
 
@@ -75,11 +77,12 @@ void
 same(void) {
 	char *s = calloc(8, sizeof(*s));
 	assert((0 != s) && strerror(errno));
+	printf("calloc: allocated = %zu\n", malloc_size(s));
+	s[0] = 'R';
+	printf("realloc: +realloc = 0x%x, @0x%p\n", *s, s);
 	char *s1 = realloc(s, sizeof(*s)*8);
-	printf("realloc: freed? = %i\n", (0 == malloc_size(s)));
 	assert((0 != s1) && strerror(errno));
-	printf("realloc: allocated = %zu\n", malloc_size(s1));
-	printf("realloc: same? = %i\n", s == s1);
+	printf("realloc: -realloc = 0x%x, @0x%p\n", *s1, s1);
 	free(s1);
 }
 
