@@ -3,7 +3,9 @@
 #include <string.h>
 
 #if GCC
-#  pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#  if NM_HAVE_W_IMPLICIT_FALLTHROUGH
+#    pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#  endif
 #endif
 
 void
