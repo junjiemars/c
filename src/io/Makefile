@@ -6,6 +6,7 @@ io: basic \
 		format \
     flush \
 		line \
+		reopen \
 		process \
 		scan \
     tmp \
@@ -19,6 +20,7 @@ io_test: basic_test  \
 				 format_test \
          flush_test \
 				 line_test \
+				 reopen_test \
 				 process_test \
 				 scan_test \
          tmp_test \
@@ -106,6 +108,17 @@ line_test: line
 	$(line_binout) $(CURDIR)/src/io/line/boards
 
 $(line_binout): $(io_root)line/l.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# reopen
+reopen_binout := $(bin_path)$(io_prefix)_reopen$(bin_ext)
+
+reopen: $(reopen_binout)
+reopen_test: reopen
+	-@cp $(CURDIR)/src/io/reopen/sample.txt $(tmp_path)
+	$(reopen_binout) $(tmp_path)sample.txt
+
+$(reopen_binout): $(io_root)reopen/ro.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # process
