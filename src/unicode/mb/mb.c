@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <locale.h>
 
 #if MSVC
 #  pragma warning(disable : 4996)
@@ -12,16 +13,15 @@ main(int argc, char* argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 
-	wchar_t s[] = L"abc中文def\n";
+	wchar_t s[] = L"abc中文def";
+	setlocale(LC_ALL, "");
+	printf("%ls:\n", s);
+	printf("----------\n");
+
 	wchar_t *p = s;
-	char buffer[MB_LEN_MAX];
-	
 	while (*p) {
-		int len = wctomb(buffer, *p);
-		if (len < 1) break;
-		for (int i=0; i < len; ++i) {
-			printf("[%c]", buffer[i]);
-			++p;
-		}
+		printf("[%lc]", *p++);
 	}
+	putchar('\n');
+	return 0;
 }
