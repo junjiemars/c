@@ -15,7 +15,7 @@ main(int argc, char* argv[]) {
 
 	wchar_t s[] = L"abc中文def";
 	setlocale(LC_ALL, "");
-	printf("%ls:\n", s);
+	printf("%ls/%zu:\n", s, sizeof(wchar_t));
 	printf("----------\n");
 
 	wchar_t *p = s;
