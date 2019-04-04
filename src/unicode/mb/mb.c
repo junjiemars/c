@@ -44,11 +44,11 @@ main(int argc, char* argv[]) {
 
 	wchar_t s[] = L"abc中文def";
 	setlocale(LC_ALL, "");
-	printf("----------\n");
 	printf("%ls[%zu]:\n", s, sizeof(wchar_t));
+	printf("----------\n");
 	
 	wide_char(s);
 	wc_to_mb(s);
-	wcs_to_mbs(s, sizeof(s)/sizeof(*s));
+	wcs_to_mbs(s, sizeof(s));
 	return 0;
 }
