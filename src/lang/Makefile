@@ -460,7 +460,7 @@ string_test: string_basic_test \
 	$(string_n_binout)
 	$(string_s_binout)
 	$(string_dup_binout)
-	$(string_tok_binout) "this is a simple sample for strdup." " "
+	$(string_tok_binout) "this is a simple sample for strtok." " "
 
 string_basic_test: $(string_basic_binout)
 	$(string_basic_binout)
