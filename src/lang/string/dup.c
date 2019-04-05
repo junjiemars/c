@@ -15,8 +15,7 @@
 #ifndef NM_HAVE_STRDUP_FN
 char*
 strdup(const char *s) {
-	size_t size = strlen(s)+1;
-	char *d = malloc(size);
+	char *d = malloc(strlen(s)+1);
 	return d ? strcpy(d, s) : 0;
 }
 #endif
