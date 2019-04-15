@@ -65,7 +65,7 @@ main(int argc, const char *argv[]) {
 	out("$", 0x0024u);
 	out("¢", 0x00a2u);
 	out("€", 0x20acu);
-	out("𐍈", 0x10348u);
+	out("¥", 0x00a5);
 
 	return 0;
 }
