@@ -48,7 +48,6 @@ in(rect_s *rect, const char *where) {
 		}
 		fprintf(stderr, "!panic: read %zu bytes, but expect %zu bytes\n",
 						len, sizeof(rect_s));
-		return;
 	}
 	fclose(f);
 	
