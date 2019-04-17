@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <limits.h>
+#include <libgen.h>
+
 
 #define NAME_SIZE 16
 
@@ -61,9 +64,12 @@ rect_s: {\n\
 
 int
 main(int argc, char **argv) {
-	const char *filename = ".rect_s";
+	char filename[PATH_MAX];
 	rect_s rect;	
 	memset(&rect, 0, sizeof(rect));
+	char *pathname = dirname(argv[0]);
+	strcpy(filename, pathname);
+	strcat(filename, ".rect_s");
 
 	if (argc < 4) {
 		/* read from binary file */
