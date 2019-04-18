@@ -1977,7 +1977,7 @@ table in a executable.
 
 ** Memory Leak Detection
 
-** debugger
+** Debugger
 
 *** Memory Read
 
