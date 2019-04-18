@@ -1981,10 +1981,11 @@ table in a executable.
 
 *** Memory Read
 
-| *Example*                       | *Command*                                      |
-| check /argv/ in /main/ entry    | (lldb) =x -t'char*' -c`argc` argv=             |
-| check array of /char*/ of /argv | (lldb) =x -s`sizeof(char*)` -c`argc` -fx argv= |
-
+| *Example*                       | *Command*                                        |
+| check /argv/ in /main/ entry    | *(lldb)* =x -t'char*' -c`argc` argv=             |
+| check array of /char*/ of /argv | *(lldb)* =x -s`sizeof(char*)` -c`argc` -fx argv= |
+| check /argc/ in /main/ entry    | *(lldb)* =x -s`sizeof(int)` -fx -c1 argc=        |
+|                                 |                                                  |
 
 ** References
 
