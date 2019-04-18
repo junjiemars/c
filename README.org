@@ -1969,15 +1969,22 @@ table in a executable.
 - MacOSX: =dtruss=
 
 ** Display Symbol Table
-	 :PROPERTIES: 
+	 :PROPERTIES:
 	 :CUSTOM_ID: display-symbol-table
 	 :END:
 
 - MacOSX: =nm=
 
 ** Memory Leak Detection
+	 :PROPERTIES:
+	 :CUSTOM_ID: memory-leak-detection
+	 :END:
 
 ** Debugger
+	 :PROPERTIES:
+	 :CUSTOM_ID: debugger
+	 :END:
+
 
 *** Memory Read
 
