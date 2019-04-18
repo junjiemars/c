@@ -1985,15 +1985,19 @@ table in a executable.
 	 :CUSTOM_ID: debugger
 	 :END:
 
-*** Image List
+*** Image
 
-| *Example*                     | *Command*             |
-|-------------------------------+-----------------------|
-| list dependents of executable | *(lldb)* =image list= |
-|                               |                       |
+| *Example*                                     | *Command*                                  |
+|-----------------------------------------------+--------------------------------------------|
+| list dependents of executable                 | *(lldb)* =image list=                      |
+|                                               |                                            |
+| lookup /main/ entry address in the executable | *(lldb)* =image lookup -a main -v=         |
+|                                               |                                            |
+| lookup /fn/ or /symbol/ by regexp             | *(lldb)* =image lookup -r -n'[fsv]printf'= |
+|                                               |                                            |
 
 
-*** Memory Read
+*** Memory
 
 | *Example*                       | *Command*                                        |
 |---------------------------------+--------------------------------------------------|
