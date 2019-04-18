@@ -1995,6 +1995,7 @@ table in a executable.
 |                                               |                                            |
 | lookup /fn/ or /symbol/ by regexp             | *(lldb)* =image lookup -r -n'[fsv]printf'= |
 |                                               |                                            |
+| lookup /type/                                 | *(lldb)* =image lookup -t'FILE'=           |
 
 
 *** Memory
