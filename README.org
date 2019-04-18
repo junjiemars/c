@@ -1990,9 +1990,11 @@ table in a executable.
 
 | *Example*                       | *Command*                                        |
 | check /argv/ in /main/ entry    | *(lldb)* =x -t'char*' -c`argc` argv=             |
-| check array of /char*/ of /argv | *(lldb)* =x -s`sizeof(char*)` -c`argc` -fx argv= |
-| check /argc/ in /main/ entry    | *(lldb)* =x -s`sizeof(int)` -fx -c1 argc=        |
 |                                 |                                                  |
+| check array of /char*/ of /argv | *(lldb)* =x -s`sizeof(char*)` -c`argc` -fx argv= |
+|                                 |                                                  |
+| check /&argc/ in /main/ entry   | *(lldb)* =x -s`sizeof(int)` -fx -c1 &argc=       |
+|                                 | *(gdb)* =x/1xw &argc=                            | 
 
 ** References
 
