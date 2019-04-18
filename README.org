@@ -1920,7 +1920,7 @@ on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see [[https://g
 	:CUSTOM_ID: tools
 	:END:
 
-** view dependents of executable
+** View Dependents of Executable
 	 :PROPERTIES:
 	 :CUSTOM_ID: view_dependents_of_exeutable
 	 :END:
@@ -1939,7 +1939,7 @@ objdump -p out/bin/math_shared
 ldd objs/bin/math_shared
 #+END_SRC
 
-** read ELF format
+** Read ELF Format
 	 :PROPERTIES:
 	 :CUSTOM_ID: read-elf-format
 	 :END:
@@ -1953,7 +1953,7 @@ so if there is a bug in BFD then /readelf/ will not be affected.
 
 On Darwin, there are no readelf, but we can use /otool/ do the trick.
 
-** view symbol table
+** View Symbol Table
 	 :PROPERTIES:
 	 :CUSTOM_ID: view-symbol-table
 	 :END:
@@ -1961,22 +1961,30 @@ On Darwin, there are no readelf, but we can use /otool/ do the trick.
 On Unix-like platform, there are /nm/ program can view the symbol
 table in a executable.
 
-** trace system call
+** Trace System Call
 	 :PROPERTIES:
 	 :CUSTOM_ID: trace-system-call
 	 :END:
 
 - MacOSX: =dtruss=
 
-** display symbol table
+** Display Symbol Table
 	 :PROPERTIES: 
 	 :CUSTOM_ID: display-symbol-table
 	 :END:
 
 - MacOSX: =nm=
 
-** memory leak detection
-	 
+** Memory Leak Detection
+
+** debugger
+
+*** Memory Read
+
+| *Example*                       | *Command*                                      |
+| check /argv/ in /main/ entry    | (lldb) =x -t'char*' -c`argc` argv=             |
+| check array of /char*/ of /argv | (lldb) =x -s`sizeof(char*)` -c`argc` -fx argv= |
+
 
 ** References
 
