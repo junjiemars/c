@@ -2029,7 +2029,8 @@ table in a executable.
 |                                  |                                    |
 | breakpoint at /source/ by regexp | *(lldb)* =b -p'm[a-z]in' -ftest.c= |
 |                                  |                                    |
-		
+
+
 *** Memory
 
 | *example*                       | *command*                                        |
