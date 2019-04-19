@@ -1,4 +1,4 @@
-# ./configure --without-debug --has-lang
+# ./configure --has-env
 
 env: var
 env_test: var_test

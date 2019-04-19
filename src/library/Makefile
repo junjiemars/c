@@ -1,7 +1,7 @@
+# ./configure --has-library
 
 library: geo math_static math_shared
 library_test: geo_test math_static_test math_shared_test
-
 
 INC += -I$(library_root)
 
