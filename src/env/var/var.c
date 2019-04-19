@@ -5,7 +5,7 @@
 
 
 int 
-main(int argc, const char* argv[]) {
+main(int argc, const char **argv) {
 	printf("----------\n");
 	printf("#your can set COUNT, TEXT via command-line args or env vars\n");
 
@@ -27,4 +27,6 @@ main(int argc, const char* argv[]) {
 		printf("%s\n", text);
 	}
 	putchar('\n');
+
+	return 0;
 }

@@ -2049,6 +2049,13 @@ table in a executable.
 | check /&argc/ in /main/ entry   | *(lldb)* =x -s`sizeof(int)` -fx -c1 &argc=       |
 |                                 | *(gdb)* =x/1xw &argc=                            |
 
+
+*** Frame
+
+| *example* | *command* |
+|-----------+-----------|
+|           |           |
+
 *** Tools References
 
 - [[https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2008/e5ewb1h3(v=vs.90)][Microsoft: Memory Leak Detection Enabling]]
