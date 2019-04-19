@@ -79,8 +79,8 @@ in(rect_s *rect, const char *where) {
 	fprintf(stdout,"\
 rect_s: {\n\
   name: \"%s\",\n\
-  width: %i,\n\
-  height: %i\n\
+  width: 0x%x,\n\
+  height: 0x%x\n\
 }\n", rect->name, rect->width, rect->height);
 }
 
@@ -100,8 +100,8 @@ main(int argc, char **argv) {
 	} else {
 		/* write to binary file */
 		strncpy(rect.name, argv[1], NAME_SIZE);
-		rect.width = atoi(argv[2]);
-		rect.height = atoi(argv[3]);
+		rect.width = (int)strtol(argv[2], 0, 16);
+		rect.height = (int)strtol(argv[3], 0, 16);
 
 		out(&rect, filename);
 	}
