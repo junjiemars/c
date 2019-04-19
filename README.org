@@ -1987,18 +1987,22 @@ table in a executable.
 
 *** Environment
 
-| *Example*       | *Command*                                               |
-|-----------------+---------------------------------------------------------|
-| list /env/ vars | *(lldb)* =env=                                          |
-|                 | *(lldb)* =settings show target.env-vars=                |
-|                 |                                                         |
-| set /env/ var   | *(lldb)* =env XXX=zzz=                                  |
-|                 | *(lldb)* =settings set target.env-vars XXX=aa YYY=bb=   |
-
+| *example*                   | *command*                                             |
+|-----------------------------+-------------------------------------------------------|
+| list /env/ vars             | *(lldb)* =env=                                        |
+|                             | *(lldb)* =settings show target.env-vars=              |
+|                             |                                                       |
+| set /env/ var               | *(lldb)* =env XXX=zzz=                                |
+|                             | *(lldb)* =settings set target.env-vars XXX=aa YYY=bb= |
+|                             |                                                       |
+| set /argv/ for /main/ entry | *(lldb)* =r arg1 arg2 arg3=                           |
+|                             | *(lldb)* =settings set target.run-args arg1 arg2=     |
+|                             | *(lldb)* =process launch -- arg1 arg2=                |
+|                             |                                                       |
 
 *** Image
 
-| *Example*                                     | *Command*                                       |
+| *example*                                     | *command*                                       |
 |-----------------------------------------------+-------------------------------------------------|
 | list dependents of executable                 | *(lldb)* =image list=                           |
 |                                               |                                                 |
@@ -2011,10 +2015,9 @@ table in a executable.
 | add /moudle/                                  | *(lldb)* =image add /opt/local/lib/libgeo.dyld= |
 |                                               |                                                 |
 
-
 *** Memory
 
-| *Example*                       | *Command*                                        |
+| *example*                       | *command*                                        |
 |---------------------------------+--------------------------------------------------|
 | check /argv/ in /main/ entry    | *(lldb)* =x -t'char*' -c`argc` argv=             |
 |                                 |                                                  |
@@ -2023,6 +2026,7 @@ table in a executable.
 | check /&argc/ in /main/ entry   | *(lldb)* =x -s`sizeof(int)` -fx -c1 &argc=       |
 |                                 | *(gdb)* =x/1xw &argc=                            |
 
-** References
+*** Tools References
 
 - [[https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2008/e5ewb1h3(v=vs.90)][Microsoft: Memory Leak Detection Enabling]]
+- [[https://lldb.llvm.org/use/map.html][GDB to LLDB command map]]
