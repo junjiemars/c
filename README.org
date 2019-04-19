@@ -2017,18 +2017,25 @@ table in a executable.
 
 *** Breakpoint
 
-| *example*                        | *command*                          |
-|----------------------------------+------------------------------------|
-| breakpoint at /fn/               | *(lldb)* =b main=                  |
-|                                  | *(lldb)* =b -nmain=                |
-|                                  |                                    |
-|                                  |                                    |
-| breakpoint at /line/             | *(lldb)* =b -ftest.c -l32=         |
-|                                  |                                    |
-| breakpoint at /fn/ by regexp     | *(lldb)* =b -rm[a-z]in=            |
-|                                  |                                    |
-| breakpoint at /source/ by regexp | *(lldb)* =b -p'm[a-z]in' -ftest.c= |
-|                                  |                                    |
+| *example*                        | *command*                                            |
+|----------------------------------+------------------------------------------------------|
+| list /breakpoint/                | *(lldb)* =b=                                         |
+|                                  | *(lldb)* =breakpoint list=                           |
+|                                  |                                                      |
+| breakpoint at /fn/               | *(lldb)* =b main=                                    |
+|                                  | *(lldb)* =b -nmain=                                  |
+|                                  |                                                      |
+|                                  |                                                      |
+| breakpoint at /line/             | *(lldb)* =b -ftest.c -l32=                           |
+|                                  |                                                      |
+| breakpoint at /fn/ by regexp     | *(lldb)* =b -rm[a-z]in=                              |
+|                                  |                                                      |
+| breakpoint at /source/ by regexp | *(lldb)* =b -p'm[a-z]in' -ftest.c=                   |
+|                                  |                                                      |
+| conditional breakpoint           | *(lldb)* =breakpoint set -fvar.c -l23 -c'2 == argc'= |
+|                                  |                                                      |
+| delete breakpoint                | *(lldb)* =breakpoint delete 1.1=                     |
+|                                  | *(lldb)* =breakpoint delete 2=                       |
 
 
 *** Memory
