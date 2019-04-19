@@ -54,7 +54,7 @@ binary_binout := $(bin_path)$(io_prefix)_binary$(bin_ext)
 
 binary: $(binary_binout)
 binary_test: binary
-	$(binary_binout) "w*h" "0x1122" "0x3344"
+	$(binary_binout) "w*h" "0x11220000" "0x00003344"
 	$(binary_binout)
 
 $(binary_binout): $(io_root)binary/b.c

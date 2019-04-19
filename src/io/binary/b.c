@@ -79,8 +79,8 @@ in(rect_s *rect, const char *where) {
 	fprintf(stdout,"\
 rect_s: {\n\
   name: \"%s\",\n\
-  width: 0x%x,\n\
-  height: 0x%x\n\
+  width:  0x%08x,\n\
+  height: 0x%08x\n\
 }\n", rect->name, rect->width, rect->height);
 }
 
