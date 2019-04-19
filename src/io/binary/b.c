@@ -2,9 +2,31 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <limits.h>
-#include <libgen.h>
 
+#ifdef MSVC
+#  include <windows.h>
+#  include <tchar.h>
+#  define PATH_MAX MAX_PATH
+#else
+#  ifdef LINUX
+#    include <linux/limits.h>
+#  else
+#    include <limits.h>
+#  endif
+#  include <libgen.h>
+#endif
+
+#ifdef MSVC
+char*
+dirname(char *path) {
+	static TCHAR d[PATH_MAX + 1], *p;
+	if (0 == GetFullPathName(path, _countof(d), d, &p)) {
+		return 0;
+	}
+	p[-1] = 0; /* remove /basename part */
+	return d;
+}
+#endif
 
 #define NAME_SIZE 16
 
@@ -69,7 +91,7 @@ main(int argc, char **argv) {
 	memset(&rect, 0, sizeof(rect));
 	char *pathname = dirname(argv[0]);
 	strcpy(filename, pathname);
-	strcat(filename, ".rect_s");
+	strcat(filename, "/.rect_s");
 
 	if (argc < 4) {
 		/* read from binary file */
