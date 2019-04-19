@@ -1985,17 +1985,31 @@ table in a executable.
 	 :CUSTOM_ID: debugger
 	 :END:
 
+*** Environment
+
+| *Example*       | *Command*                                               |
+|-----------------+---------------------------------------------------------|
+| list /env/ vars | *(lldb)* =env=                                          |
+|                 | *(lldb)* =settings show target.env-vars=                |
+|                 |                                                         |
+| set /env/ var   | *(lldb)* =env XXX=zzz=                                  |
+|                 | *(lldb)* =settings set target.env-vars XXX=aa YYY=bb=   |
+
+
 *** Image
 
-| *Example*                                     | *Command*                                  |
-|-----------------------------------------------+--------------------------------------------|
-| list dependents of executable                 | *(lldb)* =image list=                      |
-|                                               |                                            |
-| lookup /main/ entry address in the executable | *(lldb)* =image lookup -a main -v=         |
-|                                               |                                            |
-| lookup /fn/ or /symbol/ by regexp             | *(lldb)* =image lookup -r -n'[fsv]printf'= |
-|                                               |                                            |
-| lookup /type/                                 | *(lldb)* =image lookup -t'FILE'=           |
+| *Example*                                     | *Command*                                       |
+|-----------------------------------------------+-------------------------------------------------|
+| list dependents of executable                 | *(lldb)* =image list=                           |
+|                                               |                                                 |
+| lookup /main/ entry address in the executable | *(lldb)* =image lookup -a main -v=              |
+|                                               |                                                 |
+| lookup /fn/ or /symbol/ by regexp             | *(lldb)* =image lookup -r -n'[fsv]printf'=      |
+|                                               |                                                 |
+| lookup /type/                                 | *(lldb)* =image lookup -t'FILE'=                |
+|                                               |                                                 |
+| add /moudle/                                  | *(lldb)* =image add /opt/local/lib/libgeo.dyld= |
+|                                               |                                                 |
 
 
 *** Memory
