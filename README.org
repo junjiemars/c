@@ -2015,6 +2015,21 @@ table in a executable.
 | add /moudle/                                  | *(lldb)* =image add /opt/local/lib/libgeo.dyld= |
 |                                               |                                                 |
 
+*** Breakpoint
+
+| *example*                        | *command*                          |
+|----------------------------------+------------------------------------|
+| breakpoint at /fn/               | *(lldb)* =b main=                  |
+|                                  | *(lldb)* =b -nmain=                |
+|                                  |                                    |
+|                                  |                                    |
+| breakpoint at /line/             | *(lldb)* =b -ftest.c -l32=         |
+|                                  |                                    |
+| breakpoint at /fn/ by regexp     | *(lldb)* =b -rm[a-z]in=            |
+|                                  |                                    |
+| breakpoint at /source/ by regexp | *(lldb)* =b -p'm[a-z]in' -ftest.c= |
+|                                  |                                    |
+		
 *** Memory
 
 | *example*                       | *command*                                        |
