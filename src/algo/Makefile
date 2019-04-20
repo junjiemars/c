@@ -1,5 +1,6 @@
 algo: duff_device \
 			dynamic_array \
+			gcd \
 			hash \
 			is_unsigned_integer \
 			is_unsigned_type \
@@ -9,6 +10,7 @@ algo: duff_device \
 
 algo_test: duff_device_test \
 					 dynamic_array_test \
+					 gcd_test \
 					 hash_test \
 					 is_unsigned_integer_test \
 					 is_unsigned_type_test \
@@ -47,6 +49,17 @@ dynamic_array_test: dynamic_array
 	$(dynamic_array_binout)
 
 $(dynamic_array_binout): $(algo_root)dynamic_array/da.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# gcd
+gcd_binout := $(bin_path)$(algo_prefix)_gcd$(bin_ext)
+
+gcd: $(gcd_binout)
+gcd_test: gcd
+	$(gcd_binout) 5 0
+	$(gcd_binout) 206 40
+
+$(gcd_binout): $(algo_root)gcd/gcd.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # hash
