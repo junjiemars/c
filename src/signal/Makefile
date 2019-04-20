@@ -9,7 +9,7 @@ signal_test: basic_test \
 						 fork_test
 
 signal_prefix := signal
-INC += -I$(signal_root)
+INC += -I$(signal_root) -I$(root)posix
 
 
 # basic

@@ -1,16 +1,7 @@
 #include <_signal_.h>
 #include <signal.h>
 #include <stdio.h>
-
-#if WINNT
-#  include <windows.h>
-#  include <process.h>
-#  define sleep(x) Sleep((x) * 1000)
-#  define getpid() _getpid()
-#else
-#  include <unistd.h>
-#endif
-
+#include <norstd.h>
 
 static volatile int s_flag = 0;
 
