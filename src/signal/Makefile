@@ -1,10 +1,12 @@
 # ./configure --without-debug --has-lang
 
 signal: basic \
-				list
+				list \
+				fork \
 
 signal_test: basic_test \
-						 list_test
+						 list_test \
+						 fork_test
 
 signal_prefix := signal
 INC += -I$(signal_root)
@@ -28,4 +30,14 @@ list_test: list
 	$(list_binout)
 
 $(list_binout): $(signal_root)list/list-sig.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# fork
+fork_binout := $(bin_path)$(signal_prefix)_fork$(bin_ext)
+
+fork: $(fork_binout)
+fork_test: fork
+	$(fork_binout)
+
+$(fork_binout): $(signal_root)fork/f.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
