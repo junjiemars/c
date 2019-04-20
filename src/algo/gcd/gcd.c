@@ -20,7 +20,7 @@ gcd1(int a, int b) {
 	if (0 == b) {
 		return a;
 	} 
-	return gcd(b, a % b);
+	return gcd1(b, a % b);
 }
 
 int
