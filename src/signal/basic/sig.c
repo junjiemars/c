@@ -15,8 +15,10 @@
 static volatile int s_flag = 0;
 
 void on_sigint(int sig) {
-	signal(sig, on_sigint);
+	psignal(sig, "on_sigint");
 	s_flag = sig;
+	/* continue put into pending signals */
+	/* signal(sig, on_sigint); */
 }
 
 int main(int argc, char **argv) {
@@ -29,11 +31,8 @@ int main(int argc, char **argv) {
 	signal(SIGINT, on_sigint);
 
 	do {
-		printf("sleeping...\n");
-		fflush(stdout);
+		fprintf(stderr, "sleeping...\n");
 		if (s_flag) {
-			printf("on_sigint, exit.\n");
-			fflush(stdout);
 			break;
 		}
 		sleep(1);
