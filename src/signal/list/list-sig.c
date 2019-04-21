@@ -1,6 +1,7 @@
 #include <_signal_.h>
 #include <signal.h>
 #include <stdio.h>
+#include <norstd.h>
 
 int
 main(int argc, char **argv) {

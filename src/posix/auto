@@ -27,9 +27,9 @@
 #include="wchar.h" . ${NORE_ROOT}/auto/include
 #include="wctype.h" . ${NORE_ROOT}/auto/include
 #
-echo " + checking nonstandard posix header files ..."
-include="unistd.h" . ${NORE_ROOT}/auto/include
-include="signal.h" . ${NORE_ROOT}/auto/include
+# echo " + checking nonstandard posix header files ..."
+# include="unistd.h" . ${NORE_ROOT}/auto/include
+# include="signal.h" . ${NORE_ROOT}/auto/include
 #
 
 ## check machine features

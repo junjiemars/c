@@ -1,3 +1,4 @@
+# ./configure --has-io
 
 io: basic \
     binary \
@@ -30,7 +31,7 @@ io_test: basic_test  \
 
 io_prefix := io
 
-INC += -I$(io_root)
+INC += -I$(io_root) -I$(root)posix
 
 ifeq ($(CC_NAME), msvc)
 INC += -I$(root)posix
