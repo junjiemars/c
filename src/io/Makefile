@@ -31,7 +31,7 @@ io_test: basic_test  \
 
 io_prefix := io
 
-INC += -I$(io_root) -I$(root)posix
+INC += -I$(io_root)
 
 ifeq ($(CC_NAME), msvc)
 INC += -I$(root)posix

@@ -2,7 +2,32 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <norstd.h>
+
+#ifdef MSVC
+#  include <windows.h>
+#  include <tchar.h>
+#  define PATH_MAX MAX_PATH
+#else
+#  ifdef LINUX
+#    include <linux/limits.h>
+#  else
+#    include <limits.h>
+#  endif
+#  include <libgen.h>
+#endif
+
+#ifdef MSVC
+char*
+dirname(char *path) {
+	static TCHAR d[PATH_MAX + 1], *b;
+	if (0 == GetFullPathName(path, _countof(d), d, &b)) {
+		return 0;
+	}
+	b[-1] = 0; /* remove '/basename' part */
+	return d;
+}
+#endif /* MSVC */
+
 
 #define NAME_SIZE 16
 

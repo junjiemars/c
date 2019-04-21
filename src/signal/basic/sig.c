@@ -3,6 +3,16 @@
 #include <stdio.h>
 #include <norstd.h>
 
+#if WINNT
+#  include <windows.h>
+#  include <process.h>
+#  define sleep(x) Sleep((x) * 1000)
+#  define getpid() _getpid()
+#else
+#  include <unistd.h>
+#endif
+
+
 static volatile int s_flag = 0;
 
 void on_sigint(int sig) {
