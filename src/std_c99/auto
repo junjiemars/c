@@ -2,7 +2,31 @@
 
 echo " # view https://en.wikipedia.org/wiki/C99"
 
-echo " + checking C99 new header files ..."
+echo " + checking ISO/IEC 9899:1990 (C90) header files ..."
+#-----------------------------------
+include="assert.h" . ${NORE_ROOT}/auto/include
+include="ctype.h" . ${NORE_ROOT}/auto/include
+include="errno.h" . ${NORE_ROOT}/auto/include
+include="float.h" . ${NORE_ROOT}/auto/include
+include="limits.h" . ${NORE_ROOT}/auto/include
+include="locale.h" . ${NORE_ROOT}/auto/include
+include="math.h" . ${NORE_ROOT}/auto/include
+include="setjmp.h" . ${NORE_ROOT}/auto/include
+include="signal.h" . ${NORE_ROOT}/auto/include
+include="stdarg.h" . ${NORE_ROOT}/auto/include
+include="stddef.h" . ${NORE_ROOT}/auto/include
+include="stdio.h" . ${NORE_ROOT}/auto/include
+include="stdlib.h" . ${NORE_ROOT}/auto/include
+include="string.h" . ${NORE_ROOT}/auto/include
+include="time.h" . ${NORE_ROOT}/auto/include
+
+echo " + checking ISO/IEC 9899:1990/Amd.1:1995 header files ..."
+#-----------------------------------
+include="iso646.h" . ${NORE_ROOT}/auto/include
+include="wchar.h" . ${NORE_ROOT}/auto/include
+include="wctype.h" . ${NORE_ROOT}/auto/include
+
+echo " + checking ISO/IEC 9899:1999 (C99) new header files ..."
 #-----------------------------------
 include="complex.h" . ${NORE_ROOT}/auto/include
 include="fenv.h" . ${NORE_ROOT}/auto/include
