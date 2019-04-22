@@ -8,6 +8,25 @@
 #  include <process.h>
 #  define sleep(x) Sleep((x) * 1000)
 #  define getpid() _getpid()
+
+#  include <stdio.h>
+void
+psignal(int sig, const char *s) {
+	static char *tbl[] = {
+		"default",
+		0,
+		"interrupt",           /* SIGINT */
+		0,
+		"illegal instruction", /* SIGILL */
+		0,
+	};
+
+	if (0 == s || '\0' == s[0]) {
+		fprintf(stderr, "%s\n", tbl[sig]);
+	} else {
+		fprintf(stderr, "%s: %s\n", s, tbl[sig]);
+	}
+}
 #else
 #  include <unistd.h>
 #endif
