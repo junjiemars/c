@@ -1,15 +1,12 @@
 #include <_signal_.h>
 #include <signal.h>
 #include <stdio.h>
-#include <norstd.h>
 
 #if WINNT
 #  include <windows.h>
 #  include <process.h>
 #  define sleep(x) Sleep((x) * 1000)
 #  define getpid() _getpid()
-
-#  include <stdio.h>
 void
 psignal(int sig, const char *s) {
 	static char *tbl[] = {
