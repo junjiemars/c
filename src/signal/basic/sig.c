@@ -21,10 +21,12 @@ psignal(int sig, const char *s) {
 		0,
 	};
 
+	char *msg = (sig < 0 || sig >= sizeof(tbl)/sizeof(tbl[0]))
+		? "unknown signal" : tbl[sig];
 	if (0 == s || '\0' == s[0]) {
-		fprintf(stderr, "%s\n", tbl[sig]);
+		fprintf(stderr, "%s\n", msg);
 	} else {
-		fprintf(stderr, "%s: %s\n", s, tbl[sig]);
+		fprintf(stderr, "%s: %s\n", s, msg);
 	}
 }
 #else
