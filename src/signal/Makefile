@@ -11,7 +11,7 @@ signal_test: basic_test \
 signal_prefix := signal
 INC += -I$(signal_root) -I$(root)posix
 
-ifeq ($(NM_SYMTEM), Linux)
+ifeq ($(NM_SYSTEM), Linux)
 CFLAGS += $(nm_def_opt)_BSD_SOURCE
 endif
 
