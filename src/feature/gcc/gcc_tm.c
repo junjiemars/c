@@ -6,27 +6,27 @@ int main(int argc, char **argv) {
 	_unused_(argv);
 
 #ifdef __STRICT_ANSI__
-	printf("__STRICT_ANSI__ defined\n");
+	printf("#define __STRICT_ANSI__\n");
 #endif
 
 #ifdef _POSIX_SOURCE
-	printf("_POSIX_SOURCE defined\n");
+	printf("#define _POSIX_SOURCE\n");
 #endif
 
 #ifdef _POSIX_C_SOURCE
-	printf("_POSIX_C_SOURCE defined: %ldL\n", (long) _POSIX_C_SOURCE);
+	printf("#define _POSIX_C_SOURCE %ldL\n", (long) _POSIX_C_SOURCE);
 #endif
 
 #ifdef _ISOC99_SOURCE
-	printf("_ISOC99_SOURCE defined\n");
+	printf("#define _ISOC99_SOURCE\n");
 #endif
 
 #ifdef _ISOC11_SOURCE
-	printf("_ISOC11_SOURCE defined\n");
+	printf("#define _ISOC11_SOURCE\n");
 #endif
 
 #ifdef _XOPEN_SOURCE
-	printf("_XOPEN_SOURCE defined: %d\n", _XOPEN_SOURCE);
+	printf("#define _XOPEN_SOURCE %d\n", _XOPEN_SOURCE);
 #endif
 
 #ifdef _XOPEN_SOURCE_EXTENDED
@@ -38,15 +38,15 @@ int main(int argc, char **argv) {
 #endif
 
 #ifdef _FILE_OFFSET_BITS
-	printf("_FILE_OFFSET_BITS defined: %d\n", _FILE_OFFSET_BITS);
+	printf("#define _FILE_OFFSET_BITS %d\n", _FILE_OFFSET_BITS);
 #endif
 
 #ifdef _BSD_SOURCE
-	printf("_BSD_SOURCE defined\n");
+	printf("#define _BSD_SOURCE\n");
 #endif
 
 #ifdef _SVID_SOURCE
-	printf("_SVID_SOURCE defined\n");
+	printf("#define _SVID_SOURCE\n");
 #endif
 
 #ifdef _DEFAULT_SOURCE
@@ -54,11 +54,11 @@ int main(int argc, char **argv) {
 #endif
 
 #ifdef _ATFILE_SOURCE
-	printf("_ATFILE_SOURCE defined\n");
+	printf("#define _ATFILE_SOURCE\n");
 #endif
 
 #ifdef _GNU_SOURCE
-	printf("_GNU_SOURCE defined\n");
+	printf("#define _GNU_SOURCE\n");
 #endif
 
 #ifdef _REENTRANT
@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
 #endif
 
 #ifdef _FORTIFY_SOURCE
-	printf("_FORTIFY_SOURCE defined\n");
+	printf("#define _FORTIFY_SOURCE\n");
 #endif
 
 	return 0;
