@@ -9,10 +9,11 @@ signal_test: basic_test \
 						 fork_test
 
 signal_prefix := signal
-INC += -I$(signal_root) -I$(root)posix
+INC += -I$(signal_root)
 
 ifeq ($(NM_SYSTEM), Linux)
 CFLAGS += $(nm_def_opt)_BSD_SOURCE
+CFLAGS += $(nm_def_opt)_XOPEN_SOURCE
 endif
 
 # basic

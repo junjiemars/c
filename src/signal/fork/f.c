@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #ifndef WINNT
+#  include <signal.h>
 #  include <sys/wait.h>
 #  include <unistd.h>
 static volatile int sig_flag = 0x11;
