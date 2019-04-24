@@ -4,6 +4,7 @@ lang: array \
 			assert \
 			duration \
 			enum \
+			env \
 			error \
 			exit \
 			fn \
@@ -32,6 +33,7 @@ lang_test:  array_test \
 						assert_test \
 						duration_test \
 						enum_test \
+						env_test \
 						error_test \
             exit_test \
 						fn_test \
@@ -120,6 +122,19 @@ $(enum_binout): $(enum_cppout)
 
 $(enum_cppout): $(lang_root)enum/e.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+# env
+env_var_binout := $(bin_path)$(lang_prefix)_env_var$(bin_ext)
+
+$(env_var_binout): $(lang_root)env/var/var.c
+	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@ 
+
+env: $(env_var_binout)
+env_test: env
+	$(env_var_binout) --COUNT=2 --TEXT=Bonjour
+	COUNT=2 $(env_var_binout)
+	COUNT=3 TEXT="Bonjor" $(env_var_binout)
+	COUNT=2 $(env_var_binout) --TEXT=Bonjour
 
 # error
 error_basic_binout := $(bin_path)$(lang_prefix)_error_basic$(bin_ext)
