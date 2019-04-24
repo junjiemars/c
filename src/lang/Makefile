@@ -59,11 +59,6 @@ lang_test:  array_test \
 lang_prefix := lang
 INC += -I$(lang_root)
 
-ifeq ($(NM_SYSTEM), Linux)
-# --with-std=gnu99
-CFLAGS += -D_GNU_SOURCE
-endif
-
 _ERROR_ ?= 0
 
 # array
@@ -352,6 +347,7 @@ $(scope_binout): $(lang_root)scope/scope.c
 # signal
 ifeq ($(NM_SYSTEM), Linux)
 signal_cflags := $(CFLAGS)
+signal_cflags += -D_DEFAULT_SOURCE
 signal_cflags += -D_BSD_SOURCE
 signal_cflags += -D_XOPEN_SOURCE
 endif
@@ -440,6 +436,11 @@ $(storage_extern_objout): $(lang_root)storage/extern.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
 # string
+ifeq ($(NM_SYSTEM), Linux)
+string_cflags := $(CFLAGS)
+string_cflags += -D_GNU_SOURCE
+endif
+
 string_basic_binout := $(bin_path)$(lang_prefix)_string_basic$(bin_ext)
 string_n_binout := $(bin_path)$(lang_prefix)_string_n$(bin_ext)
 string_s_binout := $(bin_path)$(lang_prefix)_string_s$(bin_ext)
@@ -474,13 +475,13 @@ $(string_basic_binout): $(lang_root)string/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(string_n_binout): $(lang_root)string/n.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(string_cflags) $(INC) $^ $(bin_out)$@
 
 $(string_s_binout): $(lang_root)string/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(string_dup_binout): $(lang_root)string/dup.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(string_cflags) $(INC) $^ $(bin_out)$@
 
 $(string_tok_binout): $(lang_root)string/tok.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

@@ -1,6 +1,7 @@
 #include <_lang_.h>
 #include <signal.h>
 #include <stdio.h>
+#include <string.h>
 
 #if WINNT
 #  include <windows.h>
@@ -63,7 +64,7 @@ int main(int argc, char **argv) {
 		if (6 == n /* 5th */) {
 			int r = raise(SIGINT);
 			if (r) {
-				fprintf(stderr, "%s", strerror(errno));
+				perror("raise SIGINT failed");
 			}
 		}
 		fprintf(stderr, "sleeping...\n");
