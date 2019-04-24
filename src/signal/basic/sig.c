@@ -30,6 +30,9 @@ psignal(int sig, const char *s) {
 #  include <unistd.h>
 #endif
 
+#ifdef MSVC
+#  pragma warning(disable: 4996)
+#endif
 
 static volatile int s_flag = 0;
 
@@ -50,10 +53,16 @@ int main(int argc, char **argv) {
 	signal(SIGINT, on_sigint);
 
 	do {
-		fprintf(stderr, "sleeping...\n");
 		if (s_flag) {
 			break;
 		}
+		if (3 == n) {
+			int r = raise(SIGINT);
+			if (r) {
+				fprintf(stderr, "%s", strerror(errno));
+			}
+		}
+		fprintf(stderr, "sleeping...\n");
 		sleep(1);
 	} while (--n > 0);
 
