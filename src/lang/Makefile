@@ -59,7 +59,7 @@ lang_test:  array_test \
 lang_prefix := lang
 INC += -I$(lang_root)
 
-ifeq ($(NM_SYSTEM),Linux)
+ifeq ($(NM_SYSTEM), Linux)
 # --with-std=gnu99
 CFLAGS += -D_GNU_SOURCE
 endif
@@ -350,15 +350,32 @@ $(scope_binout): $(lang_root)scope/scope.c
 
 
 # signal
-signal_binout := $(bin_path)$(lang_prefix)_signal$(bin_ext)
+ifeq ($(NM_SYSTEM), Linux)
+signal_cflags := $(CFLAGS)
+signal_cflags += -D_BSD_SOURCE
+signal_cflags += -D_XOPEN_SOURCE
+endif
 
-signal: $(signal_binout)
+signal_basic_binout := $(bin_path)$(lang_prefix)_signal_basic$(bin_ext)
+signal_list_binout := $(bin_path)$(lang_prefix)_signal_list$(bin_ext)
+signal_fork_binout := $(bin_path)$(lang_prefix)_signal_fork$(bin_ext)
+
+signal: $(signal_basic_binout) \
+			  $(signal_list_binout) \
+				$(signal_fork_binout)
 signal_test: signal
-	$(signal_binout)
+	$(signal_basic_binout)
+	$(signal_list_binout)
+	$(signal_fork_binout)
 
-$(signal_binout): $(lang_root)signal/sig.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(signal_basic_binout): $(lang_root)signal/basic/sig.c
+	$(CC) $(signal_cflags) $(INC) $^ $(bin_out)$@
 
+$(signal_list_binout): $(lang_root)signal/list/list-sig.c
+	$(CC) $(signal_cflags) $(INC) $^ $(bin_out)$@
+
+$(signal_fork_binout): $(lang_root)signal/fork/f.c
+	$(CC) $(signal_cflags) $(INC) $^ $(bin_out)$@
 
 # sizeof
 sizeof_binout := $(bin_path)sizeof$(bin_ext)

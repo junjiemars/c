@@ -1,4 +1,4 @@
-#include <_signal_.h>
+#include <_lang_.h>
 #include <stdio.h>
 
 #ifndef WINNT
