@@ -36,11 +36,15 @@ psignal(int sig, const char *s) {
 
 static volatile int s_flag = 0;
 
-void on_sigint(int sig) {
-	psignal(sig, "on_sigint");
+void on_sigint_stop(int sig) {
+	psignal(sig, "on_sigint_stop");
 	s_flag = sig;
+}
+
+void on_sigint_continue(int sig) {
+	psignal(sig, "on_sigint_continue");
 	/* continue put into pending signals */
-	/* signal(sig, on_sigint); */
+	signal(sig, on_sigint_stop);
 }
 
 int main(int argc, char **argv) {
@@ -49,14 +53,14 @@ int main(int argc, char **argv) {
 
 	printf("pid=%d\n", getpid());
 	
-	int n = 5;
-	signal(SIGINT, on_sigint);
+	int n = 10;
+	signal(SIGINT, on_sigint_continue);
 
 	do {
 		if (s_flag) {
 			break;
 		}
-		if (3 == n) {
+		if (6 == n /* 5th */) {
 			int r = raise(SIGINT);
 			if (r) {
 				fprintf(stderr, "%s", strerror(errno));
