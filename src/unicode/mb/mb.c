@@ -38,13 +38,18 @@ wcs_to_mbs(const wchar_t *s, size_t n) {
 }
 
 int
-main(int argc, char* argv[]) {
+main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
+	printf("current locale: %s\n", setlocale(LC_ALL, 0));
+	printf("set locale to native: %s\n", setlocale(LC_ALL, ""));
+	printf("sizeof(wchar_t): %zu bytes\n", sizeof(wchar_t));
+	printf("MB_LEN_MAX: %i\n", MB_LEN_MAX);
+	printf("----------\n");
+	
 	wchar_t s[] = L"abc中文def";
-	setlocale(LC_ALL, "");
-	printf("%ls[%zu]:\n", s, sizeof(wchar_t));
+	printf("%ls:\n", s);
 	printf("----------\n");
 	
 	wide_char(s);
