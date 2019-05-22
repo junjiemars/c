@@ -96,3 +96,37 @@ case $NM_SYSTEM in
 	  ;;
 esac
 
+case "$NM_SYSTEM" in
+	Darwin|Linux)
+		nm_feature="memalign fn"
+		nm_feature_name="nm_have_memalign_fn"
+		nm_feature_run=no
+		nm_feature_h='#include <stdlib.h>
+                  #include <malloc.h>'
+		nm_feature_flags=
+		nm_feature_test='void *p = memalign(4096, 4096);
+                     return !p;'
+		. ${NORE_ROOT}/auto/feature
+
+		nm_feature="posix memalign fn"
+		nm_feature_name="nm_have_posix_memalign_fn"
+		nm_feature_run=no
+		nm_feature_h='#include <stdlib.h>'
+		nm_feature_flags=
+		nm_feature_test='void *p; int n = posix_memalign(&p, 4096, 4096);
+                     return n;'
+		. ${NORE_ROOT}/auto/feature
+		;;
+	WinNT)
+		nm_feature="memalign fn"
+		nm_feature_name="nm_have_memalign_fn"
+		nm_feature_run=no
+		nm_feature_h=' #include <malloc.h>'
+		nm_feature_flags=
+		nm_feature_test='void *p = _aligned_malloc(4096, 4096);
+                     return !p;'
+		. ${NORE_ROOT}/auto/feature
+		;;
+esac
+
+# EOF

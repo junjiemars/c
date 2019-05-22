@@ -96,16 +96,19 @@ alloc_a_binout := $(bin_path)$(memory_prefix)_alloca$(bin_ext)
 alloc_m_binout := $(bin_path)$(memory_prefix)_malloc$(bin_ext)
 alloc_c_binout := $(bin_path)$(memory_prefix)_calloc$(bin_ext)
 alloc_re_binout := $(bin_path)$(memory_prefix)_realloc$(bin_ext)
+alloc_align_binout := $(bin_path)$(memory_prefix)_memalign$(bin_ext)
 
 alloc: $(alloc_a_binout) \
 			 $(alloc_m_binout) \
        $(alloc_c_binout) \
-       $(alloc_re_binout)
+       $(alloc_re_binout) \
+			 $(alloc_align_binout)
 
 alloc_test: alloca_test \
 					  malloc_test \
 						calloc_test \
-						realloc_test
+						realloc_test \
+						align_test
 
 alloca_test: $(alloc_a_binout)
 	$(alloc_a_binout)
@@ -115,7 +118,8 @@ calloc_test: $(alloc_c_binout)
 	$(alloc_c_binout)
 realloc_test: $(alloc_re_binout)
 	$(alloc_re_binout)
-
+align_test: $(alloc_align_binout)
+	$(alloc_align_binout)
 
 $(alloc_a_binout): $(memory_root)alloc/a.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -129,6 +133,8 @@ $(alloc_c_binout): $(memory_root)alloc/c.c
 $(alloc_re_binout): $(memory_root)alloc/re.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+$(alloc_align_binout): $(memory_root)alloc/align.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 #bitfield
 bitfield_binout := $(bin_path)$(memory_prefix)_bitfield$(bin_ext)
