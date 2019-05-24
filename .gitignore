@@ -78,3 +78,7 @@ nore/
 *.tex
 **/*.html
 **/*.odt
+
+src/nginx/nd.sh
+nginx.sh
+src/nginx/nginx_home

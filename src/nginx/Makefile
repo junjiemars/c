@@ -1,26 +1,41 @@
 # ./configure --has-nginx
 
 # check or download nd.sh
-ND := nd.sh
+nd_sh_src := 'https://raw.githubusercontent.com/junjiemars/kit/master/ul/nd.sh'
+nd_sh := $(CURDIR)/src/nginx/nd.sh
+$(nd_sh):
+	curl -sqL -o $@ $(nd_sh_src) && chmod u+x $@
+
 # check or download nginx source from github
-NGINX_ROOT := /opt/open/nginx
+nginx_src := 'https://github.com/nginx/nginx.git'
+nginx_home := $(CURDIR)/src/nginx/nginx_home
+nginx_home_auto := $(nginx_home)/auto/configure
+$(nginx_home_auto):
+	git clone --depth=1 --branch=master $(nginx_src) $(nginx_home)
+
+opt_debug :=
+ifeq ($(NM_DEBUG),YES)
+opt_debug := yes
+endif
 
 hello_module_root := $(CURDIR)/src/nginx/hello
 
-configure:
-	$(ND) --home=$(NGINX_ROOT)                  \
-        --target=http                         \
-        --chain=yes                           \
-        --gen-shell=yes                       \
-        --opt-add-module=$(hello_module_root) \
-        make configure
+configure: $(nd_sh) $(nginx_home_auto)
+	$(nd_sh) --home=$(nginx_home)                  \
+           --target=http                         \
+           --chain=$(chain)                      \
+           --gen-shell=yes                       \
+           --opt-add-module=$(hello_module_root) \
+           --opt-debug=$(opt_debug)              \
+           make configure
 
-make:
-	$(ND) --home=$(NGINX_ROOT)                  \
-        --target=http                         \
-        --chain=yes                           \
-        --gen-shell=yes                       \
-        --opt-add-module=$(hello_module_root) \
-        make make
+make: $(nd_sh) $(nginx_home_auto)
+	$(nd_sh) --home=$(nginx_home)                  \
+           --target=http                         \
+           --chain=$(chain)                      \
+           --gen-shell=yes                       \
+           --opt-add-module=$(hello_module_root) \
+           --opt-debug=$(opt_debug)              \
+           make make
 
 .PHONY: configure make
