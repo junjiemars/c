@@ -8,7 +8,7 @@ static char *ngx_http_hello(ngx_conf_t *cf, ngx_command_t *cmd,
 
 static ngx_command_t  ngx_http_hello_commands[] = {
 	{ ngx_string("hello"),
-		NGX_HTTP_LOC_CONF|NGX_CONF_NOARGS,
+		NGX_HTTP_LOC_CONF | NGX_CONF_NOARGS,
 		ngx_http_hello,
 		0,
 		0,
@@ -55,7 +55,8 @@ ngx_http_hello_handler(ngx_http_request_t *r) {
 
 	ngx_log_debug0(NGX_LOG_DEBUG_HTTP, r->connection->log, 0,
 								 "http hello handler");
-	/* ignore client request body if andy */
+
+	/* ignore client request body if any */
 	if (ngx_http_discard_request_body(r) != NGX_OK) {
 		return NGX_HTTP_INTERNAL_SERVER_ERROR;
 	}
