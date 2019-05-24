@@ -25,7 +25,7 @@ configure_nginx: $(nd_sh) $(nginx_home_auto)
 	$(nd_sh) --home=$(nginx_home)                   \
            --prefix=$(nginx_prefix)               \
            --target=http                          \
-           --chain=$(chain)                       \
+           --chain=$(nginx_chain)                       \
            --gen-shell=no                         \
            --opt-add-module=$(hello_module_root)  \
            --opt-debug=$(opt_debug)               \
@@ -35,7 +35,7 @@ make_nginx: $(nd_sh) $(nginx_home_auto)
 	$(nd_sh) --home=$(nginx_home)                   \
            --prefix=$(nginx_prefix)               \
            --target=http                          \
-           --chain=$(chain)                       \
+           --chain=$(nginx_chain)                       \
            --gen-shell=no                         \
            --opt-add-module=$(hello_module_root)  \
            --opt-debug=$(opt_debug)               \
@@ -45,7 +45,7 @@ install_nginx: $(nd_sh) $(nginx_home_auto)
 	$(nd_sh) --home=$(nginx_home)                   \
            --prefix=$(nginx_prefix)               \
            --target=http                          \
-           --chain=$(chain)                       \
+           --chain=$(nginx_chain)                       \
            --gen-dir=$(CURDIR)/$(nginx_root)      \
            --gen-shell=yes                        \
            --opt-add-module=$(hello_module_root)  \
