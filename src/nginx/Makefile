@@ -18,24 +18,42 @@ ifeq ($(NM_DEBUG),YES)
 opt_debug := yes
 endif
 
+nginx_prefix := $(CURDIR)/$(tmp_path)
 hello_module_root := $(CURDIR)/src/nginx/hello
 
-configure: $(nd_sh) $(nginx_home_auto)
-	$(nd_sh) --home=$(nginx_home)                  \
-           --target=http                         \
-           --chain=$(chain)                      \
-           --gen-shell=yes                       \
-           --opt-add-module=$(hello_module_root) \
-           --opt-debug=$(opt_debug)              \
-           make configure
+configure_nginx: $(nd_sh) $(nginx_home_auto)
+	$(nd_sh) --home=$(nginx_home)                   \
+           --prefix=$(nginx_prefix)               \
+           --target=http                          \
+           --chain=$(chain)                       \
+           --gen-shell=no                         \
+           --opt-add-module=$(hello_module_root)  \
+           --opt-debug=$(opt_debug)               \
+           make configure												  
 
-make: $(nd_sh) $(nginx_home_auto)
-	$(nd_sh) --home=$(nginx_home)                  \
-           --target=http                         \
-           --chain=$(chain)                      \
-           --gen-shell=yes                       \
-           --opt-add-module=$(hello_module_root) \
-           --opt-debug=$(opt_debug)              \
+make_nginx: $(nd_sh) $(nginx_home_auto)								  
+	$(nd_sh) --home=$(nginx_home)                   \
+           --prefix=$(nginx_prefix)               \
+           --target=http                          \
+           --chain=$(chain)                       \
+           --gen-shell=no                         \
+           --opt-add-module=$(hello_module_root)  \
+           --opt-debug=$(opt_debug)               \
            make make
 
-.PHONY: configure make
+install_nginx: $(nd_sh) $(nginx_home_auto)								  
+	$(nd_sh) --home=$(nginx_home)                   \
+           --prefix=$(nginx_prefix)               \
+           --target=http                          \
+           --chain=$(chain)                       \
+           --gen-dir=$(CURDIR)/$(nginx_root)      \
+           --gen-shell=yes                        \
+           --opt-add-module=$(hello_module_root)  \
+           --opt-debug=$(opt_debug)               \
+           make install
+	cp $(nginx_root)/hello/nginx.conf $(CURDIR)/$(nginx_root)
+
+clean_nginx: $(nd_sh) $(nginx_home_auto)
+	make -C $(nginx_home) clean
+
+.PHONY: configure_nginx make_nginx install_nginx clean_nginx

@@ -80,5 +80,6 @@ nore/
 **/*.odt
 
 src/nginx/nd.sh
-nginx.sh
+src/nginx/nginx.sh
+src/nginx/nginx.conf
 src/nginx/nginx_home
