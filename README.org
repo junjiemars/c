@@ -1603,7 +1603,6 @@ the =malloc=ed array at will at run time using =realloc=.
 Row-major order, so load =a[0][0]= would potentially load =a[0][1]=, 
 but load =a[1][0]= would generate a second cache fault.
 
-
 ** Stack Implementation
 	 :PROPERTIES:
 	 :custom_id: memory-stack-implementation
@@ -1719,6 +1718,7 @@ and each such derived type is a distinct new type.
 - [[https://en.wikipedia.org/wiki/Arithmetic_shift][Arithmetic shift]]
 - [[http://stackoverflow.com/documentation/c/322/arrays#t=20170207121645271737][Arrays]]
 - [[https://www.cs.umd.edu/class/sum2003/cmsc311/Notes/Data/endian.html][Big and Little Endian]]
+- [[https://clang.llvm.org/docs/AddressSanitizer.html][Clang: Address Sanitizer]]
 - [[https://stackoverflow.com/questions/605845/do-i-cast-the-result-of-malloc][Do I cast the result of malloc]]
 - [[https://en.wikipedia.org/wiki/Endianness][Endianness]]
 - [[http://mjfrazer.org/mjfrazer/bitfields/][How Endianness Effects Bitfield Packing]]
