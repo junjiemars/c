@@ -26,6 +26,7 @@ lang: array \
 			time \
 			type \
 			typedef \
+			typeof \
 			volatile
 
 
@@ -55,6 +56,7 @@ lang_test:  array_test \
 						time_test \
 						type_test \
 						typedef_test \
+						typeof_test \
 						volatile_test
 
 
@@ -540,6 +542,16 @@ typedef_test: typedef
 	$(typedef_binout)
 
 $(typedef_binout): $(lang_root)typedef/t.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# typeof
+typeof_binout := $(bin_path)$(lang_prefix)_typeof$(bin_ext)
+
+typeof: $(typeof_binout)
+typeof_test: typeof
+	$(typeof_binout)
+
+$(typeof_binout): $(lang_root)typeof/to.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # volatile

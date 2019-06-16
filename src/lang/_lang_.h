@@ -30,6 +30,10 @@
   typedef unsigned __int64 uint64_t;
 #endif /* end of NM_HAVE_STDINT_H */
 
-
+#if NM_HAVE_TYPEOF
+#  if CLANG
+#    define typeof __typeof__
+#  endif
+#endif
 
 #endif /* _LANG_H_ */

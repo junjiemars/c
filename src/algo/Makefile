@@ -1,26 +1,37 @@
-algo: duff_device \
+algo: algo_sizeof \
+			bubble_sort \
+			duff_device \
 			dynamic_array \
 			gcd \
 			hash \
 			is_unsigned_integer \
 			is_unsigned_type \
 			qsort \
-			reverse \
-			algo_sizeof
+			reverse
 
-algo_test: duff_device_test \
+algo_test: algo_sizeof_test \
+					 bubble_sort_test \
+					 duff_device_test \
 					 dynamic_array_test \
 					 gcd_test \
 					 hash_test \
 					 is_unsigned_integer_test \
 					 is_unsigned_type_test \
 					 qsort_test \
-					 reverse_test \
-					 algo_sizeof_test
-
+					 reverse_test
 
 algo_prefix := algo
 INC += -I$(algo_root)
+
+# bubble sort
+bubble_sort_binout := $(bin_path)$(algo_prefix)_bubble_sort$(bin_ext)
+
+bubble_sort: $(bubble_sort_binout)
+bubble_sort_test: bubble_sort
+	$(bubble_sort_binout)
+
+$(bubble_sort_binout): $(algo_root)bubble_sort/bubble.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # duff device
 duff_device_binout := $(bin_path)$(algo_prefix)_duff_device$(bin_ext)
