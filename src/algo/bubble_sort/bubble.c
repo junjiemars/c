@@ -1,7 +1,7 @@
 #include <_algo_.h>
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <assert.h>
 
 int comp_int(const void *lhs, const void *rhs);
 void swap_int(void *lhs, void *rhs);
@@ -39,10 +39,37 @@ list_int_array(const int *a, size_t nel) {
 	printf("\n");
 }
 
+#if DEBUG
+void
+test_swap_int(void) {
+	int i1 = 0x1122, i2 = 0x3344;
+	swap_int((void*)&i1, (void*)&i2);
+	assert(0x1122 == i2 && 0x3344 == i1);
+	printf("test swap_int fn ... ok\n");
+}
+
+void
+test_comp_int(void) {
+	int i1 = 0x1122, i2 = 0x3344;
+	int cmp = comp_int((void*)&i1, (void*)&i2);
+	assert(cmp < 0 && "comp_int(0x1122, 0x3344) should < 0");
+	cmp = comp_int((void*)&i1, (void*)&i1);
+	assert(cmp == 0 && "comp_int(0x1122, 0x1122) should == 0");
+	cmp = comp_int((void*)&i2, (void*)&i1);
+	assert(cmp > 0 && "comp_int(0x3344, 0x1122) should > 0");
+	printf("test cmp_int fn ... ok\n");
+}
+#endif
+
 int
 main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
+
+#if DEBUG
+	test_swap_int();
+	test_comp_int();
+#endif
 
 	int a1[] = { 0x3, 0x5, 0x4, 0x1, 0x2 };
 	printf("bubble sort+:\n----------\n");
