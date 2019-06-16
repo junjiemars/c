@@ -11,9 +11,9 @@ bubble_sort(void *base, size_t nel, size_t width,
 						int (*comp)(const void *, const void *),
 						void (*swap)(void *, void *)) {
 	for (size_t i = 0; i < nel; i++) {
-		for (size_t j = 1; j < nel - i - 1; j++) {
-			if (comp((char*)base+i*width, (char*)base+j*width) > 0) {
-				swap((char*)base+i*width, (char*)base+j*width);
+		for (size_t j = 0; j < nel - i - 1; j++) {
+			if (comp((char*)base+j*width, (char*)base+(j+1)*width) > 0) {
+				swap((char*)base+j*width, (char*)base+(j+1)*width);
 			}
 		}
 	}
