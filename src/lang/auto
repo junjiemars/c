@@ -160,5 +160,12 @@ case "$CC_NAME" in
 		. ${NORE_ROOT}/auto/feature
 		;;
 	msvc)
+		nm_feature="$CC_NAME typeof"
+		nm_feature_name='nm_have_typeof'
+		nm_feature_run=no
+		nm_feature_h=
+		nm_feature_flags=
+		nm_feature_test='int x = 0x1122; decltype(x) y = 0x3344;'
+		. ${NORE_ROOT}/auto/feature
 		;;
 esac

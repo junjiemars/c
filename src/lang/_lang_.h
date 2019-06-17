@@ -35,6 +35,8 @@
 #    define typeof __typeof__
 #  elif GCC
 #    define typeof __typeof__
+#  elif MSVC
+#    define typeof decltype
 #  endif
 #endif
 
