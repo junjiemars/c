@@ -33,6 +33,8 @@
 #if NM_HAVE_TYPEOF
 #  if CLANG
 #    define typeof __typeof__
+#  elif GCC
+#    define typeof __typeof__
 #  endif
 #endif
 
