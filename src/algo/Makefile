@@ -32,7 +32,8 @@ bubble_sort: $(bubble_sort_binout)
 bubble_sort_test: bubble_sort
 	$(bubble_sort_binout)
 
-$(bubble_sort_binout): $(algo_root)bubble_sort/bubble.c
+$(bubble_sort_binout): $(algo_root)_algo_.c \
+                       $(algo_root)bubble_sort/bubble.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # duff device
@@ -190,5 +191,6 @@ selection_sort: $(selection_sort_binout)
 selection_sort_test: selection_sort
 	$(selection_sort_binout)
 
-$(selection_sort_binout): $(algo_root)selection_sort/selection_sort.c
+$(selection_sort_binout): $(algo_root)_algo_.c \
+                          $(algo_root)selection_sort/selection_sort.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

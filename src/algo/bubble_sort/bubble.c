@@ -4,7 +4,7 @@
 #include <string.h>
 #include <assert.h>
 
-int comp_int(const void *lhs, const void *rhs);
+/* int comp_int(const void *lhs, const void *rhs); */
 
 void
 bubble_sort(void *base, size_t nel, size_t width,
@@ -16,19 +16,6 @@ bubble_sort(void *base, size_t nel, size_t width,
 			}
 		}
 	}
-}
-
-int
-comp_int(const void *lhs, const void *rhs) {
-	return *(const int*)lhs - *(const int*)rhs;
-}
-
-void
-list_int_array(const int *a, size_t nel) {
-	for (size_t i = 0; i < nel; i++) {
-		printf("%i, ", a[i]);
-	}
-	printf("\n");
 }
 
 #if DEBUG
@@ -67,10 +54,17 @@ main(int argc, char **argv) {
 
 	int a1[] = { 0x3, 0x5, 0x4, 0x1, 0x2 };
 	printf("bubble sort+:\n----------\n");
-	list_int_array(a1, sizeof(a1)/sizeof(*a1));
+	list_array(a1, sizeof(a1)/sizeof(*a1), sizeof(*a1), print_int);
 	printf("bubble sort-:\n----------\n");
 	bubble_sort(a1, sizeof(a1)/sizeof(*a1), sizeof(*a1), comp_int);
-	list_int_array(a1, sizeof(a1)/sizeof(*a1));
+	list_array(a1, sizeof(a1)/sizeof(*a1), sizeof(*a1), print_int);
+
+	char *s1[] = { "block", "array", "digit", "floor", "cell" };
+	printf("bubble sort+:\n----------\n");
+	list_array(s1, sizeof(s1)/sizeof(*s1), sizeof(*s1), print_str);
+	printf("bubble sort-:\n----------\n");
+	bubble_sort(s1, sizeof(s1)/sizeof(*s1), sizeof(*s1), comp_str);
+	list_array(s1, sizeof(s1)/sizeof(*s1), sizeof(*s1), print_str);
 
 	return 0;
 }
