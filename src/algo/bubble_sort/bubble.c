@@ -1,19 +1,18 @@
 #include <_algo_.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <assert.h>
 
 int comp_int(const void *lhs, const void *rhs);
-void swap_int(void *lhs, void *rhs);
 
 void
 bubble_sort(void *base, size_t nel, size_t width,
-						int (*comp)(const void *, const void *),
-						void (*swap)(void *, void *)) {
+						int (*comp)(const void *, const void *)) {
 	for (size_t i = 0; i < nel; i++) {
 		for (size_t j = 0; j < nel - i - 1; j++) {
 			if (comp((char*)base+j*width, (char*)base+(j+1)*width) > 0) {
-				swap((char*)base+j*width, (char*)base+(j+1)*width);
+				swap((char*)base+j*width, (char*)base+(j+1)*width, width);
 			}
 		}
 	}
@@ -22,13 +21,6 @@ bubble_sort(void *base, size_t nel, size_t width,
 int
 comp_int(const void *lhs, const void *rhs) {
 	return *(const int*)lhs - *(const int*)rhs;
-}
-
-void
-swap_int(void *lhs, void *rhs) {
-	int t = *(int*)lhs;
-	*(int*)lhs = *(int*)rhs;
-	*(int*)rhs = t;
 }
 
 void
@@ -41,11 +33,13 @@ list_int_array(const int *a, size_t nel) {
 
 #if DEBUG
 void
-test_swap_int(void) {
+test_swap(void) {
 	int i1 = 0x1122, i2 = 0x3344;
-	swap_int((void*)&i1, (void*)&i2);
+	swap(&i1, &i2, sizeof(i1));
 	assert(0x1122 == i2 && 0x3344 == i1);
-	printf("test swap_int fn ... ok\n");
+	char s1[] = "abc", s2[] = "123";
+	swap(s1, s2, sizeof(s1));
+	assert(strcmp("abc", s2) == 0 && strcmp("123", s1) == 0);
 }
 
 void
@@ -67,7 +61,7 @@ main(int argc, char **argv) {
 	_unused_(argv);
 
 #if DEBUG
-	test_swap_int();
+	test_swap();
 	test_comp_int();
 #endif
 
@@ -75,9 +69,7 @@ main(int argc, char **argv) {
 	printf("bubble sort+:\n----------\n");
 	list_int_array(a1, sizeof(a1)/sizeof(*a1));
 	printf("bubbel sort-:\n----------\n");
-	bubble_sort(a1, sizeof(a1)/sizeof(*a1), sizeof(*a1),
-							comp_int,
-							swap_int);
+	bubble_sort(a1, sizeof(a1)/sizeof(*a1), sizeof(*a1), comp_int);
 	list_int_array(a1, sizeof(a1)/sizeof(*a1));
 
 	return 0;
