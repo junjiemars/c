@@ -4,8 +4,6 @@
 #include <string.h>
 #include <assert.h>
 
-/* int comp_int(const void *lhs, const void *rhs); */
-
 void
 bubble_sort(void *base, size_t nel, size_t width,
 						int (*comp)(const void *, const void *)) {
@@ -18,39 +16,10 @@ bubble_sort(void *base, size_t nel, size_t width,
 	}
 }
 
-#if DEBUG
-void
-test_swap(void) {
-	int i1 = 0x1122, i2 = 0x3344;
-	swap(&i1, &i2, sizeof(i1));
-	assert(0x1122 == i2 && 0x3344 == i1);
-	char s1[] = "abc", s2[] = "123";
-	swap(s1, s2, sizeof(s1));
-	assert(strcmp("abc", s2) == 0 && strcmp("123", s1) == 0);
-}
-
-void
-test_comp_int(void) {
-	int i1 = 0x1122, i2 = 0x3344;
-	int cmp = comp_int((void*)&i1, (void*)&i2);
-	assert(cmp < 0 && "comp_int(0x1122, 0x3344) should < 0");
-	cmp = comp_int((void*)&i1, (void*)&i1);
-	assert(cmp == 0 && "comp_int(0x1122, 0x1122) should == 0");
-	cmp = comp_int((void*)&i2, (void*)&i1);
-	assert(cmp > 0 && "comp_int(0x3344, 0x1122) should > 0");
-	printf("test cmp_int fn ... ok\n");
-}
-#endif
-
 int
 main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
-
-#if DEBUG
-	test_swap();
-	test_comp_int();
-#endif
 
 	int a1[] = { 0x3, 0x5, 0x4, 0x1, 0x2 };
 	printf("bubble sort+:\n----------\n");

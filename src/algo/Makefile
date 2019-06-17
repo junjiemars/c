@@ -1,4 +1,5 @@
-algo: algo_sizeof \
+algo: _algo_ \
+			algo_sizeof \
 			bubble_sort \
 			duff_device \
 			dynamic_array \
@@ -10,7 +11,8 @@ algo: algo_sizeof \
 			reverse \
 			selection_sort
 
-algo_test: algo_sizeof_test \
+algo_test: _algo__test \
+					 algo_sizeof_test \
 					 bubble_sort_test \
 					 duff_device_test \
 					 dynamic_array_test \
@@ -24,6 +26,16 @@ algo_test: algo_sizeof_test \
 
 algo_prefix := algo
 INC += -I$(algo_root)
+
+# _algo
+_algo__binout := $(bin_path)$(algo_prefix)_algo_$(bin_ext)
+
+_algo_: $(_algo__binout)
+_algo__test: _algo_
+	$(_algo__binout)
+
+$(_algo__binout): $(algo_root)_algo_.c
+	$(CC) $(CFLAGS) $(INC) $(nm_def_opt)_ALGO_=1 $^ $(bin_out)$@
 
 # bubble sort
 bubble_sort_binout := $(bin_path)$(algo_prefix)_bubble_sort$(bin_ext)
