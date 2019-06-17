@@ -7,7 +7,8 @@ algo: algo_sizeof \
 			is_unsigned_integer \
 			is_unsigned_type \
 			qsort \
-			reverse
+			reverse \
+			selection_sort
 
 algo_test: algo_sizeof_test \
 					 bubble_sort_test \
@@ -18,7 +19,8 @@ algo_test: algo_sizeof_test \
 					 is_unsigned_integer_test \
 					 is_unsigned_type_test \
 					 qsort_test \
-					 reverse_test
+					 reverse_test \
+					 selection_sort_test
 
 algo_prefix := algo
 INC += -I$(algo_root)
@@ -180,3 +182,13 @@ $(algo_sizeof_binout): $(algo_sizeof_cppout)
 
 $(algo_sizeof_cppout): $(algo_root)sizeof/s.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+# selection sort
+selection_sort_binout := $(bin_path)$(algo_prefix)_selection_sort$(bin_ext)
+
+selection_sort: $(selection_sort_binout)
+selection_sort_test: selection_sort
+	$(selection_sort_binout)
+
+$(selection_sort_binout): $(algo_root)selection_sort/selection_sort.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

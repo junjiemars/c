@@ -68,7 +68,7 @@ main(int argc, char **argv) {
 	int a1[] = { 0x3, 0x5, 0x4, 0x1, 0x2 };
 	printf("bubble sort+:\n----------\n");
 	list_int_array(a1, sizeof(a1)/sizeof(*a1));
-	printf("bubbel sort-:\n----------\n");
+	printf("bubble sort-:\n----------\n");
 	bubble_sort(a1, sizeof(a1)/sizeof(*a1), sizeof(*a1), comp_int);
 	list_int_array(a1, sizeof(a1)/sizeof(*a1));
 
