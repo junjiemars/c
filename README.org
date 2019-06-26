@@ -1134,7 +1134,7 @@ being used to store the return value, to *lock* the two together:
 theront for increased visibility, and drops the redundant
 parentheses with =sizeof()=; they are only needed when the argument is
 a type name. Many people seem to not know or ignore this, which makes
-their code move verbose. Remember: =sizeof= is not a function!
+their code more verbose. Remember: =sizeof= is not a function!
 
 While moving length to the front may increase visibility in some rare
 cases, one should also pay attention that in the general case, it
