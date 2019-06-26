@@ -1,6 +1,7 @@
-
-net: dns 
-net_test: dns_test
+net: dns \
+		 mac
+net_test: dns_test \
+					mac_test
 
 net_prefix := net
 
@@ -41,4 +42,12 @@ $(dns_query_binout): $(net_root)dns/query.c $(getopt_c)
 	$(CC) $(INC) $(CFLAGS) $(no_struct_align) $^ $(bin_out)$@
 
 
+# mac
+mac_binout := $(bin_path)$(net_prefix)_mac$(bin_ext)
 
+mac: $(mac_binout)
+mac_test: mac
+	$(mac_binout)
+
+$(mac_binout): $(net_root)mac/mac.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
