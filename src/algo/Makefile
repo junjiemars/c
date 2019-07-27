@@ -177,15 +177,21 @@ $(algo_sizeof_cppout): $(algo_root)sizeof/s.c
 # search
 search_linear_binout := $(bin_path)$(algo_prefix)_search_linear$(bin_ext)
 search_bsearch_binout := $(bin_path)$(algo_prefix)_search_bsearch$(bin_ext)
+search_binary_binout := $(bin_path)$(algo_prefix)_search_binary$(bin_ext)
 
-algo_search: $(search_linear_binout)
-algo_search_test: search_linear_test \
-                  search_bsearch_test
+algo_search: $(search_linear_binout)  \
+             $(search_bsearch_binout) \
+             $(search_binary_binout)
+algo_search_test: search_linear_test  \
+                  search_bsearch_test \
+                  search_binary_test
 
 search_linear_test: $(search_linear_binout)
 	$(search_linear_binout)
 search_bsearch_test: $(search_bsearch_binout)
 	$(search_bsearch_binout)
+search_binary_test: $(search_binary_binout)
+	$(search_binary_binout)
 
 $(search_linear_binout): $(algo_root)_algo_.c \
 												 $(algo_root)search/linear.c
@@ -193,6 +199,10 @@ $(search_linear_binout): $(algo_root)_algo_.c \
 
 $(search_bsearch_binout): $(algo_root)_algo_.c \
 												 $(algo_root)search/bs.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(search_binary_binout): $(algo_root)_algo_.c \
+												 $(algo_root)search/binary.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
