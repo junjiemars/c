@@ -13,7 +13,7 @@ selection_sort(void *base, size_t nel, size_t width,
 			}
 		}
 		if (i != min) {
-			swap((char*)base+min*width, (char*)base+i*width, width);
+			swap((char*)base+min*width, (char*)base+i*width);
 		}
 	}
 }

@@ -1,30 +1,26 @@
 algo: _algo_ \
 			algo_sizeof \
-			bubble_sort \
+			algo_sort \
 			duff_device \
 			dynamic_array \
 			gcd \
 			hash \
 			is_unsigned_integer \
 			is_unsigned_type \
-			qsort \
 			reverse \
-			algo_search \
-			selection_sort
+			algo_search
 
 algo_test: _algo__test \
 					 algo_sizeof_test \
-					 bubble_sort_test \
+					 algo_sort_test \
 					 duff_device_test \
 					 dynamic_array_test \
 					 gcd_test \
 					 hash_test \
 					 is_unsigned_integer_test \
 					 is_unsigned_type_test \
-					 qsort_test \
 					 reverse_test \
-					 algo_search_test \
-					 selection_sort_test
+					 algo_search_test
 
 algo_prefix := algo
 INC += -I$(algo_root)
@@ -39,16 +35,6 @@ _algo__test: _algo_
 $(_algo__binout): $(algo_root)_algo_.c
 	$(CC) $(CFLAGS) $(INC) $(nm_def_opt)_ALGO_=1 $^ $(bin_out)$@
 
-# bubble sort
-bubble_sort_binout := $(bin_path)$(algo_prefix)_bubble_sort$(bin_ext)
-
-bubble_sort: $(bubble_sort_binout)
-bubble_sort_test: bubble_sort
-	$(bubble_sort_binout)
-
-$(bubble_sort_binout): $(algo_root)_algo_.c \
-                       $(algo_root)bubble_sort/bubble.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # duff device
 duff_device_binout := $(bin_path)$(algo_prefix)_duff_device$(bin_ext)
@@ -156,16 +142,6 @@ $(is_utype_binout): $(is_utype_cppout)
 $(is_utype_cppout): $(algo_root)is_unsigned_type/is_utype.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
-# qsort
-qsort_binout := $(bin_path)$(algo_prefix)_qsort$(bin_ext)
-
-qsort: $(qsort_binout)
-qsort_test: qsort
-	$(qsort_binout)
-
-$(qsort_binout): $(algo_root)qsort/qs.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
 # reverse
 reverse_string_binout := $(bin_path)$(algo_prefix)_reverse_string$(bin_ext)
 reverse_linked_list_binout := $(bin_path)$(algo_prefix)_reverse_linked_list$(bin_ext)
@@ -211,13 +187,28 @@ $(search_linear_binout): $(algo_root)_algo_.c \
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
-# selection sort
-selection_sort_binout := $(bin_path)$(algo_prefix)_selection_sort$(bin_ext)
+# sort
+bubble_sort_binout := $(bin_path)$(algo_prefix)_sort_bubble$(bin_ext)
+qsort_sort_binout := $(bin_path)$(algo_prefix)_sort_qsort$(bin_ext)
+selection_sort_binout := $(bin_path)$(algo_prefix)_sort_selection$(bin_ext)
 
-selection_sort: $(selection_sort_binout)
-selection_sort_test: selection_sort
+algo_sort: $(bubble_sort_binout)     \
+           $(qsort_sort_binout)      \
+           $(selection_sort_binout)
+
+algo_sort_test: algo_sort
+	$(bubble_sort_binout)
+	$(qsort_sort_binout)
 	$(selection_sort_binout)
 
-$(selection_sort_binout): $(algo_root)_algo_.c \
-                          $(algo_root)selection_sort/selection_sort.c
+$(bubble_sort_binout): $(algo_root)_algo_.c \
+                       $(algo_root)sort/bubble.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(qsort_sort_binout): $(algo_root)sort/qs.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(selection_sort_binout): $(algo_root)_algo_.c \
+                          $(algo_root)sort/selection.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
