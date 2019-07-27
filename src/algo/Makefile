@@ -175,40 +175,55 @@ $(algo_sizeof_cppout): $(algo_root)sizeof/s.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # search
-
 search_linear_binout := $(bin_path)$(algo_prefix)_search_linear$(bin_ext)
+search_bsearch_binout := $(bin_path)$(algo_prefix)_search_bsearch$(bin_ext)
 
 algo_search: $(search_linear_binout)
-algo_search_test: algo_search
+algo_search_test: search_linear_test \
+                  search_bsearch_test
+
+search_linear_test: $(search_linear_binout)
 	$(search_linear_binout)
+search_bsearch_test: $(search_bsearch_binout)
+	$(search_bsearch_binout)
 
 $(search_linear_binout): $(algo_root)_algo_.c \
 												 $(algo_root)search/linear.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+$(search_bsearch_binout): $(algo_root)_algo_.c \
+												 $(algo_root)search/bs.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # sort
-bubble_sort_binout := $(bin_path)$(algo_prefix)_sort_bubble$(bin_ext)
-qsort_sort_binout := $(bin_path)$(algo_prefix)_sort_qsort$(bin_ext)
-selection_sort_binout := $(bin_path)$(algo_prefix)_sort_selection$(bin_ext)
+sort_bubble_binout := $(bin_path)$(algo_prefix)_sort_bubble$(bin_ext)
+sort_qsort_binout := $(bin_path)$(algo_prefix)_sort_qsort$(bin_ext)
+sort_selection_binout := $(bin_path)$(algo_prefix)_sort_selection$(bin_ext)
 
-algo_sort: $(bubble_sort_binout)     \
-           $(qsort_sort_binout)      \
-           $(selection_sort_binout)
+algo_sort: $(sort_bubble_binout)     \
+           $(sort_qsort_binout)      \
+           $(sort_selection_binout)
 
-algo_sort_test: algo_sort
-	$(bubble_sort_binout)
-	$(qsort_sort_binout)
-	$(selection_sort_binout)
+algo_sort_test: sort_bubble_test     \
+                sort_qsort_test      \
+                sort_selection_test
 
-$(bubble_sort_binout): $(algo_root)_algo_.c \
+sort_bubble_test: $(sort_bubble_binout)
+	$(sort_bubble_binout)
+sort_qsort_test: $(sort_qsort_binout)
+	$(sort_qsort_binout)
+sort_selection_test: $(sort_selection_binout)
+	$(sort_selection_binout)
+
+$(sort_bubble_binout): $(algo_root)_algo_.c \
                        $(algo_root)sort/bubble.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(qsort_sort_binout): $(algo_root)sort/qs.c
+$(sort_qsort_binout): $(algo_root)sort/qs.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(selection_sort_binout): $(algo_root)_algo_.c \
+$(sort_selection_binout): $(algo_root)_algo_.c \
                           $(algo_root)sort/selection.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
