@@ -9,6 +9,7 @@ algo: _algo_ \
 			is_unsigned_type \
 			qsort \
 			reverse \
+			algo_search \
 			selection_sort
 
 algo_test: _algo__test \
@@ -22,6 +23,7 @@ algo_test: _algo__test \
 					 is_unsigned_type_test \
 					 qsort_test \
 					 reverse_test \
+					 algo_search_test \
 					 selection_sort_test
 
 algo_prefix := algo
@@ -195,6 +197,19 @@ $(algo_sizeof_binout): $(algo_sizeof_cppout)
 
 $(algo_sizeof_cppout): $(algo_root)sizeof/s.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+# search
+
+search_linear_binout := $(bin_path)$(algo_prefix)_search_linear$(bin_ext)
+
+algo_search: $(search_linear_binout)
+algo_search_test: algo_search
+	$(search_linear_binout)
+
+$(search_linear_binout): $(algo_root)_algo_.c \
+												 $(algo_root)search_linear/linear.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # selection sort
 selection_sort_binout := $(bin_path)$(algo_prefix)_selection_sort$(bin_ext)

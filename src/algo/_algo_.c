@@ -1,6 +1,5 @@
 #include <_algo_.h>
 #include <string.h>
-#include <stdio.h>
 
 void
 list_array(const void *base, size_t nel, size_t width,
