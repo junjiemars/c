@@ -207,7 +207,7 @@ algo_search_test: algo_search
 	$(search_linear_binout)
 
 $(search_linear_binout): $(algo_root)_algo_.c \
-												 $(algo_root)search_linear/linear.c
+												 $(algo_root)search/linear.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

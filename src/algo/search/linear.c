@@ -3,7 +3,9 @@
 long
 linear_search(void *what, void *base, size_t nel, size_t width,
 							int (*comp)(const void *, const void *)) {
-	assert(0 == what && "what should non-null");
+	assert(0 != what && "argument:what should not be null");
+	assert(0 != base && "argument:base should not be null");
+	assert(0 != base && "argument:comp should not be null");
 	if (0 == what || 0 == base || 0 == comp) {
 		return -1;
 	}
