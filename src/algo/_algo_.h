@@ -4,6 +4,7 @@
 #include <nore.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <inttypes.h>
 #include <assert.h>
 
 #define _unused_(x) ((void)(x))

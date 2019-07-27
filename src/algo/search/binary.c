@@ -37,7 +37,7 @@ main(int argc, char **argv) {
 	printf("binary search for %i\n----------\n", what);
 	list_array(a1, sizeof(a1)/sizeof(*a1), sizeof(*a1), print_int);
   found = binary_search(&what, a1, sizeof(a1)/sizeof(*a1), sizeof(*a1), comp_int);
-	printf("found: [%Ii]\n", 0 == found ? -1 : (found - a1));
+	printf("found: %ld\n", (long)(0 == found ? -1 : found - a1));
 	
 	return 0;
 }
