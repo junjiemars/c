@@ -27,6 +27,26 @@ binary_search(const void *what, void *base, size_t nel, size_t width,
 	return 0;
 }
 
+void *
+binary_search1(const void *what, void *base, size_t nel, size_t width,
+							 int (*comp)(const void *lhs, const void *rhs)) {
+	if (nel < 1) return 0;
+	long l = 0, r = (long) (nel-1);
+	while (l <= r) {
+		long mid = l + (r-1)/2;
+		long c = comp(what, (char*) base + mid*width);
+		if (0 == c) {
+			return (char*) base + mid*width;
+		}
+		if (0 > c) {
+			r = mid-1+1; 
+		} else {
+			l = mid+1;
+		}
+	}
+	return 0;
+}
+
 int
 main(int argc, char **argv) {
 	_unused_(argc);
@@ -49,6 +69,13 @@ main(int argc, char **argv) {
   found2 = binary_search(&what2, s1, sizeof(s1)/sizeof(*s1), sizeof(*s1),
 												 comp_str);
 	printf("found: %ld\n", (long)(0 == found2 ? -1 : (char**)found2 - s1));
-	
+
+	// loop
+	printf("binary search loop for %i\n----------\n", what1);
+	list_array(a1, sizeof(a1)/sizeof(*a1), sizeof(*a1), print_int);
+  found1 = binary_search1(&what1, a1, sizeof(a1)/sizeof(*a1), sizeof(*a1),
+													comp_int);
+	printf("found: %ld\n", (long)(0 == found1 ? -1 : found1 - a1));
+
 	return 0;
 }
