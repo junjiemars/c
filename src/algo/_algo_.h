@@ -3,6 +3,7 @@
 
 #include <nore.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
 #include <inttypes.h>
 #include <assert.h>

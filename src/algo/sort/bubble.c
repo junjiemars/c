@@ -1,7 +1,5 @@
 #include <_algo_.h>
-#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include <assert.h>
 
 void
