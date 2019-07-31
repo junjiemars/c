@@ -4,14 +4,21 @@
 void
 insertion_sort(void *base, size_t nel, size_t width,
 							 int (*comp)(const void *lhs, const void *rhs)) {
+	void *saved = malloc(width);
 	for (size_t j = 1; j < nel; j++) {
 		long long i = j-1;
-		while (i >= 0 && comp((char*)base+i*width, (char*)base+j*width) > 0) {
-			swap((char*)base+(i+1)*width, (char*)base+i*width, width);
+		void *val = (char*)base+j*width;
+		while (i >= 0 && comp((char*)base+i*width, val) > 0) {
 			i--;
 		}
-		swap((char*)base+(i+1)*width, (char*)base+j*width, width);
+		if ((long long)j == ++i/* important */) {
+			continue;
+		}
+		memmove(saved, val, width);
+		memmove((char*)base+(i+1)*width, (char*)base+i*width, (j-i)*width);
+		memmove((char*)base+i*width, saved, width);
 	}
+	free(saved);
 }
 
 int
