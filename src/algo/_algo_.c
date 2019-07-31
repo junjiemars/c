@@ -57,10 +57,10 @@ test_comp_str(void) {
 void
 test_swap(void) {
 	int i1 = 0x1122, i2 = 0x3344;
-	swap(&i1, &i2, sizeof(i1));
+	swap(&i1, &i2);
 	assert(0x1122 == i2 && 0x3344 == i1);
 	char s1[] = "abc", s2[] = "123";
-	swap(s1, s2, sizeof(s1));
+	swap(s1, s2);
 	assert(strcmp("abc", s2) == 0 && strcmp("123", s1) == 0);
 	printf("test swap macro ... ok\n");
 }
