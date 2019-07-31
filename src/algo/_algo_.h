@@ -9,13 +9,12 @@
 
 #define _unused_(x) ((void)(x))
 
-#define swap(a, b) 				                  \
+#define swap(a, b, w) 											\
 	do {                                      \
-		unsigned char _swap_t1[sizeof(*(a))];		\
-		size_t _swap_w1 = sizeof(*(a));					\
-		memcpy(_swap_t1, (a), _swap_w1);	      \
-		memmove((a), (b), _swap_w1);		        \
-		memcpy((b), _swap_t1, _swap_w1);	      \
+		unsigned char _swap_t1[w];	          	\
+		memcpy(_swap_t1, (a), (w));  						\
+		memmove((a), (b), (w));									\
+		memcpy((b), _swap_t1, (w));							\
 	} while (0)
 
 

@@ -208,19 +208,24 @@ $(search_binary_binout): $(algo_root)_algo_.c \
 
 # sort
 sort_bubble_binout := $(bin_path)$(algo_prefix)_sort_bubble$(bin_ext)
+sort_insertion_binout := $(bin_path)$(algo_prefix)_sort_insertion$(bin_ext)
 sort_qsort_binout := $(bin_path)$(algo_prefix)_sort_qsort$(bin_ext)
 sort_selection_binout := $(bin_path)$(algo_prefix)_sort_selection$(bin_ext)
 
 algo_sort: $(sort_bubble_binout)     \
+					 $(sort_insertion_binout)  \
            $(sort_qsort_binout)      \
            $(sort_selection_binout)
 
 algo_sort_test: sort_bubble_test     \
+								sort_insertion_test  \
                 sort_qsort_test      \
                 sort_selection_test
 
 sort_bubble_test: $(sort_bubble_binout)
 	$(sort_bubble_binout)
+sort_insertion_test: $(sort_insertion_binout)
+	$(sort_insertion_binout)
 sort_qsort_test: $(sort_qsort_binout)
 	$(sort_qsort_binout)
 sort_selection_test: $(sort_selection_binout)
@@ -228,6 +233,10 @@ sort_selection_test: $(sort_selection_binout)
 
 $(sort_bubble_binout): $(algo_root)_algo_.c \
                        $(algo_root)sort/bubble.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(sort_insertion_binout): $(algo_root)_algo_.c \
+													$(algo_root)sort/insertion.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(sort_qsort_binout): $(algo_root)sort/qs.c
