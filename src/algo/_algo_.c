@@ -48,9 +48,11 @@ test_comp_int(void) {
 
 void
 test_comp_str(void) {
-	char *ss[] = { "abc", "123", };
-	assert(0 == comp_str(ss+0*sizeof(*ss), ss+0*sizeof(*ss)));
-	assert(0 != comp_str(ss+0*sizeof(*ss), ss+1*sizeof(*ss)));
+	char *ss[] = { "abc123", "123", };
+	assert(0 == comp_str(ss, ss));
+	assert(0 != comp_str(&ss[0], &ss[1]));
+	char *s1 = ss[0]+3;
+	assert(0 == comp_str(&s1, &ss[1]));
 	printf("test comp_str fn ... ok\n");
 }
 
