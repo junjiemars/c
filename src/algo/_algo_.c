@@ -64,6 +64,9 @@ test_swap(void) {
 	char s1[] = "abc", s2[] = "123";
 	swap(s1, s2, sizeof(s1));
 	assert(strcmp("abc", s2) == 0 && strcmp("123", s1) == 0);
+	int *p1 = &i1, *p2 = &i2;
+	swap(p1, p2, sizeof(int*));
+	assert(0x1122 == *p1 && 0x3344 == *p2);
 	printf("test swap macro ... ok\n");
 }
 
