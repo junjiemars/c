@@ -3,7 +3,7 @@
 
 void
 list_array(const void *base, size_t nel, size_t width,
-								void (*print)(const void *el)) {
+					 void (*print)(const void *el)) {
 	for (size_t i = 0; i < nel; i++) {
 		print((char*) base + i * width);
 	}
