@@ -33,7 +33,7 @@ _algo__test: _algo_
 	$(_algo__binout)
 
 $(_algo__binout): $(algo_root)_algo_.c
-	$(CC) $(CFLAGS) $(INC) $(nm_def_opt)_ALGO_=1 $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(nm_def_opt)_ALGO_TEST_=1 $^ $(bin_out)$@
 
 
 # duff device

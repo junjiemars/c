@@ -30,9 +30,7 @@ comp_str(const void *lhs, const void *rhs) {
 	return strcmp(*(char**)lhs, *(char**)rhs);
 }
 
-#if _ALGO_
-#include <assert.h>
-#include <stdio.h>
+#if _ALGO_TEST_
 
 void
 test_comp_int(void) {
@@ -61,12 +59,14 @@ test_swap(void) {
 	int i1 = 0x1122, i2 = 0x3344;
 	swap(&i1, &i2, sizeof(i1));
 	assert(0x1122 == i2 && 0x3344 == i1);
+	int *p1 = &i1, *p2 = &i2;
+	swap(p1, p2, sizeof(int));
+	assert(0x1122 == *p1 && 0x3344 == *p2);
+	swap(&p1, &p2, sizeof(int*));
+	assert(0x3344 == *p1 && 0x1122 == *p2);
 	char s1[] = "abc", s2[] = "123";
 	swap(s1, s2, sizeof(s1));
 	assert(strcmp("abc", s2) == 0 && strcmp("123", s1) == 0);
-	int *p1 = &i1, *p2 = &i2;
-	swap(p1, p2, sizeof(int*));
-	assert(0x1122 == *p1 && 0x3344 == *p2);
 	printf("test swap macro ... ok\n");
 }
 
@@ -81,4 +81,4 @@ main(int argc, char **argv) {
 	
 	return 0;
 }
-#endif
+#endif /* end of _ALGO_TEST_ */
