@@ -30,7 +30,7 @@ _algo__binout := $(bin_path)$(algo_prefix)_algo_$(bin_ext)
 
 _algo_: $(_algo__binout)
 _algo__test: _algo_
-	$(_algo__binout)
+	$(_algo__binout) x y z
 
 $(_algo__binout): $(algo_root)_algo_.c
 	$(CC) $(CFLAGS) $(INC) $(nm_def_opt)_ALGO_TEST_=1 $^ $(bin_out)$@

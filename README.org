@@ -1998,13 +1998,14 @@ table in a executable.
 | set /argv/ for /main/ entry | *(lldb)* =r arg1 arg2 arg3=                           |
 |                             | *(lldb)* =settings set target.run-args arg1 arg2=     |
 |                             | *(lldb)* =process launch -- arg1 arg2=                |
-|                             |                                                       |
+|                             | 0:000> =.kill;= =.create <target> arg1 arg2=          |
 
 *** Image
 
 | *example*                                     | *command*                                       |
 |-----------------------------------------------+-------------------------------------------------|
 | list dependents of executable                 | *(lldb)* =image list=                           |
+|                                               | 0:000> =lm=                                     |
 |                                               |                                                 |
 | lookup /main/ entry address in the executable | *(lldb)* =image lookup -a main -v=              |
 |                                               |                                                 |
@@ -2021,10 +2022,11 @@ table in a executable.
 |----------------------------------+------------------------------------------------------|
 | list /breakpoint/                | *(lldb)* =b=                                         |
 |                                  | *(lldb)* =breakpoint list=                           |
+|                                  | 0:000> =bl=                                          |
 |                                  |                                                      |
 | breakpoint at /fn/               | *(lldb)* =b main=                                    |
 |                                  | *(lldb)* =b -nmain=                                  |
-|                                  |                                                      |
+|                                  | 0:000> =bu <module>!main=                            |
 |                                  |                                                      |
 | breakpoint at /line/             | *(lldb)* =b -ftest.c -l32=                           |
 |                                  |                                                      |
@@ -2037,20 +2039,41 @@ table in a executable.
 | delete breakpoint                | *(lldb)* =breakpoint delete 1.1=                     |
 |                                  | *(lldb)* =breakpoint delete 2=                       |
 
-
 *** Memory
 
 | *example*                       | *command*                                        |
 |---------------------------------+--------------------------------------------------|
 | check /argv/ in /main/ entry    | *(lldb)* =x -t'char*' -c`argc` argv=             |
+|                                 | 0:000> =dp @@(argv)=                             |
 |                                 |                                                  |
 | check array of /char*/ of /argv | *(lldb)* =x -s`sizeof(char*)` -c`argc` -fx argv= |
 |                                 |                                                  |
 | check /&argc/ in /main/ entry   | *(lldb)* =x -s`sizeof(int)` -fx -c1 &argc=       |
 |                                 | *(gdb)* =x/1xw &argc=                            |
-
+|                                 |                                                  |
 
 *** Frame
+
+| *example* | *command* |
+|-----------+-----------|
+|           |           |
+
+*** Evaluate
+
+| *example*           | *command*                       |
+|---------------------+---------------------------------|
+| evaluate expression | *(lldb)* =e -- sizeof(int)=     |
+|                     | *(lldb)* =e -fx -- sizeof(int)= |
+|                     | 0:000> =?? sizeof(int)=         |
+
+*** Disassemble
+
+| *example*            | *command*  |
+|----------------------+------------|
+| disassemble          | 0:000> =u= |
+| disassemble function | 0:000> =uf main= |
+
+*** Step
 
 | *example* | *command* |
 |-----------+-----------|
