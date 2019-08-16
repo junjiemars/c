@@ -2054,9 +2054,10 @@ table in a executable.
 
 *** Frame
 
-| *example* | *command* |
-|-----------+-----------|
-|           |           |
+| *example*         | *command*  |
+|-------------------+------------|
+| check stack frame | 0:000> =k= |
+|                   |            |
 
 *** Evaluate
 
@@ -2078,6 +2079,13 @@ table in a executable.
 | *example* | *command* |
 |-----------+-----------|
 |           |           |
+
+*** Thread
+
+| *example*    | *command*  |
+|--------------+------------|
+| list threads | 0:000> =~= |
+|              |            |
 
 *** Tools References
 
