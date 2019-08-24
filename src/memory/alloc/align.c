@@ -1,6 +1,5 @@
 #include <_memory_.h>
 #include <stdlib.h>
-#include <malloc.h>
 
 #if NM_HAVE_POSIX_MEMALIGN_FN
 #  if DARWIN || LINUX
