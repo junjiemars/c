@@ -2044,7 +2044,7 @@ table in a executable.
 | *example*                       | *command*                                        |
 |---------------------------------+--------------------------------------------------|
 | check /argv/ in /main/ entry    | *(lldb)* =x -t'char*' -c`argc` argv=             |
-|                                 | *0:000>* =dp @@(argv)=                             |
+|                                 | *0:000>* =dp @@(argv)=                           |
 |                                 |                                                  |
 | check array of /char*/ of /argv | *(lldb)* =x -s`sizeof(char*)` -c`argc` -fx argv= |
 |                                 |                                                  |
