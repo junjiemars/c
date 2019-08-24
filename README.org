@@ -2022,11 +2022,11 @@ table in a executable.
 |----------------------------------+------------------------------------------------------|
 | list /breakpoint/                | *(lldb)* =b=                                         |
 |                                  | *(lldb)* =breakpoint list=                           |
-|                                  | 0:000> =bl=                                          |
+|                                  | *0:000>* =bl=                                          |
 |                                  |                                                      |
 | breakpoint at /fn/               | *(lldb)* =b main=                                    |
 |                                  | *(lldb)* =b -nmain=                                  |
-|                                  | 0:000> =bu <module>!main=                            |
+|                                  | *0:000>* =bu <module>!main=                            |
 |                                  |                                                      |
 | breakpoint at /line/             | *(lldb)* =b -ftest.c -l32=                           |
 |                                  |                                                      |
@@ -2044,20 +2044,22 @@ table in a executable.
 | *example*                       | *command*                                        |
 |---------------------------------+--------------------------------------------------|
 | check /argv/ in /main/ entry    | *(lldb)* =x -t'char*' -c`argc` argv=             |
-|                                 | 0:000> =dp @@(argv)=                             |
+|                                 | *0:000>* =dp @@(argv)=                             |
 |                                 |                                                  |
 | check array of /char*/ of /argv | *(lldb)* =x -s`sizeof(char*)` -c`argc` -fx argv= |
 |                                 |                                                  |
 | check /&argc/ in /main/ entry   | *(lldb)* =x -s`sizeof(int)` -fx -c1 &argc=       |
-|                                 | *(gdb)* =x/1xw &argc=                            |
+|                                 | *(gdb)*  =x/1xw &argc=                           |
 |                                 |                                                  |
 
 *** Frame
 
-| *example*         | *command*  |
-|-------------------+------------|
-| check stack frame | 0:000> =k= |
-|                   |            |
+| *example*             | *command*                 |
+|-----------------------+---------------------------|
+| check stack /frame/   | *(lldb)* =frame info=     |
+|                       | *0:000>* =k=              |
+| list frame /variable/ | *(lldb)* =frame variable= |
+|                       | *0:000>* =dv=             |
 
 *** Evaluate
 
@@ -2065,16 +2067,16 @@ table in a executable.
 |---------------------------------+-----------------------------|
 | evaluate /argc/ in /main/ entry | *(lldb)* =e -- argc=        |
 |                                 | *(lldb)* =e -fx -- argc=    |
-|                                 | 0:000> =?? argc=            |
-|                                 | 0:000> =.formats poi(argc)= |
+|                                 | *0:000>* =?? argc=            |
+|                                 | *0:000>* =.formats poi(argc)= |
 |                                 |                             |
 
 *** Disassemble
 
 | *example*            | *command*  |
 |----------------------+------------|
-| disassemble          | 0:000> =u= |
-| disassemble function | 0:000> =uf main= |
+| disassemble          | *0:000>* =u= |
+| disassemble function | *0:000>* =uf main= |
 
 *** Step
 
@@ -2086,7 +2088,7 @@ table in a executable.
 
 | *example*    | *command*  |
 |--------------+------------|
-| list threads | 0:000> =~= |
+| list threads | *0:000>* =~= |
 |              |            |
 
 *** Tools References
