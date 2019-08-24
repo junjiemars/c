@@ -1,5 +1,4 @@
 #include <_io_.h>
-#include <stdio.h>
 #include <string.h>
 #include <errno.h>
 
@@ -16,6 +15,14 @@ main(int argc, char **argv) {
 		perror("!panic");
 		perror(0);
 	} else {
+		int ch;
+		while (EOF != (ch = fgetc(file))) {
+			fputc(ch, stdout);
+		}
+		if (ferror(file)) {
+			perror(0);
+			clearerr(file);
+		}
 		fclose(file);
 	}
 	

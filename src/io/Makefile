@@ -62,13 +62,13 @@ $(io_binary_binout): $(io_root)binary/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # error
-error_binout := $(bin_path)$(io_prefix)_error$(bin_ext)
+io_error_binout := $(bin_path)$(io_prefix)_error$(bin_ext)
 
-io_error: $(error_binout)
+io_error: $(io_error_binout)
 io_error_test: io_error
 	$(error_binout)
 
-$(error_binout): $(io_root)error/e1.c
+$(io_error_binout): $(io_root)error/e1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # format I/O
