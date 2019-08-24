@@ -1,6 +1,6 @@
 # ./configure --has-io
 
-io: basic \
+io: io_basic \
     binary \
 		io_error \
 		fileno \
@@ -14,7 +14,7 @@ io: basic \
 		variadic \
 		wchar \
 		wc
-io_test: basic_test  \
+io_test: io_basic_test  \
          binary_test \
 				 io_error_test \
 				 fileno_test \
@@ -40,13 +40,13 @@ endif
 
 
 # basic I/O
-basic_binout := $(bin_path)$(io_prefix)_basic$(bin_ext)
+io_basic_binout := $(bin_path)$(io_prefix)_basic$(bin_ext)
 
-basic: $(basic_binout)
-basic_test: basic
-	echo "Hello, basic IO" | $(basic_binout)
+io_basic: $(io_basic_binout)
+io_basic_test: io_basic
+	echo "Hello, basic IO" | $(io_basic_binout)
 
-$(basic_binout): $(io_root)basic/b.c
+$(io_basic_binout): $(io_root)basic/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
