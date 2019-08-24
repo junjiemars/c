@@ -28,6 +28,12 @@ self_strcpy(char *dst, const char *src) {
   return r;
 }
 
+char *
+self_strcat(char *s1, const char *s2) {
+	size_t len = strlen(s1);
+	return strcpy(s1 + len, s2);
+}
+
 void
 test_strlen(char *s) {
 	size_t len1 = strlen(s);
@@ -89,6 +95,25 @@ test_strcmp(char *s) {
 	free(d1);
 }
 
+void
+test_strcat(void) {
+	char buf1[8], buf2[8];
+	memset(buf1, 0, sizeof(buf1)/sizeof(*buf1));
+	memset(buf2, 0, sizeof(buf2)/sizeof(*buf2));
+	strcat(&buf1[0], "abc");
+	assert(0 == strcmp(buf1, "abc")
+				 && "strcat(), failed");
+	_unused_(buf2);
+	self_strcat(buf2, "abc");
+	assert(0 == strcmp(buf2, buf1)
+				 && "self_strcat(), failed");
+	self_strcat(buf2, "");
+	assert(0 == strcmp(buf2, buf1)
+				 && "self_strcat(), failed");
+	self_strcat(buf2, "x");
+	assert(0 == strcmp(buf2, "abcx")
+				 && "self_strcat(), failed");
+}
 
 int
 main(int argc, char **argv) {
@@ -97,6 +122,7 @@ main(int argc, char **argv) {
 	test_strlen(argv[0]);
 	test_strcpy();
 	test_strcmp(argv[0]);
+	test_strcat();
 
 	return 0;
 }
