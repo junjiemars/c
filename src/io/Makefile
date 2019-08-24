@@ -3,7 +3,7 @@
 io: io_basic \
     io_binary \
 		io_error \
-		fileno \
+		io_fileno \
 		format \
     flush \
 		line \
@@ -17,7 +17,7 @@ io: io_basic \
 io_test: io_basic_test  \
          io_binary_test \
 				 io_error_test \
-				 fileno_test \
+				 io_fileno_test \
 				 format_test \
          flush_test \
 				 line_test \
@@ -82,13 +82,13 @@ $(format_binout): $(io_root)format/f.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # fileno
-fileno_binout := $(bin_path)$(io_prefix)_fileno$(bin_ext)
+io_fileno_binout := $(bin_path)$(io_prefix)_fileno$(bin_ext)
 
-fileno: $(fileno_binout)
-fileno_test: fileno
-	$(fileno_binout)
+io_fileno: $(io_fileno_binout)
+io_fileno_test: io_fileno
+	$(io_fileno_binout)
 
-$(fileno_binout): $(io_root)fileno/fn.c
+$(io_fileno_binout): $(io_root)fileno/fn.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # flush
