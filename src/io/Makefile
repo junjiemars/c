@@ -1,7 +1,7 @@
 # ./configure --has-io
 
 io: io_basic \
-    binary \
+    io_binary \
 		io_error \
 		fileno \
 		format \
@@ -15,7 +15,7 @@ io: io_basic \
 		wchar \
 		wc
 io_test: io_basic_test  \
-         binary_test \
+         io_binary_test \
 				 io_error_test \
 				 fileno_test \
 				 format_test \
@@ -51,14 +51,14 @@ $(io_basic_binout): $(io_root)basic/b.c
 
 
 # binary I/O
-binary_binout := $(bin_path)$(io_prefix)_binary$(bin_ext)
+io_binary_binout := $(bin_path)$(io_prefix)_binary$(bin_ext)
 
-binary: $(binary_binout)
-binary_test: binary
-	$(binary_binout) "w*h" "0x11220000" "0x00003344"
-	$(binary_binout)
+io_binary: $(io_binary_binout)
+io_binary_test: io_binary
+	$(io_binary_binout) "w*h" "0x11220000" "0x00003344"
+	$(io_binary_binout)
 
-$(binary_binout): $(io_root)binary/b.c
+$(io_binary_binout): $(io_root)binary/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # error
