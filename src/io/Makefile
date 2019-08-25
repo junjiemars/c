@@ -6,7 +6,7 @@ io: io_basic \
 		io_fileno \
 		io_format \
     io_flush \
-		line \
+		io_line \
 		reopen \
 		process \
 		scan \
@@ -20,7 +20,7 @@ io_test: io_basic_test  \
 				 io_fileno_test \
 				 io_format_test \
          io_flush_test \
-				 line_test \
+				 io_line_test \
 				 reopen_test \
 				 process_test \
 				 scan_test \
@@ -102,13 +102,13 @@ $(io_flush_binout): $(io_root)flush/f.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # line
-line_binout := $(bin_path)$(io_prefix)_line$(bin_ext)
+io_line_binout := $(bin_path)$(io_prefix)_line$(bin_ext)
 
-line: $(line_binout)
-line_test: line
-	$(line_binout) $(CURDIR)/src/io/line/boards
+io_line: $(io_line_binout)
+io_line_test: io_line
+	$(io_line_binout) $(CURDIR)/src/io/line/boards
 
-$(line_binout): $(io_root)line/l.c
+$(io_line_binout): $(io_root)line/l.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # reopen
