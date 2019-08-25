@@ -456,6 +456,8 @@ $(storage_extern_objout): $(lang_root)storage/extern.c
 ifeq ($(NM_SYSTEM), Linux)
 string_cflags := $(CFLAGS)
 string_cflags += -D_GNU_SOURCE
+else
+string_cflags = $(CFLAGS)
 endif
 
 string_basic_binout := $(bin_path)$(lang_prefix)_string_basic$(bin_ext)

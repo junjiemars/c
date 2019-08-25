@@ -6,14 +6,33 @@
 
 #if defined(NM_HAVE_STRN_ANY_FN)
 
+size_t
+self_strnlen(const char *s, size_t n) {
+	size_t len = 0;
+	while (*s++ && n--) {
+		len++;
+	}
+	return len;
+}
+
 void
 test_strnlen(void) {
-	char buf[8] = "abc";
-	size_t len = strnlen(buf, sizeof(buf)/sizeof(buf[0]));
-	assert(3 == len && "strnlen, 3 != len");
-	strncpy(buf, "abcdefgh", sizeof(buf)/sizeof(buf[0]));
-	len = strnlen(buf, sizeof(buf)/sizeof(buf[0]));
-	assert(8 == len && "strnlen, 8 != len");
+	char buf[8];
+	memset(buf, 0, sizeof(buf)/sizeof(*buf));
+	size_t len, len1, len2;
+	len1 = strnlen(buf, sizeof(buf)/sizeof(*buf));
+	len2 = self_strnlen(buf, sizeof(buf)/sizeof(*buf));
+	assert(0 == len1 && 0 == len2);
+	len = strlen("abc");
+	strncpy(buf, "abc", len);
+	len1 = strnlen(buf, sizeof(buf)/sizeof(*buf));
+	len2 = self_strnlen(buf, sizeof(buf)/sizeof(*buf));
+	assert(len == len1 && len == len2);
+	len = strlen("abcdefgh");
+	strncpy(buf, "abcdefgh", len-1);
+	len1 = strnlen(buf, len-1);
+	len2 = self_strnlen(buf, len-1);
+	assert(len-1 == len1 && len-1 == len2);
 }
 
 void
@@ -72,6 +91,7 @@ main(int argc, char **argv) {
 #if ! defined(NM_HAVE_STRN_ANY_FN)
 	printf("skip strn* fn testing\n");
 #else
+	printf("ddd\n");
 	test_strnlen();
 	test_strncpy();
 	test_strncmp();
