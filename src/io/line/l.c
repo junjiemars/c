@@ -68,7 +68,7 @@ self_getdelim(char **line,
 		linelen++;
 		ch = fgetc(stream);
 	}
-	if (EOF != ch) {
+	if (!feof(stream)) {
 		*p++ = delimiter;
 		linelen++;
 	}
