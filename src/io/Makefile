@@ -7,7 +7,7 @@ io: io_basic \
 		io_format \
     io_flush \
 		io_line \
-		reopen \
+		io_reopen \
 		io_process \
 		io_scan \
     tmp \
@@ -21,7 +21,7 @@ io_test: io_basic_test  \
 				 io_format_test \
          io_flush_test \
 				 io_line_test \
-				 reopen_test \
+				 io_reopen_test \
 				 io_process_test \
 				 io_scan_test \
          tmp_test \
@@ -112,14 +112,14 @@ $(io_line_binout): $(io_root)line/l.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # reopen
-reopen_binout := $(bin_path)$(io_prefix)_reopen$(bin_ext)
+io_reopen_binout := $(bin_path)$(io_prefix)_reopen$(bin_ext)
 
-reopen: $(reopen_binout)
-reopen_test: reopen
+io_reopen: $(io_reopen_binout)
+io_reopen_test: io_reopen
 	-@cp $(CURDIR)/src/io/reopen/sample.txt $(tmp_path)
-	$(reopen_binout) $(tmp_path)sample.txt
+	$(io_reopen_binout) $(tmp_path)sample.txt
 
-$(reopen_binout): $(io_root)reopen/ro.c
+$(io_reopen_binout): $(io_root)reopen/ro.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # process

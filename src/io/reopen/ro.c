@@ -17,26 +17,19 @@ change_mode(const char *name) {
 		}
 		fputc(ch, stdout);
 	}
-	if (feof(f1)) {
-		fclose(f1);
-		return;
-	}
-	char *s = "|mode to 'w'|";
+	fputc('\n', stdout);
 	FILE *f2 = freopen(name, "w", f1);
 	if (!f2) {
 		perror("!panic");
 		return;
 	}
-	fwrite(s, sizeof(*s), strlen(s), f2);
+	char *s = "|mode to 'w'|";
+	size_t n = fwrite(s, sizeof(*s), strlen(s), f2);
+	fprintf(stdout, "wrote %zu bytes into %s\n", n, name);
 	if (ferror(f2)) {
 		perror("!panic");
 	}
 	fclose(f2);
-}
-
-void
-reopen(const char *name) {
-	_unused_(name);
 }
 
 int
@@ -46,7 +39,6 @@ main(int argc, char **argv) {
 
 	if (argc > 1) {
 		change_mode(argv[1]);
-		reopen(argv[1]);
 	}
 	
 	return 0;
