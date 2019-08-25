@@ -59,6 +59,10 @@ test_strncpy(void) {
 	/* if N > strlen(src) then padding 0 */
 	strncpy(buf, "abc", sizeof(buf)/sizeof(*buf) /* N */);
 	assert(0 == buf[7] && "strncpy(), N > strlen(src)");
+	char buf1[8];
+	memset(buf1, 0x11, sizeof(buf1)/sizeof(*buf1));
+	self_strncpy(buf1, "abc", sizeof(buf1)/sizeof(*buf1));
+	assert(0 == strcmp(buf, buf1) && "self_strncpy(), failed");
 
 	/* if N < strlen(src), N is reached before the entire array 
 		 src was copied, the tailing characters keep unchanged, 
@@ -67,6 +71,9 @@ test_strncpy(void) {
 	memset(buf, 0x11, sizeof(buf)/sizeof(*buf));
 	strncpy(buf, "abc", 1 /* N */);
 	assert('a' == buf[0] && 0x11 == buf[7] && "strncpy(), N < strlen(src)");
+	memset(buf1, 0x11, sizeof(buf1)/sizeof(*buf1));
+	self_strncpy(buf1, "abc", 1);
+	assert(0 == strncmp(buf, buf1, 1) && "self_strncpy(), failed");
 
 	/* The behavior is undefined:
 		 1) if the character arrays overlap,
