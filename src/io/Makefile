@@ -8,7 +8,7 @@ io: io_basic \
     io_flush \
 		io_line \
 		reopen \
-		process \
+		io_process \
 		scan \
     tmp \
 		variadic \
@@ -22,7 +22,7 @@ io_test: io_basic_test  \
          io_flush_test \
 				 io_line_test \
 				 reopen_test \
-				 process_test \
+				 io_process_test \
 				 scan_test \
          tmp_test \
 				 variadic_test \
@@ -124,13 +124,13 @@ $(reopen_binout): $(io_root)reopen/ro.c
 
 # process
 
-process_binout := $(bin_path)$(io_prefix)_process$(bin_ext)
+io_process_binout := $(bin_path)$(io_prefix)_process$(bin_ext)
 
-process: $(process_binout)
-process_test: process
-	$(process_binout)
+io_process: $(io_process_binout)
+io_process_test: io_process
+	$(io_process_binout)
 
-$(process_binout): $(io_root)process/p.c
+$(io_process_binout): $(io_root)process/p.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # scan
