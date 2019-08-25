@@ -7,16 +7,17 @@ main(int argc, char **argv) {
 	_unused_(argv);
 
 	char c;
-	int i;
+	int i, h;
 	long l;
 	float f;
 	double d;
 	
-	int n = fscanf(stdin, "%c, %i, %li, %f, %lf",
-								 &c, &i, &l, &f, &d);
+	int n = fscanf(stdin,
+								 "%c, %i, 0x%x, %li, %f, %lf",
+								 &c, &i, &h, &l, &f, &d);
 	printf("scanned count: %d\n", n);
-	printf("c=%c, i=%i, li=%li, f=%f, lf=%lf\n",
-				 c, i, l, f, d);
+	printf("c=%c, i=%i, h=0x%x, li=%li, f=%f, lf=%lf\n",
+				 c, i, h, l, f, d);
 
 	return 0;
 }

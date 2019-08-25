@@ -9,7 +9,7 @@ io: io_basic \
 		io_line \
 		reopen \
 		io_process \
-		scan \
+		io_scan \
     tmp \
 		variadic \
 		wchar \
@@ -23,7 +23,7 @@ io_test: io_basic_test  \
 				 io_line_test \
 				 reopen_test \
 				 io_process_test \
-				 scan_test \
+				 io_scan_test \
          tmp_test \
 				 variadic_test \
 				 wchar_test \
@@ -134,13 +134,13 @@ $(io_process_binout): $(io_root)process/p.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # scan
-scan_binout := $(bin_path)$(io_prefix)_scan$(bin_ext)
+io_scan_binout := $(bin_path)$(io_prefix)_scan$(bin_ext)
 
-scan: $(scan_binout)
-scan_test: scan
-	echo "X, 1234, 5678, 3.1415, 2.718" | $(scan_binout)
+io_scan: $(io_scan_binout)
+io_scan_test: io_scan
+	echo "X, 1234, 0x11223344, 5678, 3.1415, 2.718" | $(io_scan_binout)
 
-$(scan_binout): $(io_root)scan/s.c
+$(io_scan_binout): $(io_root)scan/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # tmp
