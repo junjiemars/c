@@ -1057,6 +1057,8 @@ these types are defined in the =<stddef.h>= header.
   difference between pointers. It is only guranteed to be valid
   against pointers of the same type.
 
+- =ssize_t= is POSIX standard not C standard.
+
 *** Literal suffix
 		:PROPERTIES:
 		:CUSTOM_ID: language_type_literal_suffix

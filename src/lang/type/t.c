@@ -77,7 +77,12 @@ main(int argc, const char *argv[]) {
 
 	printf("\nsize_t\n");
 	printf("------------\n");	
+	printf("sizeof(size_t) = %zu\n", sizeof(size_t));
 	printf("sizeof(char) = %zu\n", sizeof(char));
+
+	printf("\nssize_t\n");
+	printf("------------\n");	
+	printf("sizeof(ssize_t) = %zu\n", sizeof(ssize_t));
 
 	printf("\nptrdiff_t\n");
 	printf("------------\n");
