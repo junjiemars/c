@@ -22,6 +22,14 @@ self_strncpy(char *dst, const char *src, size_t n) {
 	return r;
 }
 
+int
+self_strncmp(const char *s1, const char *s2, size_t n) {
+	while (*s1 && (*s1 == *s2) && n > 1) {
+		s1++, s2++, n--;
+	}
+	return *(const unsigned char*)s1 - *(const unsigned char*)s2;
+}
+
 void
 test_strnlen(void) {
 	char buf[8];
@@ -73,14 +81,13 @@ test_strncpy(void) {
 
 void
 test_strncmp(void) {
-	char buf[8];
-	strncpy(buf, "abcdefg", sizeof(buf)/sizeof(buf[0]));
-	int cmp = strncmp(buf, "abcdefX", sizeof(buf)/sizeof(buf[0]));
-	assert(0 < cmp && "strncmp, cmp > 0");
-	/* buf is not null-terminated */
-	strncpy(buf, "abcdefgh", sizeof(buf)/sizeof(buf[0]));
-	cmp = strncmp(buf, "abcdefghX", sizeof(buf)/sizeof(buf[0]));
-	assert(0 == cmp && "strncmp, 0 != cmp");
+	char *s1 = "abcdefg", *s2 = "abcdefG";
+	int cmp1 = strncmp(s1, s2, strlen(s2));
+	int cmp2 = self_strncmp(s1, s2, strlen(s2));
+	assert(0 < cmp1 && 0 < cmp2 && "strncmp(), failed");
+	cmp1 = strncmp(s1, s2, strlen("abcdef"));
+	cmp2 = self_strncmp(s1, s2, strlen("abcdef"));
+	assert(0 == cmp1 && 0 == cmp2 && "strncmp(), failed");
 }
 
 
