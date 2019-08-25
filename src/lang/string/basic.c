@@ -35,6 +35,18 @@ self_strcat(char *s1, const char *s2) {
 }
 
 void
+test_empty(void) {
+	char *s = "";
+	char a[] = "";
+	assert(0 == strlen(s));
+	assert(0 == strlen(a));
+#if NDEBUG
+	_unused_(s);
+	_unused_(a);
+#endif
+}
+
+void
 test_strlen(char *s) {
 	size_t len1 = strlen(s);
   size_t len2 = self_strlen(s);
@@ -119,6 +131,7 @@ int
 main(int argc, char **argv) {
   _unused_(argc);
 
+	test_empty();
 	test_strlen(argv[0]);
 	test_strcpy();
 	test_strcmp(argv[0]);
