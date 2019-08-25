@@ -15,19 +15,19 @@ main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
-	/* int i = 1, j = 0; */
-	/* printf("before: i/j = %i/%i", i, j); */
-	/* if not call fflush() here, the output of printf() may not be print */
-	/* fflush(stdout); */
-	/* i = i/j; */
-
+	int n = 0;
 	int ch = fgetc(stdin);
-	fprintf(stdout, "[0] %c\n", ch);
+	fprintf(stdout, "[%i] %c\n", n++, ch);
 	ch = fgetc(stdin);
-	fprintf(stdout, "[1] %c\n", ch);
+	fprintf(stdout, "[%i] %c\n", n++, ch);
+	fflush(stdout);
+	
+	ch = fgetc(stdin);
+	fprintf(stdout, "[%i] %c\n", n++, ch);
 
 	fpurge(stdin);
 	
 	ch = fgetc(stdin);
-	fprintf(stdout, "[2] %s\n", EOF == ch ? "EOF" : "!EOF");
+	fprintf(stdout, "[%i] %s\n", n++, EOF == ch ? "EOF" : "!EOF");
+	fflush(0);
 }

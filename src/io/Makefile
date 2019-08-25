@@ -4,8 +4,8 @@ io: io_basic \
     io_binary \
 		io_error \
 		io_fileno \
-		format \
-    flush \
+		io_format \
+    io_flush \
 		line \
 		reopen \
 		process \
@@ -18,8 +18,8 @@ io_test: io_basic_test  \
          io_binary_test \
 				 io_error_test \
 				 io_fileno_test \
-				 format_test \
-         flush_test \
+				 io_format_test \
+         io_flush_test \
 				 line_test \
 				 reopen_test \
 				 process_test \
@@ -72,13 +72,13 @@ $(io_error_binout): $(io_root)error/e1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # format I/O
-format_binout := $(bin_path)$(io_prefix)_format$(bin_ext)
+io_format_binout := $(bin_path)$(io_prefix)_format$(bin_ext)
 
-format: $(format_binout)
-format_test: format
-	$(format_binout)
+io_format: $(io_format_binout)
+io_format_test: io_format
+	$(io_format_binout)
 
-$(format_binout): $(io_root)format/f.c
+$(io_format_binout): $(io_root)format/f.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # fileno
@@ -92,13 +92,13 @@ $(io_fileno_binout): $(io_root)fileno/fn.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # flush
-flush_binout := $(bin_path)$(io_prefix)_flush$(bin_ext)
+io_flush_binout := $(bin_path)$(io_prefix)_flush$(bin_ext)
 
-flush: $(flush_binout)
-flush_test: flush
-	echo "abc" | $(flush_binout)
+io_flush: $(io_flush_binout)
+io_flush_test: io_flush
+	echo "abcdefg" | $(io_flush_binout)
 
-$(flush_binout): $(io_root)flush/f.c
+$(io_flush_binout): $(io_root)flush/f.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # line
