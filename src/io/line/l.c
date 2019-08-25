@@ -8,28 +8,31 @@
 
 void
 read_lines(const char *filename,
-					 size_t line_size,
+					 size_t linecap,
 					 int delimiter,
-					 void (*process_line)(const char *line)) {
+					 void (*process_line)(const char *line, ssize_t linelen)) {
 	FILE *file = fopen(filename, "r");
 	if (!file) {
 		perror(filename);
 		return;
 	}
 	int c;
-	char *line = malloc(line_size);
+	char *line = malloc(linecap);
 	if (0 == line) {
-		perror("line_size");
+		perror("linecap");
 		goto close_exit;
 	}
 	char *p = line;
+	ssize_t linelen;
 	while (EOF != (c = fgetc(file))) {
 		if (delimiter == c) {
 			*p = delimiter, *++p = 0;
-			process_line(line);
+			process_line(line, linelen+1);
 			p = line;
+			linelen = 0;
 		} else {
 			*p++ = c;
+			linelen++;
 		}
 	}
 	free(line);
@@ -43,8 +46,8 @@ read_lines(const char *filename,
 }
 
 void
-print_line(const char *line) {
-	fprintf(stdout, "%s", line);
+print_line(const char *line, ssize_t linelen) {
+	fwrite(line, 1, linelen, stdout);
 	fflush(stdout);
 }
 
