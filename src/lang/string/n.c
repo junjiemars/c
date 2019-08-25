@@ -15,6 +15,13 @@ self_strnlen(const char *s, size_t n) {
 	return len;
 }
 
+char *
+self_strncpy(char *dst, const char *src, size_t n) {
+	char *r = dst;
+	while (0 != (*dst++ = *src++) && n--);
+	return r;
+}
+
 void
 test_strnlen(void) {
 	char buf[8];
@@ -38,33 +45,29 @@ test_strnlen(void) {
 void
 test_strncpy(void) {
 	char buf[8];
-	memset(buf, 0x11, sizeof(buf)/sizeof(buf[0]));
-	assert(0x11 == buf[7] && "strncpy, 0x11 != tailing");
+	memset(buf, 0x11, sizeof(buf)/sizeof(*buf));
+	assert(0x11 == buf[7] && "strncpy, 0x11 != <tailing>");
 	
-	/* if num > src then padding 0
-		 If count is reached before the entire array src was copied,
-		 the resulting character array is not null-terminated. 
-	*/
-	strncpy(buf, "abc", sizeof(buf)/sizeof(buf[0]) /* num */);
-	assert(0 == buf[7] && "strncpy, 0 != padding");
+	/* if N > strlen(src) then padding 0 */
+	strncpy(buf, "abc", sizeof(buf)/sizeof(*buf) /* N */);
+	assert(0 == buf[7] && "strncpy(), N > strlen(src)");
 
-	/* if num < strlen(src), dest will not null-terminated
-		 If, after copying the terminating null character from src,
-		 count is not reached, additional null characters
-		 are written to dest until the total of count characters
-		 have been written. 
+	/* if N < strlen(src), N is reached before the entire array 
+		 src was copied, the tailing characters keep unchanged, 
+		 so the resulting character array is may not be null-terminated.
 	*/
-	strncpy(buf, "abcdefgh", sizeof(buf)/sizeof(buf[0]));
-	assert('h' == buf[7] && "strncpy, 'h' != tailing");
+	memset(buf, 0x11, sizeof(buf)/sizeof(*buf));
+	strncpy(buf, "abc", 1 /* N */);
+	assert('a' == buf[0] && 0x11 == buf[7] && "strncpy(), N < strlen(src)");
 
 	/* The behavior is undefined:
 		 1) if the character arrays overlap,
 		 2) if either dest or src is not a pointer to a character
 		 array (including if dest or src is a null pointer),
 		 3) if the size of the array pointed to by dest is
-		 less than count, or
+		 less than N, or
 		 4) if the size of the array pointed to by src is less
-		 than count and it does not contain a null character 
+		 than N and it does not contain a null character 
 	*/
 }
 
@@ -91,7 +94,6 @@ main(int argc, char **argv) {
 #if ! defined(NM_HAVE_STRN_ANY_FN)
 	printf("skip strn* fn testing\n");
 #else
-	printf("ddd\n");
 	test_strnlen();
 	test_strncpy();
 	test_strncmp();
