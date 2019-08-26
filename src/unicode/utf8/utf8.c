@@ -5,11 +5,14 @@
 
 #define TO_BASE_N (sizeof(unsigned)*8 + 1)
 #define TO_BASE(n, b) to_base((unsigned char [TO_BASE_N]){""}, (n), (b))
-#define OUT_SIZE(t) {printf("sizeof(%s) \t= %zu bytes\n", #t, sizeof(t));}
+#define OUT_SIZE(t)                                      \
+	do {                                                   \
+    printf("sizeof(%s) \t= %zu bytes\n", #t, sizeof(t)); \
+	} while (0)
 
 
 #if MSVC
-#pragma warning(disable:4244) /* conversion possible loss of data */
+#  pragma warning(disable:4244)
 #endif
 
 
