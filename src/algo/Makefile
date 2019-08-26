@@ -8,7 +8,8 @@ algo: _algo_ \
 			is_unsigned_integer \
 			is_unsigned_type \
 			reverse \
-			algo_search
+			algo_search \
+			algo_strlen_utf8
 
 algo_test: _algo__test \
 					 algo_sizeof_test \
@@ -20,7 +21,8 @@ algo_test: _algo__test \
 					 is_unsigned_integer_test \
 					 is_unsigned_type_test \
 					 reverse_test \
-					 algo_search_test
+					 algo_search_test \
+					 algo_strlen_utf8_test
 
 algo_prefix := algo
 INC += -I$(algo_root)
@@ -246,3 +248,12 @@ $(sort_selection_binout): $(algo_root)_algo_.c \
                           $(algo_root)sort/selection.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+# strlen_utf8
+algo_strlen_utf8_binout := $(bin_path)$(algo_prefix)_strlen_utf8$(bin_ext)
+
+algo_strlen_utf8: $(algo_strlen_utf8_binout)
+algo_strlen_utf8_test: algo_strlen_utf8
+	$(algo_strlen_utf8_binout)
+
+$(algo_strlen_utf8_binout): $(algo_root)/strlen_utf8/l.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
