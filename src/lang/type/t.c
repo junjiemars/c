@@ -18,6 +18,8 @@
 	 of type 'unsigned __int64', but variadic argument 2 has type
 	 'int' */
 #  pragma warning(disable : 4477)
+#  include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
 #endif
 
 
