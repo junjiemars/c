@@ -4,8 +4,6 @@
 #if (NM_HAVE_TYPEOF)
 #  if MSVC
 #    define typeof(x) decltype((x))
-#  else
-#    define typeof(x) __typeof__((x))
 #  endif
 #define swap(a, b)                \
 	do {						                \
