@@ -188,6 +188,7 @@ io_wc_test: io_wc
 	$(io_wc_binout) --help
 	echo -n "abc" | $(io_wc_binout) -c
 	echo -e "a\n b\n c" | $(io_wc_binout)
+	echo -n "中文" | $(io_wc_binout) -c -m
 	$(io_wc_binout) -l -w -c -L $(CURDIR)/Makefile $(CURDIR)/src/io/wc/wc.c
 	echo -n "abc" | \
     $(io_wc_binout) -l -w -c -L \

@@ -11,8 +11,9 @@
 
 typedef struct count_test_s {
 	int (*test_line)(char);
-	int (*test_byte)(char);
 	int (*test_word)(char, char);
+	int (*test_char)(char);
+	int (*test_byte)(char);
 	void (*test_max_line_length)(char, size_t*, size_t*);
 } count_test_s;
 
@@ -21,6 +22,7 @@ typedef struct count_unit_s {
 	int error;
 	size_t lines;
 	size_t words;
+	size_t chars;
 	size_t bytes;
 	size_t max_line_length;
 	size_t cur_line_length;
@@ -32,6 +34,7 @@ typedef struct count_state_s {
 	count_unit_s *unit;
 	size_t total_lines;
 	size_t total_words;
+	size_t total_chars;
 	size_t total_bytes;
 	size_t max_total;
 	size_t max_max_line_length;
@@ -70,6 +73,15 @@ count(count_state_s *state) {
 			state->total_words++;
 			if (state->max_total < state->total_words) {
 				state->max_total = state->total_words;
+			}
+		}
+
+		if (test->test_char) {
+			int n = test->test_char(current);
+			unit->chars += n;
+			state->total_chars += n;
+			if (state->max_total < state->total_chars) {
+				state->max_total = state->total_chars;
 			}
 		}
 
@@ -117,6 +129,17 @@ test_word(char c, char p) {
 }
 
 int
+test_char(char c) {
+	if ((0xc0 & c) == 0xc0) {
+		return 1;
+	} else if ((0x80 & c) == 0x80) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+int
 test_byte(char c) {
 	return (0 != c);
 }
@@ -141,6 +164,7 @@ void print_state(count_state_s *state) {
 	if (1 == state->idx && '-' == state->unit[0].filename[0]
 			&& (1 == (test->test_line ? 1 : 0)
 					+ (test->test_word ? 1 : 0)
+					+ (test->test_char ? 1 : 0)
 					+ (test->test_byte ? 1 : 0)
 					+ (test->test_max_line_length ? 1 : 0))) {
 		size_t n = (test->test_max_line_length
@@ -168,6 +192,9 @@ void print_state(count_state_s *state) {
 		if (test->test_word) {
 			printf("%*zu ", max_len, unit->words);
 		}
+		if (test->test_char) {
+			printf("%*zu ", max_len, unit->chars);
+		}
 		if (test->test_byte) {
 			printf("%*zu ", max_len, unit->bytes);
 		}
@@ -187,6 +214,9 @@ void print_state(count_state_s *state) {
 		}
 		if (test->test_word) {
 			printf("%*zu ", max_len, state->total_words);
+		}
+		if (test->test_char) {
+			printf("%*zu ", max_len, state->total_chars);
 		}
 		if (test->test_byte) {
 			printf("%*zu ", max_len, state->total_bytes);
@@ -211,6 +241,7 @@ the following order: newline, word, byte, maximum line length.\n");
 	printf("  -h, --help             print this message\n");
 	printf("  -l, --lines            print the newline counts\n");
 	printf("  -w, --words            print the word counts\n");
+	printf("  -m, --chars            print the char counts\n");
 	printf("  -c, --bytes            print the byte counts\n");
 	printf("  -L, --max-line-length  print the maximum width in bytes\n");
 }
@@ -219,6 +250,7 @@ static struct option long_options[] = {
 			{"help",   no_argument,   0, 'h'},
 			{"bytes",  no_argument,   0, 'c'},
 			{"lines",  no_argument,   0, 'l'},
+			{"chars",  no_argument,   0, 'm'},
 			{"words",  no_argument,   0, 'w'},
 			{"max-line-length", no_argument, 0, 'L'},
 			{0,        no_argument,   0, '-'},
@@ -227,6 +259,7 @@ static struct option long_options[] = {
 
 static int opt_has_lines = 0;
 static int opt_has_words = 0;
+static int opt_has_chars = 0;
 static int opt_has_bytes = 0;
 static int opt_has_max_line_length = 0;
 static int opt_has_from_stdin = 0;
@@ -245,7 +278,7 @@ on_exiting(void) {
 int 
 main(int argc, char **argv) {
   int ch;
-  while (-1 != (ch = getopt_long(argc, argv, "hlwcL-", long_options, 0))) {
+  while (-1 != (ch = getopt_long(argc, argv, "hlwmcL-", long_options, 0))) {
     switch (ch) {
 		case 'h':
 			usage(argv[0]);
@@ -258,6 +291,9 @@ main(int argc, char **argv) {
 			opt_has_words = 1;
 			opt_has_none = 0;
 			break;
+		case 'm':
+			opt_has_chars = 1;
+			opt_has_none = 0;
 		case 'c':
 			opt_has_bytes = 1;
 			opt_has_none = 0;
@@ -305,6 +341,7 @@ main(int argc, char **argv) {
 	} else {
 		state.test.test_line = (opt_has_lines ? test_line : 0);
 		state.test.test_word = (opt_has_words ? test_word : 0);
+		state.test.test_char = (opt_has_chars ? test_char : 0);
 		state.test.test_byte = (opt_has_bytes ? test_byte : 0);
 		state.test.test_max_line_length = (opt_has_max_line_length
 																			 ? test_max_line_length : 0);
