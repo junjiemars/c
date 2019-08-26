@@ -1,20 +1,21 @@
 #include <_io_.h>
-#include <string.h>
-#include <stdlib.h>
-#include <errno.h>
 
 #ifdef GCC
 # ifndef __USE_XOPEN
 #   define __USE_XOPEN
 # endif
 #endif
-#include <stdio.h>
 
 #if !defined(NM_HAVE_P_TMPDIR)
 #  if defined(WINNT)
 #    define P_tmpdir getenv("TMPDIR")
 #  endif
 #endif
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <errno.h>
 
 void
 test_consts(void) {

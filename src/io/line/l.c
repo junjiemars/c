@@ -89,7 +89,7 @@ test_read_line(const char *filename) {
 	read_line(filename, 16, '\n', print_line);
 }
 
-#if !MSVC
+#if !(MSVC)
 void
 test_getdelim(const char *filename) {
 	FILE *file = fopen(filename, "r");
@@ -141,7 +141,7 @@ main(int argc, char **argv) {
 		strcpy(f, argv[1]);
 		test_read_line(f);
 		fprintf(stdout, "##########\n");
-#if !MSVC
+#if !(MSVC)
 		test_getdelim(f);
 		fprintf(stdout, "##########\n");
 #endif

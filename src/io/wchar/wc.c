@@ -23,10 +23,9 @@ main(int argc, char **argv) {
 	while (WEOF != (c = fgetwc(f))) {
 		fputwc(c, stdout);
 	}
-	if (ferror(f) || !feof(f)) {
+	if (ferror(f)) {
 		perror(path);
 	}
-
 	fclose(f);
 	
 	return 0;

@@ -20,13 +20,12 @@ main(int argc, char **argv) {
 	}
 
 	wchar_t b[64];
-	while (fgetws(b, sizeof(b)/sizeof(b[0]), f)) {
+	while (fgetws(b, sizeof(b)/sizeof(*b), f)) {
 		fputws(b, stdout);
 	}
-	if (ferror(f) || !feof(f)) {
+	if (ferror(f)) {
 		perror(path);
 	}
-
 	fclose(f);
 	
 	return 0;

@@ -10,10 +10,10 @@ io: io_basic \
 		io_reopen \
 		io_process \
 		io_scan \
-    tmp \
-		variadic \
-		wchar \
-		wc
+    io_tmp \
+		io_variadic \
+		io_wchar \
+		io_wc
 io_test: io_basic_test  \
          io_binary_test \
 				 io_error_test \
@@ -24,10 +24,10 @@ io_test: io_basic_test  \
 				 io_reopen_test \
 				 io_process_test \
 				 io_scan_test \
-         tmp_test \
-				 variadic_test \
-				 wchar_test \
-				 wc_test
+         io_tmp_test \
+				 io_variadic_test \
+				 io_wchar_test \
+				 io_wc_test
 
 io_prefix := io
 
@@ -144,59 +144,59 @@ $(io_scan_binout): $(io_root)scan/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # tmp
-tmp_binout := $(bin_path)$(io_prefix)_tmp$(bin_ext)
+io_tmp_binout := $(bin_path)$(io_prefix)_tmp$(bin_ext)
 
-tmp: $(tmp_binout)
-tmp_test: tmp
-	$(tmp_binout)
+io_tmp: $(io_tmp_binout)
+io_tmp_test: io_tmp
+	$(io_tmp_binout)
 
-$(tmp_binout): $(io_root)tmp/tmp.c
+$(io_tmp_binout): $(io_root)tmp/tmp.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # variadic
-variadic_binout := $(bin_path)$(io_prefix)_variadic$(bin_ext)
+io_variadic_binout := $(bin_path)$(io_prefix)_variadic$(bin_ext)
 
-variadic: $(variadic_binout)
-variadic_test: variadic
-	$(variadic_binout)
-	$(variadic_binout) "Hi, variadic function!"
+io_variadic: $(io_variadic_binout)
+io_variadic_test: io_variadic
+	$(io_variadic_binout)
+	$(io_variadic_binout) "Hi, variadic function!"
 
-$(variadic_binout): $(io_root)variadic/v1.c
+$(io_variadic_binout): $(io_root)variadic/v1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # wide char
-wchar_ws_binout := $(bin_path)$(io_prefix)_wchar_ws$(bin_ext)
-wchar_wc_binout := $(bin_path)$(io_prefix)_wchar_wc$(bin_ext)
+io_wchar_ws_binout := $(bin_path)$(io_prefix)_wchar_ws$(bin_ext)
+io_wchar_wc_binout := $(bin_path)$(io_prefix)_wchar_wc$(bin_ext)
 
-wchar: $(wchar_ws_binout) $(wchar_wc_binout)
-wchar_test: wchar
-	$(wchar_ws_binout) $(io_root)wchar/ws.c
-	$(wchar_wc_binout) $(io_root)wchar/wc.c
+io_wchar: $(io_wchar_ws_binout) $(io_wchar_wc_binout)
+io_wchar_test: io_wchar
+	$(io_wchar_ws_binout) $(CURDIR)/src/io/wchar/sample.txt
+	$(io_wchar_wc_binout) $(CURDIR)/src/io/wchar/sample.txt
 
-$(wchar_ws_binout): $(io_root)wchar/ws.c
+$(io_wchar_ws_binout): $(io_root)wchar/ws.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(wchar_wc_binout): $(io_root)wchar/wc.c
+$(io_wchar_wc_binout): $(io_root)wchar/wc.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # wc
-wc_binout := $(bin_path)$(io_prefix)_wc$(bin_ext)
-wc_cppout := $(tmp_path)$(io_prefix)_wc$(cpp_ext)
+io_wc_binout := $(bin_path)$(io_prefix)_wc$(bin_ext)
+io_wc_cppout := $(tmp_path)$(io_prefix)_wc$(cpp_ext)
 
-wc: $(wc_binout)
-wc_test: wc
-	$(wc_binout) --help
-	echo -n "abc" | $(wc_binout) -c
-	echo -e "a\n b\n c" | $(wc_binout)
-	$(wc_binout) -l -w -c -L $(CURDIR)/Makefile $(CURDIR)/src/io/wc/wc.c
+io_wc: $(io_wc_binout)
+io_wc_test: io_wc
+	$(io_wc_binout) --help
+	echo -n "abc" | $(io_wc_binout) -c
+	echo -e "a\n b\n c" | $(io_wc_binout)
+	$(io_wc_binout) -l -w -c -L $(CURDIR)/Makefile $(CURDIR)/src/io/wc/wc.c
 	echo -n "abc" | \
-    $(wc_binout) -l -w -c -L \
+    $(io_wc_binout) -l -w -c -L \
     $(CURDIR)/Makefile $(CURDIR)/src/io/wc/wc.c -
-wc_valgrind_test: wc
+wc_valgrind_test: io_wc
 	valgrind --leak-check=full \
            --track-origins=yes \
            $(wc_binout) $(shell ls $(CURDIR)/src/*.c)
 
-$(wc_binout): $(io_root)wc/wc.c $(getopt_c)
+$(io_wc_binout): $(io_root)wc/wc.c $(getopt_c)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
