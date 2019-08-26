@@ -294,6 +294,7 @@ main(int argc, char **argv) {
 		case 'm':
 			opt_has_chars = 1;
 			opt_has_none = 0;
+			break;
 		case 'c':
 			opt_has_bytes = 1;
 			opt_has_none = 0;
