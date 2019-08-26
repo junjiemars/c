@@ -5,6 +5,8 @@
 
 #if MSVC
 #  pragma warning(disable: 4244)
+#  include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
 #endif
 
 void
@@ -24,7 +26,7 @@ read_line(const char *filename,
 		goto close_exit;
 	}
 	char *p = line;
-	ssize_t linelen;
+	ssize_t linelen = 0;
 	while (EOF != (c = fgetc(file))) {
 		if (delimiter == c) {
 			*p = delimiter, *++p = 0;
@@ -62,11 +64,11 @@ self_getdelim(char **line,
 	}
 	char *p = l;
 	ssize_t linelen = 0;
-	int ch = fgetc(stream);
-	while (delimiter != ch && EOF != ch) {
-		*p++ = ch;
+	int c = fgetc(stream);
+	while (delimiter != c && EOF != c) {
+		*p++ = c;
 		linelen++;
-		ch = fgetc(stream);
+		c = fgetc(stream);
 	}
 	if (!feof(stream)) {
 		*p++ = delimiter;
@@ -82,6 +84,7 @@ test_read_line(const char *filename) {
 	read_line(filename, 16, '\n', print_line);
 }
 
+#if !MSVC
 void
 test_getdelim(const char *filename) {
 	FILE *file = fopen(filename, "r");
@@ -101,6 +104,7 @@ test_getdelim(const char *filename) {
 	}
 	fclose(file);
 }
+#endif
 
 void
 test_self_getdelim(const char *filename) {
@@ -132,8 +136,10 @@ main(int argc, char **argv) {
 		strcpy(f, argv[1]);
 		test_read_line(f);
 		fprintf(stdout, "##########\n");
+#if !MSVC
 		test_getdelim(f);
 		fprintf(stdout, "##########\n");
+#endif
 		test_self_getdelim(f);
  		free(f);
 	}
