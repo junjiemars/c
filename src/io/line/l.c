@@ -1,11 +1,16 @@
 #include <_io_.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #if MSVC
 #  pragma warning(disable: 4244)
+#elif GCC
+#  ifndef _GNU_SOURCE
+#    define _GNU_SOURCE 1
+#  endif
 #endif
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 void
 read_line(const char *filename,
