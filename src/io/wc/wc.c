@@ -239,7 +239,7 @@ more than one FILE is specified.  A word is a non-zero-length sequence of\n\
 characters delimited by white space.\n");
 	printf("\nWith no FILE, or when FILE is -, read standard input.\n");
 	printf("\nThe options below may be used to select which counts are printed, always in\n\
-the following order: newline, word, byte, maximum line length.\n");
+the following order: newline, word, char, byte, maximum line length.\n");
 	printf("  -h, --help             print this message\n");
 	printf("  -l, --lines            print the newline counts\n");
 	printf("  -w, --words            print the word counts\n");
