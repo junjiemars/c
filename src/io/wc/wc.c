@@ -263,7 +263,7 @@ static int opt_has_chars = 0;
 static int opt_has_bytes = 0;
 static int opt_has_max_line_length = 0;
 static int opt_has_from_stdin = 0;
-static int opt_has_none = 1;
+static int opt_has_none = 0;
 
 static count_state_s state;
 
@@ -284,26 +284,22 @@ main(int argc, char **argv) {
 			return 0;
 		case 'l':
 			opt_has_lines = 1;
-			opt_has_none = 0;
 			break;
 		case 'w':
 			opt_has_words = 1;
-			opt_has_none = 0;
 			break;
 		case 'm':
 			opt_has_chars = 1;
-			opt_has_none = 0;
 			break;
 		case 'c':
 			opt_has_bytes = 1;
-			opt_has_none = 0;
 			break;
 		case 'L':
 			opt_has_max_line_length = 1;
-			opt_has_none = 0;
 			break;
 		case '-':
 			opt_has_from_stdin++;
+			opt_has_none = 1;
 			break;
 		default:
 			if ('-' == optarg[0]) {
