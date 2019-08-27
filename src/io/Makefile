@@ -192,10 +192,10 @@ io_wc_test: io_wc
 	echo -n "abc" | \
     $(io_wc_binout) -l -w -m -c -L \
     $(CURDIR)/Makefile $(CURDIR)/src/io/wc/wc.c -
-wc_valgrind_test: io_wc
+io_wc_valgrind_test: io_wc
 	valgrind --leak-check=full \
            --track-origins=yes \
-           $(wc_binout) $(shell ls $(CURDIR)/src/*.c)
+           $(io_wc_binout) $(shell ls $(CURDIR)/src/*.c)
 
 $(io_wc_binout): $(io_root)wc/wc.c $(getopt_c)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
