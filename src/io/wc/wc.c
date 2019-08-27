@@ -7,8 +7,6 @@
 #include <stdlib.h>
 
 
-#define files_min_count 16
-
 typedef struct count_test_s {
 	int (*test_line)(char);
 	int (*test_word)(char, char);
@@ -268,7 +266,6 @@ static int opt_has_from_stdin = 0;
 static int opt_has_none = 1;
 
 static count_state_s state;
-count_unit_s unit[files_min_count];
 
 void
 on_exiting(void) {
@@ -319,23 +316,15 @@ main(int argc, char **argv) {
 
 	memset(&state, 0, sizeof(state));
 
-	if (optind == argc) {
-		opt_has_from_stdin++;
-	}
-
 	int files_count = argc - optind;
-	if (files_min_count < files_count) {
-	  state.unit = malloc(sizeof(count_unit_s) * files_count);
-		if (state.unit) {
-			memset(state.unit, 0, sizeof(count_unit_s) * files_count);
-			atexit(&on_exiting);
-		} else {
-			exit(errno);
-		}
-	} else {
-		memset(&unit, 0, sizeof(unit));
-		state.unit = unit;
+	if (0 == files_count) {
+		opt_has_from_stdin++;
+		files_count++;
 	}
+	
+	state.unit = malloc(sizeof(count_unit_s) * files_count);
+	memset(state.unit, 0, sizeof(count_unit_s) * files_count);
+	atexit(&on_exiting);
 	
 	if (opt_has_none) {
 		state.test.test_line = test_line;
