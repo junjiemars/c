@@ -299,7 +299,6 @@ main(int argc, char **argv) {
 			break;
 		case '-':
 			opt_has_from_stdin++;
-			opt_has_none = 1;
 			break;
 		default:
 			if ('-' == optarg[0]) {
