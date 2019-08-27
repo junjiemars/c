@@ -12,7 +12,7 @@
 typedef struct count_test_s {
 	int (*test_line)(char);
 	int (*test_word)(char, char);
-	int (*test_char)(char);
+	int (*test_char)(char, char);
 	int (*test_byte)(char);
 	void (*test_max_line_length)(char, size_t*, size_t*);
 } count_test_s;
@@ -77,7 +77,7 @@ count(count_state_s *state) {
 		}
 
 		if (test->test_char) {
-			int n = test->test_char(current);
+			int n = test->test_char(current, previous);
 			unit->chars += n;
 			state->total_chars += n;
 			if (state->max_total < state->total_chars) {
@@ -129,10 +129,12 @@ test_word(char c, char p) {
 }
 
 int
-test_char(char c) {
+test_char(char c, char p) {
 	if ((0xc0 & c) == 0xc0) {
 		return 1;
-	} else if ((0x80 & c) == 0x80) {
+	} else if ((0x80 & c) == 0x80
+						 && (((0xc0 & p) == 0xc0)
+								 || (0x80 & p) == 0x80)) {
 		return 0;
 	} else {
 		return 1;
@@ -241,7 +243,7 @@ the following order: newline, word, byte, maximum line length.\n");
 	printf("  -h, --help             print this message\n");
 	printf("  -l, --lines            print the newline counts\n");
 	printf("  -w, --words            print the word counts\n");
-	printf("  -m, --chars            print the char counts\n");
+	printf("  -m, --chars            print the char(utf-8) counts\n");
 	printf("  -c, --bytes            print the byte counts\n");
 	printf("  -L, --max-line-length  print the maximum width in bytes\n");
 }
