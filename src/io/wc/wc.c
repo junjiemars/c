@@ -263,7 +263,7 @@ static int opt_has_chars = 0;
 static int opt_has_bytes = 0;
 static int opt_has_max_line_length = 0;
 static int opt_has_from_stdin = 0;
-static int opt_has_none = 0;
+static int opt_has_none = 1;
 
 static count_state_s state;
 
@@ -284,18 +284,23 @@ main(int argc, char **argv) {
 			return 0;
 		case 'l':
 			opt_has_lines = 1;
+			opt_has_none = 0;
 			break;
 		case 'w':
 			opt_has_words = 1;
+			opt_has_none = 0;
 			break;
 		case 'm':
 			opt_has_chars = 1;
+			opt_has_none = 0;
 			break;
 		case 'c':
 			opt_has_bytes = 1;
+			opt_has_none = 0;
 			break;
 		case 'L':
 			opt_has_max_line_length = 1;
+			opt_has_none = 0;
 			break;
 		case '-':
 			opt_has_from_stdin++;
@@ -309,14 +314,13 @@ main(int argc, char **argv) {
     }
   }
 
-	memset(&state, 0, sizeof(state));
-
 	int files_count = argc - optind;
 	if (0 == files_count) {
 		opt_has_from_stdin++;
 		files_count++;
 	}
-	
+
+	memset(&state, 0, sizeof(state));
 	state.unit = malloc(sizeof(count_unit_s) * files_count);
 	memset(state.unit, 0, sizeof(count_unit_s) * files_count);
 	atexit(&on_exiting);
@@ -330,8 +334,10 @@ main(int argc, char **argv) {
 		state.test.test_word = (opt_has_words ? test_word : 0);
 		state.test.test_char = (opt_has_chars ? test_char : 0);
 		state.test.test_byte = (opt_has_bytes ? test_byte : 0);
-		state.test.test_max_line_length = (opt_has_max_line_length
-																			 ? test_max_line_length : 0);
+		if (opt_has_max_line_length) {
+			state.test.test_max_line_length = test_max_line_length;
+			state.test.test_byte = test_byte;
+		}
 	}
 
 	if (opt_has_from_stdin) {
