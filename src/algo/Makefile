@@ -1,13 +1,13 @@
 algo: _algo_ \
 			algo_sizeof \
 			algo_sort \
-			duff_device \
-			dynamic_array \
-			gcd \
-			hash \
-			is_unsigned_integer \
-			is_unsigned_type \
-			reverse \
+			algo_duff_device \
+			algo_dynamic_array \
+			algo_gcd \
+			algo_hash \
+			algo_is_unsigned_integer \
+			algo_is_unsigned_type \
+			algo_reverse \
 			algo_search \
 			algo_strlen_utf8 \
 			algo_strscpy
@@ -15,13 +15,13 @@ algo: _algo_ \
 algo_test: _algo__test \
 					 algo_sizeof_test \
 					 algo_sort_test \
-					 duff_device_test \
-					 dynamic_array_test \
-					 gcd_test \
-					 hash_test \
-					 is_unsigned_integer_test \
-					 is_unsigned_type_test \
-					 reverse_test \
+					 algo_duff_device_test \
+					 algo_dynamic_array_test \
+					 algo_gcd_test \
+					 algo_hash_test \
+					 algois_unsigned_integer_test \
+					 algo_is_unsigned_type_test \
+					 algo_reverse_test \
 					 algo_search_test \
 					 algo_strlen_utf8_test \
 					 algo_strscpy_test
@@ -41,127 +41,129 @@ $(_algo__binout): $(algo_root)_algo_.c
 
 
 # duff device
-duff_device_binout := $(bin_path)$(algo_prefix)_duff_device$(bin_ext)
+algo_duff_device_binout := $(bin_path)$(algo_prefix)_duff_device$(bin_ext)
 
-duff_device: $(duff_device_binout)
-duff_device_test: duff_device
-	$(duff_device_binout)
-	$(duff_device_binout) a
-	$(duff_device_binout) a b
-	$(duff_device_binout) a b c
-	$(duff_device_binout) a b c d
-	$(duff_device_binout) a b c d e
-	$(duff_device_binout) a b c d e f
-	$(duff_device_binout) a b c d e f g
-	$(duff_device_binout) a b c d e f g h
-	$(duff_device_binout) a b c d e f g h i
+algo_duff_device: $(algo_duff_device_binout)
+algo_duff_device_test: algo_duff_device
+	$(algo_duff_device_binout)
+	$(algo_duff_device_binout) a
+	$(algo_duff_device_binout) a b
+	$(algo_duff_device_binout) a b c
+	$(algo_duff_device_binout) a b c d
+	$(algo_duff_device_binout) a b c d e
+	$(algo_duff_device_binout) a b c d e f
+	$(algo_duff_device_binout) a b c d e f g
+	$(algo_duff_device_binout) a b c d e f g h
+	$(algo_duff_device_binout) a b c d e f g h i
 
-$(duff_device_binout): $(algo_root)duff_device/duff.c
+$(algo_duff_device_binout): $(algo_root)duff_device/duff.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # dynamic array
-dynamic_array_binout := $(bin_path)$(algo_prefix)_dynamic_array$(bin_ext)
+algo_dynamic_array_binout := $(bin_path)$(algo_prefix)_dynamic_array$(bin_ext)
 
-dynamic_array: $(dynamic_array_binout)
-dynamic_array_test: dynamic_array
-	$(dynamic_array_binout)
+algo_dynamic_array: $(algo_dynamic_array_binout)
+algo_dynamic_array_test: algo_dynamic_array
+	$(algo_dynamic_array_binout)
 
-$(dynamic_array_binout): $(algo_root)dynamic_array/da.c
+$(algo_dynamic_array_binout): $(algo_root)dynamic_array/da.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # gcd
-gcd_binout := $(bin_path)$(algo_prefix)_gcd$(bin_ext)
+algo_gcd_binout := $(bin_path)$(algo_prefix)_gcd$(bin_ext)
 
-gcd: $(gcd_binout)
-gcd_test: gcd
-	$(gcd_binout) 5 0
-	$(gcd_binout) 206 40
+algo_gcd: $(algo_gcd_binout)
+algo_gcd_test: algo_gcd
+	$(algo_gcd_binout) 5 0
+	$(algo_gcd_binout) 206 40
 
-$(gcd_binout): $(algo_root)gcd/gcd.c
+$(algo_gcd_binout): $(algo_root)gcd/gcd.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # hash
-hash_kr1_binout := $(bin_path)$(algo_prefix)_hash_kr1$(bin_ext)
-hash_kr2_binout := $(bin_path)$(algo_prefix)_hash_kr2$(bin_ext)
-hash_djb2_binout := $(bin_path)$(algo_prefix)_hash_djb2$(bin_ext)
-hash_sdbm_binout := $(bin_path)$(algo_prefix)_hash_sdbm$(bin_ext)
-hash_jenkins_binout := $(bin_path)$(algo_prefix)_hash_jenkins$(bin_ext)
+algo_hash_kr1_binout := $(bin_path)$(algo_prefix)_hash_kr1$(bin_ext)
+algo_hash_kr2_binout := $(bin_path)$(algo_prefix)_hash_kr2$(bin_ext)
+algo_hash_djb2_binout := $(bin_path)$(algo_prefix)_hash_djb2$(bin_ext)
+algo_hash_sdbm_binout := $(bin_path)$(algo_prefix)_hash_sdbm$(bin_ext)
+algo_hash_jenkins_binout := $(bin_path)$(algo_prefix)_hash_jenkins$(bin_ext)
 
-hash: $(hash_kr1_binout) \
-			$(hash_kr2_binout) \
-			$(hash_djb2_binout) \
-			$(hash_sdbm_binout) \
-			$(hash_jenkins_binout)
-hash_test: hash
-	$(hash_kr1_binout) "abcABC"
-	$(hash_kr1_binout) "ABCabc"
-	$(hash_kr2_binout) "abcABC"
-	$(hash_kr2_binout) "ABCabc"
-	$(hash_djb2_binout) "abcABC"
-	$(hash_sdbm_binout) "abcABC"
-	$(hash_jenkins_binout) "a"
-	$(hash_jenkins_binout) "The quick brown"
+algo_hash: $(algo_hash_kr1_binout) \
+				 	 $(algo_hash_kr2_binout) \
+			     $(algo_hash_djb2_binout) \
+			     $(algo_hash_sdbm_binout) \
+			     $(algo_hash_jenkins_binout)
+algo_hash_test: algo_hash
+	$(algo_hash_kr1_binout) "abcABC"
+	$(algo_hash_kr1_binout) "ABCabc"
+	$(algo_hash_kr2_binout) "abcABC"
+	$(algo_hash_kr2_binout) "ABCabc"
+	$(algo_hash_djb2_binout) "abcABC"
+	$(algo_hash_sdbm_binout) "abcABC"
+	$(algo_hash_jenkins_binout) "a"
+	$(algo_hash_jenkins_binout) "The quick brown"
 
-$(hash_kr1_binout): $(algo_root)hash/kr1.c
+$(algo_hash_kr1_binout): $(algo_root)hash/kr1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(hash_kr2_binout): $(algo_root)hash/kr2.c
+$(algo_hash_kr2_binout): $(algo_root)hash/kr2.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(hash_djb2_binout): $(algo_root)hash/djb2.c
+$(algo_hash_djb2_binout): $(algo_root)hash/djb2.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(hash_sdbm_binout): $(algo_root)hash/sdbm.c
+$(algo_hash_sdbm_binout): $(algo_root)hash/sdbm.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(hash_jenkins_binout): $(algo_root)hash/jenkins.c
+$(algo_hash_jenkins_binout): $(algo_root)hash/jenkins.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # is unsigned integer
-is_uint_binout := $(bin_path)$(algo_prefix)_is_uint$(bin_ext)
-is_uint_cppout := $(tmp_path)$(algo_prefix)_is_uint$(cpp_ext)
+algo_is_uint_binout := $(bin_path)$(algo_prefix)_is_uint$(bin_ext)
+algo_is_uint_cppout := $(tmp_path)$(algo_prefix)_is_uint$(cpp_ext)
 
-is_unsigned_integer: $(is_uint_binout)
-is_unsigned_integer_test: is_unsigned_integer
-	$(is_uint_binout)
+algo_is_unsigned_integer: $(algo_is_uint_binout)
+algo_is_unsigned_integer_test: algo_is_unsigned_integer
+	$(algo_is_uint_binout)
 
-$(is_uint_binout): $(is_uint_cppout)
+$(algo_is_uint_binout): $(algo_is_uint_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(is_uint_cppout): $(algo_root)is_unsigned_integer/is_uint.c
+$(algo_is_uint_cppout): $(algo_root)is_unsigned_integer/is_uint.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
 # is unsigned type
-is_utype_binout := $(bin_path)$(algo_prefix)_is_utype$(bin_ext)
-is_utype_cppout := $(tmp_path)$(algo_prefix)_is_utype$(cpp_ext)
+algo_is_utype_binout := $(bin_path)$(algo_prefix)_is_utype$(bin_ext)
+algo_is_utype_cppout := $(tmp_path)$(algo_prefix)_is_utype$(cpp_ext)
 
-is_unsigned_type: $(is_utype_binout)
-is_unsigned_type_test: is_unsigned_type
-	$(is_utype_binout)
+algo_is_unsigned_type: $(algo_is_utype_binout)
+algo_is_unsigned_type_test: algo_is_unsigned_type
+	$(algo_is_utype_binout)
 
-$(is_utype_binout): $(is_utype_cppout)
+$(algo_is_utype_binout): $(algo_is_utype_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(is_utype_cppout): $(algo_root)is_unsigned_type/is_utype.c
+$(algo_is_utype_cppout): $(algo_root)is_unsigned_type/is_utype.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # reverse
-reverse_string_binout := $(bin_path)$(algo_prefix)_reverse_string$(bin_ext)
-reverse_linked_list_binout := $(bin_path)$(algo_prefix)_reverse_linked_list$(bin_ext)
+algo_reverse_string_binout := $(bin_path)$(algo_prefix)_reverse_string$(bin_ext)
+algo_reverse_linked_list_binout := $(bin_path)$(algo_prefix)_reverse_linked_list$(bin_ext)
 
-reverse: $(reverse_string_binout) $(reverse_linked_list_binout)
-reverse_test: reverse_string_test reverse_linked_list_test
+algo_reverse: $(algo_reverse_string_binout) \
+							$(algo_reverse_linked_list_binout)
+algo_reverse_test: algo_reverse_string_test \
+									 algo_reverse_linked_list_test
 
-reverse_string_test: $(reverse_string_binout)
-	$(reverse_string_binout)
-reverse_linked_list_test: $(reverse_linked_list_binout)
-	$(reverse_linked_list_binout)
+algo_reverse_string_test: $(algo_reverse_string_binout)
+	$(algo_reverse_string_binout)
+algo_reverse_linked_list_test: $(algo_reverse_linked_list_binout)
+	$(algo_reverse_linked_list_binout)
 
-$(reverse_string_binout): $(algo_root)reverse/rev_str.c
+$(algo_reverse_string_binout): $(algo_root)reverse/rev_str.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(reverse_linked_list_binout): $(algo_root)reverse/rev_linked_list.c
+$(algo_reverse_linked_list_binout): $(algo_root)reverse/rev_linked_list.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # sizeof
