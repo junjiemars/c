@@ -11,6 +11,7 @@
 /* format ‘%zi’ expects argument of type ‘signed size_t’, but argument
 	 3 has type ‘int’ [-Werror=format=] */
 #  pragma GCC diagnostic ignored "-Wformat"
+#  include <sys/types.h>
 #elif CLANG
 #  pragma clang diagnostic ignored "-Wformat"
 #elif MSVC

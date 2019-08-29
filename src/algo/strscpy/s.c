@@ -1,6 +1,8 @@
 #include <_algo_.h>
 
-#if MSVC
+#if (GCC)
+#  include <sys/types.h>
+#elif (MSVC)
 #  include <BaseTsd.h>
 typedef SSIZE_T ssize_t;
 #endif
