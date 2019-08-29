@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <pthread.h>
 
-#define N_THREADS 4
+#define N_THREADS 6
 
 void *
 echo(void *tid) {
