@@ -1912,6 +1912,10 @@ on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see [[https://g
 - [[https://en.wikipedia.org/wiki/OpenMP][wikipedia]]
 - [[https://www.openmp.org/][Office site]]
 
+** Pthread
+*** References
+- [[https://computing.llnl.gov/tutorials/pthreads/][POSIX Threads Programming]]
+
 * Algorithm
 ** Hash
 ** Algorithm References
