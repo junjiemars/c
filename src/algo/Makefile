@@ -19,7 +19,7 @@ algo_test: _algo__test \
 					 algo_dynamic_array_test \
 					 algo_gcd_test \
 					 algo_hash_test \
-					 algois_unsigned_integer_test \
+					 algo_is_unsigned_integer_test \
 					 algo_is_unsigned_type_test \
 					 algo_reverse_test \
 					 algo_search_test \
