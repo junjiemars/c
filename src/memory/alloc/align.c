@@ -1,23 +1,17 @@
 #include <_memory_.h>
-#include <stdlib.h>
 
-#if NM_HAVE_POSIX_MEMALIGN_FN
-#  if DARWIN || LINUX
-void *
-_malign_(size_t alignment, size_t size) {
-	void *p;
-	int n = posix_memalign(&p, alignment, size);
-	return 0 == n ? p : 0;
-}
+#if NM_HAVE_MEMALIGN_FN
+#  if (GCC)
+#    include <malloc.h>
+#    define _malign_ memalign
 #  endif
-#elif NM_HAVE_MEMALIGN_FN
-void *
-_malign_(size_t alignment, size_t size) {
-	void *p = memalign(alignment, size);
-	return p;
-}
-	
+#elif NM_HAVE_POSIX_MEMALIGN_FN
+#  if (GCC)
+#    include <stdlib.h>
+#    define _malign_ posix_memalign
+#  endif
 #endif
+
 
 int
 main(int argc, const char *argv[]) {
