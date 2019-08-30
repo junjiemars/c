@@ -31,7 +31,6 @@ static void on_alloc(uv_handle_t*, size_t, uv_buf_t*);
 static void on_connect(uv_stream_t *, int);
 static void on_read(uv_stream_t*, ssize_t, const uv_buf_t*);
 static void on_write(uv_write_t*, int);
-
 static int on_headers_complete(http_parser*);
 
 void
