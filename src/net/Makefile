@@ -57,6 +57,11 @@ $(mac_binout): $(net_root)mac/mac.c
 
 # http-server
 
+ifeq ($(CC_NAME), msvc)
+INC += -I$(root)posix
+getopt_c := $(root)posix/getopt.c
+endif
+
 http_parser_root := $(net_root)http-server/http-parser
 http_parser_out := $(http_parser_root)/http_parser.o
 
@@ -89,7 +94,8 @@ else
 LDLIBS =
 endif
 
-$(net_http_server_binout): $(net_root)http-server/ws.c \
+$(net_http_server_binout): $(getopt_c) \
+													 $(net_root)http-server/ws.c \
 													 $(http_parser_out) \
 												   $(libuv_out)
 	$(CC) $(CFLAGS) $(http_server_inc) $^ $(bin_out)$@ $(LDLIBS)

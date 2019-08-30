@@ -1,16 +1,14 @@
 #include <_net_.h>
+#include <getopt.h>
 #include <http_parser.h>
 #include <uv.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 
 #define LOG(x) fprintf(stdout, "%s", (x))
 #define LOGF(fmt, x) fprintf(stdout, #fmt, (x))
-
-static const char* HOST     = "0.0.0.0"; /* localhost */
-static const int   PORT     = 8888;
-static const int   BACKLOG  = 128;
 
 #define RESPONSE                  \
   "HTTP/1.1 200 OK\r\n"           \
@@ -125,31 +123,71 @@ on_headers_complete(http_parser* parser) {
 }
 
 void
-server_init(uv_loop_t *loop) {
+server_init(uv_loop_t *loop, const char *host, int port, int backlog) {
   int r = uv_tcp_init(loop, &server);
   assert(r == 0);
 
   struct sockaddr_in addr;
-  r = uv_ip4_addr(HOST, PORT, &addr);
+  r = uv_ip4_addr(host, port, &addr);
   assert(r == 0);
   
   r = uv_tcp_bind(&server, (struct sockaddr *) &addr, 0);
   assert(r == 0);
 
-  r = uv_listen((uv_stream_t *) &server, BACKLOG, on_connect);
+  r = uv_listen((uv_stream_t *) &server, backlog, on_connect);
   assert(r == 0);
 }
 
+static char opt_host[128] = "127.0.0.1";
+static int opt_port = 8080;
+
+void
+usage(const char *ws) {
+  printf("Usage: %s [OPTION]...\n", ws);
+	printf("\n");
+	printf("A tiny-handy web server.\n");
+	printf("  -h, --help             print this message\n");
+	printf("  -a, --host             listen address, default is %s\n", opt_host);
+	printf("  -p, --port             listen port, default is %i\n", opt_port);
+}
+
+static struct option long_options[] = {
+			{"help",   no_argument,   0, 'h'},
+			{"host",  no_argument,    0, 'a'},
+			{"port",  no_argument,    0, 'p'},
+			{0,        0,             0,  0 },
+};
 
 int
 main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
+  int c;
+  while (-1 != (c = getopt_long(argc, argv, "ha:p:", long_options, 0))) {
+    switch (c) {
+		case 'h':
+			usage(argv[0]);
+			return 0;
+		case 'a':
+			strcpy(opt_host, optarg);
+			break;
+		case 'p':
+			if (1 != sscanf(optarg, "%i", &opt_port)) {
+				printf("invalid argument '%s' of option '-p'\n", optarg);
+				return -1;
+			}
+			break;
+		default:
+			usage(argv[0]);
+			return -1;
+    }
+  }
+
 	uv_loop_t *loop = uv_default_loop();
 
   parser_settings.on_headers_complete = on_headers_complete;
-  server_init(loop);
+  server_init(loop, opt_host, opt_port, 128);
 
   int r = uv_run(loop, UV_RUN_DEFAULT);
   assert(r == 0);

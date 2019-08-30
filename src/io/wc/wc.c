@@ -306,9 +306,6 @@ main(int argc, char **argv) {
 			opt_has_from_stdin++;
 			break;
 		default:
-			if ('-' == optarg[0]) {
-				printf("%s: illegal option -- %s", argv[0], optarg);
-			}
 			usage(argv[0]);
 			return -1;
     }
