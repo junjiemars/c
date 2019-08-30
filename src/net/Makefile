@@ -1,11 +1,14 @@
 net: dns \
-		 mac
+		 mac \
+		 net_http_server
 net_test: dns_test \
-					mac_test
+					mac_test \
+					net_http_server_test
 
 net_prefix := net
 
 INC += -I$(net_root)
+
 ifeq ($(NM_SYSTEM), WinNT)
 	INC += -I$(root)posix
 	getopt_c := $(root)posix/getopt.c
@@ -51,3 +54,34 @@ mac_test: mac
 
 $(mac_binout): $(net_root)mac/mac.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# http-server
+
+http_parser_root := $(net_root)http-server/http-parser
+http_parser_out := $(http_parser_root)/http_parser.o
+
+libuv_root := $(net_root)http-server/libuv
+libuv_out := $(libuv_root)/.libs/libuv.a
+
+http_server_inc := $(INC) -I$(http_parser_root) -I$(libuv_root)/include/
+
+$(http_parser_out): $(http_parser_root)/Makefile
+	$(MAKE) -C $(http_parser_root) http_parser.o
+
+$(libuv_root)/configure: $(libuv_root)/autogen.sh
+	cd $(libuv_root) && ./autogen.sh
+$(libuv_root)/Makefile: $(libuv_root)/configure
+	cd $(libuv_root) && ./configure
+$(libuv_out): $(libuv_root)/Makefile
+	$(MAKE) -C $(libuv_root) libuv.la
+
+net_http_server_binout := $(bin_path)$(net_prefix)_http_server$(bin_ext)
+
+net_http_server: $(net_http_server_binout)
+net_http_server_test: net_http_server
+	$(net_http_server_binout)
+
+$(net_http_server_binout): $(net_root)http-server/ws.c \
+													 $(http_parser_out) \
+												   $(libuv_out)
+	$(CC) $(CFLAGS) $(http_server_inc) $^ $(bin_out)$@ -pthread

@@ -1,0 +1,6 @@
+[submodule "src/net/http-server/libuv"]
+	path = src/net/http-server/libuv
+	url = https://github.com/libuv/libuv.git
+[submodule "src/net/http-server/http-parser"]
+	path = src/net/http-server/http-parser
+	url = https://github.com/nodejs/http-parser.git

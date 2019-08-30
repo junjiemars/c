@@ -64,6 +64,7 @@ nore/
 # etags/ctags
 /TAGS
 /tags
+**/.tags
 
 # darwin
 .DS_Store
