@@ -36,25 +36,29 @@ static void on_write(uv_write_t*, int);
 
 static int on_headers_complete(http_parser*);
 
-void on_close(uv_handle_t *handle) {
+void
+on_close(uv_handle_t *handle) {
   client_t *client = (client_t *) handle->data;
   free(client);
 }
 
-void on_shutdown(uv_shutdown_t *shutdown_req, int status) {
+void
+on_shutdown(uv_shutdown_t *shutdown_req, int status) {
 	_unused_(status);
   uv_close((uv_handle_t *) shutdown_req->handle, on_close);
   free(shutdown_req);
 }
 
-void on_alloc(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf) {
+void
+on_alloc(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf) {
 	_unused_(handle);
   buf->base = malloc(suggested_size);
   buf->len = suggested_size;
   assert(buf->base != NULL);
 }
 
-void on_connect(uv_stream_t *server, int status) {
+void
+on_connect(uv_stream_t *server, int status) {
   assert(status == 0);
 
   client_t *client = malloc(sizeof(client_t));
@@ -74,7 +78,8 @@ void on_connect(uv_stream_t *server, int status) {
   r = uv_read_start((uv_stream_t *) &client->handle, on_alloc, on_read);
 }
 
-void on_read(uv_stream_t* handle, ssize_t nread, const uv_buf_t* buf) {
+void
+on_read(uv_stream_t* handle, ssize_t nread, const uv_buf_t* buf) {
   int r = 0;
   client_t *client = (client_t *) handle->data;
 
@@ -100,13 +105,15 @@ void on_read(uv_stream_t* handle, ssize_t nread, const uv_buf_t* buf) {
   free(buf->base);
 }
 
-void on_write(uv_write_t* write_req, int status) {
+void
+on_write(uv_write_t* write_req, int status) {
 	_unused_(status);
   uv_close((uv_handle_t *) write_req->handle, on_close);
   free(write_req);
 }
 
-int on_headers_complete(http_parser* parser) {
+int
+on_headers_complete(http_parser* parser) {
   client_t *client = (client_t *) parser->data;
 
   uv_write_t *write_req = malloc(sizeof(uv_write_t));
@@ -117,7 +124,8 @@ int on_headers_complete(http_parser* parser) {
   return 1;
 }
 
-void server_init(uv_loop_t *loop) {
+void
+server_init(uv_loop_t *loop) {
   int r = uv_tcp_init(loop, &server);
   assert(r == 0);
 

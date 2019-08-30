@@ -81,7 +81,15 @@ net_http_server: $(net_http_server_binout)
 net_http_server_test: net_http_server
 	$(net_http_server_binout)
 
+ifeq ($(NM_SYSTEM),Linux)
+LDLIBS = -pthread
+else ifeq ($(NM_SYSTEM),Darwin)
+LDLIBS =
+else
+LDLIBS =
+endif
+
 $(net_http_server_binout): $(net_root)http-server/ws.c \
 													 $(http_parser_out) \
 												   $(libuv_out)
-	$(CC) $(CFLAGS) $(http_server_inc) $^ $(bin_out)$@ -pthread
+	$(CC) $(CFLAGS) $(http_server_inc) $^ $(bin_out)$@ $(LDLIBS)
