@@ -156,7 +156,8 @@ test_max_line_length(char c, size_t *max, size_t *cur) {
 	}
 }
 
-void print_state(count_state_s *state) {
+void
+print_state(count_state_s *state) {
 	int max_len = 1;
 	count_test_s *test = &state->test;
 
@@ -311,15 +312,15 @@ main(int argc, char **argv) {
     }
   }
 
-	int files_count = argc - optind;
-	if (0 == files_count) {
+	int file_count = argc - optind;
+	if (0 == file_count) {
 		opt_has_from_stdin++;
-		files_count++;
+		file_count++;
 	}
 
 	memset(&state, 0, sizeof(state));
-	state.unit = malloc(sizeof(count_unit_s) * files_count);
-	memset(state.unit, 0, sizeof(count_unit_s) * files_count);
+	state.unit = malloc(sizeof(count_unit_s) * file_count);
+	memset(state.unit, 0, sizeof(count_unit_s) * file_count);
 	atexit(&on_exiting);
 	
 	if (opt_has_none) {

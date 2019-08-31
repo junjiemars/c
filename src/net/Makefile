@@ -84,7 +84,7 @@ net_http_server_binout := $(bin_path)$(net_prefix)_http_server$(bin_ext)
 
 net_http_server: $(net_http_server_binout)
 net_http_server_test: net_http_server
-	$(net_http_server_binout)
+	$(net_http_server_binout) --help
 
 ifeq ($(NM_SYSTEM),Linux)
 LDLIBS = -pthread
