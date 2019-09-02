@@ -4,3 +4,6 @@
 [submodule "src/net/http-server/http-parser"]
 	path = src/net/http-server/http-parser
 	url = git@github.com:nodejs/http-parser.git
+[submodule "src/nginx/nginx_home"]
+	path = src/nginx/nginx_home
+	url = git@github.com:nginx/nginx.git
