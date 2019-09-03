@@ -380,6 +380,12 @@ signal_test: signal
 	$(signal_basic_binout)
 	$(signal_list_binout)
 	$(signal_fork_binout)
+signal_basic_test: $(signal_basic_binout)
+	$(signal_basic_binout)
+signal_list_test: $(signal_list_binout)
+	$(signal_list_binout)
+signal_fork_test: $(signal_fork_binout)
+	$(signal_fork_binout)
 
 $(signal_basic_binout): $(lang_root)signal/basic/sig.c
 	$(CC) $(signal_cflags) $(INC) $^ $(bin_out)$@

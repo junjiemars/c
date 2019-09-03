@@ -8,7 +8,7 @@
 #  include <process.h>
 #  define sleep(x) Sleep((x) * 1000)
 #  define getpid() _getpid()
-void
+static void
 psignal(int sig, const char *s) {
 	static char *tbl[] = {
 		"default",
@@ -37,18 +37,21 @@ psignal(int sig, const char *s) {
 
 static volatile int s_flag = 0;
 
-void on_sigint_stop(int sig) {
+static void
+on_sigint_stop(int sig) {
 	psignal(sig, "on_sigint_stop");
 	s_flag = sig;
 }
 
-void on_sigint_continue(int sig) {
+static void
+on_sigint_continue(int sig) {
 	psignal(sig, "on_sigint_continue");
 	/* continue put into pending signals */
 	signal(sig, on_sigint_stop);
 }
 
-int main(int argc, char **argv) {
+int
+main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
@@ -59,6 +62,7 @@ int main(int argc, char **argv) {
 
 	do {
 		if (s_flag) {
+			fprintf(stderr, "stop, s_flag = %i\n", s_flag);
 			break;
 		}
 		if (6 == n /* 5th */) {
@@ -67,7 +71,7 @@ int main(int argc, char **argv) {
 				perror("raise SIGINT failed");
 			}
 		}
-		fprintf(stderr, "sleeping...\n");
+		fprintf(stderr, "sleeping 1s ...\n");
 		sleep(1);
 	} while (--n > 0);
 
