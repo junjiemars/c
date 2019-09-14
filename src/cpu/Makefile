@@ -1,7 +1,7 @@
 
-cpu: cache_line_size
+cpu: cpu_info
 
-cpu_test: cache_line_size_test
+cpu_test: cpu_info_test
 
 cpu_prefix := cpu
 
@@ -9,14 +9,14 @@ INC += -I$(cpu_root)
 
 
 
-# cache_line_size
-cache_line_size_binout := $(bin_path)$(cpu_prefix)_cache_line_size$(bin_ext)
+# info
+cpu_info_binout := $(bin_path)$(cpu_prefix)_info$(bin_ext)
 
-cache_line_size: $(cache_line_size_binout)
+cpu_info: $(cpu_info_binout)
 
-cache_line_size_test: cache_line_size
-	$(cache_line_size_binout)
+cpu_info_test: cpu_info
+	$(cpu_info_binout)
 
-$(cache_line_size_binout): $(cpu_root)cache_line_size/line.c
+$(cpu_info_binout): $(cpu_root)info/info.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
