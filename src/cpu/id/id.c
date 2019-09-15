@@ -55,7 +55,7 @@ cpu_vendor(const uint32_t *cpuid, char *vendor) {
 static void
 test_cpu_vendor(void) {
 	uint32_t buf[5];
-	memset(buf, 0, sizeof(buf)/sizeof(*buf));
+	memset(buf, 0, sizeof(buf));
 	
 	if (check_cpuid(0, buf)) {
 		char vendor[sizeof(uint32_t)*3 + 1];
