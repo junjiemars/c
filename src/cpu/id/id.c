@@ -15,7 +15,7 @@ check_cpuid(uint32_t fn, uint32_t *buf) {
 
 	__cpuid((int32_t*) buf, fn);
 
-#else
+#elif ( __AMD64__ ) || ( __x86_64__ )
 
 	uint32_t eax, ebx, ecx, edx;
 	__asm__ (
