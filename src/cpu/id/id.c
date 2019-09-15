@@ -1,32 +1,66 @@
 #include <_cpu_.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdio.h>
 
+#if ( MSVC )
+#  include <intrin.h>
+#  pragma warning(disable : 4996)
+#endif
 
 static void
-check_cpuid(uint32_t i, uint32_t *buf) {
-	uint32_t eax, ebx, ecx, edx;
+check_cpuid(uint32_t fn, uint32_t *buf) {
 
+#if ( MSVC )
+
+	__cpuid((int32_t*) buf, fn);
+
+#else
+
+	uint32_t eax, ebx, ecx, edx;
 	__asm__ (
 		  "cpuid"
 			: "=a" (eax), "=b" (ebx), "=c" (ecx), "=d" (edx)
-			: "a" (i) );
+			: "a" (fn) );
 
 	buf[0] = eax;
 	buf[1] = ebx;
 	buf[2] = edx;
 	buf[3] = ecx;
+	
+#endif
 }
+
+static char *
+cpu_vendor(const uint32_t *cpuid, char *vendor) {
+	const size_t w = sizeof(uint32_t);
+	char *p = (char *) vendor;
+
+	/* ebx, edx, ecx */
+	strncpy(p, (const char *) &cpuid[1], w);
+	strncpy(p += w, (const char *) &cpuid[3], w);
+	strncpy(p += w, (const char *) &cpuid[2], w);
+
+	return vendor;
+}
+
+static void
+test_cpu_vendor(void) {
+	uint32_t buf[5];
+	memset(buf, 0, sizeof(buf)/sizeof(*buf));
+	check_cpuid(0, buf);
+	char vendor[sizeof(uint32_t)*3 + 1];
+	printf("vendor: %s\n", cpu_vendor(buf, vendor));
+}
+
 
 int
 main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
-	uint32_t vbuf[5];
-	memset(vbuf, 0, sizeof(vbuf)/sizeof(*vbuf));
-	
-	check_cpuid(0, vbuf);
-	
+	/* vendor */
+	test_cpu_vendor();
+
 	return 0;
 }
