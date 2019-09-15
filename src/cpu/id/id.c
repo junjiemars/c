@@ -8,14 +8,15 @@
 #  pragma warning(disable : 4996)
 #endif
 
-static void
+static int
 check_cpuid(uint32_t fn, uint32_t *buf) {
 
 #if ( MSVC )
 
 	__cpuid((int32_t*) buf, fn);
+	return 1
 
-#elif ( __AMD64__ ) || ( __x86_64__ )
+#elif ( __amd64__ ) || ( __x86_64__ )
 
 	uint32_t eax, ebx, ecx, edx;
 	__asm__ (
@@ -25,8 +26,15 @@ check_cpuid(uint32_t fn, uint32_t *buf) {
 
 	buf[0] = eax;
 	buf[1] = ebx;
-	buf[2] = edx;
-	buf[3] = ecx;
+	buf[2] = ecx;
+	buf[3] = edx;
+	return 1;
+
+#else
+	
+	_unused_(fn);
+	_unused_(buf);
+	return 0;
 	
 #endif
 }
@@ -48,9 +56,11 @@ static void
 test_cpu_vendor(void) {
 	uint32_t buf[5];
 	memset(buf, 0, sizeof(buf)/sizeof(*buf));
-	check_cpuid(0, buf);
-	char vendor[sizeof(uint32_t)*3 + 1];
-	printf("vendor: %s\n", cpu_vendor(buf, vendor));
+	
+	if (check_cpuid(0, buf)) {
+		char vendor[sizeof(uint32_t)*3 + 1];
+		printf("vendor: %s\n", cpu_vendor(buf, vendor));
+	}
 }
 
 
