@@ -1,9 +1,12 @@
 [submodule "src/net/http-server/libuv"]
 	path = src/net/http-server/libuv
 	url = git@github.com:libuv/libuv.git
+	ignore = dirty
 [submodule "src/net/http-server/http-parser"]
 	path = src/net/http-server/http-parser
 	url = git@github.com:nodejs/http-parser.git
+	ignore = dirty
 [submodule "src/nginx/nginx_home"]
 	path = src/nginx/nginx_home
 	url = git@github.com:nginx/nginx.git
+	ignore = dirty

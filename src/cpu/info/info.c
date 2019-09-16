@@ -1,8 +1,8 @@
 #include <_cpu_.h>
 
-#if defined(LINUX)
+#if defined (LINUX)
 #  include <stdio.h>
-#elif defined(DARWIN)
+#elif defined (DARWIN)
 #  include <sys/sysctl.h>
 #elif defined (WINNT)
 #  include <windows.h>
@@ -22,14 +22,14 @@ typedef struct cpu_s {
 cpu_s *
 lscpu(cpu_s *cpu) {
 
-#if defined(LINUX)
+#if defined (LINUX)
 	FILE *f = fopen("/sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size", "r");
 	if (f) {
 		fscanf(f, "%zu", &cpu->cache_line_size);
 		fclose(f);
 	}
 	
-#elif defined(DARWIN)
+#elif defined (DARWIN)
 	size_t size = 0;
 
 	sysctlbyname("hw.machine", 0, &size, 0, 0);
@@ -41,7 +41,7 @@ lscpu(cpu_s *cpu) {
 	size = sizeof(cpu->cache_line_size);
 	sysctlbyname("hw.cachelinesize", &cpu->cache_line_size, &size, 0, 0);
 
-#elif defined(WINNT)
+#elif defined (WINNT)
 	DWORD buffer_size = 0;
 	SYSTEM_LOGICAL_PROCESSOR_INFORMATION *buffer = 0;
 
