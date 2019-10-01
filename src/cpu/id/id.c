@@ -14,7 +14,7 @@ check_cpuid(uint32_t fn, uint32_t *buf) {
 #if ( MSVC )
 
 	__cpuid((int32_t*) buf, fn);
-	return 1
+	return 1;
 
 #elif ( __amd64__ ) || ( __x86_64__ )
 
