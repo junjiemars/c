@@ -16,7 +16,7 @@ lang: array \
 			random \
 			restrict \
 			pointer \
-			preprocessor \
+			lang_preprocessor \
 			scope \
 			signal \
 			sizeof \
@@ -46,7 +46,7 @@ lang_test:  array_test \
 						random_test \
 						restrict_test \
 						pointer_test \
-						preprocessor \
+						lang_preprocessor_test \
 						scope_test \
 						signal_test \
 						sizeof_test \
@@ -331,17 +331,17 @@ $(pointer_void_binout): $(lang_root)pointer/void.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # preprocessor
-preprocessor_binout := $(bin_path)$(lang_prefix)_preprocessor$(bin_ext)
-preprocessor_cppout := $(tmp_path)$(lang_prefix)_preprocessor$(cpp_ext)
+lang_preprocessor_binout := $(bin_path)$(lang_prefix)_preprocessor$(bin_ext)
+lang_preprocessor_cppout := $(tmp_path)$(lang_prefix)_preprocessor$(cpp_ext)
 
-preprocessor: $(preprocessor_binout)
-preprocessor_test: preprocessor
-	$(preprocessor_binout)
+lang_preprocessor: $(lang_preprocessor_binout)
+lang_preprocessor_test: lang_preprocessor
+	$(lang_preprocessor_binout)
 
-$(preprocessor_binout): $(preprocessor_cppout)
+$(lang_preprocessor_binout): $(lang_preprocessor_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(preprocessor_cppout): $(lang_root)preprocessor/p.c
+$(lang_preprocessor_cppout): $(lang_root)preprocessor/p.c
 	$(CPP) $(CPPFLAGS) $(INC) -D_ERROR_=$(_ERROR_) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # scope

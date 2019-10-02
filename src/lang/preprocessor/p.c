@@ -1,6 +1,7 @@
 #include <_lang_.h>
 #include <stdio.h>
 
+
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 #define E 2.71828
@@ -11,7 +12,7 @@ double e_squared = E * E;
 #  define MIN(a, b) ((a) < (b) ? (a) : (b))
 #endif
 
-#if defined(_ERROR_) && (1 == _ERROR_)
+#if defined( _ERROR_ ) && ( 1 == _ERROR_ )
 #  error "compile failed: because _ERROR_==1 is true"
 #endif
 
@@ -19,7 +20,7 @@ double e_squared = E * E;
 #  pragma warning(disable:4996) /*_CRT_SECURE_NO_WARNINGS*/
 #endif
 
-#if GCC
+#if ( GCC )
 #  pragma GCC diagnostic ignored "-Wstrict-aliasing"  /* (unsigned init*)&f: */
 #endif
 
@@ -29,9 +30,9 @@ _log_(const char *header, const char *message) {
 }
 
 enum Color {
-						RED,
-						GREEN,
-						BLUE
+	RED,
+	GREEN,
+	BLUE
 };
 #define COLOR_STR(x) #x
 
@@ -45,9 +46,9 @@ main(int argc, char *argv[]) {
 	_unused_(argv);
 
 	char platform[]
-#if defined(LINUX)
+#if defined( LINUX )
   = "Linux";
-#elif defined(DARWIN)
+#elif defined( DARWIN )
 	= "Darwin";
 #else
 	= "Unknown";
