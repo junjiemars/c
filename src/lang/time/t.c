@@ -7,9 +7,12 @@ main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
-	time_t epoch = time(0);
-	printf("epoch(7/1/1970 UTC): %zu\n", epoch);
-
+	time_t epoch;
+	if ((time_t) -1 == time(&epoch)) {
+		perror(0);
+	} else {
+		printf("epoch(7/1/1970 UTC): %zu\n", epoch);
+	}
 
 	struct tm *local = localtime(&epoch);
 	printf("localtime: %s", asctime(local));

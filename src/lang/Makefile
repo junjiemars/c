@@ -513,12 +513,18 @@ $(string_tok_binout): $(lang_root)string/tok.c
 
 # time
 lang_time_binout := $(bin_path)$(lang_prefix)_time$(bin_ext)
+lang_clock_binout := $(bin_path)$(lang_prefix)_clock$(bin_ext)
 
-lang_time: $(lang_time_binout)
+lang_time: $(lang_time_binout) \
+					 $(lang_clock_binout)
 lang_time_test: lang_time
 	$(lang_time_binout)
+	$(lang_clock_binout)
 
 $(lang_time_binout): $(lang_root)time/t.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(lang_clock_binout): $(lang_root)time/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # type
