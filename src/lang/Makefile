@@ -14,7 +14,7 @@ lang: array \
 			macro \
 			main \
 			random \
-			restrict \
+			lang_restrict \
 			pointer \
 			lang_preprocessor \
 			scope \
@@ -44,7 +44,7 @@ lang_test:  array_test \
 						macro_test \
 						main_test \
 						random_test \
-						restrict_test \
+						lang_restrict_test \
 						pointer_test \
 						lang_preprocessor_test \
 						scope_test \
@@ -273,13 +273,13 @@ $(random_s_binout): $(lang_root)random/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # restrict
-restrict_binout := $(bin_path)$(lang_prefix)_restrict$(bin_ext)
+lang_restrict_binout := $(bin_path)$(lang_prefix)_restrict$(bin_ext)
 
-restrict: $(restrict_binout)
-restrict_test: restrict
-	$(restrict_binout)
+lang_restrict: $(lang_restrict_binout)
+lang_restrict_test: lang_restrict
+	$(lang_restrict_binout)
 
-$(restrict_binout): $(lang_root)restrict/r1.c
+$(lang_restrict_binout): $(lang_root)restrict/r1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # pointer

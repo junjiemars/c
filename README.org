@@ -669,6 +669,15 @@ int *p_v1 = &v1; /* bad */
 volatile int *p_v1 = &v1; /* better */
 #+END_SRC
 
+*** =restrict= Pointer
+		:PROPERTIES:
+		:CUSTOM_ID: language_pointer_restrict_pointer
+		:END:
+
+- =restrict= keyword had been introduced after c99
+- It's only way for programmer to inform about an optimizations that
+  compiler can make.
+
 *** function Pointer
 		:PROPERTIES:
 		:CUSTOM_ID: language_pointer_function_pointer

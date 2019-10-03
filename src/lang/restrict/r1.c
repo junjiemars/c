@@ -1,8 +1,11 @@
 #include <_lang_.h>
 #include <stdio.h>
 
-#if !(NM_HAVE_RESTRICT_KEYWORD)
-#  if (NM_HAVE___RESTRICT_KEYWORD)
+/* ./configure --has-lang --with-optimize=-O1 */
+
+
+#if !( NM_HAVE_RESTRICT_KEYWORD )
+#  if ( NM_HAVE___RESTRICT_KEYWORD )
 #    define restrict __restrict
 #  else
 #    define restrict
@@ -17,7 +20,7 @@ f1(int *p1, int *p2, int *val) {
 }
 
 void
-f2(int *restrict p1, int *restrict p2, int *restrict val) {
+f2(int *p1, int *p2, int *restrict val) {
 	*p1 += *val;
 	*p2 += *val;
 }
@@ -28,7 +31,7 @@ main(int argc, char **argv) {
 	_unused_(argv);
 
 	printf("support restrict keyword = %s\n",
-#if (NM_HAVE_RESTRICT_KEYWORD) || (NM_HAVE___RESTRICT_KEYWORD)
+#if ( NM_HAVE_RESTRICT_KEYWORD ) || ( NM_HAVE___RESTRICT_KEYWORD )
 				 "yes"
 #else
 				 "no"
