@@ -1,6 +1,8 @@
 #include <_lang_.h>
 #include <time.h>
 #include <stdio.h>
+#include <assert.h>
+
 
 int
 main(int argc, char **argv) {
@@ -15,14 +17,18 @@ main(int argc, char **argv) {
 	}
 
 	struct tm *local = localtime(&epoch);
-	printf("localtime: %s", asctime(local));
+	char *asc1 = asctime(local);
+	printf("localtime: %s", asc1);
 	time_t t_lt = timelocal(local);
 	printf("time_t from localtime: %zu\n", t_lt);
 
 	struct tm *gmt = gmtime(&epoch);
-	printf("gmtime: %s", asctime(gmt));
+	char *asc2 = asctime(gmt);
+	printf("gmtime: %s", asc2);
 	time_t t_gm = timegm(gmt);
 	printf("time_t from gmtime: %zu\n", t_gm);
+
+	assert(asc1 == asc2 && "static inside asctime fn");
 
 	printf("ctime: %s", ctime(&epoch));
 
