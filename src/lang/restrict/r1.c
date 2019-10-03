@@ -30,7 +30,7 @@ int
 main(int argc, char **argv) {
 	_unused_(argv);
 
-	printf("support restrict keyword = %s\n",
+	printf("support restrict keyword = %s\n----------\n",
 #if ( NM_HAVE_RESTRICT_KEYWORD ) || ( NM_HAVE___RESTRICT_KEYWORD )
 				 "yes"
 #else

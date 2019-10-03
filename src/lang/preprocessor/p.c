@@ -77,4 +77,10 @@ main(int argc, char *argv[]) {
 	DEFVAR(double, y, e_squared);
 	printf("defvar x=%i\n", var_x);
 	printf("defvar y=%f\n", var_y);
+
+	printf
+  #include "p.txt"
+	;
+
+	return 0;
 }
