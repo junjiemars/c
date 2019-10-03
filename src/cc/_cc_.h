@@ -9,4 +9,4 @@
 #  pragma warning(disable:4996)
 #endif
 
-#endif
+#endif /* end of _CC_H_ */
