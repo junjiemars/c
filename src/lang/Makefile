@@ -23,7 +23,7 @@ lang: array \
 			stage \
 			storage \
 			string \
-			time \
+			lang_time \
 			type \
 			typedef \
 			typeof \
@@ -53,7 +53,7 @@ lang_test:  array_test \
 						stage_test \
 						storage_test \
 						string_test \
-						time_test \
+						lang_time_test \
 						type_test \
 						typedef_test \
 						typeof_test \
@@ -512,19 +512,13 @@ $(string_tok_binout): $(lang_root)string/tok.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # time
-time_epoch_binout := $(bin_path)$(lang_prefix)_time_epoch$(bin_ext)
-time_local_binout := $(bin_path)$(lang_prefix)_time_local$(bin_ext)
+lang_time_binout := $(bin_path)$(lang_prefix)_time$(bin_ext)
 
-time: $(time_epoch_binout) \
-			$(time_local_binout)
-time_test: time
-	$(time_epoch_binout)
-	$(time_local_binout)
+lang_time: $(lang_time_binout)
+lang_time_test: lang_time
+	$(lang_time_binout)
 
-$(time_epoch_binout): $(lang_root)time/t.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-$(time_local_binout): $(lang_root)time/lt.c
+$(lang_time_binout): $(lang_root)time/t.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # type
