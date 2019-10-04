@@ -2038,11 +2038,11 @@ table in a executable.
 |----------------------------------+------------------------------------------------------|
 | list /breakpoint/                | *(lldb)* =b=                                         |
 |                                  | *(lldb)* =breakpoint list=                           |
-|                                  | *0:000>* =bl=                                          |
+|                                  | *0:000>* =bl=                                        |
 |                                  |                                                      |
 | breakpoint at /fn/               | *(lldb)* =b main=                                    |
 |                                  | *(lldb)* =b -nmain=                                  |
-|                                  | *0:000>* =bu <module>!main=                            |
+|                                  | *0:000>* =bu <module>!main=                          |
 |                                  |                                                      |
 | breakpoint at /line/             | *(lldb)* =b -ftest.c -l32=                           |
 |                                  |                                                      |
@@ -2054,6 +2054,7 @@ table in a executable.
 |                                  |                                                      |
 | delete breakpoint                | *(lldb)* =breakpoint delete 1.1=                     |
 |                                  | *(lldb)* =breakpoint delete 2=                       |
+|                                  | *0:000>* =bc 1 2=                                    |
 
 *** Memory
 
