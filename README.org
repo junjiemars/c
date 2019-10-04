@@ -358,7 +358,8 @@ C.
 	 :CUSTOM_ID: language_error_errno
 	 :END:
 
-Before C11, =errno= was a global variable, with all the inherent disadvantages:
+Before C11, =errno= was a global variable, with all the inherent
+disadvantages:
 - later system calls overwrote earlier system calls;
 - global map of values to error conditions (=ENOMEM=, =ERANGE=, etc);
 - behavior is underspecified in ISO C and POSIX;
