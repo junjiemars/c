@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#if WINNT
+#ifdef MSVC
+#  pragma warning(disable: 4996)
 #  include <windows.h>
 #  include <process.h>
 #  define sleep(x) Sleep((x) * 1000)
@@ -31,9 +32,7 @@ psignal(int sig, const char *s) {
 #  include <unistd.h>
 #endif
 
-#ifdef MSVC
-#  pragma warning(disable: 4996)
-#endif
+
 
 static volatile int s_flag = 0;
 
