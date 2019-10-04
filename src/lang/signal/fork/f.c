@@ -1,7 +1,7 @@
 #include <_lang_.h>
 #include <stdio.h>
 
-#ifndef WINNT
+#ifndef MSVC
 #  include <signal.h>
 #  include <sys/wait.h>
 #  include <unistd.h>
@@ -18,7 +18,7 @@ main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
-#ifndef WINNT	
+#ifndef MSVC	
 	pid_t pid;
 	signal(SIGCHLD, on_sigchld);
 
