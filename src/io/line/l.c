@@ -14,80 +14,96 @@ typedef SSIZE_T ssize_t;
 #include <stdlib.h>
 #include <string.h>
 
+ssize_t
+self_getline(char ** restrict linep,
+						 size_t * restrict linecapp,
+						 FILE * restrict stream) {
+	if (0 == *linep) {
+		*linep = malloc(*linecapp);
+	}
+	
+	char *p = *linep;
+	ssize_t linelen = 0;
+	int delimiter = '\n';
+	int c = 0;
+
+	while (EOF != (c = fgetc(stream)) && linelen < (ssize_t) *linecapp) {
+		if (delimiter == c) {
+			*p++ = c;
+			*p = 0;
+			return ++linelen;
+		} 
+		*p++ = c;
+		linelen++;
+	}
+	return EOF == c ? EOF : linelen;
+}
+
+ssize_t
+self_getdelim(char ** restrict linep,
+							size_t * restrict linecapp,
+							int delimiter,
+							FILE * restrict stream) {
+	if (0 == *linep) {
+		*linep = malloc(*linecapp);
+	}
+
+	char *p = *linep;
+	ssize_t linelen = 0;
+	int c = 0;
+
+	while (EOF != (c = fgetc(stream)) && linelen < (ssize_t) *linecapp) {
+		if (delimiter == c) {
+			*p++ = c;
+			*p = 0;
+			return ++linelen;
+		}
+		*p++ = c;
+		linelen++;
+	}
+	return EOF == c ? EOF : linelen;
+}
+
 void
-read_line(const char *filename,
-					size_t linecap,
-					int delimiter,
-					void (*process_line)(const char *line, ssize_t linelen)) {
+test_getline(const char *filename) {
 	FILE *file = fopen(filename, "r");
 	if (!file) {
 		perror(filename);
 		return;
 	}
-	int c;
-	char *line = malloc(linecap);
-	if (0 == line) {
-		perror("linecap");
-		goto close_exit;
-	}
-	char *p = line;
+
+	char *line = 0;
+	size_t linecap = 0;
 	ssize_t linelen = 0;
-	while (EOF != (c = fgetc(file))) {
-		if (delimiter == c) {
-			*p = delimiter, *++p = 0;
-			process_line(line, linelen+1);
-			p = line;
-			linelen = 0;
-		} else {
-			*p++ = c;
-			linelen++;
-		}
+	while (0 < (linelen = getline(&line, &linecap, file))) {
+		fwrite(line, linelen, 1, stdout);
 	}
-	free(line);
-	if (ferror(file)) {
-		perror(filename);
-		goto close_exit;
+	if (line) {
+		free(line);
 	}
- close_exit:
 	fclose(file);
 }
 
 void
-print_line(const char *line, ssize_t linelen) {
-	fwrite(line, 1, linelen, stdout);
-	fflush(stdout);
-}
-
-ssize_t
-self_getdelim(char **line,
-							size_t *linecap,
-							int delimiter,
-							FILE *stream) {
-	static char *l;
-	if (!l) {
-		l = malloc(*linecap+1);
+test_self_getline(const char *filename) {
+	FILE *file = fopen(filename, "r");
+	if (!file) {
+		perror(filename);
+		return;
 	}
-	char *p = l;
+
+	char *line = 0;
+	size_t linecap = 0;
 	ssize_t linelen = 0;
-	int c = fgetc(stream);
-	while (delimiter != c && EOF != c) {
-		*p++ = c;
-		linelen++;
-		c = fgetc(stream);
+	while (0 < (linelen = self_getline(&line, &linecap, file))) {
+		fwrite(line, linelen, 1, stdout);
 	}
-	if (!feof(stream)) {
-		*p++ = delimiter;
-		linelen++;
+	if (line) {
+		free(line);
 	}
-	*p = 0;
-	*line = l;
-	return linelen;
+	fclose(file);
 }
 
-void
-test_read_line(const char *filename) {
-	read_line(filename, 16, '\n', print_line);
-}
 
 #if !(MSVC)
 void
@@ -101,7 +117,7 @@ test_getdelim(const char *filename) {
 	char *line = 0;
 	size_t linecap = 0;
 	ssize_t linelen;
-	while ((linelen = getdelim(&line, &linecap, '\n', file)) > 0) {
+	while (0 < (linelen = getdelim(&line, &linecap, '\n', file))) {
 		fwrite(line, linelen, 1, stdout);
 	}
 	if (line) {
@@ -120,9 +136,9 @@ test_self_getdelim(const char *filename) {
 	}
 
 	char *line = 0;
-	size_t linecap = 0;
+	size_t linecap = 32;
 	ssize_t linelen;
-	while ((linelen = self_getdelim(&line, &linecap, '\n', file)) > 0) {
+	while (0 < (linelen = self_getdelim(&line, &linecap, '\n', file))) {
 		fwrite(line, linelen, 1, stdout);
 	}
 	if (line) {
@@ -139,7 +155,8 @@ main(int argc, char **argv) {
 	if (argc > 1) {
 		char *f = malloc(strlen(argv[1]) + 1);
 		strcpy(f, argv[1]);
-		test_read_line(f);
+		test_getline(f);
+		test_self_getline(f);
 		fprintf(stdout, "##########\n");
 #if !(MSVC)
 		test_getdelim(f);
