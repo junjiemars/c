@@ -98,24 +98,23 @@ esac
 
 case "$NM_SYSTEM" in
 	Darwin|Linux)
-		nm_feature="memalign fn"
-		nm_feature_name="nm_have_memalign_fn"
+		nm_feature="aligned_alloc fn"
+		nm_feature_name="nm_have_aligned_alloc_fn"
 		nm_feature_run=no
-		nm_feature_h='#include <stdlib.h>
-                  #include <malloc.h>'
-		nm_feature_flags=
-		nm_feature_test='void *p = memalign(4096, 4096);
+		nm_feature_h='#include <stdlib.h>'
+		nm_feature_flags="${nm_std_opt} -Werror"
+		nm_feature_test='void *p = aligned_alloc(1024, 4096); 
                      return !p;'
 		. ${NORE_ROOT}/auto/feature
 
 		if [ "yes" != $nm_found ]; then
-			nm_feature="posix memalign fn"
+			nm_feature="posix_memalign fn"
 			nm_feature_name="nm_have_posix_memalign_fn"
 			nm_feature_run=no
 			nm_feature_h='#include <stdlib.h>'
 			nm_feature_flags=
 			nm_feature_test='void *p; int n = posix_memalign(&p, 4096, 4096);
-                     return n;'
+                       return n;'
 			. ${NORE_ROOT}/auto/feature
 		fi
 		;;
@@ -125,7 +124,7 @@ case "$NM_SYSTEM" in
 		nm_feature_run=no
 		nm_feature_h=' #include <malloc.h>'
 		nm_feature_flags=
-		nm_feature_test='void *p = _aligned_malloc(4096, 4096);
+		nm_feature_test='void *p = _aligned_malloc(1024, 4096);
                      return !p;'
 		. ${NORE_ROOT}/auto/feature
 		;;
