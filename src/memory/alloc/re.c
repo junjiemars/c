@@ -18,6 +18,13 @@
 #endif
 
 void
+illegle(void) {
+	char *s = realloc(0, 0);
+	printf("realloc(0, 0), %zu\n", malloc_size(s));
+	free(s);
+}
+
+void
 as_malloc(void) {
 	char *s = realloc(0, sizeof(*s)*8);
 	assert((0 != s) && strerror(errno));
@@ -91,6 +98,9 @@ main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
+	printf("illegle?\n--------------------\n");
+	illegle();
+	
 	printf("as_malloc\n--------------------\n");
 	as_malloc();
 

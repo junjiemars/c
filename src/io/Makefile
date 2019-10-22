@@ -106,7 +106,7 @@ io_line_binout := $(bin_path)$(io_prefix)_line$(bin_ext)
 
 io_line: $(io_line_binout)
 io_line_test: io_line
-	$(io_line_binout) $(CURDIR)/src/io/line/boards
+	$(io_line_binout) $(CURDIR)/src/io/line/zigzag
 
 $(io_line_binout): $(io_root)line/l.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
