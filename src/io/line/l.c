@@ -137,6 +137,31 @@ test_getline1(const char *filename) {
 	fclose(file);
 }
 
+void
+test_getline2(const char *filename) {
+	FILE *file = fopen(filename, "r");
+	if (!file) {
+		perror(filename);
+		return;
+	}
+
+	char *line = 0;
+	size_t linecap = 64;
+	ssize_t linelen = 0;
+	
+	while (0 < (linelen = getline(&line, &linecap, file))) {
+		fwrite(line, linelen, 1, stdout);
+	}
+	
+	if (!feof(file)) {
+		perror(filename);
+	}
+	if (line) {
+		free(line);
+	}
+	fclose(file);
+}
+
 
 void
 test_self_getline(const char *filename) {
@@ -223,6 +248,7 @@ main(int argc, char **argv) {
 		
 		test_getline(f);
 		test_getline1(f);
+		test_getline2(f);
 		test_self_getline(f);
 		fprintf(stdout, "##########\n");
 		
