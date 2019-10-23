@@ -102,7 +102,7 @@ case "$NM_SYSTEM" in
 		nm_feature_name="nm_have_aligned_alloc_fn"
 		nm_feature_run=no
 		nm_feature_h='#include <stdlib.h>'
-		nm_feature_flags="${nm_std_opt} -Werror"
+		nm_feature_flags="${nm_std_opt} ${nm_error_opt}"
 		nm_feature_test='void *p = aligned_alloc(1024, 4096); 
                      return !p;'
 		. ${NORE_ROOT}/auto/feature

@@ -2,6 +2,9 @@
 
 
 #if (DARWIN || LINUX)
+#  if LINUX && !__USE_XOPEN2K
+#    define __USE_XOPEN2K 1
+#  endif
 #  include <stdlib.h>
 #elif (WINNT)
 #  include <malloc.h>
