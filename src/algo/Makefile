@@ -1,28 +1,30 @@
 algo: _algo_ \
-			algo_sizeof \
-			algo_sort \
 			algo_duff_device \
 			algo_dynamic_array \
 			algo_gcd \
 			algo_hash \
+			algo_hcf \
 			algo_is_unsigned_integer \
 			algo_is_unsigned_type \
 			algo_reverse \
 			algo_search \
+			algo_sizeof \
+			algo_sort \
 			algo_strlen_utf8 \
 			algo_strscpy
 
 algo_test: _algo__test \
-					 algo_sizeof_test \
-					 algo_sort_test \
 					 algo_duff_device_test \
 					 algo_dynamic_array_test \
 					 algo_gcd_test \
 					 algo_hash_test \
+					 algo_hcf_test \
 					 algo_is_unsigned_integer_test \
 					 algo_is_unsigned_type_test \
 					 algo_reverse_test \
 					 algo_search_test \
+					 algo_sizeof_test \
+					 algo_sort_test \
 					 algo_strlen_utf8_test \
 					 algo_strscpy_test
 
@@ -115,6 +117,15 @@ $(algo_hash_sdbm_binout): $(algo_root)hash/sdbm.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(algo_hash_jenkins_binout): $(algo_root)hash/jenkins.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+algo_hcf_binout := $(bin_path)$(algo_prefix)_hcf$(bin_ext)
+
+algo_hcf: $(algo_hcf_binout)
+algo_hcf_test: algo_hcf
+	echo "70, 42" | $(algo_hcf_binout)
+
+$(algo_hcf_binout): $(algo_root)highest_common_factor/hcf.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # is unsigned integer
