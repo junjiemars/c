@@ -9,6 +9,17 @@ hcf1(m, n) {
 }
 
 int
+hcf2(m, n) {
+	int r;
+	while (n > 0) {
+		r = m % n;
+		m = n;
+		n = r;
+	}
+	return m;
+}
+
+int
 main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
@@ -16,6 +27,7 @@ main(int argc, char **argv) {
 	int m, n;
 	fscanf(stdin, "%i, %i", &m, &n);
 	printf("hcf1(%i, %i) = %i\n", m, n, hcf1(m, n));
+	printf("hcf2(%i, %i) = %i\n", m, n, hcf1(m, n));
 	
 	return 0;
 }
