@@ -1,9 +1,9 @@
 algo: _algo_ \
 			algo_duff_device \
 			algo_dynamic_array \
+			algo_fibonacci \
 			algo_gcd \
 			algo_hash \
-			algo_hcf \
 			algo_is_unsigned_integer \
 			algo_is_unsigned_type \
 			algo_reverse \
@@ -16,9 +16,9 @@ algo: _algo_ \
 algo_test: _algo__test \
 					 algo_duff_device_test \
 					 algo_dynamic_array_test \
+					 algo_fibonacci_test \
 					 algo_gcd_test \
 					 algo_hash_test \
-					 algo_hcf_test \
 					 algo_is_unsigned_integer_test \
 					 algo_is_unsigned_type_test \
 					 algo_reverse_test \
@@ -71,6 +71,16 @@ algo_dynamic_array_test: algo_dynamic_array
 $(algo_dynamic_array_binout): $(algo_root)dynamic_array/da.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+# fibonacci
+algo_fibonacci_binout := $(bin_path)$(algo_prefix)_fibonacci$(bin_ext)
+
+algo_fibonacci: $(algo_fibonacci_binout)
+algo_fibonacci_test: algo_fibonacci
+	$(algo_fibonacci_binout) 5
+
+$(algo_fibonacci_binout): $(algo_root)fibonacci/fibo.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 # gcd
 algo_gcd_binout := $(bin_path)$(algo_prefix)_gcd$(bin_ext)
 
@@ -119,14 +129,6 @@ $(algo_hash_sdbm_binout): $(algo_root)hash/sdbm.c
 $(algo_hash_jenkins_binout): $(algo_root)hash/jenkins.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-algo_hcf_binout := $(bin_path)$(algo_prefix)_hcf$(bin_ext)
-
-algo_hcf: $(algo_hcf_binout)
-algo_hcf_test: algo_hcf
-	echo "70, 42" | $(algo_hcf_binout)
-
-$(algo_hcf_binout): $(algo_root)highest_common_factor/hcf.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # is unsigned integer
 algo_is_uint_binout := $(bin_path)$(algo_prefix)_is_uint$(bin_ext)
