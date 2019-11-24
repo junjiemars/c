@@ -103,12 +103,17 @@ $(io_flush_binout): $(io_root)flush/f.c
 
 # line
 io_line_binout := $(bin_path)$(io_prefix)_line$(bin_ext)
+io_line_gets_binout := $(bin_path)$(io_prefix)_line_gets$(bin_ext)
 
-io_line: $(io_line_binout)
+io_line: $(io_line_binout) $(io_line_gets_binout)
 io_line_test: io_line
 	$(io_line_binout) $(CURDIR)/src/io/line/zigzag
+	$(io_line_gets_binout) $(CURDIR)/src/io/line/zigzag
 
 $(io_line_binout): $(io_root)line/l.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_line_gets_binout): $(io_root)line/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # reopen
