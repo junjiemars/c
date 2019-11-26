@@ -13,6 +13,7 @@ lang: array \
 			linkage \
 			macro \
 			main \
+			math \
 			random \
 			lang_restrict \
 			pointer \
@@ -43,6 +44,7 @@ lang_test:  array_test \
 						linkage_test \
 						macro_test \
 						main_test \
+						math_test \
 						random_test \
 						lang_restrict_test \
 						pointer_test \
@@ -246,6 +248,16 @@ $(main_binout): $(lang_root)main/m.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(main_envp_binout): $(lang_root)main/m_envp.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# math
+math_binout := $(bin_path)$(lang_prefix)_math$(bin_ext)
+
+math: $(math_binout)
+math_test: math
+	$(math_binout)
+
+$(math_binout): $(lang_root)math/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # random
