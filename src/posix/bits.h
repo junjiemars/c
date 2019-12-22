@@ -13,13 +13,13 @@ const char *BIT4[] = {
 #define BIT_SEP " "
 #define BIT_PRE ""
 
-#define BIT8_FMT "%s%s"
-#define BIT16_FMT BIT_PRE  BIT8_FMT BIT_SEP BIT_PRE BIT8_FMT
+#define BIT8_FMT  BIT_PRE "%s%s"
+#define BIT16_FMT BIT8_FMT BIT_SEP BIT8_FMT
 #define BIT32_FMT BIT16_FMT BIT_SEP BIT16_FMT
 #define BIT64_FMT BIT32_FMT BIT_SEP BIT32_FMT
 
-#define BIT8(n)    BIT4[(n) >> 4], BIT4[(n) & 0x0f]
-#define BIT16(n)   BIT8((n) >> 8), BIT8((n) & 0xff)
+#define BIT8(n)  BIT4[(n) >> 4], BIT4[(n) & 0x0f]
+#define BIT16(n) BIT8((n) >> 8), BIT8((n) & 0xff)
 #define BIT32(n) BIT16((n) >> 16), BIT16((n) & 0xffff)
 #define BIT64(n) BIT32((n) >> 32), BIT32((n) & 0xffffffff)
 

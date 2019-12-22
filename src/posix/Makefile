@@ -1,14 +1,33 @@
+# src/posix
 
-ifeq ($(CC_NAME), msvc)
+posix: posix_bits
 
-posix: posix_getopt
+posix_test: posix_bits_test
 
-posix_getopt: $(src_path)getopt.h $(src_path)getopt.c
-posix_getopt_repo = https://raw.githubusercontent.com/alex85k/wingetopt/master/src/
+posix_prefix := posix
+INC += -I$(posix_root)
 
-$(src_path)getopt.h: 
-	curl -sLo $@ $(io_getopt_repo)getopt.h
-$(src_path)getopt.c:
-	curl -sLo $@ $(io_getopt_repo)getopt.c
+# bits
+posix_bits_binout := $(bin_path)$(posix_prefix)_bits$(bin_ext)
 
-endif
+posix_bits: $(posix_bits_binout)
+posix_bits_test: posix_bits
+	$(posix_bits_binout)
+
+$(posix_bits_binout): $(posix_root)bits_test.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+#ifeq ($(CC_NAME), msvc)
+#
+#posix: posix_getopt
+#
+#posix_getopt: $(src_path)getopt.h $(src_path)getopt.c
+#posix_getopt_repo = https://raw.githubusercontent.com/alex85k/wingetopt/master/src/
+#
+#$(src_path)getopt.h: 
+#	curl -sLo $@ $(io_getopt_repo)getopt.h
+#$(src_path)getopt.c:
+#	curl -sLo $@ $(io_getopt_repo)getopt.c
+#
+#endif
