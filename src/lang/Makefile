@@ -224,15 +224,24 @@ $(linkage_c_objout): $(lang_root)linkage/c.c
 # macro
 macro_binout := $(bin_path)$(lang_prefix)_macro$(bin_ext)
 macro_cppout := $(tmp_path)$(lang_prefix)_macro$(cpp_ext)
+macro_nested_binout := $(bin_path)$(lang_prefix)_macro_nested$(bin_ext)
+macro_nested_cppout := $(tmp_path)$(lang_prefix)_macro_nested$(cpp_ext)
 
-macro: $(macro_binout)
+macro: $(macro_binout) $(macro_nested_binout)
 macro_test: macro
 	$(macro_binout)
+	$(macro_nested_binout)
 
 $(macro_binout): $(macro_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(macro_cppout): $(lang_root)macro/macro.c
+	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+$(macro_nested_binout): $(macro_nested_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(macro_nested_cppout): $(lang_root)macro/nested.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # main
