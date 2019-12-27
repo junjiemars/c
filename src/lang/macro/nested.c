@@ -1,19 +1,17 @@
 #include <_lang_.h>
+#include <stdio.h>
 
-#ifdef static_assert
-#undef static_assert
-#endif
-
-#define sa_cat_(a, b) a##b
-#define sa_cat(a, b) sa_cat_(a, b)
-#define static_assert(e, m) enum {sa_cat(line_, __LINE__) = 1/!!(e)}
+#define SQUARE(x) ((x)*(x))
+#define CUBE(x) (SQUARE(x)*(x))
 
 int
 main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
-	static_assert(1, "assert message");
+	int x = SQUARE(3+3);
+	int y = CUBE(3+3);
+	printf("square(3)=%i, cube(3)=%i\n", x, y);
 	
 	return 0;
 }

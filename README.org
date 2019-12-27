@@ -553,6 +553,18 @@ else
 We can use same machinism like Lisp's ~(gensym)~ to rebind the input
 arguments to new symbols.
 
+*** Nested macro
+		:PROPERTIES:
+		:CUSTOM_ID: language_macro_nested_macro
+		:END:
+
+Macro name within another macro is called Nesting of Macro.
+
+#+BEGIN_SRC c
+#define SQUARE(x) ((x)*(x))
+#ddefine CUBE(x) (SQUARE(x)*(x))
+#+END_SRC
+
 *** Check expansion
 		:PROPERTIES:
 		:CUSTOM_ID: language_macro_check_expansion
@@ -1216,7 +1228,6 @@ There has an good answer of [[http://stackoverflow.com/questions/17206568/what-i
 | complex.h | c99+ |       |
 |           |      |       |
 
-	 
 ** Language References
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_references
