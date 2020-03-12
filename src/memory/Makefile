@@ -6,20 +6,22 @@ memory: alloc \
 				copy \
 				endian \
 				generic \
+				layout \
 				rotate \
 				shift \
 				struct
 
 memory_test: 	alloc_test \
-							bitfield_test \
-							bit_test \
-							byte_test \
-							copy_test \
-							endian_test \
-							generic_test \
-							rotate_test \
-							shift_test \
-							struct_test
+				bitfield_test \
+				bit_test \
+				byte_test \
+				copy_test \
+				endian_test \
+				generic_test \
+				layout_test \
+				rotate_test \
+				shift_test \
+				struct_test
 
 memory_prefix := memory
 
@@ -204,6 +206,22 @@ generic_test: generic
 $(generic_binout): $(memory_root)generic/g.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+# layout
+
+ifdef STACK_SIZE
+ifeq ($(CC_NAME), clang)
+LDFLAGS += -Wl,-stack_size -Wl,0x10000
+endif
+endif
+
+layout_size_binout := $(bin_path)$(memory_prefix)_layout_size$(bin_ext)
+
+layout: $(layout_size_binout)
+layout_test: layout
+	$(layout_size_binout)
+
+$(layout_size_binout): $(memory_root)layout/size.c
+	$(CC) $(CFLAGS) $(INC) $^ $(LDFLAGS) $(bin_out)$@
 
 # rotate
 rotate_binout := $(bin_path)$(memory_prefix)_rotate$(bin_ext)
