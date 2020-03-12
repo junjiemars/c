@@ -1,23 +1,42 @@
 #+TITLE: C Lessons
 #+AUTHOR: Junjie Mars
 #+STARTUP: overview
+#+OPTIONS: num:nil toc:nil
+#+REVEAL_HLEVEL: 2
+#+REVEAL_SLIDE_NUMBER: h
+#+REVEAL_THEME: moon
+#+BEGIN_COMMENT
+#+REVEAL_TRANS: cube
+#+REVEAL_MARGIN: 0.1
+#+REVEAL_MIN_SCALE: 0.2
+#+REVEAL_MAX_SCALE: 1.5
+#+END_COMMENT
 
+
+* Quick start
+  :PROPERTIES:
+  :CUSTOM_ID: quick-start
+  :END:
 
 [[https://api.travis-ci.org/junjiemars/c][https://api.travis-ci.org/junjiemars/c.svg?branch=master]]
 
+#+ATTR_HTML: :style text-align:left
 It is not /C Lessons/ at all :). I'd programming in C long long time
 ago, sometimes I want to pick something up, but I cannot find the
 peice of code somewhere or cannot run the code on a machine that been
 wrote in another machine.
 
-Sadly, old dog need learn something new
+#+REVEAL: split
+#+ATTR_HTML: :style text-align:left
+Sadly, old dog need learn something new.
 - Access the code from anywhere, oh, GitHub is good one
 - Run or write code on anywhere, so Linux, Darwin, or Windows, Docker Box
 - Easy to try and learn something new
 
+#+ATTR_HTML: :style text-align:left
 Now, we had [[https://github.com/junjiemars/nore][Nore]], something changed and something not.
 
-
+#+REVEAL: split
 Let's start ...
 
 #+BEGIN_SRC sh
