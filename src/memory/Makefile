@@ -210,7 +210,7 @@ $(generic_binout): $(memory_root)generic/g.c
 
 ifdef STACK_SIZE
 ifeq ($(CC_NAME), clang)
-LDFLAGS += -Wl,-stack_size -Wl,0x10000
+ldflags_layout := -Wl,-stack_size -Wl,0x10000
 endif
 endif
 
@@ -221,7 +221,7 @@ layout_test: layout
 	$(layout_size_binout)
 
 $(layout_size_binout): $(memory_root)layout/size.c
-	$(CC) $(CFLAGS) $(INC) $^ $(LDFLAGS) $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(ldflags_layout) $(bin_out)$@
 
 # rotate
 rotate_binout := $(bin_path)$(memory_prefix)_rotate$(bin_ext)
@@ -232,11 +232,11 @@ rotate_test: rotate
 rotate_valgrind_test: rotate
 	valgrind --leak-check=full --track-origins=yes $(rotate_binout)
 
-$(rotate_binout): $(memory_root)rotate/rotate.h \
-									$(memory_root)rotate/rotate.c \
-									$(memory_root)rotate/r.c
-	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ \
-		$(memory_root)rotate/rotate.c \
+$(rotate_binout): $(memory_root)rotate/rotate.h	\
+				  $(memory_root)rotate/rotate.c	\
+				  $(memory_root)rotate/r.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@			\
+		$(memory_root)rotate/rotate.c			\
 		$(memory_root)rotate/r.c
 
 
