@@ -1,9 +1,10 @@
+# src/cpu
 
 cpu: cpu_info \
-		 cpu_id
+	 cpu_id
 
 cpu_test: cpu_info_test \
-					cpu_id_test
+		  cpu_id_test
 
 cpu_prefix := cpu
 
