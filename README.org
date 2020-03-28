@@ -1784,6 +1784,11 @@ and each such derived type is a distinct new type.
 - [[https://www.ibm.com/developerworks/aix/library/au-endianc/index.html?ca=drs-)][Writing endian-independent code in C]]
 
 * CPU
+
+** cpuid
+
+
+
 * POSIX
 * Library
 	:PROPERTIES:
