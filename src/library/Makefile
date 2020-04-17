@@ -1,9 +1,22 @@
 # ./configure --has-library
 
-library: geo math_static math_shared
+library: cffix geo math_static math_shared
 library_test: geo_test math_static_test math_shared_test
 
 INC += -I$(library_root)
+
+
+# cffix
+cffix_libout := $(lib_path)libcffix$(lib_ext)
+cffix_h := $(inc_path)cffix.h
+
+cffix: $(cffix_libout)
+
+$(cffix_libout): $(library_root)cffi/cffix.c $(cffix.h)
+	$(CC) $(CFLAGS) -DEXPORT=0 $(INC) $(nm_shared_opt) $< $(bin_out)$@
+
+$(cffix_h): $(library_root)cffi/cffix.h
+	cp $< $(inc_path)
 
 
 # geo
