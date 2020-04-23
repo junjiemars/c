@@ -2013,6 +2013,10 @@ so if there is a bug in BFD then /readelf/ will not be affected.
 
 On Darwin, there are no readelf, but we can use /otool/ do the trick.
 
+** Metainformation about Libraries
+   
+=pkg-config=
+
 ** View Symbol Table
 	 :PROPERTIES:
 	 :CUSTOM_ID: view-symbol-table
