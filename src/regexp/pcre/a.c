@@ -30,23 +30,23 @@ main(int argc, char **argv) {
     return 1;
   }
   match = pcre_exec(re, 0, subject, strlen(subject), 0, options, ovector, N);
-  if (!match) {
-    switch (match) {
-    case PCRE_ERROR_NOMATCH:
-      fprintf(stderr, "no match");
-      break;
-    default:
-      fprintf(stderr, "error while matching: %d\n", match);
-      break;
+  if (match > 0) {
+    for (int i = 0; i < match; i++) {
+      fprintf(stderr, "%2d: %.*s\n",
+              i,
+              ovector[2*i+1] - ovector[2*i],
+              subject + ovector[2*i]);
     }
     goto clean_exit;
   }
 
-  for (int i = 0; i < match; i++) {
-    fprintf(stderr, "%2d: %.*s\n",
-            i,
-            ovector[2*i+1] - ovector[2*i],
-            subject + ovector[2*i]);
+  switch (match) {
+  case PCRE_ERROR_NOMATCH:
+    fprintf(stderr, "no match\n");
+    break;
+    default:
+      fprintf(stderr, "error while matching: %d\n", match);
+      break;
   }
 
  clean_exit:
