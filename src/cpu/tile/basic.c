@@ -21,7 +21,7 @@ void
 tiled(char *vec) {
   for (int i = 0; i < MAX; i += B) {
     for (int r = 0; r < REP; r++) {
-      for (int j = i; j < (i + B); j+=64) {
+      for (int j = i; j < (i + B); j+=NM_CPU_CACHE_LINE) {
         vec[j] = r;
       }
     }
@@ -31,7 +31,7 @@ tiled(char *vec) {
 void
 untiled(char *vec) {
   for (int r = 0; r < REP; r++) {
-    for (int i = 0; i < MAX; i+=64) {
+    for (int i = 0; i < MAX; i+=NM_CPU_CACHE_LINE) {
       vec[i] = r;
     }
   }
