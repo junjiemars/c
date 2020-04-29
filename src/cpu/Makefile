@@ -2,11 +2,11 @@
 
 cpu: cpu_info																		\
 		 cpu_id																			\
-		 cpu_tile
+		 cpu_tile_basic
 
 cpu_test: cpu_info_test													\
 	  		  cpu_id_test														\
-          cpu_tile_test
+          cpu_tile_basic_test
 
 cpu_prefix := cpu
 
@@ -35,11 +35,11 @@ $(cpu_id_binout): $(cpu_root)id/id.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # tile
-cpu_tile_binout := $(bin_path)$(cpu_prefix)_tile$(bin_ext)
+cpu_tile_basic_binout := $(bin_path)$(cpu_prefix)_tile_basic$(bin_ext)
 
-cpu_tile: $(cpu_tile_binout)
+cpu_tile: $(cpu_tile_basic_binout)
 cpu_tile_test: cpu_tile
-	$(cpu_tile_binout)
+	$(cpu_tile_basic_binout)
 
-$(cpu_tile_binout): $(cpu_root)tile/tile.c
+$(cpu_tile_basic_binout): $(cpu_root)tile/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
