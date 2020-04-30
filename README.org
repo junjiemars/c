@@ -1806,6 +1806,7 @@ wmic cpu get L2CacheSize, L2CacheSpeed
 
 *** References
 - [[https://www.linuxjournal.com/article/7105][Understanding Caching]]
+- [[https://software.intel.com/en-us/articles/efficient-use-of-tiling][Efficient use of Tiling]]
 
 * POSIX
 * Library
