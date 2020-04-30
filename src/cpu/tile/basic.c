@@ -1,61 +1,89 @@
 #include <_cpu_.h>
-#include "stdlib.h"
-#include "stdio.h"
+#include <stdio.h>
 #include <time.h>
+#include <string.h>
+#include <stdlib.h>
 
-#define MAX (1024*1024*32)
-#define REP 100
-#define B  (16*1024)
+#define ROW_SIZE 1024
+#define COL_SIZE 1024
 
-char *array;
+#define MAX(a, b) (((a) < (b)) ? (b) : (a))
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+
+#define X 0x11
+
+char *table_a, *table_b;
 
 void
-warmup(char *vec) {
-  /* fit in L3 */
-  for (int i = 0; i < MAX; i++) {
-    vec[i] = 0;
+raw(char *table) {
+  for (int i = 0; i < ROW_SIZE; i++) {
+    for (int j = 0; j < COL_SIZE; j++) {
+      table[i*j+j] = X;
+    }
   }
 }
 
 void
-tiled(char *vec) {
-  for (int i = 0; i < MAX; i += B) {
-    for (int r = 0; r < REP; r++) {
-      for (int j = i; j < (i + B); j+=NM_CPU_CACHE_LINE) {
-        vec[j] = r;
+tile(char *table) {
+  for (int i = 0; i < ROW_SIZE; i+=NM_CPU_CACHE_LINE) {
+    for (int j = 0; j < COL_SIZE; j+=NM_CPU_CACHE_LINE) {
+      
+      for (int k = j; k < MIN(j+NM_CPU_CACHE_LINE, COL_SIZE); k++) {
+        for (int l = i; l < MIN(i+NM_CPU_CACHE_LINE, ROW_SIZE); l++) {
+          table[l*k+k] = X;
+        }
       }
     }
   }
 }
 
-void
-untiled(char *vec) {
-  for (int r = 0; r < REP; r++) {
-    for (int i = 0; i < MAX; i+=NM_CPU_CACHE_LINE) {
-      vec[i] = r;
+int
+validate(const char *a, const char *b) {
+  int i = 0;
+  for (int i = 0; i < ROW_SIZE; i++) {
+    for (int j = 0; j < COL_SIZE; j++) {
+      if (a[i*j+j] != b[i*j+j]) {
+        i = 1;
+        goto clean_exit;
+      }
     }
   }
+ clean_exit:
+  return i;
 }
 
 int
 main() { 
-  array = malloc(sizeof(char)*MAX);
+  table_a = malloc(sizeof(char) * (ROW_SIZE*COL_SIZE));
+  memset(table_a, 0, ROW_SIZE * COL_SIZE);
 
-  warmup(array);
 
-  clock_t t1 = clock();
-  tiled(array);
+  clock_t begin, end;
+  long int escaped;
 
-  clock_t t2 = clock();
-  untiled(array);
+  /* raw */
+  begin = clock();
+  raw(table_a);
+  end = clock();
+  escaped = end - begin;
+  printf("raw, escaped %li cpu time, %lf sec\n",
+         escaped, (double)escaped/CLOCKS_PER_SEC);
 
-  clock_t t3 = clock();
-  printf ("tiled: %f sec\n", (double)(t2 - t1) / CLOCKS_PER_SEC);
-  printf ("untiled: %f sec\n", (double)(t3 - t2) / CLOCKS_PER_SEC);
+  /* tile */
+  table_b = malloc(sizeof(char) * (ROW_SIZE*COL_SIZE));
+  memset(table_b, 0, ROW_SIZE * COL_SIZE);
+
+  begin = clock();
+  tile(table_b);
+  end = clock();
+  escaped = end - begin;
+  printf("tile, escaped %li cpu time, %lf sec\n",
+         escaped, (double)escaped/CLOCKS_PER_SEC);
   
-  /* to prevent optimizing out all the writes */
-  printf ("array[0] = %d\n", array[0]);
-  
-  free(array);
+  printf("validate(raw, tile): %s\n",
+         validate(table_a, table_b) ? "false" : "true");
+
+  free(table_a);
+  free(table_b);
   return 0;
 }
