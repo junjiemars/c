@@ -25,7 +25,9 @@ lscpu(cpu_s *cpu) {
 #if defined (LINUX)
 	FILE *f = fopen("/sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size", "r");
 	if (f) {
-		fscanf(f, "%zu", &cpu->cache_line_size);
+		if (!fscanf(f, "%zu", &cpu->cache_line_size)) {
+      cpu->cache_line_size = 0;
+    }
 		fclose(f);
 	}
 	

@@ -2,11 +2,11 @@
 
 cpu: cpu_info																		\
 		 cpu_id																			\
-		 cpu_tile_basic
+		 cpu_tile
 
 cpu_test: cpu_info_test													\
 	  		  cpu_id_test														\
-          cpu_tile_basic_test
+          cpu_tile_test
 
 cpu_prefix := cpu
 
