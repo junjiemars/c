@@ -1,33 +1,33 @@
 # ./configure --has-io
 
-io: io_basic \
-    io_binary \
-		io_error \
-		io_fileno \
-		io_format \
-    io_flush \
-		io_line \
-		io_reopen \
-		io_process \
-		io_scan \
-    io_tmp \
-		io_variadic \
-		io_wchar \
-		io_wc
-io_test: io_basic_test  \
-         io_binary_test \
-				 io_error_test \
-				 io_fileno_test \
-				 io_format_test \
-         io_flush_test \
-				 io_line_test \
-				 io_reopen_test \
-				 io_process_test \
-				 io_scan_test \
-         io_tmp_test \
-				 io_variadic_test \
-				 io_wchar_test \
-				 io_wc_test
+io: io_basic									\
+    io_binary									\
+	io_error									\
+	io_fileno									\
+	io_format									\
+    io_flush									\
+	io_line										\
+	io_reopen									\
+	io_process									\
+	io_scan										\
+    io_tmp										\
+	io_variadic									\
+	io_wchar									\
+	io_wc
+io_test: io_basic_test							\
+         io_binary_test							\
+		 io_error_test							\
+		 io_fileno_test							\
+		 io_format_test							\
+         io_flush_test							\
+		 io_line_test							\
+		 io_reopen_test							\
+		 io_process_test						\
+		 io_scan_test							\
+         io_tmp_test							\
+		 io_variadic_test						\
+		 io_wchar_test							\
+		 io_wc_test
 
 io_prefix := io
 
