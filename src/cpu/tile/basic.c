@@ -79,6 +79,14 @@ main() {
   escaped = end - begin;
   printf("tile, escaped %li cpu time, %lf sec\n",
          escaped, (double)escaped/CLOCKS_PER_SEC);
+
+  /* raw */
+  begin = clock();
+  raw(table_a);
+  end = clock();
+  escaped = end - begin;
+  printf("raw, escaped %li cpu time, %lf sec\n",
+         escaped, (double)escaped/CLOCKS_PER_SEC);
   
   printf("validate(raw, tile): %s\n",
          validate(table_a, table_b) ? "false" : "true");
