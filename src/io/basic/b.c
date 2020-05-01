@@ -11,9 +11,12 @@ main(int argc, char *argv[]) {
 		fputc(ch, stdout);
 	}
 	if (ferror(stdin)) {
-		perror("read failed from stdin");
+		perror("!panic");
 		return 1;
 	}
+    if (feof(stdin)) {
+      fprintf(stdout, "%s\n", "end of file");
+    }
 
 	return 0;
 }
