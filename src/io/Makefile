@@ -139,19 +139,19 @@ $(io_process_binout): $(io_root)process/p.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # scan
-io_scan_binout := $(bin_path)$(io_prefix)_scan$(bin_ext)
+io_scan_stdin_binout := $(bin_path)$(io_prefix)_scan$(bin_ext)
 io_scan_csv_binout := $(bin_path)$(io_prefix)_scan_csv$(bin_ext)
 io_scan_free_binout := $(bin_path)$(io_prefix)_scan_free$(bin_ext)
 
-io_scan: $(io_scan_binout)						\
+io_scan: $(io_scan_stdin_binout)						\
          $(io_scan_csv_binout)					\
          $(io_scan_free_binout)
 io_scan_test: io_scan
-	echo "X, 1234, 0x11223344, 5678, 3.1415, 2.718" | $(io_scan_binout)
+	echo "X, 1234, 0x11223344, 5678, 3.1415, 2.718" | $(io_scan_stdin_binout)
 	$(io_scan_csv_binout) $(CURDIR)/src/io/scan/a.csv
 	$(io_scan_free_binout) $(CURDIR)/src/io/scan/free.txt
 
-$(io_scan_binout): $(io_root)scan/s.c
+$(io_scan_stdin_binout): $(io_root)scan/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_scan_csv_binout): $(io_root)scan/csv.c
