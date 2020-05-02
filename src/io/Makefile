@@ -1,33 +1,35 @@
 # ./configure --has-io
 
-io: io_basic									\
-    io_binary									\
-	io_error									\
-	io_fileno									\
-	io_format									\
-    io_flush									\
-	io_line										\
-	io_reopen									\
-	io_process									\
-	io_scan										\
-    io_tmp										\
-	io_variadic									\
-	io_wchar									\
-	io_wc
-io_test: io_basic_test							\
-         io_binary_test							\
-		 io_error_test							\
-		 io_fileno_test							\
-		 io_format_test							\
-         io_flush_test							\
-		 io_line_test							\
-		 io_reopen_test							\
-		 io_process_test						\
-		 io_scan_test							\
-         io_tmp_test							\
-		 io_variadic_test						\
-		 io_wchar_test							\
-		 io_wc_test
+io: io_basic																		\
+    io_binary																		\
+		io_error																		\
+		io_fileno																		\
+		io_format																		\
+    io_flush																		\
+		io_line																			\
+		io_reopen																		\
+		io_process																	\
+		io_scan																			\
+    io_seek                                     \
+		io_tmp																			\
+		io_variadic																	\
+		io_wchar																		\
+		io_wc
+io_test: io_basic_test													\
+         io_binary_test													\
+         io_error_test													\
+         io_fileno_test													\
+         io_format_test													\
+         io_flush_test													\
+         io_line_test														\
+         io_reopen_test													\
+         io_process_test												\
+         io_scan_test														\
+         io_seek_test                           \
+         io_tmp_test														\
+         io_variadic_test												\
+         io_wchar_test													\
+         io_wc_test
 
 io_prefix := io
 
@@ -66,7 +68,7 @@ io_binary_basic_test: io_binary_basic
 
 io_binary_array: $(io_binary_array_binout)
 io_binary_array_test: io_binary_array
-	$(io_binary_array_binout) $(tmp_path)sassy.txt
+	$(io_binary_array_binout) $(tmp_path)sassy.bin
 
 $(io_binary_basic_binout): $(io_root)binary/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -171,6 +173,16 @@ $(io_scan_csv_binout): $(io_root)scan/csv.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_scan_free_binout): $(io_root)scan/free.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# seek
+io_seek_basic_binout := $(bin_path)$(io_prefix)_seek_basic$(bin_ext)
+
+io_seek: $(io_seek_basic_binout)
+io_seek_test: io_seek
+	$(io_seek_basic_binout) $(io_root)seek/records.txt
+
+$(io_seek_basic_binout): $(io_root)seek/s1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # tmp
