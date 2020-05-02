@@ -73,15 +73,15 @@ seek_record(const char *path, const int n) {
 
 int
 main(int argc, char **argv) {
-  if (argc < 2) {
-    fprintf(stderr, "where the records.txt located?\n");
+  if (argc < 3) {
+    fprintf(stderr, "where the records.txt/records.bin located?\n");
     return 0;
   }
 
-  out_records(argv[1], "records.bin");
-  seek_record("records.bin", 1);
-  seek_record("records.bin", 3);
-  seek_record("records.bin", 10);
+  out_records(argv[1], argv[2]);
+  seek_record(argv[2], 1);
+  seek_record(argv[2], 3);
+  seek_record(argv[2], 10);
   
   return 0;
 }
