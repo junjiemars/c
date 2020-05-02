@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 typedef struct sassy_s {
   char name[16];
@@ -20,7 +21,8 @@ in(const char *path, sassy_s *ss, const size_t len) {
 
   size_t n = fread(ss, sizeof(sassy_s), len, i);
   if (n < len) {
-    fprintf(stderr, "read %zu/%zu\n", n, len);
+    fprintf(stderr, "!panic, read %zu/%zu, caused by %s\n",
+            n, len, strerror(errno));
   }
   
   fclose(i);
@@ -36,7 +38,8 @@ out(const char *path, const sassy_s *ss, const size_t len) {
 
   size_t n = fwrite(ss, sizeof(sassy_s), len, o);
   if (n < len) {
-    fprintf(stderr, "!write %zu/%zu\n", n, len);
+    fprintf(stderr, "!panic, write %zu/%zu, caused by %s\n",
+            n, len, strerror(errno));
   }
 
   fclose(o);
