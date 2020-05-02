@@ -51,14 +51,27 @@ $(io_basic_binout): $(io_root)basic/b.c
 
 
 # binary I/O
-io_binary_binout := $(bin_path)$(io_prefix)_binary$(bin_ext)
+io_binary_basic_binout := $(bin_path)$(io_prefix)_binary_basic$(bin_ext)
+io_binary_array_binout := $(bin_path)$(io_prefix)_binary_array$(bin_ext)
 
-io_binary: $(io_binary_binout)
-io_binary_test: io_binary
-	$(io_binary_binout) "w*h" "0x11220000" "0x00003344"
-	$(io_binary_binout)
+io_binary: io_binary_basic											\
+           io_binary_array
+io_binary_test: io_binary_basic_test						\
+                io_binary_array_test
 
-$(io_binary_binout): $(io_root)binary/b.c
+io_binary_basic: $(io_binary_basic_binout)
+io_binary_basic_test: io_binary_basic
+	$(io_binary_basic_binout) "w*h" "0x11220000" "0x00003344"
+	$(io_binary_basic_binout)
+
+io_binary_array: $(io_binary_array_binout)
+io_binary_array_test: io_binary_array
+	$(io_binary_array_binout) $(tmp_path)sassy.txt
+
+$(io_binary_basic_binout): $(io_root)binary/b.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_binary_array_binout): $(io_root)binary/b1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # error
