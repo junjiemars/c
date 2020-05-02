@@ -180,7 +180,9 @@ io_seek_basic_binout := $(bin_path)$(io_prefix)_seek_basic$(bin_ext)
 
 io_seek: $(io_seek_basic_binout)
 io_seek_test: io_seek
-	$(io_seek_basic_binout) $(io_root)seek/records.txt $(tmp_path)records.bin
+	$(io_seek_basic_binout) $(io_root)seek/records.txt	\
+                          $(tmp_path)records.bin			\
+                          $(tmp_path)records.idx
 
 $(io_seek_basic_binout): $(io_root)seek/s1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
