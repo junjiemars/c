@@ -7,7 +7,7 @@ typedef union u_bitfield {
 	uint16_t u16;
 	uint8_t u8[sizeof(uint32_t)/sizeof(uint8_t)];
 	struct s_bifield {
-#if (1 == NM_HAVE_LITTLE_ENDIAN)
+#if (1 == NM_CPU_LITTLE_ENDIAN)
 		uint16_t d : 4;
 		uint16_t c : 4;
 		uint16_t b : 4;

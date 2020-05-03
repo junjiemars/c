@@ -38,7 +38,7 @@ main(int argc, char *argv[]) {
   _unused_(argc);
   _unused_(argv);
 
-  printf("\nlittle endian: %s\n", _bool_(NM_HAVE_LITTLE_ENDIAN));
+  printf("\nlittle endian: %s\n", _bool_(NM_CPU_LITTLE_ENDIAN));
 	printf("----------\n");
 
 	swap();

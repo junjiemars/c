@@ -109,7 +109,7 @@ main(int argc, char *argv[]) {
   _unused_(argc);
   _unused_(argv);
 
-  printf("\n*%s ENDIAN*\n", NM_HAVE_LITTLE_ENDIAN ? "LITTLE" : "BIG");
+  printf("\n*%s ENDIAN*\n", NM_CPU_LITTLE_ENDIAN ? "LITTLE" : "BIG");
   printf("----------\n\n");
 
   swap_test();

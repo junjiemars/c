@@ -78,9 +78,9 @@ main(int argc, char *argv[]) {
 	printf("defvar x=%i\n", var_x);
 	printf("defvar y=%f\n", var_y);
 
-	printf
-  #include "p.txt"
-	;
+	/* printf */
+  /* #include "p.txt" */
+	/* ; */
 
 	return 0;
 }
