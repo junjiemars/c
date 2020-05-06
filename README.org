@@ -2052,6 +2052,10 @@ table in a executable.
 - MacOSX: =dtruss=
 - Linux: =strace=
 
+** Kernel Trace
+
+- MacOSX: =ktrace=
+
 ** Display Symbol Table
 	 :PROPERTIES:
 	 :CUSTOM_ID: display-symbol-table
