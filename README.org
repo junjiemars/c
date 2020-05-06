@@ -2050,6 +2050,7 @@ table in a executable.
 	 :END:
 
 - MacOSX: =dtruss=
+- Linux: =strace=
 
 ** Display Symbol Table
 	 :PROPERTIES:
