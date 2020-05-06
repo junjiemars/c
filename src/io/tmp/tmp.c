@@ -35,8 +35,9 @@ test_tmpfile(void) {
     perror("!panic");
     return;
   }
-  int len = fprintf(out, "test_tmpfile fn\n");
-  if (!len) {
+  fprintf(stdout, ">> fd:%i ...\n", fileno(out));
+  fprintf(out, "test_tmpfile fn\n");
+  if (ferror(out)) {
     perror("!panic");
   }
   fclose(out);
@@ -58,10 +59,9 @@ test_tmpnam(void) {
 void
 test_mkstemp(void) {
 #if NM_HAVE_MKSTEMP_FN
-	char t[L_tmpnam << 4] = {};
-  strcpy(&t[0], P_tmpdir);
-  size_t len = strlen(t);
-  strcpy(t + len, "/abcXXXXXX");
+	char t[L_tmpnam] = {};
+  strcat(t, P_tmpdir);
+  strcat(t, "/abcXXXXXX");
   
 	int fd = mkstemp(t);
   if (-1 == fd) {
@@ -74,7 +74,9 @@ test_mkstemp(void) {
     perror("!panic");
     return;
   }
-  if (0 == fprintf(out, "test_mkstemp\n")) {
+  fprintf(stdout, ">> %s ...\n", t);
+  fprintf(out, "test_mkstemp\n");
+  if (ferror(out)) {
     perror("!panic");
   }
   fclose(out);
