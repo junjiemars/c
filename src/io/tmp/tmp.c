@@ -28,14 +28,30 @@ test_consts(void) {
 }
 
 void
-test_tmpnam(void) {
-	char b1[L_tmpnam];
-	strcpy(b1, tmpnam(0)); /* may be overwriten by next call */
-	printf("tmpnam(0) = %s\n", b1);
-	char b2[L_tmpnam];
-	tmpnam(b2);
-	printf("tmpnam(\"non-nil\") = %s\n", b2);
+test_tmpfile(void) {
+#if NM_HAVE_TMPFILE_FN
+  FILE *out = tmpfile();
+  if (!out) {
+    perror("!panic");
+    return;
+  }
+  int len = fprintf(out, "test_tmpfile fn\n");
+  if (!len) {
+    perror("!panic");
+  }
+  fclose(out);
+#endif
 }
+
+/* void */
+/* test_tmpnam(void) { */
+/* 	char b1[L_tmpnam]; */
+/* 	strcpy(b1, tmpnam(0)); /\* may be overwriten by next call *\/ */
+/* 	printf("tmpnam(0) = %s\n", b1); */
+/* 	char b2[L_tmpnam]; */
+/* 	tmpnam(b2); */
+/* 	printf("tmpnam(\"non-nil\") = %s\n", b2); */
+/* } */
 
 /* void */
 /* test_mkstemp(void) { */
@@ -51,7 +67,8 @@ main(int argc, char **argv) {
 	_unused_(argv);
 
 	test_consts();
-	test_tmpnam();
+  test_tmpfile();
+	/* test_tmpnam(); */
 	/* test_mkstemp(); */
 
  /* 	char *s = tmpnam(0); */

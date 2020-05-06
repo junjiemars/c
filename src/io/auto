@@ -8,23 +8,6 @@
 #----------------------------------------
 #include="stdint.h" . ${NORE_ROOT}/auto/include
 
-
-# check features
-#----------------------------------------
-#nm_feature="endian"
-#nm_feature_name="nm_have_little_endian"
-#nm_feature_run=value
-#nm_feature_h="#include <stdio.h>"
-#nm_feature_flags=
-#nm_feature_inc=
-#nm_feature_ldlibs=
-#nm_feature_test='int i=0x11223344;
-#                 char *p = (char *)&i;
-#             		int le = (0x44 == *p);
-#                 printf("%d", le);'
-#. ${NORE_ROOT}/auto/feature
-
-
 #check features based on Compiler
 #----------------------------------------
 nm_feature="popen"
@@ -101,6 +84,7 @@ case $NM_SYSTEM in
 	  ;;
 esac
 
+# restrict
 nm_feature="restrict keyword"
 nm_feature_name="nm_have_restrict_keyword"
 nm_feature_run=
@@ -118,3 +102,22 @@ if [ "yes" != $nm_found ]; then
 	nm_feature_test='int x = 0x11; int *__restrict p = &x;'
 	. ${NORE_ROOT}/auto/feature
 fi
+
+# tmpfile
+nm_feature="tmpfile fn"
+nm_feature_name="nm_have_tmpfile_fn"
+nm_feature_run=
+nm_feature_h='#include <stdio.h>'
+nm_feature_flags=
+nm_feature_test='(FILE*)tmpfile();'
+. ${NORE_ROOT}/auto/feature
+
+# mkstemp
+nm_feature="mkstemp fn"
+nm_feature_name="nm_have_mkstemp_fn"
+nm_feature_run=
+nm_feature_h='#include <stdlib.h>'
+nm_feature_flags=
+nm_feature_test='mkstemp("abc");'
+. ${NORE_ROOT}/auto/feature
+
