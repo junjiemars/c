@@ -109,7 +109,7 @@ nm_feature_name="nm_have_tmpfile_fn"
 nm_feature_run=
 nm_feature_h='#include <stdio.h>'
 nm_feature_flags=
-nm_feature_test='(FILE*)tmpfile();'
+nm_feature_test='(void)tmpfile();'
 . ${NORE_ROOT}/auto/feature
 
 # mkstemp
