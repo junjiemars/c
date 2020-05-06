@@ -43,23 +43,43 @@ test_tmpfile(void) {
 #endif
 }
 
-/* void */
-/* test_tmpnam(void) { */
-/* 	char b1[L_tmpnam]; */
-/* 	strcpy(b1, tmpnam(0)); /\* may be overwriten by next call *\/ */
-/* 	printf("tmpnam(0) = %s\n", b1); */
-/* 	char b2[L_tmpnam]; */
-/* 	tmpnam(b2); */
-/* 	printf("tmpnam(\"non-nil\") = %s\n", b2); */
-/* } */
+void
+test_tmpnam(void) {
+#if !NM_HAVE_MKSTEMP_FN
+	char b1[L_tmpnam];
+	strcpy(b1, tmpnam(0)); /* may be overwriten by next call */
+	printf("tmpnam(0) = %s\n", b1);
+	char b2[L_tmpnam];
+	tmpnam(b2);
+	printf("tmpnam(\"non-nil\") = %s\n", b2);
+#endif
+}
 
-/* void */
-/* test_mkstemp(void) { */
-/* 	char t[L_tmpnam << 4] = "vviviiXXXXXX"; */
-/* 	int fd = mkstemp(t); */
-/* 	_unused_(t); */
-/* 	_unused_(fd); */
-/* } */
+void
+test_mkstemp(void) {
+#if NM_HAVE_MKSTEMP_FN
+	char t[L_tmpnam << 4] = {};
+  strcpy(&t[0], P_tmpdir);
+  size_t len = strlen(t);
+  strcpy(t + len, "/abcXXXXXX");
+  
+	int fd = mkstemp(t);
+  if (-1 == fd) {
+    perror("!panic");
+    return;
+  }
+  
+  FILE *out = fdopen(fd, "w");
+  if (!out) {
+    perror("!panic");
+    return;
+  }
+  if (0 == fprintf(out, "test_mkstemp\n")) {
+    perror("!panic");
+  }
+  fclose(out);
+#endif
+}
 
 int
 main(int argc, char **argv) {
@@ -68,35 +88,8 @@ main(int argc, char **argv) {
 
 	test_consts();
   test_tmpfile();
-	/* test_tmpnam(); */
-	/* test_mkstemp(); */
+  test_mkstemp();
+	test_tmpnam();
 
- /* 	char *s = tmpnam(0); */
- /* 	printf("tmpname(0) = %s\n", s); */
-
- /* 	char nam[L_tmpnam + sizeof(void*)]; */
- /* 	tmpnam(nam); */
- /* 	printf("tmpnam(nam) = %s\n", nam); */
-
- /* 	strncpy(nam, "xyz.", sizeof(nam)); */
- /* 	s = tempnam(P_tmpdir, nam); */
- /* 	printf("tempnam(%s, \"xyz\") = %s\n", P_tmpdir, s); */
-
- /* 	FILE *tf = tmpfile(); */
- /* 	if (!tf) { */
- /* 		perror("call tmpfile() failed"); */
- /* 		goto error_exit; */
- /* 	} */
-
- /* 	fprintf(tf, "%s, tmp.c\n", argv[0]); */
- /* 	goto clean_exit; */
-
- /* error_exit: */
- /* 	return 1; */
-
- /* clean_exit: */
- /* 	if (tf) { */
- /* 		fclose(tf); */
- /* 	} */
 	return 0;
 }
