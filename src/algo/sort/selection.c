@@ -23,14 +23,14 @@ main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
-	int a1[] = { 0x3, 0x5, 0x4, 0x1, 0x2 };
+	int a1[] = { 0x3, 0x5, 0x1, 0x4, 0x1, 0x2, 0x2 };
 	printf("selection sort+:\n----------\n");
 	list_array(a1, sizeof(a1)/sizeof(*a1), sizeof(*a1), print_int);
 	printf("selection sort-:\n----------\n");
 	selection_sort(a1, sizeof(a1)/sizeof(*a1), sizeof(*a1), comp_int);
 	list_array(a1, sizeof(a1)/sizeof(*a1), sizeof(*a1), print_int);
 
-	char *s1[] = { "block", "array", "digit", "floor", "cell" };
+	char *s1[] = { "block", "array", "floor", "digit", "floor", "cell", "cell" };
 	printf("selection sort+:\n----------\n");
 	list_array(s1, sizeof(s1)/sizeof(*s1), sizeof(*s1), print_str);
 	printf("selection sort-:\n----------\n");
