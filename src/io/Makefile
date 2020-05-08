@@ -7,10 +7,11 @@ io: io_basic																		\
 		io_format																		\
     io_flush																		\
 		io_line																			\
+	  io_mmap																			\
 		io_reopen																		\
 		io_process																	\
 		io_scan																			\
-    io_seek                                     \
+    io_seek																			\
 		io_tmp																			\
 		io_variadic																	\
 		io_wchar																		\
@@ -22,10 +23,11 @@ io_test: io_basic_test													\
          io_format_test													\
          io_flush_test													\
          io_line_test														\
+         io_mmap_test														\
          io_reopen_test													\
          io_process_test												\
          io_scan_test														\
-         io_seek_test                           \
+         io_seek_test														\
          io_tmp_test														\
          io_variadic_test												\
          io_wchar_test													\
@@ -129,6 +131,20 @@ $(io_line_binout): $(io_root)line/l.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_line_gets_binout): $(io_root)line/s.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# mmap
+io_mmap_read_binout := $(bin_path)$(io_prefix)_mmap_basic$(bin_ext)
+
+io_mmap: $(io_mmap_read)
+io_mmap_test: io_mmap_read_test
+	$(io_mmap_read_binout) $(CURDIR)/src/io/mmap/dout.random
+
+io_mmap_read: $(io_mmap_read_binout)
+io_mmap_read_test: io_mmap_read
+	$(io_mmap_read_binout)
+
+$(io_mmap_read_binout): $(io_root)mmap/mm1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # reopen
