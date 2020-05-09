@@ -2,23 +2,6 @@
 #define _IO_H_
 
 #include <nore.h>
-#include <stdio.h>
-
-/* mmap */
-#if DARWIN
-#  include <fcntl.h>
-#  include <unistd.h>
-#  include <sys/mman.h>
-#elif LINUX
-#  include <sys/types.h>
-#  include <sys/stat.h>
-#  include <fcntl.h>
-#  include <unistd.h>
-#  ifndef __USE_MISC
-#    define __USE_MISC 1
-#  endif
-#  include <sys/mman.h>
-#endif
 
 #define _unused_(x) (void)(x)
 
@@ -34,6 +17,7 @@
 #  pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 /* #  include <features.h> */
 #endif
+
 
 void hex_out(const char *ss);
 

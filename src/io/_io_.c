@@ -1,4 +1,5 @@
 #include <_io_.h>
+#include <stdio.h>
 
 void
 hex_out(const char *ss) {

@@ -1,6 +1,7 @@
 #include <_io_.h>
 #include <stdio.h>
 #include <string.h>
+#include "_mmap_.h"
 
 
 #if NM_HAVE_OPEN_FN && NM_HAVE_MMAP_FN
@@ -45,7 +46,7 @@ main(int argc, char **argv) {
   const char *file = argv[1];
   size_t len = 0;
   if (0 >= sscanf(argv[2], "%zu", &len)) {
-    perror("!panic");
+    perror("!panic, sscanf failed, caused by");
     return 1;
   }
   
