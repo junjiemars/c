@@ -136,13 +136,12 @@ $(io_line_gets_binout): $(io_root)line/s.c
 # mmap
 io_mmap_basic_binout := $(bin_path)$(io_prefix)_mmap_basic$(bin_ext)
 
-io_mmap: $(io_mmap_basic)
+io_mmap: io_mmap_basic
 io_mmap_test: io_mmap_basic_test
-	$(io_mmap_basic_binout) $(CURDIR)/src/io/mmap/dout.random 2048
 
 io_mmap_basic: $(io_mmap_basic_binout)
 io_mmap_basic_test: io_mmap_basic
-	$(io_mmap_basic_binout)
+	$(io_mmap_basic_binout) $(CURDIR)/src/io/mmap/dout.random 2048
 
 $(io_mmap_basic_binout): $(io_root)mmap/mm1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
