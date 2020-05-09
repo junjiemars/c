@@ -135,15 +135,25 @@ $(io_line_gets_binout): $(io_root)line/s.c
 
 # mmap
 io_mmap_basic_binout := $(bin_path)$(io_prefix)_mmap_basic$(bin_ext)
+io_mmap_shared_binout := $(bin_path)$(io_prefix)_mmap_shared$(bin_ext)
 
-io_mmap: io_mmap_basic
-io_mmap_test: io_mmap_basic_test
+io_mmap: io_mmap_basic													\
+         io_mmap_shared
+io_mmap_test: io_mmap_basic_test								\
+              io_mmap_shared_test
 
 io_mmap_basic: $(io_mmap_basic_binout)
 io_mmap_basic_test: io_mmap_basic
 	$(io_mmap_basic_binout) $(CURDIR)/src/io/mmap/dout.random 2048
 
-$(io_mmap_basic_binout): $(io_root)mmap/mm1.c
+io_mmap_shared: $(io_mmap_shared_binout)
+io_mmap_shared_test: io_mmap_shared
+	$(io_mmap_shared_binout) $(CURDIR)/src/io/mmap/dout.random 2048
+
+$(io_mmap_basic_binout): $(io_root)_io_.c $(io_root)mmap/read.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_mmap_shared_binout): $(io_root)_io_.c $(io_root)mmap/shared.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # reopen

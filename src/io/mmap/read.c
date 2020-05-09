@@ -1,31 +1,7 @@
 #include <_io_.h>
-
-#if DARWIN
-#  include <fcntl.h>
-#  include <unistd.h>
-#  include <sys/mman.h>
-#elif LINUX
-#  include <sys/types.h>
-#  include <sys/stat.h>
-#  include <fcntl.h>
-#  include <unistd.h>
-#  ifndef __USE_MISC
-#    define __USE_MISC 1
-#  endif
-#  include <sys/mman.h>
-#endif
-
 #include <stdio.h>
 #include <string.h>
 
-void
-hex_out(const char *ss) {
-  unsigned char c;
-  while (0 != (c = *ss++)) {
-    fprintf(stdout, "0x%02x ", c);
-  }
-  fprintf(stdout, "\n");
-}
 
 #if NM_HAVE_OPEN_FN && NM_HAVE_MMAP_FN
 void
@@ -36,16 +12,15 @@ test_read(const char *file, size_t len) {
     return;
   }
 
-  char *m = mmap(0, len, PROT_READ, MAP_PRIVATE, fd, 0);
+  size_t offset = 0;
+  char *m = mmap(0, len, PROT_READ, MAP_PRIVATE, fd, offset);
   if (MAP_FAILED == m) {
     perror("!panic, mmap failed, caused by");
     goto clean_exit;
   }
 
   char buf[16];
-  size_t offset = 0;
   memcpy(buf, m+offset, sizeof(buf)-1);
-
   fprintf(stdout, "read from %s@%zu\n====\n", file, offset);
   hex_out(buf);
 
