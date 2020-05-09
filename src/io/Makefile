@@ -183,12 +183,22 @@ io_scan_stdin_binout := $(bin_path)$(io_prefix)_scan$(bin_ext)
 io_scan_csv_binout := $(bin_path)$(io_prefix)_scan_csv$(bin_ext)
 io_scan_free_binout := $(bin_path)$(io_prefix)_scan_free$(bin_ext)
 
-io_scan: $(io_scan_stdin_binout)						\
-         $(io_scan_csv_binout)					\
-         $(io_scan_free_binout)
-io_scan_test: io_scan
+io_scan: io_scan_stdin													\
+         io_scan_csv														\
+         io_scan_free
+io_scan_test: io_scan_stdin_test								\
+              io_scan_csv_test									\
+              io_scan_free_test
+
+io_scan_stdin: $(io_scan_stdin_binout)
+io_scan_csv: $(io_scan_csv_binout)
+io_scan_free: $(io_scan_free_binout)
+
+io_scan_stdin_test: io_scan_stdin
 	echo "X, 1234, 0x11223344, 5678, 3.1415, 2.718" | $(io_scan_stdin_binout)
+io_scan_csv_test: io_scan_csv
 	$(io_scan_csv_binout) $(CURDIR)/src/io/scan/a.csv
+io_scan_free_test: io_scan_free
 	$(io_scan_free_binout) $(CURDIR)/src/io/scan/free.txt
 
 $(io_scan_stdin_binout): $(io_root)scan/s.c
@@ -205,9 +215,9 @@ io_seek_basic_binout := $(bin_path)$(io_prefix)_seek_basic$(bin_ext)
 
 io_seek: $(io_seek_basic_binout)
 io_seek_test: io_seek
-	$(io_seek_basic_binout) $(io_root)seek/records.txt	\
-                          $(tmp_path)records.bin			\
-                          $(tmp_path)records.idx
+	$(io_seek_basic_binout) $(CURDIR)/seek/records.txt				\
+                          $(CURDIR)/$(tmp_path)records.bin	\
+                          $(CURDIR)/$(tmp_path)records.idx
 
 $(io_seek_basic_binout): $(io_root)seek/s1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
