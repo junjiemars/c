@@ -215,7 +215,7 @@ io_seek_basic_binout := $(bin_path)$(io_prefix)_seek_basic$(bin_ext)
 
 io_seek: $(io_seek_basic_binout)
 io_seek_test: io_seek
-	$(io_seek_basic_binout) $(CURDIR)/seek/records.txt				\
+	$(io_seek_basic_binout) $(CURDIR)/src/io/seek/records.txt	\
                           $(CURDIR)/$(tmp_path)records.bin	\
                           $(CURDIR)/$(tmp_path)records.idx
 
