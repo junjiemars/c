@@ -21,17 +21,16 @@
 [[https://api.travis-ci.org/junjiemars/c][https://api.travis-ci.org/junjiemars/c.svg?branch=master]]
 
 #+ATTR_HTML: :style text-align:left
-It is not /C Lessons/ at all :). I'd programming in C long long time
-ago, sometimes I want to pick something up, but I cannot find the
-peice of code somewhere or cannot run the code on a machine that been
-wrote in another machine.
+It is not /C Lessons/ at all :). I'd programming in C long time ago,
+sometimes I want to pick something up, but I cannot find the peice of
+code somewhere or cannot run the code wroten in another machine.
 
 #+REVEAL: split
 #+ATTR_HTML: :style text-align:left
-Sadly, old dog need learn something new.
+Sadly, old dog always need learn something new.
 - Access the code from anywhere, oh, GitHub is good one
 - Run or write code on anywhere, so Linux, Darwin, or Windows, Docker Box
-- Easy to try and learn something new
+- Easy to try and learn
 
 #+ATTR_HTML: :style text-align:left
 Now, we had [[https://github.com/junjiemars/nore][Nore]], something changed and something not.
@@ -43,13 +42,11 @@ Let's start ...
 # <where> to put nore down
 $ PREFIX=<where> bash <(curl https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh)
 
-# configure -> make -> install
+# configure -> make -> test -> install
 $ ./configure --has-hi
 $ make
+$ make test
 $ make install
-
-# update nore, <what> you want to make
-$ ./configure --update --has-<what>
 #+END_SRC
 
 * Language
@@ -1201,12 +1198,12 @@ not necessarily more expensive.
 	 :custom_id: alloc-realloc
 	 :END:
 
-** Standard libraries
+** libc
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_standard_libraries
 	 :END:
 
-The /C standar library/ is a standardized collection of header files
+The /C standard library/ is a standardized collection of header files
 and library routines used to implement common operations.
 
 ** std
