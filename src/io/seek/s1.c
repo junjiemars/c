@@ -81,7 +81,8 @@ seek_record(const char *path, const int n) {
     goto clean_exit;
   }
 
-  record_s ss = {};
+  record_s ss;
+  memset(&ss, 0, sizeof(record_s));
   if (1 != fread(&ss, sizeof(record_s), 1, in)) {
     if (feof(in)) {
       fprintf(stderr, "No.%i no found\n----\n", n);
@@ -111,8 +112,10 @@ find_record(const char *binpath, const char *idxpath, const char *num) {
     goto clean_exit;
   }
 
-  index_s is = {};
-  record_s ss = {};
+  index_s is;
+  record_s ss;
+  memset(&is, 0, sizeof(index_s));
+  memset(&ss, 0, sizeof(record_s));
 
   while (1 == fread(&is, sizeof(index_s), 1, idx)) {
     if (0 == strncmp(num, is.num, NUM_LEN)) {
