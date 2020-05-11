@@ -1,6 +1,7 @@
 #include <_io_.h>
 #include <stdio.h>
 #include <errno.h>
+#include <string.h>
 
 typedef struct salary_s {
   int num;
@@ -19,7 +20,8 @@ main(int argc, char **argv) {
   const char *fmt = "%d,%d,%f,%s\n";
   FILE *in = 0;
   int n = 0;
-  salary_s ss = {0};
+  salary_s ss;
+  memset(&ss, 0, sizeof(salary_s));
   
   in = fopen(argv[1], "r");
   if (!in) {
