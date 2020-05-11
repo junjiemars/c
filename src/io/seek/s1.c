@@ -36,8 +36,10 @@ out_records(const char *inpath, const char *binpath, const char *idxpath) {
     goto clean_exit;
   }
   
-  record_s ss = {};
-  index_s is = {};
+  record_s ss;
+  index_s is;
+  memset(&ss, 0, sizeof(record_s));
+  memset(&is, 0, sizeof(index_s));
 
   int n = 0;
   while (4 == fscanf(in, "%s %s %d %lf",
