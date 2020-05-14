@@ -1,42 +1,59 @@
 #include "_tesseract_.h"
 #include <stdio.h>
 
-void die(const char *errstr) {
-	fputs(errstr, stderr);
-	exit(1);
-}
-
 void
-test_basic() {
-  TessBaseAPI *handle;
-	PIX *img;
-	char *text;
+test_read(const char *filename) {
+	PIX *img = 0;
+  TessBaseAPI *api = 0;
+  char *text = 0;
 
-	if((img = pixRead("img.png")) == NULL)
-		die("Error reading image\n");
+	if(0 == (img = pixRead(filename))) {
+    perror("!panic, read image failed, caused by");
+    goto clean_exit;
+  }
 
-	handle = TessBaseAPICreate();
-	if(TessBaseAPIInit3(handle, NULL, "eng") != 0)
-		die("Error initializing tesseract\n");
+  api = TessBaseAPICreate();
+	if(0 != TessBaseAPIInit3(api, 0, "eng")) {
+    perror("!panic, init tesseract failed, caused by");
+    goto clean_exit;
+  }
 
-	TessBaseAPISetImage2(handle, img);
-	if(TessBaseAPIRecognize(handle, NULL) != 0)
-		die("Error in Tesseract recognition\n");
+	TessBaseAPISetImage2(api, img);
+  
+	if(0 != TessBaseAPIRecognize(api, 0)) {
+    perror("!panic, recognize failed, caused by");
+    goto clean_exit;
+  }
 
-	if((text = TessBaseAPIGetUTF8Text(handle)) == NULL)
-		die("Error getting text\n");
-
+	if(0 == (text = TessBaseAPIGetUTF8Text(api))) {
+    perror("!panic, get text failed, caused by");
+    goto clean_exit;
+  }
+  fputs("text\n----------\n", stdout);
 	fputs(text, stdout);
+  fputs("----------\n", stdout);
 
-	TessDeleteText(text);
-	TessBaseAPIEnd(handle);
-	TessBaseAPIDelete(handle);
-	pixDestroy(&img);
+ clean_exit:
+  if (text) {
+    TessDeleteText(text);
+  }
+	if (api) {
+    TessBaseAPIEnd(api);
+    TessBaseAPIDelete(api);
+  }
+	if (img) {
+    pixDestroy(&img);
+  }
 }
 
 int
 main(int argc, char **argv) {
-  _unused_(argc);
-  _unused_(argv);
+  if (argc < 2) {
+    fprintf(stderr, "where the image located\n");
+    return 0;
+  }
+  const char *filename = argv[1];
+  test_read(filename);
+  
   return 0;
 }
