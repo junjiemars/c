@@ -2,7 +2,7 @@
 #define _TESSERACT_H_
 
 #include <nore.h>
-#include <allheaders.h>
+#include <leptonica/allheaders.h>
 #include <tesseract/capi.h>
 
 
