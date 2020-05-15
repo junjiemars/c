@@ -3,7 +3,7 @@
 
 #include <nore.h>
 #include <allheaders.h>
-#include <capi.h>
+#include <tesseract/capi.h>
 
 
 #define _unused_(x) (void)(x)
