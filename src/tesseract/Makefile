@@ -43,8 +43,9 @@ tesseract_pdf_binout := $(bin_path)$(tesseract_prefix)_pdf$(bin_ext)
 
 tesseract_pdf: $(tesseract_pdf_binout)
 tesseract_pdf_test: tesseract_pdf
-	$(tesseract_pdf_binout) $(CURDIR)/src/tesseract/example.png \
-		$(CURDIR)/$(tmp_path)$(tesseract_prefix)_out
+	$(tesseract_pdf_binout) $(CURDIR)/src/tesseract/example.png 	\
+		$(CURDIR)/$(tmp_path)$(tesseract_prefix)_out								\
+    5000
 
 $(tesseract_pdf_binout): $(tesseract_root)pdf/pdf.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(LDFLAGS)
