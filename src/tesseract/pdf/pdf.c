@@ -6,7 +6,7 @@ void
 test_out_pdf(const char *infile, const char* outbase, int timeout) {
   TessBaseAPI *api = 0;
   TessResultRenderer *renderer = 0;
-  const char *datadir;
+  const char *datadir = 0;
 
   api = TessBaseAPICreate();
 	if(0 != TessBaseAPIInit3(api, 0, "eng")) {
@@ -15,8 +15,21 @@ test_out_pdf(const char *infile, const char* outbase, int timeout) {
   }
 
   datadir = TessBaseAPIGetDatapath(api);
+  if (0 == datadir) {
+    perror("!panic, get data path failed, caused by");
+    goto clean_exit;
+  }
+  
   renderer = TessPDFRendererCreate(outbase, datadir, 0);
-  TessBaseAPIProcessPages(api, infile, 0, timeout, renderer);
+  if (0 == renderer) {
+    perror("!panic, create renderer failed, caused by");
+    goto clean_exit;
+  }
+  
+  BOOL ok = TessBaseAPIProcessPages(api, infile, 0, timeout, renderer);
+  if (ok) {
+    fprintf(stdout, "... output pdf successed\n");
+  }
 
  clean_exit:
 	if (api) {
