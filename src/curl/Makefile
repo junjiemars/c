@@ -1,9 +1,11 @@
 # ./configure --has-curl
 
 curl: curl_basic																\
-      curl_write
+      curl_write																\
+      curl_callback
 curl_test: curl_basic_test											\
-           curl_write_test
+           curl_write_test											\
+           curl_callback_test
 
 curl_prefix := curl
 
@@ -30,4 +32,14 @@ curl_write_test: curl_write
 	$(curl_write_binout) $(CURDIR)/$(tmp_path)$(curl_prefix)_write.txt
 
 $(curl_write_binout): $(curl_root)w.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(curl_ldflags)
+
+# callback
+curl_callback_binout := $(bin_path)$(curl_prefix)_callback$(bin_ext)
+
+curl_callback: $(curl_callback_binout)
+curl_callback_test: curl_callback
+	$(curl_callback_binout) $(CURDIR)/$(tmp_path)$(curl_prefix)_callback.txt
+
+$(curl_callback_binout): $(curl_root)callback.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(curl_ldflags)
