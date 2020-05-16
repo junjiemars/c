@@ -52,7 +52,10 @@ test_write(const char *outfile) {
 
  clean_exit:
   curl_easy_cleanup(curl);
-  fclose(out);
+  free(errbuf);
+  if (out) {
+    fclose(out);
+  }
 }
 
 int

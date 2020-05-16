@@ -97,10 +97,11 @@ test_callback(const char *outfile) {
   
  clean_exit:
   curl_easy_cleanup(curl);
-  if (m.response) {
-    free(m.response);
+  free(errbuf);
+  free(m.response);
+  if (out) {
+    fclose(out);
   }
-  fclose(out);
 }
 
 int
