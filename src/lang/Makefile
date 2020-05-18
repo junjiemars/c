@@ -1,66 +1,65 @@
 # ./configure --without-debug --has-lang
 
-lang: array										\
-	  assert									\
-	  duration									\
-	  enum										\
-	  env										\
-	  error										\
-	  exit										\
-	  fn										\
-	  goto										\
-	  jmp										\
-	  linkage									\
-	  macro										\
-	  main										\
-	  math										\
-	  random									\
-	  lang_restrict								\
-	  pointer									\
-	  lang_preprocessor							\
-	  scope										\
-	  lang_signal								\
-	  sizeof									\
-	  stage										\
-	  storage									\
-	  string									\
-	  lang_time									\
-	  type										\
-	  typedef									\
-	  typeof									\
-	  volatile
+lang: array																			\
+      assert																		\
+      duration																	\
+      enum																			\
+      env																				\
+      error																			\
+      exit																			\
+      fn																				\
+      goto																			\
+      jmp																				\
+      linkage																		\
+      macro																			\
+      main																			\
+      math																			\
+      random																		\
+      lang_restrict															\
+      pointer																		\
+      lang_preprocessor													\
+      scope																			\
+      lang_signal																\
+      sizeof																		\
+      stage																			\
+      storage																		\
+      string																		\
+      lang_time																	\
+      type																			\
+      typedef																		\
+      typeof																		\
+      volatile
 
 
-lang_test:  array_test							\
-			assert_test							\
-			duration_test						\
-			enum_test							\
-			env_test							\
-			error_test							\
-            exit_test							\
-			fn_test								\
-			goto_test							\
-            jmp_test							\
-			linkage_test						\
-			macro_test							\
-			main_test							\
-			math_test							\
-			random_test							\
-			lang_restrict_test					\
-			pointer_test						\
-			lang_preprocessor_test				\
-			scope_test							\
-			lang_signal_test					\
-			sizeof_test							\
-			stage_test							\
-			storage_test						\
-			string_test							\
-			lang_time_test						\
-			type_test							\
-			typedef_test						\
-			typeof_test							\
-			volatile_test
-
+lang_test:  array_test													\
+            assert_test                         \
+            duration_test                       \
+            enum_test                           \
+            env_test                            \
+            error_test                          \
+            exit_test                           \
+            fn_test                             \
+            goto_test                           \
+            jmp_test                            \
+            linkage_test                        \
+            macro_test                          \
+            main_test                           \
+            math_test                           \
+            random_test                         \
+            lang_restrict_test                  \
+            pointer_test                        \
+            lang_preprocessor_test              \
+            scope_test                          \
+            lang_signal_test                    \
+            sizeof_test                         \
+            stage_test                          \
+            storage_test                        \
+            string_test                         \
+            lang_time_test                      \
+            type_test                           \
+            typedef_test                        \
+            typeof_test                         \
+            volatile_test
 
 lang_prefix := lang
 INC += -I$(lang_root)
@@ -492,12 +491,14 @@ string_n_binout := $(bin_path)$(lang_prefix)_string_n$(bin_ext)
 string_s_binout := $(bin_path)$(lang_prefix)_string_s$(bin_ext)
 string_dup_binout := $(bin_path)$(lang_prefix)_string_dup$(bin_ext)
 string_tok_binout := $(bin_path)$(lang_prefix)_string_tok$(bin_ext)
+string_chr_binout := $(bin_path)$(lang_prefix)_string_chr$(bin_ext)
 
-string: $(string_basic_binout) \
-        $(string_n_binout) \
-        $(string_s_binout) \
-        $(string_dup_binout) \
-        $(string_tok_binout)
+string: $(string_basic_binout)									\
+        $(string_n_binout)											\
+        $(string_s_binout)											\
+        $(string_dup_binout)										\
+        $(string_tok_binout)										\
+        $(string_chr_binout)
 
 string_test: string_basic_test									\
              string_n_test											\
@@ -508,7 +509,8 @@ string_test: string_basic_test									\
              $(string_n_binout)									\
              $(string_s_binout)									\
              $(string_dup_binout)								\
-             string_tok_test
+             string_tok_test										\
+             string_chr_test
 
 string_basic_test: $(string_basic_binout)
 	$(string_basic_binout)
@@ -518,6 +520,8 @@ string_s_test: $(string_s_binout)
 	$(string_s_binout)
 string_tok_test: $(string_tok_binout)
 	$(string_tok_binout) "this is a simple sample for strtok." " "
+string_chr_test: $(string_chr_binout)
+	$(string_chr_binout) "The Quick Brown Fox Jumps Over the Lazy Dog" "J"
 
 $(string_basic_binout): $(lang_root)string/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -532,6 +536,9 @@ $(string_dup_binout): $(lang_root)string/dup.c
 	$(CC) $(string_cflags) $(INC) $^ $(bin_out)$@
 
 $(string_tok_binout): $(lang_root)string/tok.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(string_chr_binout): $(lang_root)string/chr.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # time
