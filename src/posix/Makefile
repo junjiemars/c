@@ -50,11 +50,13 @@ posix_mmap_shared: $(posix_mmap_shared_binout)
 posix_mmap_shared_test: posix_mmap_shared
 	$(posix_mmap_shared_binout) $(CURDIR)/src/posix/mmap/dout.random 2048
 
-$(posix_mmap_read_binout): $(posix_root)mmap/read.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(posix_mmap_read_binout): $(posix_root)mmap/read.c		\
+                           $(posix_root)mmap/_mmap_.h
+	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
 
-$(posix_mmap_shared_binout): $(posix_root)mmap/shared.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(posix_mmap_shared_binout): $(posix_root)mmap/shared.c	\
+                             $(posix_root)mmap/_mmap_.h
+	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
 
 # tmp
 posix_tmp_binout := $(bin_path)$(posix_prefix)_tmp$(bin_ext)
