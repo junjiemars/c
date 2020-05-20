@@ -5,9 +5,9 @@
 #ifndef _NORSTD_H_
 #define _NORSTD_H_
 
-#if !defined(_NORE_H_)
-#  include <nore.h>
-#endif
+
+#include <nore.h>
+
 
 #if defined(WINNT) && (WINNT)
 #  include <windows.h>
