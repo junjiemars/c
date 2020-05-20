@@ -14,3 +14,4 @@ dirname(char *path) {
 	return d;
 }
 #endif /* MSVC */
+

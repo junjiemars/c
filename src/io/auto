@@ -124,21 +124,5 @@ case $NM_SYSTEM in
 esac
 
 
-# mmap
-case $NM_SYSTEM in
-	Darwin|Linux)
-    nm_feature="mmap fn"
-    nm_feature_name="nm_have_mmap_fn"
-    nm_feature_run=no
-    nm_feature_h='#include <sys/mman.h>'
-    nm_feature_flags=
-    nm_feature_test='mmap(0, 16, 1, 0, 3, 0);'
-    . ${NORE_ROOT}/auto/feature
-	  ;;
-	WinNT)
-	  ;;
-	*)
-	  ;;
-esac
 
 

@@ -7,7 +7,6 @@ io: io_basic																		\
 		io_format																		\
     io_flush																		\
 		io_line																			\
-	  io_mmap																			\
 		io_reopen																		\
 		io_process																	\
 		io_scan																			\
@@ -22,7 +21,6 @@ io_test: io_basic_test													\
          io_format_test													\
          io_flush_test													\
          io_line_test														\
-         io_mmap_test														\
          io_reopen_test													\
          io_process_test												\
          io_scan_test														\
@@ -129,29 +127,6 @@ $(io_line_binout): $(io_root)line/l.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_line_gets_binout): $(io_root)line/s.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-# mmap
-io_mmap_read_binout := $(bin_path)$(io_prefix)_mmap_read$(bin_ext)
-io_mmap_shared_binout := $(bin_path)$(io_prefix)_mmap_shared$(bin_ext)
-
-io_mmap: io_mmap_read													\
-         io_mmap_shared
-io_mmap_test: io_mmap_read_test								\
-              io_mmap_shared_test
-
-io_mmap_read: $(io_mmap_read_binout)
-io_mmap_read_test: io_mmap_read
-	$(io_mmap_read_binout) $(CURDIR)/src/io/mmap/dout.random 2048
-
-io_mmap_shared: $(io_mmap_shared_binout)
-io_mmap_shared_test: io_mmap_shared
-	$(io_mmap_shared_binout) $(CURDIR)/src/io/mmap/dout.random 2048
-
-$(io_mmap_read_binout): $(io_root)_io_.c $(io_root)mmap/read.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-$(io_mmap_shared_binout): $(io_root)_io_.c $(io_root)mmap/shared.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # reopen

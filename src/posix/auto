@@ -6,7 +6,41 @@
 ## check posix features
 ####
 
-# check sysconf fn
+# open
+case $NM_SYSTEM in
+	Darwin|Linux)
+    nm_feature="open fn"
+    nm_feature_name="nm_have_open_fn"
+    nm_feature_run=no
+    nm_feature_h='#include <fcntl.h>'
+    nm_feature_flags=
+    nm_feature_test='int fd = open("/dev/zero", 0);'
+    . ${NORE_ROOT}/auto/feature
+	  ;;
+	WinNT)
+	  ;;
+	*)
+	  ;;
+esac # end of open
+
+# mmap
+case $NM_SYSTEM in
+	Darwin|Linux)
+    nm_feature="mmap fn"
+    nm_feature_name="nm_have_mmap_fn"
+    nm_feature_run=no
+    nm_feature_h='#include <sys/mman.h>'
+    nm_feature_flags=
+    nm_feature_test='mmap(0, 16, 1, 0, 3, 0);'
+    . ${NORE_ROOT}/auto/feature
+	  ;;
+	WinNT)
+	  ;;
+	*)
+	  ;;
+esac # end of mmap
+
+# sysconf
 case $NM_SYSTEM in
 	Darwin|Linux)
     nm_feature="sysconf fn"
@@ -21,9 +55,9 @@ case $NM_SYSTEM in
 	  ;;
 	*)
 	  ;;
-esac
+esac # end of sysconf
 
-# check tmpfile fn
+# tmpfile
 nm_feature="tmpfile fn"
 nm_feature_name="nm_have_tmpfile_fn"
 nm_feature_run=
@@ -32,7 +66,7 @@ nm_feature_flags=
 nm_feature_test='(void)tmpfile();'
 . ${NORE_ROOT}/auto/feature
 
-# check mkstemp fn
+# mkstemp
 nm_feature="mkstemp fn"
 nm_feature_name="nm_have_mkstemp_fn"
 nm_feature_run=

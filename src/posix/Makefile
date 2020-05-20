@@ -1,8 +1,10 @@
 # ./configure --has-posix
 
 posix: posix_bits																\
+       posix_mmap																\
        posix_tmp
 posix_test: posix_bits_test											\
+            posix_mmap_test											\
             posix_tmp_test
 
 posix_prefix := posix
@@ -30,6 +32,29 @@ $(src_path)getopt.h:
 $(src_path)getopt.c:
 	curl -sLo $@ $(io_getopt_repo)getopt.c
 endif # end of msvc
+
+# mmap
+posix_mmap_read_binout := $(bin_path)$(posix_prefix)_mmap_read$(bin_ext)
+posix_mmap_shared_binout := $(bin_path)$(posix_prefix)_mmap_shared$(bin_ext)
+
+posix_mmap: posix_mmap_read											\
+            posix_mmap_shared
+posix_mmap_test: posix_mmap_read_test						\
+                 posix_mmap_shared_test
+
+posix_mmap_read: $(posix_mmap_read_binout)
+posix_mmap_read_test: posix_mmap_read
+	$(posix_mmap_read_binout) $(CURDIR)/src/posix/mmap/dout.random 2048
+
+posix_mmap_shared: $(posix_mmap_shared_binout)
+posix_mmap_shared_test: posix_mmap_shared
+	$(posix_mmap_shared_binout) $(CURDIR)/src/posix/mmap/dout.random 2048
+
+$(posix_mmap_read_binout): $(posix_root)mmap/read.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(posix_mmap_shared_binout): $(posix_root)mmap/shared.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # tmp
 posix_tmp_binout := $(bin_path)$(posix_prefix)_tmp$(bin_ext)
