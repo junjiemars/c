@@ -11,6 +11,7 @@
  */
 
 #define _GETOPT_H_
+#if defined(WINNT) && (WINNT)
 
 /* All the headers include this file. */
 #include <crtdefs.h>
@@ -84,6 +85,8 @@ getopt_long_only(int nargc,
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
 
 #endif /* !defined( _GETOPT_LONG_H_ ) */

@@ -12,7 +12,6 @@ io: io_basic																		\
 		io_process																	\
 		io_scan																			\
     io_seek																			\
-		io_tmp																			\
 		io_variadic																	\
 		io_wchar																		\
 		io_wc
@@ -28,14 +27,13 @@ io_test: io_basic_test													\
          io_process_test												\
          io_scan_test														\
          io_seek_test														\
-         io_tmp_test														\
          io_variadic_test												\
          io_wchar_test													\
          io_wc_test
 
 io_prefix := io
 
-INC += -I$(io_root)
+INC += -I$(io_root) -I$(root)posix
 
 ifeq ($(CC_NAME), msvc)
 INC += -I$(root)posix
@@ -220,16 +218,6 @@ io_seek_test: io_seek
                           $(CURDIR)/$(tmp_path)records.idx
 
 $(io_seek_basic_binout): $(io_root)seek/s1.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-# tmp
-io_tmp_binout := $(bin_path)$(io_prefix)_tmp$(bin_ext)
-
-io_tmp: $(io_tmp_binout)
-io_tmp_test: io_tmp
-	$(io_tmp_binout)
-
-$(io_tmp_binout): $(io_root)tmp/tmp.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # variadic

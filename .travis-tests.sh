@@ -16,14 +16,14 @@ fi
 ROOT="`cd $(dirname ${BASH_SOURCE}) && pwd -P`"
 pushd $ROOT
 
-CC=$CC ./configure \
-  --has-algo \
-	--has-ds \
-	--has-hi \
-	--has-io \
-	--has-lang \
-	--has-memory \
-	--has-unicode \
+CC=$CC ./configure                              \
+  --has-algo                                    \
+	--has-ds                                      \
+	--has-hi                                      \
+	--has-io                                      \
+	--has-lang                                    \
+	--has-memory                                  \
+	--has-unicode                                 \
 	--has-x86
 make clean test
 

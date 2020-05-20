@@ -5,27 +5,56 @@
 #ifndef _NORSTD_H_
 #define _NORSTD_H_
 
-#if WINNT
-#  include <windows.h>
-#  include <process.h>
-#  define sleep(x) Sleep((x) * 1000)
-#  define getpid() _getpid()
-#else
-#  include <unistd.h>
+#if !defined(_NORE_H_)
+#  include <nore.h>
 #endif
 
-#ifdef MSVC
+#if defined(WINNT) && (WINNT)
 #  include <windows.h>
-#  include <tchar.h>
-#  define PATH_MAX MAX_PATH
-#else
-#  ifdef LINUX
-#    include <linux/limits.h>
-#  else
-#    include <limits.h>
-#  endif
-#  include <libgen.h>
+#  include <process.h>
+#  include "getopt.h"
+#  define sleep(x) Sleep((x) * 1000)
+#  define getpid() _getpid()
+#elif defined(DARWIN) && (DARWIN)
+#  include <unistd.h>
+#  include <getopt.h>
+#elif defined(LINUX) && (DARWIN)
+#  include <unistd.h>
+#  include <getopt.h>
 #endif
+
+#if defined(GCC) && (GCC)
+# ifndef __USE_XOPEN
+#   define __USE_XOPEN
+# endif
+# ifndef _DEFAULT_SOURCE
+#   define _DEFAULT_SOURCE
+# endif
+#endif
+
+#if !defined(NM_HAVE_P_TMPDIR)
+#  if defined(WINNT) && (WINNT)
+#    define P_tmpdir getenv("TMPDIR")
+#  endif
+#endif
+
+#if !defined(_unused_)
+#  define _unused_(x) ((void)(x))
+#endif
+
+
+/* #ifdef MSVC */
+/* #  include <windows.h> */
+/* #  include <tchar.h> */
+/* #  define PATH_MAX MAX_PATH */
+/* #else */
+/* #  ifdef LINUX */
+/* #    include <linux/limits.h> */
+/* #  else */
+/* #    include <limits.h> */
+/* #  endif */
+/* #  include <libgen.h> */
+/* #endif */
 
 
 

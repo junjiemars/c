@@ -1,4 +1,4 @@
-#include <_io_.h>
+#include <norstd.h>
 
 #ifdef GCC
 # ifndef __USE_XOPEN
