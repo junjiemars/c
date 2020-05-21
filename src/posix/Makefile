@@ -2,9 +2,11 @@
 
 posix: posix_bits																\
        posix_mmap																\
+       posix_sysconf														\
        posix_tmp
 posix_test: posix_bits_test											\
             posix_mmap_test											\
+            posix_sysconf_test									\
             posix_tmp_test
 
 posix_prefix := posix
@@ -56,6 +58,16 @@ $(posix_mmap_read_binout): $(posix_root)mmap/read.c		\
 
 $(posix_mmap_shared_binout): $(posix_root)mmap/shared.c	\
                              $(posix_root)mmap/_mmap_.h
+	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
+
+# sysconf
+posix_sysconf_binout := $(bin_path)$(posix_prefix)_sysconf$(bin_ext)
+
+posix_sysconf: $(posix_sysconf_binout)
+posix_sysconf_test: posix_sysconf
+	$(posix_sysconf_binout)
+
+$(posix_sysconf_binout): $(posix_root)sysconf/c1.c
 	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
 
 # tmp
