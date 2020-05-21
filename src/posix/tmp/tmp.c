@@ -1,20 +1,4 @@
-#include <norstd.h>
-
-#ifdef GCC
-# ifndef __USE_XOPEN
-#   define __USE_XOPEN
-# endif
-# ifndef _DEFAULT_SOURCE
-#   define _DEFAULT_SOURCE
-# endif
-#endif
-
-#if !defined(NM_HAVE_P_TMPDIR)
-#  if defined(WINNT)
-#    define P_tmpdir getenv("TMPDIR")
-#  endif
-#endif
-
+#include "norstd.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

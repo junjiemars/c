@@ -8,6 +8,17 @@
 
 #include <nore.h>
 
+#if defined(GCC)
+# ifndef __USE_XOPEN
+#   define __USE_XOPEN
+# endif
+# ifndef _DEFAULT_SOURCE
+#   define _DEFAULT_SOURCE
+# endif
+# ifndef _POSIX_C_SOURCE
+#   define _POSIX_C_SOURCE 1
+# endif
+#endif
 
 #if defined(WINNT) && (WINNT)
 #  include <windows.h>
@@ -18,25 +29,25 @@
 #elif defined(DARWIN) && (DARWIN)
 #  include <unistd.h>
 #  include <getopt.h>
-#elif defined(LINUX) && (DARWIN)
+#elif defined(LINUX) && (LINUX)
 #  include <unistd.h>
 #  include <getopt.h>
 #endif
 
-#if defined(GCC) && (GCC)
-# ifndef __USE_XOPEN
-#   define __USE_XOPEN
-# endif
-# ifndef _DEFAULT_SOURCE
-#   define _DEFAULT_SOURCE
-# endif
-#endif
 
 #if !defined(NM_HAVE_P_TMPDIR)
 #  if defined(WINNT) && (WINNT)
 #    define P_tmpdir getenv("TMPDIR")
 #  endif
 #endif
+
+
+#if !defined(NM_HAVE_P_TMPDIR)
+#  if defined(WINNT)
+#    define P_tmpdir getenv("TMPDIR")
+#  endif
+#endif
+
 
 #if !defined(_unused_)
 #  define _unused_(x) ((void)(x))
