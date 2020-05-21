@@ -9,16 +9,11 @@
 #include <nore.h>
 
 #if defined(GCC)
-# ifndef __USE_XOPEN
-#   define __USE_XOPEN
-# endif
-# ifndef _DEFAULT_SOURCE
-#   define _DEFAULT_SOURCE
-# endif
-# ifndef _POSIX_C_SOURCE
-#   define _POSIX_C_SOURCE 1
-# endif
+#  ifndef _GNU_SOURCE
+#    define _GNU_SOURCE
+#  endif
 #endif
+
 
 #if defined(WINNT) && (WINNT)
 #  include <windows.h>
