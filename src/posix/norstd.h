@@ -44,9 +44,8 @@
 #endif
 
 
-#if !defined(_unused_)
-#  define _unused_(x) ((void)(x))
-#endif
+#define _unused_(x) ((void)(x))
+#define _txt_(x) #x
 
 
 /* #ifdef MSVC */
