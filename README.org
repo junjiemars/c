@@ -1993,6 +1993,13 @@ on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see [[https://g
 
 * Assembly
 
+=cmp=
+| cmp dst, src	 | ZF  | 	CF |
+|----------------+-----+------|
+| dst = src      | 	1 | 	0  |
+| dst < src      | 	0 | 	1  |
+| dst > src      | 	0 | 	0  |
+
 RFLAGS Register
 | Bit(s)	 | Label	 | Description                        |
 |----------+---------+------------------------------------|
@@ -2024,6 +2031,7 @@ RFLAGS Register
 - [[https://gist.github.com/mishurov/6bcf04df329973c15044][AT&T assembly syntax and IA-32 instructions]]
 - [[https://www.cs.yale.edu/flint/cs421/papers/x86-asm/asm.html][Yale: x86 Assembly Guide]]
 - [[https://www.cs.virginia.edu/~evans/cs216/guides/x86.html][Virginia: x86 Assembly Guide]]
+- [[https://wiki.osdev.org/CPU_Registers_x86-64][CPU Registers x86-64]]
 
 * Tools
 	:PROPERTIES:
