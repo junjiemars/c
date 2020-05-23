@@ -8,7 +8,7 @@
 
 # open
 case $NM_SYSTEM in
-	Darwin|Linux)
+  Darwin|Linux)
     nm_feature="open fn"
     nm_feature_name="nm_have_open_fn"
     nm_feature_run=no
@@ -16,16 +16,16 @@ case $NM_SYSTEM in
     nm_feature_flags=
     nm_feature_test='int fd = open("/dev/zero", 0);'
     . ${NORE_ROOT}/auto/feature
-	  ;;
-	WinNT)
-	  ;;
-	*)
-	  ;;
+    ;;
+  WinNT)
+    ;;
+  *)
+    ;;
 esac # end of open
 
 # mmap
 case $NM_SYSTEM in
-	Darwin|Linux)
+  Darwin|Linux)
     nm_feature="mmap fn"
     nm_feature_name="nm_have_mmap_fn"
     nm_feature_run=no
@@ -33,16 +33,16 @@ case $NM_SYSTEM in
     nm_feature_flags=
     nm_feature_test='mmap(0, 16, 1, 0, 3, 0);'
     . ${NORE_ROOT}/auto/feature
-	  ;;
-	WinNT)
-	  ;;
-	*)
-	  ;;
+    ;;
+  WinNT)
+    ;;
+  *)
+    ;;
 esac # end of mmap
 
 # sysconf
 case $NM_SYSTEM in
-	Darwin|Linux)
+  Darwin|Linux)
     nm_feature="sysconf fn"
     nm_feature_name="nm_have_sysconf_fn"
     nm_feature_run=no
@@ -50,11 +50,11 @@ case $NM_SYSTEM in
     nm_feature_flags=
     nm_feature_test='sysconf(_SC_PAGESIZE);'
     . ${NORE_ROOT}/auto/feature
-	  ;;
-	WinNT)
-	  ;;
-	*)
-	  ;;
+    ;;
+  WinNT)
+    ;;
+  *)
+    ;;
 esac # end of sysconf
 
 # tmpfile

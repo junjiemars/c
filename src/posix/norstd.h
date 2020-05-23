@@ -45,7 +45,10 @@
 
 
 #define _unused_(x) ((void)(x))
+
 #define _txt_(x) #x
+
+#define _is_unsigned_type_(t) ((t)~1)
 
 
 /* #ifdef MSVC */
