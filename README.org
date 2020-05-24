@@ -1275,6 +1275,67 @@ There has an good answer of [[http://stackoverflow.com/questions/17206568/what-i
 - [[https://stackoverflow.com/questions/252780/why-should-we-typedef-a-struct-so-often-in-c][Why should we typedef a struct so often in C?]]
 
 * x86
+	:PROPERTIES:
+	:CUSTOM_ID: x86
+	:END:
+
+
+** Registers
+
+=cmp dst src= perfomans a substraction but does not store result. Such
+as =sub dst src=.
+
+| cmp dst, src	                           | CF | PF | AF | ZF | SF | OF |
+|------------------------------------------+----+----+----+----+----+----|
+| unsigned src < unsigned dst              | 1  |    |    |    |    |    |
+| parity of LSB is even                    |    |  1 |    |    |    |    |
+| carry in the low nibble of (src-dst)     |    |    |  1 |    |    |    |
+| 0, (i.e src == dst)                      | 	 |    |    |  1 |    |    |
+| if MSB of (src-dst) == 1                 |    |    |    |    |  1 |    |
+| sign bit of src != sign bit of (src-dst) | 	 |    |    |    |    |  1 |
+
+
+| Jump | Description              | signed-ness | Flags              |
+|------+--------------------------+-------------+--------------------|
+| je   | jump if equal            |             | ZF = 1             |
+| jg   | jump if greater          | signed      | ZF = 0 and SF = OF |
+| jge  | jump if greater or equal | signed      | SF = OF            |
+| jl   | jump if less             | signed      | SF != OF           |
+| jle  | jump if less or equal    | signed      | ZF = 1 or SF != OF |
+
+
+RFLAGS Register
+| Bit(s)	 | Label	 | Description                                       |
+|----------+---------+---------------------------------------------------|
+|        0 | 	CF    | 	Carry Flag                                      |
+|        1 | 	1     | 	Reserved                                        |
+|        2 | 	PF    | 	Parity Flag, set if LSB contains 1 is even bits |
+|        3 | 	0     | 	Reserved                                        |
+|        4 | 	AF    | 	Auxiliary Carry Flag                            |
+|        5 | 	0     | 	Reserved                                        |
+|        6 | 	ZF    | 	Zero Flag, set if result is zero                |
+|        7 | 	SF    | 	Sign Flag, set MSB of result                    |
+|        8 | 	TF    | 	Trap Flag                                       |
+|        9 | 	IF    | 	Interrupt Enable Flag                           |
+|       10 | 	DF    | 	Direction Flag                                  |
+|       11 | 	OF    | 	Overflow Flag                                   |
+|    12-13 | IOPL    | 	I/O Privilege Level                             |
+|       14 | 	NT    | 	Nested Task                                     |
+|       15 | 	0     | 	Reserved                                        |
+|       16 | 	RF    | 	Resume Flag                                     |
+|       17 | 	VM    | 	Virtual-8086 Mode                               |
+|       18 | 	AC    | 	Alignment Check / Access Control                |
+|       19 | 	VIF   | 	Virtual Interrupt Flag                          |
+|       20 | 	VIP   | 	Virtual Interrupt Pending                       |
+|       21 | 	ID    | 	ID Flag                                         |
+|    22-63 | 0	     | Reserved                                          |
+
+** References
+- [[https://gist.github.com/mishurov/6bcf04df329973c15044][AT&T assembly syntax and IA-32 instructions]]
+- [[https://www.cs.yale.edu/flint/cs421/papers/x86-asm/asm.html][Yale: x86 Assembly Guide]]
+- [[https://www.cs.virginia.edu/~evans/cs216/guides/x86.html][Virginia: x86 Assembly Guide]]
+- [[https://wiki.osdev.org/CPU_Registers_x86-64][CPU Registers x86-64]]
+
 * Memory
 	:PROPERTIES:
 	:CUSTOM_ID: memory
@@ -1990,48 +2051,6 @@ on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see [[https://g
 ** Hash
 ** Algorithm References
 - [[http://www.cse.yorku.ca/~oz/hash.html][Hash Functions]]
-
-* Assembly
-
-=cmp=
-| cmp dst, src	 | ZF  | 	CF |
-|----------------+-----+------|
-| dst = src      | 	1 | 	0  |
-| dst < src      | 	0 | 	1  |
-| dst > src      | 	0 | 	0  |
-
-RFLAGS Register
-| Bit(s)	 | Label	 | Description                        |
-|----------+---------+------------------------------------|
-|        0 | 	CF    | 	Carry Flag                       |
-|        1 | 	1     | 	Reserved                         |
-|        2 | 	PF    | 	Parity Flag                      |
-|        3 | 	0     | 	Reserved                         |
-|        4 | 	AF    | 	Auxiliary Carry Flag             |
-|        5 | 	0     | 	Reserved                         |
-|        6 | 	ZF    | 	Zero Flag                        |
-|        7 | 	SF    | 	Sign Flag                        |
-|        8 | 	TF    | 	Trap Flag                        |
-|        9 | 	IF    | 	Interrupt Enable Flag            |
-|       10 | 	DF    | 	Direction Flag                   |
-|       11 | 	OF    | 	Overflow Flag                    |
-|    12-13 | IOPL    | 	I/O Privilege Level              |
-|       14 | 	NT    | 	Nested Task                      |
-|       15 | 	0     | 	Reserved                         |
-|       16 | 	RF    | 	Resume Flag                      |
-|       17 | 	VM    | 	Virtual-8086 Mode                |
-|       18 | 	AC    | 	Alignment Check / Access Control |
-|       19 | 	VIF   | 	Virtual Interrupt Flag           |
-|       20 | 	VIP   | 	Virtual Interrupt Pending        |
-|       21 | 	ID    | 	ID Flag                          |
-|    22-63 | 0	     | Reserved                           |
-
-
-** References
-- [[https://gist.github.com/mishurov/6bcf04df329973c15044][AT&T assembly syntax and IA-32 instructions]]
-- [[https://www.cs.yale.edu/flint/cs421/papers/x86-asm/asm.html][Yale: x86 Assembly Guide]]
-- [[https://www.cs.virginia.edu/~evans/cs216/guides/x86.html][Virginia: x86 Assembly Guide]]
-- [[https://wiki.osdev.org/CPU_Registers_x86-64][CPU Registers x86-64]]
 
 * Tools
 	:PROPERTIES:
