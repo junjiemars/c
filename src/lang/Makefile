@@ -21,7 +21,7 @@ lang: array																			\
       scope																			\
       lang_signal																\
       sizeof																		\
-      stage																			\
+      lang_stage																\
       storage																		\
       string																		\
       lang_time																	\
@@ -30,35 +30,34 @@ lang: array																			\
       typeof																		\
       volatile
 
-
 lang_test:  array_test													\
-            assert_test                         \
-            duration_test                       \
-            enum_test                           \
-            env_test                            \
-            error_test                          \
-            exit_test                           \
-            fn_test                             \
-            goto_test                           \
-            jmp_test                            \
-            linkage_test                        \
-            macro_test                          \
-            main_test                           \
-            math_test                           \
-            random_test                         \
-            lang_restrict_test                  \
-            pointer_test                        \
-            lang_preprocessor_test              \
-            scope_test                          \
-            lang_signal_test                    \
-            sizeof_test                         \
-            stage_test                          \
-            storage_test                        \
-            string_test                         \
-            lang_time_test                      \
-            type_test                           \
-            typedef_test                        \
-            typeof_test                         \
+            assert_test													\
+            duration_test												\
+            enum_test														\
+            env_test														\
+            error_test													\
+            exit_test														\
+            fn_test															\
+            goto_test														\
+            jmp_test														\
+            linkage_test												\
+            macro_test													\
+            main_test														\
+            math_test														\
+            random_test													\
+            lang_restrict_test									\
+            pointer_test												\
+            lang_preprocessor_test							\
+            scope_test													\
+            lang_signal_test										\
+            sizeof_test													\
+            lang_stage_test											\
+            storage_test												\
+            string_test													\
+            lang_time_test											\
+            type_test														\
+            typedef_test												\
+            typeof_test													\
             volatile_test
 
 lang_prefix := lang
@@ -433,8 +432,8 @@ stage_objout := $(tmp_path)$(lang_prefix)_stage$(obj_ext)
 stage_asmout := $(tmp_path)$(lang_prefix)_stage$(asm_ext)
 stage_cppout := $(tmp_path)$(lang_prefix)_stage$(cpp_ext)
 
-stage: $(stage_binout)
-stage_test: stage
+lang_stage: $(stage_binout)
+lang_stage_test: lang_stage
 	$(stage_binout)
 
 ifeq ($(NM_VERBOSE), YES)
@@ -454,8 +453,8 @@ $(stage_cppout): $(lang_root)stage/s.c
 	$(CPP) $(CPPFLAGS) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
 
 else
-stage:
-stage_test:
+lang_stage:
+lang_stage_test:
 stage_ldflags := -link -FORCE:MULTIPLE
 endif
 
