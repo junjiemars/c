@@ -51,6 +51,20 @@ ieee_float() {
 	printf("   sign     =  " BIT_FMT_32 "\n", BIT_32(x4fs.layout.sign));
 	printf("   exponent =  " BIT_FMT_32 "\n", BIT_32(x4fs.layout.exponent));
 	printf("   mantissa =  " BIT_FMT_32 "\n", BIT_32(x4fs.layout.mantissa));
+
+	ufloat32_t x4fxs = { .f = -31.4f };
+	printf("float: %f \t=  " BIT_FMT_32 "\n", x4fxs.f, BIT_32(x4fxs.u));
+
+	printf("   sign     =  " BIT_FMT_32 "\n", BIT_32(x4fxs.layout.sign));
+	printf("   exponent =  " BIT_FMT_32 "\n", BIT_32(x4fxs.layout.exponent));
+	printf("   mantissa =  " BIT_FMT_32 "\n", BIT_32(x4fxs.layout.mantissa));
+
+	ufloat32_t x4fxxs = { .f = -314.0f };
+	printf("float: %f \t=  " BIT_FMT_32 "\n", x4fxxs.f, BIT_32(x4fxxs.u));
+
+	printf("   sign     =  " BIT_FMT_32 "\n", BIT_32(x4fxxs.layout.sign));
+	printf("   exponent =  " BIT_FMT_32 "\n", BIT_32(x4fxxs.layout.exponent));
+	printf("   mantissa =  " BIT_FMT_32 "\n", BIT_32(x4fxxs.layout.mantissa));
 }
 
 int
