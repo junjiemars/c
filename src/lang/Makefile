@@ -3,7 +3,7 @@
 lang: array																			\
       lang_assert																\
       duration																	\
-      enum																			\
+      lang_enum																	\
       env																				\
       error																			\
       exit																			\
@@ -33,7 +33,7 @@ lang: array																			\
 lang_test:  array_test													\
             lang_assert_test										\
             duration_test												\
-            enum_test														\
+            lang_enum_test											\
             env_test														\
             error_test													\
             exit_test														\
@@ -112,17 +112,17 @@ $(duration_d_objout): $(lang_root)duration/d.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
 # enum 
-enum_binout := $(bin_path)$(lang_prefix)_enum$(bin_ext)
-enum_cppout := $(tmp_path)$(lang_prefix)_enum$(cpp_ext)
+lang_enum_binout := $(bin_path)$(lang_prefix)_enum$(bin_ext)
+lang_enum_cppout := $(tmp_path)$(lang_prefix)_enum$(cpp_ext)
 
-enum: $(enum_binout)
-enum_test: enum
-	$(enum_binout)
+enum: $(lang_enum_binout)
+lang_enum_test: enum
+	$(lang_enum_binout)
 
-$(enum_binout): $(enum_cppout)
+$(lang_enum_binout): $(lang_enum_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(enum_cppout): $(lang_root)enum/e.c
+$(lang_enum_cppout): $(lang_root)enum/e.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # env

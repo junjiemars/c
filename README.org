@@ -332,7 +332,6 @@ a keyword added in C11 to provide compile-time assertion.
 	 :CUSTOM_ID: language_enum
 	 :END:
 
-
 #+BEGIN_SRC c
 enum [identifier] { enumerator-list };
 
