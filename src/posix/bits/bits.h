@@ -10,13 +10,19 @@ const char *BIT4[] = {
 };
 
 
-#define BIT8_SEP " "
-#define BIT8_PRE ""
+#define BIT8_PRE  ""
+#define BIT16_PRE ""
+#define BIT32_PRE ""
+#define BIT64_PRE ""
 
-#define BIT8_FMT  BIT8_PRE "%s%s"
-#define BIT16_FMT BIT8_FMT BIT8_SEP BIT8_FMT
-#define BIT32_FMT BIT16_FMT BIT8_SEP BIT16_FMT
-#define BIT64_FMT BIT32_FMT BIT8_SEP BIT32_FMT
+#define BIT8_SEP  ""
+#define BIT16_SEP ""
+#define BIT32_SEP ""
+
+#define BIT8_FMT  "%s%s"
+#define BIT16_FMT BIT8_FMT  BIT8_SEP  BIT8_FMT
+#define BIT32_FMT BIT16_FMT BIT16_SEP BIT16_FMT
+#define BIT64_FMT BIT32_FMT BIT32_SEP BIT32_FMT
 
 #define BIT8(n)  BIT4[(n) >> 4], BIT4[(n) & 0x0f]
 #define BIT16(n) BIT8((n) >> 8), BIT8((n) & 0xff)

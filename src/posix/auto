@@ -6,6 +6,9 @@
 ## check posix features
 ####
 
+include="stdint.h" . ${NORE_ROOT}/auto/include
+include="inttypes.h" . ${NORE_ROOT}/auto/include
+
 # open
 case $NM_SYSTEM in
   Darwin|Linux)
