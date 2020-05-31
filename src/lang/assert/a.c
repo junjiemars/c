@@ -8,9 +8,7 @@
 #  ifdef static_assert
 #    undef static_assert
 #  endif
-#  define sa_cat_(a, b) a##b
-#  define sa_cat(a, b) sa_cat_(a, b)
-#  define static_assert(e, m)  enum {sa_cat(static_assert_, __LINE__) = 1/!!(e)}
+#  define static_assert(e, m) enum {static_assert = 1/!!((e) && (m))}
 #endif
 
 int
@@ -24,11 +22,13 @@ main(int argc, const char* argv[]) {
 
 	assert((argc > 1) && "usage: one <int>");
 
+	printf("in %s mode\n",
 #ifdef NDEBUG
-	printf("in RELEASE mode\n");
+         "RELEASE"
 #else
-	printf("in DEUBG mode\n");
-#endif
+         "DEBUG"
+#endif         
+         );
 
 	static_assert(4 == sizeof(int), "sizeof(int) != 4 bytes");
 
@@ -36,7 +36,6 @@ main(int argc, const char* argv[]) {
 		int n = atoi(argv[1]);
 		printf("sqr(%i)=%u\n", n, sqr(n));
 	}
-
 
 	return 0;
 }

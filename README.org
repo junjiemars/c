@@ -299,7 +299,6 @@ DEFVAR(float, y, 2.718); /* expand to: float var_y = 2.718; */
 	 :CUSTOM_ID: language_assert
 	 :END:
 
-
 No, there's nothing wrong with =assert= as long as you use it as
 intended.
 - Assert: A failure in the program's logic itself.

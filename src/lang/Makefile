@@ -1,7 +1,7 @@
 # ./configure --without-debug --has-lang
 
 lang: array																			\
-      assert																		\
+      lang_assert																\
       duration																	\
       enum																			\
       env																				\
@@ -31,7 +31,7 @@ lang: array																			\
       volatile
 
 lang_test:  array_test													\
-            assert_test													\
+            lang_assert_test										\
             duration_test												\
             enum_test														\
             env_test														\
@@ -79,17 +79,17 @@ $(array_binout): $(lang_root)array/a1.c
 # assert at runtime
 # static_assert at compile time
 
-assert_binout := $(bin_path)$(lang_prefix)_assert$(bin_ext)
-assert_cppout := $(tmp_path)$(lang_prefix)_assert$(cpp_ext)
+lang_assert_binout := $(bin_path)$(lang_prefix)_assert$(bin_ext)
+lang_assert_cppout := $(tmp_path)$(lang_prefix)_assert$(cpp_ext)
 
-assert: $(assert_binout)
-assert_test: assert
-		-$(assert_binout) 49
+assert: $(lang_assert_binout)
+lang_assert_test: assert
+		-$(lang_assert_binout) 49
 
-$(assert_binout): $(assert_cppout)
+$(lang_assert_binout): $(lang_assert_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(assert_cppout): $(lang_root)assert/a.c
+$(lang_assert_cppout): $(lang_root)assert/a.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
