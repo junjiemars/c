@@ -54,6 +54,11 @@ $ make install
 	:CUSTOM_ID: language
 	:END:
 
+Run the example under =src/lang=.
+#+BEGIN_SRC sh
+$ ./configure --has-lang
+#+END_SRC
+
 ** Preprocessor	
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_preprocessor
@@ -74,11 +79,10 @@ text manipulations, such as:
 		:CUSTOM_ID: language_preprocessor_include
 		:END:
 		
-The =#include= directive instructs the preprocessor to paste the 
-text of the given file into the current file. 
-Generally, it is necessary to tell the preprocessor where to look for 
-header files if they are not placed in the current directory 
-or a standard system directory. 
+The =#include= directive instructs the preprocessor to paste the text
+of the given file into the current file. Generally, it is necessary to
+tell the preprocessor where to look for header files if they are not
+placed in the current directory or a standard system directory.
 
 *** =#define=
 		:PROPERTIES:
@@ -93,13 +97,12 @@ and creating a /macro/.
 #define identifier [value]
 #+END_SRC
 
-When defining a /constant/, you may optionally elect not to provide 
-a value for that constant. In this case, the /identifier/ 
-will be replaced with blank text, but will be "defined" for the 
-purposes of =#ifdef= and =ifndef=. If a value is provided, 
-the given token will be replaced literally with the remainder of 
-the text on the line. You should be careful when using =#define=
-in this way.
+When defining a /constant/, you may optionally elect not to provide a
+value for that constant. In this case, the /identifier/ will be
+replaced with blank text, but will be "defined" for the purposes of
+=#ifdef= and =ifndef=. If a value is provided, the given token will be
+replaced literally with the remainder of the text on the line. You
+should be careful when using =#define= in this way.
 
 - Defining a /parameterized macro/
 #+BEGIN_SRC c
@@ -113,7 +116,6 @@ in this way.
 		:CUSTOM_ID: language_preprocessor_undef
 		:END:
 
-
 #+BEGIN_SRC c
 #undef identifier
 #+END_SRC
@@ -122,17 +124,18 @@ The =#undef= directive undefines a constant or preprocessor macro
 defined previously using =#define=.
 
 For example:
-
 #+BEGIN_SRC c
 #define E 2.71828
 double e_squared = E * E;
-#undef E
+#ifdef E
+#  undef E
+#endif
 #+END_SRC
 
-Usually, =#undef= is used to scope a preprocessor constant into 
-a very limited region: this is done to avoid leaking the constant.
-=#undef= is the only way to create this scope since the preprocessor 
-does not understand block scope. 
+Usually, =#undef= is used to scope a preprocessor constant into a very
+limited region: this is done to avoid leaking the constant.  =#undef=
+is the only way to create this scope since the preprocessor does not
+understand block scope.
 
 *** =#if= vs. =#ifdef=
 		:PROPERTIES:
@@ -148,8 +151,8 @@ Prefer =#if define(...)=, it's more flexible
 /* code: when on LINUX or DARWIN platform */
 #endif
 
-#if defined(CLANG) && (1==NM_HAVE_LITTLE_ENDIAN)
-/* code: when using clang compile and on little endian machine */
+#if defined(CLANG) && (1==NM_CPU_LITTLE_ENDIAN)
+/* code: when using clang compiler and on a little endian machine */
 #endif
 #+END_SRC
 
@@ -158,19 +161,18 @@ Prefer =#if define(...)=, it's more flexible
 		:CUSTOM_ID: language_preprocessor_ifndef
 		:END:
 
-
 #+BEGIN_SRC c
 #ifndef identifer
 /* code: when the identifier had not been defined */
 #endif
 #+END_SRC
 
-=#ifndef= checks whether the given identifier has been =#defined= earlier 
-in the file or in an included file; if not, it includes the code 
-between it and the closing =#else= or, if no =#else= is present, 
-=#endif= statement. =#ifndef= is often used to make header files idempotent 
-by defining a identifier once the file has been included and checking 
-that the identifier was not set at the top of that file.
+=#ifndef= checks whether the given identifier has been =#defined=
+earlier in the file or in an included file; if not, it includes the
+code between it and the closing =#else= or, if no =#else= is present,
+=#endif= statement. =#ifndef= is often used to make header files
+idempotent by defining a identifier once the file has been included
+and checking that the identifier was not set at the top of that file.
 
 #+BEGIN_SRC c
 #ifndef    _LANG_H_
@@ -231,7 +233,7 @@ how many times it has been imported.
 #+END_SRC
 
 The =#pragma= directive can also be used for other compiler-specific
-purposes.  =#pragma= is commonly used to suppress warnings.
+purposes. =#pragma= is commonly used to suppress warnings.
 
 #+BEGIN_SRC c
 #if MSVC 
@@ -269,7 +271,7 @@ purposes.  =#pragma= is commonly used to suppress warnings.
 Prefixing a macro token with =#= will quote that macro token. This
 allows you to turn bare words in your source code into text
 token. This can be particularly useful for writing a macro to convert
-an =enum= into a string.
+the member of =enum= from =int= into a string.
 
 #+BEGIN_SRC c
 enum COLOR { RED, GREEN, BLUE };
@@ -289,7 +291,7 @@ variable name, or any other identifier.
 #define DEFVAR(type, var, val) type var_##var = val
 
 DEFVAR(int, x, 1); /* expand to: int var_x = 1; */
-DEFVAR(float, y, 2.718);
+DEFVAR(float, y, 2.718); /* expand to: float var_y = 2.718; */
 #+END_SRC
 
 ** assert

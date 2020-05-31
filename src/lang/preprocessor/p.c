@@ -1,26 +1,32 @@
-#include <_lang_.h>
+#include "_lang_.h"
 #include <stdio.h>
 
-
+#ifdef MAX
+#  undef MAX
+#endif
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
+#ifdef E
+#  undef E
+#endif
 #define E 2.71828
 double e_squared = E * E;
 #undef E
 
-#if !defined(MIN)
-#  define MIN(a, b) ((a) < (b) ? (a) : (b))
+#ifdef MIN
+#  undef MIN
 #endif
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
 
 #if defined( _ERROR_ ) && ( 1 == _ERROR_ )
 #  error "compile failed: because _ERROR_==1 is true"
 #endif
 
-#ifdef MSVC
+#if defined(MSVC)
 #  pragma warning(disable:4996) /*_CRT_SECURE_NO_WARNINGS*/
 #endif
 
-#if ( GCC )
+#if (GCC)
 #  pragma GCC diagnostic ignored "-Wstrict-aliasing"  /* (unsigned init*)&f: */
 #endif
 
@@ -36,7 +42,6 @@ enum Color {
 };
 #define COLOR_STR(x) #x
 
-
 #define DEFVAR(type, var, val) type var_##var = val;
 
 
@@ -46,9 +51,9 @@ main(int argc, char *argv[]) {
 	_unused_(argv);
 
 	char platform[]
-#if defined( LINUX )
+#if defined(LINUX)
   = "Linux";
-#elif defined( DARWIN )
+#elif defined(DARWIN)
 	= "Darwin";
 #else
 	= "Unknown";
@@ -77,10 +82,6 @@ main(int argc, char *argv[]) {
 	DEFVAR(double, y, e_squared);
 	printf("defvar x=%i\n", var_x);
 	printf("defvar y=%f\n", var_y);
-
-	/* printf */
-  /* #include "p.txt" */
-	/* ; */
 
 	return 0;
 }
