@@ -355,7 +355,6 @@ C.
 	 :CUSTOM_ID: language_error
 	 :END:
 
-
 - /fail safe/ pertaining to a system or component that automatically
   places itself in a safe operating mode in the event of a failue: a
   traffic light that reverts to blinking red in all directions when
@@ -391,7 +390,7 @@ Disadvantages of /Function Return Value/:
 - functions that return error indicators cannot use return value for
   other uses;
 - checking every function call for an error condition increases code
-  by 30%-40%;
+  stabilities by 30%-40%;
 - impossible for library function to enforce that callers check for
   error condition.
 

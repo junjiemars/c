@@ -4,7 +4,7 @@
 #include <string.h>
 
 int
-main(int argc, char* argv[]) {
+main(int argc, char **argv) {
   if (argc < 2) {
     printf("input a filename\n");
     return 0;

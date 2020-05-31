@@ -5,7 +5,7 @@ lang: array																			\
       duration																	\
       lang_enum																	\
       env																				\
-      error																			\
+      lang_error																\
       exit																			\
       fn																				\
       goto																			\
@@ -35,7 +35,7 @@ lang_test:  array_test													\
             duration_test												\
             lang_enum_test											\
             env_test														\
-            error_test													\
+            lang_error_test											\
             exit_test														\
             fn_test															\
             goto_test														\
@@ -139,14 +139,14 @@ env_test: env
 	COUNT=2 $(env_var_binout) --TEXT=Bonjour
 
 # error
-error_basic_binout := $(bin_path)$(lang_prefix)_error_basic$(bin_ext)
+lang_error_basic_binout := $(bin_path)$(lang_prefix)_error_basic$(bin_ext)
 
-error: $(error_basic_binout)
-error_test: error
-	$(error_basic_binout) $(CURDIR)/Makefilex
-	$(error_basic_binout) $(CURDIR)/Makefile
+error: $(lang_error_basic_binout)
+lang_error_test: error
+	$(lang_error_basic_binout) $(CURDIR)/Makefilex
+	$(lang_error_basic_binout) $(CURDIR)/Makefile
 
-$(error_basic_binout): $(lang_root)error/e.c
+$(lang_error_basic_binout): $(lang_root)error/e.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # exit
