@@ -42,7 +42,7 @@ enum Color {
 };
 #define COLOR_STR(x) #x
 
-#define DEFVAR(type, var, val) type var_##var = val;
+#define DEFVAR(type, var, val) type var_##var = val
 
 
 int
