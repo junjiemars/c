@@ -5,7 +5,6 @@
 #ifndef _NORSTD_H_
 #define _NORSTD_H_
 
-
 #include <nore.h>
 
 

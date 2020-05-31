@@ -1,31 +1,32 @@
+# ./configure --has-memory
 
-memory: alloc \
-				bitfield \
-				bit \
-				byte \
-				copy \
-				endian \
-				generic \
-				layout \
-				rotate \
-				shift \
+memory: alloc																		\
+				bitfield																\
+				memory_bit															\
+				memory_byte															\
+				copy																		\
+				endian																	\
+				generic																	\
+				layout																	\
+				rotate																	\
+				shift																		\
 				struct
 
-memory_test: 	alloc_test \
-				bitfield_test \
-				bit_test \
-				byte_test \
-				copy_test \
-				endian_test \
-				generic_test \
-				layout_test \
-				rotate_test \
-				shift_test \
+memory_test: 	alloc_test												\
+				bitfield_test														\
+				memory_bit_test													\
+				memory_byte_test												\
+				copy_test																\
+				endian_test															\
+				generic_test														\
+				layout_test															\
+				rotate_test															\
+				shift_test															\
 				struct_test
 
 memory_prefix := memory
 
-INC += -I$(memory_root)
+INC += -I$(memory_root) -I$(root)posix
 
 ifdef RISKY
 CFLAGS += -DRISKY=$(RISKY)
@@ -150,28 +151,28 @@ $(bitfield_binout): $(memory_root)bitfield/bitfield.c
 
 
 # bit
-bit_binout := $(bin_path)$(memory_prefix)_bit$(bin_ext)
+memory_bit_binout := $(bin_path)$(memory_prefix)_bit$(bin_ext)
 
-bit: $(bit_binout)
-bit_test: bit
-	$(bit_binout)
+bit: $(memory_bit_binout)
+memory_bit_test: bit
+	$(memory_bit_binout)
 
-$(bit_binout): $(memory_root)bit/bit.c
+$(memory_bit_binout): $(memory_root)bit/bit.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # byte
-byte_binout := $(bin_path)$(memory_prefix)_byte$(bin_ext)
-byte_cppout := $(tmp_path)byte$(cpp_ext)
+memory_byte_binout := $(bin_path)$(memory_prefix)_byte$(bin_ext)
+memory_byte_cppout := $(tmp_path)byte$(cpp_ext)
 
-byte: $(byte_binout)
-byte_test: byte
-	$(byte_binout)
+byte: $(memory_byte_binout)
+memory_byte_test: byte
+	$(memory_byte_binout)
 
-$(byte_binout): $(byte_cppout)
+$(memory_byte_binout): $(memory_byte_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(byte_cppout): $(memory_root)byte/byte.c
+$(memory_byte_cppout): $(memory_root)byte/byte.c
 	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
 
 
