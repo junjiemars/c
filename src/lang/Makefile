@@ -12,7 +12,7 @@ lang: array																			\
       jmp																				\
       linkage																		\
       macro																			\
-      main																			\
+      lang_main																	\
       math																			\
       random																		\
       lang_restrict															\
@@ -42,7 +42,7 @@ lang_test:  array_test													\
             jmp_test														\
             linkage_test												\
             macro_test													\
-            main_test														\
+            lang_main_test											\
             math_test														\
             random_test													\
             lang_restrict_test									\
@@ -82,8 +82,8 @@ $(array_binout): $(lang_root)array/a1.c
 lang_assert_binout := $(bin_path)$(lang_prefix)_assert$(bin_ext)
 lang_assert_cppout := $(tmp_path)$(lang_prefix)_assert$(cpp_ext)
 
-assert: $(lang_assert_binout)
-lang_assert_test: assert
+lang_assert: $(lang_assert_binout)
+lang_assert_test: lang_assert
 		-$(lang_assert_binout) 49
 
 $(lang_assert_binout): $(lang_assert_cppout)
@@ -115,8 +115,8 @@ $(duration_d_objout): $(lang_root)duration/d.c
 lang_enum_binout := $(bin_path)$(lang_prefix)_enum$(bin_ext)
 lang_enum_cppout := $(tmp_path)$(lang_prefix)_enum$(cpp_ext)
 
-enum: $(lang_enum_binout)
-lang_enum_test: enum
+lang_enum: $(lang_enum_binout)
+lang_enum_test: lang_enum
 	$(lang_enum_binout)
 
 $(lang_enum_binout): $(lang_enum_cppout)
@@ -141,8 +141,8 @@ env_test: env
 # error
 lang_error_basic_binout := $(bin_path)$(lang_prefix)_error_basic$(bin_ext)
 
-error: $(lang_error_basic_binout)
-lang_error_test: error
+lang_error: $(lang_error_basic_binout)
+lang_error_test: lang_error
 	$(lang_error_basic_binout) $(CURDIR)/Makefilex
 	$(lang_error_basic_binout) $(CURDIR)/Makefile
 
@@ -243,18 +243,18 @@ $(macro_nested_cppout): $(lang_root)macro/nested.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # main
-main_binout := $(bin_path)$(lang_prefix)_main$(bin_ext)
-main_envp_binout := $(bin_path)$(lang_prefix)_main_envp$(bin_ext)
+lang_main_binout := $(bin_path)$(lang_prefix)_main$(bin_ext)
+lang_main_envp_binout := $(bin_path)$(lang_prefix)_main_envp$(bin_ext)
 
-main: $(main_binout) $(main_envp_binout)
-main_test: main
-	$(main_binout) a bb ccc
-	ZZZ=xyz $(main_envp_binout)
+lang_main: $(lang_main_binout) $(lang_main_envp_binout)
+lang_main_test: lang_main
+	$(lang_main_binout) a bb ccc
+	ZZZ=xyz $(lang_main_envp_binout)
 
-$(main_binout): $(lang_root)main/m.c
+$(lang_main_binout): $(lang_root)main/m.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(main_envp_binout): $(lang_root)main/m_envp.c
+$(lang_main_envp_binout): $(lang_root)main/m_envp.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # math

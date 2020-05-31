@@ -7,9 +7,11 @@ main(int argc, char **argv, char **envp) {
   _unused_(argv);
 
   char **p = envp;
+  printf("char **envp ...\n----------\n");
   while (*p) {
     printf("%s\n", *p++);
   }
 
-  printf("Hello,\n");
+  return 0;
 }
+
