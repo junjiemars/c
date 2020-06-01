@@ -47,7 +47,7 @@ case $NM_SYSTEM in
 		nm_feature_h='#include <alloca.h>'
 		nm_feature_flags=
 		nm_feature_test='int *p=alloca(16*sizeof(*p));
-                     return 0 == p;'
+                     return !p;'
 		. ${NORE_ROOT}/auto/feature
 	  ;;
 	WinNT)
@@ -57,7 +57,7 @@ case $NM_SYSTEM in
 		nm_feature_h='#include <malloc.h>'
 		nm_feature_flags=
 		nm_feature_test='int *p=alloca(16*sizeof(*p));
-                     return 0 == p;'
+                     return !p;'
 		. ${NORE_ROOT}/auto/feature
 	  ;;
 	*)
