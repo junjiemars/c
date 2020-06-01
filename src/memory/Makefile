@@ -1,6 +1,6 @@
 # ./configure --has-memory
 
-memory: alloc																		\
+memory: memory_alloc														\
 				bitfield																\
 				memory_bit															\
 				memory_byte															\
@@ -12,17 +12,17 @@ memory: alloc																		\
 				shift																		\
 				struct
 
-memory_test: 	alloc_test												\
-				bitfield_test														\
-				memory_bit_test													\
-				memory_byte_test												\
-				copy_test																\
-				endian_test															\
-				generic_test														\
-				layout_test															\
-				rotate_test															\
-				shift_test															\
-				struct_test
+memory_test: 	memory_alloc_test									\
+							bitfield_test											\
+				      memory_bit_test										\
+				      memory_byte_test									\
+				      copy_test													\
+				      endian_test												\
+				      generic_test											\
+				      layout_test												\
+				      rotate_test												\
+				      shift_test												\
+				      struct_test
 
 memory_prefix := memory
 
@@ -95,48 +95,48 @@ endif
 
 
 # alloc
-alloc_a_binout := $(bin_path)$(memory_prefix)_alloca$(bin_ext)
-alloc_m_binout := $(bin_path)$(memory_prefix)_malloc$(bin_ext)
-alloc_c_binout := $(bin_path)$(memory_prefix)_calloc$(bin_ext)
-alloc_re_binout := $(bin_path)$(memory_prefix)_realloc$(bin_ext)
-alloc_align_binout := $(bin_path)$(memory_prefix)_memalign$(bin_ext)
+memory_alloc_a_binout := $(bin_path)$(memory_prefix)_alloca$(bin_ext)
+memory_alloc_m_binout := $(bin_path)$(memory_prefix)_malloc$(bin_ext)
+memory_alloc_c_binout := $(bin_path)$(memory_prefix)_calloc$(bin_ext)
+memory_alloc_re_binout := $(bin_path)$(memory_prefix)_realloc$(bin_ext)
+memory_align_binout := $(bin_path)$(memory_prefix)_align$(bin_ext)
 
-alloc: $(alloc_a_binout) \
-			 $(alloc_m_binout) \
-       $(alloc_c_binout) \
-       $(alloc_re_binout) \
-			 $(alloc_align_binout)
+memory_alloc: $(memory_alloc_a_binout)					\
+			 		    $(memory_alloc_m_binout)					\
+              $(memory_alloc_c_binout)					\
+              $(memory_alloc_re_binout)					\
+			        $(memory_align_binout)
 
-alloc_test: alloca_test \
-					  malloc_test \
-						calloc_test \
-						realloc_test \
-						align_test
+memory_alloc_test: memory_alloc_a_test					\
+					         memory_alloc_m_test					\
+						       memory_alloc_c_test					\
+						       memory_alloc_re_test					\
+						       memory_align_test
 
-alloca_test: $(alloc_a_binout)
-	$(alloc_a_binout)
-malloc_test: $(alloc_m_binout)
-	$(alloc_m_binout)
-calloc_test: $(alloc_c_binout)
-	$(alloc_c_binout)
-realloc_test: $(alloc_re_binout)
-	$(alloc_re_binout)
-align_test: $(alloc_align_binout)
-	$(alloc_align_binout)
+memory_alloc_a_test: $(memory_alloc_a_binout)
+	$(memory_alloc_a_binout)
+memory_alloc_m_test: $(memory_alloc_m_binout)
+	$(memory_alloc_m_binout)
+memory_alloc_c_test: $(memory_alloc_c_binout)
+	$(memory_alloc_c_binout)
+memory_alloc_re_test: $(memory_alloc_re_binout)
+	$(memory_alloc_re_binout)
+memory_align_test: $(memory_align_binout)
+	$(memory_align_binout)
 
-$(alloc_a_binout): $(memory_root)alloc/a.c
+$(memory_alloc_a_binout): $(memory_root)alloc/a.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(alloc_m_binout): $(memory_root)alloc/m.c
+$(memory_alloc_m_binout): $(memory_root)alloc/m.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(alloc_c_binout): $(memory_root)alloc/c.c
+$(memory_alloc_c_binout): $(memory_root)alloc/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(alloc_re_binout): $(memory_root)alloc/re.c
+$(memory_alloc_re_binout): $(memory_root)alloc/re.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(alloc_align_binout): $(memory_root)alloc/align.c
+$(memory_align_binout): $(memory_root)alloc/align.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 #bitfield
