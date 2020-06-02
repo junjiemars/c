@@ -3,21 +3,15 @@
 #include <errno.h>
 #include <stdio.h>
 
-int
-main(int argc, char **argv) {
-  if (argc < 2) {
-    printf("input a filename\n");
-    return 0;
-  }
-
-  FILE* out = 0;
-  out = fopen(argv[1], "r");
+void
+test_open_file(const char *filename) {
+  FILE *out = fopen(filename, "r");
   if (0 == out) {
     int e = errno;
   	if (e) {
-      perror(argv[1]);
+      perror(filename);
       fprintf(stderr, "#open %s failed, caused by: %s\n",
-              argv[1], strerror(e));
+              filename, strerror(e));
       
       char buf[512];
       int r = strerror_r(e, buf, sizeof(buf));
@@ -32,6 +26,16 @@ main(int argc, char **argv) {
   if (out) {
     fclose(out);
   }
+}
+
+int
+main(int argc, char **argv) {
+  if (argc < 2) {
+    printf("input a filename\n");
+    return 0;
+  }
+
+  test_open_file(argv[1]);
 
   return 0;
 }
