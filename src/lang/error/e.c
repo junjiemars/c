@@ -1,7 +1,7 @@
 #include <_lang_.h>
-#include <stdio.h>
-#include <errno.h>
 #include <string.h>
+#include <errno.h>
+#include <stdio.h>
 
 int
 main(int argc, char **argv) {
