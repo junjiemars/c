@@ -1,6 +1,10 @@
 #include "_wasm_.h"
 #include <stdio.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 EMSCRIPTEN_KEEPALIVE
 int
 version() {
@@ -21,6 +25,10 @@ fact(size_t n, size_t i, size_t acc) {
   }
   return fact(n, i+1, i*acc);
 }
+
+#ifdef __cplusplus
+} /* end of extern "C" */
+#endif
 
 int
 main(int argc, char **argv) {
