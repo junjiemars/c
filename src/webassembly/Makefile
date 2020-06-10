@@ -14,7 +14,7 @@ wasm_prefix := wasm
 wasm_flags :=
 
 # basic
-wasm_flags := -s WASM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='["nore"]'
+wasm_flags := -s WASM=1
 wasm_basic_binout := $(bin_path)$(wasm_prefix)_basic.html
 
 wasm_basic: $(wasm_basic_binout)
