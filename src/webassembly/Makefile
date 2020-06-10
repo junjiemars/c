@@ -2,7 +2,7 @@
 # ./configure --has-webassembly 
 # emsdk:
 # <emsdk_root>/upstream/emscripten/emconfigure ./configure --has-webassembly
-# <emsdk_root>/upstream/emscripten/emmake make -k -C$(CURDIR) clean test
+# [WASM=1] <emsdk_root>/upstream/emscripten/emmake make -k -C$(CURDIR) clean test
 #
 
 webassembly: wasm_basic
@@ -12,8 +12,9 @@ webassembly_test: wasm_basic_test
 INC += -I$(webassembly_root)
 wasm_prefix := wasm
 wasm_flags :=
-ifeq ($(__EMSCRIPTEN__),1)
+ifeq ($(WASM),1)
 	wasm_flags := -s WASM=1
+	CFLAGS += -DWASM=1
 	bin_ext := .html
 endif
 

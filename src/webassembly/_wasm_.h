@@ -3,11 +3,10 @@
 
 #include <nore.h>
 
-#ifdef __EMSCRIPTEN__
+#ifdef WASM
 #  include <emscripten.h>
-/* #  ifdef EMSCRIPTEN_KEEPALIVE */
-/* #    undef EMSCRIPTEN_KEEPALIVE */
-/* #  endif */
+#else
+#  define EMSCRIPTEN_KEEPALIVE
 #endif
 
 
