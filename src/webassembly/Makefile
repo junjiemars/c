@@ -12,14 +12,24 @@ webassembly_test: wasm_basic_test
 INC += -I$(webassembly_root)
 wasm_prefix := wasm
 wasm_flags :=
+ifeq ($(__EMSCRIPTEN__),1)
+	wasm_flags := -s WASM=1
+	bin_ext := .html
+endif
+
 
 # basic
-wasm_flags := -s WASM=1
-wasm_basic_binout := $(bin_path)$(wasm_prefix)_basic.html
+
+wasm_basic_binout := $(bin_path)$(wasm_prefix)_basic$(bin_ext)
 
 wasm_basic: $(wasm_basic_binout)
+ifeq ($(WASM),1)
 wasm_basic_test: wasm_basic
 	ls -lh $(bin_path)*
+else
+wasm_basic_test: wasm_basic
+	$(wasm_basic_binout)
+endif
 
 $(wasm_basic_binout): $(webassembly_root)basic/b.c
 	$(CC) $(CFLAGS) $(wasm_flags) $(INC) $^ $(bin_out)$@
