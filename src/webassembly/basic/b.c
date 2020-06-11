@@ -26,6 +26,15 @@ fact(size_t n, size_t i, size_t acc) {
   return fact(n, i+1, i*acc);
 }
 
+EMSCRIPTEN_KEEPALIVE
+size_t
+sum(size_t n, size_t i, size_t acc) {
+  if (n < i) {
+    return acc;
+  }
+  return sum(n, i+1, i+acc);
+}
+
 #ifdef __cplusplus
 } /* end of extern "C" */
 #endif
