@@ -2050,9 +2050,23 @@ on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see [[https://g
 - [[https://computing.llnl.gov/tutorials/pthreads/][POSIX Threads Programming]]
 
 * Algorithm
+  
 ** Hash
 ** Algorithm References
 - [[http://www.cse.yorku.ca/~oz/hash.html][Hash Functions]]
+
+* WebAssembly
+
+Run example in browser:
+#+BEGIN_SRC javascript
+// directly call, shorten version
+Module._sum(10, 0);
+// ccall
+Module.ccall('sum', 'number', ['number', 'number'], [10, 0]);
+#+END_SRC
+
+
+- [[https://developer.mozilla.org/en-US/docs/WebAssembly][MDN: WebAssembly]]
 
 * Tools
 	:PROPERTIES:
