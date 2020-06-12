@@ -9,9 +9,11 @@
 # in html file
 
 webassembly: wasm_basic													\
-             wasm_export
+             wasm_export												\
+             wasm_file
 webassembly_test: wasm_basic_test								\
-                  wasm_export_test
+                  wasm_export_test							\
+                  wasm_file_test
 
 
 INC += -I$(webassembly_root)
@@ -28,6 +30,9 @@ ifeq ($(WASM),1)
                      -s NO_EXIT_RUNTIME=1														\
                      -s "EXTRA_EXPORTED_RUNTIME_METHODS=['ccall']"	\
                      -s SAFE_HEAP=1
+  wasm_file_flags := $(wasm_flags)							\
+                     -s NO_EXIT_RUNTIME=1				\
+                     --preload-file $(webassembly_root)_wasm_.h
 endif
 
 
@@ -48,7 +53,6 @@ $(wasm_basic_binout): $(webassembly_root)basic/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_basic_flags)
 
 # export fn
-
 wasm_export_binout := $(bin_path)$(wasm_prefix)_export$(bin_ext)
 
 wasm_export: $(wasm_export_binout)
@@ -62,3 +66,18 @@ endif
 
 $(wasm_export_binout): $(webassembly_root)export/x.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_export_flags)
+
+# file
+wasm_file_binout := $(bin_path)$(wasm_prefix)_file$(bin_ext)
+
+wasm_file: $(wasm_file_binout)
+ifeq ($(WASM),1)
+wasm_file_test: wasm_file
+	ls -lh $(bin_path)*
+else
+wasm_file_test: wasm_file
+	$(wasm_file_binout) $(webassembly_root)_wasm_.h
+endif
+
+$(wasm_file_binout): $(webassembly_root)file/f.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_file_flags)
