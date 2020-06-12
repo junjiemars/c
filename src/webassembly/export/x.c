@@ -22,9 +22,7 @@ sum(unsigned long n, unsigned long acc) {
 EMSCRIPTEN_KEEPALIVE
 long long
 sqr(long long x) {
-  long long *y = 0;
-  *y = 0;
-  return (*y)*x;
+  return x*x;
 }
 
 
@@ -32,3 +30,11 @@ sqr(long long x) {
 } /* end of extern "C" */
 #endif
 
+#if !__EMSCRIPTEN__
+#include <stdio.h>
+int
+main(void) {
+  printf("sqr(%ld) = %lld\n", 10L, sqr(10L));
+  return 0;
+}
+#endif

@@ -3,7 +3,7 @@
 
 #include <nore.h>
 
-#ifdef WASM
+#if __EMSCRIPTEN__
 #  include <emscripten.h>
 #else
 #  define EMSCRIPTEN_KEEPALIVE

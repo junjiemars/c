@@ -21,11 +21,18 @@ ifeq ($(WASM),1)
 	wasm_flags := -s WASM=1
 	CFLAGS += -DWASM=1
 	bin_ext := .html
+
+	wasm_basic_flags := $(wasm_flags)
+	wasm_export_flags := $(wasm_flags)																\
+                     -fsanitize=undefined														\
+                     -s NO_EXIT_RUNTIME=1														\
+                     -s "EXTRA_EXPORTED_RUNTIME_METHODS=['ccall']"	\
+                     -s SAFE_HEAP=1
 endif
 
 
 # basic
-wasm_basic_flags := $(wasm_flags)
+
 wasm_basic_binout := $(bin_path)$(wasm_prefix)_basic$(bin_ext)
 
 wasm_basic: $(wasm_basic_binout)
@@ -41,11 +48,7 @@ $(wasm_basic_binout): $(webassembly_root)basic/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_basic_flags)
 
 # export fn
-wasm_export_flags := $(wasm_flags)																	\
-                     -fsanitize=undefined 													\
-                     -s NO_EXIT_RUNTIME=1														\
-                     -s "EXTRA_EXPORTED_RUNTIME_METHODS=['ccall']"	\
-                     -s SAFE_HEAP=1
+
 wasm_export_binout := $(bin_path)$(wasm_prefix)_export$(bin_ext)
 
 wasm_export: $(wasm_export_binout)
