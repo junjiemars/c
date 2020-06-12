@@ -25,7 +25,7 @@ endif
 
 
 # basic
-wasm_basic_flags := $(CFLAGS) $(wasm_flags)
+wasm_basic_flags := $(wasm_flags)
 wasm_basic_binout := $(bin_path)$(wasm_prefix)_basic$(bin_ext)
 
 wasm_basic: $(wasm_basic_binout)
@@ -38,12 +38,14 @@ wasm_basic_test: wasm_basic
 endif
 
 $(wasm_basic_binout): $(webassembly_root)basic/b.c
-	$(CC) $(wasm_basic_flags) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_basic_flags)
 
 # export fn
-wasm_export_flags := $(CFLAGS) $(wasm_flags) \
-                     -s NO_EXIT_RUNTIME=1 \
-                     -s "EXTRA_EXPORTED_RUNTIME_METHODS=['ccall']"
+wasm_export_flags := $(wasm_flags)																	\
+                     -fsanitize=undefined 													\
+                     -s NO_EXIT_RUNTIME=1														\
+                     -s "EXTRA_EXPORTED_RUNTIME_METHODS=['ccall']"	\
+                     -s SAFE_HEAP=1
 wasm_export_binout := $(bin_path)$(wasm_prefix)_export$(bin_ext)
 
 wasm_export: $(wasm_export_binout)
@@ -56,4 +58,4 @@ wasm_export_test: wasm_export
 endif
 
 $(wasm_export_binout): $(webassembly_root)export/x.c
-	$(CC) $(wasm_export_flags) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_export_flags)

@@ -22,7 +22,9 @@ sum(unsigned long n, unsigned long acc) {
 EMSCRIPTEN_KEEPALIVE
 long long
 sqr(long long x) {
-  return x*x;
+  long long *y = 0;
+  *y = 0;
+  return (*y)*x;
 }
 
 
