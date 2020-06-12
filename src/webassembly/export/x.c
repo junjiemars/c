@@ -5,19 +5,26 @@ extern "C" {
 #endif
 
 EMSCRIPTEN_KEEPALIVE
-int
-version(void) {
+unsigned long
+ver(void) {
   return 0x11223344;
 }
 
 EMSCRIPTEN_KEEPALIVE
-int
-sum(int n, int acc) {
+unsigned long
+sum(unsigned long n, unsigned long acc) {
   if (n < 1) {
     return acc;
   }
   return sum(n-1, n+acc);
 }
+
+EMSCRIPTEN_KEEPALIVE
+long long
+sqr(long long x) {
+  return x*x;
+}
+
 
 #ifdef __cplusplus
 } /* end of extern "C" */

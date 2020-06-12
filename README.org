@@ -2067,6 +2067,7 @@ Module.ccall('sum', 'number', ['number', 'number'], [10, 0]);
 
 
 - [[https://developer.mozilla.org/en-US/docs/WebAssembly][MDN: WebAssembly]]
+- [[https://github.com/mdn/webassembly-examples][MDN: webassembly-examples]]
 
 * Tools
 	:PROPERTIES:
