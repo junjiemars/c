@@ -12,13 +12,15 @@ webassembly: wasm_basic													\
              wasm_bidir													\
              wasm_export												\
              wasm_file													\
-             wasm_str
+             wasm_str														\
+             wasm_type
 
 webassembly_test: wasm_basic_test								\
                   wasm_bidir_test								\
                   wasm_export_test							\
                   wasm_file_test								\
-                  wasm_str_test
+                  wasm_str_test									\
+                  wasm_type_test
 
 
 INC += -I$(webassembly_root)
@@ -45,6 +47,11 @@ ifeq ($(WASM),1)
                     -s NO_EXIT_RUNTIME=1													\
                     -s SAFE_HEAP=1																\
                     -s "EXTRA_EXPORTED_RUNTIME_METHODS=['ccall','cwrap']"
+  wasm_type_flags := $(wasm_flags)																\
+                     -s NO_EXIT_RUNTIME=1													\
+                    -s SAFE_HEAP=1																\
+                    -s ASSERTIONS=1																\
+                    -s "EXTRA_EXPORTED_RUNTIME_METHODS=['ccall']"
 endif
 
 
@@ -124,3 +131,18 @@ endif
 
 $(wasm_str_binout): $(webassembly_root)str/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_str_flags)
+
+# type
+wasm_type_binout := $(bin_path)$(wasm_prefix)_type$(bin_ext)
+
+wasm_type: $(wasm_type_binout)
+ifeq ($(WASM),1)
+wasm_type_test: wasm_type
+	ls -lh $(bin_path)*
+else
+wasm_type_test: wasm_type
+	$(wasm_type_binout) $(webassembly_root)_wasm_.h
+endif
+
+$(wasm_type_binout): $(webassembly_root)type/t.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_type_flags)
