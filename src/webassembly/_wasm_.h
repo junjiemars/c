@@ -7,6 +7,7 @@
 #  include <emscripten.h>
 #else
 #  define EMSCRIPTEN_KEEPALIVE
+#  define EM_ASM
 #endif
 
 

@@ -9,11 +9,13 @@
 # in html file
 
 webassembly: wasm_basic													\
+             wasm_bidir													\
              wasm_export												\
              wasm_file													\
              wasm_str
 
 webassembly_test: wasm_basic_test								\
+                  wasm_bidir_test								\
                   wasm_export_test							\
                   wasm_file_test								\
                   wasm_str_test
@@ -28,6 +30,9 @@ ifeq ($(WASM),1)
 	bin_ext := .html
 
 	wasm_basic_flags := $(wasm_flags)
+  wasm_bidir_flags := $(wasm_flags)																	\
+                      -s SAFE_HEAP=1																\
+                      -s "EXTRA_EXPORTED_RUNTIME_METHODS=['ccall']"
 	wasm_export_flags := $(wasm_flags)																\
                      -fsanitize=undefined														\
                      -s NO_EXIT_RUNTIME=1														\
@@ -44,7 +49,6 @@ endif
 
 
 # basic
-
 wasm_basic_binout := $(bin_path)$(wasm_prefix)_basic$(bin_ext)
 
 wasm_basic: $(wasm_basic_binout)
@@ -58,6 +62,22 @@ endif
 
 $(wasm_basic_binout): $(webassembly_root)basic/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_basic_flags)
+
+# bidir: ./configure --with-std=no
+wasm_bidir_binout := $(bin_path)$(wasm_prefix)_bidir$(bin_ext)
+
+wasm_bidir: $(wasm_bidir_binout)
+ifeq ($(WASM),1)
+wasm_bidir_test: wasm_bidir
+	ls -lh $(bin_path)*
+else
+wasm_bidir_test: wasm_bidir
+	$(wasm_bidir_binout)
+endif
+
+$(wasm_bidir_binout): $(webassembly_root)bidir/bd.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_bidir_flags)
+
 
 # export fn
 wasm_export_binout := $(bin_path)$(wasm_prefix)_export$(bin_ext)
