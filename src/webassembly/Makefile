@@ -10,10 +10,13 @@
 
 webassembly: wasm_basic													\
              wasm_export												\
-             wasm_file
+             wasm_file													\
+             wasm_str
+
 webassembly_test: wasm_basic_test								\
                   wasm_export_test							\
-                  wasm_file_test
+                  wasm_file_test								\
+                  wasm_str_test
 
 
 INC += -I$(webassembly_root)
@@ -31,8 +34,12 @@ ifeq ($(WASM),1)
                      -s "EXTRA_EXPORTED_RUNTIME_METHODS=['ccall']"	\
                      -s SAFE_HEAP=1
   wasm_file_flags := $(wasm_flags)							\
-                     -s NO_EXIT_RUNTIME=1				\
-                     --preload-file $(webassembly_root)_wasm_.h
+                     -s NO_EXIT_RUNTIME=1       \
+                     --preload-file $(webassembly_root)@_wasm_.h@w1.h
+	wasm_str_flags := $(wasm_flags)																	\
+                    -s NO_EXIT_RUNTIME=1													\
+                    -s SAFE_HEAP=1																\
+                    -s "EXTRA_EXPORTED_RUNTIME_METHODS=['ccall','cwrap']"
 endif
 
 
@@ -81,3 +88,19 @@ endif
 
 $(wasm_file_binout): $(webassembly_root)file/f.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_file_flags)
+
+
+# str
+wasm_str_binout := $(bin_path)$(wasm_prefix)_str$(bin_ext)
+
+wasm_str: $(wasm_str_binout)
+ifeq ($(WASM),1)
+wasm_str_test: wasm_str
+	ls -lh $(bin_path)*
+else
+wasm_str_test: wasm_str
+	$(wasm_str_binout) $(webassembly_root)_wasm_.h
+endif
+
+$(wasm_str_binout): $(webassembly_root)str/s.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_str_flags)

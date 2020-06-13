@@ -7,6 +7,12 @@ extern "C" {
 
 EMSCRIPTEN_KEEPALIVE
 int
+ver() {
+  return 0x11223344;
+}
+
+EMSCRIPTEN_KEEPALIVE
+int
 print_file(const char *file) {
   FILE *in = fopen(file, "rb");
   if (!in) {
@@ -34,6 +40,7 @@ print_file(const char *file) {
 #if !__EMSCRIPTEN__
 int
 main(int argc, char **argv) {
+  printf("ver() = %i\n", ver());
   if (argc < 2) {
     fprintf(stderr, "where input file located?\n");
     return 0;
