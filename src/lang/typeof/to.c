@@ -1,7 +1,7 @@
 #include <_lang_.h>
 #include <stdio.h>
 
-#if (NM_HAVE_TYPEOF)
+#if NM_HAVE_TYPEOF
 #  define swap(a, b) do {                       \
 		 typeof(a) _swap_1_ = a;                    \
 		 a = b;                                     \
@@ -14,7 +14,7 @@ main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
-#if (NM_HAVE_TYPEOF)
+#if NM_HAVE_TYPEOF
 	int i1 = 0x1122, i2 = 0x3344;
 	printf("before swap: i1 = 0x%x, i2 = 0x%x\n", i1, i2);
 	swap(i1, i2);
@@ -25,7 +25,7 @@ main(int argc, char **argv) {
 	swap(s1, s2);
 	printf("after swap:  s1 = %s, s2 = %s\n", s1, s2);
 #else
-  printf("does not support 'typeof'\n");
+  printf("does not support 'typeof' operator\n");
 #endif
 
 	return 0;

@@ -1135,6 +1135,8 @@ $ make clean lang_typedef_test
 
 ** typeof
 
+=typeof= operator is not C standard.
+
 Run =typeof= example
 #+BEGIN_SRC sh
 $ ./configure --has-lang
