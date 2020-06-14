@@ -25,7 +25,7 @@ lang: array																			\
       storage																		\
       string																		\
       lang_time																	\
-      type																			\
+      lang_type																	\
       typedef																		\
       typeof																		\
       volatile
@@ -55,7 +55,7 @@ lang_test:  array_test													\
             storage_test												\
             string_test													\
             lang_time_test											\
-            type_test														\
+            lang_type_test										  \
             typedef_test												\
             typeof_test													\
             volatile_test
@@ -564,17 +564,17 @@ $(lang_clock_binout): $(lang_root)time/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # type
-type_binout := $(bin_path)$(lang_prefix)_type$(bin_ext)
-type_cppout := $(tmp_path)$(lang_prefix)_type$(cpp_ext)
+lang_type_binout := $(bin_path)$(lang_prefix)_type$(bin_ext)
+lang_type_cppout := $(tmp_path)$(lang_prefix)_type$(cpp_ext)
 
-type: $(type_binout)
-type_test: type
-	$(type_binout)
+lang_type: $(lang_type_binout)
+lang_type_test: lang_type
+	$(lang_type_binout)
 
-$(type_binout): $(type_cppout)
+$(lang_type_binout): $(lang_type_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(type_cppout): $(lang_root)type/t.c
+$(lang_type_cppout): $(lang_root)type/t.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
