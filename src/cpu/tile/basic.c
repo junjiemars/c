@@ -1,6 +1,5 @@
 #include <_cpu_.h>
 #include <stdio.h>
-#include <time.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -54,44 +53,33 @@ validate(const char *a, const char *b) {
 
 int
 main() { 
+  clock_t elapsed;
+
+  /* raw */
   table_a = malloc(sizeof(char) * (ROW_SIZE*COL_SIZE));
   memset(table_a, 0, ROW_SIZE * COL_SIZE);
 
-
-  clock_t begin, end;
-  long int escaped;
-
-  /* raw */
-  begin = clock();
-  raw(table_a);
-  end = clock();
-  escaped = end - begin;
+  _time_(raw(table_a), elapsed);
   printf("raw, escaped %li cpu time, %lf sec\n",
-         escaped, (double)escaped/CLOCKS_PER_SEC);
-
+         elapsed, (double)elapsed/CLOCKS_PER_SEC);
+  
   /* tile */
   table_b = malloc(sizeof(char) * (ROW_SIZE*COL_SIZE));
   memset(table_b, 0, ROW_SIZE * COL_SIZE);
 
-  begin = clock();
-  tile(table_b);
-  end = clock();
-  escaped = end - begin;
+  _time_(tile(table_b), elapsed);
   printf("tile, escaped %li cpu time, %lf sec\n",
-         escaped, (double)escaped/CLOCKS_PER_SEC);
+         elapsed, (double)elapsed/CLOCKS_PER_SEC);
 
   /* raw */
-  begin = clock();
-  raw(table_a);
-  end = clock();
-  escaped = end - begin;
+  _time_(raw(table_a), elapsed);
   printf("raw, escaped %li cpu time, %lf sec\n",
-         escaped, (double)escaped/CLOCKS_PER_SEC);
+         elapsed, (double)elapsed/CLOCKS_PER_SEC);
   
   printf("validate(raw, tile): %s\n",
          validate(table_a, table_b) ? "false" : "true");
-
   free(table_a);
   free(table_b);
+
   return 0;
 }
