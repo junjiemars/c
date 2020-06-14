@@ -2,15 +2,11 @@
 #include <stdio.h>
 
 #if (NM_HAVE_TYPEOF)
-#  if MSVC
-#    define typeof(x) decltype((x))
-#  endif
-#define swap(a, b)                \
-	do {						                \
-		typeof(a) _swap_temp_1 = a;   \
-		a = b;                        \
-    b = _swap_temp_1;						  \
-	} while (0)
+#  define swap(a, b) do {                       \
+		 typeof(a) _swap_1_ = a;                    \
+		 a = b;                                     \
+     b = _swap_1_;                              \
+	 } while (0)
 #endif
 
 int
@@ -28,6 +24,8 @@ main(int argc, char **argv) {
 	printf("before swap: s1 = %s, s2 = %s\n", s1, s2);
 	swap(s1, s2);
 	printf("after swap:  s1 = %s, s2 = %s\n", s1, s2);
+#else
+  printf("does not support 'typeof'\n");
 #endif
 
 	return 0;

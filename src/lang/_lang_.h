@@ -31,7 +31,7 @@
 #endif /* end of NM_HAVE_STDINT_H */
 
 #if NM_HAVE_TYPEOF
-#  if CLANG
+#  if CLANG || GCC
 #    define typeof __typeof__
 #  elif GCC
 #    define typeof __typeof__
