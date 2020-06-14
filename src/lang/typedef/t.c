@@ -24,4 +24,7 @@ main(int argc, char *argv[]) {
 
 	length_t len1 = 123;
 	printf("sizeof(length_t) = %zu\n", sizeof(len1));
+  
+  printf("sizeof(point_s) = %zu\n", sizeof(point_s));
+  printf("sizeof(point1_s) = %zu\n", sizeof(point1_s));
 }
