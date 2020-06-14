@@ -1,64 +1,64 @@
 # ./configure --without-debug --has-lang
-
-lang: array																			\
+lang: lang_array																\
+      lang_duration															\
+      lang_env																	\
+      lang_exit																	\
+      lang_fn																		\
+      lang_goto																	\
+      lang_jmp																	\
       lang_assert																\
-      duration																	\
       lang_enum																	\
-      env																				\
       lang_error																\
-      exit																			\
-      fn																				\
-      goto																			\
-      jmp																				\
-      linkage																		\
-      macro																			\
       lang_main																	\
-      math																			\
-      random																		\
-      lang_restrict															\
-      pointer																		\
       lang_preprocessor													\
-      scope																			\
+      lang_restrict															\
       lang_signal																\
-      sizeof																		\
       lang_stage																\
-      storage																		\
-      string																		\
       lang_time																	\
       lang_type																	\
-      typedef																		\
-      typeof																		\
-      volatile
+      lang_linkage															\
+      lang_macro																\
+      lang_math																	\
+      lang_pointer															\
+      lang_random																\
+      lang_scope																\
+      lang_sizeof																\
+      lang_storage															\
+      lang_string																\
+      lang_typedef															\
+      lang_typeof																\
+      lang_volatile
 
-lang_test:  array_test													\
+
+lang_test:  lang_array_test											\
+            lang_duration_test									\
+            lang_env_test												\
+            lang_exit_test											\
+            lang_fn_test												\
+            lang_goto_test											\
+            lang_jmp_test												\
             lang_assert_test										\
-            duration_test												\
             lang_enum_test											\
-            env_test														\
             lang_error_test											\
-            exit_test														\
-            fn_test															\
-            goto_test														\
-            jmp_test														\
-            linkage_test												\
-            macro_test													\
             lang_main_test											\
-            math_test														\
-            random_test													\
-            lang_restrict_test									\
-            pointer_test												\
             lang_preprocessor_test							\
-            scope_test													\
+            lang_restrict_test									\
             lang_signal_test										\
-            sizeof_test													\
             lang_stage_test											\
-            storage_test												\
-            string_test													\
             lang_time_test											\
-            lang_type_test										  \
-            typedef_test												\
-            typeof_test													\
-            volatile_test
+            lang_type_test											\
+            lang_linkage_test										\
+            lang_macro_test											\
+            lang_math_test											\
+            lang_pointer_test										\
+            lang_random_test										\
+            lang_scope_test											\
+            lang_sizeof_test										\
+            lang_storage_test										\
+            lang_string_test										\
+            lang_typedef_test										\
+            lang_typeof_test										\
+            lang_volatile_test
 
 lang_prefix := lang
 INC += -I$(lang_root)
@@ -66,13 +66,13 @@ INC += -I$(lang_root)
 _ERROR_ ?= 0
 
 # array
-array_binout := $(bin_path)$(lang_prefix)_array$(bin_ext)
+lang_array_binout := $(bin_path)$(lang_prefix)_lang_array$(bin_ext)
 
-array: $(array_binout)
-array_test: array
-	$(array_binout)
+lang_array: $(lang_array_binout)
+lang_array_test: lang_array
+	$(lang_array_binout)
 
-$(array_binout): $(lang_root)array/a1.c
+$(lang_array_binout): $(lang_root)array/a1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -94,21 +94,22 @@ $(lang_assert_cppout): $(lang_root)assert/a.c
 
 
 # duration
-duration_binout := $(bin_path)$(lang_prefix)_duration$(bin_ext)
-duration_extern_objout := $(bin_path)$(lang_prefix)_duration_extern$(obj_ext)
-duration_d_objout := $(bin_path)$(lang_prefix)_duration_d$(obj_ext)
+lang_duration_binout := $(bin_path)$(lang_prefix)_duration$(bin_ext)
+lang_duration_extern_objout := $(bin_path)$(lang_prefix)_duration_extern$(obj_ext)
+lang_duration_d_objout := $(bin_path)$(lang_prefix)_duration_d$(obj_ext)
 
-duration: $(duration_binout)
-duration_test: duration
-	$(duration_binout)
+lang_duration: $(lang_duration_binout)
+lang_duration_test: lang_duration
+	$(lang_duration_binout)
 
-$(duration_binout): $(duration_extern_objout) $(duration_d_objout)
+$(lang_duration_binout): $(lang_duration_extern_objout) \
+                         $(lang_duration_d_objout)
 	$(LINK) $^ $(bin_out)$@
 
-$(duration_extern_objout): $(lang_root)duration/extern.c
+$(lang_duration_extern_objout): $(lang_root)duration/extern.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
-$(duration_d_objout): $(lang_root)duration/d.c
+$(lang_duration_d_objout): $(lang_root)duration/d.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
 # enum 
@@ -126,17 +127,17 @@ $(lang_enum_cppout): $(lang_root)enum/e.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # env
-env_var_binout := $(bin_path)$(lang_prefix)_env_var$(bin_ext)
+lang_env_var_binout := $(bin_path)$(lang_prefix)_env_var$(bin_ext)
 
-$(env_var_binout): $(lang_root)env/var/var.c
+$(lang_env_var_binout): $(lang_root)env/var/var.c
 	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@ 
 
-env: $(env_var_binout)
-env_test: env
-	$(env_var_binout) --COUNT=2 --TEXT=Bonjour
-	COUNT=2 $(env_var_binout)
-	COUNT=3 TEXT="Bonjor" $(env_var_binout)
-	COUNT=2 $(env_var_binout) --TEXT=Bonjour
+lang_env: $(lang_env_var_binout)
+lang_env_test: lang_env
+	$(lang_env_var_binout) --COUNT=2 --TEXT=Bonjour
+	COUNT=2 $(lang_env_var_binout)
+	COUNT=3 TEXT="Bonjor" $(lang_env_var_binout)
+	COUNT=2 $(lang_env_var_binout) --TEXT=Bonjour
 
 # error
 lang_error_basic_binout := $(bin_path)$(lang_prefix)_error_basic$(bin_ext)
@@ -157,96 +158,96 @@ $(lang_error_basic_binout): $(lang_root)error/e.c
 	$(CC) $(error_cflags) $(INC) $^ $(bin_out)$@
 
 # exit
-exit_binout := $(bin_path)$(lang_prefix)_exit$(bin_ext)
+lang_exit_binout := $(bin_path)$(lang_prefix)_exit$(bin_ext)
 
-exit: $(exit_binout)
-exit_test: exit
-	$(exit_binout)
+lang_exit: $(lang_exit_binout)
+lang_exit_test: lang_exit
+	$(lang_exit_binout)
 
-$(exit_binout): $(lang_root)exit/e.c
+$(lang_exit_binout): $(lang_root)exit/e.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # fn
-fn_binout := $(bin_path)$(lang_prefix)_fn$(bin_ext)
+lang_fn_binout := $(bin_path)$(lang_prefix)_fn$(bin_ext)
 
-fn: $(fn_binout)
-fn_test: fn
-	$(fn_binout)
+lang_fn: $(lang_fn_binout)
+lang_fn_test: lang_fn
+	$(lang_fn_binout)
 
-$(fn_binout): $(lang_root)fn/f.c
+$(lang_fn_binout): $(lang_root)fn/f.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # goto
-goto_binout := $(bin_path)$(lang_prefix)_goto$(bin_ext)
+lang_goto_binout := $(bin_path)$(lang_prefix)_goto$(bin_ext)
 
-goto: $(goto_binout)
-goto_test: goto
-	$(goto_binout)
+lang_goto: $(lang_goto_binout)
+lang_goto_test: lang_goto
+	$(lang_goto_binout)
 
-$(goto_binout): $(lang_root)goto/g.c
+$(lang_goto_binout): $(lang_root)goto/g.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # jmp
-jmp_basic_binout := $(bin_path)$(lang_prefix)_jmp_basic$(bin_ext)
-jmp_try_binout := $(bin_path)$(lang_prefix)_jmp_try$(bin_ext)
-jmp_try_cppout := $(tmp_path)$(lang_prefix)_jmp_try$(cpp_ext)
+lang_jmp_basic_binout := $(bin_path)$(lang_prefix)_jmp_basic$(bin_ext)
+lang_jmp_try_binout := $(bin_path)$(lang_prefix)_jmp_try$(bin_ext)
+lang_jmp_try_cppout := $(tmp_path)$(lang_prefix)_jmp_try$(cpp_ext)
 
-jmp: $(jmp_basic_binout) $(jmp_try_binout)
-jmp_test: jmp
-	$(jmp_basic_binout)
-	$(jmp_try_binout)
+lang_jmp: $(lang_jmp_basic_binout) $(lang_jmp_try_binout)
+lang_jmp_test: lang_jmp
+	$(lang_jmp_basic_binout)
+	$(lang_jmp_try_binout)
 
-$(jmp_basic_binout): $(lang_root)jmp/j.c
+$(lang_jmp_basic_binout): $(lang_root)jmp/j.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(jmp_try_binout): $(jmp_try_cppout)
+$(lang_jmp_try_binout): $(lang_jmp_try_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(jmp_try_cppout): $(lang_root)jmp/try.c
+$(lang_jmp_try_cppout): $(lang_root)jmp/try.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
 # linkage
-linkage_binout := $(bin_path)$(lang_prefix)_linkage$(bin_ext)
-linkage_a_objout := $(tmp_path)$(lang_prefix)_linkage_a$(obj_ext)
-linkage_c_objout := $(tmp_path)$(lang_prefix)_linkage_c$(obj_ext)
+lang_linkage_binout := $(bin_path)$(lang_prefix)_linkage$(bin_ext)
+lang_linkage_a_objout := $(tmp_path)$(lang_prefix)_linkage_a$(obj_ext)
+lang_linkage_c_objout := $(tmp_path)$(lang_prefix)_linkage_c$(obj_ext)
 
-linkage: $(linkage_binout)
-linkage_test: linkage
-	$(linkage_binout)
+lang_linkage: $(lang_linkage_binout)
+lang_linkage_test: lang_linkage
+	$(lang_linkage_binout)
 
-$(linkage_binout): $(linkage_a_objout) $(linkage_c_objout)
+$(lang_linkage_binout): $(lang_linkage_a_objout) $(lang_linkage_c_objout)
 	$(LINK) $^ $(bin_out)$@
 
-$(linkage_a_objout): $(lang_root)linkage/extern.c
+$(lang_linkage_a_objout): $(lang_root)linkage/extern.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
-$(linkage_c_objout): $(lang_root)linkage/c.c
+$(lang_linkage_c_objout): $(lang_root)linkage/c.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
 
 # macro
-macro_binout := $(bin_path)$(lang_prefix)_macro$(bin_ext)
-macro_cppout := $(tmp_path)$(lang_prefix)_macro$(cpp_ext)
-macro_nested_binout := $(bin_path)$(lang_prefix)_macro_nested$(bin_ext)
-macro_nested_cppout := $(tmp_path)$(lang_prefix)_macro_nested$(cpp_ext)
+lang_macro_binout := $(bin_path)$(lang_prefix)_macro$(bin_ext)
+lang_macro_cppout := $(tmp_path)$(lang_prefix)_macro$(cpp_ext)
+lang_macro_nested_binout := $(bin_path)$(lang_prefix)_macro_nested$(bin_ext)
+lang_macro_nested_cppout := $(tmp_path)$(lang_prefix)_macro_nested$(cpp_ext)
 
-macro: $(macro_binout) $(macro_nested_binout)
-macro_test: macro
-	$(macro_binout)
-	$(macro_nested_binout)
+lang_macro: $(lang_macro_binout) $(lang_macro_nested_binout)
+lang_macro_test: lang_macro
+	$(lang_macro_binout)
+	$(lang_macro_nested_binout)
 
-$(macro_binout): $(macro_cppout)
+$(lang_macro_binout): $(lang_macro_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(macro_cppout): $(lang_root)macro/macro.c
+$(lang_macro_cppout): $(lang_root)macro/macro.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
-$(macro_nested_binout): $(macro_nested_cppout)
+$(lang_macro_nested_binout): $(lang_macro_nested_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(macro_nested_cppout): $(lang_root)macro/nested.c
+$(lang_macro_nested_cppout): $(lang_root)macro/nested.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # main
@@ -265,37 +266,37 @@ $(lang_main_envp_binout): $(lang_root)main/m_envp.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # math
-math_binout := $(bin_path)$(lang_prefix)_math$(bin_ext)
+lang_math_binout := $(bin_path)$(lang_prefix)_math$(bin_ext)
 
-math: $(math_binout)
-math_test: math
-	$(math_binout)
+lang_math: $(lang_math_binout)
+lang_math_test: lang_math
+	$(lang_math_binout)
 
-$(math_binout): $(lang_root)math/c.c
+$(lang_math_binout): $(lang_root)math/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # random
-random_binout := $(bin_path)$(lang_prefix)_random_raw$(bin_ext)
-random_arc_binout := $(bin_path)$(lang_prefix)_random_arc$(bin_ext)
-random_s_binout := $(bin_path)$(lang_prefix)_random_s$(bin_ext)
+lang_random_binout := $(bin_path)$(lang_prefix)_random_raw$(bin_ext)
+lang_random_arc_binout := $(bin_path)$(lang_prefix)_random_arc$(bin_ext)
+lang_random_s_binout := $(bin_path)$(lang_prefix)_random_s$(bin_ext)
 
-random: $(random_binout) \
-				$(random_arc_binout) \
-				$(random_s_binout)
-random_test: random
-	$(random_binout) 10
-	$(random_binout) 10 -10 10
-	$(random_arc_binout)
-	$(random_arc_binout) 20
-	$(random_s_binout)
+lang_random: $(lang_random_binout)							\
+             $(lang_random_arc_binout)					\
+             $(lang_random_s_binout)
+lang_random_test: lang_random
+	$(lang_random_binout) 10
+	$(lang_random_binout) 10 -10 10
+	$(lang_random_arc_binout)
+	$(lang_random_arc_binout) 20
+	$(lang_random_s_binout)
 
-$(random_binout): $(lang_root)random/r.c
+$(lang_random_binout): $(lang_root)random/r.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(random_arc_binout): $(lang_root)random/arc.c
+$(lang_random_arc_binout): $(lang_root)random/arc.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(random_s_binout): $(lang_root)random/s.c
+$(lang_random_s_binout): $(lang_root)random/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # restrict
@@ -309,51 +310,58 @@ $(lang_restrict_binout): $(lang_root)restrict/r1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # pointer
-pointer_basic_binout := $(bin_path)$(lang_prefix)_pointer_basic$(bin_ext)
-pointer_const_binout := $(bin_path)$(lang_prefix)_pointer_const$(bin_ext)
-pointer_fn_binout := $(bin_path)$(lang_prefix)_pointer_fn$(bin_ext)
-pointer_size_binout := $(bin_path)$(lang_prefix)_pointer_size$(bin_ext)
+lang_ptr_basic_binout := $(bin_path)$(lang_prefix)_ptr_basic$(bin_ext)
+lang_ptr_const_binout := $(bin_path)$(lang_prefix)_ptr_const$(bin_ext)
+lang_ptr_fn_binout := $(bin_path)$(lang_prefix)_ptr_fn$(bin_ext)
+lang_ptr_size_binout := $(bin_path)$(lang_prefix)_ptr_size$(bin_ext)
+lang_ptr_void_binout := $(bin_path)$(lang_prefix)_ptr_void$(bin_ext)
 
-pointer_void_binout := $(bin_path)$(lang_prefix)_pointer_void$(bin_ext)
+lang_pointer: lang_ptr_basic										\
+	  					lang_ptr_const										\
+              lang_ptr_fn												\
+              lang_ptr_size											\
+		  				lang_ptr_void
 
-pointer_basic_test: $(pointer_basic_binout)
-	$(pointer_basic_binout)
+lang_pointer_test: lang_ptr_basic_test					\
+							     lang_ptr_const_test					\
+                   lang_ptr_fn_test							\
+                   lang_ptr_size_test						\
+                   lang_ptr_void_test
 
-pointer_const_test: $(pointer_const_binout)
-	$(pointer_const_binout)
+lang_ptr_basic: $(lang_ptr_basic_binout)
+lang_ptr_basic_test: lang_ptr_basic
+	$(lang_ptr_basic_binout)
 
-pointer_fn_test: $(pointer_fn_binout)
-	$(pointer_fn_binout)
+lang_ptr_const: $(lang_ptr_const_binout)
+lang_ptr_const_test: lang_ptr_const
+	$(lang_ptr_const_binout)
 
-pointer_size_test: $(pointer_size_binout)
-	$(pointer_size_binout)
+lang_ptr_fn: $(lang_ptr_fn_binout)
+lang_ptr_fn_test: lang_ptr_fn
+	$(lang_ptr_fn_binout)
 
-pointer_void_test: $(pointer_void_binout)
-	$(pointer_void_binout)
+lang_ptr_size: $(lang_ptr_size_binout)
+lang_ptr_size_test: lang_ptr_size
+	$(lang_ptr_size_binout)
 
-pointer: $(pointer_basic_binout) \
-				 $(pointer_const_binout) \
-				 $(pointer_size_binout) \
-				 $(pointer_void_binout)
+lang_ptr_void: $(lang_ptr_void_binout)
+lang_ptr_void_test: lang_ptr_void
+	$(lang_ptr_void_binout)
 
-pointer_test: $(pointer_basic_test) \
-							$(pointer_const_test) \
-							$(pointer_size_test) \
-							$(pointer_void_test)
 
-$(pointer_basic_binout): $(lang_root)pointer/basic.c
+$(lang_ptr_basic_binout): $(lang_root)pointer/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(pointer_const_binout): $(lang_root)pointer/const.c
+$(lang_ptr_const_binout): $(lang_root)pointer/const.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(pointer_fn_binout): $(lang_root)pointer/fn.c
+$(lang_ptr_fn_binout): $(lang_root)pointer/fn.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(pointer_size_binout): $(lang_root)pointer/size.c
+$(lang_ptr_size_binout): $(lang_root)pointer/size.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(pointer_void_binout): $(lang_root)pointer/void.c
+$(lang_ptr_void_binout): $(lang_root)pointer/void.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # preprocessor
@@ -371,19 +379,18 @@ $(lang_preprocessor_cppout): $(lang_root)preprocessor/p.c
 	$(CPP) $(CPPFLAGS) $(INC) -D_ERROR_=$(_ERROR_) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # scope
-scope_binout := $(bin_path)$(lang_prefix)_scope$(bin_ext)
+lang_scope_binout := $(bin_path)$(lang_prefix)_scope$(bin_ext)
 
 scope_cflags = $(CFLAGS)
-
 ifeq ($(CC_NAME), msvc)
 	scope_cflags += -Wv:18
 endif
 
-scope: $(scope_binout)
-scope_test: scope
-	$(scope_binout)
+lang_scope: $(lang_scope_binout)
+lang_scope_test: lang_scope
+	$(lang_scope_binout)
 
-$(scope_binout): $(lang_root)scope/scope.c
+$(lang_scope_binout): $(lang_root)scope/scope.c
 	$(CC) $(scope_cflags) $(INC) $^ $(bin_out)$@
 
 
@@ -423,13 +430,13 @@ $(lang_signal_fork_binout): $(lang_root)signal/fork/f.c
 	$(CC) $(signal_cflags) $(INC) $^ $(bin_out)$@
 
 # sizeof
-sizeof_binout := $(bin_path)sizeof$(bin_ext)
+lang_sizeof_binout := $(bin_path)sizeof$(bin_ext)
 
-sizeof: $(sizeof_binout)
-sizeof_test: sizeof
-	$(sizeof_binout)
+lang_sizeof: $(lang_sizeof_binout)
+lang_sizeof_test: lang_sizeof
+	$(lang_sizeof_binout)
 
-$(sizeof_binout): $(lang_root)sizeof/sizeof.c
+$(lang_sizeof_binout): $(lang_root)sizeof/sizeof.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # stage
@@ -467,21 +474,21 @@ endif
 
 
 # storage
-storage_binout := $(bin_path)$(lang_prefix)_storage$(bin_ext)
-storage_extern_objout := $(tmp_path)$(lang_prefix)_storage_extern$(obj_ext)
-storage_s_objout := $(tmp_path)$(lang_prefix)_storage_s$(obj_ext)
+lang_stor_binout	:= $(bin_path)$(lang_prefix)_storage$(bin_ext)
+lang_stor_extern_objout := $(tmp_path)$(lang_prefix)_storage_extern$(obj_ext)
+lang_stor_s_objout := $(tmp_path)$(lang_prefix)_storage_s$(obj_ext)
 
-storage: $(storage_binout)
-storage_test: storage
-	$(storage_binout)
+lang_storage: $(lang_stor_binout)
+lang_storage_test: lang_storage
+	$(lang_stor_binout)
 
-$(storage_binout): $(storage_extern_objout) $(storage_s_objout)
+$(lang_stor_binout): $(lang_stor_extern_objout) $(lang_stor_s_objout)
 	$(LINK) $^ $(bin_out)$@
 
-$(storage_s_objout): $(lang_root)storage/s.c
+$(lang_stor_s_objout): $(lang_root)storage/s.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
-$(storage_extern_objout): $(lang_root)storage/extern.c
+$(lang_stor_extern_objout): $(lang_root)storage/extern.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
 # string
@@ -492,59 +499,66 @@ else
 string_cflags = $(CFLAGS)
 endif
 
-string_basic_binout := $(bin_path)$(lang_prefix)_string_basic$(bin_ext)
-string_n_binout := $(bin_path)$(lang_prefix)_string_n$(bin_ext)
-string_s_binout := $(bin_path)$(lang_prefix)_string_s$(bin_ext)
-string_dup_binout := $(bin_path)$(lang_prefix)_string_dup$(bin_ext)
-string_tok_binout := $(bin_path)$(lang_prefix)_string_tok$(bin_ext)
-string_chr_binout := $(bin_path)$(lang_prefix)_string_chr$(bin_ext)
+lang_str_basic_binout := $(bin_path)$(lang_prefix)_string_basic$(bin_ext)
+lang_str_n_binout := $(bin_path)$(lang_prefix)_string_n$(bin_ext)
+lang_str_s_binout := $(bin_path)$(lang_prefix)_string_s$(bin_ext)
+lang_str_dup_binout := $(bin_path)$(lang_prefix)_string_dup$(bin_ext)
+lang_str_tok_binout := $(bin_path)$(lang_prefix)_string_tok$(bin_ext)
+lang_str_chr_binout := $(bin_path)$(lang_prefix)_string_chr$(bin_ext)
 
-string: $(string_basic_binout)									\
-        $(string_n_binout)											\
-        $(string_s_binout)											\
-        $(string_dup_binout)										\
-        $(string_tok_binout)										\
-        $(string_chr_binout)
+lang_string: lang_str_basic											\
+             lang_str_n													\
+             lang_str_s													\
+             lang_str_dup												\
+             lang_str_tok												\
+             lang_str_chr
 
-string_test: string_basic_test									\
-             string_n_test											\
-             string_s_test											\
-             $(string_dup_binout)								\
-             $(string_tok_binout)								\
-             $(string_basic_binout)							\
-             $(string_n_binout)									\
-             $(string_s_binout)									\
-             $(string_dup_binout)								\
-             string_tok_test										\
-             string_chr_test
+lang_string_test: lang_str_basic_test						\
+                  lang_str_n_test								\
+                  lang_str_s_test								\
+                  lang_str_dup_test							\
+                  lang_str_tok_test							\
+                  lang_str_chr_test
 
-string_basic_test: $(string_basic_binout)
-	$(string_basic_binout)
-string_n_test: $(string_n_binout)
-	$(string_n_binout)
-string_s_test: $(string_s_binout)
-	$(string_s_binout)
-string_tok_test: $(string_tok_binout)
-	$(string_tok_binout) "this is a simple sample for strtok." " "
-string_chr_test: $(string_chr_binout)
-	$(string_chr_binout) "The Quick Brown Fox Jumps Over the Lazy Dog" "J"
+lang_str_basic: $(lang_str_basic_binout)
+lang_str_basic_test: lang_str_basic
+	$(lang_str_basic_binout)
 
-$(string_basic_binout): $(lang_root)string/basic.c
+lang_str_n: $(lang_str_n_binout)
+lang_str_n_test: lang_str_n
+	$(lang_str_n_binout)
+
+lang_str_s: $(lang_str_s_binout)
+lang_str_s_test: lang_str_s
+	$(lang_str_s_binout)
+
+lang_str_dup: $(lang_str_dup_binout)
+lang_str_dup_test: lang_str_dup
+
+lang_str_tok: $(lang_str_tok_binout)
+lang_str_tok_test: lang_str_tok
+	$(lang_str_tok_binout) "this is a simple sample for strtok." " "
+
+lang_str_chr: $(lang_str_chr_binout)
+lang_str_chr_test: lang_str_chr
+	$(lang_str_chr_binout) "The Quick Brown Fox Jumps Over the Lazy Dog" "J"
+
+$(lang_str_basic_binout): $(lang_root)string/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(string_n_binout): $(lang_root)string/n.c
-	$(CC) $(string_cflags) $(INC) $^ $(bin_out)$@
+$(lang_str_n_binout): $(lang_root)string/n.c
+	$(CC) $(lang_str_cflags) $(INC) $^ $(bin_out)$@
 
-$(string_s_binout): $(lang_root)string/s.c
+$(lang_str_s_binout): $(lang_root)string/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(string_dup_binout): $(lang_root)string/dup.c
-	$(CC) $(string_cflags) $(INC) $^ $(bin_out)$@
+$(lang_str_dup_binout): $(lang_root)string/dup.c
+	$(CC) $(lang_str_cflags) $(INC) $^ $(bin_out)$@
 
-$(string_tok_binout): $(lang_root)string/tok.c
+$(lang_str_tok_binout): $(lang_root)string/tok.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(string_chr_binout): $(lang_root)string/chr.c
+$(lang_str_chr_binout): $(lang_root)string/chr.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # time
@@ -579,23 +593,23 @@ $(lang_type_cppout): $(lang_root)type/t.c
 
 
 # typedef
-typedef_binout := $(bin_path)$(lang_prefix)_typedef$(bin_ext)
+lang_typedef_binout := $(bin_path)$(lang_prefix)_typedef$(bin_ext)
 
-typedef: $(typedef_binout)
-typedef_test: typedef
-	$(typedef_binout)
+lang_typedef: $(lang_typedef_binout)
+lang_typedef_test: lang_typedef
+	$(lang_typedef_binout)
 
-$(typedef_binout): $(lang_root)typedef/t.c
+$(lang_typedef_binout): $(lang_root)typedef/t.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # typeof
-typeof_binout := $(bin_path)$(lang_prefix)_typeof$(bin_ext)
+lang_typeof_binout := $(bin_path)$(lang_prefix)_typeof$(bin_ext)
 
-typeof: $(typeof_binout)
-typeof_test: typeof
-	$(typeof_binout)
+lang_typeof: $(lang_typeof_binout)
+lang_typeof_test: lang_typeof
+	$(lang_typeof_binout)
 
-$(typeof_binout): $(lang_root)typeof/to.c
+$(lang_typeof_binout): $(lang_root)typeof/to.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # volatile
@@ -603,11 +617,11 @@ volatile_basic_binout := $(bin_path)$(lang_prefix)_volatile_basic$(bin_ext)
 volatile_pointer_binout := $(bin_path)$(lang_prefix)_volatile_pointer$(bin_ext)
 volatile_struct_binout := $(bin_path)$(lang_prefix)_volatile_struct$(bin_ext)
 
-volatile: $(volatile_basic_binout) \
-					$(volatile_pointer_binout) \
-					$(volatile_struct_binout)
+lang_volatile: $(volatile_basic_binout)					\
+               $(volatile_pointer_binout)				\
+               $(volatile_struct_binout)
 
-volatile_test: volatile
+lang_volatile_test: lang_volatile
 	$(volatile_basic_binout)
 	$(volatile_pointer_binout)
 	$(volatile_struct_binout)

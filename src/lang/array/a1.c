@@ -1,4 +1,4 @@
-#include <_lang_.h>
+#include "_lang_.h"
 
 char *s1[] = {
 	"aaa", "bbb", "ccc", 0,
