@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
 void*
 self_memcpy1(void *dst, const void *src, size_t n) {
@@ -35,27 +36,44 @@ self_memcpy2(void *dst, const void *src, size_t n) {
 }
 
 void 
-test_self_memcpy1(void) {
-  int ia[] = {1,2,3,4,};
-  int *ia1 = malloc(sizeof(ia));
-  self_memcpy1(&ia1[0], &ia[0], sizeof(ia));
+test_self_memcpy1(const int *rs, size_t n) {
+  int *ia1 = malloc(sizeof(int)*n);
+  self_memcpy1(ia1, rs, sizeof(int)*n);
   free(ia1);
 }
 
 void
-test_self_memcpy2(void) {
-  int ia[] = {1,2,3,4,5,6,7,8,};
-  int *ia1 = malloc(sizeof(ia));
-  self_memcpy2(&ia1[0], &ia[0], sizeof(ia));
+test_self_memcpy2(const int *rs, size_t n) {
+  int *ia1 = aligned_alloc(sizeof(int), sizeof(int)*n);
+  self_memcpy2(ia1, rs, sizeof(int)*n);
   free(ia1);
+}
+
+int
+ranged_randomize(int min, int max) {
+	int r = rand() / (RAND_MAX + 1.0) * (max - min) + min;
+	return r;
 }
 
 int 
 main(int argc, const char *argv[]) {
-	_unused_(argc);
-	_unused_(argv);
+  if (argc < 2) {
+    fprintf(stderr, "random size ?\n");
+    return 0;
+  }
+  _unused_(argv);
+  /* int n = atoi(argv[1]); */
+  /* srand(time(0)); */
 
-  test_self_memcpy1();
-  test_self_memcpy2();
+  /* int *rs = aligned_alloc(sizeof(int), sizeof(int)*n); */
+  /* if (0 == rs) { */
+  /*   perror(0); */
+  /*   return 1; */
+  /* } */
+
+  /* test_self_memcpy1(rs, n); */
+  /* test_self_memcpy2(rs, n); */
+  
+  /* free(rs); */
   return 0;
 }
