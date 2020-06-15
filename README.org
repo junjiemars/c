@@ -1836,27 +1836,30 @@ which a pointer addresses.
 Each pointer type is derived from another type, its base type, 
 and each such derived type is a distinct new type.
 
+** Memory Copy
+
 ** References
 	 :PROPERTIES:
 	 :custom_id: memory-references
 	 :END:
 
-- [[https://stackoverflow.com/questions/7622/are-the-shift-operators-arithmetic-or-logical-in-c][Are the shift operators arithmetic or logical in C?]]
-- [[https://en.wikipedia.org/wiki/Arithmetic_shift][Arithmetic shift]]
-- [[http://stackoverflow.com/documentation/c/322/arrays#t=20170207121645271737][Arrays]]
-- [[https://www.cs.umd.edu/class/sum2003/cmsc311/Notes/Data/endian.html][Big and Little Endian]]
-- [[https://clang.llvm.org/docs/AddressSanitizer.html][Clang: Address Sanitizer]]
-- [[https://stackoverflow.com/questions/605845/do-i-cast-the-result-of-malloc][Do I cast the result of malloc]]
-- [[https://en.wikipedia.org/wiki/Endianness][Endianness]]
-- [[http://mjfrazer.org/mjfrazer/bitfields/][How Endianness Effects Bitfield Packing]]
-- [[http://steve.hollasch.net/cgindex/coding/ieeefloat.html][IEEE Standard 754 Floating Point Numbers]]
-- [[https://en.wikipedia.org/wiki/Logical_shift][Logical shift]]
 - [[http://cslibrary.stanford.edu/106/][Pointer Basics]]
-- [[https://see.stanford.edu/Course/CS107][Programming Paradigms]]
-- [[https://stackoverflow.com/questions/4306186/structure-padding-and-packing][Structure padding and packing]]
-- [[https://see.stanford.edu/materials/icsppcs107/07-Arrays-The-Full-Story.pdf][The Ins and Outs of C Arrays]]
+- [[http://mjfrazer.org/mjfrazer/bitfields/][How Endianness Effects Bitfield Packing]]
+- [[http://stackoverflow.com/documentation/c/322/arrays#t=20170207121645271737][Arrays]]
+- [[http://steve.hollasch.net/cgindex/coding/ieeefloat.html][IEEE Standard 754 Floating Point Numbers]]
 - [[http://www.catb.org/esr/structure-packing/][The Lost Art of C Structure Packing]]
 - [[https://betterexplained.com/articles/understanding-big-and-little-endian-byte-order/)][Understanding Big and Little Endian Byte Order]]
+- [[https://clang.llvm.org/docs/AddressSanitizer.html][Clang: Address Sanitizer]]
+- [[https://en.wikipedia.org/wiki/Arithmetic_shift][Arithmetic shift]]
+- [[https://en.wikipedia.org/wiki/Endianness][Endianness]]
+- [[https://en.wikipedia.org/wiki/Logical_shift][Logical shift]]
+- [[https://see.stanford.edu/Course/CS107][Programming Paradigms]]
+- [[https://see.stanford.edu/materials/icsppcs107/07-Arrays-The-Full-Story.pdf][The Ins and Outs of C Arrays]]
+- [[https://stackoverflow.com/questions/4306186/structure-padding-and-packing][Structure padding and packing]]
+- [[https://stackoverflow.com/questions/605845/do-i-cast-the-result-of-malloc][Do I cast the result of malloc]]
+- [[https://stackoverflow.com/questions/7622/are-the-shift-operators-arithmetic-or-logical-in-c][Are the shift operators arithmetic or logical in C?]]
+- [[https://www.cs.umd.edu/class/sum2003/cmsc311/Notes/Data/endian.html][Big and Little Endian]]
+- [[https://www.embedded.com/optimizing-memcpy-improves-speed/][Optimizing Memcpy improves speed]]
 - [[https://www.ibm.com/developerworks/aix/library/au-endianc/index.html?ca=drs-)][Writing endian-independent code in C]]
 
 * CPU

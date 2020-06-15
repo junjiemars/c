@@ -3,20 +3,51 @@
 #include <string.h>
 #include <stdlib.h>
 
-void 
-copy() {
-    char d[16] = {0};
-    char *s = "abc123";
-    printf("s=%s memcpy(d,s)=%s\n",s ,(char*)memcpy(d, s, strlen(s)));
+void*
+self_memcpy1(void *dst, const void *src, size_t n) {
+  char *d = (char *)dst;
+  char const *s = (char const *)src;
+  while (n--) {
+    *d++ = *s++;
+  }
+  return dst;
+}
+
+void*
+self_memcpy2(void *dst, const void *src, size_t n) {
+  long *d = (long *)dst;
+  long const *s = (long const *)src;
+  if (!(0xfffffffcL & (unsigned long)s)
+      && !(0xfffffffcL & (unsigned long)d)) {
+    while (n >= 4) {
+      *d++ = *s++;
+      n -= 4;
+    }
+  }
+
+  char *d1 = (char *)d;
+  char const *s1 = (char const *)s;
+  while (n--) {
+    *d1++ = *s1++;
+  }
+
+  return dst;
 }
 
 void 
-move() {
-    char s[] = "abc123";
-    printf("s=%s strlen(s)=%zu memmove(s,s)=%s\n"
-            ,s
-            ,strlen(s)
-            ,(char*)memmove(&s[2], s, strlen(s)/2));
+test_self_memcpy1(void) {
+  int ia[] = {1,2,3,4,};
+  int *ia1 = malloc(sizeof(ia));
+  self_memcpy1(&ia1[0], &ia[0], sizeof(ia));
+  free(ia1);
+}
+
+void
+test_self_memcpy2(void) {
+  int ia[] = {1,2,3,4,5,6,7,8,};
+  int *ia1 = malloc(sizeof(ia));
+  self_memcpy2(&ia1[0], &ia[0], sizeof(ia));
+  free(ia1);
 }
 
 int 
@@ -24,6 +55,7 @@ main(int argc, const char *argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 
-	copy();
-	move();
+  test_self_memcpy1();
+  test_self_memcpy2();
+  return 0;
 }

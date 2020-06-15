@@ -4,7 +4,7 @@ memory: memory_alloc														\
 				bitfield																\
 				memory_bit															\
 				memory_byte															\
-				copy																		\
+				memory_copy															\
 				endian																	\
 				generic																	\
 				layout																	\
@@ -16,7 +16,7 @@ memory_test: 	memory_alloc_test									\
 							bitfield_test											\
 				      memory_bit_test										\
 				      memory_byte_test									\
-				      copy_test													\
+				      memory_copy_test									\
 				      endian_test												\
 				      generic_test											\
 				      layout_test												\
@@ -177,13 +177,13 @@ $(memory_byte_cppout): $(memory_root)byte/byte.c
 
 
 # copy
-copy_binout := $(bin_path)$(memory_prefix)_copy$(bin_ext)
+mem_copy_binout := $(bin_path)$(memory_prefix)_copy$(bin_ext)
 
-copy: $(copy_binout)
-copy_test: copy
-	$(copy_binout)
+memory_copy: $(mem_copy_binout)
+memory_copy_test: memory_copy
+	$(mem_copy_binout)
 
-$(copy_binout): $(memory_root)copy/c.c
+$(mem_copy_binout): $(memory_root)copy/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # endian
