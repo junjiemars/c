@@ -7,7 +7,8 @@ ii1;
 var ii1ptr = _malloc(ii1.length*4);
 ii1ptr;
 Module.HEAP32.set(ii1, ii1ptr/4);
-var ii1ptr1 = ccall('double_elem', 'pointer', ['pointer', 'number'], [ii1ptr, ii1.length]);
+var ii1ptr1 = _double_elem(ii1ptr, ii1.length);
+// var ii1ptr1 = ccall('double_elem', 'pointer', ['pointer', 'number'], [ii1ptr, ii1.length]);
 var ii1ret = new Int32Array(Module.HEAP32.buffer, ii1ptr1, ii1.length);
 _free(ii1ptr);
 
