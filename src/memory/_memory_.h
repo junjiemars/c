@@ -44,6 +44,7 @@ typedef union {
 
 
 
+
 #ifdef NM_HAVE_STDBOOL_H
 #  include <stdbool.h>
 #endif /* end of NM_HAVE_STDBOOL_H */
