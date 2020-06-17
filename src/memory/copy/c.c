@@ -13,8 +13,31 @@
 #define _align_(x, a)           _align_mask_(x, (uintptr_t)(a)-1)
 #define _align_mask_(x, mask)   (((uintptr_t)(x)+(mask)) & ~(mask))
 
+
+#if !(NM_HAVE_RESTRICT_KEYWORD)
+#  if (NM_HAVE___RESTRICT_KEYWORD)
+#    define restrict __restrict
+#  else
+#    define restrict
+#  endif
+#endif
+
+
+#define _time_(E, V) do {                       \
+    clock_t _epoch_1_ = clock();                \
+    (E);                                        \
+    V = (clock() - _epoch_1_);                  \
+  } while (0)
+
+long
+ranged_randomize(long min, long max) {
+	long r = rand() / (RAND_MAX + 1.0) * (max - min) + min;
+	return r;
+}
+
+
 void*
-self_memcpy1(void *dst, const void *src, size_t n) {
+self_memcpy1(void *restrict dst, const void *restrict src, size_t n) {
   char *d = (char *)dst;
   char const *s = (char const *)src;
   while (n--) {
@@ -23,18 +46,17 @@ self_memcpy1(void *dst, const void *src, size_t n) {
   return dst;
 }
 
-
 void*
-self_memcpy2(void *dst, const void *src, size_t n) {
-  int *d = (int *)dst;
-  int const *s = (int const *)src;
+self_memcpy2(void *restrict dst, const void *restrict src, size_t n) {
+  long *d = (long *)dst;
+  long const *s = (long const *)src;
 
 #ifdef _align_
-  if ((int*)_align_(d, sizeof(int)) == d
-      && (int*)_align_(s, sizeof(int)) == s) {
-    while (n >= 4) {
+  if ((long*)_align_(d, sizeof(long)) == d
+      && (long*)_align_(s, sizeof(long)) == s) {
+    while (n >= sizeof(long)) {
       *d++ = *s++;
-      n -= 4;
+      n -= sizeof(long);
     }
   }
 #endif
@@ -47,67 +69,92 @@ self_memcpy2(void *dst, const void *src, size_t n) {
   return dst;
 }
 
+void
+test_native_memcpy(long *dst, const long *src, long n, long x) {
+  clock_t elapsed;
+  double sum = 0.0;
+
+  for (long i = 0; i < x; i++) {
+    _time_(memcpy(dst, src, sizeof(long)*n), elapsed);
+    sum += elapsed;
+  }
+
+  printf("%16s[%li,%li] elpased %li cpu time, %lf ms\n",
+         "native_memcpy",
+         dst[0], dst[n-1],
+         (long)sum/x, (double)(sum*1000.0/(x*CLOCKS_PER_SEC)));
+}
 
 void 
-test_self_memcpy1(const int *rs, size_t n) {
-  int *ia1 = malloc(sizeof(int)*n);
-  self_memcpy1(ia1, rs, sizeof(int)*n);
-  free(ia1);
+test_self_memcpy1(long *dst, const long *src, long n, long x) {
+  clock_t elapsed;
+  double sum = 0.0;
+
+  for (long i = 0; i < x; i++) {
+    _time_(self_memcpy1(dst, src, sizeof(long)*n), elapsed);
+    sum += elapsed;
+  }
+
+  printf("%16s[%li,%li] elpased %li cpu time, %lf ms\n",
+         "self_memcpy1",
+         dst[0], dst[n-1],
+         (long)sum/x, (double)(sum*1000.0/(x*CLOCKS_PER_SEC)));
 }
 
 void
-test_self_memcpy2(const int *rs, size_t n) {
-  int *raw_ptr = 0;
-  int *ptr = 0;
-#ifdef _align_
-  raw_ptr = malloc(sizeof(int)*(n+sizeof(int)-1));
-  ptr = (int*)_align_(raw_ptr, sizeof(int));
-#else
-  raw_ptr = malloc(sizeof(int)*n);
-  ptr = raw_ptr;
-#endif
-  self_memcpy2(ptr, rs, sizeof(int)*n);
-  free(raw_ptr);
+test_self_memcpy2(long *dst, const long *src, long n, long x) {
+  clock_t elapsed;
+  double sum = 0.0;
+
+  for (long i = 0; i < x; i++) {
+    _time_(self_memcpy2(dst, src, n), elapsed);
+    sum += elapsed;
+  }
+
+  printf("%16s[%li,%li] elpased %li cpu time, %lf ms\n",
+         "self_memcpy2",
+         dst[0], dst[n-1],
+         (long)sum/x, (double)(sum*1000.0/(x*CLOCKS_PER_SEC)));
 }
 
-int
-ranged_randomize(int min, int max) {
-	int r = rand() / (RAND_MAX + 1.0) * (max - min) + min;
-	return r;
-}
 
 int 
 main(int argc, const char *argv[]) {
-  if (argc < 2) {
+  if (argc < 3) {
     fprintf(stderr, "random size ?\n");
     return 0;
   }
-  _unused_(argv);
-  int n = atoi(argv[1]);
-  srand(time(0));
+  long n = atol(argv[1]);
+  long x = atol(argv[2]);
 
-  int *raw_rs = 0;
-  int *rs = 0;
-#ifdef _align_
-  raw_rs = malloc(sizeof(int)*(n+sizeof(int)-1));
-  rs = (int*)_align_(raw_rs, sizeof(int));
-#else
-  raw_rs = malloc(sizeof(int)*n);
-  rs= raw_rs;
-#endif
-  if (0 == raw_rs) {
-    perror(0);
-    return 1;
-  }
-
-  int *p = rs;
-  for (int i = 0; i < n; i++) {
-    p[i] = ranged_randomize(0, 100);
-  }
-
-  /* test_self_memcpy1(rs, n); */
-  test_self_memcpy2(rs, n);
+  long *raw_src = 0, *raw_dst = 0;
+  long *src = 0, *dst = 0;
   
-  free(raw_rs);
+#ifdef _align_
+  raw_src = malloc(sizeof(long)*(n+sizeof(long)-1));
+  raw_dst = malloc(sizeof(long)*(n+sizeof(long)-1));
+  src = (long*)_align_(raw_src, sizeof(long));
+  dst = (long*)_align_(raw_dst, sizeof(long));
+#else
+  raw_src = malloc(sizeof(long)*n);
+  raw_dst = malloc(sizeof(long)*n);
+  src = raw_src;
+  dst = raw_dst;
+#endif
+  if (!raw_src) {
+    perror(0);
+    return 0;
+  }
+
+  for (long i = 0; i < n; i++) {
+    src[i] = ranged_randomize(1, 100);
+  }
+
+  test_native_memcpy(dst, src, n, x);
+  test_self_memcpy1(dst, src, n, x);
+  test_self_memcpy2(dst, src, n, x);
+
+  free(raw_dst);
+  free(raw_src);
   return 0;
 }

@@ -181,7 +181,7 @@ mem_copy_binout := $(bin_path)$(memory_prefix)_copy$(bin_ext)
 
 memory_copy: $(mem_copy_binout)
 memory_copy_test: memory_copy
-	$(mem_copy_binout) 1024
+	$(mem_copy_binout) 5698 10
 
 $(mem_copy_binout): $(memory_root)copy/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
