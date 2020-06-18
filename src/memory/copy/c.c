@@ -79,7 +79,7 @@ test_native_memcpy(long *dst, const long *src, long n, long x) {
     sum += elapsed;
   }
 
-  printf("%16s[%li,%li] elpased %li cpu time, %lf ms\n",
+  printf("%16s[%li,...,%li] elpased %li cpu time, %lf ms\n",
          "native_memcpy",
          dst[0], dst[n-1],
          (long)sum/x, (double)(sum*1000.0/(x*CLOCKS_PER_SEC)));
@@ -95,7 +95,7 @@ test_self_memcpy1(long *dst, const long *src, long n, long x) {
     sum += elapsed;
   }
 
-  printf("%16s[%li,%li] elpased %li cpu time, %lf ms\n",
+  printf("%16s[%li,...,%li] elpased %li cpu time, %lf ms\n",
          "self_memcpy1",
          dst[0], dst[n-1],
          (long)sum/x, (double)(sum*1000.0/(x*CLOCKS_PER_SEC)));
@@ -111,7 +111,7 @@ test_self_memcpy2(long *dst, const long *src, long n, long x) {
     sum += elapsed;
   }
 
-  printf("%16s[%li,%li] elpased %li cpu time, %lf ms\n",
+  printf("%16s[%li,...,%li] elpased %li cpu time, %lf ms\n",
          "self_memcpy2",
          dst[0], dst[n-1],
          (long)sum/x, (double)(sum*1000.0/(x*CLOCKS_PER_SEC)));
