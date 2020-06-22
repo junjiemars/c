@@ -5,11 +5,6 @@
 #include <time.h>
 
 
-#if CLANG
-#  define typeof __typeof
-#elif MSVC
-#  define typeof decltype
-#endif
 #define _align_(x, a)           _align_mask_(x, (uintptr_t)(a)-1)
 #define _align_mask_(x, mask)   (((uintptr_t)(x)+(mask)) & ~(mask))
 
@@ -79,7 +74,7 @@ test_native_memcpy(long *dst, const long *src, long n, long x) {
     sum += elapsed;
   }
 
-  printf("%16s[%li,...,%li] elpased %li cpu time, %lf ms\n",
+  printf("%16s[%li,...,%li] elpased %8li cpu time, %16lf ms\n",
          "native_memcpy",
          dst[0], dst[n-1],
          (long)sum/x, (double)(sum*1000.0/(x*CLOCKS_PER_SEC)));
@@ -95,7 +90,7 @@ test_self_memcpy1(long *dst, const long *src, long n, long x) {
     sum += elapsed;
   }
 
-  printf("%16s[%li,...,%li] elpased %li cpu time, %lf ms\n",
+  printf("%16s[%li,...,%li] elpased %8li cpu time, %16lf ms\n",
          "self_memcpy1",
          dst[0], dst[n-1],
          (long)sum/x, (double)(sum*1000.0/(x*CLOCKS_PER_SEC)));
@@ -111,7 +106,7 @@ test_self_memcpy2(long *dst, const long *src, long n, long x) {
     sum += elapsed;
   }
 
-  printf("%16s[%li,...,%li] elpased %li cpu time, %lf ms\n",
+  printf("%16s[%li,...,%li] elpased %8li cpu time, %16lf ms\n",
          "self_memcpy2",
          dst[0], dst[n-1],
          (long)sum/x, (double)(sum*1000.0/(x*CLOCKS_PER_SEC)));
