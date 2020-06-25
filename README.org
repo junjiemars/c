@@ -621,8 +621,15 @@ generally occupy one machine word.
 		:CUSTOM_ID: language_pointer_const_pointer
 		:END:
 
-Threre is a technique known as the /Clockwise/Spiral Rule/ enables any
+Threre is a technique known as the [[http://c-faq.com/decl/spiral.anderson.html][Clockwise/Spiral Rule]] enables any
 C programmer to parse in their head any C declaration.
+
+The first =const= can be either side of the type.
+#+BEGIN_SRC c
+const int * == int const *; /* pointer to const int */
+const int * const == int const * const; /* const pointer to const int  */
+
+#+END_SRC
 
 - pointer to =const= object
   #+BEGIN_SRC c
@@ -633,7 +640,7 @@ C programmer to parse in their head any C declaration.
 - =const= pointer to object
   #+BEGIN_SRC c
   int v1=0x11223344;
-  int *const p = &v1;
+  int *const p1 = &v1;
   #+END_SRC
  
 - =const= pointer to =const= object
