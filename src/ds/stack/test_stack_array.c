@@ -48,16 +48,19 @@ test_stack_new_free_int(void) {
 void
 test_stack_push_pop_int(void) {
   stack_s *s = stack_new(0, int_node_new, 4);
-  int arr[] = {1,2,3,4,5,6,7,8,9};
+  int n = 2*s->n + 1, i = 0;
 
   printf("stack int push/pop [%zu]\n", s->n);
   printf("---------------------\n");
-  for (size_t i = 0; i < sizeof(arr)/sizeof(arr[0]); i++) {
-    stack_push(s, &arr[i], int_stack_full, int_node_new, int_push_val);
-    printf("%8s %16i\n", "push", arr[i]);
+
+  while (i++ < n) {
+    stack_push(s, &i, int_stack_full, int_node_new, int_push_val);
+    printf("%8s %16i\n", "push", i);
   }
+
   printf("---------------------\n");
-  for (size_t i = 0; i < sizeof(arr)/sizeof(arr[0])+10; i++) {
+  i = 0;
+  while (i++ < 2*n) {
     int k = 0;
     int empty = stack_pop(s, &k, int_pop_val);
     if (0 == empty) {
