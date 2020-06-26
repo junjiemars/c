@@ -53,24 +53,34 @@ $(single_linked_list_binout): $(ds_root)single_linked_list/test.c \
 
 
 # stack
-stack_binout := $(bin_path)$(ds_prefix)_stack$(bin_ext)
-stack_inc += $(INC) -I$(ds_root)double_linked_list
+stack_array_binout := $(bin_path)$(ds_prefix)_stack_array$(bin_ext)
+# stack_inc += $(INC) -I$(ds_root)double_linked_list
 
-stack: $(stack_binout)
-stack_test: stack
-	$(stack_binout)
+stack: $(stack_array_binout)
+stack_test: stack_array_test
+stack_valgrind_test: stack_array_test
+	valgrind --leak-check=full --track-origins=yes $(stack_array_binout)
 
-stack_valgrind_test: stack
-	valgrind --leak-check=full --track-origins=yes $(stack_binout)
+stack_array_test: $(stack_array_binout)
+	$(stack_array_binout)
 
-$(stack_binout): $(ds_root)stack/test.c								\
-								 $(ds_root)stack/stack.c							\
-								 $(ds_root)double_linked_list/list.c	\
-								 $(ds_root)stack/stack.h
-	$(CC) $(CFLAGS) $(stack_inc)									\
-		$(ds_root)stack/test.c											\
-		$(ds_root)stack/stack.c											\
-		$(ds_root)double_linked_list/list.c					\
-		$(bin_out)$@
+$(stack_array_binout): $(ds_root)stack/test_stack_array.c	\
+                       $(ds_root)stack/stack_array.c			\
+								       $(ds_root)stack/node_array.h				\
+								       $(ds_root)stack/stack.h
+	$(CC) $(CFLAGS) $(INC)												\
+    $(ds_root)stack/stack_array.c								\
+    $(ds_root)stack/test_stack_array.c					\
+    $(bin_out)$@
+
+# $(stack_binout): $(ds_root)stack/test.c								\
+# 								 $(ds_root)stack/stack.c							\
+# 								 $(ds_root)double_linked_list/list.c	\
+# 								 $(ds_root)stack/stack.h
+# 	$(CC) $(CFLAGS) $(stack_inc)									\
+# 		$(ds_root)stack/test.c											\
+# 		$(ds_root)stack/stack.c											\
+# 		$(ds_root)double_linked_list/list.c					\
+# 		$(bin_out)$@
 
 # tree
