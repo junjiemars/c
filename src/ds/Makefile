@@ -1,13 +1,20 @@
+#
+# ./configure --has-ds
+# make clean test
+#
+
 ds_prefix := ds
 INC += -I$(ds_root)
 
-ds: double_linked_list \
-		single_linked_list \
-		stack
+ds: double_linked_list													\
+		single_linked_list													\
+		stack																				\
+    tree
 
-ds_test: double_linked_list_test \
-				 single_linked_list_test \
-				 stack_test
+ds_test: double_linked_list_test								\
+				 single_linked_list_test								\
+				 stack_test															\
+         tree_test
 
 # list
 
@@ -56,13 +63,14 @@ stack_test: stack
 stack_valgrind_test: stack
 	valgrind --leak-check=full --track-origins=yes $(stack_binout)
 
-$(stack_binout): $(ds_root)stack/test.c \
-								 $(ds_root)stack/stack.c \
-								 $(ds_root)double_linked_list/list.c \
+$(stack_binout): $(ds_root)stack/test.c								\
+								 $(ds_root)stack/stack.c							\
+								 $(ds_root)double_linked_list/list.c	\
 								 $(ds_root)stack/stack.h
-	$(CC) $(CFLAGS) $(stack_inc) \
-		$(ds_root)stack/test.c \
-		$(ds_root)stack/stack.c \
-		$(ds_root)double_linked_list/list.c \
+	$(CC) $(CFLAGS) $(stack_inc)									\
+		$(ds_root)stack/test.c											\
+		$(ds_root)stack/stack.c											\
+		$(ds_root)double_linked_list/list.c					\
 		$(bin_out)$@
 
+# tree
