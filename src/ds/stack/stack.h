@@ -34,9 +34,9 @@ void stack_push(stack_s *const stack,
                 new_node new_node,
                 push_val push_val);
 
-void stack_pop(stack_s *const stack,
-               void *val,
-               pop_val pop_val);
+int stack_pop(stack_s *const stack,
+              void *val,
+              pop_val pop_val);
 
 
 /* #define stack_top(s) ((0 != (s) && (s)->_c && (s)->_c->head) \ */

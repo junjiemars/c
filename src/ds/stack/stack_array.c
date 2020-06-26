@@ -37,11 +37,13 @@ stack_push(stack_s *const stack,
   stack->top = push_val(stack, val);
 }
 
-void
+int
 stack_pop(stack_s *const stack,
           void *val,
           pop_val pop_val) {
-  if (!stack_empty(stack)) {
-    stack->top = pop_val(stack, val);
+  if (stack_empty(stack)) {
+    return 0;
   }
+  stack->top = pop_val(stack, val);
+  return 1;
 }

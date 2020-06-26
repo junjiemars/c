@@ -57,9 +57,12 @@ test_stack_push_pop_int(void) {
     printf("%8s %16i\n", "push", arr[i]);
   }
   printf("---------------------\n");
-  for (size_t i = 0; i < sizeof(arr)/sizeof(arr[0]); i++) {
+  for (size_t i = 0; i < sizeof(arr)/sizeof(arr[0])+10; i++) {
     int k = 0;
-    stack_pop(s, &k, int_pop_val);
+    int empty = stack_pop(s, &k, int_pop_val);
+    if (0 == empty) {
+      break;
+    }
     printf("%8s %16i\n", "pop", k);
   }
 
