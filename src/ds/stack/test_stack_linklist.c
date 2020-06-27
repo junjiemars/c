@@ -2,7 +2,6 @@
 #include "stack_linklist.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 
 void
 test_stack_new_free_int(void) {

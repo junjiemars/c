@@ -2,25 +2,6 @@
 #include "stack_array.h"
 #include <stdio.h>
 
-void
-int_push_val(stack_s *const stack, void *val) {
-  *(int*)stack->top = *(int*)val;
-}
-
-void
-int_pop_val(stack_s *const stack, void *val) {
-  *(int*)val = *(int*)stack->top;
-}
-
-void
-str_push_val(stack_s *const stack, void *val) {
-  *(char**)stack->top = *(char**)val;
-}
-
-void
-str_pop_val(stack_s *const stack, void *val) {
-  *(char**)val = *(char**)stack->top;
-}
 
 void
 test_stack_new_free_int(void) {
@@ -37,7 +18,7 @@ test_stack_push_pop_int(void) {
   printf("---------------------\n");
 
   while (i++ < n) {
-    stack_push(s, &i, int_push_val);
+    stack_push(s, &i);
     printf("%8s %16i\n", "push", i);
   }
 
@@ -45,7 +26,7 @@ test_stack_push_pop_int(void) {
   i = 0;
   while (i++ < 2*n) {
     int k = 0;
-    int empty = stack_pop(s, &k, int_pop_val);
+    int empty = stack_pop(s, &k);
     if (0 == empty) {
       break;
     }
@@ -70,14 +51,14 @@ test_stack_push_pop_str(void) {
   printf("---------------------\n");
   
   for (size_t i = 0; i < sizeof(ss)/sizeof(ss[0]); i++) {
-    stack_push(s, &ss[i], str_push_val);
+    stack_push(s, &ss[i]);
     printf("%8s %16s\n", "push", ss[i]);
   }
 
   printf("---------------------\n");
   for (size_t i = 0; i < sizeof(ss)/sizeof(ss[0]); i++) {
     char *buf = 0;
-    int empty = stack_pop(s, &buf, str_pop_val);
+    int empty = stack_pop(s, &buf);
     if (0 == empty) {
       break;
     }

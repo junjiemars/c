@@ -1,5 +1,6 @@
 #include "stack_array.h"
 #include <stdlib.h>
+#include <string.h>
 
 static
 void
@@ -43,7 +44,7 @@ stack_full(stack_s *const stack) {
 }
 
 void
-stack_push(stack_s *const stack, void *val, push_val push_val) {
+stack_push(stack_s *const stack, void *val) {
   if (stack_full(stack)) {
     stack->n *= 2;
     size_t offset = (char*)stack->top - (char*)stack->data;
@@ -51,15 +52,15 @@ stack_push(stack_s *const stack, void *val, push_val push_val) {
     stack->top = (char*)stack->data + offset;
   }
   stack->top = (char*)stack->top + stack->size;
-  push_val(stack, val);
+  memcpy(stack->top, val, stack->size);
 }
 
 int
-stack_pop(stack_s *const stack, void *val, pop_val pop_val) {
+stack_pop(stack_s *const stack, void *val) {
   if (stack_empty(stack)) {
     return 0;
   }
-  pop_val(stack, val);
+  memcpy(val, stack->top, stack->size);
   stack->top = (char*)stack->top - stack->size;
   return 1;
 }
