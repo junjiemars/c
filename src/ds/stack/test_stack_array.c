@@ -33,9 +33,9 @@ test_stack_new_free_int(void) {
 void
 test_stack_push_pop_int(void) {
   stack_s *s = stack_new(0, 4, sizeof(int));
-  int n = 2*s->n + 1, i = 0;
+  int n = s->n + 3, i = 0;
 
-  printf("stack int push/pop [%zu]\n", s->n);
+  printf("stack int push/pop [%zu/%i]\n", s->n, n);
   printf("---------------------\n");
 
   while (i++ < n) {
@@ -68,7 +68,7 @@ test_stack_push_pop_str(void) {
   stack_s *s = stack_new(0, 4, sizeof(char*));
   char *ss[] = {"a", "bb", "ccc", "dddd", "eeeee", "ffffff", };
 
-  printf("stack str push/pop [%zu]\n", s->n);
+  printf("stack str push/pop [%zu/%zu]\n", s->n, sizeof(ss)/sizeof(ss[0]));
   printf("---------------------\n");
   
   for (size_t i = 0; i < sizeof(ss)/sizeof(ss[0]); i++) {
@@ -95,8 +95,8 @@ main(void) {
   test_stack_new_free_int();
   test_stack_push_pop_int();
   
-  /* test_stack_new_free_str(); */
-  /* test_stack_push_pop_str(); */
+  test_stack_new_free_str();
+  test_stack_push_pop_str();
   
   return 0;
 }
