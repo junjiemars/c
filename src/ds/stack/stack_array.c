@@ -1,11 +1,13 @@
 #include "stack_array.h"
 #include <stdlib.h>
 
+static
 void
 node_new(stack_s *const stack) {
   stack->data = realloc(stack->data, (stack->n+1) * stack->size);
 }
 
+static
 void
 node_free(stack_s *const stack) {
   free(stack->data);

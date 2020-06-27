@@ -12,9 +12,6 @@ typedef struct stack_s {
 } stack_s;
 
 
-void node_new(stack_s *const stack);
-void node_free(stack_s *const stack);
-
 stack_s* stack_new(stack_s *stack, size_t n, size_t size);
 void stack_free(stack_s *const stack);
 
