@@ -4,10 +4,6 @@
 #include <stddef.h>
 
 
-typedef struct node_s {
-  void *data;
-} node_s;
-
 typedef struct stack_s {
 	size_t n;
   size_t size;
