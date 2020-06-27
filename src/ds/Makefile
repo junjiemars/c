@@ -76,12 +76,10 @@ $(stack_array_binout): $(ds_root)stack/test_stack_array.c	\
     $(ds_root)stack/test_stack_array.c					\
     $(bin_out)$@
 
-$(stack_linklist_binout): $(ds_root)stack/test_stack_linklist.c	\
-                          $(ds_root)stack/stack_linklist.c			\
-								          $(ds_root)stack/stack_linklist.h
+$(stack_linklist_binout): $(ds_root)stack/linklist/test.c		\
+								          $(ds_root)stack/linklist/stack.h
 	$(CC) $(CFLAGS) $(INC)												\
-    $(ds_root)stack/stack_linklist.c						\
-    $(ds_root)stack/test_stack_linklist.c				\
+    $(ds_root)stack/linklist/test.c							\
     $(bin_out)$@
 
 # tree

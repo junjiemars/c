@@ -1,5 +1,5 @@
 #include "_ds_.h"
-#include "stack_linklist.h"
+#include "stack.h"
 #include <stdlib.h>
 #include <stdio.h>
 
