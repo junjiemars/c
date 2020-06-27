@@ -1,6 +1,18 @@
-#include "stack_array.h"
+#ifndef _STACK_H_
+#define _STACK_H_
+
+#include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
+
+
+typedef struct stack_s {
+	size_t n;
+  size_t size;
+  void *top;
+  void *data;
+} stack_s;
+
 
 static
 void
@@ -14,6 +26,7 @@ node_free(stack_s *const stack) {
   free(stack->data);
 }
 
+
 stack_s*
 stack_new(stack_s *stack, size_t n, size_t size) {
   stack = calloc(1, sizeof(stack_s));
@@ -23,24 +36,24 @@ stack_new(stack_s *stack, size_t n, size_t size) {
     node_new(stack);
     stack->top = stack->data;
   }
-  return stack;
+  return stack;  
 }
 
 void
 stack_free(stack_s *const stack) {
   node_free(stack);
-  free(stack);
+  free(stack);  
 }
 
 int
 stack_empty(stack_s *const stack) {
-  return stack->top == stack->data;
+  return stack->top == stack->data;  
 }
 
 int
 stack_full(stack_s *const stack) {
   size_t len = (char*)stack->top - (char*)stack->data;
-  return stack->size * stack->n == len;
+  return stack->size * stack->n == len;  
 }
 
 void
@@ -52,7 +65,7 @@ stack_push(stack_s *const stack, void *val) {
     stack->top = (char*)stack->data + offset;
   }
   stack->top = (char*)stack->top + stack->size;
-  memcpy(stack->top, val, stack->size);
+  memcpy(stack->top, val, stack->size);  
 }
 
 int
@@ -62,5 +75,8 @@ stack_pop(stack_s *const stack, void *val) {
   }
   memcpy(val, stack->top, stack->size);
   stack->top = (char*)stack->top - stack->size;
-  return 1;
+  return 1;  
 }
+
+
+#endif /* end of _STACK_H_ */

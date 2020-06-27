@@ -68,12 +68,10 @@ stack_array_test: $(stack_array_binout)
 stack_linklist_test: $(stack_linklist_binout)
 	$(stack_linklist_binout)
 
-$(stack_array_binout): $(ds_root)stack/test_stack_array.c	\
-                       $(ds_root)stack/stack_array.c			\
-								       $(ds_root)stack/stack_array.h
+$(stack_array_binout): $(ds_root)stack/array/test.c		\
+								       $(ds_root)stack/array/stack.h
 	$(CC) $(CFLAGS) $(INC)												\
-    $(ds_root)stack/stack_array.c								\
-    $(ds_root)stack/test_stack_array.c					\
+    $(ds_root)stack/array/test.c								\
     $(bin_out)$@
 
 $(stack_linklist_binout): $(ds_root)stack/linklist/test.c		\
