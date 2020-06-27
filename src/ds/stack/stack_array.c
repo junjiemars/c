@@ -37,7 +37,7 @@ stack_empty(stack_s *const stack) {
 int
 stack_full(stack_s *const stack) {
   size_t len = stack->top - stack->node.data;
-  return stack->size * (stack->n - 1) == len;
+  return stack->size * stack->n == len;
 }
 
 void
@@ -46,7 +46,8 @@ stack_push(stack_s *const stack, void *val, push_val push_val) {
     stack->n *= 2;
     node_new(stack);
   }
-  stack->top = push_val(stack, val);
+  stack->top = (char*)stack->top + stack->size;
+  push_val(stack, val);
 }
 
 int
@@ -54,6 +55,7 @@ stack_pop(stack_s *const stack, void *val, pop_val pop_val) {
   if (stack_empty(stack)) {
     return 0;
   }
-  stack->top = pop_val(stack, val);
+  pop_val(stack, val);
+  stack->top = (char*)stack->top - stack->size;
   return 1;
 }

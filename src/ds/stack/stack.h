@@ -27,8 +27,8 @@ void stack_free(stack_s *const stack);
 int stack_empty(stack_s *const stack);
 int stack_full(stack_s *const stack);
 
-typedef void* (*push_val)(stack_s *const stack, void *val);
-typedef void* (*pop_val)(stack_s *const stack, void *val);
+typedef void (*push_val)(stack_s *const stack, void *val);
+typedef void (*pop_val)(stack_s *const stack, void *val);
 
 void stack_push(stack_s *const stack, void *val, push_val push_val);
 
