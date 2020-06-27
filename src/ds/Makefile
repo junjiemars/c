@@ -66,7 +66,6 @@ stack_array_test: $(stack_array_binout)
 
 $(stack_array_binout): $(ds_root)stack/test_stack_array.c	\
                        $(ds_root)stack/stack_array.c			\
-								       $(ds_root)stack/node_array.h				\
 								       $(ds_root)stack/stack.h
 	$(CC) $(CFLAGS) $(INC)												\
     $(ds_root)stack/stack_array.c								\

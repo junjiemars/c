@@ -1,46 +1,56 @@
-#include "node_array.h"
 #include "stack.h"
 #include <stdlib.h>
 
-stack_s*
-stack_new(stack_s *stack, new_node new_node, size_t n) {
-  stack_s* s = realloc(stack, sizeof(stack_s));
-  if (s) {
-    s->node = new_node(0, n);
-    s->n = n;
-    s->top = s->node->data;
-  }
-  return s;
+void
+node_new(stack_s *const stack) {
+  stack->node.data = realloc(stack->node.data, (stack->n+1) * stack->size);
 }
 
 void
-stack_free(stack_s *stack, free_node free_node) {
-  free_node(stack->node);
+node_free(stack_s *const stack) {
+  free(stack->node.data);
+}
+
+stack_s*
+stack_new(stack_s *stack, size_t n, size_t size) {
+  stack = calloc(1, sizeof(stack_s));
+  if (stack) {
+    stack->size = size;
+    stack->n = n;
+    node_new(stack);
+    stack->top = stack->node.data;
+  }
+  return stack;
+}
+
+void
+stack_free(stack_s *const stack) {
+  node_free(stack);
   free(stack);
 }
 
 int
 stack_empty(stack_s *const stack) {
-  return stack->top == stack->node->data;
+  return stack->top == stack->node.data;
+}
+
+int
+stack_full(stack_s *const stack) {
+  size_t len = stack->top - stack->node.data;
+  return stack->size * (stack->n - 1) == len;
 }
 
 void
-stack_push(stack_s *const stack,
-           void *val,
-           stack_full stack_full,
-           new_node new_node,
-           push_val push_val) {
+stack_push(stack_s *const stack, void *val, push_val push_val) {
   if (stack_full(stack)) {
     stack->n *= 2;
-    new_node(stack->node, stack->n);
+    node_new(stack);
   }
   stack->top = push_val(stack, val);
 }
 
 int
-stack_pop(stack_s *const stack,
-          void *val,
-          pop_val pop_val) {
+stack_pop(stack_s *const stack, void *val, pop_val pop_val) {
   if (stack_empty(stack)) {
     return 0;
   }
