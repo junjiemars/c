@@ -2,7 +2,6 @@
 #include "stack.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 
 void
 int_push_val(stack_s *const stack, void *val) {
