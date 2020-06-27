@@ -36,7 +36,7 @@ stack_empty(stack_s *const stack) {
 
 int
 stack_full(stack_s *const stack) {
-  size_t len = stack->top - stack->node.data;
+  size_t len = (char*)stack->top - (char*)stack->node.data;
   return stack->size * stack->n == len;
 }
 
@@ -44,7 +44,9 @@ void
 stack_push(stack_s *const stack, void *val, push_val push_val) {
   if (stack_full(stack)) {
     stack->n *= 2;
+    size_t offset = (char*)stack->top - (char*)stack->node.data;
     node_new(stack);
+    stack->top = (char*)stack->node.data + offset;
   }
   stack->top = (char*)stack->top + stack->size;
   push_val(stack, val);

@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 
+
 typedef struct node_s {
   void *data;
 } node_s;
@@ -14,9 +15,6 @@ typedef struct stack_s {
   node_s node;
 } stack_s;
 
-#ifndef _unused_
-#define _unused_(x) ((void)(x))
-#endif
 
 void node_new(stack_s *const stack);
 void node_free(stack_s *const stack);
@@ -34,12 +32,5 @@ void stack_push(stack_s *const stack, void *val, push_val push_val);
 
 int stack_pop(stack_s *const stack, void *val, pop_val pop_val);
 
-
-/* #define stack_top(s) ((0 != (s) && (s)->_c && (s)->_c->head) \ */
-/* 	? ((s)->_c->head->val) : ((void*)0)) */
-
-/* #define stack_size(s) ((0 != (s) && (s)->_c) ? (s)->_c->size : (0)) */
-
-/* #define stack_empty(s) (0 == (s) || 0 == (s)->_c || 0 == (s)->_c->size) */
 
 #endif /* end of _STACK_H_ */

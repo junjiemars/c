@@ -95,8 +95,8 @@ main(void) {
   test_stack_new_free_int();
   test_stack_push_pop_int();
   
-  test_stack_new_free_str();
-  test_stack_push_pop_str();
+  /* test_stack_new_free_str(); */
+  /* test_stack_push_pop_str(); */
   
   return 0;
 }
