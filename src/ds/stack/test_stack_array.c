@@ -1,6 +1,5 @@
 #include "_ds_.h"
-#include "stack.h"
-#include <stdlib.h>
+#include "stack_array.h"
 #include <stdio.h>
 
 void

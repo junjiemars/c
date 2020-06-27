@@ -70,7 +70,7 @@ stack_linklist_test: $(stack_linklist_binout)
 
 $(stack_array_binout): $(ds_root)stack/test_stack_array.c	\
                        $(ds_root)stack/stack_array.c			\
-								       $(ds_root)stack/stack.h
+								       $(ds_root)stack/stack_array.h
 	$(CC) $(CFLAGS) $(INC)												\
     $(ds_root)stack/stack_array.c								\
     $(ds_root)stack/test_stack_array.c					\
@@ -78,11 +78,10 @@ $(stack_array_binout): $(ds_root)stack/test_stack_array.c	\
 
 $(stack_linklist_binout): $(ds_root)stack/test_stack_linklist.c	\
                           $(ds_root)stack/stack_linklist.c			\
-								          $(ds_root)stack/stack.h
+								          $(ds_root)stack/stack_linklist.h
 	$(CC) $(CFLAGS) $(INC)												\
     $(ds_root)stack/stack_linklist.c						\
     $(ds_root)stack/test_stack_linklist.c				\
     $(bin_out)$@
-
 
 # tree
