@@ -1,6 +1,6 @@
 #include "stack_linklist.h"
 #include <stdlib.h>
-
+#include <string.h>
 
 void
 node_new(stack_s *const stack) {
@@ -46,17 +46,17 @@ stack_empty(stack_s *const stack) {
 }
 
 void
-stack_push(stack_s *const stack, void *val, push_val push_val) {
+stack_push(stack_s *const stack, void *val) {
   node_new(stack);
-  push_val(stack, val);
+  memcpy(stack->top->data, val, stack->size);
 }
 
 int
-stack_pop(stack_s *const stack, void *val, pop_val pop_val) {
+stack_pop(stack_s *const stack, void *val) {
   if (stack_empty(stack)) {
     return 0;
   }
-  pop_val(stack, val);
+  memcpy(val, stack->top->data, stack->size);
   node_s *top = stack->top;
   stack->top = stack->top->next;
   node_free(top);
