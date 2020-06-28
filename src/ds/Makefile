@@ -60,8 +60,13 @@ stack: $(stack_array_binout)										\
        $(stack_linklist_binout)
 stack_test: stack_array_test										\
             stack_linklist_test
-stack_valgrind_test: stack_array_test
+stack_valgrind_test: stack_valgrind_array_test 		\
+                     stack_valgrind_linklist_test
+
+stack_valgrind_array_test: stack_array_test
 	valgrind --leak-check=full --track-origins=yes $(stack_array_binout)
+stack_valgrind_linklist_test: stack_linklist_test
+	valgrind --leak-check=full --track-origins=yes $(stack_linklist_binout)
 
 stack_array_test: $(stack_array_binout)
 	$(stack_array_binout)
