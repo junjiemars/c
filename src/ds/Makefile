@@ -55,11 +55,14 @@ $(single_linked_list_binout): $(ds_root)single_linked_list/test.c \
 # stack
 stack_array_binout := $(bin_path)$(ds_prefix)_stack_array$(bin_ext)
 stack_linklist_binout := $(bin_path)$(ds_prefix)_stack_linklist$(bin_ext)
+stack_d2b_binout := $(bin_path)$(ds_prefix)_stack_d2b$(bin_ext)
 
 stack: $(stack_array_binout)										\
-       $(stack_linklist_binout)
+       $(stack_linklist_binout)									\
+       $(stack_d2b_binout)
 stack_test: stack_array_test										\
-            stack_linklist_test
+            stack_linklist_test									\
+            stack_d2b_test
 stack_valgrind_test: stack_valgrind_array_test 		\
                      stack_valgrind_linklist_test
 
@@ -72,6 +75,11 @@ stack_array_test: $(stack_array_binout)
 	$(stack_array_binout)
 stack_linklist_test: $(stack_linklist_binout)
 	$(stack_linklist_binout)
+stack_d2b_test: $(stack_d2b_binout)
+	$(stack_d2b_binout) "2, 8"
+	$(stack_d2b_binout) "3, 8"
+	$(stack_d2b_binout) "99999, 8"
+	$(stack_d2b_binout) "-1, 8"
 
 $(stack_array_binout): $(ds_root)stack/array/test.c		\
 								       $(ds_root)stack/array/stack.h
@@ -83,6 +91,12 @@ $(stack_linklist_binout): $(ds_root)stack/linklist/test.c		\
 								          $(ds_root)stack/linklist/stack.h
 	$(CC) $(CFLAGS) $(INC)												\
     $(ds_root)stack/linklist/test.c							\
+    $(bin_out)$@
+
+$(stack_d2b_binout): $(ds_root)stack/array/stack.h	\
+                     $(ds_root)stack/d2b.c
+	$(CC) $(CFLAGS) $(INC) -I$(ds_root)stack/array	\
+    $(ds_root)stack/d2b.c													\
     $(bin_out)$@
 
 # tree
