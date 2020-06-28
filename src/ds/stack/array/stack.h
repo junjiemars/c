@@ -14,14 +14,12 @@ typedef struct stack_s {
 } stack_s;
 
 
-static
-void
+static inline void*
 node_new(stack_s *const stack) {
-  stack->data = realloc(stack->data, (stack->n+1) * stack->size);
+  return stack->data = realloc(stack->data, (stack->n+1) * stack->size);
 }
 
-static
-void
+static inline void
 node_free(stack_s *const stack) {
   free(stack->data);
 }
@@ -56,26 +54,29 @@ stack_full(stack_s *const stack) {
   return stack->size * stack->n == len;  
 }
 
-void
+void*
 stack_push(stack_s *const stack, void *val) {
   if (stack_full(stack)) {
     stack->n *= 2;
     size_t offset = (char*)stack->top - (char*)stack->data;
-    node_new(stack);
+    void *new_one = node_new(stack);
+    if (0 == new_one) {
+      return 0;
+    }
     stack->top = (char*)stack->data + offset;
   }
   stack->top = (char*)stack->top + stack->size;
   memcpy(stack->top, val, stack->size);  
+  return stack->top;
 }
 
-int
+void*
 stack_pop(stack_s *const stack, void *val) {
   if (stack_empty(stack)) {
     return 0;
   }
   memcpy(val, stack->top, stack->size);
-  stack->top = (char*)stack->top - stack->size;
-  return 1;  
+  return stack->top = (char*)stack->top - stack->size;
 }
 
 
