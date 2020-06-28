@@ -18,7 +18,11 @@ test_stack_push_pop_int(void) {
   printf("---------------------\n");
 
   while (i++ < n) {
-    stack_push(s, &i);
+    int *one = stack_push(s, &i);
+    if (0 == one) {
+      fprintf(stderr, "push failed\n");
+      break;
+    }
     printf("%8s %16i\n", "push", i);
   }
 
@@ -26,8 +30,9 @@ test_stack_push_pop_int(void) {
   i = 0;
   while (i++ < 2*n) {
     int k = 0;
-    int empty = stack_pop(s, &k);
+    int *empty = stack_pop(s, &k);
     if (0 == empty) {
+      fprintf(stderr, "pop failed\n");
       break;
     }
     printf("%8s %16i\n", "pop", k);
@@ -51,15 +56,20 @@ test_stack_push_pop_str(void) {
   printf("---------------------\n");
   
   for (size_t i = 0; i < sizeof(ss)/sizeof(ss[0]); i++) {
-    stack_push(s, &ss[i]);
+    char *one = stack_push(s, &ss[i]);
+    if (0 == one) {
+      fprintf(stderr, "push failed\n");
+      break;
+    }
     printf("%8s %16s\n", "push", ss[i]);
   }
 
   printf("---------------------\n");
   for (size_t i = 0; i < sizeof(ss)/sizeof(ss[0]); i++) {
     char *buf = 0;
-    int empty = stack_pop(s, &buf);
+    char *empty = stack_pop(s, &buf);
     if (0 == empty) {
+      fprintf(stderr, "pop failed\n");
       break;
     }
     printf("%8s %16s\n", "pop", buf);
