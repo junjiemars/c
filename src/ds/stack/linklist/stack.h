@@ -85,5 +85,14 @@ stack_pop(stack_s *const stack, void *val) {
   return stack->top;  
 }
 
+void*
+stack_peek(stack_s *const stack, void *val) {
+  if (stack_empty(stack)) {
+    return 0;
+  }
+  memcpy(val, stack->top->data, stack->size);
+  return val;
+}
+
 
 #endif /* end of _STACK_H_ */
