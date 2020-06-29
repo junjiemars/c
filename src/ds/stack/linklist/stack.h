@@ -70,7 +70,7 @@ stack_push(stack_s *const stack, void *val) {
     return 0;
   }
   memcpy(stack->top->data, val, stack->size);
-  return stack->top->data;
+  return val;
 }
 
 void*
@@ -82,7 +82,7 @@ stack_pop(stack_s *const stack, void *val) {
   node_s *old_one = stack->top;
   stack->top = stack->top->next;
   node_free(old_one);
-  return stack->top;  
+  return val;  
 }
 
 void*
