@@ -39,8 +39,8 @@ precedence(char c) {
   case '-': return 3;
   case '*':
   case '/': return 5;
+  default: return 0;
   }
-  return 0;
 }
 
 char

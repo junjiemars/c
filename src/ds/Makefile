@@ -84,7 +84,7 @@ stack_d2b_test: $(stack_d2b_binout)
 	$(stack_d2b_binout) "99999, 8"
 	$(stack_d2b_binout) "-1, 8"
 stack_calc_test: $(stack_calc_binout)
-	$(stack_calc_binout) "3+5"
+	$(stack_calc_binout) "(7+3)*4"
 
 $(stack_array_binout): $(ds_root)stack/array/test.c		\
 								       $(ds_root)stack/array/stack.h
