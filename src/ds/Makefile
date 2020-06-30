@@ -84,7 +84,7 @@ stack_d2b_test: $(stack_d2b_binout)
 	$(stack_d2b_binout) "99999, 8"
 	$(stack_d2b_binout) "-1, 8"
 stack_calc_test: $(stack_calc_binout)
-	$(stack_calc_binout) "(7+3)*4"
+	$(stack_calc_binout) "1+2*3/5^6"
 
 $(stack_array_binout): $(ds_root)stack/array/test.c		\
 								       $(ds_root)stack/array/stack.h
@@ -104,10 +104,10 @@ $(stack_d2b_binout): $(ds_root)stack/array/stack.h	\
     $(ds_root)stack/d2b.c													\
     $(bin_out)$@
 
-$(stack_calc_binout): $(ds_root)stack/linklist/stack.h	\
+$(stack_calc_binout): $(ds_root)stack/array/stack.h	\
                       $(ds_root)stack/calc.c
-	$(CC) $(CFLAGS) $(INC) -I$(ds_root)stack/linklist	\
-    $(ds_root)stack/calc.c													\
+	$(CC) $(CFLAGS) $(INC) -I$(ds_root)stack/array	\
+    $(ds_root)stack/calc.c												\
     $(bin_out)$@
 
 # tree
