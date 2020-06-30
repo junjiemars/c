@@ -27,6 +27,12 @@ test_stack_push_pop_int(void) {
   }
 
   printf("---------------------\n");
+  if (0 == stack_peek(s, &i)) {
+    fprintf(stderr, "peek failed\n");
+  }
+  printf("%8s %16i\n", "peek", i);
+
+  printf("---------------------\n");
   i = 0;
   while (i++ < 2*n) {
     int k = 0;
@@ -51,6 +57,7 @@ void
 test_stack_push_pop_str(void) {
   stack_s *s = stack_new(0, 4, sizeof(char*));
   char *ss[] = {"a", "bb", "ccc", "dddd", "eeeee", "ffffff", };
+  char *buf = 0;
 
   printf("stack str push/pop [%zu/%zu]\n", s->n, sizeof(ss)/sizeof(ss[0]));
   printf("---------------------\n");
@@ -65,8 +72,14 @@ test_stack_push_pop_str(void) {
   }
 
   printf("---------------------\n");
+  if (0 == stack_peek(s, &buf)) {
+    fprintf(stderr, "peek failed\n");
+  }
+  printf("%8s %16s\n", "peek", buf);
+
+  printf("---------------------\n");
   for (size_t i = 0; i < sizeof(ss)/sizeof(ss[0]); i++) {
-    char *buf = 0;
+    buf = 0;
     char *empty = stack_pop(s, &buf);
     if (0 == empty) {
       fprintf(stderr, "pop failed\n");
