@@ -20,8 +20,8 @@ _getc_() {
   return _str_in_[_str_in_i_++];
 }
 
-int
 static
+int
 _ungetc_(int c, FILE* stream) {
   _unused_(stream);
   _str_in_i_--;
