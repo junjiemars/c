@@ -115,6 +115,7 @@ void
 test_postfix() {
   printf("postfix: ");
 
+  _str_in_i_ = 0;
   queue_s *expr = queue_new(0, 8, sizeof(int));
   postfix(expr, expr_buf);
 
