@@ -1,5 +1,6 @@
 #include <_ds_.h>
 #include <stack.h>
+#include <queue.h>
 #include <stdio.h>
 #include <ctype.h>
 
@@ -71,7 +72,7 @@ token(void) {
 }
 
 void
-postfix(stack_s *const expr, char *const buf) {
+postfix(queue_s *const expr, char *const buf) {
   stack_s *s = stack_new(0, 8, sizeof(int));
   int i, t, c, v;
 
@@ -85,18 +86,18 @@ postfix(stack_s *const expr, char *const buf) {
       buf[i] = 0;
       _ungetc_(c, _stdin_);
       sscanf(&buf[0], "%i", &v);
-      stack_push(expr, &v);
+      queue_enq(expr, &v);
     } else if ('(' == t) {
       stack_push(s, &t);
     } else if (')' == t) {
       while ('(' != *(int*)(stack_pop(s, &c))) {
-        stack_push(expr, &c);
+        queue_enq(expr, &c);
       }
     } else {
       while (!stack_empty(s)
              && precedence(*(char*)(stack_peek(s, &c))) >= precedence(t)) {
         stack_pop(s, &c);
-        stack_push(expr, &c);
+        queue_enq(expr, &c);
       }
       stack_push(s, &t);
     }
@@ -104,7 +105,7 @@ postfix(stack_s *const expr, char *const buf) {
 
   while (!stack_empty(s)) {
     stack_pop(s, &c);
-    stack_push(expr, &c);
+    queue_enq(expr, &c);
   }
 
   stack_free(s);
@@ -127,12 +128,12 @@ main(int argc, char **argv) {
 
   printf("postfix:\n");
 
-  stack_s *expr = stack_new(0, 8, sizeof(int));
+  queue_s *expr = queue_new(0, 8, sizeof(int));
   postfix(expr, expr_buf);
 
   int v;
-  while (!stack_empty(expr)) {
-    stack_pop(expr, &v);
+  while (!queue_empty(expr)) {
+    queue_deq(expr, &v);
     if (isop(v)) {
       printf("%c ", v);
     } else {
@@ -141,6 +142,6 @@ main(int argc, char **argv) {
   }
   putchar('\n');
 
-  stack_free(expr);
+  queue_free(expr);
   return 0;
 }

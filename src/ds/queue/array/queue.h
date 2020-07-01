@@ -11,12 +11,12 @@ typedef struct queue_s {
 
 
 static inline void*
-node_new(queue_s *const queue) {
+queue_node_new(queue_s *const queue) {
   return queue->data = realloc(queue->data, queue->n * queue->size);
 }
 
 static inline void
-node_free(queue_s *const queue) {
+queue_node_free(queue_s *const queue) {
   free(queue->data);
 }
 
@@ -26,7 +26,7 @@ queue_new(queue_s *queue, size_t n, size_t size) {
   if (queue) {
     queue->size = size;
     queue->n = n;
-    node_new(queue);
+    queue_node_new(queue);
     queue->head = queue->tail = queue->data;
   }
   return queue;
@@ -34,7 +34,7 @@ queue_new(queue_s *queue, size_t n, size_t size) {
 
 void
 queue_free(queue_s *const queue) {
-  node_free(queue);
+  queue_node_free(queue);
   free(queue);  
 }
 
@@ -55,7 +55,7 @@ queue_enq(queue_s *queue, void *val) {
     queue->n *= 2;
     size_t tail_offset = (char*)queue->tail - (char*)queue->data;
     size_t head_offset = (char*)queue->head - (char*)queue->data;
-    void *new_one = node_new(queue);
+    void *new_one = queue_node_new(queue);
     if (0 == new_one) {
       return 0;
     }
