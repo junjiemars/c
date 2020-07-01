@@ -38,7 +38,7 @@ test_stack_push_pop_int(void) {
     int k = 0;
     int *empty = stack_pop(s, &k);
     if (0 == empty) {
-      fprintf(stderr, "pop failed\n");
+      fprintf(stderr, "pop failed, empty\n");
       break;
     }
     printf("%8s %16i\n", "pop", k);
@@ -82,7 +82,7 @@ test_stack_push_pop_str(void) {
     buf = 0;
     char *empty = stack_pop(s, &buf);
     if (0 == empty) {
-      fprintf(stderr, "pop failed\n");
+      fprintf(stderr, "pop failed, empty\n");
       break;
     }
     printf("%8s %16s\n", "pop", buf);

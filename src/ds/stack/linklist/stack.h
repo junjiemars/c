@@ -18,7 +18,7 @@ typedef struct stack_s {
 
 
 static inline void*
-node_new(stack_s *const stack) {
+stack_node_new(stack_s *const stack) {
   node_s *p = malloc(sizeof(node_s));
   if (0 == p) {
     return 0;
@@ -29,7 +29,7 @@ node_new(stack_s *const stack) {
 }
 
 static inline void
-node_free(node_s *node) {
+stack_node_free(node_s *node) {
   free(node->data);
   free(node);
 }
@@ -55,7 +55,7 @@ stack_free(stack_s *stack) {
     node_s **p = &stack->top;
     do {
       node_s *next = (*p)->next;
-      node_free(*p);
+      stack_node_free(*p);
       *p = next;
     } while ((*p)->next);
   }
@@ -65,7 +65,7 @@ stack_free(stack_s *stack) {
 
 void*
 stack_push(stack_s *const stack, void *val) {
-  void *new_one = node_new(stack);
+  void *new_one = stack_node_new(stack);
   if (0 == new_one) {
     return 0;
   }
@@ -81,7 +81,7 @@ stack_pop(stack_s *const stack, void *val) {
   memcpy(val, stack->top->data, stack->size);
   node_s *old_one = stack->top;
   stack->top = stack->top->next;
-  node_free(old_one);
+  stack_node_free(old_one);
   return val;  
 }
 
