@@ -8,11 +8,13 @@ INC += -I$(ds_root)
 
 ds: double_linked_list													\
 		single_linked_list													\
+    queue																				\
 		stack																				\
     tree
 
 ds_test: double_linked_list_test								\
 				 single_linked_list_test								\
+         queue_test															\
 				 stack_test															\
          tree_test
 
@@ -50,6 +52,28 @@ $(single_linked_list_binout): $(ds_root)single_linked_list/test.c \
 		$(ds_root)single_linked_list/test.c \
 		$(ds_root)single_linked_list/list.c \
 		$(bin_out)$@
+
+
+# queue
+queue_array_binout := $(bin_path)$(ds_prefix)_queue_array$(bin_ext)
+
+queue: $(queue_array_binout)
+
+queue_test: queue_array_test
+
+queue_valgrind_test: queue_valgrind_array_test
+
+queue_valgrind_array_test: queue_array_test
+	valgrind --leak-check=full --track-origins=yes $(queue_array_binout)
+
+queue_array_test: $(queue_array_binout)
+	$(queue_array_binout)
+
+$(queue_array_binout): $(ds_root)queue/array/test.c		\
+								       $(ds_root)queue/array/queue.h
+	$(CC) $(CFLAGS) $(INC)												\
+    $(ds_root)queue/array/test.c								\
+    $(bin_out)$@
 
 
 # stack
