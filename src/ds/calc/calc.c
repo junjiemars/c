@@ -111,22 +111,9 @@ postfix(queue_s *const expr, char *const buf) {
   stack_free(s);
 }
 
-int
-main(int argc, char **argv) {
-  _unused_(argc);
-  _unused_(argv);
-
-#if !(NDEBUG)
-  if (argc < 2) {
-    printf("where the expression?\n");
-    return 0;
-  }
-
-  memcpy(_str_in_, argv[1], strlen(argv[1])+1);
-  printf("expr: %s\n", _str_in_);
-#endif
-
-  printf("postfix:\n");
+void
+test_postfix() {
+  printf("postfix: ");
 
   queue_s *expr = queue_new(0, 8, sizeof(int));
   postfix(expr, expr_buf);
@@ -142,6 +129,59 @@ main(int argc, char **argv) {
   }
   putchar('\n');
 
+  queue_free(expr);  
+}
+
+void
+test_eval(void) {
+  printf("eval: ");
+
+  _str_in_i_ = 0;
+  queue_s *expr = queue_new(0, 8, sizeof(int));
+  postfix(expr, expr_buf);
+
+  stack_s *op = stack_new(0, 8, sizeof(int));
+  int v, a, b, c;
+  while (!queue_empty(expr)) {
+    queue_deq(expr, &v);
+    if (isop(v)) {
+        stack_pop(op, &b);
+        stack_pop(op, &a);
+        switch (v) {
+        case '+': c = a + b; break;
+        case '-': c = a - b; break;
+        case '*': c = a * b; break;
+        case '/': c = a / b; break;
+        }
+      stack_push(op, &c);
+    } else {
+      stack_push(op, &v);
+    }
+  }
+  stack_pop(op, &v);
+  printf("%i\n", v);
+
   queue_free(expr);
+  stack_free(op);
+}
+
+int
+main(int argc, char **argv) {
+  _unused_(argc);
+  _unused_(argv);
+
+#if !(NDEBUG)
+  if (argc < 2) {
+    printf("where the expression?\n");
+    return 0;
+  }
+
+  memcpy(_str_in_, argv[1], strlen(argv[1])+1);
+  printf("expr: %s\n", _str_in_);
+#endif
+
+  test_postfix();
+  test_eval();
+
   return 0;
 }
