@@ -53,12 +53,14 @@ void*
 queue_enq(queue_s *queue, void *val) {
   if (queue_full(queue)) {
     queue->n *= 2;
-    size_t offset = (char*)queue->tail - (char*)queue->data;
+    size_t tail_offset = (char*)queue->tail - (char*)queue->data;
+    size_t head_offset = (char*)queue->head - (char*)queue->data;
     void *new_one = node_new(queue);
     if (0 == new_one) {
       return 0;
     }
-    queue->tail = (char*)queue->data + offset;
+    queue->tail = (char*)queue->data + tail_offset;
+    queue->head = (char*)queue->data + head_offset;
   }
   memcpy(queue->tail, val, queue->size);
   return queue->tail = (char*)queue->tail + queue->size;

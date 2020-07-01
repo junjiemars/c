@@ -28,7 +28,7 @@ test_queue_enq_deq_int(void) {
 
   printf("---------------------\n");
   if (0 == queue_peek(s, &i)) {
-    fprintf(stderr, "peek failed\n");
+    fprintf(stderr, "peek failed, empty\n");
   }
   printf("%8s %16i\n", "peek", i);
 
