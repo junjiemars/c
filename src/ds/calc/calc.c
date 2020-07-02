@@ -7,11 +7,11 @@
 #define MAX_EXPR 128
 
 #if NDEBUG
-#define _getc_ getchar
-#define _ungetc_ ungetc
-#define _stdin_ stdin
+#  define _getc_ getchar
+#  define _ungetc_ ungetc
+#  define _stdin_ stdin
 #else
-#define _stdin_ 0
+#  define _stdin_ 0
 static char _str_in_[MAX_EXPR];
 static int _str_in_i_ = 0;
 
@@ -30,7 +30,7 @@ _ungetc_(int c, FILE* stream) {
   _str_in_i_--;
   return c;
 }
-#endif
+#endif /* NDEBUG */
 
 static char expr_buf[MAX_EXPR];
 
@@ -156,6 +156,7 @@ test_expt(void) {
 void
 test_postfix() {
   printf("postfix: ");
+  _str_in_i_ = 0;
 
   queue_s *expr = queue_new(0, 8, sizeof(int));
   postfix(expr, expr_buf);
@@ -177,7 +178,7 @@ test_postfix() {
 void
 test_eval(void) {
   printf("eval: ");
-
+  _str_in_i_ = 0;
 
   queue_s *expr = queue_new(0, 8, sizeof(int));
   postfix(expr, expr_buf);
@@ -193,12 +194,14 @@ main(int argc, char **argv) {
   _unused_(argc);
   _unused_(argv);
 
+
 #if NDEBUG
   queue_s *expr = queue_new(0, 8, sizeof(int));
   postfix(expr, expr_buf);
   int v = eval(expr);
   printf(" %i\n", v);
   queue_free(expr);
+
 #else
   if (argc < 2) {
     printf("where the expression?\n");
@@ -206,14 +209,13 @@ main(int argc, char **argv) {
   }
   memcpy(_str_in_, argv[1], strlen(argv[1])+1);
 
-  test_expt();
+  /* test_expt(); */
   printf("expr: %s\n", _str_in_);
-  _str_in_i_ = 0;
-  test_postfix();
-  _str_in_i_ = 0;
-  test_eval();
-#endif
 
+  test_postfix();
+  test_eval();
+
+#endif
 
   return 0;
 }
