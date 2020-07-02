@@ -4,15 +4,17 @@
 #include <stdio.h>
 #include <ctype.h>
 
+#define MAX_EXPR 128
+
 #if NDEBUG
 #define _getc_ getchar
 #define _ungetc_ ungetc
 #define _stdin_ stdin
 #else
-#define MAX_EXPR 128
 #define _stdin_ 0
 static char _str_in_[MAX_EXPR];
 static int _str_in_i_ = 0;
+
 static int
 _getc_() {
   if (MAX_EXPR == _str_in_i_) {
@@ -30,7 +32,7 @@ _ungetc_(int c, FILE* stream) {
 }
 #endif
 
-static char expr_buf[1024];
+static char expr_buf[MAX_EXPR];
 
 int
 precedence(int c) {
@@ -63,7 +65,7 @@ token(void) {
     if (' ' == c) {
       continue;
     }
-    if ('\0' == c) {
+    if ('\0' == c || c == '=') {
       return EOF;
     }
     return c;
@@ -155,7 +157,6 @@ void
 test_postfix() {
   printf("postfix: ");
 
-  _str_in_i_ = 0;
   queue_s *expr = queue_new(0, 8, sizeof(int));
   postfix(expr, expr_buf);
 
@@ -177,7 +178,7 @@ void
 test_eval(void) {
   printf("eval: ");
 
-  _str_in_i_ = 0;
+
   queue_s *expr = queue_new(0, 8, sizeof(int));
   postfix(expr, expr_buf);
 
@@ -192,21 +193,27 @@ main(int argc, char **argv) {
   _unused_(argc);
   _unused_(argv);
 
-
-#if !(NDEBUG)
+#if NDEBUG
+  queue_s *expr = queue_new(0, 8, sizeof(int));
+  postfix(expr, expr_buf);
+  int v = eval(expr);
+  printf(" %i\n", v);
+  queue_free(expr);
+#else
   if (argc < 2) {
     printf("where the expression?\n");
     return 0;
   }
-
   memcpy(_str_in_, argv[1], strlen(argv[1])+1);
+
+  test_expt();
   printf("expr: %s\n", _str_in_);
+  _str_in_i_ = 0;
+  test_postfix();
+  _str_in_i_ = 0;
+  test_eval();
 #endif
 
-  /* test_expt(); */
-
-  test_postfix();
-  test_eval();
 
   return 0;
 }
