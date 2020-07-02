@@ -115,6 +115,12 @@ postfix(queue_s *const expr, char *const buf) {
 }
 
 int
+expt(int b, int n, int acc) {
+  if (n < 1) return acc;
+  return expt(b, n-1, acc*b);
+}
+
+int
 eval(queue_s *const expr) {
   stack_s *op = stack_new(0, 8, sizeof(int));
   int v, a, b, c;
@@ -124,6 +130,7 @@ eval(queue_s *const expr) {
         stack_pop(op, &b);
         stack_pop(op, &a);
         switch (v) {
+        case '^': c = expt(a, b, 1); break;
         case '+': c = a + b; break;
         case '-': c = a - b; break;
         case '*': c = a * b; break;
@@ -137,6 +144,11 @@ eval(queue_s *const expr) {
   stack_pop(op, &v);
   stack_free(op);
   return v;
+}
+
+void
+test_expt(void) {
+  printf("expt: %i^%i = %i\n", 2, 3, expt(2, 3, 1));
 }
 
 void
@@ -180,6 +192,7 @@ main(int argc, char **argv) {
   _unused_(argc);
   _unused_(argv);
 
+
 #if !(NDEBUG)
   if (argc < 2) {
     printf("where the expression?\n");
@@ -189,6 +202,8 @@ main(int argc, char **argv) {
   memcpy(_str_in_, argv[1], strlen(argv[1])+1);
   printf("expr: %s\n", _str_in_);
 #endif
+
+  /* test_expt(); */
 
   test_postfix();
   test_eval();
