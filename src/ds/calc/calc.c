@@ -90,14 +90,17 @@ postfix(queue_s *const expr, char *const buf) {
     } else if ('(' == t) {
       stack_push(s, &t);
     } else if (')' == t) {
-      while ('(' != *(int*)(stack_pop(s, &c))) {
+      stack_pop(s, &c);
+      while ('(' != c) {
         queue_enq(expr, &c);
+        stack_pop(s, &c);
       }
     } else {
-      while (!stack_empty(s)
-             && precedence(*(char*)(stack_peek(s, &c))) >= precedence(t)) {
+      stack_peek(s, &c);
+      while (!stack_empty(s) && precedence(c) >= precedence(t)) {
         stack_pop(s, &c);
         queue_enq(expr, &c);
+        stack_peek(s, &c);
       }
       stack_push(s, &t);
     }
@@ -109,6 +112,31 @@ postfix(queue_s *const expr, char *const buf) {
   }
 
   stack_free(s);
+}
+
+int
+eval(queue_s *const expr) {
+  stack_s *op = stack_new(0, 8, sizeof(int));
+  int v, a, b, c;
+  while (!queue_empty(expr)) {
+    queue_deq(expr, &v);
+    if (isop(v)) {
+        stack_pop(op, &b);
+        stack_pop(op, &a);
+        switch (v) {
+        case '+': c = a + b; break;
+        case '-': c = a - b; break;
+        case '*': c = a * b; break;
+        case '/': c = a / b; break;
+        }
+      stack_push(op, &c);
+    } else {
+      stack_push(op, &v);
+    }
+  }
+  stack_pop(op, &v);
+  stack_free(op);
+  return v;
 }
 
 void
@@ -141,29 +169,10 @@ test_eval(void) {
   queue_s *expr = queue_new(0, 8, sizeof(int));
   postfix(expr, expr_buf);
 
-  stack_s *op = stack_new(0, 8, sizeof(int));
-  int v, a, b, c;
-  while (!queue_empty(expr)) {
-    queue_deq(expr, &v);
-    if (isop(v)) {
-        stack_pop(op, &b);
-        stack_pop(op, &a);
-        switch (v) {
-        case '+': c = a + b; break;
-        case '-': c = a - b; break;
-        case '*': c = a * b; break;
-        case '/': c = a / b; break;
-        }
-      stack_push(op, &c);
-    } else {
-      stack_push(op, &v);
-    }
-  }
-  stack_pop(op, &v);
+  int v = eval(expr);
   printf("%i\n", v);
 
   queue_free(expr);
-  stack_free(op);
 }
 
 int
