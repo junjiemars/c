@@ -46,7 +46,7 @@ queue_empty(queue_s *const queue) {
 int
 queue_full(queue_s *const queue) {
   size_t len = (char*)queue->tail - (char*)queue->data;
-  return queue->size * (queue->n - 1) == len;
+  return queue->size * queue->n == len;
 }
 
 void*
