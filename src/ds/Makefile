@@ -11,14 +11,16 @@ ds: double_linked_list													\
     queue																				\
 		stack																				\
     tree																				\
-    ds_calc
+    ds_calc																			\
+    ds_d2b
 
 ds_test: double_linked_list_test								\
 				 single_linked_list_test								\
          queue_test															\
 				 stack_test															\
          tree_test															\
-         ds_calc_test
+         ds_calc_test														\
+         ds_d2b_test
 
 # list
 
@@ -128,6 +130,22 @@ $(stack_d2b_binout): $(ds_root)stack/array/stack.h	\
     $(bin_out)$@
 
 # tree
+
+# d2b
+ds_d2b_binout := $(bin_path)$(ds_prefix)_d2b$(bin_ext)
+
+ds_d2b: $(ds_d2b_binout)
+ds_d2b_test: ds_d2b
+	$(ds_d2b_binout) "2, 8"
+	$(ds_d2b_binout) "3, 8"
+	$(ds_d2b_binout) "99999, 8"
+	$(ds_d2b_binout) "-1, 8"
+
+$(ds_d2b_binout): $(ds_root)stack/array/stack.h	\
+                  $(ds_root)d2b/d2b.c
+	$(CC) $(CFLAGS) $(INC) -I$(ds_root)stack/array	\
+    $(ds_root)d2b/d2b.c														\
+    $(bin_out)$@
 
 # calc
 ds_calc_binout := $(bin_path)$(ds_prefix)_calc$(bin_ext)
