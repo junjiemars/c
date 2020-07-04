@@ -435,7 +435,6 @@ produced, otherwise it can be overwritten by calls to other functions.
 		:CUSTOM_ID: language_function_main
 		:END:
 
-
 C90 =main()= declarations:
 #+BEGIN_SRC c
 int main(void);
@@ -465,6 +464,11 @@ In arguments:
 - ~envp~ is not specified by POSIX but widely supported, =getenv= is
   the only one specified by the C standard, the =putenv=
 	and ~extern char **environ~ are POSIX-specific.
+
+*** Forward declaration
+
+- call graph is cyclic
+- cross more than one translation unit
 
 ** Macro
 	 :PROPERTIES:
