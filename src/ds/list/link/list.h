@@ -17,17 +17,20 @@ typedef struct list_s {
 } list_s;
 
 
-static node_s *list_node_new(void);
+static node_s *list_node_new(list_s *const l);
 static void list_node_free(node_s *const n);
 
 list_s *list_new(list_s *l, size_t size);
 void list_free(list_s *const l);
 
-void *list_append(list_s *const l, void *val);
+node_s *list_append(list_s *const l, void *val);
 
 static inline node_s*
-list_node_new(void) {
+list_node_new(list_s *const l) {
   node_s *n = calloc(1, sizeof(node_s));
+  if (n) {
+    n->data = malloc(l->size);
+  }
   return n;
 }
 
@@ -57,13 +60,13 @@ list_free(list_s *const l) {
   free(l);
 }
 
-void*
+node_s*
 list_append(list_s *const l, void *val) {
-  node_s *new_one = list_node_new();
+  node_s *new_one = list_node_new(l);
   if (!new_one) {
     return 0;
   }
-  memcpy(&new_one->data, val, l->size);
+  memcpy(new_one->data, val, l->size);
   
   if (!l->head) {
     l->head = l->tail = new_one;
@@ -71,7 +74,7 @@ list_append(list_s *const l, void *val) {
     l->tail = l->tail->next = new_one;
   }
 
-  return new_one->data;
+  return l->tail;
 }
 
 #endif /* end of _LIST_H_ */

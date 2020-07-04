@@ -22,9 +22,10 @@ test_list_append_int() {
   list_s *s = list_new(0, sizeof(int));
   int n = 4;
   for (int i = 1; i <= n; i++) {
-    list_append(s, &i);
+    node_s *c = list_append(s, &i);
+    printf("%i, ", *(int*)c->data);
   }
-  print_list_int(s);
+  putchar('\n');
 
   list_free(s);
 }
