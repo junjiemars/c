@@ -8,6 +8,7 @@ INC += -I$(ds_root)
 
 ds: double_linked_list													\
 		single_linked_list													\
+    list																				\
     queue																				\
 		stack																				\
     tree																				\
@@ -16,6 +17,7 @@ ds: double_linked_list													\
 
 ds_test: double_linked_list_test								\
 				 single_linked_list_test								\
+         list_test															\
          queue_test															\
 				 stack_test															\
          tree_test															\
@@ -55,6 +57,25 @@ $(single_linked_list_binout): $(ds_root)single_linked_list/test.c \
 	$(CC) $(CFLAGS) $(INC) \
 		$(ds_root)single_linked_list/test.c \
 		$(ds_root)single_linked_list/list.c \
+		$(bin_out)$@
+
+# list
+list_link_binout := $(bin_path)$(ds_prefix)_list_link$(bin_ext)
+
+list: list_link
+list_test: list_link_test
+
+list_link: $(list_link_binout)
+list_link_test: list_link
+	$(list_link_binout)
+
+list_valgrind_test: list_link_test
+	valgrind --leak-check=full --track-origins=yes $(list_link_binout)
+
+$(list_link_binout): $(ds_root)list/link/test.c	\
+										 $(ds_root)list/link/list.h
+	$(CC) $(CFLAGS) $(INC)												\
+		$(ds_root)list/link/test.c									\
 		$(bin_out)$@
 
 
