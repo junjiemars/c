@@ -6,7 +6,7 @@
 #include <string.h>
 
 typedef struct node_s {
-  void *data;
+  char data[sizeof(char*)];
   struct node_s *next;
 } node_s;
 
@@ -17,7 +17,7 @@ typedef struct list_s {
 } list_s;
 
 
-static node_s *list_node_new(list_s *const l);
+static node_s *list_node_new(void);
 static void list_node_free(node_s *const n);
 
 list_s *list_new(list_s *l, size_t size);
@@ -29,19 +29,13 @@ node_s *list_find(list_s *const l, const void *val,
 int list_remove(list_s *const l, node_s *const n);
 
 static inline node_s*
-list_node_new(list_s *const l) {
+list_node_new(void) {
   node_s *n = calloc(1, sizeof(node_s));
-  if (n) {
-    n->data = malloc(l->size);
-  }
   return n;
 }
 
 static inline void
 list_node_free(node_s *const n) {
-  if (n) {
-    free(n->data);
-  }
   free(n);
 }
 
@@ -68,7 +62,7 @@ list_free(list_s *const l) {
 
 node_s*
 list_append(list_s *const l, void *val) {
-  node_s *new_one = list_node_new(l);
+  node_s *new_one = list_node_new();
   if (!new_one) {
     return 0;
   }
