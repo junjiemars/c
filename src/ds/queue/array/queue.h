@@ -52,19 +52,21 @@ queue_full(queue_s *const queue) {
 void*
 queue_enq(queue_s *queue, void *val) {
   if (queue_full(queue)) {
-    if (queue_empty(queue)) {
-      queue->head = queue->tail = queue->data;
+    size_t offset = (char*)queue->head - (char*)queue->data;
+    size_t len = (char*)queue->tail - (char*)queue->head;
+    if (offset > 0) {
+      if (len > 0) {
+        memmove(queue->data, queue->head, len);
+      }
     } else {
-      queue->n *= 2;
-      size_t tail_offset = (char*)queue->tail - (char*)queue->data;
-      size_t head_offset = (char*)queue->head - (char*)queue->data;
+      queue->n = queue->n*2;
       void *new_one = queue_node_new(queue);
       if (0 == new_one) {
         return 0;
       }
-      queue->tail = (char*)queue->data + tail_offset;
-      queue->head = (char*)queue->data + head_offset;
     }
+    queue->head = queue->data;
+    queue->tail = (char*)queue->head + len;
   }
   memcpy(queue->tail, val, queue->size);
   return queue->tail = (char*)queue->tail + queue->size;

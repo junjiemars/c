@@ -6,12 +6,13 @@
 void
 print_queue(queue_s *const s) {
   printf("---------------------\n");
-  printf("%8s: %2i, top: %p, tail: %p\n", "full",
-         queue_full(s), s->head, s->tail);
-  printf("%8s: %2i, top: %p, tail: %p\n", "empty",
-         queue_empty(s), s->head, s->tail);
-  printf("%8s: %2zu, top: %p, tail: %p\n", "capacity",
-         s->n, s->head, s->tail);
+  printf("%8s: %2i, %8s: %2i, %8s: %2zu\n%8s= %p\n%8s= %p\n%8s= %2zu\n",
+         "full", queue_full(s),
+         "empty", queue_empty(s),
+         "capacity", s->n,
+         "head", s->head,
+         "tail", s->tail,
+         "offset", (char*)s->tail - (char*)s->head);
 }
 
 void
@@ -40,28 +41,49 @@ test_queue_realloc(void) {
 
   printf("---------------------\n");
   i = 0;
-  while (i++ < n) {
+  while (i++ < n/2) {
     queue_deq(s, &v);
-    printf("%8s %16i\n", "enq", v);
+    printf("%8s %16i\n", "deq", v);
   }
+  print_queue(s);
 
   printf("---------------------\n");
-  v = 5;
-  queue_enq(s, &v);
-  print_queue(s);
-
   i = 0;
-  while (i++ < n+2) {
-    int *one = queue_enq(s, &i);
-    if (0 == one) {
-      fprintf(stderr, "enq failed\n");
-      break;
-    }
+  while (i++ < 2) {
+    queue_enq(s, &i);
     printf("%8s %16i\n", "enq", i);
   }
-
   print_queue(s);
 
+  printf("---------------------\n");
+  i = 0;
+  while (i++ < 2) {
+    queue_enq(s, &i);
+    printf("%8s %16i\n", "enq", i);
+  }
+  print_queue(s);
+
+  printf("---------------------\n");
+  queue_deq(s, &v);
+  printf("%8s %16i\n", "deq", v);
+  print_queue(s);
+
+  printf("---------------------\n");
+  i = 0;
+  while (i++ < 1) {
+    queue_enq(s, &i);
+    printf("%8s %16i\n", "enq", i);
+  }
+  print_queue(s);
+
+  printf("---------------------\n");
+  i = 0;
+  while (i++ < n+3) {
+    queue_enq(s, &i);
+    printf("%8s %16i\n", "enq", i);
+  }
+  print_queue(s);
+  
   queue_free(s);
 }
 
