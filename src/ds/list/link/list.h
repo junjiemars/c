@@ -24,6 +24,9 @@ list_s *list_new(list_s *l, size_t size);
 void list_free(list_s *const l);
 
 node_s *list_append(list_s *const l, void *val);
+node_s *list_find(list_s *const l, const void *val,
+                  int (*cmp)(const void *lhs, const void *rhs));
+int list_remove(list_s *const l, node_s *const n);
 
 static inline node_s*
 list_node_new(list_s *const l) {
@@ -75,6 +78,37 @@ list_append(list_s *const l, void *val) {
   }
 
   return l->tail;
+}
+
+node_s*
+list_find(list_s *const l, const void *val,
+          int (*cmp)(const void *lhs, const void *rhs)) {
+  node_s *h = l->head;
+  while (h) {
+    if (0 == cmp(h->data, val)) {
+      return h;
+    }
+    h = h->next;
+  }
+  return 0;
+}
+
+int
+list_remove(list_s *const l, node_s *const n) {
+  node_s *h = l->head;
+  node_s *pre = 0;
+  while (h) {
+    if (h == n) {
+      if (pre) {
+        pre->next = h->next;
+      } 
+      list_node_free(h);
+      return 1;
+    }
+    pre = h;
+    h = h->next;
+  }
+  return 0;
 }
 
 #endif /* end of _LIST_H_ */
