@@ -39,6 +39,9 @@ list_node_new(list_s *const l) {
 
 static inline void
 list_node_free(node_s *const n) {
+  if (n) {
+    free(n->data);
+  }
   free(n);
 }
 
