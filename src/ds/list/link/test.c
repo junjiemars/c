@@ -3,10 +3,10 @@
 #include <stdio.h>
 
 void print_list_int(list_s *const s) {
-  node_s **h = &s->head;
-  node_s *n = *h;
-  while (n && n->next) {
-    printf("%i, ", *(int*)n->data);
+  node_s *h = s->head;
+  while (h) {
+    printf("%i, ", *(int*)&h->data);
+    h = h->next;
   }
   putchar('\n');
 }
@@ -24,6 +24,7 @@ test_list_append_int() {
   for (int i = 1; i <= n; i++) {
     list_append(s, &i);
   }
+  print_list_int(s);
 
   list_free(s);
 }

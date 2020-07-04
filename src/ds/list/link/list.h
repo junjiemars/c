@@ -13,6 +13,7 @@ typedef struct node_s {
 typedef struct list_s {
   size_t size;
   struct node_s *head;
+  struct node_s *tail;
 } list_s;
 
 
@@ -21,8 +22,8 @@ static void list_node_free(node_s *const n);
 
 list_s *list_new(list_s *l, size_t size);
 void list_free(list_s *const l);
-void *list_append(list_s *const l, void *val);
 
+void *list_append(list_s *const l, void *val);
 
 static inline node_s*
 list_node_new(void) {
@@ -46,12 +47,12 @@ list_new(list_s *l, size_t size) {
 
 void
 list_free(list_s *const l) {
-  node_s **h = &l->head;
-  node_s *c = *h;
-  while (c) {
-    h = &c->next;
+  node_s *h = l->head;
+  node_s *c;
+  while (h) {
+    c = h;
+    h = h->next;
     list_node_free(c);
-    c = *h;
   }
   free(l);
 }
@@ -65,12 +66,9 @@ list_append(list_s *const l, void *val) {
   memcpy(&new_one->data, val, l->size);
   
   if (!l->head) {
-    l->head = new_one;
+    l->head = l->tail = new_one;
   } else {
-    node_s **h = &l->head;
-    while (*h) {
-      *h = (*h)->next;
-    }
+    l->tail = l->tail->next = new_one;
   }
 
   return new_one->data;
