@@ -105,7 +105,7 @@ list_insert(list_s *const l, void *val,
     h = h->next;
   }
 
-  new_one->next = h;  
+  new_one->next = h;
   if (pre) {
     pre->next = new_one;
   } else {
