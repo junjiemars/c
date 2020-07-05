@@ -97,27 +97,19 @@ list_insert(list_s *const l, void *val,
     return 0;
   }
   memcpy(new_one->data, val, l->size);
-  
-  if (!l->head) {
-    l->head = new_one;
-  } else {
-    node_s *h = l->head;
-    node_s *pre = 0;
-    while (h) {
-      if (_sort_(cmp(val, h->data))) {
-        new_one->next = h;
-        break;
-      }
-      pre = h;
-      h = h->next;
-    }
 
-    if (pre) {
-      pre->next = new_one;
-    } else {
-      new_one->next = l->head;
-      l->head = new_one;
-    }
+  node_s *h = l->head;
+  node_s *pre = 0;
+  while (h && !_sort_(cmp(val, h->data))) {
+    pre = h;
+    h = h->next;
+  }
+
+  new_one->next = h;  
+  if (pre) {
+    pre->next = new_one;
+  } else {
+    l->head = new_one;
   }
 
   return new_one;
@@ -131,14 +123,11 @@ node_s *list_find(list_s *const l, const void *val,
     return 0;
   }
   
-  node_s *h = l->head;
-  while (h) {
-    if (0 == cmp(val, h->data)) {
-      return h;
-    }
+  node_s *h = l->head->next;
+  while (h && 0 != cmp(val, h->data)) {
     h = h->next;
   }
-  return 0;
+  return h;
 }
 #endif /* end of defined(SORT) */
 
