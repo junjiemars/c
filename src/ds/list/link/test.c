@@ -10,6 +10,7 @@ cmp_int(const void *a, const void *b) {
 
 void
 print_list_int(list_s *const s) {
+  printf("---------------------\n");
   node_s *h = s->head;
   while (h) {
     printf("%16i  at %p\n", *(int*)h->data, h->data);
@@ -29,8 +30,8 @@ test_list_int(void) {
   int ss = 4;
   list_s *s = list_new(0, sizeof(int));
 
-  printf("list int append/find/remove/delete\n");
-  printf("---------------------\n");  
+  printf("lists[int]: append/find/remove/delete\n");
+  printf("---------------------\n");
 
   node_s *n;
   for (int i = 1; i <= ss; i++) {
@@ -44,26 +45,36 @@ test_list_int(void) {
   putchar('\n');
 
   int f = 5;
-  printf("find '%i', ", f);
   n = list_find(s, &f, cmp_int);
   if (!n) {
-    printf("no found\n");
+    printf("%8s %16i  no found\n", "find", f);
   } else {
-    printf("found '%i' at %p\n", *(int*)n->data, n->data);
+    printf("%8s %16i  at %p\n", "find", *(int*)n->data, n->data);
   }
 
   f = 4;
-  printf("find '%i', ", f);
   n = list_find(s, &f, cmp_int);
   if (!n) {
-    printf("no found\n");
+    printf("%8s %16i  no found\n", "find", f);
   } else {
-    printf("found '%i' at %p\n", *(int*)n->data, n->data);
+    printf("%8s %16i  at %p\n", "find", *(int*)n->data, n->data);
   }
 
-  printf("remove '%i' at %p\n", *(int*)n->data, n->data);
-  list_remove(s, n);
-  print_list_int(s);
+  f = *(int*)n->data;
+  if (list_remove(s, n)) {
+    printf("%8s %16i  at %p\n", "remove", f, &f);
+  } else {
+    printf("%8s %16i  failed\n", "remove", f);
+  }
+  
+  f = 5;
+  n = list_prepend(s, &f);
+  if (n) {
+    printf("%8s %16i  at %p\n", "prepend", *(int*)n->data, n->data);
+  } else {
+    printf("%8s %16i  failed\n", "prepend", f);
+  }
+  print_list_int(s);  
 
  clean_exit:
   list_free(s);
@@ -78,9 +89,10 @@ cmp_str(const void *a, const void*b) {
 
 void
 print_list_str(list_s *const s) {
+  printf("---------------------\n");
   node_s *h = s->head;
   while (h) {
-    printf("%16s  at %p\n", *(char**)h->data, h->data);
+    printf("%8s %16s  at %p\n", "", *(char**)h->data, h->data);
     h = h->next;
   }
   putchar('\n');
@@ -95,11 +107,10 @@ test_list_new_free_str(void) {
 void
 test_list_str(void) {
   char *ss[] = { "a", "bb", "ccc", "dddd", "eeeee", 0, };
-
   list_s *s = list_new(0, sizeof(char*));
 
-  printf("list str append/find/remove/delete\n");
-  printf("---------------------\n");  
+  printf("lists[str]: append/find/remove/delete\n");
+  printf("---------------------\n");
   
   char **p = ss;
   node_s *n;
@@ -114,26 +125,35 @@ test_list_str(void) {
   putchar('\n');
 
   char *f = "fffffff";
-  printf("find '%s', ", f);
-
   n = list_find(s, &f, cmp_str);
-  if (!n) {
-    printf("no found\n");
+  if (n) {
+    printf("%8s %16s  at %p\n", "find", *(char**)n->data, n->data);
   } else {
-    printf("found '%s' at %p\n", f, n->data);
+    printf("%8s %16s  no found\n", "find", f);
   }
 
   f = "dddd";
-  printf("str find '%s', ", f);
   n = list_find(s, &f, cmp_str);
-  if (!n) {
-    printf("no found '%s'\n", f);
+  if (n) {
+    printf("%8s %16s  at %p\n", "find", *(char**)n->data, n->data);
   } else {
-    printf("found '%s' at %p\n", f, n->data);
+    printf("%8s %16s  no found\n", "found", f);
   }
 
-  printf("remove '%s' at %p\n", *(char**)n->data, n->data);
-  list_remove(s, n);
+  f = *(char**)n->data;
+  if (list_remove(s, n)) {
+    printf("%8s %16s  at %p\n", "remove", f, &f);    
+  } else {
+    printf("%8s %16s failed\n", "remove", f);
+  }
+
+  f = "fffffff";
+  n = list_prepend(s, &f);
+  if (n) {
+    printf("%8s %16s  at %p\n", "prepend", *(char**)n->data, n->data);
+  } else {
+    fprintf(stderr, "prepend failed\n");
+  }
   print_list_str(s);
 
  clean_exit:
