@@ -140,7 +140,7 @@ node_s *list_find(list_s *const l, const void *val,
   }
   return 0;
 }
-#endif
+#endif /* end of defined(SORT) */
 
 #if !defined(SORT)
 node_s*

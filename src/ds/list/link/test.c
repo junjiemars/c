@@ -124,6 +124,14 @@ test_list_int(void) {
   } else {
     printf("%8s %16i  failed\n", "remove", f);
   }
+
+  f = 1;
+  n = list_insert(s, &f, cmp_int);
+  if (n) {
+    printf("%8s %16i  at %p\n", "insert", *(int*)n->data, n->data);
+  } else {
+    printf("%8s %16i  failed\n", "insert", f);
+  }
   
   print_list_int(s);  
 
@@ -198,6 +206,14 @@ test_list_str(void) {
     printf("%8s %16s  at %p\n", "remove", f, &f);
   } else {
     printf("%8s %16s failed\n", "remove", f);
+  }
+
+  f = "a";
+  n = list_insert(s, &f, cmp_str);
+  if (n) {
+    printf("%8s %16s  at %p\n", "insert", *(char**)n->data, n->data);
+  } else {
+    printf("%8s %16s  failed\n", "insert", f);
   }
 
   print_list_str(s);
