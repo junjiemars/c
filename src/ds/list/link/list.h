@@ -27,6 +27,13 @@ list_s *list_new(list_s *l, size_t size);
 void list_free(list_s *const l);
 
 #if defined(SORT)
+
+#if (SORT) >= 0
+#  define _sort_(expr) ((expr) >= 0)
+#else
+#  define _sort_(expr) ((expr) < 0)
+#endif
+
 node_s *list_insert(list_s *const l, void *val,
                     int (*cmp)(const void *lhs, const void *rhs));
 node_s *list_find(list_s *const l, const void *val,
@@ -38,7 +45,7 @@ node_s *list_prepend(list_s *const l, void *val);
 node_s *list_find(list_s *const l, const void *val,
                   int (*cmp)(const void *lhs, const void *rhs));
 
-#endif /* end of SORT */
+#endif /* end of defined(SORT) */
 
 int list_remove(list_s *const l, node_s *const n);
 
@@ -97,7 +104,7 @@ list_insert(list_s *const l, void *val,
     node_s *h = l->head;
     node_s *pre = 0;
     while (h) {
-      if (cmp(val, h->data) < 0) {
+      if (_sort_(cmp(val, h->data))) {
         new_one->next = h;
         break;
       }
@@ -115,12 +122,12 @@ list_insert(list_s *const l, void *val,
 
   return new_one;
 }
-#endif /* end of SORT */
+#endif /* end of defined(SORT) */
 
 #if defined(SORT)
 node_s *list_find(list_s *const l, const void *val,
                   int (*cmp)(const void *lhs, const void *rhs)) {
-  if (cmp(val, l->head->data) < 0) {
+  if (_sort_(cmp(val, l->head->data))) {
     return 0;
   }
   

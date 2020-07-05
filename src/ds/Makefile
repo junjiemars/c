@@ -89,7 +89,7 @@ $(list_link_binout): $(ds_root)list/link/test.c	\
 
 $(list_sort_binout): $(ds_root)list/link/test.c	\
 										 $(ds_root)list/link/list.h
-	$(CC) $(CFLAGS) $(INC) -DSORT=1								\
+	$(CC) $(CFLAGS) $(INC) -DSORT=-1							\
 		$(ds_root)list/link/test.c									\
 		$(bin_out)$@
 
