@@ -30,7 +30,7 @@ test_list_int(void) {
   int ss = 4;
   list_s *s = list_new(0, sizeof(int));
 
-  printf("lists[int]: append/find/remove/delete\n");
+  printf("lists[int]: append/find/remove/prepend\n");
   printf("---------------------\n");
 
   node_s *n;
@@ -109,7 +109,7 @@ test_list_str(void) {
   char *ss[] = { "a", "bb", "ccc", "dddd", "eeeee", 0, };
   list_s *s = list_new(0, sizeof(char*));
 
-  printf("lists[str]: append/find/remove/delete\n");
+  printf("lists[str]: append/find/remove/prepend\n");
   printf("---------------------\n");
   
   char **p = ss;
