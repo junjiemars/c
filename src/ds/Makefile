@@ -61,20 +61,35 @@ $(single_linked_list_binout): $(ds_root)single_linked_list/test.c \
 
 # list
 list_link_binout := $(bin_path)$(ds_prefix)_list_link$(bin_ext)
+list_sort_binout := $(bin_path)$(ds_prefix)_list_sort$(bin_ext)
 
-list: list_link
-list_test: list_link_test
+list: list_link																	\
+      list_sort
+list_test: list_link_test												\
+           list_sort_test
 
 list_link: $(list_link_binout)
+list_sort: $(list_sort_binout)
+
 list_link_test: list_link
 	$(list_link_binout)
+list_sort_test: list_sort
+	$(list_sort_binout)
 
-list_valgrind_test: list_link_test
+list_valgrind_test: list_link_test							\
+                    list_sort_test
 	valgrind --leak-check=full --track-origins=yes $(list_link_binout)
+	valgrind --leak-check=full --track-origins=yes $(list_sort_binout)
 
 $(list_link_binout): $(ds_root)list/link/test.c	\
 										 $(ds_root)list/link/list.h
 	$(CC) $(CFLAGS) $(INC)												\
+		$(ds_root)list/link/test.c									\
+		$(bin_out)$@
+
+$(list_sort_binout): $(ds_root)list/link/test.c	\
+										 $(ds_root)list/link/list.h
+	$(CC) $(CFLAGS) $(INC) -DSORT=1								\
 		$(ds_root)list/link/test.c									\
 		$(bin_out)$@
 

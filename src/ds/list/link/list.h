@@ -13,7 +13,10 @@ typedef struct node_s {
 typedef struct list_s {
   size_t size;
   struct node_s *head;
+
+#if !defined(SORT)
   struct node_s *tail;
+#endif
 } list_s;
 
 
@@ -23,10 +26,20 @@ void list_node_free(node_s *const n);
 list_s *list_new(list_s *l, size_t size);
 void list_free(list_s *const l);
 
+#if defined(SORT)
+node_s *list_insert(list_s *const l, void *val,
+                    int (*cmp)(const void *lhs, const void *rhs));
+node_s *list_find(list_s *const l, const void *val,
+                  int (*cmp)(const void *lhs, const void *rhs));
+#else
+
 node_s *list_append(list_s *const l, void *val);
 node_s *list_prepend(list_s *const l, void *val);
 node_s *list_find(list_s *const l, const void *val,
                   int (*cmp)(const void *lhs, const void *rhs));
+
+#endif /* end of SORT */
+
 int list_remove(list_s *const l, node_s *const n);
 
 inline node_s*
@@ -67,6 +80,62 @@ list_free(list_s *const l) {
   free(l);
 }
 
+#if defined(SORT)
+
+node_s*
+list_insert(list_s *const l, void *val,
+            int (*cmp)(const void *lhs, const void *rhs)) {
+  node_s *new_one = list_node_new(l);
+  if (!new_one) {
+    return 0;
+  }
+  memcpy(new_one->data, val, l->size);
+  
+  if (!l->head) {
+    l->head = new_one;
+  } else {
+    node_s *h = l->head;
+    node_s *pre = 0;
+    while (h) {
+      if (cmp(val, h->data) < 0) {
+        new_one->next = h;
+        break;
+      }
+      pre = h;
+      h = h->next;
+    }
+
+    if (pre) {
+      pre->next = new_one;
+    } else {
+      new_one->next = l->head;
+      l->head = new_one;
+    }
+  }
+
+  return new_one;
+}
+#endif /* end of SORT */
+
+#if defined(SORT)
+node_s *list_find(list_s *const l, const void *val,
+                  int (*cmp)(const void *lhs, const void *rhs)) {
+  if (cmp(val, l->head->data) < 0) {
+    return 0;
+  }
+  
+  node_s *h = l->head;
+  while (h) {
+    if (0 == cmp(val, h->data)) {
+      return h;
+    }
+    h = h->next;
+  }
+  return 0;
+}
+#endif
+
+#if !defined(SORT)
 node_s*
 list_append(list_s *const l, void *val) {
   node_s *new_one = list_node_new(l);
@@ -83,6 +152,9 @@ list_append(list_s *const l, void *val) {
 
   return l->tail;
 }
+#endif /* end of SORT */
+
+#if !defined(SORT)
 
 node_s*
 list_prepend(list_s *const l, void *val) {
@@ -101,19 +173,24 @@ list_prepend(list_s *const l, void *val) {
   
   return l->head;
 }
+#endif /* end of SORT */
+
+
+#if !defined(SORT)
 
 node_s*
 list_find(list_s *const l, const void *val,
           int (*cmp)(const void *lhs, const void *rhs)) {
   node_s *h = l->head;
   while (h) {
-    if (0 == cmp(h->data, val)) {
+    if (0 == cmp(val, h->data)) {
       return h;
     }
     h = h->next;
   }
   return 0;
 }
+#endif /* end of SORT */
 
 int
 list_remove(list_s *const l, node_s *const n) {
