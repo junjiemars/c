@@ -9,6 +9,9 @@ typedef struct queue_s {
   void *data;
 } queue_s;
 
+void *queue_node_new(queue_s *const q);
+void queue_node_free(queue_s *const q);
+
 queue_s *queue_new(queue_s *q, size_t n, size_t size);
 void queue_free(queue_s *const q);
 int queue_empty(queue_s *q);
@@ -18,12 +21,12 @@ void *queue_deq(queue_s *const q, void *val);
 void *queue_peek(queue_s *const q, void *val);
 
 
-static inline void*
+inline void*
 queue_node_new(queue_s *const q) {
   return q->data = realloc(q->data, q->n * q->size);
 }
 
-static inline void
+inline void
 queue_node_free(queue_s *const q) {
   free(q->data);
 }
