@@ -143,7 +143,7 @@ test_list_int(void) {
 
 int
 cmp_str(const void *a, const void*b) {
-  int c = strcmp(*(const char**)a, *(const char**)b);
+  int c = strcmp(*(char* const*)a, *(char* const*)b);
   return c;
 }
 
