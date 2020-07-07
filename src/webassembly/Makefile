@@ -1,7 +1,7 @@
 # normal:
 # ./configure --has-webassembly 
 # emsdk:
-# <emsdk_root>/upstream/emscripten/emconfigure ./configure --has-webassembly
+# <emsdk_root>/upstream/emscripten/emconfigure ./configure --has-webassembly --with-std=no
 # [WASM=1] <emsdk_root>/upstream/emscripten/emmake make -k -C$(CURDIR) clean test
 #
 # include:
