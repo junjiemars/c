@@ -7,7 +7,8 @@
 #  include <emscripten.h>
 #else
 #  define EMSCRIPTEN_KEEPALIVE
-#  define EM_ASM
+#  define EM_ASM(...)
+#  define EM_ASM_INT(code, ...) __VA_ARGS__
 #endif
 
 

@@ -28,15 +28,6 @@ incf(int i) {
   return x;
 }
 
-EMSCRIPTEN_KEEPALIVE
-int
-sum(int a, int b) {
-  int x = EM_ASM_INT({
-      return js_sum($0, $1);
-    }, a, b);
-  return x;
-}
-
 
 #ifdef __cplusplus
 } /* end of extern "C" */
