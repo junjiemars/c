@@ -1,11 +1,17 @@
 #include "_feature_.h"
 #include <stdio.h>
 
-__noinline__
+__always_inline__
 int
 sum(int n, int acc) {
   if (n < 1) return acc;
   return sum(n-1, n+acc);
+}
+
+__noinline__
+int
+test_sum(int n, int acc) {
+  return sum(n, acc);
 }
 
 int
@@ -17,7 +23,7 @@ main(int argc, char **argv) {
 
   int n;
   sscanf(argv[1], "%d", &n);
-  int x = sum(n, 0);
+  int x = test_sum(n, 0);
   printf("sum(%d)=%d\n", n, x);
   
   return 0;
