@@ -3,32 +3,36 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define ROW_SIZE 1024
-#define COL_SIZE 1024
+#define ROW_SIZE (NM_CPU_CACHE_LINE * 16)
+#define COL_SIZE (NM_CPU_CACHE_LINE * 16)
 
 #define MAX(a, b) (((a) < (b)) ? (b) : (a))
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
 #define X 0x11
 
-char *table_a, *table_b;
+void
+print_time(char *const what, long elapsed) {
+  printf("%8s, escaped %8li cpu time, %16lf sec\n",
+         what, elapsed, (double)elapsed/CLOCKS_PER_SEC);
+}
 
 void
-raw(char *table) {
-  for (int i = 0; i < ROW_SIZE; i++) {
-    for (int j = 0; j < COL_SIZE; j++) {
+raw(char *const table, int row_size, int col_size) {
+  for (int i = 0; i < row_size; i++) {
+    for (int j = 0; j < col_size; j++) {
       table[i*j+j] = X;
     }
   }
 }
 
 void
-tile(char *table) {
-  for (int i = 0; i < ROW_SIZE; i+=NM_CPU_CACHE_LINE) {
-    for (int j = 0; j < COL_SIZE; j+=NM_CPU_CACHE_LINE) {
+tile(char *const table, int row_size, int col_size) {
+  for (int i = 0; i < row_size; i+=NM_CPU_CACHE_LINE) {
+    for (int j = 0; j < col_size; j+=NM_CPU_CACHE_LINE) {
       
-      for (int k = j; k < MIN(j+NM_CPU_CACHE_LINE, COL_SIZE); k++) {
-        for (int l = i; l < MIN(i+NM_CPU_CACHE_LINE, ROW_SIZE); l++) {
+      for (int k = j; k < MIN(j+NM_CPU_CACHE_LINE, col_size); k++) {
+        for (int l = i; l < MIN(i+NM_CPU_CACHE_LINE, row_size); l++) {
           table[l*k+k] = X;
         }
       }
@@ -51,35 +55,37 @@ validate(const char *a, const char *b) {
   return i;
 }
 
-int
-main() { 
+void
+test_raw(char *const table) {
   clock_t elapsed;
+  _time_(raw(table, ROW_SIZE, COL_SIZE), elapsed);
+  print_time("raw", elapsed);
+}
 
-  /* raw */
-  table_a = malloc(sizeof(char) * (ROW_SIZE*COL_SIZE));
-  memset(table_a, 0, ROW_SIZE * COL_SIZE);
+void
+test_tile(char *const table) {
+  clock_t elapsed;
+  _time_(tile(table, ROW_SIZE, COL_SIZE), elapsed);
+  print_time("tile", elapsed);
+}
 
-  _time_(raw(table_a), elapsed);
-  printf("raw, escaped %li cpu time, %lf sec\n",
-         elapsed, (double)elapsed/CLOCKS_PER_SEC);
-  
-  /* tile */
-  table_b = malloc(sizeof(char) * (ROW_SIZE*COL_SIZE));
-  memset(table_b, 0, ROW_SIZE * COL_SIZE);
+int
+main(void) { 
+  size_t size = sizeof(char) * ROW_SIZE * COL_SIZE;
+  char *tile = calloc(1, size);
+  char *raw = calloc(1, size);
+  char *tile1 = calloc(1, size);
 
-  _time_(tile(table_b), elapsed);
-  printf("tile, escaped %li cpu time, %lf sec\n",
-         elapsed, (double)elapsed/CLOCKS_PER_SEC);
-
-  /* raw */
-  _time_(raw(table_a), elapsed);
-  printf("raw, escaped %li cpu time, %lf sec\n",
-         elapsed, (double)elapsed/CLOCKS_PER_SEC);
+  test_tile(tile);
+  test_raw(raw);
+  test_tile(tile1);
   
   printf("validate(raw, tile): %s\n",
-         validate(table_a, table_b) ? "false" : "true");
-  free(table_a);
-  free(table_b);
+         validate(raw, tile) ? "false" : "true");
+
+  free(raw);
+  free(tile);
+  free(tile1);
 
   return 0;
 }
