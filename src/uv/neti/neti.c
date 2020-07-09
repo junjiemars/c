@@ -12,9 +12,9 @@ test_neti(void) {
 
   while (i--) {
     uv_interface_address_t inet = info[i];
-    if (inet.is_internal) {
-      continue;
-    }
+    /* if (inet.is_internal) { */
+    /*   continue; */
+    /* } */
 
     if (AF_INET == inet.address.address4.sin_family) {
       uv_ip4_name(&inet.address.address4, buf, sizeof(buf));
