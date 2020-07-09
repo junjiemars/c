@@ -1,5 +1,6 @@
 # -*- mode:sh -*- vim:ft=sh
-
+# ./configure --has-std_c99
+#
 echo " # view https://en.wikipedia.org/wiki/C99"
 
 echo " + checking ISO/IEC 9899:1990 (C90) header files ..."
