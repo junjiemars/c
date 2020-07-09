@@ -3,7 +3,7 @@
 #
 echo " # view https://en.wikipedia.org/wiki/C99"
 
-echo " + checking ISO/IEC 9899:1990 (C90) header files ..."
+echo "checking ISO/IEC 9899:1990 (C90) header files ..."
 #-----------------------------------
 include="assert.h" . ${NORE_ROOT}/auto/include
 include="ctype.h" . ${NORE_ROOT}/auto/include
@@ -21,13 +21,13 @@ include="stdlib.h" . ${NORE_ROOT}/auto/include
 include="string.h" . ${NORE_ROOT}/auto/include
 include="time.h" . ${NORE_ROOT}/auto/include
 
-echo " + checking ISO/IEC 9899:1990/Amd.1:1995 header files ..."
+echo "checking ISO/IEC 9899:1990/Amd.1:1995 header files ..."
 #-----------------------------------
 include="iso646.h" . ${NORE_ROOT}/auto/include
 include="wchar.h" . ${NORE_ROOT}/auto/include
 include="wctype.h" . ${NORE_ROOT}/auto/include
 
-echo " + checking ISO/IEC 9899:1999 (C99) new header files ..."
+echo "checking ISO/IEC 9899:1999 (C99) new header files ..."
 #-----------------------------------
 include="complex.h" . ${NORE_ROOT}/auto/include
 include="fenv.h" . ${NORE_ROOT}/auto/include
@@ -36,13 +36,12 @@ include="stdbool.h" . ${NORE_ROOT}/auto/include
 include="stdint.h" . ${NORE_ROOT}/auto/include
 include="tgmath.h" . ${NORE_ROOT}/auto/include
 
-echo " + checking C99 new data types ..."
+echo "checking C99 new data types ..."
 #-----------------------------------
 nm_feature="boolean type"
-nm_feature_name="nm_have_bool_type_h"
+nm_feature_name="nm_have_bool_type"
 nm_feature_run=yes
-nm_feature_h='#include <stdbool.h>
-              #include <stdio.h>'
+nm_feature_h='#include <stdbool.h>'
 nm_feature_flags=
 nm_feature_test='bool a = false, b = true;
                  return !(a || b);'
@@ -57,7 +56,7 @@ nm_feature_test='long long int x=0;'
 . ${NORE_ROOT}/auto/feature
 
 
-echo " + checking C99 new identifiers ..."
+echo "checking C99 new identifiers ..."
 #-----------------------------------
 nm_feature="__func__ identifier"
 nm_feature_name="nm_have_func_identifier"
@@ -75,7 +74,7 @@ nm_feature_flags=
 nm_feature_test='printf("%zu", sizeof(int));'
 . ${NORE_ROOT}/auto/feature
 
-echo " + checking C99 new keywords ..."
+echo "checking C99 new keywords ..."
 #-----------------------------------
 nm_feature="inline keyword"
 nm_feature_name="nm_have_inline_keyword"
@@ -93,7 +92,7 @@ nm_feature_flags=
 nm_feature_test='int x = 0x11; int *restrict p = &x;'
 . ${NORE_ROOT}/auto/feature
 
-echo " + checking C99 new features ..."
+echo "checking C99 new features ..."
 #-----------------------------------
 nm_feature="designated initializers"
 nm_feature_name="nm_have_designated_initializers"
