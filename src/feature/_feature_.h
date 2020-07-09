@@ -5,7 +5,7 @@
 
 #define _unused_(x) ((void)(x))
 
-#if defined(CLANG)
+#if defined(CLANG) || defined(GCC)
 #  if __has_attribute(noinline)
 #    define __noinline__ __attribute__((noinline))
 #  else
