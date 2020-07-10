@@ -1,5 +1,5 @@
 #
-# ./configure --has-uv
+# ./configure --has-uv --with-std=no
 #
 
 uv: uv_dns																			\

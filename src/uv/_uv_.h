@@ -3,6 +3,7 @@
 
 #include <nore.h>
 #include <uv.h>
+#include <stdio.h>
 
 #define _unused_(x) (void)(x)
 
