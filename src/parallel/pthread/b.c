@@ -1,4 +1,4 @@
-#include <_parallel_.h>
+#include "_parallel_.h"
 #include <stdio.h>
 #include <pthread.h>
 
@@ -6,7 +6,7 @@
 
 void *
 echo(void *tid) {
-	fprintf(stdout, "Hello, tid=%ld\n", (long)tid);
+	fprintf(stdout, "Hello, tid=%d\n", *(int*)tid);
 	pthread_exit(0);
 }
 
@@ -19,7 +19,7 @@ main(int argc, char **argv) {
 
 	for (long i = 0; i < N_THREADS; i++) {
 		fprintf(stdout, "creating thread %ld\n", i);
-		int r = pthread_create(&t[i], 0, echo, (void*)i);
+		int r = pthread_create(&t[i], 0, echo, &i);
 		if (r) {
 			fprintf(stderr, "!panic, return code %d\n", r);
 			return -1;
