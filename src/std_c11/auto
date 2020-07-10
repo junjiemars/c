@@ -2,13 +2,32 @@
 
 echo " # view https://en.wikipedia.org/wiki/C_standard_library"
 
-echo " + checking ISO/IEC 9899:2011 (C11) new header files ..."
+echo "checking ISO/IEC 9899:2011 (C11) new header files ..."
 #-----------------------------------
 include="stdalign.h" . ${NORE_ROOT}/auto/include
 include="stdatomic.h" . ${NORE_ROOT}/auto/include
 include="stdnoreturn.h" . ${NORE_ROOT}/auto/include
 include="threads.h" . ${NORE_ROOT}/auto/include
 include="uchar.h" . ${NORE_ROOT}/auto/include
+
+
+echo "checking C11 new features ..."
+#-----------------------------------
+nm_feature="alignof operator"
+nm_feature_name="nm_have_alignof_op"
+nm_feature_run=no
+nm_feature_h='#include <stdalign.h>'
+nm_feature_flags=
+nm_feature_test='1 == alignof(char);'
+. ${NORE_ROOT}/auto/feature
+
+nm_feature="alignas operator"
+nm_feature_name="nm_have_alignas_op"
+nm_feature_run=no
+nm_feature_h='#include <stdalign.h>'
+nm_feature_flags=
+nm_feature_test='alignas(64) char cache[64];'
+. ${NORE_ROOT}/auto/feature
 
 # nm_feature="__STDC_HOSTED__ macro"
 # nm_feature_name="nm_have_stdc_hosted"
