@@ -1354,11 +1354,15 @@ RFLAGS Register
 |       21 | 	ID    | 	ID Flag                                         |
 |    22-63 | 0	     | Reserved                                          |
 
+** Addressing
+
+
 ** References
 - [[https://gist.github.com/mishurov/6bcf04df329973c15044][AT&T assembly syntax and IA-32 instructions]]
 - [[https://www.cs.yale.edu/flint/cs421/papers/x86-asm/asm.html][Yale: x86 Assembly Guide]]
 - [[https://www.cs.virginia.edu/~evans/cs216/guides/x86.html][Virginia: x86 Assembly Guide]]
 - [[https://wiki.osdev.org/CPU_Registers_x86-64][CPU Registers x86-64]]
+- [[https://software.intel.com/content/www/us/en/develop/articles/introduction-to-x64-assembly.html][Introduction to x64 Assembly]]
 
 * Memory
 	:PROPERTIES:
