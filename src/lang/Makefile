@@ -562,19 +562,23 @@ $(lang_str_chr_binout): $(lang_root)string/chr.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # time
-lang_time_binout := $(bin_path)$(lang_prefix)_time$(bin_ext)
+lang_time_basic_binout := $(bin_path)$(lang_prefix)_time_basic$(bin_ext)
 lang_clock_binout := $(bin_path)$(lang_prefix)_clock$(bin_ext)
 
-lang_time: $(lang_time_binout) \
+lang_time: $(lang_time_basic_binout) \
 					 $(lang_clock_binout)
-lang_time_test: lang_time
-	$(lang_time_binout)
-	$(lang_clock_binout)
+lang_time_test: lang_time_basic_test						\
+                lang_time_clock_test
 
-$(lang_time_binout): $(lang_root)time/t.c
+lang_time_basic_test: $(lang_time_basic_binout)
+	$(lang_time_basic_binout)
+lang_time_clock_test: $(lang_time_clock_binout)
+	$(lang_time_clock_binout)
+
+$(lang_time_basic_binout): $(lang_root)time/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(lang_clock_binout): $(lang_root)time/c.c
+$(lang_time_clock_binout): $(lang_root)time/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # type
