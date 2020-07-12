@@ -34,7 +34,7 @@ main(int argc, char **argv) {
   }
 
   long max;
-  sscanf(argv[1], "%lx", &max);
+  sscanf(argv[1], "%ld", &max);
   timer_reset();
 
   for (long i = 0; i < max; ++i) {
