@@ -63,9 +63,11 @@ main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
-  time_t epoch;
+  time_t epoch = 0;
 
   test_epoch(&epoch);
+  test_epoch(&epoch);
+
   test_localtime(&epoch);
   test_timelocal(&epoch);
   test_gmtime(&epoch);
