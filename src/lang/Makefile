@@ -9,6 +9,7 @@ lang: lang_array																\
       lang_assert																\
       lang_enum																	\
       lang_error																\
+      lang_locale																\
       lang_main																	\
       lang_preprocessor													\
       lang_restrict															\
@@ -40,6 +41,7 @@ lang_test:  lang_array_test											\
             lang_assert_test										\
             lang_enum_test											\
             lang_error_test											\
+            lang_locale_test										\
             lang_main_test											\
             lang_preprocessor_test							\
             lang_restrict_test									\
@@ -226,6 +228,15 @@ $(lang_linkage_a_objout): $(lang_root)linkage/extern.c
 $(lang_linkage_c_objout): $(lang_root)linkage/c.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
+# locale
+lang_locale_binout := $(bin_path)$(lang_prefix)_locale$(bin_ext)
+
+lang_locale: $(lang_locale_binout)
+lang_locale_test: lang_locale
+	$(lang_locale_binout)
+
+$(lang_locale_binout): $(lang_root)locale/b.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # macro
 lang_macro_binout := $(bin_path)$(lang_prefix)_macro$(bin_ext)
