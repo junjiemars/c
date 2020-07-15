@@ -12,6 +12,13 @@
 #endif
 #include <time.h>
 
+void test_epoch(time_t *);
+void test_localtime(const time_t *);
+void test_timelocal(const time_t *);
+void test_gmtime(const time_t *);
+void test_ctime(const time_t *);
+void test_difftime(const time_t *);
+
 void
 test_epoch(time_t *epoch) {
 	if ((time_t) -1 == time(epoch)) {
