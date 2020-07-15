@@ -1,7 +1,16 @@
 #include <_lang_.h>
-#include <time.h>
 #include <stdio.h>
 #include <assert.h>
+
+#if GCC
+# if !defined(_POSIX_C_SOURCE)
+#   define _POSIX_C_SOURCE
+# endif
+# if !defined(__USE_MISC)
+#   define __USE_MISC
+# endif
+#endif
+#include <time.h>
 
 void
 test_epoch(time_t *epoch) {
@@ -54,9 +63,11 @@ main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
 
-  time_t epoch;
+  time_t epoch = 0;
 
   test_epoch(&epoch);
+  test_epoch(&epoch);
+
   test_localtime(&epoch);
   test_timelocal(&epoch);
   test_gmtime(&epoch);
