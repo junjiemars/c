@@ -1,7 +1,8 @@
-#include <_lang_.h>
+#include "_lang_.h"
 #include <string.h>
 #include <errno.h>
 #include <stdio.h>
+#include <math.h>
 
 void
 test_open_file(const char *filename) {
@@ -28,6 +29,12 @@ test_open_file(const char *filename) {
   }
 }
 
+void
+test_sqrt(double x) {
+  double d = sqrt(x);
+  printf("%f\n", d);
+}
+
 int
 main(int argc, char **argv) {
   if (argc < 2) {
@@ -36,6 +43,7 @@ main(int argc, char **argv) {
   }
 
   test_open_file(argv[1]);
+  test_sqrt(-1 * argc);
 
   return 0;
 }
