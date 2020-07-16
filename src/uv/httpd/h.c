@@ -5,8 +5,9 @@
 #include <stdlib.h>
 #include <limits.h>
 
-#define LOG(...) fprintf(stderr, __VA_ARGS__)
-#define LOGF(...) fprintf(stderr, __VA_ARGS__)
+#define LOG(...) do {                             \
+    opt_verbose && fprintf(stderr, __VA_ARGS__);  \
+} while (0)
 
 static struct option long_options[] = {
       {"help",    no_argument,         0, 'H'},
@@ -14,6 +15,7 @@ static struct option long_options[] = {
       {"port",    optional_argument,   0, 'p'},
       {"head",    optional_argument,   0, 'I'},
       {"file",    optional_argument,   0, 'f'},
+      {"verbose", no_argument,         0, 'v'},
       {0,         no_argument,         0, '-'},
       {0,         0,                   0,  0 },
 };
@@ -23,6 +25,7 @@ static char opt_host[NAME_MAX] = "127.0.0.1";
 static long opt_port = 9696;
 static char opt_head[NAME_MAX] = {0};
 static char opt_file[NAME_MAX] = "abc";
+static int  opt_verbose = 0;
 static int  opt_stdin = 0;
 
 static uv_loop_t *loop;
@@ -47,12 +50,13 @@ usage(const char *httpd) {
   printf("  -p, --port             listen port, default 9696\n");
   printf("  -I, --head             response header file, default 9696\n");
   printf("  -f, --file             response data file\n");
+  printf("  -v, --verbose          verbose output\n");
 }
 
 void
 on_connect(uv_stream_t *host, int status) {
   if (status < 0) {
-    LOGF("!panic, connect error %s\n", uv_strerror(status));
+    LOG("!panic, connect error %s\n", uv_strerror(status));
     return;
   }
 
@@ -63,7 +67,15 @@ on_connect(uv_stream_t *host, int status) {
   if (r) {
     uv_shutdown_t *shutdown = malloc(sizeof(uv_shutdown_t));
     uv_shutdown(shutdown, (uv_stream_t *) client, on_shutdown);
+    return;
   }
+  
+  struct sockaddr_in addr;
+  int addr_len;
+  char addr_buf[32];
+  uv_tcp_getpeername(client, (struct sockaddr*) &addr, &addr_len);
+  uv_ip4_name(&addr, &addr_buf[0], addr_len);
+  LOG("#accepted from %s\n", addr_buf);
 
   uv_read_start((uv_stream_t*) client, on_alloc, on_read);
 }
@@ -76,21 +88,20 @@ on_alloc(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf) {
 
 void
 on_read(uv_stream_t* handle, ssize_t nread, const uv_buf_t* buf) {
-  _unused_(handle);
-  _unused_(nread);
-  _unused_(buf);
   if (nread < 0) {
     LOG("read empty\n");
     uv_close((uv_handle_t*) handle, on_close);
     return;
   }
+  LOG("#read (%li bytes) ...\n%s\n", nread, buf->base);
+
   uv_close((uv_handle_t*) handle, on_close);
   free(buf->base);
 }
 
 void
 on_close(uv_handle_t *handle) {
-  LOG("close connection\n");
+  LOG("#closed\n");
   free(handle);
 }
 
@@ -98,6 +109,7 @@ void
 on_shutdown(uv_shutdown_t *shutdown, int status) {
 	_unused_(status);
   uv_close((uv_handle_t *) shutdown->handle, on_close);
+  LOG("#shutdown\n");
   free(shutdown);
 }
 
@@ -111,7 +123,8 @@ on_write(uv_write_t* write_req, int status) {
 int
 main(int argc, char **argv) {
   int ch;
-  while (-1 != (ch = getopt_long(argc, argv, "Hh:p:I:f:-", long_options, 0))) {
+  while (EOF != (ch = getopt_long(argc, argv,
+                                  "Hh:p:I:f:v-", long_options, 0))) {
     switch (ch) {
 		case 'H':
 			usage(argv[0]);
@@ -128,8 +141,11 @@ main(int argc, char **argv) {
 		case 'f':
       strncpy(opt_file, optarg, sizeof(opt_file));
 			break;
+    case 'v':
+      ++opt_verbose;
+      break;
 		case '-':
-			opt_stdin++;
+			++opt_stdin;
 			break;
 		default:
 			usage(argv[0]);
@@ -154,16 +170,16 @@ main(int argc, char **argv) {
   uv_ip4_addr(opt_host, opt_port, &addr);
   r = uv_tcp_bind(&host, (const struct sockaddr*)&addr, 0);
   if (r) {
-    LOGF("!panic, bind error %s\n", uv_strerror(r));
+    LOG("!panic, bind error %s\n", uv_strerror(r));
     return 1;
   }
 
   r = uv_listen((uv_stream_t*) &host, opt_port, on_connect);
   if (r) {
-    LOGF("!panic, listen error %s\n", uv_strerror(r));
+    LOG("!panic, listen error %s\n", uv_strerror(r));
     return 1;
   }
-  LOGF("listen on %s:%li ...\n", opt_host, opt_port);
+  LOG("#listen on %s:%li ...\n", opt_host, opt_port);
 
   return uv_run(loop, UV_RUN_DEFAULT);
 }
