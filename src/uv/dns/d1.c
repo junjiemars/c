@@ -1,6 +1,8 @@
 #include "_uv_.h"
 
 static uv_loop_t* loop;
+static void on_resolved(uv_getaddrinfo_t*, int, struct addrinfo*);
+
 
 static void
 on_resolved(uv_getaddrinfo_t* resolver, 
