@@ -36,7 +36,7 @@ uv_httpd_binout := $(bin_path)$(uv_prefix)_httpd$(bin_ext)
 uv_httpd: $(uv_httpd_binout)
 uv_httpd_test: uv_httpd
 	$(uv_httpd_binout) -H
-	$(uv_httpd_binout) --host=0.0.0.0 --port=9393 --file=@$(CURDIR)/httpd/h.c
+	# $(uv_httpd_binout) --host=0.0.0.0 --port=9393 --head=@$(CURDIR)/httpd/header --file=@$(CURDIR)/httpd/h.c
 
 $(uv_httpd_binout): $(uv_root)httpd/h.c $(getopt_c)
 	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@ $(LFLAGS)
