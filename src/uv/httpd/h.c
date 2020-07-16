@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <inttypes.h>
 
 #define LOG(...) do {                             \
     opt_verbose && fprintf(stderr, __VA_ARGS__);  \
@@ -32,6 +33,9 @@ static uv_loop_t *loop;
 static uv_tcp_t host;
 /* static http_parser_settings parser_settings; */
 
+static uv_process_t cgi_req;
+static uv_process_options_t cgi_opt;
+
 void usage(const char*);
 void on_connect(uv_stream_t*, int);
 void on_close(uv_handle_t*);
@@ -39,6 +43,9 @@ void on_shutdown(uv_shutdown_t*, int);
 void on_alloc(uv_handle_t*, size_t, uv_buf_t*);
 void on_read(uv_stream_t*, ssize_t, const uv_buf_t*);
 void on_write(uv_write_t*, int);
+
+void cgi_exe(uv_tcp_t*);
+void on_cgi_close(uv_process_t*, int64_t, int);
 
 void
 usage(const char *httpd) {
@@ -95,7 +102,9 @@ on_read(uv_stream_t* handle, ssize_t nread, const uv_buf_t* buf) {
   }
   LOG("#read (%li bytes) ...\n%s\n", nread, buf->base);
 
-  uv_close((uv_handle_t*) handle, on_close);
+  cgi_exe((uv_tcp_t*) handle);
+
+  /* uv_close((uv_handle_t*) handle, on_close); */
   free(buf->base);
 }
 
@@ -118,6 +127,40 @@ on_write(uv_write_t* write_req, int status) {
 	_unused_(status);
   uv_close((uv_handle_t *) write_req->handle, on_close);
   free(write_req);
+}
+
+void
+on_cgi_close(uv_process_t *req, int64_t exit_status, int term_signal) {
+  LOG("#cgi exited (status:%" PRId64 ", signal:%d)\n",
+      exit_status, term_signal);
+
+  uv_close((uv_handle_t*) req->data, 0);
+  uv_close((uv_handle_t*) req, 0);
+}
+void
+cgi_exe(uv_tcp_t *client) {
+  char *args[2];
+  args[0] = "./cgi.c";
+  args[1] = 0;
+
+  cgi_opt.stdio_count = 3;
+  uv_stdio_container_t ios[3];
+  ios[0].flags = UV_IGNORE;
+  ios[1].flags = UV_INHERIT_STREAM;
+  ios[1].data.stream = (uv_stream_t*) client;
+  ios[2].flags = UV_IGNORE;
+
+  cgi_opt.stdio = ios;
+  cgi_opt.exit_cb = on_cgi_close;
+  cgi_opt.file = args[0];
+  cgi_opt.args = args;
+  cgi_req.data = (void*) client;
+
+  int r = uv_spawn(loop, &cgi_req, &cgi_opt);
+  if (r) {
+    LOG("!panic, spawn cgi error: %s\n", uv_strerror(r));
+    return;
+  }
 }
 
 int

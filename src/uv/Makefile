@@ -62,7 +62,8 @@ $(uv_parser_binout): $(uv_parser_objout) $(uv_root)parser/test.c
 uv_httpd_binout := $(bin_path)$(uv_prefix)_httpd$(bin_ext)
 
 uv_httpd: $(uv_httpd_binout)
-uv_httpd_test: uv_httpd
+uv_httpd_test: uv_httpd $(uv_root)httpd/cgi.c
+	@cp $(uv_root)httpd/cgi.c $(bin_path)
 	$(uv_httpd_binout) -H
 
 $(uv_httpd_binout): $(uv_root)httpd/h.c $(uv_parser_objout) $(getopt_c)
