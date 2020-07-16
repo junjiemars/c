@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <limits.h>
 
-#define LOG(x) fprintf(stderr, (x))
+#define LOG(...) fprintf(stderr, __VA_ARGS__)
 #define LOGF(...) fprintf(stderr, __VA_ARGS__)
 
 static struct option long_options[] = {
