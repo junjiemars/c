@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <limits.h>
 
+#define LOG(x) fprintf(stderr, (x))
 #define LOGF(fmt, x) fprintf(stderr, #fmt, (x))
 
 static struct option long_options[] = {
@@ -66,10 +67,7 @@ on_connect(uv_stream_t *host, int status) {
 void
 on_alloc(uv_handle_t* handle, size_t suggested_size, uv_buf_t* buf) {
 	_unused_(handle);
-  buf->base = malloc(suggested_size);
-  if (buf->base) {
-    buf->len = suggested_size;
-  }
+  *buf = uv_buf_init(malloc(suggested_size), suggested_size);
 }
 
 void
@@ -77,14 +75,19 @@ on_read(uv_stream_t* handle, ssize_t nread, const uv_buf_t* buf) {
   _unused_(handle);
   _unused_(nread);
   _unused_(buf);
+  if (nread < 0) {
+    LOG("read empty\n");
+    uv_close((uv_handle_t*) handle, on_close);
+    return;
+  }
+  uv_close((uv_handle_t*) handle, on_close);
   free(buf->base);
 }
 
 void
 on_close(uv_handle_t *handle) {
-  _unused_(handle);
-  /* client_t *client = (client_t *) handle->data; */
-  /* free(client); */
+  LOG("close connection\n");
+  free(handle);
 }
 
 void
@@ -134,12 +137,17 @@ main(int argc, char **argv) {
 
   uv_tcp_t host;
   struct sockaddr_in addr;
+  int r = 0;
 
   uv_tcp_init(loop, &host);
   uv_ip4_addr(opt_host, opt_port, &addr);
-  uv_tcp_bind(&host, (const struct sockaddr*)&addr, 0);
+  r = uv_tcp_bind(&host, (const struct sockaddr*)&addr, 0);
+  if (r) {
+    LOGF("!panic, bind error %s\n", uv_strerror(r));
+    return 1;
+  }
 
-  int r = uv_listen((uv_stream_t*) &host, opt_port, on_connect);
+  r = uv_listen((uv_stream_t*) &host, opt_port, on_connect);
   if (r) {
     LOGF("!panic, listen error %s\n", uv_strerror(r));
     return 1;
