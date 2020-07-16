@@ -1,6 +1,7 @@
 #include <_lang_.h>
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 
 #if GCC
 # if !defined(_POSIX_C_SOURCE)
@@ -55,6 +56,8 @@ test_gmtime(const time_t *epoch) {
 void
 test_ctime(const time_t *epoch) {
   char *c = ctime(epoch);
+  char *c1 = asctime(localtime(epoch));
+  assert(0 == strcmp(c, c1));
   printf("ctime of epoch: %s", c);
 }
 
