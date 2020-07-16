@@ -24,7 +24,7 @@ test_epoch(time_t *epoch) {
 	if ((time_t) -1 == time(epoch)) {
 		perror(0);
 	} else {
-		printf("epoch since 7/1/1970 UTC: %zu\n", *epoch);
+		printf("epoch since 1/1/1970 UTC: %zu\n", *epoch);
 	}
 }
 
