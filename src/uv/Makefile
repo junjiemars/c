@@ -44,16 +44,6 @@ uv_neti_test: uv_neti
 $(neti_binout): $(uv_root)neti/neti.c
 	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@ $(LFLAGS)
 
-# httpd
-uv_httpd_binout := $(bin_path)$(uv_prefix)_httpd$(bin_ext)
-
-uv_httpd: $(uv_httpd_binout)
-uv_httpd_test: uv_httpd
-	$(uv_httpd_binout) -H
-
-$(uv_httpd_binout): $(uv_root)httpd/h.c $(getopt_c)
-	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@ $(LFLAGS)
-
 # parser
 uv_parser_objout := $(lib_path)$(uv_prefix)_parser$(obj_ext)
 uv_parser_binout := $(bin_path)$(uv_prefix)_parser$(bin_ext)
@@ -67,3 +57,13 @@ $(uv_parser_objout): $(uv_root)parser/http_parser.c $(uv_root)parser/http_parser
 
 $(uv_parser_binout): $(uv_parser_objout) $(uv_root)parser/test.c
 	$(CC) $(CFLAGS) $(INC) $? $(bin_out)$@
+
+# httpd
+uv_httpd_binout := $(bin_path)$(uv_prefix)_httpd$(bin_ext)
+
+uv_httpd: $(uv_httpd_binout)
+uv_httpd_test: uv_httpd
+	$(uv_httpd_binout) -H
+
+$(uv_httpd_binout): $(uv_root)httpd/h.c $(uv_parser_objout) $(getopt_c)
+	$(CC) $(INC) $(CFLAGS) $? $(bin_out)$@ $(LFLAGS)

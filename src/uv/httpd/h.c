@@ -6,7 +6,7 @@
 #include <limits.h>
 
 #define LOG(x) fprintf(stderr, (x))
-#define LOGF(fmt, x) fprintf(stderr, #fmt, (x))
+#define LOGF(...) fprintf(stderr, __VA_ARGS__)
 
 static struct option long_options[] = {
       {"help",    no_argument,         0, 'H'},
@@ -24,6 +24,10 @@ static long opt_port = 9696;
 static char opt_head[NAME_MAX] = {0};
 static char opt_file[NAME_MAX] = "abc";
 static int  opt_stdin = 0;
+
+static uv_loop_t *loop;
+static uv_tcp_t host;
+/* static http_parser_settings parser_settings; */
 
 void usage(const char*);
 void on_connect(uv_stream_t*, int);
@@ -133,9 +137,16 @@ main(int argc, char **argv) {
     }
   }
 
-  uv_loop_t *loop = uv_default_loop();
+  /* parser_settings.on_url = on_url; */
+  /* parser_settings.on_message_begin = on_message_begin; */
+  /* parser_settings.on_headers_complete = on_headers_complete; */
+  /* parser_settings.on_message_complete = on_message_complete; */
+  /* parser_settings.on_header_field = on_header_field; */
+  /* parser_settings.on_header_value = on_header_value; */
+  /* parser_settings.on_body = on_body; */
 
-  uv_tcp_t host;
+  loop = uv_default_loop();
+
   struct sockaddr_in addr;
   int r = 0;
 
@@ -152,5 +163,7 @@ main(int argc, char **argv) {
     LOGF("!panic, listen error %s\n", uv_strerror(r));
     return 1;
   }
+  LOGF("listen on %s:%li ...\n", opt_host, opt_port);
+
   return uv_run(loop, UV_RUN_DEFAULT);
 }
