@@ -1,4 +1,5 @@
 #include "_uv_.h"
+#include "parser/http_parser.h"
 #include <stdio.h>
 #include <getopt.h>
 #include <string.h>
