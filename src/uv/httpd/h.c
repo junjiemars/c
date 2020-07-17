@@ -37,6 +37,7 @@ static http_parser_settings parser_settings;
 static uv_process_t cgi_req;
 static uv_process_options_t cgi_opt;
 
+
 void usage(const char*);
 void on_connect(uv_stream_t*, int);
 void on_close(uv_handle_t*);
@@ -50,6 +51,7 @@ void on_cgi_close(uv_process_t*, int64_t, int);
 
 int on_url(http_parser*, const char*, size_t);
 int on_body(http_parser*, const char*, size_t);
+int on_message_complete(http_parser*);
 
 void
 usage(const char *httpd) {
@@ -115,6 +117,19 @@ on_read(uv_stream_t* handle, ssize_t nread, const uv_buf_t* buf) {
     LOG("!panic, parse error: %s\n", "xxx");
   }
   /* cgi_exe((uv_tcp_t*) handle); */
+  char *s1 = "HTTP/2 200 OK \r\n"
+    "content-type: text/html; charset=utf-8 \r\n"
+    "Accept-Ranges: bytes \r\n\r\n"
+    "<!DOCTYPE html><html><body>abc</body></html>";
+
+  uv_buf_t resp[] = {
+    { .base = s1, .len = strlen(s1)+1 }
+  };
+  uv_write_t w;
+  int r = uv_write(&w, handle, &resp[0], 1, 0);
+  if (r) {
+    LOG("!panic, write error: %s\n", uv_strerror(r));
+  }
 
   uv_close((uv_handle_t*) handle, on_close);
   free(buf->base);
@@ -193,6 +208,11 @@ on_body(http_parser *parser, const char *at, size_t length) {
   return 0;
 }
 
+int
+on_message_complete(http_parser *parser) {
+  _unused_(parser);
+  return 0;
+}
 
 int
 main(int argc, char **argv) {
@@ -227,13 +247,13 @@ main(int argc, char **argv) {
     }
   }
 
-  parser_settings.on_url = on_url;
+  /* parser_settings.on_url = on_url; */
   /* parser_settings.on_message_begin = on_message_begin; */
   /* parser_settings.on_headers_complete = on_headers_complete; */
-  /* parser_settings.on_message_complete = on_message_complete; */
+  parser_settings.on_message_complete = on_message_complete;
   /* parser_settings.on_header_field = on_header_field; */
   /* parser_settings.on_header_value = on_header_value; */
-  parser_settings.on_body = on_body;
+  /* parser_settings.on_body = on_body; */
 
   loop = uv_default_loop();
 
