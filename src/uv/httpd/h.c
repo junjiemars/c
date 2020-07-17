@@ -22,7 +22,6 @@ static struct option long_options[] = {
       {0,         0,                   0,  0 },
 };
 
-
 static char opt_host[NAME_MAX] = "127.0.0.1";
 static long opt_port = 9696;
 static char opt_head[NAME_MAX] = {0};
@@ -32,7 +31,8 @@ static int  opt_stdin = 0;
 
 static uv_loop_t *loop;
 static uv_tcp_t host;
-/* static http_parser_settings parser_settings; */
+
+static http_parser_settings parser_settings;
 
 static uv_process_t cgi_req;
 static uv_process_options_t cgi_opt;
@@ -47,6 +47,9 @@ void on_write(uv_write_t*, int);
 
 void cgi_exe(uv_tcp_t*);
 void on_cgi_close(uv_process_t*, int64_t, int);
+
+int on_url(http_parser*, const char*, size_t);
+int on_body(http_parser*, const char*, size_t);
 
 void
 usage(const char *httpd) {
@@ -103,9 +106,17 @@ on_read(uv_stream_t* handle, ssize_t nread, const uv_buf_t* buf) {
   }
   LOG("#read (%li bytes) ...\n%s\n", nread, buf->base);
 
-  cgi_exe((uv_tcp_t*) handle);
+  http_parser parser;
+  parser.data = handle;
+  http_parser_init(&parser, HTTP_REQUEST);
 
-  /* uv_close((uv_handle_t*) handle, on_close); */
+  size_t parsed = http_parser_execute(&parser, &parser_settings, buf->base, nread);
+  if ((ssize_t)parsed != nread) {
+    LOG("!panic, parse error: %s\n", "xxx");
+  }
+  /* cgi_exe((uv_tcp_t*) handle); */
+
+  uv_close((uv_handle_t*) handle, on_close);
   free(buf->base);
 }
 
@@ -165,6 +176,25 @@ cgi_exe(uv_tcp_t *client) {
 }
 
 int
+on_url(http_parser *parser, const char *at, size_t length) {
+  _unused_(parser);
+  char *url = malloc(length+1);
+  strncpy(url, at, length);
+  
+  free(url);
+  return 0;
+}
+
+int
+on_body(http_parser *parser, const char *at, size_t length) {
+  _unused_(parser);
+  _unused_(at);
+  _unused_(length);
+  return 0;
+}
+
+
+int
 main(int argc, char **argv) {
   int ch;
   while (EOF != (ch = getopt_long(argc, argv,
@@ -197,13 +227,13 @@ main(int argc, char **argv) {
     }
   }
 
-  /* parser_settings.on_url = on_url; */
+  parser_settings.on_url = on_url;
   /* parser_settings.on_message_begin = on_message_begin; */
   /* parser_settings.on_headers_complete = on_headers_complete; */
   /* parser_settings.on_message_complete = on_message_complete; */
   /* parser_settings.on_header_field = on_header_field; */
   /* parser_settings.on_header_value = on_header_value; */
-  /* parser_settings.on_body = on_body; */
+  parser_settings.on_body = on_body;
 
   loop = uv_default_loop();
 
