@@ -6,8 +6,8 @@
 #include <limits.h>
 #include <inttypes.h>
 
-#define LOG(...) do {                             \
-    opt_verbose && fprintf(stderr, __VA_ARGS__);  \
+#define LOG(...) do {                                     \
+    (void)(opt_verbose && fprintf(stderr, __VA_ARGS__));  \
 } while (0)
 
 static struct option long_options[] = {
