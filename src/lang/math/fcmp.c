@@ -21,6 +21,8 @@ unsigned long to_ul(double);
 
 void test_cmp_float(void);
 void test_cmp_double(void);
+void test_asm_double(void);
+void test_episilon_double(void);
 
 unsigned int
 to_ui(float x) {
@@ -58,16 +60,30 @@ test_cmp_float(void) {
   assert(u3 == u12);
   assert(d3 == d1 + d2);
   
-  int less, greater, lessgreater, unordered;
+  int less, greater, lessgreater, unordered, lessequal, greaterequal;
   less = isless(d3, d1+d2);
   greater = islessgreater(d3, d1+d2);
   lessgreater = islessgreater(d3, d1+d2);
+  lessequal = islessequal(d3, d1+d2);
+  greaterequal = isgreaterequal(d3, d1+d2);
   unordered = isunordered(d3, d1+d2);
 
   assert(!unordered);
   assert(!less);
   assert(!greater);
-  assert(!lessgreater);  
+  assert(!lessgreater);
+  assert((less || greater) == lessgreater);
+  assert(lessequal && greaterequal);
+
+  int less1, greater1, lessgreater1;
+  float lg1 = 0.1, lg2 = 0.2, lg3 = 0.3001;
+  less1 = isless(lg3, lg1+lg2);
+  greater1 = isgreater(lg3, lg1+lg2);
+  lessgreater1 = islessgreater(lg3, lg1+lg2);
+
+  assert(less1 || greater1);
+  assert(lessgreater1);
+  assert((less1 || greater1) == lessgreater1);
 }
 
 void
@@ -92,16 +108,45 @@ test_cmp_double(void) {
   assert(u3 != u12);
   assert(d3 != d1 + d2);
   
-  int less, greater, lessgreater, unordered;
+  int less, greater, lessgreater, unordered, lessequal, greaterequal;
   less = isless(d3, d1+d2);
   greater = islessgreater(d3, d1+d2);
   lessgreater = islessgreater(d3, d1+d2);
+  lessequal = islessequal(d3, d1+d2);
+  greaterequal = isgreaterequal(d3, d1+d2);
   unordered = isunordered(d3, d1+d2);
 
   assert(!unordered);
   assert(less);
   assert(greater);
   assert(lessgreater);
+  assert(lessequal || greaterequal);
+  assert(less && greater);
+
+  int less1, greater1, lessgreater1;
+  double lg1 = 0.1, lg2 = 0.2, lg3 = 0.3001;
+  less1 = isless(lg3, lg1+lg2);
+  greater1 = isgreater(lg3, lg1+lg2);
+  lessgreater1 = islessgreater(lg3, lg1+lg2);
+
+  assert(less1 || greater1);
+  assert(lessgreater1);
+  assert((less1 || greater1) == lessgreater1);
+}
+
+void
+test_asm_double(void) {
+  double d1 = 0.1, d2 = 0.2, d3 = 0.3;
+  int x = ((d1+d2) - d3);
+  _unused_(x);
+}
+
+void
+test_episilon_double(void) {
+  double d1 = 0.1, d2 = 0.2, d3 = 0.3;
+  double episilon = 0.00001;
+  int x = fabs((d1+d2) - d3) < episilon;
+  _unused_(x);
 }
 
 int
@@ -111,6 +156,8 @@ main(int argc, char **argv) {
 
   test_cmp_float();
   test_cmp_double();
-
+  test_asm_double();
+  test_episilon_double();
+  
   return 0;
 }
