@@ -624,7 +624,7 @@ lang_type: $(lang_type_basic_binout)						\
 lang_type_test: lang_type_basic_test						\
                 lang_type_c_test
 
-lang_type_basic_test: $(lang_type_binout)
+lang_type_basic_test: $(lang_type_basic_binout)
 	$(lang_type_basic_binout)
 lang_type_c_test: $(lang_type_c_binout)
 	$(lang_type_c_binout) 11ff22aa
@@ -667,10 +667,15 @@ volatile_struct_binout := $(bin_path)$(lang_prefix)_volatile_struct$(bin_ext)
 lang_volatile: $(volatile_basic_binout)					\
                $(volatile_pointer_binout)				\
                $(volatile_struct_binout)
+lang_volatile_test: lang_volatile_basic_test		\
+                    lang_volatile_pointer_test	\
+                    lang_volatile_struct_test
 
-lang_volatile_test: lang_volatile
+lang_volatile_basic_test: $(volatile_basic_binout)
 	$(volatile_basic_binout)
+lang_volatile_pointer_test: $(volatile_pointer_binout)
 	$(volatile_pointer_binout)
+lang_volatile_struct_test: $(volatile_struct_binout)
 	$(volatile_struct_binout)
 
 $(volatile_basic_binout): $(lang_root)volatile/basic.c
