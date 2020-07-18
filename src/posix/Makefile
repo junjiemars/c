@@ -19,7 +19,7 @@ posix_bits: $(posix_bits_binout)
 posix_bits_test: posix_bits
 	$(posix_bits_binout)
 
-$(posix_bits_binout): $(posix_root)bits/bits_test.c
+$(posix_bits_binout): $(posix_root)bits_test.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
