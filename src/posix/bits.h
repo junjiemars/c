@@ -8,15 +8,33 @@ const char *BIT4[] = {
 	[12] = "1100", [13] = "1101", [14] = "1110", [15] = "1111",
 };
 
+#if !defined(BIT8_PRE)
+#  define BIT8_PRE  ""
+#endif
 
-#define BIT8_PRE  ""
-#define BIT16_PRE ""
-#define BIT32_PRE ""
-#define BIT64_PRE ""
+#if !defined(BIT16_PRE)
+#  define BIT16_PRE BIT8_PRE
+#endif
 
-#define BIT8_SEP  ""
-#define BIT16_SEP ""
-#define BIT32_SEP ""
+#if !defined(BIT32_PRE)
+#  define BIT32_PRE BIT16_PRE
+#endif
+
+#if !defined(BIT64_PRE)
+#  define BIT64_PRE BIT32_PRE
+#endif
+
+#if !defined(BIT8_SEP)
+#  define BIT8_SEP  " "
+#endif
+
+#if !defined(BIT16_SEP)
+#  define BIT16_SEP BIT8_SEP
+#endif
+
+#if !defined(BIT32_SEP)
+#  define BIT32_SEP BIT16_SEP
+#endif
 
 #define BIT8_FMT  "%s%s"
 #define BIT16_FMT BIT8_FMT  BIT8_SEP  BIT8_FMT

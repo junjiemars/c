@@ -1,45 +1,16 @@
 #include "nore.h"
-#include "bits.h"
 #include <stdio.h>
 
-#ifdef BIT8_SEP
-#  undef BIT8_SEP
-#  define BIT8_SEP " "
-#endif
-
-#ifdef BIT16_SEP
-#  undef BIT16_SEP
-#  define BIT16_SEP " "
-#endif
-
-#ifdef BIT32_SEP
-#  undef BIT32_SEP
-#  define BIT32_SEP " "
-#endif
-
-#ifdef BIT8_PRE
-#  undef BIT8_PRE
-#  define BIT8_PRE " "
-#endif
-
-#ifdef BIT16_PRE
-#  undef BIT16_PRE
-#  define BIT16_PRE " "
-#endif
-
-#ifdef BIT32_PRE
-#  undef BIT32_PRE
-#  define BIT32_PRE " "
-#endif
-
-#ifdef BIT64_PRE
-#  undef BIT64_PRE
-#  define BIT64_PRE " "
-#endif
+#define BIT8_SEP  ","
+#define BIT16_SEP "|"
+#define BIT8_PRE  "0b: "
+#include "bits.h"
 
 #ifndef _unused_
 #  define _unused_(x) ((void)(x))
 #endif
+
+#include "bits.h"
 
 int
 main(int argc, char **argv) {
