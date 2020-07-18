@@ -23,15 +23,15 @@ const char *BIT4[] = {
 #define BIT32_FMT BIT16_FMT BIT16_SEP BIT16_FMT
 #define BIT64_FMT BIT32_FMT BIT32_SEP BIT32_FMT
 
-#define BIT8(n)  BIT4[(n) >> 4], BIT4[(n) & 0x0f]
-#define BIT16(n) BIT8((n) >> 8), BIT8((n) & 0xff)
+#define BIT8(n)  BIT4[(n) >> 4],   BIT4[(n)  & 0x0f]
+#define BIT16(n) BIT8((n) >> 8),   BIT8((n)  & 0xff)
 #define BIT32(n) BIT16((n) >> 16), BIT16((n) & 0xffff)
 #define BIT64(n) BIT32((n) >> 32), BIT32((n) & 0xffffffff)
 
-#define BPRI8(x)  printf(BIT8_PRE  BIT8_FMT  "\n", BIT8(x))
-#define BPRI16(x) printf(BIT16_PRE BIT16_FMT "\n", BIT16(x))
-#define BPRI32(x) printf(BIT32_PRE BIT32_FMT "\n", BIT32(x))
-#define BPRI64(x) printf(BIT64_PRE BIT64_FMT "\n", BIT64(x))
+#define BPRI8(x)  BIT8_PRE  BIT8_FMT  "\n", BIT8(x)
+#define BPRI16(x) BIT16_PRE BIT16_FMT "\n", BIT16(x)
+#define BPRI32(x) BIT32_PRE BIT32_FMT "\n", BIT32(x)
+#define BPRI64(x) BIT64_PRE BIT64_FMT "\n", BIT64(x)
 
 
 #endif /* end of _BITS_H_ */
