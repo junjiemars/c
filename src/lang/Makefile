@@ -277,14 +277,26 @@ $(lang_main_envp_binout): $(lang_root)main/m_envp.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # math
-lang_math_binout := $(bin_path)$(lang_prefix)_math$(bin_ext)
+lang_math_complex_binout := $(bin_path)$(lang_prefix)_math_complex$(bin_ext)
+lang_math_fcmp_binout := $(bin_path)$(lang_prefix)_math_fcmp$(bin_ext)
 
-lang_math: $(lang_math_binout)
-lang_math_test: lang_math
-	$(lang_math_binout)
+lang_math: $(lang_math_complex_binout)					\
+           $(lang_math_fcmp_binout)
+lang_math_test: lang_math_complex_test					\
+                lang_math_fcmp_test
 
-$(lang_math_binout): $(lang_root)math/c.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+lang_math_complex_test: $(lang_math_complex_binout)
+	$(lang_math_complex_binout)
+lang_math_fcmp_test: $(lang_math_fcmp_binout)
+	$(lang_math_fcmp_binout)
+
+math_inc := $(INC) -I$(root)posix
+
+$(lang_math_complex_binout): $(lang_root)math/c.c
+	$(CC) $(CFLAGS) $(math_inc) $^ $(bin_out)$@
+
+$(lang_math_fcmp_binout): $(lang_root)math/fcmp.c
+	$(CC) $(CFLAGS) $(math_inc) $^ $(bin_out)$@
 
 # random
 lang_random_binout := $(bin_path)$(lang_prefix)_random_raw$(bin_ext)

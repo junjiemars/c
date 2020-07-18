@@ -1,10 +1,10 @@
 #ifndef _MEMORY_H_
 #define _MEMORY_H_
 
-#include <nore.h>
+#include "nore.h"
+#include "ints.h"
+#include "bits.h"
 #include <assert.h>
-#include <norstd.h>
-#include <bits/bits.h>
 
 #ifdef _unused_
 #  undef _unused_
