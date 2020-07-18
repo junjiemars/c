@@ -1,7 +1,6 @@
 #ifndef _BITS_H_
 #define _BITS_H_
 
-
 const char *BIT4[] = {
 	[ 0] = "0000", [ 1] = "0001", [ 2] = "0010", [ 3] = "0011",
 	[ 4] = "0100", [ 5] = "0101", [ 6] = "0110", [ 7] = "0111",
@@ -28,6 +27,11 @@ const char *BIT4[] = {
 #define BIT16(n) BIT8((n) >> 8), BIT8((n) & 0xff)
 #define BIT32(n) BIT16((n) >> 16), BIT16((n) & 0xffff)
 #define BIT64(n) BIT32((n) >> 32), BIT32((n) & 0xffffffff)
+
+#define BPRI8(x)  printf(BIT8_PRE  BIT8_FMT  "\n", BIT8(x))
+#define BPRI16(x) printf(BIT16_PRE BIT16_FMT "\n", BIT16(x))
+#define BPRI32(x) printf(BIT32_PRE BIT32_FMT "\n", BIT32(x))
+#define BPRI64(x) printf(BIT64_PRE BIT64_FMT "\n", BIT64(x))
 
 
 #endif /* end of _BITS_H_ */
