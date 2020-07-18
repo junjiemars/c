@@ -23,6 +23,8 @@ void test_cmp_float(void);
 void test_cmp_double(void);
 void test_asm_double(void);
 void test_episilon_double(void);
+void test_double_zero(void);
+void test_double_equal(void);
 
 unsigned int
 to_ui(float x) {
@@ -149,6 +151,33 @@ test_episilon_double(void) {
   _unused_(x);
 }
 
+void
+test_double_zero(void) {
+  double d1 = 0.0L, d2 = 0.0L;
+  int le, ge;
+
+  le = islessequal(d1, d2);
+  ge = isgreaterequal(d1, d2);
+
+  assert(FP_ZERO == fpclassify(d1));
+  assert(d1 == d2);
+  assert(le && ge);
+}
+
+void
+test_double_equal(void) {
+  double d1 = 0.1L, d2 = 0.2L, d3 = 0.3L;
+  int le, ge, l, g;
+  
+  le = islessequal(d1+d2, d3);
+  ge = isgreaterequal(d1+d2, d3);
+  l = isless(d1+d2, d3);
+  g = isgreater(d1+d2, d3);
+
+  assert((le || ge) && (l || g));
+  assert(g && ge);
+}
+
 int
 main(int argc, char **argv) {
   _unused_(argc);
@@ -158,6 +187,8 @@ main(int argc, char **argv) {
   test_cmp_double();
   test_asm_double();
   test_episilon_double();
-  
+  test_double_zero();
+  test_double_equal();
+
   return 0;
 }
