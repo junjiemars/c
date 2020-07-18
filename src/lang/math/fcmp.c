@@ -57,6 +57,17 @@ test_cmp_float(void) {
 
   assert(u3 == u12);
   assert(d3 == d1 + d2);
+  
+  int less, greater, lessgreater, unordered;
+  less = isless(d3, d1+d2);
+  greater = islessgreater(d3, d1+d2);
+  lessgreater = islessgreater(d3, d1+d2);
+  unordered = isunordered(d3, d1+d2);
+
+  assert(!unordered);
+  assert(!less);
+  assert(!greater);
+  assert(!lessgreater);  
 }
 
 void
@@ -80,6 +91,17 @@ test_cmp_double(void) {
 
   assert(u3 != u12);
   assert(d3 != d1 + d2);
+  
+  int less, greater, lessgreater, unordered;
+  less = isless(d3, d1+d2);
+  greater = islessgreater(d3, d1+d2);
+  lessgreater = islessgreater(d3, d1+d2);
+  unordered = isunordered(d3, d1+d2);
+
+  assert(!unordered);
+  assert(less);
+  assert(greater);
+  assert(lessgreater);
 }
 
 int
