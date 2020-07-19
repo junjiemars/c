@@ -1484,13 +1484,13 @@ between different endian machines, there is often a substantial amount of
 patterns. 4 bytes is the contemporary default size for an integer. Also 
 known as a /word/.
 
-*** Fixed-point 
+*** Fixed-point
 		:PROPERTIES:
 		:CUSTOM_ID: memory-basic-types-fixed-point
 		:END:
 
 
-*** Floating-point 
+*** Floating-point
 		:PROPERTIES:
 		:CUSTOM_ID: memory-basic-types-floating-point
 		:END:
