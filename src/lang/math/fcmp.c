@@ -22,9 +22,10 @@ unsigned long to_ul(double);
 void test_cmp_float(void);
 void test_cmp_double(void);
 void test_asm_double(void);
-void test_episilon_double(void);
+void test_epsilon_double(void);
 void test_double_zero(void);
 void test_double_equal(void);
+void test_double_classify(void);
 
 unsigned int
 to_ui(float x) {
@@ -144,11 +145,11 @@ test_asm_double(void) {
 }
 
 void
-test_episilon_double(void) {
+test_epsilon_double(void) {
   double d1 = 0.1, d2 = 0.2, d3 = 0.3;
-  double episilon = 0.00001;
-  int x = fabs((d1+d2) - d3) < episilon;
-  _unused_(x);
+  double epsilon = DBL_EPSILON;
+  int x = fabs((d1+d2) - d3) < epsilon;
+  assert(x);
 }
 
 void
@@ -178,6 +179,24 @@ test_double_equal(void) {
   assert(g && ge);
 }
 
+void
+test_double_classify(void) {
+  assert(FP_ZERO == fpclassify(0.0L));
+  assert(FP_ZERO == fpclassify(0.0L/DBL_MAX));
+  assert(FP_NORMAL == fpclassify(1.0L));
+  assert(FP_NORMAL != fpclassify(0.0L));
+  assert(FP_INFINITE == fpclassify(1.0L/0.0L));
+  assert(FP_INFINITE == fpclassify(-1.0L/0.0L));
+  assert(FP_NAN == fpclassify((1.0L/0.0L) / (1.0L/0.0L)));
+  
+  assert(isfinite(0.0L));
+  assert(isinf(1.0L/0.0L));
+  assert(isnan((1.0L/0.0L)/(1.0L/0.0L)));
+  assert(isnormal(0.1L));
+}
+
+
+
 int
 main(int argc, char **argv) {
   _unused_(argc);
@@ -186,9 +205,10 @@ main(int argc, char **argv) {
   test_cmp_float();
   test_cmp_double();
   test_asm_double();
-  test_episilon_double();
+  test_epsilon_double();
   test_double_zero();
   test_double_equal();
+  test_double_classify();
 
   return 0;
 }
