@@ -22,6 +22,7 @@ unsigned long to_ul(double);
 void test_cmp_float(void);
 void test_cmp_double(void);
 void test_asm_double(void);
+void test_asm_long_double(void);
 void test_epsilon_double(void);
 void test_double_zero(void);
 void test_double_equal(void);
@@ -145,6 +146,13 @@ test_asm_double(void) {
 }
 
 void
+test_asm_long_double(void) {
+  long double d1 = 0.1L, d2 = 0.2L, d3 = 0.3L;
+  int x = ((d1+d2) - d3);
+  _unused_(x);
+}
+
+void
 test_epsilon_double(void) {
   double d1 = 0.1, d2 = 0.2, d3 = 0.3;
   double epsilon = DBL_EPSILON;
@@ -154,7 +162,7 @@ test_epsilon_double(void) {
 
 void
 test_double_zero(void) {
-  double d1 = 0.0L, d2 = 0.0L;
+  double d1 = 0.0, d2 = 0.0;
   int le, ge;
 
   le = islessequal(d1, d2);
@@ -167,7 +175,7 @@ test_double_zero(void) {
 
 void
 test_double_equal(void) {
-  double d1 = 0.1L, d2 = 0.2L, d3 = 0.3L;
+  double d1 = 0.1, d2 = 0.2, d3 = 0.3;
   int le, ge, l, g;
   
   le = islessequal(d1+d2, d3);
@@ -181,18 +189,18 @@ test_double_equal(void) {
 
 void
 test_double_classify(void) {
-  assert(FP_ZERO == fpclassify(0.0L));
-  assert(FP_ZERO == fpclassify(0.0L/DBL_MAX));
-  assert(FP_NORMAL == fpclassify(1.0L));
-  assert(FP_NORMAL != fpclassify(0.0L));
-  assert(FP_INFINITE == fpclassify(1.0L/0.0L));
-  assert(FP_INFINITE == fpclassify(-1.0L/0.0L));
-  assert(FP_NAN == fpclassify((1.0L/0.0L) / (1.0L/0.0L)));
+  assert(FP_ZERO == fpclassify(0.0));
+  assert(FP_ZERO == fpclassify(0.0/DBL_MAX));
+  assert(FP_NORMAL == fpclassify(1.0));
+  assert(FP_NORMAL != fpclassify(0.0));
+  assert(FP_INFINITE == fpclassify(1.0/0.0));
+  assert(FP_INFINITE == fpclassify(-1.0/0.0));
+  assert(FP_NAN == fpclassify((1.0L/0.0) / (1.0/0.0)));
   
-  assert(isfinite(0.0L));
-  assert(isinf(1.0L/0.0L));
-  assert(isnan((1.0L/0.0L)/(1.0L/0.0L)));
-  assert(isnormal(0.1L));
+  assert(isfinite(0.0));
+  assert(isinf(1.0/0.0));
+  assert(isnan((1.0/0.0)/(1.0/0.0)));
+  assert(isnormal(0.1));
 }
 
 
@@ -205,6 +213,7 @@ main(int argc, char **argv) {
   test_cmp_float();
   test_cmp_double();
   test_asm_double();
+  test_asm_long_double();
   test_epsilon_double();
   test_double_zero();
   test_double_equal();
