@@ -147,8 +147,11 @@ lang_error_basic_binout := $(bin_path)$(lang_prefix)_error_basic$(bin_ext)
 ifeq ($(NM_SYSTEM), Linux)
   error_cflags := $(CFLAGS)
   error_cflags += -D_POSIX_C_SOURCE=200112L
+	error_lflags := $(LFLAGS)
+	error_lflags += -lm
 else
   error_cflags = $(CFLAGS)
+	error_lflags = $(LFLAGS)
 endif
 
 lang_error: $(lang_error_basic_binout)
@@ -157,7 +160,7 @@ lang_error_test: lang_error
 	$(lang_error_basic_binout) $(CURDIR)/Makefile
 
 $(lang_error_basic_binout): $(lang_root)error/e.c
-	$(CC) $(error_cflags) $(INC) $^ $(bin_out)$@
+	$(CC) $(error_cflags) $(INC) $^ $(bin_out)$@ $(error_lflags)
 
 # exit
 lang_exit_binout := $(bin_path)$(lang_prefix)_exit$(bin_ext)
