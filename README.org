@@ -2194,6 +2194,16 @@ table in a executable.
 | Linux | objdump | objdump -d <bin> |
 |       |         |                  |
 
+** Hex Dump
+
+| OS     | name      | command line   |
+|--------+-----------+----------------|
+| MacOS  | hexdump   | hexdump <file> |
+| Linux  | hexdump   | hexdump <file> |
+| Window |           |                |
+| Emacs  | hexl-mode |                |
+|        |           |                |
+
 ** Trace System Call
 	 :PROPERTIES:
 	 :CUSTOM_ID: trace-system-call
