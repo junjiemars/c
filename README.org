@@ -67,6 +67,7 @@ text manipulations, such as:
 - stripping comments
 - resolving =#include= directives and replacing them with the contents
   of the included file
+- =#include_next=
 - evaluating =#if= and =#ifdef= directives
 - evaluating =#define=
 - expanding the macros found in the rest of the code according to
