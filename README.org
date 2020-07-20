@@ -1948,6 +1948,15 @@ time used only by the process.
 - [[https://en.wikipedia.org/wiki/Static_library][Static library]]
 
 * ELF
+	:PROPERTIES:
+	:CUSTOM_ID: elf
+	:END:
+
+** References
+- [[http://www.skyfree.org/linux/references/ELF_Format.pdf][Executable and Linkable Format (ELF)]]
+- [[https://linux-audit.com/elf-binaries-on-linux-understanding-and-analysis/#:~:text=ELF%2520is%2520the%2520abbreviation%2520for%2520Executable%2520and%2520Linkable,compiler%2520or%2520linker%2520and%2520are%2520a%2520binary%2520format.][The 101 of ELF files on Linux: Understanding and Analysis]]
+- [[https://developer.apple.com/library/archive/documentation/Performance/Conceptual/CodeFootprint/Articles/MachOOverview.html][Apple: Overview of the Mach-O Executable Format]]
+
 * Unicode
 	:PROPERTIES:
 	:CUSTOM_ID: unicode
@@ -2168,6 +2177,12 @@ goes into more detail and it exists independently of the BFD library,
 so if there is a bug in BFD then /readelf/ will not be affected.
 
 On Darwin, there are no readelf, but we can use /otool/ do the trick.
+
+| OS      | name   | command line   |
+|---------+--------+----------------|
+| MacOS   | otool  | otool -l <bin> |
+| Linux   | reaelf | readelf <bin>  |
+| Windows |        |                |
 
 ** Metainformation about Libraries
    
