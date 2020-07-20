@@ -9,7 +9,7 @@ memory: memory_alloc														\
 				generic																	\
 				layout																	\
 				rotate																	\
-				shift																		\
+				memory_shift													  \
 				struct
 
 memory_test: 	memory_alloc_test									\
@@ -21,7 +21,7 @@ memory_test: 	memory_alloc_test									\
 				      generic_test											\
 				      layout_test												\
 				      rotate_test												\
-				      shift_test												\
+				      memory_shift_test								  \
 				      struct_test
 
 memory_prefix := memory
@@ -242,13 +242,13 @@ $(rotate_binout): $(memory_root)rotate/rotate.h	\
 
 
 # shift
-shift_binout := $(bin_path)$(memory_prefix)_shift$(bin_ext)
+memory_shift_binout := $(bin_path)$(memory_prefix)_memory_shift$(bin_ext)
 
-shift: $(shift_binout)
-shift_test: shift
-	$(shift_binout)
+memory_shift: $(memory_shift_binout)
+memory_shift_test: memory_shift
+	$(memory_shift_binout)
 
-$(shift_binout): $(memory_root)shift/shift.c
+$(memory_shift_binout): $(memory_root)shift/shift.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

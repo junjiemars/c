@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <float.h>
 #include "bits.h"
+#include "ints.h"
 
 typedef union {
 	float f;

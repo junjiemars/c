@@ -1,6 +1,7 @@
 #include <_memory_.h>
 #include <string.h>
 #include <stdio.h>
+#include "ints.h"
 
 #if ! defined( NM_HAVE_VLA )
 #include <stdlib.h>

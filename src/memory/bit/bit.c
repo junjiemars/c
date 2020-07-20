@@ -1,5 +1,11 @@
 #include <_memory_.h>
+#include "bits.h"
+#include "ints.h"
 #include <stdio.h>
+
+#define LOG8_1()    printf("%44s = ", "uint8_t")
+#define LOG8_2(...) printf("%25s(%8"PRIu8",%8u) = ", __VA_ARGS__)
+#define LOG8_3(...) printf("%16s(%8"PRIu8",%8u,%8u) = ", __VA_ARGS__);
 
 uint8_t
 set_a_bit(uint8_t x, uint8_t n) {
@@ -23,27 +29,43 @@ change_a_bit(uint8_t x, uint8_t n, uint8_t v) {
 
 int
 main(void) {
-	uint8_t x = 11;
+	uint8_t x = 0xff;
 	uint8_t z;
-	
-	printf("uint8_t: %" PRIu8 " = " BIT8_FMT "\n", x, BIT8(x));
 
 	printf("----------\n");
-	z = set_a_bit(x, 2u);
-	printf("set_a_bit(%" PRIu8 ", %u) = " BIT8_FMT "\n", x, 2u, BIT8(z));
+  LOG8_1();
+  printf(BPRI8(x));
 
-	printf("----------\n");
-	z = clear_a_bit(x, 1u);
-	printf("clear_a_bit(%" PRIu8 ", %u) = " BIT8_FMT "\n", x, 1u, BIT8(z));
-	printf("----------\n");
-	z = toggle_a_bit(x, 2u);
-	printf("toggle_a_bit(%" PRIu8 ", %u) = " BIT8_FMT "\n", x, 2u, BIT8(z));
-	printf("toggle_a_bit(%" PRIu8 ", %u) = " BIT8_FMT "\n", z, 2u, BIT8(toggle_a_bit(z, 2u)));
+	x = clear_a_bit(x, 1u);
+  LOG8_2("clear_a_bit", x, 1u);
+  printf(BPRI8(x));
 
-	printf("----------\n");
+	x = clear_a_bit(x, 2u);
+  LOG8_2("clear_a_bit", x, 2u);
+  printf(BPRI8(x));
+
+	x = set_a_bit(x, 2u);
+  LOG8_2("set_a_bit", x, 2u);
+  printf(BPRI8(x));
+
+	x = set_a_bit(x, 1u);
+  LOG8_2("set_a_bit", x, 1u);
+  printf(BPRI8(x));
+
+	x = toggle_a_bit(x, 1u);
+	LOG8_2("toggle_a_bit", x, 1u);
+  printf(BPRI8(x));
+
+	x = toggle_a_bit(x, 1u);
+	LOG8_2("toggle_a_bit", x, 1u);
+  printf(BPRI8(x));
+
 	z = change_a_bit(x, 2u, 3u);
-	printf("change_a_bit(%" PRIu8 ", %u, %u) = " BIT8_FMT "\n", x, 2u, 3u, BIT8(z));
+	LOG8_3("change_a_bit", x, 2u, 3u);
+  printf(BPRI8(z));
+
 	z = change_a_bit(x, 2u, 0u);
-	printf("change_a_bit(%" PRIu8 ", %u, %u) = " BIT8_FMT "\n", x, 2u, 0u, BIT8(z));	
+	LOG8_3("change_a_bit", x, 2u, 0u);
+  printf(BPRI8(z));
 }
 

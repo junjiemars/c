@@ -2,7 +2,6 @@
 #define _MEMORY_H_
 
 #include "nore.h"
-#include "ints.h"
 #include <assert.h>
 
 #ifdef _unused_
@@ -19,9 +18,6 @@
 #  undef _bool_
 #endif
 #define _bool_(p) ((p) ? "true" : "false")
-
-
-
 
 #ifdef NM_HAVE_STDBOOL_H
 #  include <stdbool.h>
