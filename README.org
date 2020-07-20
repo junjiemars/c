@@ -1947,7 +1947,7 @@ time used only by the process.
 - [[https://en.wikipedia.org/wiki/Dynamic-link_library][Dynamic-link library]]
 - [[https://en.wikipedia.org/wiki/Static_library][Static library]]
 
-* String
+* ELF
 * Unicode
 	:PROPERTIES:
 	:CUSTOM_ID: unicode
@@ -2142,24 +2142,18 @@ Module.ccall('sum', 'number', ['number', 'number'], [10, 0]);
 	:CUSTOM_ID: tools
 	:END:
 
-** View Dependents of Executable
+** Display Dependents of Executable
 	 :PROPERTIES:
-	 :CUSTOM_ID: view_dependents_of_exeutable
+	 :CUSTOM_ID: display_dependents_of_exeutable
 	 :END:
 
-#+BEGIN_SRC sh
-# on Windows
-dumpbin -dependents out/bin/math_shared
-
-# on Darwin
-otool -L out/bin/math_shared
-
-# on Linux
-objdump -p out/bin/math_shared
-
-# or
-ldd objs/bin/math_shared
-#+END_SRC
+| OS      | name    | command line      |
+|---------+---------+-------------------|
+| MacOS   | otool   | otool -L <bin>    |
+| Linux   | objdump | objdump -p <bin>  |
+|         | ldd     | ldd <bin>         |
+| Windows | dumpbin | -dependents <bin> |
+|         |         |                   |
 
 ** Read ELF Format
 	 :PROPERTIES:
@@ -2179,13 +2173,26 @@ On Darwin, there are no readelf, but we can use /otool/ do the trick.
    
 =pkg-config=
 
-** View Symbol Table
+** Display Symbol Table
 	 :PROPERTIES:
-	 :CUSTOM_ID: view-symbol-table
+	 :CUSTOM_ID: display-symbol-table
 	 :END:
 
 On Unix-like platform, there are /nm/ program can view the symbol
 table in a executable.
+
+| OS    | name | command line |
+|-------+------+--------------|
+| MacOS | nm   | nm <bin>     |
+| Linux | nm   | nm <bin>     |
+
+** Disassembly
+
+| OS    | name    | command line     |
+|-------+---------+------------------|
+| MacOS | otool   | otool -tV <bin>  |
+| Linux | objdump | objdump -d <bin> |
+|       |         |                  |
 
 ** Trace System Call
 	 :PROPERTIES:
@@ -2198,13 +2205,6 @@ table in a executable.
 ** Kernel Trace
 
 - MacOSX: =ktrace=
-
-** Display Symbol Table
-	 :PROPERTIES:
-	 :CUSTOM_ID: display-symbol-table
-	 :END:
-
-- MacOSX: =nm=
 
 ** Memory Leak Detection
 	 :PROPERTIES:
