@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include <ints.h>
+#include <stdint.h>
 
 
 #define _align_(x, a)           _align_mask_(x, (uintptr_t)(a)-1)

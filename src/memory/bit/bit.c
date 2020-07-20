@@ -1,6 +1,7 @@
 #include <_memory_.h>
+#include <inttypes.h>
 #include "bits.h"
-#include "ints.h"
+#include <stdint.h>
 #include <stdio.h>
 
 #define LOG8_1()    printf("%44s = ", "uint8_t")

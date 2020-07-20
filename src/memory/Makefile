@@ -1,4 +1,4 @@
-# ./configure --has-memory
+# ./configure --has-memory --with-std=c99
 
 memory: memory_alloc														\
 				bitfield																\

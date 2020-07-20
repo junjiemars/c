@@ -1,7 +1,8 @@
 #include <_memory_.h>
-#include "ints.h"
+#include <stdint.h>
 #include "bits.h"
 #include <stdio.h>
+#include <inttypes.h>
 
 void unsigned_left_shift() {
   uint16_t x2 = 0x1122;

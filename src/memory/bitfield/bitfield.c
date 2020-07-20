@@ -1,7 +1,7 @@
 #include <_memory_.h>
 #include <string.h>
 #include <stdio.h>
-#include <ints.h>
+#include <stdint.h>
 
 typedef union u_bitfield {
 	uint16_t u16;

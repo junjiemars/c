@@ -19,11 +19,6 @@
 #endif
 #define _bool_(p) ((p) ? "true" : "false")
 
-#ifdef NM_HAVE_STDBOOL_H
-#  include <stdbool.h>
-#endif /* end of NM_HAVE_STDBOOL_H */
-
-
 #ifdef MSVC
 #  pragma warning(disable : 4996) /* _CRT_SECURE_NO_WARNINGS */
 #  pragma warning(disable : 4214) /* bit field types other than int */

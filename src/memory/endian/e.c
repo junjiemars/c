@@ -1,6 +1,7 @@
 #include <_memory_.h>
 #include <stdio.h>
-#include "ints.h"
+#include <stdint.h>
+#include <inttypes.h>
 
 uint32_t
 bit_swap32(uint32_t x) {
