@@ -1948,7 +1948,16 @@ time used only by the process.
 - [[https://en.wikipedia.org/wiki/Dynamic-link_library][Dynamic-link library]]
 - [[https://en.wikipedia.org/wiki/Static_library][Static library]]
 
-* String
+* ELF
+	:PROPERTIES:
+	:CUSTOM_ID: elf
+	:END:
+
+** References
+- [[http://www.skyfree.org/linux/references/ELF_Format.pdf][Executable and Linkable Format (ELF)]]
+- [[https://linux-audit.com/elf-binaries-on-linux-understanding-and-analysis/#:~:text=ELF%2520is%2520the%2520abbreviation%2520for%2520Executable%2520and%2520Linkable,compiler%2520or%2520linker%2520and%2520are%2520a%2520binary%2520format.][The 101 of ELF files on Linux: Understanding and Analysis]]
+- [[https://developer.apple.com/library/archive/documentation/Performance/Conceptual/CodeFootprint/Articles/MachOOverview.html][Apple: Overview of the Mach-O Executable Format]]
+
 * Unicode
 	:PROPERTIES:
 	:CUSTOM_ID: unicode
@@ -2143,24 +2152,18 @@ Module.ccall('sum', 'number', ['number', 'number'], [10, 0]);
 	:CUSTOM_ID: tools
 	:END:
 
-** View Dependents of Executable
+** Display Dependents of Executable
 	 :PROPERTIES:
-	 :CUSTOM_ID: view_dependents_of_exeutable
+	 :CUSTOM_ID: display_dependents_of_exeutable
 	 :END:
 
-#+BEGIN_SRC sh
-# on Windows
-dumpbin -dependents out/bin/math_shared
-
-# on Darwin
-otool -L out/bin/math_shared
-
-# on Linux
-objdump -p out/bin/math_shared
-
-# or
-ldd objs/bin/math_shared
-#+END_SRC
+| OS      | name    | command line      |
+|---------+---------+-------------------|
+| MacOS   | otool   | otool -L <bin>    |
+| Linux   | objdump | objdump -p <bin>  |
+|         | ldd     | ldd <bin>         |
+| Windows | dumpbin | -dependents <bin> |
+|         |         |                   |
 
 ** Read ELF Format
 	 :PROPERTIES:
@@ -2176,17 +2179,46 @@ so if there is a bug in BFD then /readelf/ will not be affected.
 
 On Darwin, there are no readelf, but we can use /otool/ do the trick.
 
+| OS      | name   | command line   |
+|---------+--------+----------------|
+| MacOS   | otool  | otool -l <bin> |
+| Linux   | reaelf | readelf <bin>  |
+| Windows |        |                |
+
 ** Metainformation about Libraries
    
 =pkg-config=
 
-** View Symbol Table
+** Display Symbol Table
 	 :PROPERTIES:
-	 :CUSTOM_ID: view-symbol-table
+	 :CUSTOM_ID: display-symbol-table
 	 :END:
 
 On Unix-like platform, there are /nm/ program can view the symbol
 table in a executable.
+
+| OS    | name | command line |
+|-------+------+--------------|
+| MacOS | nm   | nm <bin>     |
+| Linux | nm   | nm <bin>     |
+
+** Disassembly
+
+| OS    | name    | command line     |
+|-------+---------+------------------|
+| MacOS | otool   | otool -tV <bin>  |
+| Linux | objdump | objdump -d <bin> |
+|       |         |                  |
+
+** Hex Dump
+
+| OS     | name      | command line   |
+|--------+-----------+----------------|
+| MacOS  | hexdump   | hexdump <file> |
+| Linux  | hexdump   | hexdump <file> |
+| Window |           |                |
+| Emacs  | hexl-mode |                |
+|        |           |                |
 
 ** Trace System Call
 	 :PROPERTIES:
@@ -2199,13 +2231,6 @@ table in a executable.
 ** Kernel Trace
 
 - MacOSX: =ktrace=
-
-** Display Symbol Table
-	 :PROPERTIES:
-	 :CUSTOM_ID: display-symbol-table
-	 :END:
-
-- MacOSX: =nm=
 
 ** Memory Leak Detection
 	 :PROPERTIES:
