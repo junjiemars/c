@@ -15,8 +15,7 @@ static struct option long_options[] = {
       {"help",    no_argument,         0, 'H'},
       {"host",    optional_argument,   0, 'h'},
       {"port",    optional_argument,   0, 'p'},
-      {"head",    optional_argument,   0, 'I'},
-      {"file",    optional_argument,   0, 'f'},
+      {"root",    optional_argument,   0, 'w'},
       {"verbose", no_argument,         0, 'v'},
       {0,         no_argument,         0, '-'},
       {0,         0,                   0,  0 },
@@ -24,10 +23,8 @@ static struct option long_options[] = {
 
 static char opt_host[NAME_MAX] = "127.0.0.1";
 static long opt_port = 9696;
-static char opt_head[NAME_MAX] = {0};
-static char opt_file[NAME_MAX] = "abc";
+static char opt_root[NAME_MAX];
 static int  opt_verbose = 0;
-static int  opt_stdin = 0;
 
 static uv_loop_t *loop;
 static uv_tcp_t host;
@@ -61,8 +58,7 @@ usage(const char *httpd) {
   printf("  -H, --help             print this message\n");
   printf("  -h, --host             listen IP address, default 127.0.0.1\n");
   printf("  -p, --port             listen port, default 9696\n");
-  printf("  -I, --head             response header file, default 9696\n");
-  printf("  -f, --file             response data file\n");
+  printf("  -w, --webroot          webroot path, default ./\n");
   printf("  -v, --verbose          verbose output\n");
 }
 
@@ -218,7 +214,7 @@ int
 main(int argc, char **argv) {
   int ch;
   while (EOF != (ch = getopt_long(argc, argv,
-                                  "Hh:p:I:f:v-", long_options, 0))) {
+                                  "Hh:p:v-", long_options, 0))) {
     switch (ch) {
 		case 'H':
 			usage(argv[0]);
@@ -229,18 +225,12 @@ main(int argc, char **argv) {
 		case 'p':
       opt_port = atol(optarg);
 			break;
-    case 'I':
-      strncpy(opt_head, optarg, sizeof(opt_head));
+    case 'w':
+      strncpy(opt_root, optarg, sizeof(opt_root));
       break;
-		case 'f':
-      strncpy(opt_file, optarg, sizeof(opt_file));
-			break;
     case 'v':
       ++opt_verbose;
       break;
-		case '-':
-			++opt_stdin;
-			break;
 		default:
 			usage(argv[0]);
 			return -1;
@@ -250,7 +240,7 @@ main(int argc, char **argv) {
   /* parser_settings.on_url = on_url; */
   /* parser_settings.on_message_begin = on_message_begin; */
   /* parser_settings.on_headers_complete = on_headers_complete; */
-  parser_settings.on_message_complete = on_message_complete;
+  /* parser_settings.on_message_complete = on_message_complete; */
   /* parser_settings.on_header_field = on_header_field; */
   /* parser_settings.on_header_value = on_header_value; */
   /* parser_settings.on_body = on_body; */
@@ -262,16 +252,16 @@ main(int argc, char **argv) {
 
   uv_tcp_init(loop, &host);
   uv_ip4_addr(opt_host, opt_port, &addr);
-  r = uv_tcp_bind(&host, (const struct sockaddr*)&addr, 0);
+  r = uv_tcp_bind(&host, (const struct sockaddr*) &addr, 0);
   if (r) {
     LOG("!panic, bind error %s\n", uv_strerror(r));
-    return 1;
+    return r;
   }
 
   r = uv_listen((uv_stream_t*) &host, opt_port, on_connect);
   if (r) {
     LOG("!panic, listen error %s\n", uv_strerror(r));
-    return 1;
+    return r;
   }
   LOG("#listen on %s:%li ...\n", opt_host, opt_port);
 
