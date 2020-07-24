@@ -36,11 +36,12 @@ static uv_process_options_t cgi_opt;
 
 typedef struct hreq_s {
   http_parser parser;
+  unsigned int method;
   uv_buf_t url;
   struct {
     uv_buf_t field;
     uv_buf_t value;
-  } headers[8];
+  } headers[32/* 4K */];
   int htop;
   int close;
 } hreq_s;
@@ -61,6 +62,7 @@ int on_message_complete(http_parser*);
 int on_url(http_parser*, const char*, size_t);
 int on_header_field(http_parser*, const char*, size_t);
 int on_header_value(http_parser*, const char*, size_t);
+int on_headers_complete(http_parser*);
 int on_body(http_parser*, const char*, size_t);
 
 void
@@ -226,11 +228,13 @@ cgi_exe(uv_tcp_t *client) {
 
 int
 on_url(http_parser *parser, const char *at, size_t length) {
-  LOG("##url ...\n");
   hreq_s *hreq = (hreq_s*)parser->data;
+  hreq->method = parser->method;
   hreq->url.base = calloc(sizeof(char), length+1);
   strncpy(hreq->url.base, at, length);
   hreq->url.len = length;
+  
+  LOG("##url: %s\n", hreq->url.base);
   return 0;
 }
 
@@ -258,6 +262,15 @@ on_header_value(http_parser *parser, const char *at, size_t length) {
   LOG("##header value: %s\n", val.base);
   return 0;
 }
+
+int
+on_headers_complete(http_parser *parser) {
+  LOG("##headers completed\n");
+  hreq_s *hreq = (hreq_s*) parser->data;
+  _unused_(hreq);
+  return 0;
+}
+
 
 int
 on_body(http_parser *parser, const char *at, size_t length) {
@@ -316,7 +329,7 @@ main(int argc, char **argv) {
   parser_settings.on_url = on_url;
   parser_settings.on_header_field = on_header_field;
   parser_settings.on_header_value = on_header_value;
-/* parser_settings.on_headers_complete = on_headers_complete; */
+  parser_settings.on_headers_complete = on_headers_complete;
   parser_settings.on_body = on_body;
   parser_settings.on_message_complete = on_message_complete;
 
