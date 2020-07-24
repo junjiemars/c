@@ -21,8 +21,8 @@ static struct option long_options[] = {
       {0,         0,                   0,  0 },
 };
 
-static char opt_host[NAME_MAX] = "127.0.0.1";
-static long opt_port = 9696;
+static char opt_host[NAME_MAX] = "0.0.0.0";
+static int opt_port = 9696;
 static char opt_root[NAME_MAX];
 static int  opt_verbose = 0;
 
@@ -34,6 +34,11 @@ static http_parser_settings parser_settings;
 static uv_process_t cgi_req;
 static uv_process_options_t cgi_opt;
 
+typedef struct hreq_s {
+  http_parser parser;
+  char *url;
+  int close;
+} hreq_s;
 
 void usage(const char*);
 void on_connect(uv_stream_t*, int);
@@ -56,8 +61,8 @@ usage(const char *httpd) {
   printf("\n");
   printf("A tiny http server, listen, accept and response what your want.\n");
   printf("  -H, --help             print this message\n");
-  printf("  -h, --host             listen IP address, default 127.0.0.1\n");
-  printf("  -p, --port             listen port, default 9696\n");
+  printf("  -h, --host             listen IP address, default %s\n", opt_host);
+  printf("  -p, --port             listen port, default %i\n", opt_port);
   printf("  -w, --webroot          webroot path, default ./\n");
   printf("  -v, --verbose          verbose output\n");
 }
@@ -68,14 +73,24 @@ on_connect(uv_stream_t *host, int status) {
     LOG("!panic, connect error %s\n", uv_strerror(status));
     return;
   }
+  
+  hreq_s *hreq = calloc(sizeof(hreq_s), 1);
+  if (!hreq) {
+    LOG("!panic, %s\n", strerror(errno));
+    return;
+  }
 
   uv_tcp_t *client = (uv_tcp_t*) malloc(sizeof(uv_tcp_t));
+  if (!client) {
+    LOG("!panic, %s\n", strerror(errno));
+    return;
+  }
   uv_tcp_init(host->loop, client);
 
   int r = uv_accept(host, (uv_stream_t*) client);
   if (r) {
-    uv_shutdown_t *shutdown = malloc(sizeof(uv_shutdown_t));
-    uv_shutdown(shutdown, (uv_stream_t *) client, on_shutdown);
+    LOG("!panic, %s\n", uv_strerror(r));
+    uv_close((uv_handle_t*) client, on_close);
     return;
   }
   
@@ -85,6 +100,9 @@ on_connect(uv_stream_t *host, int status) {
   uv_tcp_getpeername(client, (struct sockaddr*) &addr, &addr_len);
   uv_ip4_name(&addr, &addr_buf[0], addr_len);
   LOG("#accepted from %s\n", addr_buf);
+  
+  http_parser_init(&hreq->parser, HTTP_REQUEST);
+  client->data = hreq;
 
   uv_read_start((uv_stream_t*) client, on_alloc, on_read);
 }
@@ -99,48 +117,60 @@ void
 on_read(uv_stream_t* handle, ssize_t nread, const uv_buf_t* buf) {
   if (nread < 0) {
     LOG("read empty\n");
-    uv_close((uv_handle_t*) handle, on_close);
-    return;
+    goto close_;
   }
   LOG("#read (%li bytes) ...\n%s\n", nread, buf->base);
 
-  http_parser parser;
-  parser.data = handle;
-  http_parser_init(&parser, HTTP_REQUEST);
+  hreq_s *hreq = (hreq_s*) handle->data;
+  if (!hreq) {
+    LOG("!panic, hreq_s no found\n");
+    goto close_;
+  }
 
-  size_t parsed = http_parser_execute(&parser, &parser_settings, buf->base, nread);
+  hreq->parser.data = hreq;
+  size_t parsed = http_parser_execute(&hreq->parser, &parser_settings, buf->base, nread);
   if ((ssize_t)parsed != nread) {
     LOG("!panic, parse error: %s\n", "xxx");
+    goto close_;
   }
   /* cgi_exe((uv_tcp_t*) handle); */
-  char *s1 = "HTTP/2 200 OK \r\n"
-    "content-type: text/html; charset=utf-8 \r\n"
-    "Accept-Ranges: bytes \r\n\r\n"
-    "<!DOCTYPE html><html><body>abc</body></html>";
+  /* char *s1 = "HTTP/2 200 OK \r\n" */
+  /*   "content-type: text/html; charset=utf-8 \r\n" */
+  /*   "Accept-Ranges: bytes \r\n\r\n" */
+  /*   "<!DOCTYPE html><html><body>abc</body></html>"; */
 
-  uv_buf_t resp[] = {
-    { .base = s1, .len = strlen(s1)+1 }
-  };
-  uv_write_t w;
-  int r = uv_write(&w, handle, &resp[0], 1, 0);
-  if (r) {
-    LOG("!panic, write error: %s\n", uv_strerror(r));
+  /* uv_buf_t resp[] = { */
+  /*   { .base = s1, .len = strlen(s1)+1 } */
+  /* }; */
+  /* uv_write_t w; */
+  /* int r = uv_write(&w, handle, &resp[0], 1, 0); */
+  /* if (r) { */
+  /*   LOG("!panic, write error: %s\n", uv_strerror(r)); */
+  /* } */
+
+  /* uv_close((uv_handle_t*) handle, on_close); */
+  /* free(buf->base); */
+  if (!hreq->close) {
+    return;
   }
-
+ close_:
   uv_close((uv_handle_t*) handle, on_close);
-  free(buf->base);
 }
 
 void
 on_close(uv_handle_t *handle) {
-  LOG("#closed\n");
+  hreq_s *hreq = (hreq_s*)handle->data;
+  if (hreq && hreq->url) {
+    free(hreq->url);
+  }
+  free(hreq);
   free(handle);
+  LOG("#closed\n");
 }
 
 void
 on_shutdown(uv_shutdown_t *shutdown, int status) {
 	_unused_(status);
-  uv_close((uv_handle_t *) shutdown->handle, on_close);
   LOG("#shutdown\n");
   free(shutdown);
 }
@@ -188,11 +218,9 @@ cgi_exe(uv_tcp_t *client) {
 
 int
 on_url(http_parser *parser, const char *at, size_t length) {
-  _unused_(parser);
-  char *url = malloc(length+1);
-  strncpy(url, at, length);
-  
-  free(url);
+  hreq_s *hreq = (hreq_s*)parser->data;
+  hreq->url = calloc(sizeof(char), length+1);
+  strncpy(hreq->url, at, length);
   return 0;
 }
 
@@ -206,7 +234,8 @@ on_body(http_parser *parser, const char *at, size_t length) {
 
 int
 on_message_complete(http_parser *parser) {
-  _unused_(parser);
+  hreq_s *hreq = (hreq_s*) parser->data;
+  hreq->close = 1;
   return 0;
 }
 
@@ -237,10 +266,10 @@ main(int argc, char **argv) {
     }
   }
 
-  /* parser_settings.on_url = on_url; */
+  parser_settings.on_url = on_url;
   /* parser_settings.on_message_begin = on_message_begin; */
   /* parser_settings.on_headers_complete = on_headers_complete; */
-  /* parser_settings.on_message_complete = on_message_complete; */
+  parser_settings.on_message_complete = on_message_complete;
   /* parser_settings.on_header_field = on_header_field; */
   /* parser_settings.on_header_value = on_header_value; */
   /* parser_settings.on_body = on_body; */
@@ -263,7 +292,7 @@ main(int argc, char **argv) {
     LOG("!panic, listen error %s\n", uv_strerror(r));
     return r;
   }
-  LOG("#listen on %s:%li ...\n", opt_host, opt_port);
+  LOG("#listen on %s:%i ...\n", opt_host, opt_port);
 
   return uv_run(loop, UV_RUN_DEFAULT);
 }
