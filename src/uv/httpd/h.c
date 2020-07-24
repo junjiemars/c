@@ -36,7 +36,7 @@ static uv_process_options_t cgi_opt;
 
 typedef struct hreq_s {
   http_parser parser;
-  char *url;
+  uv_buf_t url;
   int close;
 } hreq_s;
 
@@ -161,8 +161,8 @@ on_read(uv_stream_t* handle, ssize_t nread, const uv_buf_t* buf) {
 void
 on_close(uv_handle_t *handle) {
   hreq_s *hreq = (hreq_s*)handle->data;
-  if (hreq && hreq->url) {
-    free(hreq->url);
+  if (hreq) {
+    free(hreq->url.base);
   }
   free(hreq);
   free(handle);
@@ -221,8 +221,9 @@ int
 on_url(http_parser *parser, const char *at, size_t length) {
   LOG("##url ...\n");
   hreq_s *hreq = (hreq_s*)parser->data;
-  hreq->url = calloc(sizeof(char), length+1);
-  strncpy(hreq->url, at, length);
+  hreq->url.base = calloc(sizeof(char), length+1);
+  strncpy(hreq->url.base, at, length);
+  hreq->url.len = length;
   return 0;
 }
 
