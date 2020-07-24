@@ -37,6 +37,11 @@ static uv_process_options_t cgi_opt;
 typedef struct hreq_s {
   http_parser parser;
   uv_buf_t url;
+  struct {
+    uv_buf_t field;
+    uv_buf_t value;
+  } headers[8];
+  int htop;
   int close;
 } hreq_s;
 
@@ -54,6 +59,8 @@ void on_cgi_close(uv_process_t*, int64_t, int);
 int on_message_begin(http_parser*);
 int on_message_complete(http_parser*);
 int on_url(http_parser*, const char*, size_t);
+int on_header_field(http_parser*, const char*, size_t);
+int on_header_value(http_parser*, const char*, size_t);
 int on_body(http_parser*, const char*, size_t);
 
 void
@@ -228,6 +235,31 @@ on_url(http_parser *parser, const char *at, size_t length) {
 }
 
 int
+on_header_field(http_parser *parser, const char *at, size_t length) {
+  hreq_s *hreq = (hreq_s*)parser->data;
+  uv_buf_t fld = hreq->headers[hreq->htop].field;
+  fld.base = calloc(sizeof(char), length+1);
+  strncpy(fld.base, at, length);
+  fld.len = length;
+
+  LOG("##header field: %s\n", fld.base);
+  return 0;
+}
+
+int
+on_header_value(http_parser *parser, const char *at, size_t length) {
+  hreq_s *hreq = (hreq_s*)parser->data;
+  uv_buf_t val = hreq->headers[hreq->htop].value;
+  val.base = calloc(sizeof(char), length+1);
+  strncpy(val.base, at, length);
+  val.len = length;
+  hreq->htop++;
+  
+  LOG("##header value: %s\n", val.base);
+  return 0;
+}
+
+int
 on_body(http_parser *parser, const char *at, size_t length) {
   LOG("##body ...\n");
   hreq_s *hreq = (hreq_s*) parser->data;
@@ -280,13 +312,13 @@ main(int argc, char **argv) {
     }
   }
 
-  parser_settings.on_url = on_url;
   parser_settings.on_message_begin = on_message_begin;
-  /* parser_settings.on_headers_complete = on_headers_complete; */
-  parser_settings.on_message_complete = on_message_complete;
-  /* parser_settings.on_header_field = on_header_field; */
-  /* parser_settings.on_header_value = on_header_value; */
+  parser_settings.on_url = on_url;
+  parser_settings.on_header_field = on_header_field;
+  parser_settings.on_header_value = on_header_value;
+/* parser_settings.on_headers_complete = on_headers_complete; */
   parser_settings.on_body = on_body;
+  parser_settings.on_message_complete = on_message_complete;
 
   loop = uv_default_loop();
 
