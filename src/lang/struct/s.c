@@ -5,8 +5,8 @@
 #include <string.h>
 
 struct flex_s {
-  uint16_t n;
-  uint32_t n2[];  /* flexibile member */
+  int n;
+  long n2[];  /* flexibile member */
 };
 
 struct noname_s {
@@ -82,15 +82,15 @@ test_flex_s(void) {
   printf("sizeof(fs3) = %zu\n", sizeof(fs3));
 
   /* n2[8] */
-  struct flex_s *fs64 = malloc(sizeof(struct flex_s) + sizeof(uint32_t)*8);
+  struct flex_s *fs64 = malloc(sizeof(struct flex_s) + sizeof(long)*8);
   /* n2[1] */
-  struct flex_s *fsd2 = malloc(sizeof(struct flex_s) + sizeof(uint32_t)+2);
+  struct flex_s *fsd2 = malloc(sizeof(struct flex_s) + sizeof(long)+2);
 
   for (int i = 0; i < 8; i++) {
     fs64->n2[i] = i;
   }
   for (int i = 0; i < 8; i++) {
-    printf("fs64->n2[%d] = %8i\n", i, fs64->n2[i]);
+    printf("fs64->n2[%d] = %8li\n", i, fs64->n2[i]);
   }
 
   /* head buffer overflow */
@@ -98,7 +98,7 @@ test_flex_s(void) {
     fsd2->n2[i] = i;
   }
   for (int i = 0; i < 1; i++) {
-    printf("fsd2->n2[%d] = %8i\n", i, fsd2->n2[i]);
+    printf("fsd2->n2[%d] = %8li\n", i, fsd2->n2[i]);
   }
   
   free(fs64);
