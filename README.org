@@ -1058,28 +1058,6 @@ it inside any other translation unit rather your current one. Within
 the whole program, all declarations with /external linkage/ for the
 same identifier refer to the same object.
 
-** Basic types
-	 :PROPERTIES:
-	 :CUSTOM_ID: basic_types
-	 :END:
-
-
-All C types be represented as binary numbers in memory, the way how to
-interprete those numbers is what type does.
-
-C provides the four basic /arithmetic type specifiers/ =char=, =int=,
-=float= and =double=, and the /modifiers/ =signed=, =unsigned=,
-=short= and =long=.
-
-=long= and =long int= are identical. So are =long long= and =long long
-int=. In both case, the =int= is optional.
-
-| specifier       | type            |
-|-----------------+-----------------|
-| =long long int= | =long long int= |
-| =long long=     | =long long int= |
-| =long=          | =long int=      |
-|                 |                 |
 
 *** Size type and Pointer difference types
 		:PROPERTIES:
@@ -1125,24 +1103,24 @@ struct optional_name { declaration_list; };
 struct name;
 #+END_SRC
 
+Initialization, =sizeof= and === operator ignore the flexible array
+member.
+
 Run example
 #+BEGIN_SRC c
 $ ./configure --has-lang
 $ make clean lang_struct_test
 #+END_SRC
 
-*** Incomplete type
+*** Padding
 	 :PROPERTIES:
-	 :CUSTOM_ID: struct_incomplete_type
+	 :CUSTOM_ID: struct_padding
 	 :END:
 
-An incomplete type is an object type that lacks sufficent information
-to determine the size of the object of that object, and an incomplete
-type may be completed at some point in the translation unit.
+There may be unnamed padding between any two members of a struct or
+after the last member, but not before the first member. The size of a
+struct is at least as large as the sum of the sizes of its members.
 
-- =void= cannot be completed.
-- =[]= array type of unknown size, it can be completed by a later
-  declaration that specifies the size.
 
 #+BEGIN_SRC c
 extern int a[]; /* the type of a is incomplete */
@@ -1152,6 +1130,47 @@ struct node {
   struct node *next; /* struct node is incomplete type at this point */
 } /* struct node is now complete at this point */
 #+END_SRC
+
+** Type
+	 :PROPERTIES:
+	 :CUSTOM_ID: type
+	 :END:
+
+*** Basic types
+	 :PROPERTIES:
+	 :CUSTOM_ID: basic_types
+	 :END:
+
+
+All C types be represented as binary numbers in memory, the way how to
+interprete those numbers is what type does.
+
+C provides the four basic /arithmetic type specifiers/ =char=, =int=,
+=float= and =double=, and the /modifiers/ =signed=, =unsigned=,
+=short= and =long=.
+
+=long= and =long int= are identical. So are =long long= and =long long
+int=. In both case, the =int= is optional.
+
+| specifier       | type            |
+|-----------------+-----------------|
+| =long long int= | =long long int= |
+| =long long=     | =long long int= |
+| =long=          | =long int=      |
+|                 |                 |
+
+*** Incomplete type
+	 :PROPERTIES:
+	 :CUSTOM_ID: incomplete_type
+	 :END:
+
+An incomplete type is an object type that lacks sufficent information
+to determine the size of the object of that object, and an incomplete
+type may be completed at some point in the translation unit.
+
+- =void= cannot be completed.
+- =[]= array type of unknown size, it can be completed by a later
+  declaration that specifies the size.
 
 ** typedef
 	 :PROPERTIES:

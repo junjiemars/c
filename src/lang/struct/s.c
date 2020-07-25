@@ -43,10 +43,31 @@ struct nest2_s {
   char y[16];
 };
 
+struct padding_s {
+  int a;
+  char b;
+};
+
+#if defined(GCC) || defined(CLANG)
+struct __attribute__((packed)) packed_s {
+  int a;
+  char b;
+};
+#elif defined(MSVC)
+#pragma pack(push, 1)
+struct packed_s {
+  int a;
+  char b;
+};
+#pragma pack(pop)
+#endif
+
 void test_flex_s(void);
 void test_noname_s(void);
 void test_cyclic_s(void);
 void test_nest_s(void);
+void test_padding_s(void);
+void test_packed_s(void);
 
 void
 test_flex_s(void) {
@@ -123,6 +144,22 @@ test_nest_s(void) {
   free(n1);
 }
 
+void
+test_padding_s(void) {
+  struct padding_s *p1 = malloc(sizeof(struct padding_s));
+  printf("sizeof(padding_s) = %zu\n", sizeof(struct padding_s));
+  
+  free(p1);
+}
+
+void
+test_packed_s(void) {
+  struct packed_s *p1 = malloc(sizeof(struct packed_s));
+  printf("sizeof(packed_s) = %zu\n", sizeof(struct packed_s));
+  
+  free(p1);
+}
+
 int
 main(int argc, char **argv) {
   _unused_(argc);
@@ -132,6 +169,8 @@ main(int argc, char **argv) {
   test_noname_s();
   test_cyclic_s();
   test_nest_s();
+  test_padding_s();
+  test_packed_s();
 
   return 0;
 }
