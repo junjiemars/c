@@ -19,7 +19,7 @@ typedef struct point1_s {
 /* x_t alias of int */
 /* p_t alias of pointer to int */
 /* f_t as function accept int and return pointer to int */
-typedef int x_t, *p_t, *(*fn)(int);
+typedef int x_t, *p_t, *(*fn_t)(int);
 
 p_t fn(int n) {
   x_t x = n + 10;
@@ -29,7 +29,8 @@ p_t fn(int n) {
 
 void
 test_fn(void) {
-  p_t p = fn(3);
+  fn_t f1 = fn;
+  p_t p = f1(3);
   printf("test_fn(3)        = %4i\n", *p);
 }
 
@@ -43,7 +44,7 @@ main(int argc, char *argv[]) {
   printf("sizeof(point1_t)  = %4zu\n", sizeof(point1_t));
   printf("sizeof(x_t)       = %4zu\n", sizeof(x_t));
   printf("sizeof(p_t)       = %4zu\n", sizeof(p_t));
-  printf("sizeof(f_t)       = %4zu\n", sizeof(f_t));
+  printf("sizeof(f_t)       = %4zu\n", sizeof(fn_t));
   
   test_fn();
   
