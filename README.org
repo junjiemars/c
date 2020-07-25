@@ -1117,6 +1117,12 @@ these types are defined in the =<stddef.h>= header.
 	 :CUSTOM_ID: language_typedef
 	 :END:
 
+#+BEGIN_SRC c
+typedef type_specifier declarator;
+typedef type_specifier declarator1, *declarator2, (*declarator3)(void);
+#+END_SRC
+
+
 The /typedef/ used to create an alias name for another types. As such,
 it is often used to simplify the syntax of declaring complex data
 structure consisting of /struct/ and /union/ types, but is just as
