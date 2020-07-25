@@ -1112,6 +1112,47 @@ these types are defined in the =<stddef.h>= header.
 - =l= or =L= for =long=, such as =123l=, =3.14L=
 - =f= for =float=, such as =2.718f=
 
+** struct
+	 :PROPERTIES:
+	 :CUSTOM_ID: struct
+	 :END:
+
+A =struct= is a type consisting of a sequence of members whose storage
+is allocated in order which the members were defined.
+
+#+BEGIN_SRC c
+struct optional_name { member_list; };
+struct name;
+#+END_SRC
+
+Run example
+#+BEGIN_SRC c
+$ ./configure --has-lang
+$ make clean lang_struct_test
+#+END_SRC
+
+*** Incomplete type
+	 :PROPERTIES:
+	 :CUSTOM_ID: struct_incomplete_type
+	 :END:
+
+An incomplete type is an object type that lacks sufficent information
+to determine the size of the object of that object, and an incomplete
+type may be completed at some point in the translation unit.
+
+- =void= cannot be completed.
+- =[]= array type of unknown size, it can be completed by a later
+  declaration that specifies the size.
+
+#+BEGIN_SRC c
+extern int a[]; /* the type of a is incomplete */
+char a[4];      /* the type of a is now complete */
+
+struct node {
+  struct node *next; /* struct node is incomplete type at this point */
+} /* struct node is now complete at this point */
+#+END_SRC
+
 ** typedef
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_typedef

@@ -1,63 +1,65 @@
 # ./configure --without-debug --has-lang
 lang: lang_array																\
+      lang_assert																\
       lang_duration															\
+      lang_enum																	\
       lang_env																	\
+      lang_error																\
       lang_exit																	\
       lang_fn																		\
       lang_goto																	\
       lang_jmp																	\
-      lang_assert																\
-      lang_enum																	\
-      lang_error																\
-      lang_locale																\
-      lang_main																	\
-      lang_preprocessor													\
-      lang_restrict															\
-      lang_signal																\
-      lang_stage																\
-      lang_time																	\
-      lang_type																	\
       lang_linkage															\
+      lang_locale																\
       lang_macro																\
+      lang_main																	\
       lang_math																	\
       lang_pointer															\
+      lang_preprocessor													\
       lang_random																\
+      lang_restrict															\
       lang_scope																\
+      lang_signal																\
       lang_sizeof																\
+      lang_stage																\
       lang_storage															\
       lang_string																\
+      lang_struct																\
+      lang_time																	\
+      lang_type																	\
       lang_typedef															\
       lang_typeof																\
       lang_volatile
 
 
 lang_test:  lang_array_test											\
+            lang_assert_test										\
             lang_duration_test									\
+            lang_enum_test											\
             lang_env_test												\
+            lang_error_test											\
             lang_exit_test											\
             lang_fn_test												\
             lang_goto_test											\
             lang_jmp_test												\
-            lang_assert_test										\
-            lang_enum_test											\
-            lang_error_test											\
-            lang_locale_test										\
-            lang_main_test											\
-            lang_preprocessor_test							\
-            lang_restrict_test									\
-            lang_signal_test										\
-            lang_stage_test											\
-            lang_time_test											\
-            lang_type_test											\
             lang_linkage_test										\
+            lang_locale_test										\
             lang_macro_test											\
+            lang_main_test											\
             lang_math_test											\
             lang_pointer_test										\
+            lang_preprocessor_test							\
             lang_random_test										\
+            lang_restrict_test									\
             lang_scope_test											\
+            lang_signal_test										\
             lang_sizeof_test										\
+            lang_stage_test											\
             lang_storage_test										\
             lang_string_test										\
+            lang_struct_test										\
+            lang_time_test											\
+            lang_type_test											\
             lang_typedef_test										\
             lang_typeof_test										\
             lang_volatile_test
@@ -586,6 +588,16 @@ $(lang_str_tok_binout): $(lang_root)string/tok.c
 
 $(lang_str_chr_binout): $(lang_root)string/chr.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# struct
+lang_struct_binout := $(bin_path)$(lang_prefix)_struct$(bin_ext)
+
+lang_struct: $(lang_struct_binout)
+lang_struct_test: lang_struct
+	$(lang_struct_binout)
+
+$(lang_struct_binout): $(lang_root)struct/s.c
+	$(CC) $(CFLAGS) $(cflags_sanitize) $(INC) $^ $(bin_out)$@
 
 # time
 lang_time_basic_binout := $(bin_path)$(lang_prefix)_time_basic$(bin_ext)
