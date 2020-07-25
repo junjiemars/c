@@ -1121,7 +1121,7 @@ A =struct= is a type consisting of a sequence of members whose storage
 is allocated in order which the members were defined.
 
 #+BEGIN_SRC c
-struct optional_name { member_list; };
+struct optional_name { declaration_list; };
 struct name;
 #+END_SRC
 

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 struct flex_s {
   uint16_t n;
@@ -28,9 +29,24 @@ struct cyclic_y {
   struct cyclic_x x;
 };
 
+#define _OVERLAP_                               \
+  char *base;                                   \
+  size_t len;
+
+struct nest1_s {
+  _OVERLAP_
+  uint16_t x;
+};
+
+struct nest2_s {
+  _OVERLAP_
+  char y[16];
+};
+
 void test_flex_s(void);
 void test_noname_s(void);
 void test_cyclic_s(void);
+void test_nest_s(void);
 
 void
 test_flex_s(void) {
@@ -87,6 +103,26 @@ test_cyclic_s(void) {
   printf("sizeof(y) = %4zu\n", sizeof(y));
 }
 
+void
+test_nest_s(void) {
+  struct nest1_s *n1 = malloc(sizeof(struct nest1_s));
+  printf("sizeof(nest1_s) = %4zu\n", sizeof(struct nest1_s));
+
+  n1->base = "abc";
+  n1->len = strlen(n1->base);
+
+  struct nest1_s *n11 = (struct nest1_s*)&n1->base;
+  printf("n11->base = %s, %zu\n", n11->base, n11->len);
+
+  struct nest2_s *n2 = (struct nest2_s*)n11;
+  printf("n2->base = %s, %zu\n", n2->base, n2->len);
+
+  struct nest2_s *n21 = (struct nest2_s*)&n1->base;
+  printf("n21->base = %s, %zu\n", n21->base, n21->len);
+  
+  free(n1);
+}
+
 int
 main(int argc, char **argv) {
   _unused_(argc);
@@ -95,6 +131,7 @@ main(int argc, char **argv) {
   test_flex_s();
   test_noname_s();
   test_cyclic_s();
+  test_nest_s();
 
   return 0;
 }
