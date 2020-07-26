@@ -55,6 +55,7 @@ $ make install
 Run the example under =src/lang=.
 #+BEGIN_SRC sh
 $ ./configure --has-lang
+$ make clean test
 #+END_SRC
 
 ** Preprocessor	
@@ -1041,11 +1042,11 @@ storage class specifier have /no linkage/.
 		 :CUSTOM_ID: language_linkage_internal_linkage
 		 :END:
 
-/Internal linkage/ means that the variable must be defined in your
-translation unit scope, which means it should either be defined in any
-of the included libraries, or in the same file scope. Within the
-translation unit, all declarations with /internal linkage/ for the
-same identifier refer to the same object.
+/Internal linkage/ means that the variable must be
+defined in your translation unit scope, which means it should either
+be defined in any of the included libraries, or in the same file
+scope. Within the translation unit, all declarations with /internal
+linkage/ for the same identifier refer to the same object.
 
 *** External linkage
 		 :PROPERTIES:
@@ -1057,7 +1058,6 @@ else outside the file you are working on, which means you can define
 it inside any other translation unit rather your current one. Within
 the whole program, all declarations with /external linkage/ for the
 same identifier refer to the same object.
-
 
 *** Size type and Pointer difference types
 		:PROPERTIES:
@@ -1092,7 +1092,7 @@ these types are defined in the =<stddef.h>= header.
 
 ** struct
 	 :PROPERTIES:
-	 :CUSTOM_ID: struct
+	 :CUSTOM_ID: language_struct
 	 :END:
 
 A =struct= is a type consisting of a sequence of members whose storage
@@ -1133,7 +1133,7 @@ struct node {
 
 ** union
 	 :PROPERTIES:
-	 :CUSTOM_ID: union
+	 :CUSTOM_ID: language_union
 	 :END:
 
 A union is a type consisting of a sequence of members whose storage
@@ -1146,7 +1146,7 @@ union name;
 
 ** Type
 	 :PROPERTIES:
-	 :CUSTOM_ID: type
+	 :CUSTOM_ID: language_type
 	 :END:
 
 *** Basic types
@@ -1352,6 +1352,7 @@ There has an good answer of [[http://stackoverflow.com/questions/17206568/what-i
 	 :END:
 
 - [[https://en.cppreference.com/w/c/language/history][History of C]]
+- [[https://en.cppreference.com/w/c/language/basic_concepts][Basic concepts]]
 - [[http://c-faq.com/decl/spiral.anderson.html][Clockwise/Spiral Rule]]
 - [[http://norswap.com/c_scope_duration_linkage/][C: Scope, Duration & Linkage]]
 - [[http://stackoverflow.com/documentation/c/1108/pointers#t=201702060822544818513][Pointers]]

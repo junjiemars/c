@@ -1,41 +1,50 @@
-#include <_lang_.h>
-#include <stdio.h>
+#include "_lang_.h"
+#include "lnk.h"
+#include <assert.h>
 
-/* external linkage */
-extern int g_var_x;
-extern const int g_const_x;
+/*
+ * error: duplicate symbol
+ * fn: declaration in lnk.h, definition in lnk.c
+int fn(int x) {
+  return x;
+}
+*/
 
-/* internal linkage */
-static int f_var_y = 0xaabbccdd;
-
-void
-foo(void) {
-	int b_var_z = 0xa1b2c3d4;
-	printf("b_var_z = 0x%08x\n", b_var_z);
+/* function definition with internal linkage */
+int
+fn_l(int i) {
+  return i*4;
 }
 
-
 int
-main(int argc, char *argv[]) {
+main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
-	
-	printf("\nexternal linkage\n");
-	printf("------------------\n");
-	printf("g_var_x = 0x%08x\n", g_var_x);
-	printf("g_const_x = 0x%08x\n", g_const_x);
-	
-	extern int g_var_y;
-	printf("g_var_y = 0x%08x\n", g_var_y);
 
-	g_var_y = 0x44332211;
-	printf("g_var_y = 0x%08x\n", g_var_y);
+  int val = fn(1);
+  assert(val == 0 + 0 + 3);
 
-	printf("\ninternal linkage\n");
-	printf("------------------\n");
-	printf("f_var_y = 0x%08x\n", f_var_y);
+  /* declaration with external linkage in lnk.h, definition in lnk.c */
+  state = 10;
+  val = fn(1);
+  assert(val == 10 + 0 + 3);
 
-	printf("\nno linkage\n");
-	printf("------------\n");
-	foo();
+  /* same identifier, declaration with internal linkage in lnk.c 
+   * so generate different instances.
+   */
+  int state_l = 1;
+  _unused_(state_l);
+  val = fn(1);
+  assert(val == 10 + 0 + 3);
+
+  /* MAX in lnk.h */
+  assert(MAX == 10);
+
+  /* 
+   * sum: inline function definition in lnk.h
+   val = sum(1, 2);
+   assert(val == 1+2);
+  */
+  
+  return 0;
 }
