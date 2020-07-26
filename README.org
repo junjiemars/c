@@ -1131,6 +1131,19 @@ struct node {
 } /* struct node is now complete at this point */
 #+END_SRC
 
+** union
+	 :PROPERTIES:
+	 :CUSTOM_ID: union
+	 :END:
+
+A union is a type consisting of a sequence of members whose storage
+overlaps.
+
+#+BEGIN_SRC c
+union optional_name { declaration_list; };
+union name;
+#+END_SRC
+
 ** Type
 	 :PROPERTIES:
 	 :CUSTOM_ID: type

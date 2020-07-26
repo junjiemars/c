@@ -29,6 +29,7 @@ lang: lang_array																\
       lang_type																	\
       lang_typedef															\
       lang_typeof																\
+      lang_union																\
       lang_volatile
 
 
@@ -62,6 +63,7 @@ lang_test:  lang_array_test											\
             lang_type_test											\
             lang_typedef_test										\
             lang_typeof_test										\
+            lang_union_test											\
             lang_volatile_test
 
 lang_prefix := lang
@@ -673,6 +675,16 @@ lang_typeof_test: lang_typeof
 
 $(lang_typeof_binout): $(lang_root)typeof/to.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# union
+lang_union_binout := $(bin_path)$(lang_prefix)_union$(bin_ext)
+
+lang_union: $(lang_union_binout)
+lang_union_test: lang_union
+	$(lang_union_binout)
+
+$(lang_union_binout): $(lang_root)union/u.c
+	$(CC) $(CFLAGS) $(cflags_sanitize) $(INC) $^ $(bin_out)$@
 
 # volatile
 volatile_basic_binout := $(bin_path)$(lang_prefix)_volatile_basic$(bin_ext)
