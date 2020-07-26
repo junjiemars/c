@@ -4,12 +4,26 @@
 #include <stdint.h>
 #include <string.h>
 
-struct flex_s {
+struct flex1_s {
   int n;
   long n2[];  /* flexibile member */
 };
 
-struct noname_s {
+#if defined(GCC) || defined(CLANG)
+struct __attribute__((packed)) flex2_s {
+  int n;
+  long n2[]; /* flexibile member */
+};
+#elif defined(MSVC)
+#pragma packed(push, 1);
+struct flex2_s {
+  int n;
+  long n2[]; /* flexibile member */
+};
+#pragma packed(pop)
+#endif
+
+struct noname1_s {
   uint16_t n;
   struct { /* anonymous struct */
     uint16_t a;
@@ -17,17 +31,67 @@ struct noname_s {
   } noname;
 };
 
-struct cyclic_y;
 
-struct cyclic_x {
-  uint16_t nx;
-  struct cyclic_y *y; /* if not pointer type that is incomplete type */
+#if defined(GCC) || defined(CLANG)
+struct __attribute__((packed)) noname2_s {
+  uint16_t n;
+  struct { /* anonymous struct */
+    uint16_t a;
+    uint16_t b;
+  } noname;
+};
+#elif defined(MSVC)
+#pragma packed(push, 1)
+struct noname2_s {
+  uint16_t n;
+  struct { /* anonymous struct */
+    uint16_t a;
+    uint16_t b;
+  } noname;
+};
+#pragma packed(pop)
+#endif
+
+struct cyclic1_y;
+
+struct cyclic1_x {
+  int nx;
+  struct cyclic1_y *y; /* if not pointer type that is incomplete type */
 };
 
-struct cyclic_y {
-  uint16_t ny;
-  struct cyclic_x x;
+struct cyclic1_y {
+  int ny;
+  struct cyclic1_x x;
 };
+
+
+#if defined(GCC) || defined(CLANG)
+struct cyclic2_y;
+
+struct __attribute__((packed)) cyclic2_x {
+  int nx;
+  struct cyclic2_y *y; /* if not pointer type that is incomplete type */
+};
+
+struct __attribute__((packed)) cyclic2_y {
+  int ny;
+  struct cyclic2_x x;
+};
+#elif defined(MSVC)
+#pragma packed(push, 1)
+struct cyclic2_y;
+
+struct cyclic2_x {
+  int nx;
+  struct cyclic2_y *y; /* if not pointer type that is incomplete type */
+};
+
+struct cyclic2_y {
+  int ny;
+  struct cyclic2_x x;
+};
+#pragma packed(pop)
+#endif
 
 #define _OVERLAP_                               \
   char *base;                                   \
@@ -62,29 +126,32 @@ struct packed_s {
 #pragma pack(pop)
 #endif
 
-void test_flex_s(void);
-void test_noname_s(void);
-void test_cyclic_s(void);
+void test_flex1_s(void);
+void test_flex2_s(void);
+void test_noname1_s(void);
+void test_noname2_s(void);
+void test_cyclic1_s(void);
+void test_cyclic2_s(void);
 void test_nest_s(void);
 void test_padding_s(void);
 void test_packed_s(void);
 
 void
-test_flex_s(void) {
-  struct flex_s fs1 = { 0 };
+test_flex1_s(void) {
+  struct flex1_s fs1 = { 0 };
   printf("sizeof(fs1) = %zu\n", sizeof(fs1));
-  /* fs1.n[0] = 0x1; */
+  /* fs1.n2[0] = 0x1; */
   /* fs1.n2 flexibile member, no space had been allocated */
 
   /* initialization of flexible array member is not allowed */
-  /* struct flex_s fs2 = { .n = 1, .n2= { 0x11, 0x22 } }; */
-  struct flex_s fs3 = { .n = 1 };
+  /* struct flex1_s fs2 = { .n = 1, .n2= { 0x11, 0x22 } }; */
+  struct flex1_s fs3 = { .n = 1 };
   printf("sizeof(fs3) = %zu\n", sizeof(fs3));
 
   /* n2[8] */
-  struct flex_s *fs64 = malloc(sizeof(struct flex_s) + sizeof(long)*8);
+  struct flex1_s *fs64 = malloc(sizeof(struct flex1_s) + sizeof(long)*8);
   /* n2[1] */
-  struct flex_s *fsd2 = malloc(sizeof(struct flex_s) + sizeof(long)+2);
+  struct flex1_s *fsd2 = malloc(sizeof(struct flex1_s) + sizeof(long)+2);
 
   for (int i = 0; i < 8; i++) {
     fs64->n2[i] = i;
@@ -106,8 +173,14 @@ test_flex_s(void) {
 }
 
 void
-test_noname_s(void) {
-  struct noname_s nn1 = {0};
+test_flex2_s(void) {
+  struct flex2_s fs1 = {0};
+  printf("sizeof(fs1) = %4zu\n", sizeof(fs1));
+}
+
+void
+test_noname1_s(void) {
+  struct noname1_s nn1 = {0};
   printf("sizeof(nn1) = %4zu\n", sizeof(nn1));
 
   nn1.n = 0x1;
@@ -116,11 +189,31 @@ test_noname_s(void) {
 }
 
 void
-test_cyclic_s(void) {
-  struct cyclic_x x = { 0 };
+test_noname2_s(void) {
+  struct noname2_s nn1 = {0};
+  printf("sizeof(nn1) = %4zu\n", sizeof(nn1));
+
+  nn1.n = 0x1;
+  nn1.noname.a = 0x2;
+  nn1.noname.b = 0x3;
+}
+
+void
+test_cyclic1_s(void) {
+  struct cyclic1_x x = { 0 };
+  struct cyclic1_y y = { 0 };
+  printf("sizeof(x) = %4zu\n", sizeof(x));
+  printf("sizeof(y) = %4zu\n", sizeof(y));
+}
+
+void
+test_cyclic2_s(void) {
+  struct cyclic2_x x = { 0 };
   printf("sizeof(x) = %4zu\n", sizeof(x));
 
-  struct cyclic_y y = { 0 };
+  struct cyclic2_y y = { 0 };
+  y.ny = 0x11223344;
+  y.x.nx = 0xaabbccdd;
   printf("sizeof(y) = %4zu\n", sizeof(y));
 }
 
@@ -165,9 +258,12 @@ main(int argc, char **argv) {
   _unused_(argc);
   _unused_(argv);
   
-  test_flex_s();
-  test_noname_s();
-  test_cyclic_s();
+  test_flex1_s();
+  test_flex2_s();
+  test_noname1_s();
+  test_noname2_s();
+  test_cyclic1_s();
+  test_cyclic2_s();
   test_nest_s();
   test_padding_s();
   test_packed_s();
