@@ -3,7 +3,7 @@
 /* definition with internal linkage */
 static int
 fn_l(int i) {
-  return i*3;
+  return i * size;
 }
 
 /* definition with internal linkage */

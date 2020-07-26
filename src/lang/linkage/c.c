@@ -29,8 +29,11 @@ main(int argc, char **argv) {
   val = fn(1);
   assert(val == 10 + 0 + 3);
 
+  /* size: read-only, defined in lnk.h with internal linkage */
+  assert(size == 3);
+
   /* same identifier, declaration with internal linkage in lnk.c 
-   * so generate different instances.
+   * so compiler generates different instances.
    */
   int state_l = 1;
   _unused_(state_l);
