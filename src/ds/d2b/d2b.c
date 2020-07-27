@@ -22,6 +22,8 @@ test_d2b(int n, int g) {
     g1++;
   };
   putchar('\n');
+  
+  stack_free(s);
 }
 
 int

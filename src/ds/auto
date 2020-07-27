@@ -1,0 +1,57 @@
+# -*- mode:sh -*- vim:ft=sh
+#
+
+
+include="stdint.h" . ${NORE_ROOT}/auto/include
+include="inttypes.h" . ${NORE_ROOT}/auto/include
+
+# check compiler features
+#----------------------------------------
+case "$CC_NAME" in
+   clang)
+     nm_feature="$CC_NAME -fsanitize=address"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-fsanitize=address'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+
+     if [ yes = $nm_found ]; then
+       flag=CFLAGS op="+=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     ;;
+   gcc)
+     nm_feature="$CC_NAME -fsanitize=address"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-fsanitize=address'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+
+     if [ yes = $nm_found ]; then
+       flag=CFLAGS op="+=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+
+     nm_feature="$CC_NAME -fsanitize=leak"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-fsanitize=leak'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+
+     if [ yes = $nm_found ]; then
+       flag=CFLAGS op="+=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     ;;		 
+   msvc)
+     ;;
+esac
