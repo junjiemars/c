@@ -2,9 +2,6 @@
 #
 
 
-include="stdint.h" . ${NORE_ROOT}/auto/include
-include="inttypes.h" . ${NORE_ROOT}/auto/include
-
 # check compiler features
 #----------------------------------------
 case "$CC_NAME" in
