@@ -866,7 +866,7 @@ are defined inside a block and are accessed with high frequency.
 		:END:
 
 The /static storge class/ serves different purposes, depending on the
-location of the declaration in the file. >=C99, used in function
+location of the declaration in the file. =>=C99=, used in function
 parameters to denote an array is expected to have a constant minimum
 number of elements and a non-null parameter.
 

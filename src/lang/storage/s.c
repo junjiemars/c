@@ -1,5 +1,6 @@
 #include <_lang_.h>
 #include <stdio.h>
+#include <assert.h>
 
 
 #if MSVC
@@ -7,6 +8,8 @@
 # pragma warning(disable : 4456)
 #endif
 
+static void static_storage_class(void);
+static int static_storage_class_raw(int);
 
 void
 automatic_storage_class(void) {
@@ -59,10 +62,21 @@ void
 static_storage_class(void) {
 	static int i;
 	{
+    static int x;
+    x = i;
 		static int i = 0x11223344;
-		printf("inner i = 0x%08x\n", i++);
+    assert((0x11223344 + x) == i);
+    i++;
 	}
-	printf("outer i = 0x%08x\n", i++);
+  i++;
+}
+
+int
+static_storage_class_raw(int x) {
+  static int v;
+  assert(v == 0);
+  v += x;
+  return v;
 }
 
 
@@ -92,6 +106,8 @@ main(int argc, char *argv[]) {
 	static_storage_class();
 	static_storage_class();
 	static_storage_class();
+  
+  static_storage_class_raw(argc);
 
 	printf("\nexternal storage class\n");
 	printf("------------------------\n");
