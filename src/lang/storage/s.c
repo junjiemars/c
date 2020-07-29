@@ -8,8 +8,13 @@
 # pragma warning(disable : 4456)
 #endif
 
-static void static_storage_class(void);
-static int static_storage_class_raw(int);
+static int f_int;
+
+void automatic_storage_class(void);
+static void static_storage_class_fn(void);
+static int static_storage_class_fn_raw(int);
+void array_decay(char *);
+void external_storage_class(void);
 
 void
 automatic_storage_class(void) {
@@ -17,23 +22,23 @@ automatic_storage_class(void) {
 #if GCC
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wuninitialized"
-	printf("x = 0x%08x\n", x);
+  assert(x == x);
 # pragma GCC diagnostic pop
 #else
-	_unused_(x);
+  _unused_(x);
 #endif
 
 	auto int i = 0x1122;
 	{
-		auto int i = 0x11223344;
-		printf("inner i = 0x%08x\n", i++);
+		auto int i = 0x3344;
+    assert(0x3344 == i);
 	}
-	printf("outer i = 0x%08x\n", i++);
+  assert(0x1122 == i);
 }
 
 
 void
-decay(char *a) {
+array_decay(char *a) {
 	printf("a[0] = 0x%02x\n", a[0]);
 }
 
@@ -52,14 +57,14 @@ register_storage_class(register int x) {
 	printf("a[0/%zu] = 0x%02x\n", sizeof(a)/sizeof(a[0]), a[0]);
 # if CLANG
 	/* GCC error: address of register variable ‘a’ requested */
-	decay(a);
+	array_decay(a);
 # endif
 #endif
 }
 
 
 void
-static_storage_class(void) {
+static_storage_class_fn(void) {
 	static int i;
 	{
     static int x;
@@ -68,13 +73,15 @@ static_storage_class(void) {
     assert((0x11223344 + x) == i);
     i++;
 	}
+  assert((0 + i) == f_int);
+  f_int++;
   i++;
 }
 
 int
-static_storage_class_raw(int x) {
+static_storage_class_fn_raw(int x) {
   static int v;
-  assert(v == 0);
+  assert(0 == v);
   v += x;
   return v;
 }
@@ -103,11 +110,10 @@ main(int argc, char *argv[]) {
 
 	printf("\nstatic storage class\n");
 	printf("---------------------\n");
-	static_storage_class();
-	static_storage_class();
-	static_storage_class();
-  
-  static_storage_class_raw(argc);
+	static_storage_class_fn();
+	static_storage_class_fn();
+	static_storage_class_fn();
+  static_storage_class_fn_raw(argc);
 
 	printf("\nexternal storage class\n");
 	printf("------------------------\n");

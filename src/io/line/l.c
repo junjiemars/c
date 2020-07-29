@@ -20,7 +20,10 @@ ssize_t
 self_getline(char ** restrict linep,
 						 size_t * restrict linecapp,
 						 FILE * restrict stream) {
-	if (0 == *linecapp) {
+  if (0 == linep) {
+    return EOF;
+  }
+	if (0 == *linep) {
 		*linecapp = 8;
 		*linep = malloc(*linecapp);
 		if (0 == *linep) {
@@ -58,6 +61,9 @@ self_getdelim(char ** restrict linep,
 							size_t * restrict linecapp,
 							int delimiter,
 							FILE * restrict stream) {
+  if (0 == linep) {
+    return EOF;
+  }
 	if (0 == *linep) {
 		*linecapp = 8;
 		*linep = malloc(*linecapp);
@@ -99,7 +105,8 @@ test_getline(const char *filename) {
 		return;
 	}
 
-	char **line = 0;
+  char *block = 0;
+	char **line = &block;
 	size_t linecap = 0;
 	ssize_t linelen = 0;
 	
@@ -107,14 +114,14 @@ test_getline(const char *filename) {
 		fwrite(*line, linelen, 1, stdout);
 	}
 	
-	if (!feof(file)) {
+	if (ferror(file)) {
 		perror(filename);
 	}
-
+	fclose(file);
+  
   if (line) {
     free(*line);
   }
-	fclose(file);
 }
 
 void
@@ -134,13 +141,14 @@ test_getline1(const char *filename) {
 		fwrite(*line, linelen, 1, stdout);
 	}
 	
-	if (!feof(file)) {
+	if (ferror(file)) {
 		perror(filename);
 	}
+  fclose(file);
+
 	if (line) {
 		free(*line);
 	}
-	fclose(file);
 }
 
 void
@@ -151,7 +159,8 @@ test_getline2(const char *filename) {
 		return;
 	}
 
-	char **line = 0;
+  char *block = 0;
+	char **line = &block;
 	size_t linecap = 64;
 	ssize_t linelen = 0;
 	
@@ -159,13 +168,14 @@ test_getline2(const char *filename) {
 		fwrite(*line, linelen, 1, stdout);
 	}
 	
-	if (!feof(file)) {
+	if (ferror(file)) {
 		perror(filename);
 	}
-	if (line) {
+  fclose(file);
+	
+  if (line) {
 		free(*line);
 	}
-	fclose(file);
 }
 
 
@@ -186,14 +196,14 @@ test_self_getline(const char *filename) {
 		fwrite(*line, linelen, 1, stdout);
 	}
 	
-	if (!feof(file)) {
+	if (ferror(file)) {
 		perror(filename);
 	}
+	fclose(file);
 
   if (line) {
     free(*line);
   }
-	fclose(file);
 }
 
 
@@ -206,17 +216,23 @@ test_getdelim(const char *filename) {
 		return;
 	}
 
-	char **line = 0;
+  char *block = 0;
+	char **line = &block;
 	size_t linecap = 0;
 	ssize_t linelen;
 	
 	while (0 < (linelen = getdelim(line, &linecap, '\n', file))) {
 		fwrite(*line, linelen, 1, stdout);
 	}
+
+  if (ferror(file)) {
+    perror(filename);
+  }
+  fclose(file);
+  
 	if (line) {
 		free(*line);
 	}
-	fclose(file);
 }
 #endif
 
@@ -237,38 +253,44 @@ test_self_getdelim(const char *filename) {
 		fwrite(*line, linelen, 1, stdout);
 	}
 
+  if (ferror(file)) {
+    perror(filename);
+  }
+  fclose(file);
+
   if (line) {
     free(*line);
   }
-	fclose(file);	
 }
 
 int
 main(int argc, char **argv) {
-	_unused_(argc);
-	_unused_(argv);
 
-	if (argc > 1) {
-		char *f = malloc(strlen(argv[1]) + 1);
-		if (0 == f) {
-			perror(argv[1]);
-			return 0;
-		}
-		strcpy(f, argv[1]);
+  if (argc < 2) {
+    printf("where the file located?\n");
+    return 0;
+  }
+
+  char *f = malloc(strlen(argv[1]) + 1);
+  if (0 == f) {
+    perror(argv[1]);
+    return 0;
+  }
+  strcpy(f, argv[1]);
 		
-		test_getline(f);
-		test_getline1(f);
-		test_getline2(f);
-		test_self_getline(f);
-		fprintf(stdout, "##########\n");
+  test_getline(f);
+  test_getline1(f);
+  test_getline2(f);
+  test_self_getline(f);
+  fprintf(stdout, "##########\n");
 		
 #if !(MSVC)
-		test_getdelim(f);
-		fprintf(stdout, "##########\n");
+  test_getdelim(f);
+  fprintf(stdout, "##########\n");
 #endif
 		
-		test_self_getdelim(f);
- 		free(f);
-	}
+  test_self_getdelim(f);
+  free(f);
+
 	return 0;
 }
