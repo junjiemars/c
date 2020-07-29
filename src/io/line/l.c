@@ -4,9 +4,11 @@
 #  pragma warning(disable: 4244)
 #  include <BaseTsd.h>
 typedef SSIZE_T ssize_t;
-#elif GCC
-#  ifndef _GNU_SOURCE
-#    define _GNU_SOURCE 1
+#endif
+
+#if (LINUX)
+#  ifndef __USE_GNU
+#    define __USE_GNU 1
 #  endif
 #endif
 
