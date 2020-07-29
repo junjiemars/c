@@ -39,6 +39,7 @@ self_getline(char ** restrict linep,
 			if (0 == p1) {
 				return EOF;
 			}
+      *linep = p1;
 			p = p1 + linelen;
 		}
 		*p++ = c;
@@ -76,6 +77,7 @@ self_getdelim(char ** restrict linep,
 			if (0 == *p1) {
 				return EOF;
 			}
+      *linep = p1;
 			p = p1 + linelen;
 		}
 		*p++ = c;
@@ -97,20 +99,21 @@ test_getline(const char *filename) {
 		return;
 	}
 
-	char *line = 0;
+	char **line = 0;
 	size_t linecap = 0;
 	ssize_t linelen = 0;
 	
-	while (0 < (linelen = getline(&line, &linecap, file))) {
-		fwrite(line, linelen, 1, stdout);
+	while (0 < (linelen = getline(line, &linecap, file))) {
+		fwrite(*line, linelen, 1, stdout);
 	}
 	
 	if (!feof(file)) {
 		perror(filename);
 	}
-	if (line) {
-		free(line);
-	}
+
+  if (line) {
+    free(*line);
+  }
 	fclose(file);
 }
 
@@ -122,19 +125,20 @@ test_getline1(const char *filename) {
 		return;
 	}
 
-	char *line = malloc(8-1);
+	char *block = malloc(8-1);
+  char **line = &block;
 	size_t linecap = 0;
 	ssize_t linelen = 0;
 	
-	while (0 < (linelen = getline(&line, &linecap, file))) {
-		fwrite(line, linelen, 1, stdout);
+	while (0 < (linelen = getline(line, &linecap, file))) {
+		fwrite(*line, linelen, 1, stdout);
 	}
 	
 	if (!feof(file)) {
 		perror(filename);
 	}
 	if (line) {
-		free(line);
+		free(*line);
 	}
 	fclose(file);
 }
@@ -147,19 +151,19 @@ test_getline2(const char *filename) {
 		return;
 	}
 
-	char *line = 0;
+	char **line = 0;
 	size_t linecap = 64;
 	ssize_t linelen = 0;
 	
-	while (0 < (linelen = getline(&line, &linecap, file))) {
-		fwrite(line, linelen, 1, stdout);
+	while (0 < (linelen = getline(line, &linecap, file))) {
+		fwrite(*line, linelen, 1, stdout);
 	}
 	
 	if (!feof(file)) {
 		perror(filename);
 	}
 	if (line) {
-		free(line);
+		free(*line);
 	}
 	fclose(file);
 }
@@ -173,20 +177,22 @@ test_self_getline(const char *filename) {
 		return;
 	}
 
-	char *line = malloc(8-1);
+	char *block = malloc(8-1);
+  char **line = &block;
 	size_t linecap = 8-1;
 	ssize_t linelen = 0;
 	
-	while (0 < (linelen = self_getline(&line, &linecap, file))) {
-		fwrite(line, linelen, 1, stdout);
+	while (0 < (linelen = self_getline(line, &linecap, file))) {
+		fwrite(*line, linelen, 1, stdout);
 	}
 	
 	if (!feof(file)) {
 		perror(filename);
 	}
-	if (line) {
-		free(line);
-	}
+
+  if (line) {
+    free(*line);
+  }
 	fclose(file);
 }
 
@@ -200,15 +206,15 @@ test_getdelim(const char *filename) {
 		return;
 	}
 
-	char *line = 0;
+	char **line = 0;
 	size_t linecap = 0;
 	ssize_t linelen;
 	
-	while (0 < (linelen = getdelim(&line, &linecap, '\n', file))) {
-		fwrite(line, linelen, 1, stdout);
+	while (0 < (linelen = getdelim(line, &linecap, '\n', file))) {
+		fwrite(*line, linelen, 1, stdout);
 	}
 	if (line) {
-		free(line);
+		free(*line);
 	}
 	fclose(file);
 }
@@ -222,16 +228,18 @@ test_self_getdelim(const char *filename) {
 		return;
 	}
 
-	char *line = 0;
+	char *block = 0;
+  char **line = &block;
 	size_t linecap = 0;
 	ssize_t linelen;
 	
-	while (0 < (linelen = self_getdelim(&line, &linecap, '\n', file))) {
-		fwrite(line, linelen, 1, stdout);
+	while (0 < (linelen = self_getdelim(line, &linecap, '\n', file))) {
+		fwrite(*line, linelen, 1, stdout);
 	}
-	if (line) {
-		free(line);
-	}
+
+  if (line) {
+    free(*line);
+  }
 	fclose(file);	
 }
 
