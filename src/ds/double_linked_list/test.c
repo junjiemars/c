@@ -63,6 +63,7 @@ test_append() {
 	list* lst = list_new(malloc(sizeof(list)));
 
 	node *n;
+  _unused_(n);
 
 	char *s1 = malloc(64*sizeof(char));
 	assert(s1);
@@ -87,6 +88,7 @@ test_push() {
 	assert(lst);
 
 	node *n;
+  _unused_(n);
 
 	char *s1 = malloc(64*sizeof(char));
 	assert(s1);
@@ -112,6 +114,8 @@ test_remove_val() {
 	assert(lst);
 
 	node *a, *n;
+  _unused_(a);
+  _unused_(n);
 	
 	n = list_remove_val(lst, 0, cmp_str_node);
 	assert(0 == n);
@@ -149,6 +153,7 @@ test_remove_next() {
 	char *s1 = malloc(64*sizeof(char));
 	strcpy(s1, "Apple");
 	node *n1 = list_append(lst, s1, new_node);
+  _unused_(n1);
 	assert(n1);
 
 	char *s2 = malloc(64*sizeof(char));
@@ -186,16 +191,19 @@ test_remove_tail() {
 	char *s1 = malloc(64*sizeof(char));
 	strcpy(s1, "Apple");
 	node *n1 = list_append(lst, s1, new_node);
+  _unused_(n1);
 	assert(n1);
 
 	char *s2 = malloc(64*sizeof(char));
 	strcpy(s2, "Bear");
 	node *n2 = list_append(lst, s2, new_node);
+  _unused_(n2);
 	assert(n2);
 
 	char *s3 = malloc(64*sizeof(char));
 	strcpy(s3, "Code");
 	node *n3 = list_append(lst, s3, new_node);
+  _unused_(n3);
 	assert(n3);
 	assert(lst->tail == n3);
 
@@ -223,6 +231,7 @@ test_find() {
 	list_append(lst, i2, new_node);
 
 	node *node = list_find(lst, i1, cmp_int_node);
+  _unused_(node);
 	assert(node);
 
 	list_free(lst, free_node);

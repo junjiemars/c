@@ -63,12 +63,15 @@ test_static_str_list() {
   list_append(head, "Duck", new_node);
 
   node_s *nil = list_find(0, "Bee", cmp_str_node);
+  _unused_(nil);
   assert(0 == nil);
 
   node_s *tail = list_find(head, 0, cmp_str_node);
+  _unused_(tail);
   assert(0 == tail);
   
   node_s *bee = list_find(head, "Bee", cmp_str_node);
+  _unused_(bee);
   assert(0 == strcmp(bee->val, "Bee"));
   list_iterate(head, iter_str_node);
 
@@ -100,12 +103,15 @@ test_dynamic_str_list() {
   list_append(head, strcpy(duck, "Duck"), new_node);
 
   node_s *nil = list_find(0, bee, cmp_str_node);
+  _unused_(nil);
   assert(0 == nil);
 
   node_s *tail = list_find(head, 0, cmp_str_node);
+  _unused_(tail);
   assert(0 == tail);
   
   node_s *bee_node = list_find(head, bee, cmp_str_node);
+  _unused_(bee_node);
   assert(0 == strcmp(bee_node->val, bee));
 
   list_delete(&head, bee, cmp_str_node, free_alloc_node);
@@ -128,6 +134,7 @@ test_int_list() {
   int *two = malloc(sizeof(int));
   *two = 2;
   node_s *n = list_append(head, two, new_node);
+  _unused_(n);
 	assert((0 != n) && (2 == *(int*)(n->val)));
 	
   int *three = malloc(sizeof(int));

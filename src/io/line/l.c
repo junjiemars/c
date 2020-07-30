@@ -286,7 +286,7 @@ main(int argc, char **argv) {
   strcpy(f, argv[1]);
 		
   test_getline(f);
-  /* test_getline1(f); */
+  test_getline1(f);
   test_getline2(f);
   test_self_getline(f);
   fprintf(stdout, "##########\n");

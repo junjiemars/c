@@ -5,6 +5,8 @@
 
 ds_prefix := ds
 INC += -I$(ds_root)
+CFLAGS += $(if $(strip $(nm_build_opt)),,$(cflags_sanitize))
+
 
 ds: double_linked_list													\
 		single_linked_list													\
