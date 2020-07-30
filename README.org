@@ -2321,6 +2321,9 @@ table in a executable.
 *** =valgrind=
 *** =sanitize=
 
+**** References
+- [[https://clang.llvm.org/docs/AddressSanitizer.html][Clang: AddressSanitizer]]
+
 ** Debugger
 	 :PROPERTIES:
 	 :CUSTOM_ID: debugger
