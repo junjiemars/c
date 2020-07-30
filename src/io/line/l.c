@@ -16,6 +16,15 @@ typedef SSIZE_T ssize_t;
 #include <stdlib.h>
 #include <string.h>
 
+ssize_t self_getline(char**, size_t*, FILE*);
+ssize_t self_getdelim(char**, size_t*, int, FILE*);
+void test_getline(const char*);
+void test_getline1(const char*);
+void test_getline2(const char*);
+void test_self_getdelim(const char*);
+void test_self_getline(const char*);
+
+
 ssize_t
 self_getline(char ** restrict linep,
 						 size_t * restrict linecapp,
@@ -146,9 +155,7 @@ test_getline1(const char *filename) {
 	}
   fclose(file);
 
-	if (line) {
-		free(*line);
-	}
+  free(*line);
 }
 
 void
@@ -279,13 +286,13 @@ main(int argc, char **argv) {
   strcpy(f, argv[1]);
 		
   test_getline(f);
-  test_getline1(f);
+  /* test_getline1(f); */
   test_getline2(f);
   test_self_getline(f);
   fprintf(stdout, "##########\n");
 		
 #if !(MSVC)
-  test_getdelim(f);
+  /* test_getdelim(f); */
   fprintf(stdout, "##########\n");
 #endif
 		

@@ -38,6 +38,7 @@ INC += -I$(root)posix
 getopt_c := $(root)posix/getopt.c
 endif
 
+CFLAGS += $(if $(strip $(nm_build_opt)),,$(cflags_sanitize))
 
 # basic I/O
 io_basic_binout := $(bin_path)$(io_prefix)_basic$(bin_ext)

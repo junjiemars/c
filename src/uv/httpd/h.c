@@ -54,7 +54,7 @@ void on_alloc(uv_handle_t*, size_t, uv_buf_t*);
 void on_read(uv_stream_t*, ssize_t, const uv_buf_t*);
 void on_write(uv_write_t*, int);
 
-void cgi_exe(uv_tcp_t*);
+void spawn_cgi_proc(uv_tcp_t*);
 void on_cgi_close(uv_process_t*, int64_t, int);
 
 int on_message_begin(http_parser*);
@@ -143,7 +143,7 @@ on_read(uv_stream_t* handle, ssize_t nread, const uv_buf_t* buf) {
     LOG("!panic, parse error: %s\n", "xxx");
     goto close_;
   }
-  /* cgi_exe((uv_tcp_t*) handle); */
+  /* spawn_cgi_proc((uv_tcp_t*) handle); */
   /* char *s1 = "HTTP/2 200 OK \r\n" */
   /*   "content-type: text/html; charset=utf-8 \r\n" */
   /*   "Accept-Ranges: bytes \r\n\r\n" */
@@ -201,7 +201,7 @@ on_cgi_close(uv_process_t *req, int64_t exit_status, int term_signal) {
   uv_close((uv_handle_t*) req, 0);
 }
 void
-cgi_exe(uv_tcp_t *client) {
+spawn_cgi_proc(uv_tcp_t *client) {
   char *args[2];
   args[0] = "./cgi.c";
   args[1] = 0;
