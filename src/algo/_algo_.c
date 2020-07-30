@@ -1,4 +1,4 @@
-#include <_algo_.h>
+#include "_algo_.h"
 #include <string.h>
 
 void
@@ -36,6 +36,7 @@ void
 test_comp_int(void) {
 	int i1 = 0x1122, i2 = 0x3344;
 	int cmp = comp_int((void*)&i1, (void*)&i2);
+  _unused_(cmp);
 	assert(cmp < 0 && "comp_int(0x1122, 0x3344) should < 0");
 	cmp = comp_int((void*)&i1, (void*)&i1);
 	assert(cmp == 0 && "comp_int(0x1122, 0x1122) should == 0");
@@ -50,6 +51,7 @@ test_comp_str(void) {
 	assert(0 == comp_str(ss, ss));
 	assert(0 != comp_str(&ss[0], &ss[1]));
 	char *s1 = ss[0]+3;
+  _unused_(s1);
 	assert(0 == comp_str(&s1, &ss[1]));
 	printf("test comp_str fn ... ok\n");
 }

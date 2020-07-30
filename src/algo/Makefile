@@ -1,3 +1,13 @@
+#
+# ./configure --has-algo
+# make clean test
+#
+
+algo_prefix := algo
+INC += -I$(algo_root)
+
+CFLAGS += $(if $(strip $(nm_build_opt)),,$(cflags_sanitize))
+
 algo: _algo_ \
 			algo_duff_device \
 			algo_dynamic_array \
@@ -28,8 +38,6 @@ algo_test: _algo__test \
 					 algo_strlen_utf8_test \
 					 algo_strscpy_test
 
-algo_prefix := algo
-INC += -I$(algo_root)
 
 # _algo
 _algo__binout := $(bin_path)$(algo_prefix)_algo_$(bin_ext)
