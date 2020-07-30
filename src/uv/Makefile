@@ -17,7 +17,7 @@ uv_prefix := uv
 
 INC += -I$(uv_root)
 CFLAGS += $(shell pkg-config --cflags libuv)
-LDFLAGS += $(shell pkg-config --libs libuv)
+LDLIBS += $(shell pkg-config --libs libuv)
 
 ifeq ($(CC_NAME), msvc)
 INC += -I$(root)posix
@@ -32,7 +32,7 @@ uv_dns_test: uv_dns
 	$(dns_binout) "www.bing.com"
 
 $(dns_binout): $(uv_root)dns/d1.c
-	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@ $(LDFLAGS)
+	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@ $(LDLIBS)
 
 # neti
 neti_binout := $(bin_path)$(uv_prefix)_neti$(bin_ext)
@@ -42,7 +42,7 @@ uv_neti_test: uv_neti
 	$(neti_binout)
 
 $(neti_binout): $(uv_root)neti/neti.c
-	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@ $(LDFLAGS)
+	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@ $(LDLIBS)
 
 # parser
 uv_parser_objout := $(lib_path)$(uv_prefix)_parser$(obj_ext)
@@ -67,4 +67,4 @@ uv_httpd_test: uv_httpd $(uv_root)httpd/cgi.c
 	$(uv_httpd_binout) -H
 
 $(uv_httpd_binout): $(uv_root)httpd/h.c $(uv_parser_objout) $(getopt_c)
-	$(CC) $(INC) $(CFLAGS) $? $(bin_out)$@ $(LDFLAGS)
+	$(CC) $(INC) $(CFLAGS) $? $(bin_out)$@ $(LDLIBS)
