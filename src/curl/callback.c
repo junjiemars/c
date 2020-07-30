@@ -36,8 +36,7 @@ test_callback(const char *outfile) {
   CURLcode code = 0;
   char *errbuf = 0;
   FILE *out = 0;
-  memory_s m;
-  memset(&m, 0, sizeof(m));
+  memory_s m = { .response = 0, .size = 0 };
   
   curl = curl_easy_init();
   if (!curl) {
