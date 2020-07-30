@@ -1,6 +1,8 @@
-#include <_curl_.h>
+#include "_curl_.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+void test_write(const char *);
 
 void
 test_write(const char *outfile) {
@@ -11,7 +13,7 @@ test_write(const char *outfile) {
   
   curl = curl_easy_init();
   if (!curl) {
-    fprintf(stderr, "!panic, init failed\n");
+    LOG("!panic, init failed\n");
     return;
   }
 
@@ -23,13 +25,13 @@ test_write(const char *outfile) {
 
   code = curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);
   if (code) {
-    fprintf(stderr, "setopt CURLOPT_ERRORBUFFER failed\n");
+    LOG("!panic, setopt CURLOPT_ERRORBUFFER failed\n");
     goto clean_exit;
   }
   
   code = curl_easy_setopt(curl, CURLOPT_URL, "https://curl.haxx.se");
   if (code) {
-    fprintf(stderr, "!panic, setopt CURLOPT_URL failed\n");
+    LOG("!panic, setopt CURLOPT_URL failed\n");
     goto clean_exit;
   }
   
@@ -41,13 +43,14 @@ test_write(const char *outfile) {
 
   code = curl_easy_setopt(curl, CURLOPT_WRITEDATA, out);
   if (code) {
-    fprintf(stderr, "!panic, setopt CURLOPT_WRITEFUNCTION failed\n");
+    LOG("!panic, setopt CURLOPT_WRITEFUNCTION failed\n");
     goto clean_exit;
   }
 
   code = curl_easy_perform(curl);
   if (code) {
-    fprintf(stderr, "%s\n", errbuf);
+    LOG("%s\n", errbuf);
+    goto clean_exit;
   }
 
  clean_exit:
@@ -61,7 +64,7 @@ test_write(const char *outfile) {
 int
 main(int argc, char **argv) {
   if (argc < 2) {
-    fprintf(stderr, "where the output file located\n");
+    LOG("where the output file located\n");
     return 0;
   }
   

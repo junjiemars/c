@@ -1,4 +1,4 @@
-#include <_curl_.h>
+#include "_curl_.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,14 +8,17 @@ typedef struct memory_s {
   size_t size;
 } memory_s;
 
-static size_t
+static size_t on_write(char *, size_t, size_t, void *);
+static void test_callback(const char *);
+
+size_t
 on_write(char *ptr, size_t size, size_t nitems, void *userdata) {
   size_t realsize = size * nitems;
-  memory_s *m = (memory_s*)userdata;
+  memory_s *m = (memory_s*) userdata;
 
   char *p = realloc(m->response, m->size+realsize+1);
   if (!p) {
-    perror("!panic, realloc failed");
+    perror("!panic");
     return 0;
   }
 
@@ -38,61 +41,63 @@ test_callback(const char *outfile) {
   
   curl = curl_easy_init();
   if (!curl) {
-    fprintf(stderr, "!panic, init failed\n");
+    LOG("!panic, init failed\n");
     return;
   }
 
   errbuf = malloc(CURL_ERROR_SIZE);
   if (0 == errbuf) {
-    perror("!panic, alloc memory for errbuf failed");
+    perror("!panic");
     goto clean_exit;
   }
 
   code = curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);
   if (code) {
-    fprintf(stderr, "setopt CURLOPT_ERRORBUFFER failed\n");
+    LOG("!panic, setopt CURLOPT_ERRORBUFFER failed\n");
     goto clean_exit;
   }
   
   code = curl_easy_setopt(curl, CURLOPT_URL, "https://curl.haxx.se");
   if (code) {
-    fprintf(stderr, "!panic, setopt CURLOPT_URL failed\n");
+    LOG("!panic, setopt CURLOPT_URL failed\n");
     goto clean_exit;
   }
 
   code = curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, on_write);
   if (code) {
-    fprintf(stderr, "!panic, setopt CURLOPT_WRITEFUNCTION failed\n");
+    LOG("!panic, setopt CURLOPT_WRITEFUNCTION failed\n");
     goto clean_exit;
   }
   
   code = curl_easy_setopt(curl, CURLOPT_WRITEDATA, &m);
   if (code) {
-    fprintf(stderr, "!panic, setopt CURLOPT_WRITEDATA failed\n");
+    LOG("!panic, setopt CURLOPT_WRITEDATA failed\n");
     goto clean_exit;
   }
 
   code = curl_easy_perform(curl);
   if (code) {
-    fprintf(stderr, "%s\n", errbuf);
+    LOG("!panic, %s\n", errbuf);
+    goto clean_exit;
   }
 
   if (!m.size) {
-    fprintf(stderr, "!panic, response is 0\n");
+    LOG("!panic, response is 0\n");
     goto clean_exit;
   }
   
   out = fopen(outfile, "wb");
   if (!out) {
-    perror("!panic, fopen failed");
+    perror("!panic");
     goto clean_exit;
   }
-  fwrite((char*)&m.response[0],
+  fwrite((char*) &m.response[0],
          sizeof(char),
          m.size/sizeof(char),
          out);
   if (ferror(out)) {
-    perror("!panic, write failed");
+    perror("!panic");
+    goto clean_exit;
   }
   
  clean_exit:
@@ -107,7 +112,7 @@ test_callback(const char *outfile) {
 int
 main(int argc, char **argv) {
   if (argc < 2) {
-    fprintf(stderr, "where the output file located\n");
+    LOG("where the output file located\n");
     return 0;
   }
   

@@ -6,6 +6,6 @@
 
 
 #define _unused_(x) (void)(x)
-
+#define LOG(...) fprintf(stderr, __VA_ARGS__)
 
 #endif /* end of _CURL_H_ */
