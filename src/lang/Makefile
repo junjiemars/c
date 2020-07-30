@@ -1,4 +1,13 @@
+#
 # ./configure --without-debug --has-lang
+#
+
+lang_prefix := lang
+INC += -I$(lang_root)
+
+CFLAGS += $(if $(strip $(nm_build_opt)),,$(cflags_sanitize))
+_ERROR_ ?= 0
+
 lang: lang_array																\
       lang_assert																\
       lang_duration															\
@@ -66,10 +75,6 @@ lang_test:  lang_array_test											\
             lang_union_test											\
             lang_volatile_test
 
-lang_prefix := lang
-INC += -I$(lang_root)
-
-_ERROR_ ?= 0
 
 # array
 lang_array_binout := $(bin_path)$(lang_prefix)_lang_array$(bin_ext)
@@ -600,7 +605,7 @@ lang_struct_test: lang_struct
 	$(lang_struct_binout)
 
 $(lang_struct_binout): $(lang_root)struct/s.c
-	$(CC) $(CFLAGS) $(cflags_sanitize) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # time
 lang_time_basic_binout := $(bin_path)$(lang_prefix)_time_basic$(bin_ext)
@@ -685,7 +690,7 @@ lang_union_test: lang_union
 	$(lang_union_binout)
 
 $(lang_union_binout): $(lang_root)union/u.c
-	$(CC) $(CFLAGS) $(cflags_sanitize) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # volatile
 volatile_basic_binout := $(bin_path)$(lang_prefix)_volatile_basic$(bin_ext)
