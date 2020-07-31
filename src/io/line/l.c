@@ -16,6 +16,9 @@ typedef SSIZE_T ssize_t;
 #include <stdlib.h>
 #include <string.h>
 
+#define LESS_LEN 7
+#define REGU_LEN 8
+
 ssize_t self_getline(char**, size_t*, FILE*);
 ssize_t self_getdelim(char**, size_t*, int, FILE*);
 void test_getline(const char*);
@@ -33,7 +36,7 @@ self_getline(char ** restrict linep,
     return EOF;
   }
 	if (0 == *linep) {
-		*linecapp = 8;
+		*linecapp = REGU_LEN;
 		*linep = malloc(*linecapp);
 		if (0 == *linep) {
 			return EOF;
@@ -74,7 +77,7 @@ self_getdelim(char ** restrict linep,
     return EOF;
   }
 	if (0 == *linep) {
-		*linecapp = 8;
+		*linecapp = REGU_LEN;
 		*linep = malloc(*linecapp);
 		if (0 == *linep) {
 			return EOF;
@@ -128,9 +131,7 @@ test_getline(const char *filename) {
 	}
 	fclose(file);
   
-  if (line) {
-    free(*line);
-  }
+  free(*line);
 }
 
 void
@@ -141,9 +142,9 @@ test_getline1(const char *filename) {
 		return;
 	}
 
-	char *block = malloc(8-1);
+	char *block = malloc(LESS_LEN);
   char **line = &block;
-	size_t linecap = 0;
+	size_t linecap = LESS_LEN;
 	ssize_t linelen = 0;
 	
 	while (0 < (linelen = getline(line, &linecap, file))) {
@@ -180,9 +181,7 @@ test_getline2(const char *filename) {
 	}
   fclose(file);
 	
-  if (line) {
-		free(*line);
-	}
+  free(*line);
 }
 
 
@@ -194,9 +193,9 @@ test_self_getline(const char *filename) {
 		return;
 	}
 
-	char *block = malloc(8-1);
+	char *block = malloc(LESS_LEN);
   char **line = &block;
-	size_t linecap = 8-1;
+	size_t linecap = LESS_LEN;
 	ssize_t linelen = 0;
 	
 	while (0 < (linelen = self_getline(line, &linecap, file))) {
@@ -208,9 +207,7 @@ test_self_getline(const char *filename) {
 	}
 	fclose(file);
 
-  if (line) {
-    free(*line);
-  }
+  free(*line);
 }
 
 
@@ -236,10 +233,8 @@ test_getdelim(const char *filename) {
     perror(filename);
   }
   fclose(file);
-  
-	if (line) {
-		free(*line);
-	}
+
+  free(*line);
 }
 #endif
 
@@ -264,10 +259,8 @@ test_self_getdelim(const char *filename) {
     perror(filename);
   }
   fclose(file);
-
-  if (line) {
-    free(*line);
-  }
+  
+  free(*line);
 }
 
 int
@@ -286,11 +279,7 @@ main(int argc, char **argv) {
   strcpy(f, argv[1]);
 		
   test_getline(f);
-
-#if !(LINUX)
-  /* leaks on Linux */
   test_getline1(f);
-#endif
   test_getline2(f);
   test_self_getline(f);
   fprintf(stdout, "##########\n");
