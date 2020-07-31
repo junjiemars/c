@@ -286,13 +286,17 @@ main(int argc, char **argv) {
   strcpy(f, argv[1]);
 		
   test_getline(f);
+
+#if !(LINUX)
+  /* leaks on Linux */
   test_getline1(f);
+#endif
   test_getline2(f);
   test_self_getline(f);
   fprintf(stdout, "##########\n");
 		
 #if !(MSVC)
-  /* test_getdelim(f); */
+  test_getdelim(f);
   fprintf(stdout, "##########\n");
 #endif
 		
