@@ -1,4 +1,16 @@
+#
 # ./configure --has-io
+#
+
+io_prefix := io
+INC += -I$(io_root) -I$(root)posix
+
+ifeq ($(CC_NAME), msvc)
+INC += -I$(root)posix
+getopt_c := $(root)posix/getopt.c
+endif
+
+CFLAGS += $(if $(strip $(nm_build_opt)),,$(cflags_sanitize))
 
 io: io_basic																		\
     io_binary																		\
@@ -29,16 +41,6 @@ io_test: io_basic_test													\
          io_wchar_test													\
          io_wc_test
 
-io_prefix := io
-
-INC += -I$(io_root) -I$(root)posix
-
-ifeq ($(CC_NAME), msvc)
-INC += -I$(root)posix
-getopt_c := $(root)posix/getopt.c
-endif
-
-CFLAGS += $(if $(strip $(nm_build_opt)),,$(cflags_sanitize))
 
 # basic I/O
 io_basic_binout := $(bin_path)$(io_prefix)_basic$(bin_ext)
