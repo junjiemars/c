@@ -351,18 +351,21 @@ lang_ptr_const_binout := $(bin_path)$(lang_prefix)_ptr_const$(bin_ext)
 lang_ptr_fn_binout := $(bin_path)$(lang_prefix)_ptr_fn$(bin_ext)
 lang_ptr_size_binout := $(bin_path)$(lang_prefix)_ptr_size$(bin_ext)
 lang_ptr_void_binout := $(bin_path)$(lang_prefix)_ptr_void$(bin_ext)
+lang_ptr_lvalue_binout := $(bin_path)$(lang_prefix)_ptr_lvalue$(bin_ext)
 
 lang_pointer: lang_ptr_basic										\
 	  					lang_ptr_const										\
               lang_ptr_fn												\
               lang_ptr_size											\
-		  				lang_ptr_void
+		  				lang_ptr_void											\
+              lang_ptr_lvalue
 
 lang_pointer_test: lang_ptr_basic_test					\
 							     lang_ptr_const_test					\
                    lang_ptr_fn_test							\
                    lang_ptr_size_test						\
-                   lang_ptr_void_test
+                   lang_ptr_void_test						\
+                   lang_ptr_lvalue
 
 lang_ptr_basic: $(lang_ptr_basic_binout)
 lang_ptr_basic_test: lang_ptr_basic
@@ -384,6 +387,9 @@ lang_ptr_void: $(lang_ptr_void_binout)
 lang_ptr_void_test: lang_ptr_void
 	$(lang_ptr_void_binout)
 
+lang_ptr_lvalue: $(lang_ptr_lvalue_binout)
+lang_ptr_lvalue_test: lang_ptr_lvalue
+	$(lang_ptr_lvalue_binout)
 
 $(lang_ptr_basic_binout): $(lang_root)pointer/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -398,6 +404,9 @@ $(lang_ptr_size_binout): $(lang_root)pointer/size.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_ptr_void_binout): $(lang_root)pointer/void.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(lang_ptr_lvalue_binout): $(lang_root)pointer/lvalue.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # preprocessor
