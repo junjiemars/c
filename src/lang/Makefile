@@ -662,25 +662,21 @@ $(lang_time_conv_binout): $(lang_root)time/conv.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # type
-lang_type_basic_binout := $(bin_path)$(lang_prefix)_type_basic$(bin_ext)
-lang_type_basic_cppout := $(tmp_path)$(lang_prefix)_type_basic$(cpp_ext)
+lang_type_int_binout := $(bin_path)$(lang_prefix)_type_int$(bin_ext)
 lang_type_c_binout := $(bin_path)$(lang_prefix)_type_c$(bin_ext)
 
-lang_type: $(lang_type_basic_binout)						\
+lang_type: $(lang_type_int_binout)						\
            $(lang_type_c_binout)
-lang_type_test: lang_type_basic_test						\
+lang_type_test: lang_type_int_test						\
                 lang_type_c_test
 
-lang_type_basic_test: $(lang_type_basic_binout)
-	$(lang_type_basic_binout)
+lang_type_int_test: $(lang_type_int_binout)
+	$(lang_type_int_binout)
 lang_type_c_test: $(lang_type_c_binout)
 	$(lang_type_c_binout) 11ff22aa
 
-$(lang_type_basic_binout): $(lang_type_basic_cppout)
-	$(CC) $(CFLAGS) $^ $(bin_out)$@
-
-$(lang_type_basic_cppout): $(lang_root)type/t.c
-	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+$(lang_type_int_binout): $(lang_root)type/int.c
+	$(CPP) $(INC) $(CFLAGS) $^ $(bin_out)$@
 
 $(lang_type_c_binout): $(lang_root)type/ct.c
 	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@

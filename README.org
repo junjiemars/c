@@ -1154,6 +1154,10 @@ union name;
 	 :CUSTOM_ID: basic_types
 	 :END:
 
+**** Integer
+	 :PROPERTIES:
+	 :CUSTOM_ID: basic_types_integer
+	 :END:
 
 All C types be represented as binary numbers in memory, the way how to
 interprete those numbers is what type does.
