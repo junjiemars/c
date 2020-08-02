@@ -1,8 +1,18 @@
 #include "_lang_.h"
 #include <assert.h>
 
+void test_raw(int);
 void test_ptr(int);
 void test_ptr_ptr(int);
+
+void
+test_raw(int a) {
+  int d;
+  d = a + 1;
+  
+  /* d + 1 is a value, not a lvalue */
+  /* d + 1 = a; */
+}
 
 void
 test_ptr(int c) {
@@ -44,7 +54,8 @@ int
 main(int argc, char **argv) {
   _unused_(argc);
   _unused_(argv);
-  
+
+  test_raw('a');
   test_ptr('a');
   test_ptr_ptr('a');
 
