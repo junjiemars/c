@@ -10,7 +10,10 @@ INC += -I$(root)posix
 getopt_c := $(root)posix/getopt.c
 endif
 
-CFLAGS += $(if $(strip $(nm_build_opt)),,$(cflags_sanitize))
+_MEMORY_ ?= 0
+ifeq ($(shell test $(_MEMORY_) -gt 0; echo $$?),0)
+CFLAGS += $(cflags_sanitize)
+endif
 
 io: io_basic																		\
     io_binary																		\
