@@ -5,8 +5,13 @@
 lang_prefix := lang
 INC += -I$(lang_root)
 
-CFLAGS += $(if $(strip $(nm_build_opt)),,$(cflags_sanitize))
 _ERROR_ ?= 0
+_MEMORY_ ?= 0
+
+# CFLAGS += $(if $(strip $(nm_build_opt)),,$(cflags_sanitize))
+ifeq ($(shell test $(_MEMORY_) -gt 0; echo $$?),0)
+	CFLAGS += $(cflags_sanitize)
+endif
 
 lang: lang_array																\
       lang_assert																\
@@ -352,20 +357,23 @@ lang_ptr_fn_binout := $(bin_path)$(lang_prefix)_ptr_fn$(bin_ext)
 lang_ptr_size_binout := $(bin_path)$(lang_prefix)_ptr_size$(bin_ext)
 lang_ptr_void_binout := $(bin_path)$(lang_prefix)_ptr_void$(bin_ext)
 lang_ptr_lvalue_binout := $(bin_path)$(lang_prefix)_ptr_lvalue$(bin_ext)
+lang_ptr_arith_binout := $(bin_path)$(lang_prefix)_ptr_arith$(bin_ext)
 
 lang_pointer: lang_ptr_basic										\
 	  					lang_ptr_const										\
               lang_ptr_fn												\
               lang_ptr_size											\
 		  				lang_ptr_void											\
-              lang_ptr_lvalue
+              lang_ptr_lvalue										\
+              lang_ptr_arith
 
 lang_pointer_test: lang_ptr_basic_test					\
 							     lang_ptr_const_test					\
                    lang_ptr_fn_test							\
                    lang_ptr_size_test						\
                    lang_ptr_void_test						\
-                   lang_ptr_lvalue
+                   lang_ptr_lvalue							\
+                   lang_ptr_arith
 
 lang_ptr_basic: $(lang_ptr_basic_binout)
 lang_ptr_basic_test: lang_ptr_basic
@@ -391,6 +399,10 @@ lang_ptr_lvalue: $(lang_ptr_lvalue_binout)
 lang_ptr_lvalue_test: lang_ptr_lvalue
 	$(lang_ptr_lvalue_binout)
 
+lang_ptr_arith: $(lang_ptr_arith_binout)
+lang_ptr_arith_test: lang_ptr_arith
+	$(lang_ptr_arith_binout)
+
 $(lang_ptr_basic_binout): $(lang_root)pointer/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
@@ -407,6 +419,9 @@ $(lang_ptr_void_binout): $(lang_root)pointer/void.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_ptr_lvalue_binout): $(lang_root)pointer/lvalue.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(lang_ptr_arith_binout): $(lang_root)pointer/arith.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # preprocessor
