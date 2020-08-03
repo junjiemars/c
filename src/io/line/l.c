@@ -25,9 +25,41 @@ ssize_t self_getdelim(char**, size_t*, int, FILE*);
 void test_getline(const char*);
 void test_getline1(const char*);
 void test_getline2(const char*);
+void test_getdelim(const char*);
 void test_self_getdelim(const char*);
 void test_self_getline(const char*);
 
+int
+main(int argc, char **argv) {
+
+  if (argc < 2) {
+    printf("where the file located?\n");
+    return 0;
+  }
+
+  char *f = malloc(strlen(argv[1]) + 1);
+  if (0 == f) {
+    perror(argv[1]);
+    return 0;
+  }
+  strcpy(f, argv[1]);
+		
+  test_getline(f);
+  test_getline1(f);
+  test_getline2(f);
+  test_self_getline(f);
+  fprintf(stdout, "##########\n");
+		
+#if !(MSVC)
+  test_getdelim(f);
+  fprintf(stdout, "##########\n");
+#endif
+		
+  test_self_getdelim(f);
+  free(f);
+
+	return 0;
+}
 
 ssize_t
 self_getline(char ** restrict linep,
@@ -264,34 +296,4 @@ test_self_getdelim(const char *filename) {
   free(*line);
 }
 
-int
-main(int argc, char **argv) {
-
-  if (argc < 2) {
-    printf("where the file located?\n");
-    return 0;
-  }
-
-  char *f = malloc(strlen(argv[1]) + 1);
-  if (0 == f) {
-    perror(argv[1]);
-    return 0;
-  }
-  strcpy(f, argv[1]);
-		
-  test_getline(f);
-  test_getline1(f);
-  test_getline2(f);
-  test_self_getline(f);
-  fprintf(stdout, "##########\n");
-		
-#if !(MSVC)
-  test_getdelim(f);
-  fprintf(stdout, "##########\n");
-#endif
-		
-  test_self_getdelim(f);
-  free(f);
-
-	return 0;
-}
+/* eof */
