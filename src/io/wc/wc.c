@@ -4,6 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <getopt.h>
 
 
 typedef struct count_test_s {
