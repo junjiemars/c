@@ -2,8 +2,9 @@
 #define _IO_H_
 
 #include <nore.h>
-#include "norstd.h"
+/* #include "norstd.h" */
 
+#define _unused_(x) ((void)(x))
 
 void hex_out(const char *ss);
 

@@ -1,20 +1,21 @@
 #include <_io_.h>
 
-#if MSVC
-#  pragma warning(disable: 4244)
-#  include <BaseTsd.h>
-typedef SSIZE_T ssize_t;
-#endif
-
 #if (LINUX)
 #  ifndef __USE_GNU
 #    define __USE_GNU 1
 #  endif
+#  ifndef _GNU_SOURCE
+#    define _GNU_SOURCE
+#  endif
 #endif
-
 #include <stdio.h>
+
 #include <stdlib.h>
 #include <string.h>
+
+#include <posix/ssize_t.h>
+
+/* #include <unistd.h> */
 
 #define LESS_LEN 7
 #define REGU_LEN 8
