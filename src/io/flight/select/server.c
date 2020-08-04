@@ -161,7 +161,7 @@ main (int argc, char **argv) {
                 bool valid;
                 char temp_buf [FLIGHT_NUM_SIZE + 1];
                         
-                switch (ntohl (recv_message.message_id)) {
+                switch (ntohl (recv_message.id)) {
                 case STORE_FLIGHT:
                   valid = true;
                   // validate flight number
@@ -172,9 +172,9 @@ main (int argc, char **argv) {
                   trim (temp_buf, recv_message.flight_no);
                   strcpy (recv_message.flight_no, temp_buf);
                   bool departure;
-                  if (toupper (recv_message.departure [0]) == 'D')
+                  if (toupper (recv_message.departure) == 'D')
                     departure = true;
-                  else if (toupper (recv_message.departure [0]) == 'A')
+                  else if (toupper (recv_message.departure) == 'A')
                     departure = false; 
                   else
                     valid = false;
@@ -234,7 +234,7 @@ main (int argc, char **argv) {
 
                   if (!valid) {
                     // send error message to client
-                    send_message.message_id = htonl (ERROR_IN_INPUT);
+                    send_message.id = htonl (ERROR_IN_INPUT);
                     size_t msg_len = sizeof (long);
                     if (send (fd, &send_message, msg_len, 0) == -1)
                       error ("send");
@@ -244,9 +244,9 @@ main (int argc, char **argv) {
                       // add flight data to tree
                       root = add_to_tree (root, recv_message.flight_no, departure, ts);
                       // send confirmation to client
-                      send_message.message_id = htonl (FLIGHT_TIME_STORED);
-                      strcpy (send_message.flight_no, recv_message.flight_no);
-                      strcpy (send_message.departure, (departure) ? "D" : "A");
+                      send_message.id = htonl (FLIGHT_TIME_STORED);
+                      strcpy(send_message.flight_no, recv_message.flight_no);
+                      send_message.departure = (departure) ? 'D' : 'A';
                       struct tm *tms;  
                       if ((tms = localtime (&ts)) == NULL)  
                         perror ("localtime");                    
@@ -268,7 +268,7 @@ main (int argc, char **argv) {
                     valid = false;
                   if (!valid) {
                     // send error message to client
-                    send_message.message_id = htonl (ERROR_IN_INPUT);
+                    send_message.id = htonl (ERROR_IN_INPUT);
                     size_t msg_len = sizeof (long);
                     if (send (fd, &send_message, msg_len, 0) == -1)
                       error ("send");
@@ -281,16 +281,16 @@ main (int argc, char **argv) {
                   ptr = find_flight_rec (root, recv_message.flight_no);
                   if (!ptr) {
                     memset (&send_message, '\0', sizeof (struct message));
-                    send_message.message_id = htonl (FLIGHT_NOT_FOUND);
+                    send_message.id = htonl (FLIGHT_NOT_FOUND);
                     strcpy (send_message.flight_no, recv_message.flight_no);
                     size_t msg_len = sizeof (struct message);
                     if (send (fd, &send_message, msg_len, 0) == -1)
                       error ("send");
                     break;
                   }
-                  send_message.message_id = htonl (FLIGHT_TIME_RESULT);
+                  send_message.id = htonl (FLIGHT_TIME_RESULT);
                   strcpy (send_message.flight_no, recv_message.flight_no);
-                  strcpy (send_message.departure, (ptr -> departure) ? "D" : "A");
+                  send_message.departure = (ptr->departure) ? 'D' : 'A';
                   struct tm *tms;  
                   if ((tms = localtime (&(ptr -> flight_time))) == NULL)  
                     perror ("localtime");                    

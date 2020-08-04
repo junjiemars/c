@@ -83,10 +83,11 @@ const char *flight_errno_desc(enum flight_errno);
 #define LOG(...) fprintf(stderr, __VA_ARGS__)
 
 struct message {
-  int32_t message_id;
+  int32_t id;
   char flight_no [FLIGHT_NUM_SIZE + 1];
-  char departure [1 + 1]; // 'D': departure, 'A': arrival
-  char date [10 + 1]; // dd/mm/yyyy
+  int departure;       // 'D': departure, 'A': arrival
+  short datetime[12];
+  char date [10 + 1];  // mm/dd/yyyy
   char time [5 + 1];   // hh:mm
 };
 

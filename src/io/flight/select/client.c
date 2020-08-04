@@ -23,7 +23,8 @@
 static struct message message;
 
 
-static int shell(void);
+static enum flight_op shell(void);
+static void tail_zero(char * const);
 
 int
 main (int argc, char **argv) {
@@ -87,10 +88,10 @@ main (int argc, char **argv) {
       exit(errno);
     }
 
-    switch (ntohl (message.message_id)) {
+    switch (ntohl(message.id)) {
     case FLIGHT_TIME_STORED: 
     case FLIGHT_TIME_RESULT:
-      LOG("\n#response: \n  %s: %s %s %s\n", message.flight_no, message.departure, 
+      LOG("\n#response: \n  %s: %c %s %s\n", message.flight_no, message.departure, 
           message.date, message.time);
       break;
     case FLIGHT_NOT_FOUND:
@@ -108,10 +109,18 @@ main (int argc, char **argv) {
   exit (EXIT_SUCCESS);
 }
 
-int
+void
+tail_zero(char * const buf) {
+  size_t len = strnlen(buf, SHELL_MAX_SIZE);
+  if ('\n' == buf[len - 1]) {
+    buf[len - 1] = '\0';
+  }
+}
+
+enum flight_op
 shell(void) {
-  static char inbuf[512];
-  int option;
+  static char inbuf[SHELL_MAX_SIZE];
+  int choose;
 
   while (1) {
     printf("flight info\n");
@@ -123,72 +132,77 @@ shell(void) {
       LOG("!panic, %s\n", strerror(errno));
       exit(errno);
     }
-    sscanf(inbuf, "%d", &option);
+    sscanf(inbuf, "%d", &choose);
+    enum flight_op op = (enum flight_op)choose;
 
-    int len;
+    switch (op) {
 
-    switch (option) {
-
-    case 1: message.message_id = htonl (FLIGHT_TIME);
-      printf ("Flight no: ");
-      if (!fgets(inbuf, sizeof(inbuf), stdin)) {
-        LOG("!panic, %s\n", strerror(errno));
-        exit(errno);
-      }
-      len = strlen (inbuf);
-      if (inbuf [len - 1] == '\n')
-        inbuf [len - 1] = '\0';
-      strcpy (message.flight_no, inbuf);
-      break;
-
-    case 2: message.message_id = htonl (STORE_FLIGHT);
-      printf ("Flight no: ");
-      if (!fgets(inbuf, sizeof(inbuf), stdin)) {
-        LOG("!panic, %s\n", strerror(errno));
-        exit(errno);
-      }
-      len = strlen (inbuf);
-      if (inbuf [len - 1] == '\n')
-        inbuf [len - 1] = '\0';
-      strcpy (message.flight_no, inbuf);
-
-      while (1) {
-        printf ("A/D: ");
-        if (fgets(inbuf, sizeof(inbuf), stdin)) {
+    case FLIGHT_QUERY:
+      {
+        message.id = htonl(FLIGHT_TIME);
+        printf ("flight no: ");
+        if (!fgets(inbuf, sizeof(inbuf), stdin)) {
           LOG("!panic, %s\n", strerror(errno));
           exit(errno);
         }
-        message.departure [0] = toupper (inbuf [0]);
-        message.departure [1] = '\0';
-        if ((message.departure [0] == 'A') || (message.departure [0] == 'D'))
-          break;
-        printf ("Error in input, valid values are A and D\n");
+        tail_zero(inbuf);
+        strcpy(message.flight_no, inbuf);
       }
+      break;
+
+    case FLIGHT_STORE:
+      {
+        message.id = htonl(STORE_FLIGHT);
+        printf("flight no: ");
+        if (!fgets(inbuf, sizeof(inbuf), stdin)) {
+          LOG("!panic, %s\n", strerror(errno));
+          exit(errno);
+        }
+        tail_zero(inbuf);
+        strcpy(message.flight_no, inbuf);
+
+        while (1) {
+          printf("A/D: ");
+          if (!fgets(inbuf, sizeof(inbuf), stdin)) {
+            LOG("!panic, %s\n", strerror(errno));
+            exit(errno);
+          }
+
+          inbuf[0] = toupper(inbuf[0]);
+          if ((inbuf[0] == 'A') || (inbuf[0] == 'D')) {
+            message.departure = inbuf[0];
+            break;
+          }
+          LOG("!panic, invalid input: '%c'\n", inbuf[0]);
+        }
                     
-      printf ("date (dd/mm/yyyy): ");
-      if (!fgets(inbuf, sizeof(inbuf), stdin)) {
-        LOG("!panic, %s\n", strerror(errno));
-        exit(errno);
+        printf("date (mm/dd/yyyy): ");
+        if (!fgets(inbuf, sizeof(inbuf), stdin)) {
+          LOG("!panic, %s\n", strerror(errno));
+          exit(errno);
+        }
+        int mm, dd, yyyy;
+        sscanf(inbuf, "%i/%i/%i", &mm, &dd, &yyyy);
+        strncpy (message.date, inbuf, 10);
+        message.date [10] = '\0';
+        printf ("time (hh:mm): ");
+        if (!fgets(inbuf, sizeof(inbuf), stdin)) {
+          LOG("!panic, %s\n", strerror(errno));
+          exit(errno);
+        }
+        strncpy (message.time, inbuf, 5);
+        message.time [5] = '\0';
       }
-      strncpy (message.date, inbuf, 10);
-      message.date [10] = '\0';
-      printf ("time (hh:mm): ");
-      if (!fgets(inbuf, sizeof(inbuf), stdin)) {
-        LOG("!panic, %s\n", strerror(errno));
-        exit(errno);
-      }
-      strncpy (message.time, inbuf, 5);
-      message.time [5] = '\0';
       break;
 
-    case 0:
+    case FLIGHT_QUIT:
       break;
 
-    default: printf ("Illegal option, try again\n\n");
+    default:
+      LOG("!panic, illegal choose, try again\n");
       continue;
-
     }
 
-    return option;
+    return op;
   }
 }
