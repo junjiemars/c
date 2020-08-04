@@ -14,14 +14,16 @@
 #include <stdint.h>
 #include <time.h>
 
+#define SHELL_MAX_SIZE              512
+
 #define OP_QUIT                       0
 #define OP_QUERY                      1
 #define OP_STORE                      2
 
 static struct message message;
-static char inbuf[512];
 
-static int get_input (void);
+
+static int shell(void);
 
 int
 main (int argc, char **argv) {
@@ -70,7 +72,7 @@ main (int argc, char **argv) {
   int op;
 
   while (1) {
-    op = get_input();
+    op = shell();
     if (OP_QUIT == op) {
       break;
     }
@@ -107,16 +109,17 @@ main (int argc, char **argv) {
 }
 
 int
-get_input (void) {
+shell(void) {
+  static char inbuf[512];
   int option;
 
   while (1) {
-    printf ("Flight Info\n\n");
-    printf ("\tFlight time query\t1\n");
-    printf ("\tStore flight time\t2\n");
-    printf ("\tQuit\t\t0\n\n");
-    printf ("Your option: ");
-    if (!fgets(inbuf, sizeof (inbuf), stdin)) {
+    printf("flight info\n");
+    printf("  flight time query  1\n");
+    printf("  store flight time  2\n");
+    printf("  quit               0\n");
+    printf("choose: ");
+    if (!fgets(inbuf, sizeof(inbuf), stdin)) {
       LOG("!panic, %s\n", strerror(errno));
       exit(errno);
     }
