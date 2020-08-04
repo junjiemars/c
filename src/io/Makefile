@@ -26,6 +26,7 @@ io: io_basic																		\
 		io_process																	\
 		io_scan																			\
     io_seek																			\
+    io_select																		\
 		io_variadic																	\
 		io_wchar																		\
 		io_wc
@@ -40,6 +41,7 @@ io_test: io_basic_test													\
          io_process_test												\
          io_scan_test														\
          io_seek_test														\
+         io_select_test													\
          io_variadic_test												\
          io_wchar_test													\
          io_wc_test
@@ -200,6 +202,27 @@ io_seek_test: io_seek
 
 $(io_seek_basic_binout): $(io_root)seek/s1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# select
+io_select_server_binout := $(bin_path)$(io_prefix)_select_server$(bin_ext)
+io_select_client_binout := $(bin_path)$(io_prefix)_select_client$(bin_ext)
+
+ifeq ($(NM_SYSTEM),Linux)
+io_select: $(io_select_server_binout)						\
+           $(io_select_client_binout)
+io_select_test: io_select
+else
+io_select:
+io_select_test:
+endif
+
+$(io_select_server_binout): $(io_root)select/svr.c		\
+                            $(io_root)select/_sel_.h
+	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@
+
+$(io_select_client_binout): $(io_root)select/clt.c	\
+                            $(io_root)select/_sel_.h
+	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@
 
 # variadic
 io_variadic_binout := $(bin_path)$(io_prefix)_variadic$(bin_ext)
