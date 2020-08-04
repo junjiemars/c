@@ -23,7 +23,7 @@
 static struct message message;
 
 #define ZERO_TIME_FIELDS(m)                                       \
-  memset((m)->time_fields, 0, sizeof((m)->time_fields) * TF_MAX)
+  memset((m)->time_fields, 0, sizeof((m)->time_fields[0]) * TF_MAX)
 #define VAL_YEAR(year)    (0 < (year) && (year) <= 3000)
 #define VAL_MONTH(month)  (0 < (month) && (month) <= 12)
 #define VAL_DAY(day)      (0 < (day) && (day) <= 31)

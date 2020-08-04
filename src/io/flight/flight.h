@@ -15,8 +15,17 @@
 #  define __USE_XOPEN2K
 #endif
 
+
 #include "_io_.h"
 #include <assert.h>
+
+
+#if (DARWIN)
+#  if !defined(MSG_NOSIGNAL)
+#    define MSG_NOSIGNAL 0
+#  endif
+#endif
+
 
 #define FLIGHT_OP_MAP(XX)                       \
   XX(0,  QUIT,   quit)                          \

@@ -129,12 +129,13 @@ io_flight_select_c_binout := $(bin_path)$(io_prefix)_flight_select_c$(bin_ext)
 
 inc_flight := -I$(io_root)flight
 
-ifeq ($(NM_SYSTEM),Linux)
+ifeq ($(NM_SYSTEM),$(filter $(NM_SYSTEM),Linux Darwin))
 io_flight: io_flight_select
 # io_flight_test: io_flight_select_test
 
 io_flight_select: $(io_flight_select_s_binout)	\
                   $(io_flight_select_c_binout)
+
 # io_flight_select_test: io_flight_select
 # 	$(io_flight_select_s_binout)
 # 	$(io_flight_select_c_binout)
@@ -146,11 +147,11 @@ endif
 
 $(io_flight_select_s_binout): $(io_root)flight/select/server.c	\
                               $(io_root)flight/flight.h
-	$(CC) $(INC) $(inc_flight) $(CFLAGS) $^ $(bin_out)$@
+	$(CC) $(INC) $(inc_flight) $(CFLAGS) $< $(bin_out)$@
 
 $(io_flight_select_c_binout): $(io_root)flight/select/client.c	\
                               $(io_root)flight/flight.h
-	$(CC) $(INC) $(inc_flight) $(CFLAGS) $^ $(bin_out)$@
+	$(CC) $(INC) $(inc_flight) $(CFLAGS) $< $(bin_out)$@
 
 # line
 io_line_basic_binout := $(bin_path)$(io_prefix)_line_basic$(bin_ext)
