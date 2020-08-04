@@ -22,9 +22,11 @@
 
 static struct message message;
 
+#define ZERO_TIME_FIELDS(m) memset((m)->time_fields, 0, sizeof((m)->time_fields) * TF_MAX)
 
 static enum flight_op shell(void);
 static void tail_zero(char * const);
+static void set_time_fields(struct message * const);
 
 int
 main (int argc, char **argv) {
@@ -117,6 +119,25 @@ tail_zero(char * const buf) {
   }
 }
 
+void
+set_time_fields(struct message * const msg) {
+  if (msg->time_fields[TF_YEAR] > 0) {
+    msg->time_field_set |= (1 << TF_YEAR);
+  }
+  if (msg->time_fields[TF_MONTH] > 0) {
+    msg->time_field_set |= (1 << TF_MONTH);
+  }
+  if (msg->time_fields[TF_DAY] > 0) {
+    msg->time_field_set |= (1 << TF_DAY);
+  }
+  if (msg->time_fields[TF_HOUR] > 0) {
+    msg->time_field_set |= (1 << TF_HOUR);
+  }
+  if (msg->time_fields[TF_MINUS] > 0) {
+    msg->time_field_set |= (1 << TF_MINUS);
+  }
+}
+
 enum flight_op
 shell(void) {
   static char inbuf[SHELL_MAX_SIZE];
@@ -139,7 +160,7 @@ shell(void) {
 
     case FLIGHT_QUERY:
       {
-        message.id = htonl(FLIGHT_TIME);
+        message.id = htonl(op);
         printf ("flight no: ");
         if (!fgets(inbuf, sizeof(inbuf), stdin)) {
           LOG("!panic, %s\n", strerror(errno));
@@ -152,7 +173,7 @@ shell(void) {
 
     case FLIGHT_STORE:
       {
-        message.id = htonl(STORE_FLIGHT);
+        message.id = htonl(op);
         printf("flight no: ");
         if (!fgets(inbuf, sizeof(inbuf), stdin)) {
           LOG("!panic, %s\n", strerror(errno));
@@ -173,25 +194,29 @@ shell(void) {
             message.departure = inbuf[0];
             break;
           }
-          LOG("!panic, invalid input: '%c'\n", inbuf[0]);
+          LOG("!panic, invalid input: '%s'\n", inbuf);
         }
-                    
-        printf("date (mm/dd/yyyy): ");
-        if (!fgets(inbuf, sizeof(inbuf), stdin)) {
+
+        int read_time = 0;
+        while (1) {
+          printf("date (mm/dd/yyyy hh:mm): ");
+          if (!fgets(inbuf, sizeof(inbuf), stdin)) {
+            LOG("!panic, %s\n", strerror(errno));
+            exit(errno);
+          }
+          ZERO_TIME_FIELDS(&message);
+          read_time = sscanf(inbuf, "%hd/%hd/%hd %hd:%hd",
+                             &message.time_fields[TF_MONTH],
+                             &message.time_fields[TF_DAY],
+                             &message.time_fields[TF_YEAR],
+                             &message.time_fields[TF_HOUR],
+                             &message.time_fields[TF_MINUS]);
+          if (read_time) {
+            set_time_fields(&message);
+            break;
+          }
           LOG("!panic, %s\n", strerror(errno));
-          exit(errno);
         }
-        int mm, dd, yyyy;
-        sscanf(inbuf, "%i/%i/%i", &mm, &dd, &yyyy);
-        strncpy (message.date, inbuf, 10);
-        message.date [10] = '\0';
-        printf ("time (hh:mm): ");
-        if (!fgets(inbuf, sizeof(inbuf), stdin)) {
-          LOG("!panic, %s\n", strerror(errno));
-          exit(errno);
-        }
-        strncpy (message.time, inbuf, 5);
-        message.time [5] = '\0';
       }
       break;
 

@@ -82,13 +82,23 @@ const char *flight_errno_desc(enum flight_errno);
 #define FLIGHT_NUM_SIZE            15
 #define LOG(...) fprintf(stderr, __VA_ARGS__)
 
+enum flight_time_fields
+  { TF_YEAR            = 0
+    , TF_MONTH         = 1
+    , TF_DAY           = 2
+    , TF_HOUR          = 3
+    , TF_MINUS         = 4
+    , TF_MAX           = 5
+  };
+
 struct message {
-  int32_t id;
-  char flight_no [FLIGHT_NUM_SIZE + 1];
-  int departure;       // 'D': departure, 'A': arrival
-  short datetime[12];
+  uint32_t id;
+  int departure;            // 'D': departure, 'A': arrival
+  short time_fields[TF_MAX];
+  uint16_t time_field_set;
   char date [10 + 1];  // mm/dd/yyyy
   char time [5 + 1];   // hh:mm
+  char flight_no [FLIGHT_NUM_SIZE + 1];
 };
 
 
