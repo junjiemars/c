@@ -22,10 +22,16 @@
 
 static struct message message;
 
-#define ZERO_TIME_FIELDS(m) memset((m)->time_fields, 0, sizeof((m)->time_fields) * TF_MAX)
+#define ZERO_TIME_FIELDS(m)                                       \
+  memset((m)->time_fields, 0, sizeof((m)->time_fields) * TF_MAX)
+#define VAL_YEAR(year)    (0 < (year) && (year) <= 3000)
+#define VAL_MONTH(month)  (0 < (month) && (month) <= 12)
+#define VAL_DAY(day)      (0 < (day) && (day) <= 31)
+#define VAL_HOUR(hour)    (0 < (hour) && (hour) <= 24)
+#define VAL_MINUTE(minute)  (0 < (minute) && (minute) <= 60)
 
 static enum flight_op shell(void);
-static void tail_zero(char * const);
+static void zero_tail(char * const);
 static void set_time_fields(struct message * const);
 
 int
@@ -112,7 +118,7 @@ main (int argc, char **argv) {
 }
 
 void
-tail_zero(char * const buf) {
+zero_tail(char * const buf) {
   size_t len = strnlen(buf, SHELL_MAX_SIZE);
   if ('\n' == buf[len - 1]) {
     buf[len - 1] = '\0';
@@ -121,20 +127,20 @@ tail_zero(char * const buf) {
 
 void
 set_time_fields(struct message * const msg) {
-  if (msg->time_fields[TF_YEAR] > 0) {
+  if (VAL_YEAR(msg->time_fields[TF_YEAR])) {
     msg->time_field_set |= (1 << TF_YEAR);
   }
-  if (msg->time_fields[TF_MONTH] > 0) {
+  if (VAL_MONTH(msg->time_fields[TF_MONTH])) {
     msg->time_field_set |= (1 << TF_MONTH);
   }
-  if (msg->time_fields[TF_DAY] > 0) {
+  if (VAL_DAY(msg->time_fields[TF_DAY])) {
     msg->time_field_set |= (1 << TF_DAY);
   }
-  if (msg->time_fields[TF_HOUR] > 0) {
+  if (VAL_HOUR(msg->time_fields[TF_HOUR])) {
     msg->time_field_set |= (1 << TF_HOUR);
   }
-  if (msg->time_fields[TF_MINUS] > 0) {
-    msg->time_field_set |= (1 << TF_MINUS);
+  if (VAL_MINUTE(msg->time_fields[TF_MINUTE])) {
+    msg->time_field_set |= (1 << TF_MINUTE);
   }
 }
 
@@ -166,7 +172,7 @@ shell(void) {
           LOG("!panic, %s\n", strerror(errno));
           exit(errno);
         }
-        tail_zero(inbuf);
+        zero_tail(inbuf);
         strcpy(message.flight_no, inbuf);
       }
       break;
@@ -179,20 +185,24 @@ shell(void) {
           LOG("!panic, %s\n", strerror(errno));
           exit(errno);
         }
-        tail_zero(inbuf);
+        zero_tail(inbuf);
         strcpy(message.flight_no, inbuf);
 
         while (1) {
-          printf("A/D: ");
+          printf("A(rrival)/D(eparture): ");
           if (!fgets(inbuf, sizeof(inbuf), stdin)) {
             LOG("!panic, %s\n", strerror(errno));
             exit(errno);
           }
 
-          inbuf[0] = toupper(inbuf[0]);
-          if ((inbuf[0] == 'A') || (inbuf[0] == 'D')) {
-            message.departure = inbuf[0];
+          zero_tail(inbuf);
+          int ad = toupper(inbuf[0]);
+          if (('A' == ad) || ('D' == ad)) {
+            message.departure = ad;
             break;
+          }
+          if (ferror(stdin)) {
+            clearerr(stdin);
           }
           LOG("!panic, invalid input: '%s'\n", inbuf);
         }
@@ -210,12 +220,15 @@ shell(void) {
                              &message.time_fields[TF_DAY],
                              &message.time_fields[TF_YEAR],
                              &message.time_fields[TF_HOUR],
-                             &message.time_fields[TF_MINUS]);
+                             &message.time_fields[TF_MINUTE]);
           if (read_time) {
             set_time_fields(&message);
             break;
           }
-          LOG("!panic, %s\n", strerror(errno));
+          if (ferror(stdin)) {
+            clearerr(stdin);
+          }
+          LOG("!panic, invalid input: '%s'\n", inbuf);
         }
       }
       break;

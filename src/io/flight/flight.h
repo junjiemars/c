@@ -87,13 +87,13 @@ enum flight_time_fields
     , TF_MONTH         = 1
     , TF_DAY           = 2
     , TF_HOUR          = 3
-    , TF_MINUS         = 4
+    , TF_MINUTE         = 4
     , TF_MAX           = 5
   };
 
 struct message {
   uint32_t id;
-  int departure;            // 'D': departure, 'A': arrival
+  short departure;            // 'D': departure, 'A': arrival
   short time_fields[TF_MAX];
   uint16_t time_field_set;
   char date [10 + 1];  // mm/dd/yyyy
