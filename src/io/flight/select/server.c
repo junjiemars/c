@@ -9,7 +9,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <syslog.h>
 #include <unistd.h>
 #include <stdbool.h>
 #include <sys/select.h>
@@ -43,11 +42,6 @@ main (int argc, char **argv) {
   _unused_(argc);
   _unused_(argv);
 
-  const char * const ident = "flight-time-server";
-
-  openlog (ident, LOG_CONS | LOG_PID | LOG_PERROR, LOG_USER);
-  syslog (LOG_USER | LOG_INFO, "%s", "Hello world!");
-    
   struct addrinfo hints;
   memset(&hints, 0, sizeof (struct addrinfo));
   hints.ai_family = AF_UNSPEC;    /* allow IPv4 or IPv6 */
@@ -137,8 +131,9 @@ main (int argc, char **argv) {
               ptr = NULL;
               fprintf (stderr, "Address family is neither AF_INET nor AF_INET6\n");
             }
-          if (ptr) 
-            syslog (LOG_USER | LOG_INFO, "%s %s", "Connection from client", str);
+          if (ptr) {
+            /* !TODO: */
+          }
                 
         }
         else  // data from an existing connection, receive it
