@@ -18,6 +18,7 @@
 
 #include "_io_.h"
 #include <assert.h>
+#include <stdio.h>
 
 
 #if (DARWIN)

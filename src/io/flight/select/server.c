@@ -5,7 +5,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>

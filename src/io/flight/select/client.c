@@ -5,20 +5,15 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <unistd.h>
 #include <ctype.h>
-#include <stdint.h>
 #include <time.h>
 
 #define SHELL_MAX_SIZE              512
 
-#define OP_QUIT                       0
-#define OP_QUERY                      1
-#define OP_STORE                      2
 
 static struct message message;
 
@@ -53,8 +48,10 @@ main (int argc, char **argv) {
     exit(s);
   }
 
+  LOG("#connect to %s ...\n", host);
   int sock_fd;
   struct addrinfo *ap;
+
   for (ap = addr; ap; ap = ap->ai_next) {
     sock_fd = socket(ap->ai_family, ap->ai_socktype, ap->ai_protocol);
     if (EOF == sock_fd) {
@@ -77,12 +74,12 @@ main (int argc, char **argv) {
     LOG("!panic, no host connectable\n");
     exit (EXIT_FAILURE);
   }
+  LOG("#connected\n");
 
   int op;
-
   while (1) {
-    op = shell();
-    if (OP_QUIT == op) {
+    if (FLIGHT_QUIT == (op = shell())) {
+      LOG("#quit ...\n");
       break;
     }
 
@@ -99,7 +96,9 @@ main (int argc, char **argv) {
     switch (ntohl(message.id)) {
     case FLIGHT_TIME_STORED: 
     case FLIGHT_TIME_RESULT:
-      LOG("\n#response: \n  %s: %c %s %s\n", message.flight_no, message.departure, 
+      LOG("\n#response: \n  %s: %c %s %s\n",
+          message.flight_no,
+          message.departure, 
           message.date, message.time);
       break;
     case FLIGHT_NOT_FOUND:
