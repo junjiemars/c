@@ -1,4 +1,4 @@
-#include "_sel_.h"
+#include "flight.h"
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -14,9 +14,12 @@
 #include <stdint.h>
 #include <time.h>
 
-#define QUIT                       0
+#define OP_QUIT                       0
+#define OP_QUERY                      1
+#define OP_STORE                      2
 
 static struct message message;
+static char inbuf[512];
 
 static int get_input (void);
 
@@ -48,7 +51,7 @@ main (int argc, char **argv) {
       continue;
     }
 
-    if (EOF == connect(sock_fd, ap-> ai_addr, ap-> ai_addrlen)) {
+    if (EOF == connect(sock_fd, ap->ai_addr, ap->ai_addrlen)) {
       LOG("!panic, %s\n", strerror(errno));
       if (EOF == close (sock_fd)) {
         LOG("!panic, %s\n", strerror(errno));
@@ -64,11 +67,11 @@ main (int argc, char **argv) {
     exit (EXIT_FAILURE);
   }
 
-  int option;
+  int op;
 
   while (1) {
-    option = get_input();
-    if (QUIT == option) {
+    op = get_input();
+    if (OP_QUIT == op) {
       break;
     }
 
@@ -86,7 +89,7 @@ main (int argc, char **argv) {
     case FLIGHT_TIME_STORED: 
     case FLIGHT_TIME_RESULT:
       LOG("\n#response: \n  %s: %s %s %s\n", message.flight_no, message.departure, 
-              message.date, message.time);
+          message.date, message.time);
       break;
     case FLIGHT_NOT_FOUND:
       LOG("\n#response: flight not found\n");
@@ -103,10 +106,8 @@ main (int argc, char **argv) {
   exit (EXIT_SUCCESS);
 }
 
-char inbuf [512];
-
-int get_input (void)
-{
+int
+get_input (void) {
   int option;
 
   while (1) {
@@ -115,7 +116,7 @@ int get_input (void)
     printf ("\tStore flight time\t2\n");
     printf ("\tQuit\t\t0\n\n");
     printf ("Your option: ");
-    if (!fgets(inbuf, sizeof (inbuf),  stdin)) {
+    if (!fgets(inbuf, sizeof (inbuf), stdin)) {
       LOG("!panic, %s\n", strerror(errno));
       exit(errno);
     }
@@ -127,8 +128,10 @@ int get_input (void)
 
     case 1: message.message_id = htonl (FLIGHT_TIME);
       printf ("Flight no: ");
-      if (fgets (inbuf, sizeof (inbuf),  stdin) == NULL)
-        error ("fgets");
+      if (!fgets(inbuf, sizeof(inbuf), stdin)) {
+        LOG("!panic, %s\n", strerror(errno));
+        exit(errno);
+      }
       len = strlen (inbuf);
       if (inbuf [len - 1] == '\n')
         inbuf [len - 1] = '\0';
@@ -137,8 +140,10 @@ int get_input (void)
 
     case 2: message.message_id = htonl (STORE_FLIGHT);
       printf ("Flight no: ");
-      if (fgets (inbuf, sizeof (inbuf),  stdin) == NULL)
-        error ("fgets");
+      if (!fgets(inbuf, sizeof(inbuf), stdin)) {
+        LOG("!panic, %s\n", strerror(errno));
+        exit(errno);
+      }
       len = strlen (inbuf);
       if (inbuf [len - 1] == '\n')
         inbuf [len - 1] = '\0';
@@ -146,8 +151,10 @@ int get_input (void)
 
       while (1) {
         printf ("A/D: ");
-        if (fgets (inbuf, sizeof (inbuf),  stdin) == NULL)
-          error ("fgets");
+        if (fgets(inbuf, sizeof(inbuf), stdin)) {
+          LOG("!panic, %s\n", strerror(errno));
+          exit(errno);
+        }
         message.departure [0] = toupper (inbuf [0]);
         message.departure [1] = '\0';
         if ((message.departure [0] == 'A') || (message.departure [0] == 'D'))
@@ -156,13 +163,17 @@ int get_input (void)
       }
                     
       printf ("date (dd/mm/yyyy): ");
-      if (fgets (inbuf, sizeof (inbuf),  stdin) == NULL)
-        error ("fgets");
+      if (!fgets(inbuf, sizeof(inbuf), stdin)) {
+        LOG("!panic, %s\n", strerror(errno));
+        exit(errno);
+      }
       strncpy (message.date, inbuf, 10);
       message.date [10] = '\0';
       printf ("time (hh:mm): ");
-      if (fgets (inbuf, sizeof (inbuf),  stdin) == NULL)
-        error ("fgets");
+      if (!fgets(inbuf, sizeof(inbuf), stdin)) {
+        LOG("!panic, %s\n", strerror(errno));
+        exit(errno);
+      }
       strncpy (message.time, inbuf, 5);
       message.time [5] = '\0';
       break;

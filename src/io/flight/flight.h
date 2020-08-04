@@ -1,5 +1,5 @@
-#ifndef _SEL_H_
-#define _SEL_H_
+#ifndef _FLIGHT_H_
+#define _FLIGHT_H_
 
 #include "_io_.h"
 
@@ -17,6 +17,7 @@
 #endif
 
 #define SERVER_PORT                "4358"
+
 #define STORE_FLIGHT               1
 #define FLIGHT_TIME_STORED         2
 #define FLIGHT_TIME                3
@@ -39,4 +40,4 @@ struct message {
 };
 
 
-#endif /* end of _SEL_H_ */
+#endif /* end of _FLIGHT_H_ */
