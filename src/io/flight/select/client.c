@@ -15,19 +15,10 @@
 #define SHELL_MAX_SIZE              512
 
 
-static struct message message;
-
-#define ZERO_TIME_FIELDS(m)                                       \
-  memset((m)->time_fields, 0, sizeof((m)->time_fields[0]) * TF_MAX)
-#define VAL_YEAR(year)    (0 < (year) && (year) <= 3000)
-#define VAL_MONTH(month)  (0 < (month) && (month) <= 12)
-#define VAL_DAY(day)      (0 < (day) && (day) <= 31)
-#define VAL_HOUR(hour)    (0 < (hour) && (hour) <= 24)
-#define VAL_MINUTE(minute)  (0 < (minute) && (minute) <= 60)
+static struct message_s message;
 
 static enum flight_op shell(void);
 static void zero_tail(char * const);
-static void set_time_fields(struct message * const);
 
 int
 main (int argc, char **argv) {
@@ -83,12 +74,12 @@ main (int argc, char **argv) {
       break;
     }
 
-    if (EOF == send(sock_fd, &message, sizeof(struct message), MSG_NOSIGNAL)) {
+    if (EOF == send(sock_fd, &message, sizeof(struct message_s), MSG_NOSIGNAL)) {
       LOG("!panic, %s\n", strerror(errno));
       exit(errno);
     }
 
-    if (EOF == (recv(sock_fd, &message, sizeof(struct message), 0))) {
+    if (EOF == (recv(sock_fd, &message, sizeof(struct message_s), 0))) {
       LOG("!panic, %s\n", strerror(errno));
       exit(errno);
     }
@@ -121,25 +112,6 @@ zero_tail(char * const buf) {
   size_t len = strnlen(buf, SHELL_MAX_SIZE);
   if ('\n' == buf[len - 1]) {
     buf[len - 1] = '\0';
-  }
-}
-
-void
-set_time_fields(struct message * const msg) {
-  if (VAL_YEAR(msg->time_fields[TF_YEAR])) {
-    msg->time_field_set |= (1 << TF_YEAR);
-  }
-  if (VAL_MONTH(msg->time_fields[TF_MONTH])) {
-    msg->time_field_set |= (1 << TF_MONTH);
-  }
-  if (VAL_DAY(msg->time_fields[TF_DAY])) {
-    msg->time_field_set |= (1 << TF_DAY);
-  }
-  if (VAL_HOUR(msg->time_fields[TF_HOUR])) {
-    msg->time_field_set |= (1 << TF_HOUR);
-  }
-  if (VAL_MINUTE(msg->time_fields[TF_MINUTE])) {
-    msg->time_field_set |= (1 << TF_MINUTE);
   }
 }
 
@@ -194,10 +166,11 @@ shell(void) {
             exit(errno);
           }
 
-          zero_tail(inbuf);
-          int ad = toupper(inbuf[0]);
-          if (('A' == ad) || ('D' == ad)) {
-            message.departure = ad;
+          char *const adstr = strstrip(inbuf);
+          zero_tail(adstr);
+          int ad = toupper(adstr[0]);
+          if (check_departure(ad)) {
+            message.departure = htonl(ad);
             break;
           }
           if (ferror(stdin)) {
@@ -208,20 +181,21 @@ shell(void) {
 
         int read_time = 0;
         while (1) {
-          printf("date (mm/dd/yyyy hh:mm): ");
+          printf("date (MM/dd/yyyy hh:mm:ss): ");
           if (!fgets(inbuf, sizeof(inbuf), stdin)) {
             LOG("!panic, %s\n", strerror(errno));
             exit(errno);
           }
-          ZERO_TIME_FIELDS(&message);
-          read_time = sscanf(inbuf, "%hd/%hd/%hd %hd:%hd",
-                             &message.time_fields[TF_MONTH],
-                             &message.time_fields[TF_DAY],
-                             &message.time_fields[TF_YEAR],
-                             &message.time_fields[TF_HOUR],
-                             &message.time_fields[TF_MINUTE]);
-          if (read_time) {
-            set_time_fields(&message);
+          memset(&message, 0, sizeof(struct message_s));
+          struct tm time = message.time1;
+          read_time = sscanf(inbuf, "%d/%d/%d %d:%d:%d",
+                             &time.tm_sec,
+                             &time.tm_min,
+                             &time.tm_hour,
+                             &time.tm_mday,
+                             &time.tm_mon,
+                             &time.tm_year);
+          if (read_time == TIME_FIELD_MAX(time)) {
             break;
           }
           if (ferror(stdin)) {

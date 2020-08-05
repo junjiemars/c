@@ -28,7 +28,7 @@ struct tnode {
   struct tnode *right;
 };
 
-struct message recv_message, send_message;
+struct message_s recv_message, send_message;
 
 struct tnode *add_to_tree (struct tnode *p, char *flight_no, bool departure, time_t flight_time);
 struct tnode *find_flight_rec (struct tnode *p, char *flight_no);
@@ -137,8 +137,8 @@ main (int argc, char **argv) {
         }
         else  // data from an existing connection, receive it
           {
-            memset (&recv_message, '\0', sizeof (struct message));
-            ssize_t numbytes = recv (fd, &recv_message, sizeof (struct message), 0);
+            memset (&recv_message, '\0', sizeof (struct message_s));
+            ssize_t numbytes = recv (fd, &recv_message, sizeof (struct message_s), 0);
    
             if (numbytes == -1)
               error ("recv");
@@ -248,7 +248,7 @@ main (int argc, char **argv) {
                                tms -> tm_mon + 1, tms -> tm_year + 1900);
                       sprintf (send_message.time, "%02d:%02d", tms -> tm_hour,
                                tms -> tm_min);
-                      size_t msg_len = sizeof (struct message);
+                      size_t msg_len = sizeof (struct message_s);
                       if (send (fd, &send_message, msg_len, 0) == -1)
                         error ("send");
                     }
@@ -274,10 +274,10 @@ main (int argc, char **argv) {
                   struct tnode *ptr;
                   ptr = find_flight_rec (root, recv_message.flight_no);
                   if (!ptr) {
-                    memset (&send_message, '\0', sizeof (struct message));
+                    memset (&send_message, '\0', sizeof (struct message_s));
                     send_message.id = htonl (FLIGHT_NOT_FOUND);
                     strcpy (send_message.flight_no, recv_message.flight_no);
-                    size_t msg_len = sizeof (struct message);
+                    size_t msg_len = sizeof (struct message_s);
                     if (send (fd, &send_message, msg_len, 0) == -1)
                       error ("send");
                     break;
@@ -292,7 +292,7 @@ main (int argc, char **argv) {
                            tms -> tm_mon + 1, tms -> tm_year + 1900);
                   sprintf (send_message.time, "%02d:%02d", tms -> tm_hour,
                            tms -> tm_min);
-                  size_t msg_len = sizeof (struct message);
+                  size_t msg_len = sizeof (struct message_s);
                   if (send (fd, &send_message, msg_len, 0) == -1)
                     error ("send");
                   break;
