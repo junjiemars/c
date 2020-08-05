@@ -3,7 +3,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <arpa/inet.h>
+
 #include <netdb.h>
 #include <string.h>
 #include <stdlib.h>
@@ -63,7 +63,7 @@ main (int argc, char **argv) {
   freeaddrinfo(addr);
   if (!ap) {
     LOG("!panic, no host connectable\n");
-    exit (EXIT_FAILURE);
+    exit(EXIT_FAILURE);
   }
   LOG("#connected\n");
 
@@ -152,7 +152,7 @@ shell(void) {
       {
         while (1) {
           message.id = htonl(op);
-          printf("flight no: ");
+          printf("Flight No: ");
           if (!fgets(inbuf, sizeof(inbuf), stdin)) {
             LOG("!panic, %s\n", strerror(errno));
             exit(errno);
@@ -194,6 +194,7 @@ shell(void) {
             LOG("!panic, %s\n", strerror(errno));
             exit(errno);
           }
+          zero_tail(inbuf);
           memset(&message, 0, sizeof(message));
           struct tm time;
           int read_time = sscanf(inbuf, "%d/%d/%d %d:%d:%d",

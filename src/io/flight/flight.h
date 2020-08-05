@@ -49,7 +49,6 @@ static const char *flight_op_strings[] =
   };
 
 
-
 #define FLIGHT_ERRNO_MAP(XX)                    \
   XX(OK,               "success")               \
   XX(NO_FOUND,         "no found")              \
@@ -82,7 +81,7 @@ static struct {
 #include <stdio.h>
 #include <time.h>
 #include <string.h>
-
+#include <arpa/inet.h>
 
 enum flight_time_fields
   { TF_SEC           = 0
@@ -95,12 +94,14 @@ enum flight_time_fields
   };
 
 #define FLIGHT_NUM_SIZE            15
+#define FLIGHT_TIME_LEN            32
 
 struct message_s {
-  uint32_t id;
-  int departure;            // 'D': departure, 'A': arrival
-  struct tm time1;
+  unsigned int id;
+  int departure;
   time_t epoch;
+  char ctime[32];
+  struct tm time1;  
   uint16_t time_set;
   char date [10 + 1];  // mm/dd/yyyy
   char time [5 + 1];   // hh:mm
@@ -114,6 +115,15 @@ struct message_s {
 #endif
 
 #define LOG(...) fprintf(stderr, __VA_ARGS__)
+#define LOGX() perror("!panic")
+#define LOGM(id, ad, tm, ...)                   \
+  LOG("Flight Info:\n"                          \
+      "  flight no: %u\n"                       \
+      "  a(rrival)/d(eparture): %c\n"           \
+      "  time: %s\n"                            \
+      , (id)                                    \
+      , (ad)                                    \
+      , (tm))
 
 
 #define SERVER_PORT                "4358"
@@ -123,6 +133,8 @@ const char *flight_errno_desc(enum flight_errno);
 const char *flight_op_str(enum flight_op);
 char *strstrip(char * const);
 int check_departure(int c);
+struct message_s *hton_message(struct message_s *const);
+struct message_s *ntoh_message(struct message_s *const);
 
 const char *
 flight_op_str(enum flight_op op) {
@@ -156,18 +168,37 @@ strstrip(char * const s) {
 
   size = strlen(s1);
 
-  if (!size)
+  if (!size) {
     return s;
+  }
 
   end = s1 + size - 1;
-  while (end >= s1 && isspace(*end))
+  while (end >= s1 && isspace(*end)) {
     end--;
+  }
   *(end + 1) = '\0';
 
-  while (*s1 && isspace(*s1))
+  while (*s1 && isspace(*s1)) {
     s1++;
+  }
 
   return s1;
+}
+
+struct message_s *
+hton_message(struct message_s *const m) {
+  assert(m);
+  m->id = htonl(m->id);
+  m->epoch = htonl(m->epoch);
+  return m;
+}
+
+struct message_s *
+ntoh_message(struct message_s *const m) {
+  assert(m);
+  m->id = ntohl(m->id);
+  m->epoch = ntohl(m->epoch);
+  return m;
 }
 
 #endif /* end of _FLIGHT_H_ */
