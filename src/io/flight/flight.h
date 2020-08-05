@@ -100,6 +100,7 @@ struct message_s {
   uint32_t id;
   int departure;            // 'D': departure, 'A': arrival
   struct tm time1;
+  time_t epoch;
   uint16_t time_set;
   char date [10 + 1];  // mm/dd/yyyy
   char time [5 + 1];   // hh:mm

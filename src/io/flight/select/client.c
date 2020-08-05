@@ -74,12 +74,12 @@ main (int argc, char **argv) {
       break;
     }
 
-    if (EOF == send(sock_fd, &message, sizeof(struct message_s), MSG_NOSIGNAL)) {
+    if (EOF == send(sock_fd, &message, sizeof(message), MSG_NOSIGNAL)) {
       LOG("!panic, %s\n", strerror(errno));
       exit(errno);
     }
 
-    if (EOF == (recv(sock_fd, &message, sizeof(struct message_s), 0))) {
+    if (EOF == (recv(sock_fd, &message, sizeof(message), 0))) {
       LOG("!panic, %s\n", strerror(errno));
       exit(errno);
     }
@@ -114,7 +114,6 @@ zero_tail(char * const buf) {
     buf[len - 1] = '\0';
   }
 }
-
 
 enum flight_op
 shell(void) {
@@ -151,15 +150,24 @@ shell(void) {
 
     case FLIGHT_STORE:
       {
-        message.id = htonl(op);
-        printf("flight no: ");
-        if (!fgets(inbuf, sizeof(inbuf), stdin)) {
-          LOG("!panic, %s\n", strerror(errno));
-          exit(errno);
+        while (1) {
+          message.id = htonl(op);
+          printf("flight no: ");
+          if (!fgets(inbuf, sizeof(inbuf), stdin)) {
+            LOG("!panic, %s\n", strerror(errno));
+            exit(errno);
+          }
+          char *const fno = strstrip(inbuf);
+          if (strlen(fno) > 0) {
+            zero_tail(fno);
+            strncpy(message.flight_no, fno, FLIGHT_NUM_SIZE);
+            break;
+          }
+          if (ferror(stdin)) {
+            clearerr(stdin);
+          }
+          LOG("!panic, invalid input: '%s'\n", inbuf);
         }
-        char *const fno = strstrip(inbuf);
-        zero_tail(fno);
-        strncpy(message.flight_no, fno, FLIGHT_NUM_SIZE);
 
         while (1) {
           printf("A(rrival)/D(eparture): ");
@@ -180,24 +188,28 @@ shell(void) {
           LOG("!panic, invalid input: '%s'\n", inbuf);
         }
 
-        int read_time = 0;
         while (1) {
           printf("date (MM/dd/yyyy hh:mm:ss): ");
           if (!fgets(inbuf, sizeof(inbuf), stdin)) {
             LOG("!panic, %s\n", strerror(errno));
             exit(errno);
           }
-          memset(&message, 0, sizeof(struct message_s));
-          struct tm time = message.time1;
-          read_time = sscanf(inbuf, "%d/%d/%d %d:%d:%d",
-                             &time.tm_sec,
-                             &time.tm_min,
-                             &time.tm_hour,
-                             &time.tm_mday,
-                             &time.tm_mon,
-                             &time.tm_year);
+          memset(&message, 0, sizeof(message));
+          struct tm time;
+          int read_time = sscanf(inbuf, "%d/%d/%d %d:%d:%d",
+                                 &time.tm_mon,
+                                 &time.tm_mday,
+                                 &time.tm_year,
+                                 &time.tm_hour,
+                                 &time.tm_min,
+                                 &time.tm_sec);
           if (read_time > 0) {
-            break;
+            time_t epoch = mktime(&time);
+            if ((time_t)EOF != epoch) {
+              message.epoch = htonl(epoch);
+              break;
+            }
+            LOG("!panic, %s\n", strerror(errno));
           }
           if (ferror(stdin)) {
             clearerr(stdin);
