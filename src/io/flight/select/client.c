@@ -74,6 +74,7 @@ main (int argc, char **argv) {
       break;
     }
 
+    hton_message(&message);
     if (EOF == send(sock_fd, &message, sizeof(message), MSG_NOSIGNAL)) {
       LOG("!panic, %s\n", strerror(errno));
       exit(errno);
@@ -83,23 +84,21 @@ main (int argc, char **argv) {
       LOG("!panic, %s\n", strerror(errno));
       exit(errno);
     }
+    ntoh_message(&message);
 
-    switch (ntohl(message.id)) {
-    case FLIGHT_TIME_STORED: 
-    case FLIGHT_TIME_RESULT:
-      LOG("\n#response: \n  %s: %c %s %s\n",
-          message.flight_no,
-          message.departure, 
-          message.date, message.time);
+    switch (message.id) {
+    case FLIGHT_QUERY: 
+    case FLIGHT_STORE:
+      LOGM(message.id, message.departure, message.ctime);
       break;
-    case FLIGHT_NOT_FOUND:
-      LOG("\n#response: flight not found\n");
-      break;
-    case ERROR_IN_INPUT:
-      LOG("\n#!panic, read input failed\n");
-      break;
+    /* case FE_NO_FOUND: */
+    /*   LOG("#response: %s\n", flight_errno_desc(FE_NO_FOUND)); */
+    /*   break; */
+    /* case FE_OK: */
+    /*   LOG("#response: %s\n", flight_errno_desc(FE_OK)); */
+    /*   break; */
     default:
-      LOG("\n!panic, unrecongnized message from server\n");
+      LOG("!panic: unknown error\n");
       break;
     }
   }

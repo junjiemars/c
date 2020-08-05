@@ -14,28 +14,9 @@
 #include <ctype.h>
 #include <time.h>
 
+#define MAX_REQ            4
+#define BACKLOG            8
 
-
-#define BACKLOG                   10
-#define MAX_REQ                    1
-
-void error (char *msg);
-
-struct tnode {
-  char *flight_no;
-  bool departure; // true: departure, false: arrival
-  time_t flight_time;
-  struct tnode *left;
-  struct tnode *right;
-};
-
-/* static struct message_s recv_message, send_message; */
-
-struct tnode *add_to_tree (struct tnode *p, char *flight_no, bool departure, time_t flight_time);
-struct tnode *find_flight_rec (struct tnode *p, char *flight_no);
-void print_tree (struct tnode *p);
-void trim (char *dest, char *src); 
-void error (char *msg);
 void run(int);
 
 int
@@ -96,116 +77,13 @@ main (int argc, char **argv) {
 
   run(s_listen);
   exit (EXIT_SUCCESS);
-} // main
-
-// record the flight departure / arrival time    
-struct tnode *add_to_tree (struct tnode *p, char *flight_no, bool departure, time_t flight_time)
-{
-  int res;
-
-  if (p == NULL) {  // new entry
-    if ((p = (struct tnode *) malloc (sizeof (struct tnode))) == NULL)
-      error ("malloc");
-    p -> flight_no = strdup (flight_no);
-    p -> departure = departure;
-    p -> flight_time = flight_time;
-    p -> left = p -> right = NULL;
-  }
-  else if ((res = strcmp (flight_no, p -> flight_no)) == 0) { // entry exists
-    p -> departure = departure;
-    p -> flight_time = flight_time;
-  }
-  else if (res < 0) // less than flight_no for this node, put in left subtree
-    p -> left = add_to_tree (p -> left, flight_no, departure, flight_time);
-  else   // greater than flight_no for this node, put in right subtree
-    p -> right = add_to_tree (p -> right, flight_no, departure, flight_time);
-  return p;
-}
-
-// find node for the flight for which departure or arrival time is queried
-struct tnode *find_flight_rec (struct tnode *p, char *flight_no)
-{
-  int res;
-
-  if (!p) 
-    return p;
-  res = strcmp (flight_no, p -> flight_no);
-    
-  if (!res)
-    return p;
-
-  if (res < 0)
-    return find_flight_rec (p -> left, flight_no);
-  else 
-    return find_flight_rec (p -> right, flight_no);
-}
-
-// print_tree: print the tree (in-order traversal)
-void print_tree (struct tnode *p)
-{
-  if (p != NULL) {
-    print_tree (p -> left);
-    printf ("%s: %d %s\n\n", p -> flight_no, (int) p -> departure, ctime (&(p -> flight_time)));
-    print_tree (p -> right);
-  }
-}
-
-void error (char *msg)
-{
-  perror (msg);
-  exit (1);
-}
-
-// trim: leading and trailing whitespace of string
-void trim (char *dest, char *src)
-{
-  if (!src || !dest)
-    return;
-
-  int len = strlen (src);
-
-  if (!len) {
-    *dest = '\0';
-    return;
-  }
-  char *ptr = src + len - 1;
-
-  // remove trailing whitespace
-  while (ptr > src) {
-    if (!isspace (*ptr))
-      break;
-    ptr--;
-  }
-
-  ptr++;
-
-  char *q;
-  // remove leading whitespace
-  for (q = src; (q < ptr && isspace (*q)); q++)
-    ;
-
-  while (q < ptr)
-    *dest++ = *q++;
-
-  *dest = '\0';
 }
 
 void
 run(int s_listen) {
-  /* socklen_t addrlen; */
-  /* fd_set fds, r_fds; */
-  /* FD_ZERO(&fds); */
-  /* FD_SET(s_listen, &fds); */
-  /* int fdmax = s_listen; */
-  /* struct sockaddr_storage client_saddr; */
-  /* char str [INET6_ADDRSTRLEN]; */
-  /* struct sockaddr_in  *ptr; */
-  /* struct sockaddr_in6  *ptr1; */
-  /* struct tnode *root = NULL; */
-
   fd_set r_fds;
   int max_fd;
-  int reqs[MAX_REQ];
+  int reqs[MAX_REQ] = { 0 };
 
   while (1) {
     FD_ZERO(&r_fds);
@@ -213,11 +91,12 @@ run(int s_listen) {
     max_fd = s_listen;
 
     for (int i = 0; i < MAX_REQ; i++) {
-      if (reqs[i] > 0) {
-        FD_SET(reqs[i], &r_fds);
+      int fd = reqs[i];
+      if (fd > 0) {
+        FD_SET(fd, &r_fds);
       }
-      if (reqs[i] > max_fd) {
-        max_fd = reqs[i];
+      if (fd > max_fd) {
+        max_fd = fd;
       }
     }
 
@@ -227,27 +106,27 @@ run(int s_listen) {
 
     int retval = select(max_fd + 1, &r_fds, 0, 0, &tv);
     if (EOF == retval) {
-      LOG("!panic, %s\n", strerror(errno));
+      LOGX();
     } else if (0 == retval) {
-      LOG("!panic, select timeout\n");
+      LOG("!panic: select timeout[%d]\n", (int)tv.tv_sec);
     }
 
     if (FD_ISSET(s_listen, &r_fds)) {
       struct sockaddr_in req_addr;
       socklen_t req_len;
-      int new_fd = accept(s_listen, (struct sockaddr*)&req_addr,
+      int new_fd = accept(s_listen,
+                          (struct sockaddr*)&req_addr,
                           (socklen_t*)&req_len);
       if (EOF == new_fd) {
-        LOG("!panic, %s\n", strerror(errno));
-        /* exit(EXIT_FAILURE); */
+        LOGX();
+        exit(errno);
       }
 
-      LOG("#accept, [%d], %s:%d\n", new_fd,
-          inet_ntoa(req_addr.sin_addr), ntohs(req_addr.sin_port));
-       
-      //send new connection greeting message
-             
-      //add new socket to array of sockets
+      LOG("#accept, [%d], %s:%d\n",
+          new_fd,
+          inet_ntoa(req_addr.sin_addr),
+          ntohs(req_addr.sin_port));
+
       for (int i = 0; i < MAX_REQ; i++) {
           if (0 == reqs[i]) {
             reqs[i] = new_fd;

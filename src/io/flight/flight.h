@@ -70,12 +70,6 @@ static struct {
 };
 #undef FLIGHT_STRERROR_GEN
 
-#define STORE_FLIGHT               1
-#define FLIGHT_TIME_STORED         2
-#define FLIGHT_TIME                3
-#define FLIGHT_TIME_RESULT         4
-#define FLIGHT_NOT_FOUND           5
-#define ERROR_IN_INPUT             9
 
 #include <stdint.h>
 #include <stdio.h>
@@ -83,15 +77,6 @@ static struct {
 #include <string.h>
 #include <arpa/inet.h>
 
-enum flight_time_fields
-  { TF_SEC           = 0
-    , TF_MIN         = 1
-    , TF_HOUR        = 2
-    , TF_MDAY        = 3
-    , TF_MON         = 4
-    , TF_YEAR        = 5
-    , TF_MAX         = 6
-  };
 
 #define FLIGHT_NUM_SIZE            15
 #define FLIGHT_TIME_LEN            32
@@ -101,10 +86,6 @@ struct message_s {
   int departure;
   time_t epoch;
   char ctime[32];
-  struct tm time1;  
-  uint16_t time_set;
-  char date [10 + 1];  // mm/dd/yyyy
-  char time [5 + 1];   // hh:mm
   char flight_no [FLIGHT_NUM_SIZE + 1];
 };
 
@@ -118,9 +99,9 @@ struct message_s {
 #define LOGX() perror("!panic")
 #define LOGM(id, ad, tm, ...)                   \
   LOG("Flight Info:\n"                          \
-      "  flight no: %u\n"                       \
-      "  a(rrival)/d(eparture): %c\n"           \
-      "  time: %s\n"                            \
+      "  Flight No: %u\n"                       \
+      "  A(rrival)/D(eparture): %c\n"           \
+      "  Date: %s\n"                            \
       , (id)                                    \
       , (ad)                                    \
       , (tm))
