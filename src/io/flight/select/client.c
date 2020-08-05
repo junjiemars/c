@@ -115,6 +115,7 @@ zero_tail(char * const buf) {
   }
 }
 
+
 enum flight_op
 shell(void) {
   static char inbuf[SHELL_MAX_SIZE];
@@ -156,8 +157,9 @@ shell(void) {
           LOG("!panic, %s\n", strerror(errno));
           exit(errno);
         }
-        zero_tail(inbuf);
-        strcpy(message.flight_no, inbuf);
+        char *const fno = strstrip(inbuf);
+        zero_tail(fno);
+        strncpy(message.flight_no, fno, FLIGHT_NUM_SIZE);
 
         while (1) {
           printf("A(rrival)/D(eparture): ");
@@ -194,7 +196,7 @@ shell(void) {
                              &time.tm_mday,
                              &time.tm_mon,
                              &time.tm_year);
-          if (read_time == TIME_FIELD_MAX(time)) {
+          if (read_time > 0) {
             break;
           }
           if (ferror(stdin)) {
