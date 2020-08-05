@@ -196,6 +196,7 @@ shell(void) {
           zero_tail(inbuf);
 
           struct tm time;
+          memset(&time, 0, sizeof(time));
           int read_time = sscanf(inbuf, "%d/%d/%d %d:%d:%d",
                                  &time.tm_mon,
                                  &time.tm_mday,
@@ -206,7 +207,7 @@ shell(void) {
           if (read_time > 0) {
             time_t epoch = mktime(&time);
             if ((time_t)EOF != epoch) {
-              message.epoch = htonl(epoch);
+              message.epoch = epoch;
               break;
             }
             LOGX();
