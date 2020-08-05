@@ -8,6 +8,16 @@
 #    define _GNU_SOURCE
 #  endif
 #endif
+
+#if !( NM_HAVE_RESTRICT_KEYWORD )
+#  if ( NM_HAVE___RESTRICT_KEYWORD )
+#    define restrict __restrict
+#  else
+#    define restrict
+#  endif
+#endif
+
+
 #include <stdio.h>
 
 #include <stdlib.h>
@@ -20,11 +30,13 @@
 #define LESS_LEN 7
 #define REGU_LEN 8
 
-ssize_t self_getline(char**, size_t*, FILE*);
-ssize_t self_getdelim(char**, size_t*, int, FILE*);
+ssize_t self_getline(char* *restrict, size_t *restrict, FILE *restrict);
+ssize_t self_getdelim(char* *restrict, size_t *restrict, int, FILE *restrict);
+#if !(MSVC)
 void test_getline(const char*);
 void test_getline1(const char*);
 void test_getline2(const char*);
+#endif
 void test_getdelim(const char*);
 void test_self_getdelim(const char*);
 void test_self_getline(const char*);
@@ -43,10 +55,12 @@ main(int argc, char **argv) {
     return 0;
   }
   strcpy(f, argv[1]);
-		
+	
+#if !(MSVC)	
   test_getline(f);
   test_getline1(f);
   test_getline2(f);
+#endif
   test_self_getline(f);
   fprintf(stdout, "##########\n");
 		
@@ -142,6 +156,7 @@ self_getdelim(char ** restrict linep,
 	return EOF == c ? EOF : linelen;
 }
 
+#if !(MSVC)
 void
 test_getline(const char *filename) {
 	FILE *file = fopen(filename, "r");
@@ -166,7 +181,9 @@ test_getline(const char *filename) {
   
   free(*line);
 }
+#endif
 
+#if !(MSVC)
 void
 test_getline1(const char *filename) {
 	FILE *file = fopen(filename, "r");
@@ -191,7 +208,9 @@ test_getline1(const char *filename) {
 
   free(*line);
 }
+#endif
 
+#if !(MSVC)
 void
 test_getline2(const char *filename) {
 	FILE *file = fopen(filename, "r");
@@ -216,7 +235,7 @@ test_getline2(const char *filename) {
 	
   free(*line);
 }
-
+#endif
 
 void
 test_self_getline(const char *filename) {

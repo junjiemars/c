@@ -11,7 +11,7 @@ test_fgets(const char *filename) {
 		return;
 	}
 
-	size_t str_len = 128;
+	int str_len = 128;
 	char *str = malloc(str_len);
 	if (0 == str) {
 		perror("malloc failed");
