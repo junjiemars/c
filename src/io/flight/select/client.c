@@ -35,7 +35,7 @@ main (int argc, char **argv) {
   struct addrinfo *addr;
   int s; 
   if (0 != (s = getaddrinfo(host, SERVER_PORT, &hints, &addr))) {
-    LOG("!panic, %s\n", gai_strerror(s));
+    LOG("!panic: %s\n", gai_strerror(s));
     exit(s);
   }
 
@@ -46,14 +46,14 @@ main (int argc, char **argv) {
   for (ap = addr; ap; ap = ap->ai_next) {
     sock_fd = socket(ap->ai_family, ap->ai_socktype, ap->ai_protocol);
     if (EOF == sock_fd) {
-      LOG("!panic, %s\n", strerror(errno));
+      LOGX();
       continue;
     }
 
     if (EOF == connect(sock_fd, ap->ai_addr, ap->ai_addrlen)) {
-      LOG("!panic, %s\n", strerror(errno));
+      LOGX();
       if (EOF == close (sock_fd)) {
-        LOG("!panic, %s\n", strerror(errno));
+        LOGX();
       }
       continue;
     }
@@ -62,7 +62,7 @@ main (int argc, char **argv) {
 
   freeaddrinfo(addr);
   if (!ap) {
-    LOG("!panic, no host connectable\n");
+    LOG("!panic: no host connectable\n");
     exit(EXIT_FAILURE);
   }
   LOG("#connected\n");
@@ -76,12 +76,12 @@ main (int argc, char **argv) {
 
     hton_message(&message);
     if (EOF == send(sock_fd, &message, sizeof(message), MSG_NOSIGNAL)) {
-      LOG("!panic, %s\n", strerror(errno));
+      LOGX();
       exit(errno);
     }
 
     if (EOF == (recv(sock_fd, &message, sizeof(message), 0))) {
-      LOG("!panic, %s\n", strerror(errno));
+      LOGX();
       exit(errno);
     }
     ntoh_message(&message);
@@ -120,26 +120,27 @@ shell(void) {
   int choose;
 
   while (1) {
-    printf("flight info\n");
-    printf("  flight time query  1\n");
-    printf("  store flight time  2\n");
-    printf("  quit               0\n");
-    printf("choose: ");
+    LOG("Flight Info\n");
+    LOG("  flight time query  1\n");
+    LOG("  store flight time  2\n");
+    LOG("  quit               0\n");
+    LOG("Choose: ");
     if (!fgets(inbuf, sizeof(inbuf), stdin)) {
-      LOG("!panic, %s\n", strerror(errno));
+      LOGX();
       exit(errno);
     }
     sscanf(inbuf, "%d", &choose);
     enum flight_op op = (enum flight_op)choose;
-
+    memset(&message, 0, sizeof(message));
+    message.id = op;
+    
     switch (op) {
 
     case FLIGHT_QUERY:
       {
-        message.id = htonl(op);
-        printf ("flight no: ");
+        LOG("Flight No: ");
         if (!fgets(inbuf, sizeof(inbuf), stdin)) {
-          LOG("!panic, %s\n", strerror(errno));
+          LOGX();
           exit(errno);
         }
         zero_tail(inbuf);
@@ -150,10 +151,9 @@ shell(void) {
     case FLIGHT_STORE:
       {
         while (1) {
-          message.id = htonl(op);
-          printf("Flight No: ");
+          LOG("Flight No: ");
           if (!fgets(inbuf, sizeof(inbuf), stdin)) {
-            LOG("!panic, %s\n", strerror(errno));
+            LOGX();
             exit(errno);
           }
           char *const fno = strstrip(inbuf);
@@ -165,13 +165,13 @@ shell(void) {
           if (ferror(stdin)) {
             clearerr(stdin);
           }
-          LOG("!panic, invalid input: '%s'\n", inbuf);
+          LOG("!panic: invalid input: '%s'\n", inbuf);
         }
 
         while (1) {
-          printf("A(rrival)/D(eparture): ");
+          LOG("A(rrival)/D(eparture): ");
           if (!fgets(inbuf, sizeof(inbuf), stdin)) {
-            LOG("!panic, %s\n", strerror(errno));
+            LOGX();
             exit(errno);
           }
 
@@ -184,17 +184,17 @@ shell(void) {
           if (ferror(stdin)) {
             clearerr(stdin);
           }
-          LOG("!panic, invalid input: '%s'\n", inbuf);
+          LOG("!panic: invalid input: '%s'\n", inbuf);
         }
 
         while (1) {
-          printf("date (MM/dd/yyyy hh:mm:ss): ");
+          LOG("Date (MM/dd/yyyy hh:mm:ss): ");
           if (!fgets(inbuf, sizeof(inbuf), stdin)) {
-            LOG("!panic, %s\n", strerror(errno));
+            LOGX();
             exit(errno);
           }
           zero_tail(inbuf);
-          memset(&message, 0, sizeof(message));
+
           struct tm time;
           int read_time = sscanf(inbuf, "%d/%d/%d %d:%d:%d",
                                  &time.tm_mon,
@@ -209,12 +209,12 @@ shell(void) {
               message.epoch = htonl(epoch);
               break;
             }
-            LOG("!panic, %s\n", strerror(errno));
+            LOGX();
           }
           if (ferror(stdin)) {
             clearerr(stdin);
           }
-          LOG("!panic, invalid input: '%s'\n", inbuf);
+          LOG("!panic: invalid input: '%s'\n", inbuf);
         }
       }
       break;
@@ -223,7 +223,7 @@ shell(void) {
       break;
 
     default:
-      LOG("!panic, illegal choose, try again\n");
+      LOG("!panic: illegal choose, try again\n");
       continue;
     }
 
