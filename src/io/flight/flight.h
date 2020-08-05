@@ -170,6 +170,7 @@ struct message_s *
 hton_message(struct message_s *const m) {
   assert(m);
   m->id = htonl(m->id);
+  m->departure = htonl(m->departure);
   m->epoch = htonl(m->epoch);
   return m;
 }
@@ -178,6 +179,7 @@ struct message_s *
 ntoh_message(struct message_s *const m) {
   assert(m);
   m->id = ntohl(m->id);
+  m->departure = ntohl(m->departure);
   m->epoch = ntohl(m->epoch);
   return m;
 }

@@ -178,7 +178,7 @@ shell(void) {
           char ad;
           int read_ad = sscanf(inbuf, " %c", &ad);
           if ((read_ad > 0) && check_departure(ad)) {
-            message.departure = htonl(toupper(ad));
+            message.departure = toupper(ad);
             break;
           }
           if (ferror(stdin)) {
