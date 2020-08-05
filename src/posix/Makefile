@@ -1,16 +1,22 @@
+#
 # ./configure --has-posix
-
-posix: posix_bits																\
-       posix_mmap																\
-       posix_sysconf														\
-       posix_tmp
-posix_test: posix_bits_test											\
-            posix_mmap_test											\
-            posix_sysconf_test									\
-            posix_tmp_test
+#
 
 posix_prefix := posix
 INC += -I$(posix_root)
+
+posix: posix_bits																\
+       posix_mmap																\
+       posix_restrict														\
+       posix_sysconf														\
+       posix_tmp
+
+posix_test: posix_bits_test											\
+            posix_mmap_test											\
+            posix_restrict_test									\
+            posix_sysconf_test									\
+            posix_tmp_test
+
 
 # bits
 posix_bits_binout := $(bin_path)$(posix_prefix)_bits$(bin_ext)
@@ -21,7 +27,6 @@ posix_bits_test: posix_bits
 
 $(posix_bits_binout): $(posix_root)bits_test.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
 
 # msvc on Windows
 ifeq ($(CC_NAME), msvc)
@@ -59,6 +64,9 @@ $(posix_mmap_read_binout): $(posix_root)mmap/read.c		\
 $(posix_mmap_shared_binout): $(posix_root)mmap/shared.c	\
                              $(posix_root)mmap/_mmap_.h
 	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
+
+# restrict
+# !TODO
 
 # sysconf
 posix_sysconf_binout := $(bin_path)$(posix_prefix)_sysconf$(bin_ext)

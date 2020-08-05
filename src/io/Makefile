@@ -3,10 +3,9 @@
 #
 
 io_prefix := io
-INC += -I$(io_root) -I$(root)
+INC += -I$(io_root) -I$(root) -I$(root)posix
 
 ifeq ($(CC_NAME),msvc)
-INC += -I$(root)posix
 getopt_c := $(root)posix/getopt.c
 endif
 

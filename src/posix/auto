@@ -9,6 +9,24 @@
 include="stdint.h" . ${NORE_ROOT}/auto/include
 include="inttypes.h" . ${NORE_ROOT}/auto/include
 
+# restrict
+nm_feature="restrict keyword"
+nm_feature_name="nm_have_restrict_kw"
+nm_feature_run=
+nm_feature_h=
+nm_feature_flags=
+nm_feature_test='int x = 0x11; int *restrict p = &x;'
+. ${NORE_ROOT}/auto/feature
+if [ "yes" != $nm_found ]; then
+	nm_feature="__restrict keyword"
+	nm_feature_name="nm_have___restrict_kw"
+	nm_feature_run=
+	nm_feature_h=
+	nm_feature_flags=
+	nm_feature_test='int x = 0x11; int *__restrict p = &x;'
+	. ${NORE_ROOT}/auto/feature
+fi
+
 # open
 case $NM_SYSTEM in
   Darwin|Linux)

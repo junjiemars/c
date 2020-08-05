@@ -9,15 +9,6 @@
 #  endif
 #endif
 
-#if !( NM_HAVE_RESTRICT_KEYWORD )
-#  if ( NM_HAVE___RESTRICT_KEYWORD )
-#    define restrict __restrict
-#  else
-#    define restrict
-#  endif
-#endif
-
-
 #include <stdio.h>
 
 #include <stdlib.h>

@@ -2,7 +2,7 @@
 #define _IO_H_
 
 #include <nore.h>
-/* #include "norstd.h" */
+#include "restrict.h"
 
 #if (MSVC)
 #  pragma warning(disable : 4996)
