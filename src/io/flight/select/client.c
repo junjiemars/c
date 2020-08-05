@@ -166,11 +166,10 @@ shell(void) {
             exit(errno);
           }
 
-          char *const adstr = strstrip(inbuf);
-          zero_tail(adstr);
-          int ad = toupper(adstr[0]);
-          if (check_departure(ad)) {
-            message.departure = htonl(ad);
+          char ad;
+          int read_ad = sscanf(inbuf, " %c", &ad);
+          if ((read_ad > 0) && check_departure(ad)) {
+            message.departure = htonl(toupper(ad));
             break;
           }
           if (ferror(stdin)) {
