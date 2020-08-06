@@ -1,6 +1,9 @@
 #include "_lang_.h"
 #include <stdio.h>
 
+#if (MSVC)
+#  pragma warning(disable: 4172)
+#endif
 
 /* syntax: typedef type declaration */
 typedef int length_t;

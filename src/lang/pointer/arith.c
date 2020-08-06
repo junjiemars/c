@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <stdio.h>
+#include <posix/ints.h>
 
 #define N 8
 

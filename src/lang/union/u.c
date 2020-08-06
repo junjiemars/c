@@ -11,7 +11,7 @@ union __attribute__((packed)) size_u {
   int whole;
 };
 #elif defined(MSVC)
-#pragma packed(push, 1)
+#pragma pack(push, 1)
 union size_u {
   struct {
     short high;
@@ -19,7 +19,7 @@ union size_u {
   } split;
   int whole;
 };
-#pragma packed(pop)
+#pragma pack(pop)
 #endif
 
 void test_size_u(void);

@@ -19,5 +19,11 @@ typedef __int64 int64_t;
 typedef unsigned __int64 uint64_t;
 #endif /* end of NM_HAVE_STDINT_H */
 
-
+#if (MSVC)
+#  include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
+#define timegm _mkgmtime
+#else
+#  include <sys/types.h>
+#endif
 #endif /* end of _INTS_H_ */

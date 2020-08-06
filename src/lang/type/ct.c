@@ -3,6 +3,10 @@
 #include <string.h>
 #include <stdio.h>
 
+#if (MSVC)
+#  pragma warning(disable: 4244)
+#endif
+
 long
 atox(const char *s) {
   static char const *x = "0123456789ABCDEF";

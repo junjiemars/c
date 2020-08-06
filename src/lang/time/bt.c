@@ -12,6 +12,7 @@
 # endif
 #endif
 #include <time.h>
+#include <posix/ints.h>
 
 void test_epoch(time_t *);
 void test_localtime(const time_t *);

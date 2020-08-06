@@ -1,7 +1,7 @@
 #include <_lang_.h>
 #include <stdio.h>
 
-#if NM_HAVE_TYPEOF
+#if (NM_HAVE_TYPEOF)
 #  define swap(a, b) do {                       \
 		 typeof(a) _swap_1_ = a;                    \
 		 a = b;                                     \
@@ -12,7 +12,7 @@
 #  define swap(a, b, w) do {                    \
      unsigned char _swap_2_[w];                 \
 		 memcpy(_swap_2_, a, w);                    \
-     memmov(a, b, w);                           \
+     memmove(a, b, w);                           \
      memcpy(b, _swap_2_, w);                    \
 	 } while (0)
 #endif

@@ -4,6 +4,10 @@
 #include <stdint.h>
 #include <string.h>
 
+#if (MSVC)
+#  pragma warning(disable: 4200)
+#endif
+
 struct flex1_s {
   int n;
   long n2[];  /* flexibile member */
@@ -15,12 +19,12 @@ struct __attribute__((packed)) flex2_s {
   long n2[]; /* flexibile member */
 };
 #elif defined(MSVC)
-#pragma packed(push, 1);
+#  pragma pack(push, 1)
 struct flex2_s {
   int n;
   long n2[]; /* flexibile member */
 };
-#pragma packed(pop)
+#  pragma pack(pop)
 #endif
 
 struct noname1_s {
@@ -41,7 +45,7 @@ struct __attribute__((packed)) noname2_s {
   } noname;
 };
 #elif defined(MSVC)
-#pragma packed(push, 1)
+#  pragma pack(push, 1)
 struct noname2_s {
   uint16_t n;
   struct { /* anonymous struct */
@@ -49,7 +53,7 @@ struct noname2_s {
     uint16_t b;
   } noname;
 };
-#pragma packed(pop)
+#  pragma pack(pop)
 #endif
 
 struct cyclic1_y;
@@ -78,7 +82,7 @@ struct __attribute__((packed)) cyclic2_y {
   struct cyclic2_x x;
 };
 #elif defined(MSVC)
-#pragma packed(push, 1)
+#pragma pack(push, 1)
 struct cyclic2_y;
 
 struct cyclic2_x {
@@ -90,7 +94,7 @@ struct cyclic2_y {
   int ny;
   struct cyclic2_x x;
 };
-#pragma packed(pop)
+#pragma pack(pop)
 #endif
 
 #define _OVERLAP_                               \
