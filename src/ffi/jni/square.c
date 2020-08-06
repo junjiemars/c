@@ -1,5 +1,5 @@
 #include <_ffi_.h>
-#include <square.h>
+#include <Java2c.h>
 #include <stdio.h>
 
 

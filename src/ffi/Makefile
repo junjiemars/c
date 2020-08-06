@@ -1,10 +1,13 @@
+#
+# ./configure --has-ffi
+#
+
+INC += -I$(ffi_root)
 
 ffi: jni
 ffi_test: jni_test
 
-INC += -I$(ffi_root)
-
-
+ifeq ($(javac_ge_8),$(javac_ver))
 # jni
 square_libout := $(lib_path)libsquare$(lib_ext)
 jni_classpath += -classpath .$(nm_p)$(bin_path)
@@ -16,16 +19,18 @@ jni_test: jni
 jni_inc += $(INC) $(jni_ldflags)
 jni_cflags += $(CFLAGS) $(nm_shared_opt)
 
-square_h := $(inc_path)square.h
+java2c_h := $(inc_path)Java2c.h
 java2c_classout := $(bin_path)Java2c.class
 
 # square_libout does not need link with -ljvm
-$(square_libout): $(square_h) $(ffi_root)jni/square.c
+$(square_libout): $(java2c_h) $(ffi_root)jni/square.c
 	$(CC) $(jni_cflags) $(jni_inc) $(ffi_root)jni/square.c $(bin_out)$@ 
 
-$(square_h): $(java2c_classout)
-	$(JAVAH) $(jni_binout) $@ $(jni_classpath) Java2c
+$(java2c_h): $(ffi_root)jni/Java2c.java
+	$(JAVAH) -h $(inc_path) -d $(bin_path) $(ffi_root)jni/Java2c.java
 
-$(java2c_classout): $(ffi_root)jni/Java2c.java
-	$(JAVAC) $(jni_symbol) -d $(bin_path) $^
-
+else
+jni:
+jni_test:
+endif
+# eof
