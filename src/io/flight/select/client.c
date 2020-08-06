@@ -3,20 +3,18 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-
 #include <netdb.h>
-#include <string.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <unistd.h>
 #include <ctype.h>
-#include <time.h>
 
 #define SHELL_MAX_SIZE              512
 
 
 static struct message_s message;
 
+static void run(int);
 static enum flight_op shell(void);
 static void zero_tail(char * const);
 
@@ -26,9 +24,10 @@ main (int argc, char **argv) {
     LOG("where the host?\n");
     exit(EXIT_FAILURE);
   }
+
   const char *host = argv[1];
   struct addrinfo hints;
-  memset(&hints, 0, sizeof (struct addrinfo));
+  memset(&hints, 0, sizeof(struct addrinfo));
   hints.ai_family = AF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
 
@@ -40,33 +39,50 @@ main (int argc, char **argv) {
   }
 
   LOG("#connect to %s ...\n", host);
-  int sock_fd;
+  int s_fd;
   struct addrinfo *ap;
 
   for (ap = addr; ap; ap = ap->ai_next) {
-    sock_fd = socket(ap->ai_family, ap->ai_socktype, ap->ai_protocol);
-    if (EOF == sock_fd) {
+    s_fd = socket(ap->ai_family, ap->ai_socktype, ap->ai_protocol);
+    if (EOF == s_fd) {
       LOGX();
       continue;
     }
 
-    if (EOF == connect(sock_fd, ap->ai_addr, ap->ai_addrlen)) {
+    if (EOF == connect(s_fd, ap->ai_addr, ap->ai_addrlen)) {
+      int err = errno;
       LOGX();
-      if (EOF == close (sock_fd)) {
+      if (EOF == close(s_fd)) {
         LOGX();
       }
-      continue;
+      exit(err);
     }
     break;
   }
-
-  freeaddrinfo(addr);
+  
   if (!ap) {
     LOG("!panic: no host connectable\n");
     exit(EXIT_FAILURE);
   }
+  freeaddrinfo(addr);
   LOG("#connected\n");
 
+  run(s_fd);
+
+  close(s_fd);
+  exit(EXIT_SUCCESS);
+}
+
+void
+zero_tail(char * const buf) {
+  size_t len = strnlen(buf, SHELL_MAX_SIZE);
+  if ('\n' == buf[len - 1]) {
+    buf[len - 1] = '\0';
+  }
+}
+
+void
+run(int sfd) {
   int op;
   while (1) {
     if (FLIGHT_QUIT == (op = shell())) {
@@ -75,14 +91,14 @@ main (int argc, char **argv) {
     }
 
     hton_message(&message);
-    if (EOF == send(sock_fd, &message, sizeof(message), MSG_NOSIGNAL)) {
+    if (EOF == send(sfd, &message, sizeof(message), MSG_NOSIGNAL)) {
       LOGX();
-      exit(errno);
+      break;
     }
 
-    if (EOF == (recv(sock_fd, &message, sizeof(message), 0))) {
+    if (EOF == (recv(sfd, &message, sizeof(message), 0))) {
       LOGX();
-      exit(errno);
+      break;
     }
     ntoh_message(&message);
 
@@ -101,16 +117,6 @@ main (int argc, char **argv) {
       LOG("!panic: unknown error\n");
       break;
     }
-  }
-
-  exit (EXIT_SUCCESS);
-}
-
-void
-zero_tail(char * const buf) {
-  size_t len = strnlen(buf, SHELL_MAX_SIZE);
-  if ('\n' == buf[len - 1]) {
-    buf[len - 1] = '\0';
   }
 }
 

@@ -3,7 +3,7 @@
 #
 
 io_prefix := io
-INC += -I$(io_root) -I$(root) -I$(root)posix
+INC += -I$(io_root) -I$(root)
 
 ifeq ($(CC_NAME),msvc)
 getopt_c := $(root)posix/getopt.c
@@ -130,7 +130,7 @@ inc_flight := -I$(io_root)flight
 
 ifeq ($(NM_SYSTEM),$(filter $(NM_SYSTEM),Linux Darwin))
 io_flight: io_flight_select
-# io_flight_test: io_flight_select_test
+io_flight_test:
 
 io_flight_select: $(io_flight_select_s_binout)	\
                   $(io_flight_select_c_binout)

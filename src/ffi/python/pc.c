@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <getopt.h>
+#include <posix/getopt.h>
 
 static struct option longopts[] = {
     {"help",    no_argument,    0,      'h'},
