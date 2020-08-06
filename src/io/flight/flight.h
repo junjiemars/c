@@ -20,6 +20,10 @@
 #include <assert.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <stdint.h>
+#include <time.h>
+#include <string.h>
+#include <arpa/inet.h>
 
 
 #if (DARWIN)
@@ -30,9 +34,9 @@
 
 
 #define FLIGHT_OP_MAP(XX)                       \
-  XX(0,  QUIT,   quit)                          \
-  XX(1,  QUERY,  query)                         \
-  XX(2,  STORE,  store)
+  XX(0,  QUIT,       quit)                      \
+  XX(1,  QUERY,      query)                     \
+  XX(2,  STORE,      store)
   
 enum flight_op
   {
@@ -69,13 +73,6 @@ static struct {
   FLIGHT_ERRNO_MAP(FLIGHT_STRERROR_GEN)
 };
 #undef FLIGHT_STRERROR_GEN
-
-
-#include <stdint.h>
-#include <stdio.h>
-#include <time.h>
-#include <string.h>
-#include <arpa/inet.h>
 
 
 #define FLIGHT_NUM_SIZE            15
@@ -143,6 +140,7 @@ check_departure(int c) {
 
 char *
 strstrip(char * const s) {
+  assert(s);
   size_t size;
   char *end;
   char *s1 = s;
