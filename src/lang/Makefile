@@ -3,7 +3,7 @@
 #
 
 lang_prefix := lang
-INC += -I$(lang_root)
+INC += -I$(root) -I$(lang_root)
 
 _ERROR_ ?= 0
 _MEMORY_ ?= 0

@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <math.h>
+#include <posix/strs.h>
 
 void
 test_open_file(const char *filename) {
