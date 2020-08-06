@@ -6,6 +6,10 @@
 #include <string.h>
 #include <assert.h>
 
+#if (MSVC)
+#  pragma warning(disable: 4293)
+#endif
+
 #if defined(BIT8_SEP)
 #  undef  BIT8_SEP
 #  define BIT8_SEP " "
@@ -44,7 +48,7 @@ to_ul(double x) {
 
 void
 test_cmp_float(void) {
-  float d1 = 0.1, d2 = 0.2, d3 = 0.3;
+  float d1 = 0.1f, d2 = 0.2f, d3 = 0.3f;
   unsigned int u1 = to_ui(d1);
   unsigned int u2 = to_ui(d2);
   unsigned int u12 = to_ui(d1+d2);
@@ -80,7 +84,7 @@ test_cmp_float(void) {
   assert(lessequal && greaterequal);
 
   int less1, greater1, lessgreater1;
-  float lg1 = 0.1, lg2 = 0.2, lg3 = 0.3001;
+  float lg1 = 0.1f, lg2 = 0.2f, lg3 = 0.3001f;
   less1 = isless(lg3, lg1+lg2);
   greater1 = isgreater(lg3, lg1+lg2);
   lessgreater1 = islessgreater(lg3, lg1+lg2);
@@ -141,14 +145,14 @@ test_cmp_double(void) {
 void
 test_asm_double(void) {
   double d1 = 0.1, d2 = 0.2, d3 = 0.3;
-  int x = ((d1+d2) - d3);
+  int x = (int)((d1+d2) - d3);
   _unused_(x);
 }
 
 void
 test_asm_long_double(void) {
   long double d1 = 0.1L, d2 = 0.2L, d3 = 0.3L;
-  int x = ((d1+d2) - d3);
+  int x = (int)((d1+d2) - d3);
   _unused_(x);
 }
 
@@ -193,13 +197,18 @@ test_double_classify(void) {
   assert(FP_ZERO == fpclassify(0.0/DBL_MAX));
   assert(FP_NORMAL == fpclassify(1.0));
   assert(FP_NORMAL != fpclassify(0.0));
+
+#if !defined(MSVC)
   assert(FP_INFINITE == fpclassify(1.0/0.0));
   assert(FP_INFINITE == fpclassify(-1.0/0.0));
   assert(FP_NAN == fpclassify((1.0L/0.0) / (1.0/0.0)));
-  
+#endif
+
   assert(isfinite(0.0));
+#if !defined(MSVC)
   assert(isinf(1.0/0.0));
   assert(isnan((1.0/0.0)/(1.0/0.0)));
+#endif
   assert(isnormal(0.1));
 }
 

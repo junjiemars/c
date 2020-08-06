@@ -4,7 +4,7 @@
  */
 
 
-#if (WINNT) && (MSVC)
+#if (MSVC)
 
 
 #ifndef _GETOPT_H_
@@ -109,7 +109,7 @@ getopt_long_only(int nargc,
 #    include <unistd.h>
 #  endif
 #  include_next <getopt.h>
-#endif /* (WINNT) && (MSVC) */
+#endif /* (MSVC) */
 
 
 /* eof */
