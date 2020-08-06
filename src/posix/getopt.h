@@ -3,18 +3,9 @@
  * #include <nore.h>
  */
 
-#if !(WINNT)
-#  if (LINUX)
-#    ifndef _XOPEN_SOURCE
-#      define _XOPEN_SOURCE
-#    endif
-#    ifndef _GNU_SOURCE
-#      define _GNU_SOURCE
-#    endif
-#    include <unistd.h>
-#  endif
-#  include_next <getopt.h>
-#else /* WINNT */
+
+#if (WINNT) && (MSVC)
+
 
 #ifndef _GETOPT_H_
 #define _GETOPT_H_
@@ -107,7 +98,18 @@ getopt_long_only(int nargc,
 #endif /* !defined(_GETOPT_LONG_H_) */
 
 
-#endif /* !(MSVC) */
+#else /* Unix-like */
+#  if (LINUX)
+#    ifndef _XOPEN_SOURCE
+#      define _XOPEN_SOURCE
+#    endif
+#    ifndef _GNU_SOURCE
+#      define _GNU_SOURCE
+#    endif
+#    include <unistd.h>
+#  endif
+#  include_next <getopt.h>
+#endif /* (WINNT) && (MSVC) */
 
 
 /* eof */
