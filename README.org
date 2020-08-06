@@ -68,7 +68,8 @@ text manipulations, such as:
 - stripping comments
 - resolving =#include= directives and replacing them with the contents
   of the included file
-- =#include_next=
+- =#include_next= directives does not distinguish between =<file>= and
+  ="file"= inclusion, just look the file in the search path
 - evaluating =#if= and =#ifdef= directives
 - evaluating =#define=
 - expanding the macros found in the rest of the code according to
