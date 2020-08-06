@@ -1,5 +1,5 @@
-#ifndef _RESTRICT_H_
-#define _RESTRICT_H_
+#ifndef _KWS_H_
+#define _KWS_H_
 
 #if !(NM_HAVE_RESTRICT_KW)
 #  if (NM_HAVE___RESTRICT_KD)
@@ -10,4 +10,4 @@
 #endif
 
 
-#endif /* end of _RESTRICT_H_ */
+#endif /* end of _KWS_H_ */

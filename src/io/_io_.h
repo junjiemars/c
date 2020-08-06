@@ -2,10 +2,10 @@
 #define _IO_H_
 
 #include <nore.h>
-#include <posix/restrict.h>
+#include <posix/kws.h>
 
 #if (MSVC)
-#  pragma warning(disable : 4996)
+#  pragma warning(disable: 4996)
 #  pragma warning(disable: 4244)
 #endif
 
