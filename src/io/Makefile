@@ -3,7 +3,7 @@
 #
 
 io_prefix := io
-INC += -I$(io_root) -I$(root) -I$(root)posix
+INC += -I$(io_root) -I$(root)
 
 ifeq ($(CC_NAME),msvc)
 getopt_c := $(root)posix/getopt.c

@@ -1,4 +1,24 @@
+/**
+ * Darwin, Linux, Windows
+ * #include <nore.h>
+ */
+
+#if !(WINNT)
+#  if (LINUX)
+#    ifndef _XOPEN_SOURCE
+#      define _XOPEN_SOURCE
+#    endif
+#    ifndef _GNU_SOURCE
+#      define _GNU_SOURCE
+#    endif
+#    include <unistd.h>
+#  endif
+#  include_next <getopt.h>
+#else /* WINNT */
+
 #ifndef _GETOPT_H_
+#define _GETOPT_H_
+
 /**
  * DISCLAIMER
  * This file has no copyright assigned and is placed in the Public Domain.
@@ -10,15 +30,12 @@
  * warranties of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#define _GETOPT_H_
-#if defined(WINNT) && (WINNT)
-
 /* All the headers include this file. */
 #include <crtdefs.h>
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif /* __cplusplus */
 
 extern int optind;		/* index of first non-option in argv      */
 extern int optopt;		/* single option character, as parsed     */
@@ -33,7 +50,7 @@ extern int getopt(int nargc,
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
 /*
  * POSIX requires the `getopt' API to be specified in `unistd.h';
@@ -51,7 +68,7 @@ extern int getopt(int nargc,
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif /* __cplusplus */
 
 struct option		/* specification for a long form option...	*/
 {
@@ -85,8 +102,12 @@ getopt_long_only(int nargc,
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
-#endif
+#endif /* !defined(_GETOPT_LONG_H_) */
 
-#endif /* !defined( _GETOPT_LONG_H_ ) */
+
+#endif /* !(MSVC) */
+
+
+/* eof */
