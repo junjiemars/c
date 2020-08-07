@@ -5,15 +5,15 @@
 #include <stddef.h>
 
 /* make: CFLAGS=-DSHARED=1 */
-#if ( WINNT )
-#  if ( 0 == EXPORT )
+#if (MSVC)
+#  if (1 == EXPORT)
 #    define CFFIX_API __declspec(dllexport) __stdcall
-#  elif ( 1 == EXPORT )
+#  elif (0 == EXPORT)
 #    define CFFIX_API __declspec(dllimport) __stdcall
-#  endif /* end of SHARED */
+#  endif /* end of EXPORT */
 #else
 #  define CFFIX_API
-#endif /* end of WINNT */
+#endif /* end of MSVC */
 
 
 #ifdef __cplusplus

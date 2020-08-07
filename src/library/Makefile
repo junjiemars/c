@@ -1,22 +1,45 @@
+#
 # ./configure --has-library
-
-library: cffix geo math_static math_shared
-library_test: geo_test math_static_test math_shared_test
+#
 
 INC += -I$(library_root)
+
+library: cffix																	\
+         geo																		\
+         math_static														\
+         math_shared
+
+library_test: cffix_test												\
+              geo_test													\
+              math_static_test									\
+              math_shared_test
 
 
 # cffix
 cffix_libout := $(lib_path)libcffix$(lib_ext)
 cffix_h := $(inc_path)cffix.h
+cffix_binout := $(bin_path)cffix_call$(bin_ext)
 
-cffix: $(cffix_libout)
+cffix: $(cffix_libout) $(cffix_binout)
+cffix_test: cffix
+	$(LD_LIBRARY_PATH)=$(lib_path) $(cffix_binout) "120, 0123456789"
+
+ifeq ($(CC_NAME), msvc)
+LD_LIBRARY_PATH := PATH
+cffix_ldlibs := libcffix$(ar_ext)
+else
+LD_LIBRARY_PATH := LD_LIBRARY_PATH
+cffix_ldlibs := -lcffix
+endif
 
 $(cffix_libout): $(library_root)cffi/cffix.c $(cffix.h)
-	$(CC) $(CFLAGS) -DEXPORT=0 $(INC) $(nm_shared_opt) $< $(bin_out)$@
+	$(CC) $(CFLAGS) -DEXPORT=1 $(INC) $(nm_shared_opt) $< $(bin_out)$@
 
 $(cffix_h): $(library_root)cffi/cffix.h
 	cp $< $(inc_path)
+
+$(cffix_binout): $(library_root)cffi/call.c $(cffix_libout)
+	$(CC) $(CFLAGS) -DEXPORT=0 $(INC) $< $(bin_out)$@ $(LDFLAGS) $(cffix_ldlibs)
 
 
 # geo
@@ -55,11 +78,11 @@ stdmath_lib :=
 endif
 
 ifeq ($(CC_NAME), msvc)
-math_lib_path := PATH
-LDLIBS = libgeo$(ar_ext)
+LD_LIBRARY_PATH := PATH
+LDLIBS := libgeo$(ar_ext)
 else
-math_lib_path := LD_LIBRARY_PATH
-LDLIBS = -lgeo $(stdmath_lib)
+LD_LIBRARY_PATH := LD_LIBRARY_PATH
+LDLIBS := -lgeo $(stdmath_lib)
 endif
 
 math_static_binout := $(bin_path)math_static$(bin_ext)
@@ -70,7 +93,7 @@ math_shared: $(math_shared_binout)
 math_static_test: math_static
 	$(math_static_binout)
 math_shared_test: math_shared
-	$(math_lib_path)=$(lib_path) $(math_shared_binout)
+	$(LD_LIBRARY_PATH)=$(lib_path) $(math_shared_binout)
 
 $(math_static_binout): $(library_root)math/math1.c $(geo_arout) $(stdmath_lib)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

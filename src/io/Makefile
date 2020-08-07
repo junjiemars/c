@@ -157,8 +157,11 @@ io_line_basic_binout := $(bin_path)$(io_prefix)_line_basic$(bin_ext)
 io_line_gets_binout := $(bin_path)$(io_prefix)_line_gets$(bin_ext)
 
 io_line: $(io_line_basic_binout) $(io_line_gets_binout)
-io_line_test: io_line
+io_line_test: io_line_basic_test								\
+              io_line_gets_test
+io_line_basic_test: $(io_line_basic_binout)
 	$(io_line_basic_binout) $(CURDIR)/src/io/line/zigzag
+io_line_gets_binout: $(io_line_gets_binout)
 	$(io_line_gets_binout) $(CURDIR)/src/io/line/zigzag
 
 $(io_line_basic_binout): $(io_root)line/l.c

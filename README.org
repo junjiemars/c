@@ -2355,7 +2355,7 @@ table in a executable.
 | *example*                                     | *command*                                       |
 |-----------------------------------------------+-------------------------------------------------|
 | list dependents of executable                 | *(lldb)* =image list=                           |
-|                                               | 0:000> =lm=                                     |
+|                                               | *0:000>* =lm=                                   |
 |                                               |                                                 |
 | lookup /main/ entry address in the executable | *(lldb)* =image lookup -a main -v=              |
 |                                               |                                                 |
@@ -2414,13 +2414,13 @@ table in a executable.
 
 *** Evaluate
 
-| *example*                       | *command*                   |
-|---------------------------------+-----------------------------|
-| evaluate /argc/ in /main/ entry | *(lldb)* =e -- argc=        |
-|                                 | *(lldb)* =e -fx -- argc=    |
+| *example*                       | *command*                     |
+|---------------------------------+-------------------------------|
+| evaluate /argc/ in /main/ entry | *(lldb)* =e -- argc=          |
+|                                 | *(lldb)* =e -fx -- argc=      |
 |                                 | *0:000>* =?? argc=            |
 |                                 | *0:000>* =.formats poi(argc)= |
-|                                 |                             |
+|                                 |                               |
 
 *** Disassemble
 
@@ -2437,16 +2437,18 @@ table in a executable.
 
 *** Step
 
-| *example* | *command* |
-|-----------+-----------|
-|           |           |
+| *example* | *command*    |
+|-----------+--------------|
+| quit      | *(lldb)* =q= |
+|           | *(gdb)* =q=  |
+|           | *0:000>* -q= |
 
 *** Thread
 
-| *example*    | *command*  |
-|--------------+------------|
+| *example*    | *command*    |
+|--------------+--------------|
 | list threads | *0:000>* =~= |
-|              |            |
+|              |              |
 
 *** Tools References
 
