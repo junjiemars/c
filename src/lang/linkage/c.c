@@ -36,18 +36,20 @@ main(int argc, char **argv) {
    * so compiler generates different instances.
    */
   int state_l = 1;
-  _unused_(state_l);
-  val = fn(1);
+  val = fn(state_l);
   assert(val == 10 + 0 + 3);
 
   /* MAX in lnk.h */
   assert(MAX == 10);
 
-  /* 
-   * sum: inline function definition in lnk.h
-   val = sum(1, 2);
-   assert(val == 1+2);
-  */
+  /* sum: inline function definition in lnk.h */
+  val = sum(1, 2);
+  assert(val == 1+2);
+
+  /* state_c: extern definition in lnk.c */
+  extern int state_c;
+  state_c++;
+  assert((0x12+1) == state_c);
   
   return 0;
 }

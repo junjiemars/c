@@ -12,5 +12,4 @@ inline int sum(int a, int b) {
   return a+b;
 }
 
-
 #endif /* end of _LNK_H_ */

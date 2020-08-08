@@ -2348,7 +2348,8 @@ table in a executable.
 | set /argv/ for /main/ entry | *(lldb)* =r arg1 arg2 arg3=                           |
 |                             | *(lldb)* =settings set target.run-args arg1 arg2=     |
 |                             | *(lldb)* =process launch -- arg1 arg2=                |
-|                             | 0:000> =.kill;= =.create <target> arg1 arg2=          |
+|                             | *0:000>* =.kill;= =.create <target> arg1 arg2=        |
+|                             | *0:000>* =.exepath+ <path>=                           |
 
 *** Image
 
@@ -2364,6 +2365,10 @@ table in a executable.
 | lookup /type/                                 | *(lldb)* =image lookup -t'FILE'=                |
 |                                               |                                                 |
 | add /moudle/                                  | *(lldb)* =image add /opt/local/lib/libgeo.dyld= |
+|                                               | *0:000>* =.reload -f -i libcffix.dll=           |
+|                                               |                                                 |
+| unload /module/                               | *(lldb)* ==                                     |
+|                                               | *0:000>* =.reload -u libcffix.dll=              |
 |                                               |                                                 |
 
 *** Breakpoint
@@ -2442,6 +2447,14 @@ table in a executable.
 | quit      | *(lldb)* =q= |
 |           | *(gdb)* =q=  |
 |           | *0:000>* -q= |
+| continue  | *(lldb)* =c= |
+|           | *0:000>* =g= |
+| step over | *(lldb)* =n= |
+|           | *0:000>* =p= |
+| step into | *(lldb)* =s= |
+|           | *(gcc)* =s=  |
+|           | *0:000>* =t= |
+|           |              |
 
 *** Thread
 

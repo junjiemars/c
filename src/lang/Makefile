@@ -228,20 +228,32 @@ $(lang_jmp_try_cppout): $(lang_root)jmp/try.c
 
 
 # linkage
-lang_linkage_binout := $(bin_path)$(lang_prefix)_linkage$(bin_ext)
+lang_linkage_lnkc_binout := $(bin_path)$(lang_prefix)_linkage_lnkc$(bin_ext)
 lang_linkage_lnk_objout := $(tmp_path)$(lang_prefix)_linkage_lnk$(obj_ext)
 lang_linkage_c_objout := $(tmp_path)$(lang_prefix)_linkage_c$(obj_ext)
+lang_linkage_whole_binout := $(bin_path)$(lang_prefix)_linkage_whole$(bin_ext)
 
-lang_linkage: $(lang_linkage_binout)
-lang_linkage_test: lang_linkage
-	$(lang_linkage_binout)
+lang_linkage: $(lang_linkage_lnkc_binout)				\
+              $(lang_linkage_whole_binout)
+lang_linkage_test: lang_linkage_lnkc_test				\
+                   lang_linkage_whole_test
 
-$(lang_linkage_binout): $(lang_linkage_lnk_objout)	\
-                        $(lang_linkage_c_objout)
+lang_linkage_lnkc_test: $(lang_linkage_lnkc_binout)
+	$(lang_linkage_lnkc_binout)
+lang_linkage_whole_test: $(lang_linkage_whole_binout)
+	$(lang_linkage_whole_binout)
+
+$(lang_linkage_lnkc_binout): $(lang_linkage_lnk_objout)	\
+                             $(lang_linkage_c_objout)
 	$(LINK) $^ $(bin_out)$@
 
-$(lang_linkage_lnk_objout): $(lang_root)linkage/lnk.c
-	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
+$(lang_linkage_whole_binout): $(lang_root)linkage/c.c \
+                              $(lang_root)linkage/lnk.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(lang_linkage_lnk_objout): $(lang_root)linkage/lnk.c	\
+                            $(lang_root)linkage/lnk.h
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $< $(obj_out)$@
 
 $(lang_linkage_c_objout): $(lang_root)linkage/c.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@

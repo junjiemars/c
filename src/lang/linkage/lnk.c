@@ -12,6 +12,9 @@ static int state_l;
 /* definition with external linkage */
 int state;
 
+/* declaration with external linkage */
+extern int state_c = 0x12;
+
 /* definition with external linkage */
 int
 fn(int x) {
