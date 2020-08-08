@@ -1,22 +1,29 @@
 #include "lnk.h"
 
-/* definition with internal linkage */
-static int
-fn_l(int i) {
-  return i * size;
-}
+/* declaration with internal linkage */
+static int fn_i(int);
 
-/* definition with internal linkage */
-static int state_l;
+/* declaration with internal linkage */
+static int state_i = 0x1;
 
 /* definition with external linkage */
 int state;
 
 /* declaration with external linkage */
-extern int state_c = 0x12;
+int state_c = 0x1122;
 
 /* definition with external linkage */
 int
 fn(int x) {
-  return state + state_l + fn_l(x);
+  return state + state_i + fn_i(x);
 }
+
+/* definition with internal linkage */
+int
+fn_i(int i) {
+  return i;
+}
+
+int fn_cube(int);
+
+

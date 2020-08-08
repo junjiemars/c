@@ -2,19 +2,18 @@
 #include "lnk.h"
 #include <assert.h>
 
-/*
- * error: duplicate symbol
- * fn: declaration in lnk.h, definition in lnk.c
-int fn(int x) {
-  return x;
-}
-*/
+static int fn_i(int);
 
-/* function definition with internal linkage */
 int
-fn_l(int i) {
-  return i*4;
+fn_i(int i) {
+  return i*i;
 }
+
+extern int fn_cube(int a) {
+  return a*a*a;
+}
+
+int state_i = 0x1122;
 
 int
 main(int argc, char **argv) {
@@ -22,12 +21,12 @@ main(int argc, char **argv) {
 	_unused_(argv);
 
   int val = fn(1);
-  assert(val == 0 + 0 + 3);
+  assert(val == state + 0x1 /* state_i:lnk.c */ + 1);
 
-  /* declaration with external linkage in lnk.h, definition in lnk.c */
-  state = 10;
+  state = 10; /* state:lnk.c */
   val = fn(1);
-  assert(val == 10 + 0 + 3);
+  assert(val != (state + state_i + 1));
+  assert(val == 10 + 0x1 /* == state_i:lnk.c */+ 1);
 
   /* size: read-only, defined in lnk.h with internal linkage */
   assert(size == 3);
@@ -35,21 +34,20 @@ main(int argc, char **argv) {
   /* same identifier, declaration with internal linkage in lnk.c 
    * so compiler generates different instances.
    */
-  int state_l = 1;
-  val = fn(state_l);
-  assert(val == 10 + 0 + 3);
+  val = fn_i(state_i);
+  assert(val != state_i);
+  assert(val == state_i * state_i);
 
-  /* MAX in lnk.h */
+  /* MAX:lnk.h */
   assert(MAX == 10);
 
-  /* sum: inline function definition in lnk.h */
-  val = sum(1, 2);
-  assert(val == 1+2);
-
-  /* state_c: extern definition in lnk.c */
+  /* state_c: extern declaration in lnk.c */
   extern int state_c;
-  state_c++;
-  assert((0x12+1) == state_c);
+  state_c += 0x1122;
+  assert(0x2244 == state_c);
   
+  val = fn_cube(3);
+  assert(3*3*3 == val);
+
   return 0;
 }
