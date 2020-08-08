@@ -9,11 +9,12 @@ fn_i(int i) {
   return i*i;
 }
 
-extern int fn_cube(int a) {
+extern int
+fn_cube(int a) {
   return a*a*a;
 }
 
-int state_i = 0x1122;
+static int state_i = 0x1122;
 
 int
 main(int argc, char **argv) {
