@@ -16,7 +16,9 @@
 
 void test_epoch(time_t *);
 void test_localtime(const time_t *);
+#if !(MSVC)
 void test_timelocal(const time_t *);
+#endif
 void test_gmtime(const time_t *);
 void test_ctime(const time_t *);
 void test_difftime(const time_t *);
@@ -36,6 +38,7 @@ test_localtime(const time_t *epoch) {
   _unused_(local);
 }
 
+#if !(MSVC)
 void
 test_timelocal(const time_t *epoch) {
   struct tm *local = localtime(epoch);
@@ -44,6 +47,7 @@ test_timelocal(const time_t *epoch) {
   char *asc = asctime(local);
   printf("asctime of localtime: %s", asc);
 }
+#endif
 
 void
 test_gmtime(const time_t *epoch) {
@@ -80,7 +84,9 @@ main(int argc, char **argv) {
   test_epoch(&epoch);
 
   test_localtime(&epoch);
+#if !(MSVC)
   test_timelocal(&epoch);
+#endif
   test_gmtime(&epoch);
   test_ctime(&epoch);
   test_difftime(&epoch);
