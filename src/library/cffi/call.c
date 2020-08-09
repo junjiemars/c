@@ -1,5 +1,6 @@
 #include "cffix.h"
 #include <stdio.h>
+#include <errno.h>
 
 #if (MSVC)
 #  pragma warning(disable: 4996)

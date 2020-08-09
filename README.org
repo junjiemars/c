@@ -779,6 +779,12 @@ called a storage class specifier only for syntatic convenience.
 The general declaration that use a /storage class/ is show here:
 ~<storage-class-specifier> <type> <identifer>~
 
+Living example:
+#+BEGIN_SRC sh
+$ ./configure --has-lang
+$ make clean lang_storage_test
+#+END_SRC
+
 *** Automatic storage class
 		:PROPERTIES:
 		:CUSTOM_ID: language_storage_automatic_storage_class
@@ -826,7 +832,7 @@ optimizations:
 #+BEGIN_SRC c
 /* error: address of register variable requested */
 register int i = 0x10;
-int* p = &i;
+int *p = &i;
 #+END_SRC
 
 =i= that can never alias because no code can pass its address to
@@ -1014,6 +1020,12 @@ has static duration.
 
 /Linkage/ describes how identifiers can or can not refer to the same
 entity throughout the whole program or one single translation unit.
+
+Living example:
+#+BEGIN_SRC sh
+$ ./configure --has-lang
+$ make clean lang_linkage_test
+#+END_SRC
 
 *** Translation unit
 		:PROPERTIES:
@@ -2244,13 +2256,13 @@ Module.ccall('sum', 'number', ['number', 'number'], [10, 0]);
 	 :CUSTOM_ID: display_dependents_of_exeutable
 	 :END:
 
-| OS      | name    | command line      |
-|---------+---------+-------------------|
-| MacOS   | otool   | otool -L <bin>    |
-| Linux   | objdump | objdump -p <bin>  |
-|         | ldd     | ldd <bin>         |
-| Windows | dumpbin | -dependents <bin> |
-|         |         |                   |
+| OS      | name    | command line              |
+|---------+---------+---------------------------|
+| MacOS   | otool   | otool -L <bin>            |
+| Linux   | objdump | objdump -p <bin>          |
+|         | ldd     | ldd <bin>                 |
+| Windows | dumpbin | dumpbin -dependents <bin> |
+|         |         |                           |
 
 ** Read ELF Format
 	 :PROPERTIES:
@@ -2287,6 +2299,7 @@ table in a executable.
 | OS    | name | command line |
 |-------+------+--------------|
 | MacOS | nm   | nm <bin>     |
+|       |      | nm -m <bin>  |
 | Linux | nm   | nm <bin>     |
 
 ** Disassembly
