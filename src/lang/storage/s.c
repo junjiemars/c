@@ -2,6 +2,12 @@
 #include <stdio.h>
 #include <assert.h>
 
+#ifdef NDEBUG
+#  define _assert_(x) _unused_(x)
+#else
+#  define _assert_(x) assert(x)
+#endif
+
 
 #if MSVC
  /* C4456: declaration of 'i' hides previous local declaration */
@@ -22,7 +28,7 @@ automatic_storage_class(void) {
 #if GCC
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wuninitialized"
-  assert(x == x);
+  _assert_(x == x);
 # pragma GCC diagnostic pop
 #else
   _unused_(x);
@@ -31,9 +37,9 @@ automatic_storage_class(void) {
 	auto int i = 0x1122;
 	{
 		auto int i = 0x3344;
-    assert(0x3344 == i);
+    _assert_(0x3344 == i);
 	}
-  assert(0x1122 == i);
+  _assert_(0x1122 == i);
 }
 
 
@@ -45,12 +51,13 @@ array_decay(char *a) {
 
 void
 register_storage_class(register int x) {
-	register int i = x;
+	register int i;
+  i = x;
 	printf("i = 0x%08x\n", i++);
 	/* error: address of register variable requested */
 	/* int *p = &i; */
 
-	register char a[] = {0x11, 0x22, 0x33, 0x44, };
+	register char a[] = { 0x11, 0x22, 0x33, 0x44, };
 #if MSVC
 	printf("a[0/%zu]\n", sizeof(a));
 #elif CLANG || GCC
@@ -70,10 +77,10 @@ static_storage_class_fn(void) {
     static int x;
     x = i;
 		static int i = 0x11223344;
-    assert((0x11223344 + x) == i);
+    _assert_((0x11223344 + x) == i);
     i++;
 	}
-  assert((0 + i) == f_int);
+  _assert_((0 + i) == f_int);
   f_int++;
   i++;
 }
@@ -81,16 +88,20 @@ static_storage_class_fn(void) {
 int
 static_storage_class_fn_raw(int x) {
   static int v;
-  assert(0 == v);
+  _assert_(0 == v);
   v += x;
   return v;
 }
 
+/* definition for external linkage */
+int g_var_x = 0x1122;
 
 void
 external_storage_class(void) {
 	extern int g_var_x;
+  extern int g_var_y;
 	printf("g_var_x = 0x%08x\n", g_var_x++);
+  printf("g_var_y = 0x%08x\n", g_var_y);
 }
 
 
@@ -119,4 +130,6 @@ main(int argc, char *argv[]) {
 	printf("------------------------\n");
 	external_storage_class();
 	external_storage_class();
+  
+  return 0;
 }

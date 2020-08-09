@@ -901,7 +901,7 @@ one in which the corresponding object or function is defined.
 
 ** Scope
 	 :PROPERTIES:
-	 :CUSTOM_ID: scope
+	 :CUSTOM_ID: language_scope
 	 :END:
 
 In C, all identifiers are lexically (or statically) scoped.
@@ -919,7 +919,7 @@ declaration in an outer scope; but only if one of two has [[#language_linkage_no
 
 *** Declarations and Definitions
 		:PROPERTIES:
-		:CUSTOM_ID: declaration_and_definition
+		:CUSTOM_ID: language_scope_declaration_and_definition
 		:END:
 
 If neither the =extern= keyword nor an initializer are present, the
@@ -990,7 +990,7 @@ distinct names.
 		:END:
 
 All vairables and functions defined ouside functions have /file
-scope/.  They are visible from their [[#declaration_and_definition][declaration]] until the end of the
+scope/.  They are visible from their [[#language_scope_declaration_and_definition][declaration]] until the end of the
 file. Here, the term /file/ should be understood as the source file
 being compiled, after all includes have been resolved.
 
@@ -999,7 +999,7 @@ being compiled, after all includes have been resolved.
 	 :CUSTOM_ID: language_duration
    :END:
 
-Indicates whether the object associated to the [[#declaration_and_definition][declaration]] persists
+Indicates whether the object associated to the [[#language_scope_declaration_and_definition][declaration]] persists
 throughout the program's execution (/static/) or whether it is
 allocated dynamically when the declaration's scope is entered
 (/automatic/).
