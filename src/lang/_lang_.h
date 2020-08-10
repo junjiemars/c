@@ -41,4 +41,11 @@
 #  endif
 #endif
 
+#ifdef NDEBUG
+#  define _assert_(x) _unused_(x)
+#else
+#  define _assert_(x) assert(x)
+#endif
+
+
 #endif /* _LANG_H_ */

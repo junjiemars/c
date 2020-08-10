@@ -2,12 +2,6 @@
 #include <stdio.h>
 #include <assert.h>
 
-#ifdef NDEBUG
-#  define _assert_(x) _unused_(x)
-#else
-#  define _assert_(x) assert(x)
-#endif
-
 
 #if MSVC
  /* C4456: declaration of 'i' hides previous local declaration */

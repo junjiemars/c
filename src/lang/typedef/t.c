@@ -5,6 +5,10 @@
 #  pragma warning(disable: 4172)
 #endif
 
+#if (GCC)
+#  pragma GCC diagnostic ignored "-Wreturn-local-addr"
+#endif
+
 /* syntax: typedef type declaration */
 typedef int length_t;
 
@@ -27,6 +31,8 @@ typedef int x_t, *p_t, *(*fn_t)(int);
 p_t fn(int n) {
   x_t x = n + 10;
   p_t p = &x;
+  
+  /* returns address of local variable [-Werror=return-local-addr] */
   return p;
 }
 
