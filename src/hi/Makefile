@@ -1,3 +1,6 @@
+#
+# ./configure --has-hi
+#
 
 hi_binout := $(bin_path)hi$(bin_ext)
 
