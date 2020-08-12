@@ -22,14 +22,19 @@ cffix_binout := $(bin_path)cffix_call$(bin_ext)
 
 cffix: $(cffix_libout) $(cffix_binout)
 cffix_test: cffix
-	$(LD_LIBRARY_PATH)=$(lib_path) $(cffix_binout) "120, 0123456789"
+	$(LD_LIBRARY_PATH)=$(cffix_lib_path) $(cffix_binout) "120, 0123456789"
 
-ifeq ($(CC_NAME), msvc)
-LD_LIBRARY_PATH := PATH
-cffix_ldlibs := libcffix$(ar_ext)
+cffix_ldlibs =
+cffix_lib_path = $(lib_path)
+ifeq ($(CC_NAME),msvc)
+	LD_LIBRARY_PATH := PATH
+	cffix_ldlibs := libcffix$(ar_ext)
 else
-LD_LIBRARY_PATH := LD_LIBRARY_PATH
-cffix_ldlibs := -lcffix
+	cffix_ldlibs := $(nm_lib_opt)cffix
+	LD_LIBRARY_PATH := LD_LIBRARY_PATH
+	ifeq ($(nm_link_opt),rpath)
+		cffix_lib_path :=
+	endif
 endif
 
 $(cffix_libout): $(library_root)cffi/cffix.c $(cffix.h)
@@ -71,18 +76,22 @@ $(geo_h): $(library_root)geo/geo.h
 
 ## math
 
-ifeq ($(NM_SYSTEM), Linux)
-stdmath_lib := -lm
+stdmath_lib =
+geo_lib_path = $(lib_path)
+ifeq ($(CC_NAME),msvc)
+	LD_LIBRARY_PATH := PATH
+	LDLIBS := libgeo$(ar_ext)
 else
-stdmath_lib :=
-endif
-
-ifeq ($(CC_NAME), msvc)
-LD_LIBRARY_PATH := PATH
-LDLIBS := libgeo$(ar_ext)
-else
-LD_LIBRARY_PATH := LD_LIBRARY_PATH
-LDLIBS := -lgeo $(stdmath_lib)
+	LD_LIBRARY_PATH := LD_LIBRARY_PATH
+	LDLIBS := $(nm_lib_opt)geo $(stdmath_lib)
+	ifeq ($(NM_SYSTEM),Linux)
+		stdmath_lib := $(nm_lib_opt)m
+	else
+		stdmath_lib :=
+	endif
+	ifeq ($(nm_link_opt),rpath)
+		geo_lib_path :=
+	endif
 endif
 
 math_static_binout := $(bin_path)math_static$(bin_ext)
@@ -93,7 +102,7 @@ math_shared: $(math_shared_binout)
 math_static_test: math_static
 	$(math_static_binout)
 math_shared_test: math_shared
-	$(LD_LIBRARY_PATH)=$(lib_path) $(math_shared_binout)
+	$(LD_LIBRARY_PATH)=$(geo_lib_path) $(math_shared_binout)
 
 $(math_static_binout): $(library_root)math/math1.c $(geo_arout) $(stdmath_lib)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
