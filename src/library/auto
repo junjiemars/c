@@ -27,13 +27,29 @@ esac
 # check linker's -rpath features
 #----------------------------------------
 case "$CC_NAME" in
-   gcc|clang)
+   gcc)
      nm_feature="$CC_NAME -Wl,-rpath"
      nm_feature_name=
      nm_feature_indent=yes
      nm_feature_run=no
      nm_feature_h=
      nm_feature_flags='-Wl,-rpath=$(lib_path)'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=nm_link_opt op=":=" value="rpath" \
+           . ${NORE_ROOT}/auto/make_define
+       flag=LDFLAGS op="+=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     ;;
+   clang)
+     nm_feature="$CC_NAME -rpath"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-rpath $(lib_path)'
      nm_feature_test=
      . ${NORE_ROOT}/auto/feature
      if [ yes = $nm_found ]; then

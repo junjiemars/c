@@ -24,6 +24,7 @@ cffix: $(cffix_libout) $(cffix_binout)
 cffix_test: cffix
 	$(LD_LIBRARY_PATH)=$(cffix_lib_path) $(cffix_binout) "120, 0123456789"
 
+
 cffix_ldlibs =
 cffix_lib_path = $(lib_path)
 ifeq ($(CC_NAME),msvc)
