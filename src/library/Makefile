@@ -76,7 +76,6 @@ $(geo_h): $(library_root)geo/geo.h
 
 
 ## math
-
 stdmath_lib =
 geo_lib_path = $(lib_path)
 ifeq ($(CC_NAME),msvc)
@@ -84,11 +83,10 @@ ifeq ($(CC_NAME),msvc)
 	LDLIBS := libgeo$(ar_ext)
 else
 	LD_LIBRARY_PATH := LD_LIBRARY_PATH
-	LDLIBS := $(nm_lib_opt)geo $(stdmath_lib)
+	LDLIBS := $(nm_lib_opt)geo
 	ifeq ($(NM_SYSTEM),Linux)
 		stdmath_lib := $(nm_lib_opt)m
-	else
-		stdmath_lib :=
+		LDLIBS += $(stdmath_lib)
 	endif
 	ifeq ($(nm_link_opt),rpath)
 		geo_lib_path :=
