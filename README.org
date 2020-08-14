@@ -2325,8 +2325,10 @@ table in a executable.
 	 :CUSTOM_ID: trace-system-call
 	 :END:
 
-- MacOSX: =dtruss=
-- Linux: =strace=
+| OS    | name   | command line    |
+|-------+--------+-----------------|
+| MacOS | dtruss | dtruss <bin>    |
+| Linux | strace | strace -C <bin> |
 
 ** Kernel Trace
 
