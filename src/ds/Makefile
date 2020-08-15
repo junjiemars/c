@@ -5,7 +5,11 @@
 
 ds_prefix := ds
 INC += -I$(ds_root)
-CFLAGS += $(if $(strip $(nm_build_opt)),,$(cflags_sanitize))
+
+# CFLAGS += $(if $(strip $(nm_build_opt)),,$(cflags_sanitize))
+ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
+	CFLAGS += $(cflags_sanitize)
+endif
 
 
 ds: double_linked_list													\

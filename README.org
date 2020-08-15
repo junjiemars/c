@@ -2327,7 +2327,7 @@ table in a executable.
 
 | OS    | name   | command line                  |
 |-------+--------+-------------------------------|
-| MacOS | dtruss | dtruss -o <out-file> <bin>    |
+| MacOS | dtruss | dtruss <bin>                  |
 | Linux | strace | strace -o <out-file> -C <bin> |
 
 ** Kernel Trace
