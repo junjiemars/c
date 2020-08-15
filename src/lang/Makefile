@@ -9,7 +9,7 @@ _ERROR_ ?= 0
 _MEMORY_ ?= 0
 
 # CFLAGS += $(if $(strip $(nm_build_opt)),,$(cflags_sanitize))
-ifeq ($(shell test $(_MEMORY_) -gt 0; echo $$?),0)
+ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
 	CFLAGS += $(cflags_sanitize)
 endif
 
@@ -120,7 +120,7 @@ lang_duration_test: lang_duration
 
 $(lang_duration_binout): $(lang_duration_extern_objout) \
                          $(lang_duration_d_objout)
-	$(LINK) $^ $(bin_out)$@
+	$(LINK) $(CFLAGS) $^ $(bin_out)$@
 
 $(lang_duration_extern_objout): $(lang_root)duration/extern.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
