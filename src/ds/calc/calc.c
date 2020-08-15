@@ -60,7 +60,7 @@ isop(int c) {
 
 char
 token(void) {
-  char c;
+  int c;
   while (EOF != (c = _getc_())) {
     if (' ' == c) {
       continue;
