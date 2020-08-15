@@ -6,7 +6,7 @@
 
 #define MAX_EXPR 128
 
-#if NDEBUG
+#if (NDEBUG)
 #  define _getc_ getchar
 #  define _ungetc_ ungetc
 #  define _stdin_ stdin
@@ -17,7 +17,7 @@ static int _str_in_i_ = 0;
 
 static int
 _getc_() {
-  if (MAX_EXPR == _str_in_i_) {
+  if (MAX_EXPR <= _str_in_i_) {
     return EOF;
   }
   return _str_in_[_str_in_i_++];
@@ -30,9 +30,19 @@ _ungetc_(int c, FILE* stream) {
   _str_in_i_--;
   return c;
 }
-#endif /* NDEBUG */
+#endif /* end of NDEBUG */
 
 static char expr_buf[MAX_EXPR];
+
+int precedence(int);
+int isop(int);
+char token(void);
+void postfix(queue_s *const, char *const);
+int expt(int, int, int);
+int eval(queue_s *const);
+void test_expt(void);
+void test_postfix(void);
+void test_eval(void);
 
 int
 precedence(int c) {
@@ -60,7 +70,7 @@ isop(int c) {
 
 char
 token(void) {
-  int c;
+  char c;
   while (EOF != (c = _getc_())) {
     if (' ' == c) {
       continue;
@@ -148,13 +158,16 @@ eval(queue_s *const expr) {
   return v;
 }
 
+#if !(NDEBUG)
 void
 test_expt(void) {
   printf("expt: %i^%i = %i\n", 2, 3, expt(2, 3, 1));
 }
+#endif /* end of !(NDEBUG) */
 
+#if !(NDEBUG)
 void
-test_postfix() {
+test_postfix(void) {
   printf("postfix: ");
   _str_in_i_ = 0;
 
@@ -174,7 +187,9 @@ test_postfix() {
 
   queue_free(expr);  
 }
+#endif /* end of !(NDEBUG) */
 
+#if !(NDEBUG)
 void
 test_eval(void) {
   printf("eval: ");
@@ -188,6 +203,7 @@ test_eval(void) {
 
   queue_free(expr);
 }
+#endif /* end of !(NDEBUG) */
 
 int
 main(int argc, char **argv) {
@@ -195,7 +211,7 @@ main(int argc, char **argv) {
   _unused_(argv);
 
 
-#if NDEBUG
+#if (NDEBUG)
   queue_s *expr = queue_new(0, 8, sizeof(int));
   postfix(expr, expr_buf);
   int v = eval(expr);
@@ -215,7 +231,7 @@ main(int argc, char **argv) {
   test_postfix();
   test_eval();
 
-#endif
+#endif /* end of NDEBUG */
 
   return 0;
 }
