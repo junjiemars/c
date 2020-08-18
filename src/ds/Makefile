@@ -11,6 +11,10 @@ ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
 	CFLAGS += $(cflags_sanitize)
 endif
 
+ifeq ($(shell test -n "$(NDEBUG)" && test $(NDEBUG) -gt 0; echo $$?),0)
+	CFLAGS += -DNDEBUG=1
+endif
+
 
 ds: double_linked_list													\
 		single_linked_list													\
@@ -183,10 +187,10 @@ ds_calc_binout := $(bin_path)$(ds_prefix)_calc$(bin_ext)
 
 ds_calc: $(ds_calc_binout)
 ds_calc_test: ds_calc
-	$(ds_calc_binout) "1+2+3"
-	$(ds_calc_binout) "1+2+3*4/5"
-	$(ds_calc_binout) "(2+3)*4"
-	$(ds_calc_binout) "2*3^(4+5)"
+	$(ds_calc_binout) "1+2+3="
+	$(ds_calc_binout) "1+2+3*4/5="
+	$(ds_calc_binout) "(2+3)*4="
+	$(ds_calc_binout) "2*3^(4+5)="
 
 $(ds_calc_binout): $(ds_root)stack/array/stack.h		\
                    $(ds_root)queue/array/queue.h		\

@@ -6,12 +6,12 @@
 
 #define MAX_EXPR 128
 
+#define _stdin_ stdin
+
 #if (NDEBUG)
 #  define _getc_ getchar
 #  define _ungetc_ ungetc
-#  define _stdin_ stdin
 #else
-#  define _stdin_ 0
 static char _str_in_[MAX_EXPR];
 static int _str_in_i_ = 0;
 
@@ -20,7 +20,7 @@ _getc_() {
   if (MAX_EXPR <= _str_in_i_) {
     return EOF;
   }
-  return _str_in_[_str_in_i_++];
+  return (int)_str_in_[_str_in_i_++];
 }
 
 static
@@ -36,7 +36,7 @@ static char expr_buf[MAX_EXPR];
 
 int precedence(int);
 int isop(int);
-char token(void);
+int token(void);
 void postfix(queue_s *const, char *const);
 int expt(int, int, int);
 int eval(queue_s *const);
@@ -68,9 +68,9 @@ isop(int c) {
   }    
 }
 
-char
+int
 token(void) {
-  char c;
+  int c;
   while (EOF != (c = _getc_())) {
     if (' ' == c) {
       continue;
