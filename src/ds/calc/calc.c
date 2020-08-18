@@ -6,7 +6,6 @@
 
 #define MAX_EXPR 128
 
-#define _stdin_ stdin
 
 #if (NDEBUG)
 #  define _getc_ getchar
@@ -16,7 +15,7 @@ static char _str_in_[MAX_EXPR];
 static int _str_in_i_ = 0;
 
 static int
-_getc_() {
+_getc_(void) {
   if (MAX_EXPR <= _str_in_i_) {
     return EOF;
   }
@@ -30,7 +29,7 @@ _ungetc_(int c, FILE* stream) {
   _str_in_i_--;
   return c;
 }
-#endif /* end of NDEBUG */
+#endif /* end of (NDEBUG) */
 
 static char expr_buf[MAX_EXPR];
 
@@ -40,9 +39,12 @@ int token(void);
 void postfix(queue_s *const, char *const);
 int expt(int, int, int);
 int eval(queue_s *const);
+
+#if !(NDEBUG)
 void test_expt(void);
 void test_postfix(void);
 void test_eval(void);
+#endif /* end of !(NDEBUG) */
 
 int
 precedence(int c) {
@@ -72,10 +74,10 @@ int
 token(void) {
   int c;
   while (EOF != (c = _getc_())) {
-    if (' ' == c) {
+    if (isspace(c)) {
       continue;
     }
-    if ('\0' == c || c == '=') {
+    if ('=' == c) {
       return EOF;
     }
     return c;
@@ -96,7 +98,7 @@ postfix(queue_s *const expr, char *const buf) {
         buf[i++] = c;
       }
       buf[i] = 0;
-      _ungetc_(c, _stdin_);
+      _ungetc_(c, stdin);
       sscanf(&buf[0], "%i", &v);
       queue_enq(expr, &v);
     } else if ('(' == t) {
