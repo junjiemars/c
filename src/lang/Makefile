@@ -616,7 +616,9 @@ lang_str_tok_test: lang_str_tok
 
 lang_str_chr: $(lang_str_chr_binout)
 lang_str_chr_test: lang_str_chr
-	$(lang_str_chr_binout) "The Quick Brown Fox Jumps Over the Lazy Dog" "J"
+	$(lang_str_chr_binout) "the quick brown fox jumps over the lazy dog" "j"
+	$(lang_str_chr_binout) "the quick brown fox jumps over the lazy dog" "t"
+	$(lang_str_chr_binout) "the quick brown fox jumps over the lazy dog" "1"
 
 $(lang_str_basic_binout): $(lang_root)string/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

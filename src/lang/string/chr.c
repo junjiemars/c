@@ -4,30 +4,55 @@
 
 
 #if MSVC
-/* warning C4996: 'strtok': This function or variable may be
-	 unsafe. Consider using strtok_s instead. To disable deprecation,
-	 use _CRT_SECURE_NO_WARNINGS */
 #  pragma warning(disable : 4996)
 #endif
 
-static void
-test_strchr(char *ss, int c) {
-  char *s1 = strchr(ss, c);
+typedef char *(*strchr_fn)(const char *, int);
+typedef char *(*strrchr_fn)(const char *, int);
+
+char *self_strchr(const char *, int);
+char *self_strrchr(const char *, int);
+
+static void test_strchr(strchr_fn, char *, int);
+
+void
+test_strchr(strchr_fn fn, char *ss, int c) {
+  char *s1 = fn(ss, c);
   if (s1) {
     fprintf(stdout, "%s\n", s1);
   } else {
-    fprintf(stdout, "no found\n");
+    fprintf(stdout, "%c: no found\n", c);
   }
 }
 
-static void
-test_strrchr(char *ss, int c) {
-  char *s1 = strrchr(ss, c);
-  if (s1) {
-    fprintf(stdout, "%s\n", s1);
-  } else {
-    fprintf(stdout, "no found\n");
+char *
+self_strchr(const char *s, int c) {
+  while (s && *s) {
+    if (c == *s) {
+      return (char *)s;
+    }
+    s++;
   }
+  return 0;
+}
+
+char *
+self_strrchr(const char *s, int c) {
+  if (!s) {
+    return 0;
+  }
+
+  size_t n = strlen(s);
+  const char *s1 = &s[n - 1];
+
+  while (s1 && n--) {
+    if (c == *s1) {
+      return (char *)s1;
+    }
+    s1--;
+  }
+  
+  return 0;
 }
 
 int
@@ -40,8 +65,11 @@ main(int argc, char **argv) {
   char *ss = argv[1];
   int c = argv[2][0];
   
-  test_strchr(ss, c);
-  test_strrchr(ss, c);
+  test_strchr(strchr, ss, c);
+  test_strchr(strrchr, ss, c);
   
+  test_strchr(self_strchr, ss, c);
+  test_strchr(self_strrchr, ss, c);
+
   return 0;
 }
