@@ -571,6 +571,8 @@ else
 string_cflags = $(CFLAGS)
 endif
 
+string_inc := $(INC) -I$(root)posix
+
 lang_str_basic_binout := $(bin_path)$(lang_prefix)_string_basic$(bin_ext)
 lang_str_n_binout := $(bin_path)$(lang_prefix)_string_n$(bin_ext)
 lang_str_s_binout := $(bin_path)$(lang_prefix)_string_s$(bin_ext)
@@ -609,8 +611,8 @@ lang_str_dup_test: lang_str_dup
 
 lang_str_tok: $(lang_str_tok_binout)
 lang_str_tok_test: lang_str_tok
-	$(lang_str_tok_binout) "this is a simple sample for strtok." " "
-	$(lang_str_tok_binout) "mutliple   whitespaces    strtok." " "
+	$(lang_str_tok_binout) "this is a simple sample for strtok." " ."
+	$(lang_str_tok_binout) "this is a simple    sample for strtok." " ."
 
 lang_str_chr: $(lang_str_chr_binout)
 lang_str_chr_test: lang_str_chr
