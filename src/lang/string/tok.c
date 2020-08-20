@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdio.h>
 
-
 #if MSVC
 /* warning C4996: 'strtok': This function or variable may be
 	 unsafe. Consider using strtok_s instead. To disable deprecation,
@@ -10,7 +9,10 @@
 #  pragma warning(disable : 4996)
 #endif
 
-static void
+/* strtok should modified the source string */
+static void test_strtok(char *, char *d);
+
+void
 test_strtok(char *ss, char *d) {
 	char *tok = strtok(ss, d);
 	while (tok) {
@@ -26,9 +28,9 @@ main(int argc, char **argv) {
 		return 1;
 	}
 
-  char *s = argv[1];
+  char *ss = argv[1];
   char *d = argv[2];
-  test_strtok(s, d);
+  test_strtok(ss, d);
   
   return 0;
 }

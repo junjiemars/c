@@ -610,6 +610,7 @@ lang_str_dup_test: lang_str_dup
 lang_str_tok: $(lang_str_tok_binout)
 lang_str_tok_test: lang_str_tok
 	$(lang_str_tok_binout) "this is a simple sample for strtok." " "
+	$(lang_str_tok_binout) "mutliple   whitespaces    strtok." " "
 
 lang_str_chr: $(lang_str_chr_binout)
 lang_str_chr_test: lang_str_chr
