@@ -38,21 +38,14 @@ self_strchr(const char *s, int c) {
 
 char *
 self_strrchr(const char *s, int c) {
-  if (!s) {
-    return 0;
-  }
-
-  size_t n = strlen(s);
-  const char *s1 = &s[n - 1];
-
-  while (s1 && n--) {
-    if (c == *s1) {
-      return (char *)s1;
+  const char *pre = 0;
+  while (s && *s) {
+    if (c == *s) {
+      pre = s;
     }
-    s1--;
+    s++;
   }
-  
-  return 0;
+  return (char *)pre;
 }
 
 int
