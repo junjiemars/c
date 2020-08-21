@@ -606,7 +606,10 @@ lang_str_basic_test: lang_str_basic
 
 lang_str_n: $(lang_str_n_binout)
 lang_str_n_test: lang_str_n
-	$(lang_str_n_binout)
+	$(lang_str_n_binout) "abcd1234" "abcd" "4"
+	$(lang_str_n_binout) "abcd1234" "abcd1" "4"
+	$(lang_str_n_binout) "abcd1234" "abcde" "5"
+	$(lang_str_n_binout) "abcd1234" "abcde" "0"
 
 lang_str_s: $(lang_str_s_binout)
 lang_str_s_test: lang_str_s
@@ -645,7 +648,7 @@ $(lang_str_basic_binout): $(lang_root)string/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_str_n_binout): $(lang_root)string/n.c
-	$(CC) $(lang_str_cflags) $(INC) $^ $(bin_out)$@
+	$(CC) $(string_cflags) $(INC) $^ $(bin_out)$@
 
 $(lang_str_s_binout): $(lang_root)string/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
