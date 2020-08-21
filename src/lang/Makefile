@@ -614,6 +614,7 @@ lang_str_s_test: lang_str_s
 
 lang_str_dup: $(lang_str_dup_binout)
 lang_str_dup_test: lang_str_dup
+	$(lang_str_dup_binout) "the quick brown fox"
 
 lang_str_tok: $(lang_str_tok_binout)
 lang_str_tok_test: lang_str_tok
@@ -650,7 +651,7 @@ $(lang_str_s_binout): $(lang_root)string/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_str_dup_binout): $(lang_root)string/dup.c
-	$(CC) $(lang_str_cflags) $(INC) $^ $(bin_out)$@
+	$(CC) $(string_cflags) $(INC) $^ $(bin_out)$@
 
 $(lang_str_tok_binout): $(lang_root)string/tok.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

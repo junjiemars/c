@@ -111,14 +111,29 @@ strcpy_s(buf, sizeof(buf), xyz);"
 . ${NORE_ROOT}/auto/feature
 
 
-nm_feature="strdup fn"
-nm_feature_name="nm_have_strdup_fn"
-nm_feature_run=no
-nm_feature_h="#include <string.h>"
-nm_feature_flags=
-nm_feature_test="
-char *xyz = strdup(\"xyz\");"
-. ${NORE_ROOT}/auto/feature
+case "$CC_NAME" in
+  gcc|clang)
+    nm_feature="strdup fn"
+    nm_feature_name="nm_have_strdup_fn"
+    nm_feature_run=no
+    nm_feature_h="#include <string.h>"
+    nm_feature_flags=
+    nm_feature_test="
+    char *xyz = strdup(\"xyz\");"
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  msvc)
+    nm_feature="strdup fn"
+    nm_feature_name="nm_have_strdup_fn"
+    nm_feature_run=no
+    nm_feature_h="#include <string.h>"
+    nm_feature_flags=
+    nm_feature_test="
+    char *xyz = _strdup(\"xyz\");"
+    . ${NORE_ROOT}/auto/feature
+		;;
+esac
+       
 
 
 nm_feature="restrict keyword"
