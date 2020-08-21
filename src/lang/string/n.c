@@ -27,7 +27,7 @@ self_strnlen(const char *s, size_t maxlen) {
 char *
 self_strncpy(char *dst, const char *src, size_t n) {
 	char *p = dst;
-	while (0 != (*p++ = *src++) && n--) {
+	while (n-- && (0 != (*p++ = *src++))) {
     /* do nothing */
   }
 	return dst;
@@ -35,17 +35,11 @@ self_strncpy(char *dst, const char *src, size_t n) {
 
 int
 self_strncmp(const char *s1, const char *s2, size_t n) {
-	while (*s1 && (*s1 == *s2) && n > 1) {
-		s1++, s2++, n--;
+	while (*s1 && *s2 && (*s1 == *s2) && n > 1) {
+    s1++, s2++, n--;
 	}
-  
-	int cmp = *(const unsigned char*)s1 - *(const unsigned char*)s2;
-  if (cmp < 0) {
-    return -1;
-  } else if (cmp > 0) {
-    return 1;
-  }
-  return 0;
+	int cmp = *(unsigned char *)s1 - *(unsigned char *)s2;
+  return cmp;
 }
 
 void
@@ -71,9 +65,6 @@ test_strncmp(strncmp_fn fn, const char *s1, const char *s2, size_t n) {
   cmp = fn(s1, s2, n);
   printf("==%i\n", cmp);
 }
-
-
-/* #endif /\* end of NM_HAVE_STRN_ANY_FN *\/ */
 
 int
 main(int argc, char **argv) {
