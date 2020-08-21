@@ -11,11 +11,21 @@ static void test_strspn(strspn_fn fn, const char *s, const char *d);
 
 size_t
 self_strspn(const char *s, const char *d) {
-  const char *p;
-  for (p = d; *p && *s && (*p == *s); p++, s++) {
-    // do nothing
+  size_t n;
+  const char *s1;
+  const char *p, *p1;
+
+  for (p = d; *p; p++) {
+    n = 0;
+    s1 = s;
+    for (p1 = p; *p1 && *s1 && (*p1 == *s1); p1++, s1++) {
+      n++;
+    }
+    if (n > 0) {
+      return n;
+    }
   }
-  return (p - d);
+  return 0;
 }
 
 size_t

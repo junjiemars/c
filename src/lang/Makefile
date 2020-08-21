@@ -637,6 +637,8 @@ lang_str_spn_test: lang_str_spn
 	$(lang_str_spn_binout) "the quick brown fox jumps over the lazy dog" "f"
 	$(lang_str_spn_binout) "the quick brown fox jumps over the lazy dog" "q"
 	$(lang_str_spn_binout) "the quick brown fox jumps over the lazy dog" "the q"
+	$(lang_str_spn_binout) "the quick brown fox jumps over the lazy dog" "fthe q"
+	$(lang_str_spn_binout) "the quick brown fox jumps over the lazy dog" "fthe x"
 
 $(lang_str_basic_binout): $(lang_root)string/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
