@@ -27,7 +27,7 @@ test_strchr(strchr_fn fn, char *ss, int c) {
 
 char *
 self_strchr(const char *s, int c) {
-  while (s && *s) {
+  while (*s) {
     if (c == *s) {
       return (char *)s;
     }
@@ -39,7 +39,7 @@ self_strchr(const char *s, int c) {
 char *
 self_strrchr(const char *s, int c) {
   const char *pre = 0;
-  while (s && *s) {
+  while (*s) {
     if (c == *s) {
       pre = s;
     }
