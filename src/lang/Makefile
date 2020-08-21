@@ -579,20 +579,23 @@ lang_str_s_binout := $(bin_path)$(lang_prefix)_string_s$(bin_ext)
 lang_str_dup_binout := $(bin_path)$(lang_prefix)_string_dup$(bin_ext)
 lang_str_tok_binout := $(bin_path)$(lang_prefix)_string_tok$(bin_ext)
 lang_str_chr_binout := $(bin_path)$(lang_prefix)_string_chr$(bin_ext)
+lang_str_pbrk_binout := $(bin_path)$(lang_prefix)_string_pbrk$(bin_ext)
 
 lang_string: lang_str_basic											\
              lang_str_n													\
              lang_str_s													\
              lang_str_dup												\
              lang_str_tok												\
-             lang_str_chr
+             lang_str_chr												\
+             lang_str_pbrk
 
 lang_string_test: lang_str_basic_test						\
                   lang_str_n_test								\
                   lang_str_s_test								\
                   lang_str_dup_test							\
                   lang_str_tok_test							\
-                  lang_str_chr_test
+                  lang_str_chr_test							\
+                  lang_str_pbrk_test
 
 lang_str_basic: $(lang_str_basic_binout)
 lang_str_basic_test: lang_str_basic
@@ -620,6 +623,12 @@ lang_str_chr_test: lang_str_chr
 	$(lang_str_chr_binout) "the quick brown fox jumps over the lazy dog" "t"
 	$(lang_str_chr_binout) "the quick brown fox jumps over the lazy dog" "1"
 
+lang_str_pbrk: $(lang_str_pbrk_binout)
+lang_str_pbrk_test: lang_str_pbrk
+	$(lang_str_pbrk_binout) "the quick brown fox jumps over the lazy dog" "fxx"
+	$(lang_str_pbrk_binout) "the quick brown fox jumps over the lazy dog" "dxx"
+	$(lang_str_pbrk_binout) "the quick brown fox jumps over the lazy dog" "123"
+
 $(lang_str_basic_binout): $(lang_root)string/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
@@ -636,6 +645,9 @@ $(lang_str_tok_binout): $(lang_root)string/tok.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_str_chr_binout): $(lang_root)string/chr.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(lang_str_pbrk_binout): $(lang_root)string/pbrk.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # struct
