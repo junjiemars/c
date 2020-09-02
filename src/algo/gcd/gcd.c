@@ -3,9 +3,13 @@
 #include <stdlib.h>
 
 
-/* raw while loop */
+/* iterative */
+int gcd_iter(int a, int b);
+/* tail recursive */
+int gcd_tr(int a, int b);
+
 int
-gcd(int a, int b) {
+gcd_iter(int a, int b) {
 	while (b) {
 		int m = a % b;
 		a = b;
@@ -14,26 +18,25 @@ gcd(int a, int b) {
 	return a;
 }
 
-/* tail recursion */
 int
-gcd1(int a, int b) {
+gcd_tr(int a, int b) {
 	if (0 == b) {
 		return a;
 	} 
-	return gcd1(b, a % b);
+	return gcd_tr(b, a % b);
 }
 
 int
 main(int argc, char **argv) {
 	if (argc < 3) {
-		printf("gcd(a, b)\n");
+		printf("gcd_iter(a, b)\n");
 		return 1;
 	}
 	
 	int a = atoi(argv[1]);
 	int b = atoi(argv[2]);
-	printf("gcd(%i, %i) = %i\n", a, b, gcd(a, b));
-	printf("gcd1(%i, %i) = %i\n", a, b, gcd1(a, b));
+	printf("iterative: gcd(%i, %i) = %i\n", a, b, gcd_iter(a, b));
+	printf("recursive: gcd(%i, %i) = %i\n", a, b, gcd_tr(a, b));
 	
 	return 0;
 }

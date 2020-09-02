@@ -6,7 +6,10 @@
 algo_prefix := algo
 INC += -I$(algo_root)
 
-CFLAGS += $(if $(strip $(nm_build_opt)),,$(cflags_sanitize))
+ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
+	CFLAGS += $(cflags_sanitize)
+endif
+
 
 algo: _algo_ \
 			algo_duff_device \
