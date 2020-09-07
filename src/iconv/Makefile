@@ -12,7 +12,9 @@ iconv_test: iconv_basic_test										\
 iconv_prefix := iconv
 
 INC += -I$(iconv_root)
-LDLIBS += -liconv
+ifeq ($(NM_SYSTEM), Darwin)
+	LDLIBS += -liconv
+endif
 
 
 # basic
