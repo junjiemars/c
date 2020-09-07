@@ -3,7 +3,12 @@
 #include <string.h>
 
 #define NUM_LEN 7
-#define OUT_FMT "No.%d found\n----\nnum: %s\nname: %s\nstock: %d\nprice: %lf\n"
+#define OUT_FMT "No.%d found\n"                 \
+"----\n"                                        \
+"num: %s\n"                                     \
+"name: %s\n"                                    \
+"stock: %d\n"                                   \
+"price: %lf\n"
 
 typedef struct record_s {
   char num[NUM_LEN];
@@ -17,8 +22,24 @@ typedef struct index_s {
   int idx;
 } index_s;
 
+/* generate bin and idx files */
+void out_records(const char *inpath,
+                 const char *binpath,
+                 const char *idxpath);
+
+/* seek record by idx */
+
+void seek_record(const char *path, const int n);
+
+/* find record by num filed */
+void find_record(const char *binpath,
+                 const char *idxpath,
+                 const char *num);
+
 void
-out_records(const char *inpath, const char *binpath, const char *idxpath) {
+out_records(const char *inpath,
+            const char *binpath,
+            const char *idxpath) {
   FILE *in = 0, *outbin = 0, *outidx = 0;
   in = fopen(inpath, "r");
   if (!in) {
@@ -85,7 +106,7 @@ seek_record(const char *path, const int n) {
   memset(&ss, 0, sizeof(record_s));
   if (1 != fread(&ss, sizeof(record_s), 1, in)) {
     if (feof(in)) {
-      fprintf(stderr, "No.%i no found\n----\n", n);
+      fprintf(stderr, "!No.%i no found\n----\n", n);
     } else if (ferror(in)) {
       perror("!panic");
     }
@@ -99,7 +120,9 @@ seek_record(const char *path, const int n) {
 }
 
 void
-find_record(const char *binpath, const char *idxpath, const char *num) {
+find_record(const char *binpath,
+            const char *idxpath,
+            const char *num) {
   FILE *idx = 0, *bin = 0;
   idx = fopen(idxpath, "rb");
   if (!idx) {
@@ -133,7 +156,7 @@ find_record(const char *binpath, const char *idxpath, const char *num) {
     perror("!panic");
   }
   if (feof(idx)) {
-    fprintf(stdout, "!no found\n----\n");
+    fprintf(stdout, "!Num.%s no found\n----\n", num);
   }
 
  clean_exit:
@@ -145,7 +168,9 @@ find_record(const char *binpath, const char *idxpath, const char *num) {
 int
 main(int argc, char **argv) {
   if (argc < 4) {
-    fprintf(stderr, "where the records.txt/records.bin/records.idx located?\n");
+    fprintf(stderr,
+            "where the records.txt/records.bin/records.idx"
+            "located?\n");
     return 0;
   }
 
@@ -161,6 +186,7 @@ main(int argc, char **argv) {
 
   find_record(bin, idx, "PKL070");
   find_record(bin, idx, "DKP080");
+  find_record(bin, idx, "DKP081");
   
   return 0;
 }
