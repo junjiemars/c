@@ -25,7 +25,6 @@ test_utf8_to_gb18030(void) {
   out_len = BUF_SIZE;
   in = &in_buf[0];
   out = &out_buf[0];
-
   
   n = iconv(cd, &in, &in_len, &out, &out_len);
   if ((size_t) -1 == n) {

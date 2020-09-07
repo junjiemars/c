@@ -2,7 +2,7 @@
 #include <string.h>
 
 
-#define BUF_SIZE 64
+#define BUF_SIZE 4
 
 void test_utf8_to_gb18030(const char *dst_file, const char *src_file);
 
@@ -12,6 +12,7 @@ test_utf8_to_gb18030(const char *dst_file, const char *src_file) {
   iconv_t cd = (iconv_t) -1;
   char in_buf[BUF_SIZE], out_buf[BUF_SIZE];
   size_t n;
+  size_t bufsize = BUF_SIZE;
 
   dst = fopen(dst_file, "wb");
   if (!dst) {
@@ -30,33 +31,39 @@ test_utf8_to_gb18030(const char *dst_file, const char *src_file) {
     goto clean_exit;
   }
 
-  while (0 < (n = fread(in_buf, sizeof(char), BUF_SIZE, src))) {
+  while (0 < (n = fread(in_buf, sizeof(char), bufsize, src))) {
     char *in, *out;
     size_t in_len, out_len;
+
     in = &in_buf[0];
     out = &out_buf[0];
     in_len = n;
     out_len = BUF_SIZE;
+
     size_t cn = iconv(cd, &in, &in_len, &out, &out_len);
     if ((size_t) -1 == cn) {
       perror("!panic, iconv failed");
-      fseek(src, -1, SEEK_CUR);
-      if (ferror(src)) {
+      fprintf(stderr, "!try to recover ...\n");
+
+      if (fseek(src, -n, SEEK_CUR)) {
         perror("!panic, fread failed");
         goto clean_exit;
       }
+      bufsize--;
       continue;
     }
-    fwrite(out_buf, sizeof(char), out_len, dst);
+
+    fwrite(out_buf, sizeof(char), BUF_SIZE - out_len, dst);
     if (ferror(dst)) {
       perror("!panic, fwrite failed");
       goto clean_exit;
     }
   }
-
+  
   if (ferror(src)) {
     perror("!panic, fread failed");
   }
+  printf("... done\n");
   
  clean_exit:
   if (-1 == iconv_close(cd)) {
