@@ -26,7 +26,7 @@ test_utf8_to_gb18030(const char *dst_file, const char *src_file) {
   }
 
   cd = iconv_open("GB18030", "UTF-8");
-  if ((iconv_t) -1 == cd) {
+  if ((iconv_t)(-1) == cd) {
     perror("!panic");
     goto clean_exit;
   }
