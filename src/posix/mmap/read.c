@@ -3,7 +3,10 @@
 #include <string.h>
 
 
-#if NM_HAVE_OPEN_FN && NM_HAVE_MMAP_FN
+#if (NM_HAVE_MMAP_FN)
+
+void test_read(const char *file, size_t len);
+
 void
 test_read(const char *file, size_t len) {
   int fd = open(file, O_RDONLY);
@@ -35,7 +38,8 @@ test_read(const char *file, size_t len) {
   }
   close(fd);
 }
-#endif
+
+#endif  /* end of (NM_HAVE_OPEN_FN) */
 
 int
 main(int argc, char **argv) {
@@ -51,7 +55,7 @@ main(int argc, char **argv) {
     return 1;
   }
   
-#if NM_HAVE_OPEN_FN
+#if (NM_HAVE_MMAP_FN)
   test_read(file, len);
 #endif
   
