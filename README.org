@@ -2354,7 +2354,7 @@ table in a executable.
 
 | *example*                   | *command*                                             |
 |-----------------------------+-------------------------------------------------------|
-| set working directory       | *(lldb)* platform shell -w <pwd>                      |
+| set working directory       | *(lldb)* platform settings -w <pwd>                   |
 |                             | *(gdb)* cd <pwd>                                      |
 |                             |                                                       |
 | list /env/ vars             | *(lldb)* =env=                                        |
@@ -2415,16 +2415,18 @@ table in a executable.
 
 *** Memory
 
-| *example*                       | *command*                                        |
-|---------------------------------+--------------------------------------------------|
-| check /argv/ in /main/ entry    | *(lldb)* =x -t'char*' -c`argc` argv=             |
-|                                 | *0:000>* =dp @@(argv)=                           |
-|                                 |                                                  |
-| check array of /char*/ of /argv | *(lldb)* =x -s`sizeof(char*)` -c`argc` -fx argv= |
-|                                 |                                                  |
-| check /&argc/ in /main/ entry   | *(lldb)* =x -s`sizeof(int)` -fx -c1 &argc=       |
-|                                 | *(gdb)*  =x/1xw &argc=                           |
-|                                 |                                                  |
+| *example*                       | *command*                                                  |
+|---------------------------------+------------------------------------------------------------|
+| check /argv/ in /main/ entry    | *(lldb)* =x -t'char*' -c`argc` argv=                       |
+|                                 | *0:000>* =dp @@(argv)=                                     |
+|                                 |                                                            |
+| check array of /char*/ of /argv | *(lldb)* =x -s`sizeof(char*)` -c`argc` -fx argv=           |
+|                                 |                                                            |
+| check /&argc/ in /main/ entry   | *(lldb)* =x -s`sizeof(int)` -fx -c1 &argc=                 |
+|                                 | *(gdb)*  =x/1xw &argc=                                     |
+|                                 |                                                            |
+| memory read                     | *(lldb)* memory read -o/tmp/x.out -s1 -fu -c10 -- &argv[0] |
+|                                 |                                                            |
 
 *** Frame
 
