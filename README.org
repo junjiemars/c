@@ -2354,6 +2354,9 @@ table in a executable.
 
 | *example*                   | *command*                                             |
 |-----------------------------+-------------------------------------------------------|
+| set working directory       | *(lldb)* platform shell -w <pwd>                      |
+|                             | *(gdb)* cd <pwd>                                      |
+|                             |                                                       |
 | list /env/ vars             | *(lldb)* =env=                                        |
 |                             | *(lldb)* =settings show target.env-vars=              |
 |                             |                                                       |
