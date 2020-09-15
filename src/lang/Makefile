@@ -512,7 +512,7 @@ $(lang_sizeof_binout): $(lang_root)sizeof/sizeof.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # stage
-ifneq ($(CC_NAME), msvc)
+ifneq ($(CC_NAME),msvc)
 stage_binout := $(bin_path)$(lang_prefix)_stage$(bin_ext)
 stage_objout := $(tmp_path)$(lang_prefix)_stage$(obj_ext)
 stage_asmout := $(tmp_path)$(lang_prefix)_stage$(asm_ext)
@@ -521,10 +521,6 @@ stage_cppout := $(tmp_path)$(lang_prefix)_stage$(cpp_ext)
 lang_stage: $(stage_binout)
 lang_stage_test: lang_stage
 	$(stage_binout)
-
-ifeq ($(NM_VERBOSE), YES)
-stage_ldflags += -VERBOSE:LIB
-endif
 
 $(stage_binout): $(stage_objout)
 	$(LINK) $^ $(bin_out)$@ $(stage_ldflags)
@@ -542,6 +538,9 @@ else
 lang_stage:
 lang_stage_test:
 stage_ldflags := -link -FORCE:MULTIPLE
+ifeq ($(NM_VERBOSE),YES)
+stage_ldflags += -VERBOSE:LIB
+endif
 endif
 
 
