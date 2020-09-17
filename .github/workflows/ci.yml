@@ -20,8 +20,7 @@ jobs:
           bash <(curl https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh)
       - name: Build and Test
         run: |
-          CC=gcc ./configure --has-hi
-                             --has-algo
+          CC=gcc ./configure --has-hi --has-algo --has-ds --has-library --has-lang --has-memory
           make clean test
 
   MacOS:
@@ -35,5 +34,5 @@ jobs:
           bash <(curl https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh)
       - name: Build and Test
         run: |
-          CC=clang ./configure --has-hi
+          CC=gcc ./configure --has-hi --has-algo --has-ds --has-library --has-lang --has-memory
           make clean test
