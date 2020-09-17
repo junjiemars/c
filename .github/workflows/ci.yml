@@ -22,3 +22,17 @@ jobs:
         run: |
           CC=gcc ./configure --has-hi
           make clean test
+
+  MacOS:
+    runs-on: macosx-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install Nore
+        run: |
+          bash <(curl https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh)
+      - name: Build and Test
+        run: |
+          CC=clang ./configure --has-hi
+          make clean test
