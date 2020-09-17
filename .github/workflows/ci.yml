@@ -1,0 +1,21 @@
+name: C
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  Linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install Nore
+        run: |
+          bash <(curl https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh)
