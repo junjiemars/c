@@ -1,7 +1,7 @@
 #include <_lang_.h>
-#include <string.h>
 #include <stdio.h>
 #include <posix/strs.h>
+#include <string.h>
 
 #if MSVC
 /* warning C4996: 'strtok': This function or variable may be
