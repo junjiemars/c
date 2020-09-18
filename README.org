@@ -1397,7 +1397,12 @@ There has an good answer of [[http://stackoverflow.com/questions/17206568/what-i
 - [[https://www.cs.rit.edu/~kar/pointers.on.c/index.html][Kenneth A.Reek: Pointers on C]]
 
 * Compiler
-** inline
+** flex
+
+*** References
+
+- [[https://web.stanford.edu/class/archive/cs/cs143/cs143.1128/handouts/050%20Flex%20In%20A%20Nutshell.pdf][flex In A Nutshell]]
+
 * x86
 	:PROPERTIES:
 	:CUSTOM_ID: x86
@@ -2428,7 +2433,7 @@ table in a executable.
 | memory read                     | *(lldb)* memory read -o/tmp/x.out -s1 -fu -c10 -- &argv[0] |
 |                                 |                                                            |
 
-*** Frame
+~*** Frame
 
 | *example*             | *command*                 |
 |-----------------------+---------------------------|
@@ -2487,3 +2492,4 @@ table in a executable.
 
 - [[https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2008/e5ewb1h3(v=vs.90)][Microsoft: Memory Leak Detection Enabling]]
 - [[https://lldb.llvm.org/use/map.html][GDB to LLDB command map]]
+  
