@@ -2,8 +2,8 @@
 #define _STRS_H_
 
 #if (LINUX)
-#  if !(__USE_POSIX_POSIX_C_SOURCE)
-#    define __USE_POSIX
+#  if !defined(__USE_POSIX)
+#     define __USE_POSIX
 #  endif
 #endif
 
