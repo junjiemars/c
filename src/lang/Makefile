@@ -294,17 +294,25 @@ $(lang_macro_nested_cppout): $(lang_root)macro/nested.c
 # main
 lang_main_binout := $(bin_path)$(lang_prefix)_main$(bin_ext)
 lang_main_envp_binout := $(bin_path)$(lang_prefix)_main_envp$(bin_ext)
+lang_main_entry_binout := $(bin_path)$(lang_prefix)_main_entry$(bin_ext)
 
-lang_main: $(lang_main_binout) $(lang_main_envp_binout)
+lang_main: $(lang_main_binout)									\
+           $(lang_main_envp_binout)							\
+           $(lang_main_entry_binout)
+
 lang_main_test: lang_main
 	$(lang_main_binout) a bb ccc
 	ZZZ=xyz $(lang_main_envp_binout)
+	$(lang_main_entry_binout)
 
 $(lang_main_binout): $(lang_root)main/m.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_main_envp_binout): $(lang_root)main/m_envp.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(lang_main_entry_binout): $(lang_root)main/m_entry.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(nm_entry_opt)_entry
 
 # math
 lang_math_complex_binout := $(bin_path)$(lang_prefix)_math_complex$(bin_ext)
