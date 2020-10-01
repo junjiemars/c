@@ -3,6 +3,10 @@
 
 #define IS_UNSIGNED_INTEGER(x) ((x) > 0 && ~(x) > 0)
 
+#if (GCC)
+#  pragma GCC diagnostic ignored "-Wsign-compare"
+#endif
+
 int main(int argc, char **argv) {
 	_unused_(argc);
 	_unused_(argv);
