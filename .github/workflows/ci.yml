@@ -31,12 +31,6 @@ jobs:
 
   Windows:
     runs-on: windows-latest
-    strategy:
-      matrix:
-        include:
-          - CC: "gcc"
-          - CC: "cl"
-
     defaults:
       run:
         shell: msys2 {0}
@@ -52,6 +46,6 @@ jobs:
         update: true
         install: git make mingw-w64-x86_64-gcc mingw-w64-x86_64
 
-    - name: Build and Test via CC=${{ matrix.CC }}
+    - name: Build and Test
       run: |
-        CC=${{ matrix.CC }} ./test.sh
+        CC=cl ./test.sh
