@@ -22,7 +22,7 @@ cd "${_ROOT_DIR_}"
 
 # check nore
 if [ !- "${_ROOT_DIR_%/}/configure" ]; then
-  bash <(curl https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh)
+  curl -O https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh
 fi
 
 # check cc-env for cl
