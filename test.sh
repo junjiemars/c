@@ -71,7 +71,7 @@ test_do() {
 	  echo "! $@ <failed>"
 	  echo "------------"
   fi
-  echo $retval
+  return $retval
 }
 
 # basic test
