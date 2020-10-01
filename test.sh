@@ -58,16 +58,19 @@ END
 fi
 
 test_do() {
+  local retval=0
   if [ -z "${_WIN_ENV_}" ]; then
     ${_ROOT_DIR_%/}/configure "$@" && make clean test
   else
     ./${_WIN_ENV_MSVC_} "${_WIN_ENV_}" "./configure $@" "make clean test"
   fi
-  if [ 0 -ne $? ]; then
+  retval=$?
+  if [ 0 -ne $retval ]; then
 	  echo "------------"
 	  echo "! $@ failed "
 	  echo "------------"
   fi
+  echo $retval
 }
 
 # basic test
