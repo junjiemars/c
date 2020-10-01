@@ -9,6 +9,7 @@ struct point_s {
 	int y;
 };
 
+int a1[16];
 
 int
 main(int argc, char **argv) {
@@ -16,13 +17,17 @@ main(int argc, char **argv) {
 	_unused_(argv);
 
 	assert(sizeof(short) == field_sizeof(struct point_s, x)
-				 || "field_sizeof macro failed");
+				 && "field_sizeof macro failed");
 
 	assert(sizeof(int) == field_sizeof(struct point_s, y)
-				 || "field_sizeof macro failed");
+				 && "field_sizeof macro failed");
 
-	assert(array_sizeof(argv) == argc
-				 || "array_sizeof macro failed");
+  assert(16 == array_sizeof(a1)
+         && "array_sizeof failed");
+  
+  /* should failed to calculate sizeof ** */
+	/* assert(array_sizeof(argv) == argc */
+	/* 			 || "array_sizeof macro failed"); */
 
 	return 0;
 }

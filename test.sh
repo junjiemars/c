@@ -63,7 +63,7 @@ test_do() {
   if [ -z "${_WIN_ENV_}" ]; then
     ${_ROOT_DIR_%/}/configure "$@" && make clean test
   else
-    ./${_WIN_ENV_MSVC_} "${_WIN_ENV_}" "./configure $@" "make clean test"
+    ${_WIN_ENV_MSVC_} "${_WIN_ENV_}" "./configure $@" "make clean test"
   fi
   retval=$?
   if [ 0 -ne $retval ]; then
