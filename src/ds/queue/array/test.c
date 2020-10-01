@@ -2,6 +2,9 @@
 #include "queue.h"
 #include <stdio.h>
 
+#if (MSVC)
+#  pragma warning(disable:2220) /* conversion from 'size_t' to 'int' */
+#endif
 
 void
 print_queue(queue_s *const s) {
