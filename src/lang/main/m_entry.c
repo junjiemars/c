@@ -1,7 +1,7 @@
 #include <_lang_.h>
 #include <stdio.h>
 
-#if ((GCC) || (MSVC))&& (LINUX)
+#if (GCC)&& (LINUX)
 #  define entry main
 #endif
 
