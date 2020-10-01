@@ -305,6 +305,11 @@ lang_main_test: lang_main
 	ZZZ=xyz $(lang_main_envp_binout)
 	$(lang_main_entry_binout)
 
+main_opt :=
+ifeq ($(CC),msvc)
+main_opt := -subsystem:console
+endif
+
 $(lang_main_binout): $(lang_root)main/m.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
@@ -312,7 +317,7 @@ $(lang_main_envp_binout): $(lang_root)main/m_envp.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_main_entry_binout): $(lang_root)main/m_entry.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(nm_entry_opt)_entry
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(nm_entry_opt)_entry $(main_opt)
 
 # math
 lang_math_complex_binout := $(bin_path)$(lang_prefix)_math_complex$(bin_ext)
