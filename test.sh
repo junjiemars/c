@@ -5,6 +5,7 @@ _TEST_="${_TEST_:-basic}"
 _OS_NAME_="`uname -s 2>/dev/null`"
 _WIN_ENV_=
 
+
 case "${_OS_NAME_}" in
   MSYS_NT-*|MINGW??_NT-*) _OS_NAME_="WinNT" ;;
 esac
@@ -20,7 +21,6 @@ fi
 
 cd "${_ROOT_DIR_}"
 
-echo "!!!${CI}!!!"
 # check nore
 if [ ! -f "${_ROOT_DIR_%/}/configure" ]; then
   bash <(curl https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh)
@@ -45,14 +45,21 @@ if [ "WinNT" = "${_OS_NAME_}" -a "cl" = "${CC}" ]; then
 fi
 
 # basic test
+declare -A _TEST_BASIC_=(
+  --has-hi
+  --has-algo
+  --has-ds
+  --has-library
+  --has-lang
+  --has-memory
+)
+
 if [ "basic" = "${_TEST_}" ]; then
-  ${_ROOT_DIR_%/}/configure --has-hi              \
-                 --has-algo                       \
-                 --has-ds                         \
-                 --has-library                    \
-                 --has-lang                       \
-                 --has-memory
-  make -k -C ${_ROOT_DIR_} clean test
+  for "$baisc" in "${!_TEST_BASIC_[@]}"; do
+    ${_ROOT_DIR_%/}/configure "$basic"          \
+      && make clean test                        \
+        || exit 1
+  done
 fi
 
 # eof
