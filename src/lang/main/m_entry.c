@@ -6,8 +6,12 @@
 #endif
 
 #if (MSVC)
+#include <stdlib.h>
 FILE* __cdecl __iob_func(void) {
-  static FILE _iob[] = { *stdin, *stdout, *stderr };
+  static FILE _iob[] = malloc(sizeof(*stdin)*3);
+  _iob[0] = *stdin;
+  _iob[1] = *stdout;
+  _iob[2] = *stderr;
   return _iob;
 }
 #endif
