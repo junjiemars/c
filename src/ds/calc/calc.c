@@ -4,6 +4,11 @@
 #include <stdio.h>
 #include <ctype.h>
 
+#if (MSVC)
+#  pragma warning(disable:4267) /* conversion from 'size_t' to 'int' */
+#endif
+
+
 #define MAX_EXPR 128
 
 
