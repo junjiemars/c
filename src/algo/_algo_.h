@@ -17,7 +17,7 @@
 		memcpy(_swap_1_, (a), (w));                 \
 		memmove((a), (b), (w));                     \
 		memcpy((b), _swap_1_, (w));                 \
-    free(_swap_1);                              \
+    free(_swap_1_);                             \
 	} while (0)
 #else
 #define swap(a, b, w) do {                      \

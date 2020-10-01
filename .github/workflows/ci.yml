@@ -11,6 +11,11 @@ on:
 jobs:
   Linux:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - CC: "gcc"
+
     steps:
       - uses: actions/checkout@v2
         with:
@@ -21,6 +26,11 @@ jobs:
 
   MacOS:
     runs-on: macos-latest
+    strategy:
+      matrix:
+        include:
+          - CC: "clang"
+
     steps:
       - uses: actions/checkout@v2
         with:
@@ -31,6 +41,11 @@ jobs:
 
   Windows:
     runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - CC: "cl"
+
     defaults:
       run:
         shell: msys2 {0}
