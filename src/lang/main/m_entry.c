@@ -1,9 +1,9 @@
 #include <_lang_.h>
 #include <stdio.h>
 
-/* #if (GCC) && (LINUX) */
-/* #  define entry main */
-/* #endif */
+#if (GCC) && (LINUX)
+#  define entry main
+#endif
 
 int
 entry(int argc, char **argv) {
@@ -15,11 +15,11 @@ entry(int argc, char **argv) {
   return 0;
 }
 
-/* #if (GCC) && (LINUX) */
-/* #  if defined(entry) */
-/* #    undef entry */
-/* #  endif */
-/* #endif */
+#if (GCC) && (LINUX)
+#  if defined(entry)
+#    undef entry
+#  endif
+#endif
 
 #ifdef main
 #undef main
