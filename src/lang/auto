@@ -240,7 +240,7 @@ case "$NM_SYSTEM" in
 	WinNT)
     case "$CC_NAME" in
       msvc)
-        flag=entry_opt op=":=" value="${nm_entry_opt}_entry -subsystem:console" \
+        flag=entry_opt op=":=" value="${nm_entry_opt}entry -subsystem:console" \
             . ${NORE_ROOT}/auto/make_define
         ;;
     esac
