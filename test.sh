@@ -19,11 +19,12 @@ if [ -z "$CC" ]; then
   esac
 fi
 
+# switch to ROOT
 cd "${_ROOT_DIR_}"
 
 # check nore
 if [ ! -f "${_ROOT_DIR_%/}/configure" ]; then
-  bash <(curl https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh)
+  bash <(curl --retry=3 https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh)
   if [ 0 -ne $? ]; then
     echo "!panic: install Nore failed"
     exit 1
@@ -67,7 +68,7 @@ test_do() {
   retval=$?
   if [ 0 -ne $retval ]; then
 	  echo "------------"
-	  echo "! $@ failed "
+	  echo "! $@ <failed>"
 	  echo "------------"
   fi
   echo $retval
