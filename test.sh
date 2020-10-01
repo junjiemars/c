@@ -45,21 +45,13 @@ if [ "WinNT" = "${_OS_NAME_}" -a "cl" = "${CC}" ]; then
 fi
 
 # basic test
-declare -A _TEST_BASIC_=(
-  --has-hi
-  --has-algo
-  --has-ds
-  --has-library
-  --has-lang
-  --has-memory
-)
-
 if [ "basic" = "${_TEST_}" ]; then
-  for "$baisc" in "${!_TEST_BASIC_[@]}"; do
-    ${_ROOT_DIR_%/}/configure "$basic"          \
-      && make clean test                        \
-        || exit 1
-  done
+  ${_ROOT_DIR_%/}/configure --has-hi && make clean test || exit 1
+  ${_ROOT_DIR_%/}/configure --has-algo && make clean test || exit 1
+  ${_ROOT_DIR_%/}/configure --has-ds && make clean test || exit 1
+  ${_ROOT_DIR_%/}/configure --has-library && make clean test || exit 1
+  ${_ROOT_DIR_%/}/configure --has-lang && make clean test || exit 1
+  ${_ROOT_DIR_%/}/configure --has-memory && make clean test || exit 1
 fi
 
 # eof
