@@ -1,8 +1,10 @@
 #include <_lang_.h>
 #include <stdio.h>
 
-#if ((GCC) || (MSVC)) && (LINUX)
-#  define entry main
+#if (GCC) || (MSVC)
+#  if (LINUX) || (WINNT)
+#    define entry main
+#  endif
 #endif
 
 int
