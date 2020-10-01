@@ -6,7 +6,10 @@
 #endif
 
 #if (MSVC)
-FILE __iob_func[3] = { *stdin, *stdout, *stderr };
+FILE* __cdecl __iob_func(void) {
+  FILE _iob[] = { *stdin, *stdout, *stderr };
+  return _iob;
+}
 #endif
 
 int
