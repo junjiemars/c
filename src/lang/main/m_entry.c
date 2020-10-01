@@ -5,6 +5,12 @@
 #  define entry main
 #endif
 
+#if (MSVC)
+extern "C" {
+  FILE __iob_func[3] = { *stdin,*stdout,*stderr };
+}
+#endif
+
 int
 entry(int argc, char **argv) {
   _unused_(argc);
