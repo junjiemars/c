@@ -21,11 +21,11 @@
 #+ATTR_HTML: :style text-align:left
 It is not /C Lessons/ at all :). I'd programming in C long time ago,
 sometimes I want to pick something up, but I cannot find the peice of
-code somewhere or cannot run the code wroten in another machine.
+code somewhere or cannot run the code written in another machine.
 
 #+REVEAL: split
 #+ATTR_HTML: :style text-align:left
-Sadly, old dog always need learn something new.
+Sadly, old dog always need to learn something new.
 - Access the code from anywhere, oh, GitHub is good one
 - Run or write code on anywhere, so Linux, Darwin, or Windows, Docker Box
 - Easy to try and learn
@@ -816,7 +816,7 @@ leftover from C predecessor's B.
 		:END:
 
 Hints to the compiler that access to an object should as fast as
-possible.  Whether the compiler actually uses the hint is
+possible.Whether the compiler actually uses the hint is
 implementation-defined; it may simply treat it as equivalent to
 =auto=.
 
