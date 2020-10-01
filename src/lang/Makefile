@@ -307,7 +307,7 @@ lang_main_test: lang_main
 
 main_entry := _entry
 main_opt :=
-ifeq ($(CC_NAME),clang)
+ifeq ($(CC_NAME),msvc)
 main_entry := entry
 main_opt := -subsystem:console
 endif
