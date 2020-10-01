@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 #if (MSVC)
-#  pragma warning(disable:2220) /* conversion from 'size_t' to 'int' */
+#  pragma warning(disable:4267) /* conversion from 'size_t' to 'int' */
 #endif
 
 void
