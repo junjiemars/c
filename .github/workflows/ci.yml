@@ -28,3 +28,30 @@ jobs:
       - name: Build and Test
         run: |
           ./test.sh
+
+  Windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - CC: "gcc"
+          - CC: "cl"
+
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # checkout history and tags
+
+    - name: Install Dependencies
+      uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        install: git make mingw-w64-x86_64-gcc mingw-w64-x86_64
+
+    - name: Build and Test via CC=${{ matrix.CC }}
+      run: |
+        CC=${{ matrix.CC }} ./test.sh
