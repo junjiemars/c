@@ -238,11 +238,11 @@ case "$NM_SYSTEM" in
     # esac
 		;;
 	WinNT)
-    case "$CC_NAME" in
-      msvc)
-        flag=entry_opt op=":=" value="${nm_entry_opt}entry -subsystem:console" \
-            . ${NORE_ROOT}/auto/make_define
-        ;;
-    esac
+    # case "$CC_NAME" in
+    #   msvc)
+    #     flag=entry_opt op=":=" value="${nm_entry_opt}entry -subsystem:console" \
+    #         . ${NORE_ROOT}/auto/make_define
+    #     ;;
+    # esac
 		;;
 esac
