@@ -10,8 +10,10 @@
 #if (WINNT) && (MSVC)
 #  define strerror_r(errno, buf, len) strerror_s(buf, len, errno)
 #  define strtok_r                    strtok_s
+#  define strdup                      _strdup
 #endif
 
+#include <string.h>
 
 #endif /* end of _STRS_H_ */
 

@@ -1,17 +1,8 @@
 #include <_lang_.h>
-#include <string.h>
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-
-#if MSVC
-/* warning C4996: 'strdup': The POSIX name for this item is
-	 deprecated. Instead, use the ISO C and C++ conformant name:
-	 _strdup */
-#  pragma warning(disable : 4996)
-#endif
-
+#include <posix/strs.h>
 
 typedef char *(*strdup_fn)(const char *s);
 typedef char *(*strndup_fn)(const char *s, size_t n);
@@ -80,8 +71,12 @@ main(int argc, char **argv) {
   }
   
   const char *s = argv[1];
+
   test_strdup(strdup, s);
+
+#if !defined(MSVC)
   test_strndup(strndup, s, 5);
+#endif
 
   test_strdup(self_strdup, s);
   test_strndup(self_strndup, s, 5);

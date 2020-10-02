@@ -1,5 +1,4 @@
 #include "_lang_.h"
-#include <string.h>
 #include <errno.h>
 #include <stdio.h>
 #include <math.h>
