@@ -5,6 +5,10 @@
 #include <time.h>
 #include <stdint.h>
 
+#if (MSVC)
+#  pragma warning(disable:4244)
+#endif
+
 
 #define _align_(x, a)           _align_mask_(x, (uintptr_t)(a)-1)
 #define _align_mask_(x, mask)   (((uintptr_t)(x)+(mask)) & ~(mask))
