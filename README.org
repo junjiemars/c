@@ -12,6 +12,7 @@
 #+REVEAL_MAX_SCALE: 1.5
 #+END_COMMENT
 
+@@html:<img src="https://github.com/junjiemars/c/workflows/C/badge.svg" alt="clang, gcc and msvc"/>@@
 
 * Quick start
   :PROPERTIES:
