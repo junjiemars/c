@@ -162,6 +162,8 @@ ieee_float_special_values(void) {
 	printf("float: %16f \t=  ", x4f0n.f);
   printf(BPRI32(x4f0n.u));
 
+/* stupid msvc C2124: divide or mod by zero */
+#if !(MSVC)
   ufloat32_t x4finf =  { .f = (1.0f/0.0f) };
 	printf("float: %16f \t=  ", x4finf.f);
   printf(BPRI32(x4finf.u));
@@ -169,6 +171,7 @@ ieee_float_special_values(void) {
   ufloat32_t x4finfn =  { .f = (-1.0f/0.0f) };
 	printf("float: %16f \t=  ", x4finfn.f);
   printf(BPRI32(x4finfn.u));
+#endif
 
   ufloat32_t x4fnan =  { .f = (0.0f/0.0f) };
 	printf("float: %16f \t=  ", x4fnan.f);
