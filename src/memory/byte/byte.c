@@ -171,11 +171,11 @@ ieee_float_special_values(void) {
   ufloat32_t x4finfn =  { .f = (-1.0f/0.0f) };
 	printf("float: %16f \t=  ", x4finfn.f);
   printf(BPRI32(x4finfn.u));
-#endif
 
   ufloat32_t x4fnan =  { .f = (0.0f/0.0f) };
 	printf("float: %16f \t=  ", x4fnan.f);
   printf(BPRI32(x4fnan.u));
+#endif
 
   ufloat32_t x4fmin =  { .f = FLT_MIN };
 	printf("float: %16s \t=  ", "min");
