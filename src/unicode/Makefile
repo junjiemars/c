@@ -1,4 +1,7 @@
-# src/unicode
+#
+# ./configure --has-unicode
+# make clean test
+#
 
 unicode: unicode_mb \
 				 unicode_utf8

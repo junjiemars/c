@@ -528,7 +528,7 @@ if (a > b) incr(a, b);
 #+END_SRC
 
 just only =b= will be incremented. We can block it and convert it to
-block-type macro
+block-type macro.
 
 #+BEGIN_SRC c
 #define incr(a, b) { \

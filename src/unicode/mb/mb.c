@@ -9,8 +9,12 @@
 #  pragma warning(disable : 4996)
 #endif
 
+void print_wc(const wchar_t *s);
+void wc_to_mb(const wchar_t *s);
+void wcs_to_mbs(const wchar_t *s, size_t n);
+
 void
-wide_char(const wchar_t *s) {
+print_wc(const wchar_t *s) {
 	const wchar_t *p = s;
 	while (*p) {
 		printf("[%lc]", *p++);
@@ -47,12 +51,12 @@ main(int argc, char **argv) {
 	printf("sizeof(wchar_t): %zu bytes\n", sizeof(wchar_t));
 	printf("MB_LEN_MAX: %i\n", MB_LEN_MAX);
 	printf("----------\n");
-	
+
 	wchar_t s[] = L"abc中文def";
 	printf("%ls:\n", s);
 	printf("----------\n");
 	
-	wide_char(s);
+	print_wc(s);
 	wc_to_mb(s);
 	wcs_to_mbs(s, sizeof(s));
 	return 0;
