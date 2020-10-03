@@ -32,7 +32,7 @@ mbs_to_wcs(const char *s, size_t *n) {
   size_t ns = strlen(s);
   wchar_t *d = malloc(sizeof(wchar_t) * ns);
   *n = mbstowcs(d, s, ns);
-  if (n > 0) {
+  if (*n > 0) {
     return d;
   }
   perror("!panic");
