@@ -87,7 +87,7 @@ main(int argc, char **argv) {
 	printf("current locale: %s\n", setlocale(LC_ALL, 0));
   printf("set locale to native: %s\n", setlocale(LC_ALL, ""));
 #if (WINNT)
-  printf("set locale to native: %s\n", setlocale(LC_ALL, "en_US.UTF-8"));
+  printf("set locale to native: %s\n", setlocale(LC_ALL, "English_United States.65001"));
 #endif
 	printf("sizeof(wchar_t): %zu bytes\n", sizeof(wchar_t));
 	printf("MB_LEN_MAX: %zu\n", (size_t)MB_LEN_MAX);
