@@ -90,8 +90,9 @@ main(int argc, char **argv) {
   printf("set locale to native: %s\n", setlocale(LC_ALL, "en_US.UTF-8"));
 #endif
 	printf("sizeof(wchar_t): %zu bytes\n", sizeof(wchar_t));
-	printf("MB_LEN_MAX: %i\n", MB_LEN_MAX);
-	printf("MB_CUR_MAX: %i\n", MB_CUR_MAX);
+	printf("MB_LEN_MAX: %zu\n", (size_t)MB_LEN_MAX);
+	printf("MB_CUR_MAX: %zu\n", (size_t)MB_CUR_MAX);
+
 	printf("----------\n");
 
   if (argc < 2) {
