@@ -2253,9 +2253,9 @@ Module.ccall('sum', 'number', ['number', 'number'], [10, 0]);
 - [[https://emscripten.org/index.html][emscripten]]
 
 * Tools
-	:PROPERTIES:
-	:CUSTOM_ID: tools
-	:END:
+  :PROPERTIES:
+  :CUSTOM_ID: tools
+  :END:
 
 ** Display Dependents of Executable
 	 :PROPERTIES:
@@ -2494,3 +2494,13 @@ table in a executable.
 - [[https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2008/e5ewb1h3(v=vs.90)][Microsoft: Memory Leak Detection Enabling]]
 - [[https://lldb.llvm.org/use/map.html][GDB to LLDB command map]]
   
+** CPU Features
+   
+- Linux:
+#+BEGIN_SRC sh
+$ lscpu
+#+END_SRC
+- Darwin:
+#+BEGIN_SRC sh
+$  sysctl -a | grep machdep.cpu.features
+#+END_SRC
