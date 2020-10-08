@@ -1,0 +1,47 @@
+#### -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## check
+####
+
+
+
+# check machine features
+#----------------------------------------
+case "$CC_NAME" in
+   clang)
+     nm_feature="$CC_NAME loop vectorizer"
+     nm_feature_name="nm_have_loop_vectorizer"
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-march=native -fvectorize -mprefer-vector-width=8'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=CFLAGS op="+=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+       have="NM_LOOP_VECTOR_WIDTH" value="8"\
+           . ${NORE_ROOT}/auto/define
+     fi
+     ;;
+   gcc)
+     nm_feature="$CC_NAME -Wl,-E|--export-dynamic"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-Wl,-E'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+
+     if [ yes = $nm_found ]; then
+       flag=LDFLAGS op="+=" value=$nm_feature_flags \
+         . ${NORE_ROOT}/auto/make_define
+     fi
+     ;;
+   msvc)
+     ;;
+esac

@@ -3,12 +3,14 @@
 cpu: cpu_info																		\
 		 cpu_id																			\
 		 cpu_tile																		\
-     cpu_time
+     cpu_time                                   \
+     cpu_vectorize
 
 cpu_test: cpu_info_test													\
 	  		  cpu_id_test														\
           cpu_tile_test													\
-          cpu_time_test
+          cpu_time_test                         \
+          cpu_vectorize_test
 
 cpu_prefix := cpu
 
@@ -55,3 +57,15 @@ cpu_time_test: cpu_time
 
 $(cpu_time_basic_binout): $(cpu_root)time/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# vectorize
+cpu_vectorize_loop_binout := $(bin_path)$(cpu_prefix)_vectorize_loop$(bin_ext)
+
+cpu_vectorize: $(cpu_vectorize_loop_binout)
+cpu_vectorize_test: cpu_vectorize
+	$(cpu_vectorize_loop_binout)
+
+$(cpu_vectorize_loop_binout): $(cpu_root)vectorize/loop.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
