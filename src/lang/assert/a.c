@@ -22,13 +22,13 @@ main(int argc, const char* argv[]) {
 
 	assert((argc > 1) && "usage: one <int>");
 
-	printf("in %s mode\n",
-#ifdef NDEBUG
-         "RELEASE"
+  char *mode =
+#if (NDEBUG)
+  "RELEASE";
 #else
-         "DEBUG"
-#endif         
-         );
+  "DEBUG";
+#endif
+	printf("in %s mode\n", mode);
 
 	static_assert(4 == sizeof(int), "sizeof(int) != 4 bytes");
 

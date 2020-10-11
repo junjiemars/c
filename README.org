@@ -276,19 +276,22 @@ purposes. =#pragma= is commonly used to suppress warnings.
 
 No, there's nothing wrong with =assert= as long as you use it as
 intended.
-- Assert: A failure in the program's logic itself.
-- Error Handling: An erroneous input or system state not due to a bug
-  in the program.
+- assert: a failure in the program's logic itself.
+- error: an erroneous input or system state not due to a bug in the
+  program.
 
 Assertions are primarily intended for use during debugging and are
 generally turned off before code is deployed by defining the =NDEBUG=
 macro.
 
 #+BEGIN_SRC sh
+# with assert
+./configure --has-lang
+make clean lang_assert_test
+
 # erase assertions: simple way
-./configure --has-lang --without-debug
-# or via make
-make NDEBUG=1
+./configure --has-lang --with-release=yes
+make clean lang_assert_test
 #+END_SRC
 
 An /assertion/ specifies that a program statisfies certain conditions
