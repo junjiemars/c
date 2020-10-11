@@ -35,7 +35,7 @@ _log_(const char *header, const char *message) {
 	fprintf(stderr, "%s: %s\n", header, message);
 }
 
-enum Color {
+enum color {
 	RED,
 	GREEN,
 	BLUE
@@ -50,7 +50,7 @@ main(int argc, char *argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 
-	char platform[]
+	char *platform
 #if defined(LINUX)
   = "Linux";
 #elif defined(DARWIN)
@@ -58,18 +58,29 @@ main(int argc, char *argv[]) {
 #elif defined(WINNT)
   = "WinNT"
 #else
-	= "Unknown";
+	= "unknown platform";
+#endif
+
+  char *compiler
+#if (CLANG)
+  = "clang";
+#elif (GCC)
+  = "gcc";
+#elif (MSVC)
+  = "msvc";
+#else
+  = "unknown compiler";
 #endif
 
 	printf("platform: %s\n", platform);
+  printf("compiler: %s\n", compiler);
 	printf("max: %i in [%i %i]\n", MAX(0,1), 0, 1);
 	printf("E^2: %f\n", e_squared);
 	printf("min: %i in [%i %i]\n", MIN(0,1), 0, 1);
 
-	char s[256] = {0};
-	
 	_log_("__FILE__", __FILE__);
-	
+
+  char s[8] = {0};
 	snprintf(s, sizeof(s), "%i", __LINE__);
 	_log_("__LINE__", s);
 
