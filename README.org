@@ -39,13 +39,13 @@ Let's start ...
 
 #+BEGIN_SRC sh
 # bootstrap Nore
-$ bash <(curl https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh)
+bash <(curl https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh)
 
 # configure -> make -> test -> install
-$ ./configure --has-hi
-$ make
-$ make test
-$ make install
+./configure --has-hi
+make
+make test
+make install
 #+END_SRC
 
 * Language
@@ -55,8 +55,8 @@ $ make install
 
 Run the example under =src/lang=.
 #+BEGIN_SRC sh
-$ ./configure --has-lang
-$ make clean test
+./configure --has-lang
+make clean test
 #+END_SRC
 
 ** Preprocessor	
@@ -597,7 +597,7 @@ Macro name within another macro is called Nesting of Macro.
 		:END:
 
 #+BEGIN_SRC c
-$ cc -E <source-file>
+cc -E <source-file>
 #+END_SRC
 
 ** Pointer
@@ -694,8 +694,8 @@ const int * const == int const * const; /* const pointer to const int  */
 
 Run example:
 #+BEGIN_SRC sh
-$ ./configure --has-lang
-$ make clean lang_ptr_const_test
+./configure --has-lang
+make clean lang_ptr_const_test
 #+END_SRC
 
 *** =volatile= Pointer
@@ -787,8 +787,8 @@ The general declaration that use a /storage class/ is show here:
 
 Living example:
 #+BEGIN_SRC sh
-$ ./configure --has-lang
-$ make clean lang_storage_test
+./configure --has-lang
+make clean lang_storage_test
 #+END_SRC
 
 *** Automatic storage class
@@ -1029,8 +1029,8 @@ entity throughout the whole program or one single translation unit.
 
 Living example:
 #+BEGIN_SRC sh
-$ ./configure --has-lang
-$ make clean lang_linkage_test
+./configure --has-lang
+make clean lang_linkage_test
 #+END_SRC
 
 *** Translation unit
@@ -1127,8 +1127,8 @@ member.
 
 Run example
 #+BEGIN_SRC c
-$ ./configure --has-lang
-$ make clean lang_struct_test
+./configure --has-lang
+make clean lang_struct_test
 #+END_SRC
 
 *** Padding
@@ -1241,8 +1241,8 @@ kernel coding style]]
 
 Run =typedef= example
 #+BEGIN_SRC sh
-$ ./configure --has-lang
-$ make clean lang_typedef_test
+./configure --has-lang
+make clean lang_typedef_test
 #+END_SRC
 
 ** typeof
@@ -1251,8 +1251,8 @@ $ make clean lang_typedef_test
 
 Run =typeof= example
 #+BEGIN_SRC sh
-$ ./configure --has-lang
-$ make clean lang_typeof_test
+./configure --has-lang
+make clean lang_typeof_test
 #+END_SRC
 
 ** cdecl
@@ -1482,8 +1482,8 @@ RFLAGS Register
 
 Run the examples under =src/memory=.
 #+BEGIN_SRC sh
-$ ./configure --has-memory
-$ make clean test
+./configure --has-memory
+make clean test
 #+END_SRC
 
 ** Bits and Bytes
@@ -2026,7 +2026,7 @@ wmic cpu get L2CacheSize, L2CacheSpeed
 ** Timing
 
 #+BEGIN_SRC sh
-$ time ls /tmp
+time ls /tmp
 # ...
 # ls -G /tmp  0.00s user 0.00s system 73% cpu 0.003 total
 #+END_SRC
@@ -2503,9 +2503,9 @@ table in a executable.
    
 - Linux:
 #+BEGIN_SRC sh
-$ lscpu
+lscpu
 #+END_SRC
 - Darwin:
 #+BEGIN_SRC sh
-$  sysctl -a | grep machdep.cpu.features
+ sysctl -a | grep machdep.cpu.features
 #+END_SRC
