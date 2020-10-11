@@ -38,8 +38,8 @@ Now, we had [[https://github.com/junjiemars/nore][Nore]], something changed and 
 Let's start ...
 
 #+BEGIN_SRC sh
-# <where> to put nore down
-$ PREFIX=<where> bash <(curl https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh)
+# bootstrap Nore
+$ bash <(curl https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh)
 
 # configure -> make -> test -> install
 $ ./configure --has-hi
@@ -75,6 +75,11 @@ text manipulations, such as:
 - evaluating =#define=
 - expanding the macros found in the rest of the code according to
   those =#define=
+
+#+BEGIN_SRC sh
+./configure --lang
+make clean lang_preprocessor_test
+#+END_SRC
 
 *** =#include=
 		:PROPERTIES:
@@ -265,37 +270,6 @@ purposes. =#pragma= is commonly used to suppress warnings.
   abbreviated month, =Date= is the current day of the month (1-31),
   and =yyyy= is the four digit year, such as "Tue Sep 25 16:44:08 2018"
 
-*** =#= macro operator
-		:PROPERTIES:
-		:CUSTOM_ID: language_preprocessor_sharp
-		:END:
-		
-Prefixing a macro token with =#= will quote that macro token. This
-allows you to turn bare words in your source code into text
-token. This can be particularly useful for writing a macro to convert
-the member of =enum= from =int= into a string.
-
-#+BEGIN_SRC c
-enum COLOR { RED, GREEN, BLUE };
-#define COLOR_STR(x) #x
-#+END_SRC
-
-*** =##= macro operator
-		:PROPERTIES:
-		:CUSTOM_ID: language_preprocessor_sharp_sharp
-		:END:
-
-The =##= operator takes two separate tokens and pastes them together
-to form a single identifier. The resulting identifier could be a
-variable name, or any other identifier.
-
-#+BEGIN_SRC c
-#define DEFVAR(type, var, val) type var_##var = val
-
-DEFVAR(int, x, 1); /* expand to: int var_x = 1; */
-DEFVAR(float, y, 2.718); /* expand to: float var_y = 2.718; */
-#+END_SRC
-
 ** assert
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_assert
@@ -478,6 +452,37 @@ In arguments:
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_macro
 	 :END:
+
+*** =#= macro operator
+		:PROPERTIES:
+		:CUSTOM_ID: language_macro_sharp
+		:END:
+
+Prefixing a macro token with =#= will quote that macro token. This
+allows you to turn bare words in your source code into text
+token. This can be particularly useful for writing a macro to convert
+the member of =enum= from =int= into a string.
+
+#+BEGIN_SRC c
+enum COLOR { RED, GREEN, BLUE };
+#define COLOR_STR(x) #x
+#+END_SRC
+
+*** =##= macro operator
+		:PROPERTIES:
+		:CUSTOM_ID: language_macro_sharp_sharp
+		:END:
+
+The =##= operator takes two separate tokens and pastes them together
+to form a single identifier. The resulting identifier could be a
+variable name, or any other identifier.
+
+#+BEGIN_SRC c
+#define DEFVAR(type, var, val) type var_##var = val
+
+DEFVAR(int, x, 1); /* expand to: int var_x = 1; */
+DEFVAR(float, y, 2.718); /* expand to: float var_y = 2.718; */
+#+END_SRC
 	 
 *** Expression
 		:PROPERTIES:

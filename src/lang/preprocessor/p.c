@@ -55,6 +55,8 @@ main(int argc, char *argv[]) {
   = "Linux";
 #elif defined(DARWIN)
 	= "Darwin";
+#elif defined(WINNT)
+  = "WinNT"
 #else
 	= "Unknown";
 #endif
