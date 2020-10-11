@@ -50,26 +50,26 @@ main(int argc, char *argv[]) {
 	_unused_(argc);
 	_unused_(argv);
 
-	char *platform = 
+	char platform[]
 #if defined(LINUX)
-  "Linux";
+  = "Linux";
 #elif defined(DARWIN)
-	"Darwin";
+	= "Darwin";
 #elif defined(WINNT)
-  "WinNT"
+  = "WinNT"
 #else
-	"unknown platform";
+	= "unknown platform";
 #endif
 
-  char *compiler = 
+  char compiler[]
 #if (CLANG)
-  "clang";
+  = "clang";
 #elif (GCC)
-  "gcc";
+  = "gcc";
 #elif (MSVC)
-  "msvc";
+  = "msvc";
 #else
-  "unknown compiler";
+  = "unknown compiler";
 #endif
 
 	printf("platform: %s\n", platform);

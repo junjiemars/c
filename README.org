@@ -297,9 +297,9 @@ make clean lang_assert_test
 An /assertion/ specifies that a program statisfies certain conditions
 at particular points in its execution. There are three types of
 assertion:
-- Preconditions: specify conditions at the start of a function.
-- Postconditions: specify conditions at the end of a function.
-- Invariants: specify conditions over a defined region of a program.
+- preconditions: specify conditions at the start of a function.
+- postconditions: specify conditions at the end of a function.
+- invariants: specify conditions over a defined region of a program.
 
 
 The =static_assert= macro, which expands to the =_Static_assert_=,
