@@ -96,8 +96,8 @@ placed in the current directory or a standard system directory.
 		:CUSTOM_ID: language_preprocessor_define
 		:END:
 
-The =#define= directive takes two forms: defining a /constant/ 
-and creating a /macro/. 
+The =#define= directive takes two forms: defining a /constant/ or
+creating a /macro/.
 
 - Defining a /constant/
 #+BEGIN_SRC c
@@ -113,8 +113,7 @@ should be careful when using =#define= in this way.
 
 - Defining a /parameterized macro/
 #+BEGIN_SRC c
-#define identifier(<arg> [, <arg>s ...]) statement
-
+#define identifier(<arg> [, <arg> ...]) statement
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #+END_SRC
 
@@ -127,8 +126,8 @@ should be careful when using =#define= in this way.
 #undef identifier
 #+END_SRC
 
-The =#undef= directive undefines a constant or preprocessor macro 
-defined previously using =#define=.
+The =#undef= directive undefines a constant or macro that defined
+previously using =#define=.
 
 For example:
 #+BEGIN_SRC c
@@ -243,12 +242,12 @@ The =#pragma= directive can also be used for other compiler-specific
 purposes. =#pragma= is commonly used to suppress warnings.
 
 #+BEGIN_SRC c
-#if MSVC 
+#if (MSVC)
 #  pragma warning(disable:4706) /* assignment within conditional expression */
 #  pragma comment(lib, "Ws2_32.lib") /* link to Ws2_32.lib */
-#elif GCC
-#  pragma GCC diagnostic ignored "-Wparentheses"
-#elif CLANG
+#elif (GCC)
+#  pragma GCC diagnostic ignored "-Wstrict-aliasing" /* (unsigned*)&x */
+#elif (CLANG)
 #  pragma clang diagnostic ignored "-Wparentheses"
 #endif
 #+END_SRC
