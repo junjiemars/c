@@ -16,6 +16,7 @@ cpu_prefix := cpu
 
 INC += -I$(cpu_root)
 
+_VECTORIZE_ ?= 0
 
 # info
 cpu_info_binout := $(bin_path)$(cpu_prefix)_info$(bin_ext)
@@ -61,11 +62,16 @@ $(cpu_time_basic_binout): $(cpu_root)time/basic.c
 # vectorize
 cpu_vectorize_loop_binout := $(bin_path)$(cpu_prefix)_vectorize_loop$(bin_ext)
 
+loop_vectorize_cflags := $(CFLAGS)
+ifeq ($(_VECTORIZE_),1)
+	loop_vectorize_cflags += $(loop_vectorizer_flags)
+endif
+
 cpu_vectorize: $(cpu_vectorize_loop_binout)
 cpu_vectorize_test: cpu_vectorize
 	$(cpu_vectorize_loop_binout)
 
 $(cpu_vectorize_loop_binout): $(cpu_root)vectorize/loop.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(loop_vectorize_cflags) $(INC) $^ $(bin_out)$@
 
 

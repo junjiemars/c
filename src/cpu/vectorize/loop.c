@@ -3,9 +3,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#if (CLANG)
-
-#endif
 
 #define ROW_SIZE (NM_LOOP_VECTOR_WIDTH * 16)
 #define COL_SIZE (NM_LOOP_VECTOR_WIDTH * 16)
@@ -24,7 +21,7 @@ void test_vectorize(char *const table);
 
 void
 print_time(char *const what, long elapsed) {
-  printf("%8s, escaped %8li cpu time, %16lf sec\n",
+  printf("%16s, escaped %8li cpu time, %16lf sec\n",
          what, elapsed, (double)elapsed/CLOCKS_PER_SEC);
 }
 

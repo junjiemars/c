@@ -28,18 +28,19 @@ case "$CC_NAME" in
      fi
      ;;
    gcc)
-     nm_feature="$CC_NAME -Wl,-E|--export-dynamic"
-     nm_feature_name=
+     nm_feature="$CC_NAME loop vectorizer"
+     nm_feature_name="nm_have_loop_vectorizer"
      nm_feature_indent=yes
      nm_feature_run=no
      nm_feature_h=
-     nm_feature_flags='-Wl,-E'
+     nm_feature_flags='-O3 -march=native -ftree-loop-vectorize'
      nm_feature_test=
      . ${NORE_ROOT}/auto/feature
-
      if [ yes = $nm_found ]; then
-       flag=LDFLAGS op="+=" value=$nm_feature_flags \
-         . ${NORE_ROOT}/auto/make_define
+       flag=loop_vectorizer_flags op="=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+       have="NM_LOOP_VECTOR_WIDTH" value="8"\
+           . ${NORE_ROOT}/auto/define
      fi
      ;;
    msvc)
