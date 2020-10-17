@@ -6,13 +6,13 @@ _OS_NAME_="`uname -s 2>/dev/null`"
 _WIN_ENV_=
 _WIN_ENV_MSVC_=
 
-case "${_OS_NAME_}" in
+case "$_OS_NAME_" in
   MSYS_NT-*|MINGW??_NT-*) _OS_NAME_="WinNT" ;;
 esac
 
 CC="${CC}"
 if [ -z "$CC" ]; then
-  case `uname -s 2>/dev/null` in
+  case "$_OS_NAME_" in
     Darwin)  CC="clang" ;;
     Linux)   CC="gcc"   ;;
     WinNT)   CC="cl"    ;;
@@ -60,10 +60,10 @@ fi
 
 test_do() {
   local retval=0
-  if [ -z "${_WIN_ENV_}" ]; then
+  if [ -z "$_WIN_ENV_" ]; then
     ${_ROOT_DIR_%/}/configure "$@" && make clean test
   else
-    ${_WIN_ENV_MSVC_} "${_WIN_ENV_}" "./configure $@" "make clean test"
+    ${_WIN_ENV_MSVC_} "$_WIN_ENV_" "./configure $@" "make clean test"
   fi
   retval=$?
   if [ 0 -ne $retval ]; then
@@ -75,7 +75,7 @@ test_do() {
 }
 
 # basic test
-if [ "basic" = "${_TEST_}" ]; then
+if [ "basic" = "$_TEST_" ]; then
   test_do --has-hi       || exit 1
   test_do --has-algo     || exit 1
   test_do --has-ds       || exit 1
