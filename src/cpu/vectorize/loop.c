@@ -3,58 +3,58 @@
 #include <string.h>
 #include <stdlib.h>
 
-#if (CLANG)
 
-#endif
-
-#define ROW_SIZE (NM_LOOP_VECTOR_WIDTH * 16)
-#define COL_SIZE (NM_LOOP_VECTOR_WIDTH * 16)
+#define ROW_SIZE (NM_LOOP_VECTOR_WIDTH * 1024)
 
 #define MAX(a, b) (((a) < (b)) ? (b) : (a))
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
-#define X 0x11
 
 void print_time(char *const what, long elpased);
-void raw(char *const table, int row_size, int col_size);
-void vectorize(char *const table, int row_size, int col_size);
-int validate(const char *a, const char *b);
-void test_raw(char *const table);
-void test_vectorize(char *const table);
+void fill(int *const array, int row_size);
+void raw(int *const dst, int *const src, int row_size);
+void vectorize(int *const dst, int *const src, int row_size);
+int validate(int *const a, int *const b, int row_size);
+void test_fill(int *const dst, int row_size);
+void test_raw(int *const dst, int *const src, int row_size);
+void test_vectorize(int *const dst, int *const src, int row_size);
 
 void
 print_time(char *const what, long elapsed) {
-  printf("%8s, escaped %8li cpu time, %16lf sec\n",
+  printf("%16s, escaped %8li cpu time, %16lf sec\n",
          what, elapsed, (double)elapsed/CLOCKS_PER_SEC);
 }
 
 void
-raw(char *const table, int row_size, int col_size) {
+fill(int *const array, int row_size) {
   for (int i = 0; i < row_size; i++) {
-    for (int j = 0; j < col_size; j++) {
-      table[i*j+j] = X;
-    }
+    array[i] = i;
   }
 }
 
 void
-vectorize(char *const table, int row_size, int col_size) {
-  for (int i = 0; i < row_size; i+=NM_LOOP_VECTOR_WIDTH) {
-    for (int j = 0; j < col_size; j+=NM_LOOP_VECTOR_WIDTH) {
-     table[i*j+j] = X; 
-    }
+raw(int *const dst, int *const src, int row_size) {
+  for (int i = 0; i < row_size; i++) {
+    dst[i] = src[i];
+  }
+}
+
+void
+vectorize(int *const dst, int *const src, int row_size) {
+  for (int i = 0; i < row_size; i += NM_LOOP_VECTOR_WIDTH) {
+    dst[i] = src[i];
+    dst[i+1] = src[i+1];
+    dst[i+2] = src[i+2];
+    dst[i+3] = src[i+3];
   }
 }
 
 int
-validate(const char *a, const char *b) {
+validate(int *const a, int *const b, int row_size) {
   int i = 0;
-  for (int i = 0; i < ROW_SIZE; i++) {
-    for (int j = 0; j < COL_SIZE; j++) {
-      if (a[i*j+j] != b[i*j+j]) {
-        i = 1;
-        goto clean_exit;
-      }
+  for (int i = 0; i < row_size; i++) {
+    if (a[i] != b[i]) {
+      goto clean_exit;
     }
   }
  clean_exit:
@@ -62,36 +62,41 @@ validate(const char *a, const char *b) {
 }
 
 void
-test_raw(char *const table) {
+test_fill(int *const dst, int row_size) {
   clock_t elapsed;
-  _time_(raw(table, ROW_SIZE, COL_SIZE), elapsed);
+  _time_(fill(dst, row_size), elapsed);
+  print_time("fill", elapsed);
+}
+
+void
+test_raw(int *const dst, int *const src, int row_size) {
+  clock_t elapsed;
+  _time_(raw(dst, src, row_size), elapsed);
   print_time("raw", elapsed);
 }
 
 void
-test_vectorize(char *const table) {
+test_vectorize(int *const dst, int *const src, int row_size) {
   clock_t elapsed;
-  _time_(vectorize(table, ROW_SIZE, COL_SIZE), elapsed);
+  _time_(vectorize(dst, src, row_size), elapsed);
   print_time("vectorize", elapsed);
 }
 
 int
 main(void) { 
-  size_t size = sizeof(char) * ROW_SIZE * COL_SIZE;
-  char *vectorize = calloc(1, size);
-  char *raw = calloc(1, size);
-  char *vectorize1 = calloc(1, size);
+  int *array = calloc(sizeof(int), ROW_SIZE);
+  int *raw = calloc(sizeof(int), ROW_SIZE);
+  int *vectorize = calloc(sizeof(int), ROW_SIZE);
 
-  test_vectorize(vectorize);
-  test_raw(raw);
-  test_vectorize(vectorize1);
+  test_fill(array, ROW_SIZE);
+  test_vectorize(vectorize, array, ROW_SIZE);
+  test_raw(raw, array, ROW_SIZE);
   
-  printf("validate(raw, vectorize): %s\n",
-         validate(raw, vectorize) ? "false" : "true");
+  printf("validate(raw, vectorize, %i): %s\n", ROW_SIZE,
+         validate(raw, vectorize, ROW_SIZE) ? "false" : "true");
 
-  free(raw);
+  free(array);
   free(vectorize);
-  free(vectorize1);
 
   return 0;
 }
