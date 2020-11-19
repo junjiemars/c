@@ -3,37 +3,50 @@
 
 void
 list_array(const void *base, size_t nel, size_t width,
-					 void (*print)(const void *el)) {
-	for (size_t i = 0; i < nel; i++) {
-		print((char*) base + i * width);
-	}
+					 void (*print)(const void *el))
+{
+	for (size_t i = 0; i < nel; i++)
+    {
+      print((char*) base + i * width);
+    }
 	printf("\n");
 }
 
 void
-print_int(const void *el) {
+print_int(const void *el)
+{
 	printf("%i, ", *(int*) el);
 }
 
 void
-print_str(const void *el) {
+print_str(const void *el)
+{
 	printf("%s, ", *(char**) el);
 }
 
 int
-comp_int(const void *lhs, const void *rhs) {
+comp_int(const void *lhs, const void *rhs)
+{
 	return *(const int*)lhs - *(const int*)rhs;
 }
 
 int
-comp_str(const void *lhs, const void *rhs) {
+comp_str(const void *lhs, const void *rhs)
+{
 	return strcmp(*(char**)lhs, *(char**)rhs);
+}
+
+int
+verify(const void *lhs, const void *rhs, size_t size)
+{
+  return memcmp((char*)lhs, (char*)rhs, size);
 }
 
 #if _ALGO_TEST_
 
 void
-test_comp_int(void) {
+test_comp_int(void)
+{
 	int i1 = 0x1122, i2 = 0x3344;
 	int cmp = comp_int((void*)&i1, (void*)&i2);
   _unused_(cmp);
@@ -46,7 +59,8 @@ test_comp_int(void) {
 }
 
 void
-test_comp_str(void) {
+test_comp_str(void)
+{
 	char *ss[] = { "abc123", "123", };
 	assert(0 == comp_str(ss, ss));
 	assert(0 != comp_str(&ss[0], &ss[1]));
@@ -57,7 +71,24 @@ test_comp_str(void) {
 }
 
 void
-test_swap(void) {
+test_verify(void)
+{
+	char *ss[] = { "abc", "12345" };
+  size_t s1 = strlen(ss[0]);
+  size_t s2 = strlen(ss[1]);
+  assert(0 == verify(&ss[0], &ss[0], MIN(s1, s1)));
+  assert(0 != verify(&ss[0], &ss[1], MIN(s1, s2)));
+
+  int ii[] = { 1234, 12345 };
+  assert(0 == verify(&ii[0], &ii[0], sizeof(*ii)));
+  assert(0 != verify(&ii[0], &ii[1], sizeof(*ii)));
+  
+  printf("test verify fn ... ok\n");
+}
+
+void
+test_swap(void)
+{
 	int i1 = 0x1122, i2 = 0x3344;
 	swap(&i1, &i2, sizeof(int));
 	assert(0x1122 == i2 && 0x3344 == i1);
@@ -75,12 +106,14 @@ test_swap(void) {
 }
 
 int
-main(int argc, char **argv) {
+main(int argc, char **argv)
+{
 	_unused_(argc);
 	_unused_(argv);
 
 	test_comp_int();
 	test_comp_str();
+  test_verify();
 	test_swap();
 	
 	return 0;
