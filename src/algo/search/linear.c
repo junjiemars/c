@@ -14,7 +14,6 @@ linear_search(void *what, void *base, size_t nel, size_t width,
       if (0 == comp((char*)what, (char*)base + i * width))
         {
           return (long)i;
-          break;
         }
     }
   return -1;
