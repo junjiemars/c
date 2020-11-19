@@ -1,15 +1,20 @@
 #include <_algo_.h>
 
+long linear_search(void*, void*, size_t, size_t,
+                   int(*)(const void*, const void*));
+void test_linear_search_int(void);
+void test_linear_search_str(void);
+
 long
 linear_search(void *what, void *base, size_t nel, size_t width,
 							int (*comp)(const void *, const void *)) {
-	for (size_t i = 0; i < nel; i++) {
-		if (0 == comp((char*)what, (char*)base + i * width)) {
-			return (long)i;
-			break;
-		}
-	}
-	return -1;
+  for (size_t i = 0; i < nel; i++) {
+    if (0 == comp((char*)what, (char*)base + i * width)) {
+      return (long)i;
+      break;
+    }
+  }
+  return -1;
 }
 
 void

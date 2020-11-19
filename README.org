@@ -2511,3 +2511,6 @@ lscpu
 #+BEGIN_SRC sh
  sysctl -a | grep machdep.cpu.features
 #+END_SRC
+* Making the Best Use of C
+
+- [[https://www.gnu.org/prep/standards/standards.html#Writing-C][GNU Coding Standards]]
