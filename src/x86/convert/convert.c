@@ -1,7 +1,8 @@
 #include <_x86_.h>
 
 void 
-narrow() {
+narrow()
+{
 	int i;
 	char c;
 	i = 0x11223344;
@@ -9,7 +10,8 @@ narrow() {
 }
 
 void
-broaden() {
+broaden()
+{
 	int i;
 	char c;
 	c = -1;
@@ -17,7 +19,8 @@ broaden() {
 }
 
 void
-int_float() {
+int_float()
+{
 	int i;
 	float f;
 	i = 128;
@@ -25,7 +28,8 @@ int_float() {
 }
 
 void
-float_int() {
+float_int()
+{
 	int i;
 	float f;
 	f = 3.1415;
@@ -33,7 +37,8 @@ float_int() {
 }
 
 int 
-main(int argc, const char *argv[]) {
+main(int argc, const char *argv[])
+{
 	_unused_(argc);
 	_unused_(argv);
 
