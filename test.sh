@@ -1,6 +1,6 @@
 #!/bin/sh
 
-_ROOT_DIR_="`cd $(dirname ${BASH_SOURCE[0]}); pwd`"
+_ROOT_DIR_="`cd -- $(dirname -- $0) && pwd`"
 _TEST_="${_TEST_:-basic}"
 _OS_NAME_="`uname -s 2>/dev/null`"
 _WIN_ENV_=
@@ -49,12 +49,12 @@ call "%1"
 sh "%2"
 "%3"
 END
-	if [ ! -f "${HOME}/msvc.bat" ]; then
-		echo "!panic: generate ${HOME}/msvc.bat failed"
-		exit 1
-	fi
+  if [ ! -f "${HOME}/msvc.bat" ]; then
+    echo "!panic: generate ${HOME}/msvc.bat failed"
+    exit 1
+  fi
   _WIN_ENV_MSVC_="${HOME}/msvc.bat"
-	chmod u+x "${_WIN_ENV_MSVC_}"
+  chmod u+x "${_WIN_ENV_MSVC_}"
   _WIN_ENV_="${HOME}/.nore/cc-env.bat"
 fi
 
@@ -67,9 +67,9 @@ test_do() {
   fi
   retval=$?
   if [ 0 -ne $retval ]; then
-	  echo "------------"
-	  echo "! $@ <failed>"
-	  echo "------------"
+    echo "------------"
+    echo "! $@ <failed>"
+    echo "------------"
   fi
   return $retval
 }
