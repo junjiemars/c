@@ -1511,7 +1511,92 @@ BGT ... ;; greater than
 BGE ... ;; greater than or equal
 BEQ ... ;; equal
 BNE ... ;; not equal
+
+;; unconditional jump that has no test, but just immediately
+;; diverts execution to new address
+;; begin executing at address 2000 unconditionally: like a goto
+JMP 2000
+
+;; begin executing at address 12 before current instruction
+JMP PC-12
 #+END_SRC
+
+** Type Convertion
+	 :PROPERTIES:
+	 :CUSTOM_ID: type_convertion
+	 :END:
+
+The types =char=, =short=, =int=, and =long= are all in the same
+family, and use the same binary polynomial representation. C allows
+you to freely assign between these types.
+
+- broaden: When assigning from a smaller-sized type to a larger, there
+  is no problem. All of the source bytes are copied and the remaining
+  upper bytes in the destination are filled using what is called /sign
+  extension/ -- the sign bit is extended across the extra bytes.
+- narrow: Only copy the lower bytes and ignores the upper bytes.
+
+Remember a floating point 1.0 has a completely different arrangement
+of bits than the integer 1 and instruction are required to do those
+conversions.
+
+#+BEGIN_SRC asm
+;; take bits in R2 that represent integer, convert to float, store in R1
+R1 = ItoF R2
+
+;; take bits in R4, convert from float to int, and store back in same Note
+;; that converting in this direction loses information, the fractional
+;; component is truncated and lost
+R4 = FtoI R3
+#+END_SRC
+
+** Typecast
+	 :PROPERTIES:
+	 :CUSTOM_ID: typecast
+	 :END:
+
+A /typecast/ is a compile-time entity that instructs the compiler to
+treat an expression differently than its declared type when generating
+code for that expression.
+
+- casting a /pointer/ from one type to another could change the offset
+  was multiplied for pointer arithmetic or how many bytes were copied
+  on a pointer dereference.
+- some typecasts are actually [[#type_convertion][type conversions]]. A type conversion is
+  required when the data needs to be converted from one representation
+  to another, such as when changing an integer to floating point
+  representation or vice versa.
+- most often, a cast does affect the generated code, since the
+  compiler will be treating the expression as a different type.
+
+#+BEGIN_SRC c
+int i;
+((struct binky *)i)->b = 'A';
+#+END_SRC
+
+What does this code actually do at runtime? Why would your ever want
+to do such a thing? The typecast is one of the reasons C is a
+fundamentatlly unsafe launguage.
+
+** Data Sizes
+	 :PROPERTIES:
+	 :CUSTOM_ID: data_sizes
+	 :END:
+
+| 16-bits    | Size (bytes) | Size (bits) |
+|------------+--------------+-------------|
+| Word       |            2 |          16 |
+| Doubleword |            4 |          32 |
+| Quadword   |            8 |          64 |
+| Paragraph  |           16 |         128 |
+| Kilobyte   |         1024 |        8192 |
+| Megabyte   |    1,048,576 |     8388608 |
+
+In computing, a /word/ is the natural unit of data used by a
+particular processor design. A /word/ is a fixed-sized piece of data
+handled as a unit by the instruction set or the hardware of the
+processor. The number of bits in a word is an important characteristic
+of any specific processor design or computer architecture.
 
 ** Registers
 
