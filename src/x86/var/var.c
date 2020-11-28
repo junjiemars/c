@@ -1,7 +1,8 @@
 #include <_x86_.h>
 
 void
-simple_variables() {
+simple_variables(void)
+{
 	int i;
 	char c;
 
@@ -11,9 +12,7 @@ simple_variables() {
 }
 
 int
-main(int argc, const char *argv[]) {
-	_unused_(argc);
-	_unused_(argv);
-
+main(void)
+{
 	simple_variables();
 }
