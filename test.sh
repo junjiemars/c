@@ -37,7 +37,7 @@ if [ "WinNT" = "${_OS_NAME_}" -a "cl" = "${CC}" ]; then
     echo "!panic: ${HOME}/.nore/cc-env.sh no found"
     exit 1
   fi
-  ${HOME}/.nore/cc-env.sh
+  ${HOME}/.nore/cc-env.sh 1
   if [ ! -f "${HOME}/.nore/cc-env.bat" ]; then
     echo "!panic: ${HOME}/.nore/cc-env.bat no found"
     exit 1
