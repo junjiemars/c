@@ -778,7 +778,7 @@ registers are types of locations where a variable's value can be
 stored. There are four storage classes in C those are /automatic/,
 /register/, /static/, and /external/.
 
-Each [[#declaration_and_definition][declaration]] can only have one of five /storage class specifier/:
+Each [[#language_scope_declaration_and_definition][declaration]] can only have one of five /storage class specifier/:
 =static=, =extern=, =auto=, =register= and =typedef=.
 
 =typedef= storage class specifier does not reserve storage and is
@@ -914,14 +914,14 @@ one in which the corresponding object or function is defined.
 
 In C, all identifiers are lexically (or statically) scoped.
 
-The scope of a [[#declaration_and_definition][declaration]] is the part of the code where the
+The scope of a [[#language_scope_declaration_and_definition][declaration]] is the part of the code where the
 declaration is seen and can be used. Note that this says nothing about
 whether the object associated to the declaration can be accessed from
 some other part of the code via another declaration. We uniquely
 identify an object by its memory: the storage for a variable or the
 function code.
 
-Finally, note that a [[#declaration_and_definition][declaration]] in a nested scope can hide a
+Finally, note that a [[#language_scope_declaration_and_definition][declaration]] in a nested scope can hide a
 declaration in an outer scope; but only if one of two has [[#language_linkage_no_linkage][no linkage]].
 
 
@@ -1416,20 +1416,116 @@ There has an good answer of [[http://stackoverflow.com/questions/17206568/what-i
 	:CUSTOM_ID: x86
 	:END:
 
+While memory stores the program and data, the /Central Processing
+Unit/ does all the work. The CPU has two parts: /registers/ and
+/Arithmetic Logic Unit(ALU)/.  The ALU performs the actual
+computations such as addtion and multiplication along with comparison
+and other logical operations.
+
+** Load
+	 :PROPERTIES:
+	 :CUSTOM_ID: load
+	 :END:
+
+/Load/ instructions read bytes into register. The source may be a
+constant value, another register, or a location in memory.
+
+#+BEGIN_SRC asm
+;; load the constant 23 into register 4
+R4 = 23
+
+;; copy the contents of register 2 into register 3
+R3 = R2
+
+;; load char (one byte) starting at memory address 244 into register 6
+R6 = .1 M[244]
+
+;; load R5 with the word whose memory address is in R1
+R5 = M[R1]
+
+;; load the word that begins 8 bytes after the address in R1.
+;; this is known as constant offset mode and is about the fanciest
+;; addressing mode a RISC processor will support
+R4 = M[R1+8]
+#+END_SRC
+
+** Store
+	 :PROPERTIES:
+	 :CUSTOM_ID: store
+	 :END:
+
+/Store/ instructions are basically the reverse of /load/ instructions:
+they move values from registers back out to memory.
+
+#+BEGIN_SRC asm
+;; store the constant number 37 into the word beginning at 400
+M[400] = 37
+
+;; store the value in R6 into the word whose address is in R1
+M[R1] = R6
+
+;; store lower half-word from R2 into 2 bytes starting at address 1024
+M[1024] = .2 R2
+
+;; store R7 into the word whose address is 12 more than the address in R1
+M[R1+12] = R7
+#+END_SRC
+
+** ALU
+	 :PROPERTIES:
+	 :CUSTOM_ID: ALU
+	 :END:
+
+#+BEGIN_SRC asm
+;; add 6 to R3 and store the result in R1
+R1 = 6 + R3
+
+;; subtract R3 from R2 and store the result in R1
+R1 = R2 - R3
+#+END_SRC
+
+** Branching
+	 :PROPERTIES:
+	 :CUSTOM_ID: branching
+	 :END:
+
+By default, the /CPU/ fetches and executes instructions from memory in
+order, working from low memory to high. Branch instructions alter this
+order.  Branch instructions test a condition and possibly change which
+instruction should be executed next by changing the value of the /PC/
+register. The operands in the test of a branch statement must be in
+registers or constant values. Branches are used to implement control
+structures like =if= as well as loops like =for= and =while=.
+
+#+BEGIN_SRC asm
+;; begin executing at address 344 if R1 equals 0
+BEQ R1, 0, 344
+
+;; begin executing at address 8 past current instruction if R2 less than R3
+BLT R2, R3, PC+8
+
+;; The full set of branch variants:
+BLT ... ;; branch if first argument is less than second
+BLE ... ;; less than or equal
+BGT ... ;; greater than
+BGE ... ;; greater than or equal
+BEQ ... ;; equal
+BNE ... ;; not equal
+#+END_SRC
 
 ** Registers
 
 =cmp dst src= perfomans a substraction but does not store result. Such
 as =sub dst src=.
 
-| cmp dst, src	                           | CF | PF | AF | ZF | SF | OF |
+| cmp dst, src                             | CF | PF | AF | ZF | SF | OF |
 |------------------------------------------+----+----+----+----+----+----|
-| unsigned src < unsigned dst              | 1  |    |    |    |    |    |
+| unsigned src < unsigned dst              |  1 |    |    |    |    |    |
 | parity of LSB is even                    |    |  1 |    |    |    |    |
 | carry in the low nibble of (src-dst)     |    |    |  1 |    |    |    |
-| 0, (i.e src == dst)                      | 	 |    |    |  1 |    |    |
+| 0, (i.e src == dst)                      |    |    |    |  1 |    |    |
 | if MSB of (src-dst) == 1                 |    |    |    |    |  1 |    |
-| sign bit of src != sign bit of (src-dst) | 	 |    |    |    |    |  1 |
+| sign bit of src != sign bit of (src-dst) |    |    |    |    |    |  1 |
 
 
 | Jump | Description              | signed-ness | Flags              |
@@ -1442,30 +1538,30 @@ as =sub dst src=.
 
 
 RFLAGS Register
-| Bit(s)	 | Label	 | Description                                       |
-|----------+---------+---------------------------------------------------|
-|        0 | 	CF    | 	Carry Flag                                      |
-|        1 | 	1     | 	Reserved                                        |
-|        2 | 	PF    | 	Parity Flag, set if LSB contains 1 is even bits |
-|        3 | 	0     | 	Reserved                                        |
-|        4 | 	AF    | 	Auxiliary Carry Flag                            |
-|        5 | 	0     | 	Reserved                                        |
-|        6 | 	ZF    | 	Zero Flag, set if result is zero                |
-|        7 | 	SF    | 	Sign Flag, set MSB of result                    |
-|        8 | 	TF    | 	Trap Flag                                       |
-|        9 | 	IF    | 	Interrupt Enable Flag                           |
-|       10 | 	DF    | 	Direction Flag                                  |
-|       11 | 	OF    | 	Overflow Flag                                   |
-|    12-13 | IOPL    | 	I/O Privilege Level                             |
-|       14 | 	NT    | 	Nested Task                                     |
-|       15 | 	0     | 	Reserved                                        |
-|       16 | 	RF    | 	Resume Flag                                     |
-|       17 | 	VM    | 	Virtual-8086 Mode                               |
-|       18 | 	AC    | 	Alignment Check / Access Control                |
-|       19 | 	VIF   | 	Virtual Interrupt Flag                          |
-|       20 | 	VIP   | 	Virtual Interrupt Pending                       |
-|       21 | 	ID    | 	ID Flag                                         |
-|    22-63 | 0	     | Reserved                                          |
+| Bit(s) | Label | Description                                     |
+|--------+-------+-------------------------------------------------|
+|      0 | CF    | Carry Flag                                      |
+|      1 | 1     | Reserved                                        |
+|      2 | PF    | Parity Flag, set if LSB contains 1 is even bits |
+|      3 | 0     | Reserved                                        |
+|      4 | AF    | Auxiliary Carry Flag                            |
+|      5 | 0     | Reserved                                        |
+|      6 | ZF    | Zero Flag, set if result is zero                |
+|      7 | SF    | Sign Flag, set MSB of result                    |
+|      8 | TF    | Trap Flag                                       |
+|      9 | IF    | Interrupt Enable Flag                           |
+|     10 | DF    | Direction Flag                                  |
+|     11 | OF    | Overflow Flag                                   |
+|  12-13 | IOPL  | I/O Privilege Level                             |
+|     14 | NT    | Nested Task                                     |
+|     15 | 0     | Reserved                                        |
+|     16 | RF    | Resume Flag                                     |
+|     17 | VM    | Virtual-8086 Mode                               |
+|     18 | AC    | Alignment Check / Access Control                |
+|     19 | VIF   | Virtual Interrupt Flag                          |
+|     20 | VIP   | Virtual Interrupt Pending                       |
+|     21 | ID    | ID Flag                                         |
+|  22-63 | 0     | Reserved                                        |
 
 ** Addressing
 
@@ -2003,6 +2099,9 @@ and each such derived type is a distinct new type.
 - [[https://www.ibm.com/developerworks/aix/library/au-endianc/index.html?ca=drs-)][Writing endian-independent code in C]]
 
 * CPU
+	:PROPERTIES:
+	:CUSTOM_ID: cpu
+	:END:
 
 ** cpuid
 ** Cache
