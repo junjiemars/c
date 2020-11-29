@@ -24,8 +24,7 @@ cd "${_ROOT_DIR_}"
 
 # check nore
 if [ ! -f "${_ROOT_DIR_%/}/configure" ]; then
-  curl -L -O "https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh" \
-       -o bootstrap.sh
+  $SHELL <(curl "https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh")
   if [ 0 -ne $? ]; then
     echo "!panic: install Nore failed"
     exit 1
