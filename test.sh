@@ -24,11 +24,13 @@ cd "${_ROOT_DIR_}"
 
 # check nore
 if [ ! -f "${_ROOT_DIR_%/}/configure" ]; then
-  sh <(curl "https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh")
+  curl -O "https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh" -o bootstrap.sh
   if [ 0 -ne $? ]; then
     echo "!panic: install Nore failed"
     exit 1
   fi
+  sh bootstrap.sh
+  rm bootstrap.sh
 fi
 
 # check cc-env for cl
