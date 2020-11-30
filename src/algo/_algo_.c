@@ -33,13 +33,13 @@ comp_int(const void *lhs, const void *rhs)
 int
 comp_str(const void *lhs, const void *rhs)
 {
-	return strcmp(*(char**)lhs, *(char**)rhs);
+	return strcmp(*(const char**)lhs, *(const char**)rhs);
 }
 
 int
 verify(const void *lhs, const void *rhs, size_t size)
 {
-  return memcmp((char*)lhs, (char*)rhs, size);
+  return memcmp((const char*)lhs, (const char*)rhs, size);
 }
 
 #if _ALGO_TEST_
