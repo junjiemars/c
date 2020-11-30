@@ -1,5 +1,15 @@
 #include <_algo_.h>
 
+/* 
+ * binary_search and binary_search_loop implement the same function
+ * and API of bsearch in stdlib.h
+ * 
+ * binary_search using tail-recursive, if CC supports tail-recursion
+ * optimization then binary_search should as fast as
+ * binary_search_loop does.
+ */
+
+
 #if MSVC
 #  pragma warning(disable : 4267)
 #endif
@@ -195,6 +205,78 @@ test_binary_search_loop_str(void)
   printf("found: [%ld]\n", (long)(NULL == found ? -1 : found - s1));
 }
 
+void
+test_bsearch_int(void)
+{
+  int *found;
+  int a1[] = {0x1, 0x2, 0x3, 0x4, 0x5 };
+  int what = 0x5;
+  printf("bsearch for %i\n----------\n", what);
+  list_array(a1, sizeof(a1)/sizeof(*a1), sizeof(*a1), print_int);
+  found = bsearch(&what,
+                  a1,
+                  sizeof(a1)/sizeof(*a1),
+                  sizeof(*a1),
+                  comp_int);
+  printf("found: [%ld]\n", (long)(NULL == found ? -1 : found - a1));
+
+  what = 0x6;
+  printf("bsearch for %i\n----------\n", what);
+  list_array(a1, sizeof(a1)/sizeof(*a1), sizeof(*a1), print_int);
+  found = bsearch(&what,
+                  a1,
+                  sizeof(a1)/sizeof(*a1),
+                  sizeof(*a1),
+                  comp_int);
+  printf("found: [%ld]\n", (long)(NULL == found ? -1 : found - a1));
+
+  what = 0x3;
+  printf("bsearch for %i\n----------\n", what);
+  list_array(a1, sizeof(a1)/sizeof(*a1), sizeof(*a1), print_int);
+  found = bsearch(&what,
+                  a1,
+                  sizeof(a1)/sizeof(*a1),
+                  sizeof(*a1),
+                  comp_int);
+  printf("found: [%ld]\n", (long)(NULL == found ? -1 : found - a1));
+}
+
+void
+test_bsearch_str(void)
+{
+  char **found;
+  char *s1[] = { "a", "bb", "ccc", "dddd", "eeeee" };
+  char *what = "dddd";
+  printf("bsearch for %s\n----------\n", what);
+  list_array(s1, sizeof(s1)/sizeof(*s1), sizeof(*s1), print_str);
+  found = binary_search(&what,
+                        s1,
+                        sizeof(s1)/sizeof(*s1),
+                        sizeof(*s1),
+                        comp_str);
+  printf("found: [%ld]\n", (long)(NULL == found ? -1 : (char**)found - s1));
+
+  what = "ffffff";
+  printf("bsearch for %s\n----------\n", what);
+  list_array(s1, sizeof(s1)/sizeof(*s1), sizeof(*s1), print_str);
+  found = bsearch(&what,
+                  s1,
+                  sizeof(s1)/sizeof(*s1),
+                  sizeof(*s1),
+                  comp_str);
+  printf("found: [%ld]\n", (long)(NULL == found ? -1 : found - s1));
+
+  what = "ccc";
+  printf("bsearch for %s\n----------\n", what);
+  list_array(s1, sizeof(s1)/sizeof(*s1), sizeof(*s1), print_str);
+  found = bsearch(&what,
+                  s1,
+                  sizeof(s1)/sizeof(*s1),
+                  sizeof(*s1),
+                  comp_str);
+  printf("found: [%ld]\n", (long)(NULL == found ? -1 : found - s1));
+}
+
 int
 main(int argc, char **argv)
 {
@@ -205,6 +287,9 @@ main(int argc, char **argv)
   test_binary_search_str();
   test_binary_search_loop_int();
   test_binary_search_loop_str();
+
+  test_bsearch_int();
+  test_bsearch_str();
 
   return 0;
 }
