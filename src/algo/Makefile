@@ -11,45 +11,47 @@ ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
 endif
 
 
-algo: _algo_ \
-			algo_duff_device \
-			algo_dynamic_array \
-			algo_fibonacci \
-			algo_gcd \
-			algo_hash \
-			algo_is_unsigned_integer \
-			algo_is_unsigned_type \
-			algo_reverse \
-			algo_search \
-			algo_sizeof \
-			algo_sort \
-			algo_strlen_utf8 \
+algo: _algo_																		\
+			algo_duff_device													\
+			algo_dynamic_array												\
+			algo_fibonacci														\
+			algo_gcd																	\
+			algo_hash																	\
+			algo_is_unsigned_integer									\
+			algo_is_unsigned_type											\
+      algo_merge																\
+			algo_reverse															\
+			algo_search																\
+			algo_sizeof																\
+			algo_sort																	\
+			algo_strlen_utf8													\
 			algo_strscpy
 
-algo_test: _algo__test \
-					 algo_duff_device_test \
-					 algo_dynamic_array_test \
-					 algo_fibonacci_test \
-					 algo_gcd_test \
-					 algo_hash_test \
-					 algo_is_unsigned_integer_test \
-					 algo_is_unsigned_type_test \
-					 algo_reverse_test \
-					 algo_search_test \
-					 algo_sizeof_test \
-					 algo_sort_test \
-					 algo_strlen_utf8_test \
+algo_test: _algo_test														\
+					 algo_duff_device_test								\
+					 algo_dynamic_array_test							\
+					 algo_fibonacci_test									\
+					 algo_gcd_test												\
+					 algo_hash_test												\
+					 algo_is_unsigned_integer_test				\
+					 algo_is_unsigned_type_test						\
+           algo_merge_test											\
+					 algo_reverse_test										\
+					 algo_search_test											\
+					 algo_sizeof_test											\
+					 algo_sort_test												\
+					 algo_strlen_utf8_test								\
 					 algo_strscpy_test
 
 
 # _algo
-_algo__binout := $(bin_path)$(algo_prefix)_algo_$(bin_ext)
+_algo_binout := $(bin_path)$(algo_prefix)_algo_$(bin_ext)
 
-_algo_: $(_algo__binout)
-_algo__test: _algo_
-	$(_algo__binout)
+_algo_: $(_algo_binout)
+_algo_test: _algo_
+	$(_algo_binout)
 
-$(_algo__binout): $(algo_root)_algo_.c
+$(_algo_binout): $(algo_root)_algo_.c
 	$(CC) $(CFLAGS) $(INC) $(nm_def_opt)_ALGO_TEST_=1 $^ $(bin_out)$@
 
 
@@ -169,6 +171,18 @@ $(algo_is_utype_binout): $(algo_is_utype_cppout)
 
 $(algo_is_utype_cppout): $(algo_root)is_unsigned_type/is_utype.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+# merge
+algo_merge_binout := $(bin_path)$(algo_prefix)_merge$(bin_ext)
+
+algo_merge: $(algo_merge_binout)
+algo_merge_test: algo_merge
+	$(algo_merge_binout)
+
+$(algo_merge_binout): $(algo_root)_algo_.c			\
+                      $(algo_root)merge/m1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # reverse
 algo_reverse_string_binout := $(bin_path)$(algo_prefix)_reverse_string$(bin_ext)
