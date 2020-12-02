@@ -1,57 +1,39 @@
 #include <_algo_.h>
 
-typedef struct s_merge
-{
-  void *base;
-  size_t nel;
-  size_t idx;
-} merge_t;
-
+/* 
+ * merge two arrays based on order
+ */
 void
-merge(merge_t * const l, merge_t * const r, merge_t * const m,
+merge(void * const l, size_t lnel,
+      void * const r, size_t rnel,
+      void * const m, size_t midx,
       size_t width,
       int (*comp)(const void*lhs, const void *rhs))
 {
-  if ((l->idx == l->nel) && (r->idx == r->nel))
+  if (NULL == l && NULL == r)
     {
       return;
     }
-  else if (l->idx == l->nel)
+  else if (0 == lnel)
     {
-      size_t n = r->nel - r->idx;
-      memcpy((char*)m->base + m->idx * width,
-             (char*)r->base + r->idx * width,
-             n * width);
-      m->idx += n;
-      m->nel += n;
-      r->idx += n;
+      memcpy((char*)m + midx * width, r, width * rnel);
+      merge(0, 0, 0, 0, m, midx + rnel, width, comp);
     }
-  else if (r->idx == r->nel)
+  else if (0 == rnel)
     {
-      size_t n = l->nel - l->idx;
-      memcpy((char*)m->base + m->idx * width,
-             (char*)l->base + l->idx * width,
-             n * width);
-      m->idx += n;
-      m->nel += n;
-      l->idx += n;
+      memcpy((char*)m + midx * width, l, width * lnel);
+      merge(0, 0, 0, 0, m, midx + lnel, width, comp);
     }
-  else if (comp((char*)l->base + l->idx * width,
-                (char*)r->base + r->idx * width) <= 0)
+  else if (comp(l, r) <= 0)
     {
-      memcpy((char*)m->base + m->idx++ * width,
-             (char*)l->base + l->idx++ * width,
-             width);
-      m->nel++;
+      memcpy((char*)m + midx * width, l, width);
+      merge((char*)l + width, lnel-1, r, rnel, m, midx+1, width, comp);
     }
   else
     {
-      memcpy((char*)m->base + m->idx++ * width,
-             (char*)r->base + r->idx++ * width,
-             width);
-      m->nel++;
+      memcpy((char*)m + midx * width, r, width);
+      merge(l, lnel, (char*)r + width, rnel-1, m, midx+1, width, comp);
     }
-  merge(l, r, m, width, comp);
 }
 
 void
@@ -60,25 +42,18 @@ test_merge_int(void)
   int al[] = {21, 28, 35, 40, 61, 75};
   int ar[] = {16, 25, 47, 54 };
   int am[sizeof(al)/sizeof(*al) + sizeof(ar)/sizeof(*ar)];
-  merge_t l, r, m;
-  l.base = &al[0];
-  l.nel = sizeof(al)/sizeof(*al);
-  l.idx = 0;
-  r.base = &ar[0];
-  r.nel = sizeof(ar)/sizeof(*ar);
-  r.idx = 0;
-  m.base = &am[0];
-  m.nel = 0;
-  m.idx = 0;
+  size_t alnel = sizeof(al)/sizeof(*al);
+  size_t arnel = sizeof(ar)/sizeof(*ar);
+  size_t amnel = sizeof(am)/sizeof(*am);
 
   printf("merge int array ...\n----------\n");
-  list_array(al, sizeof(al)/sizeof(*al), sizeof(*al), print_int);
-  list_array(ar, sizeof(ar)/sizeof(*ar), sizeof(*ar), print_int);
+  list_array(al, alnel, sizeof(*al), print_int);
+  list_array(ar, arnel, sizeof(*ar), print_int);
   printf("----------\n");
   
-  merge(&l, &r, &m, sizeof(int), comp_int);
+  merge(al, alnel, ar, arnel, am, 0, sizeof(int), comp_int);
 
-  list_array(am, sizeof(am)/sizeof(*am), sizeof(*am), print_int);
+  list_array(am, amnel, sizeof(*am), print_int);
 }
 
 int
