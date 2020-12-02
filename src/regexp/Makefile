@@ -30,19 +30,17 @@ $(pcre_basic_binout): $(regexp_root)pcre/a.c
 	$(CC) $(pcre_cflags) $(INC) $^ $(bin_out)$@ $(pcre_libs)
 
 # os
-regexp_os: os_basic
-regexp_os_test: os_basic_test
+regexp_os_binout := $(bin_path)$(regexp_prefix)_os$(bin_ext)
 
-os_basic_binout := $(bin_path)$(regexp_prefix)_os_basic$(bin_ext)
+regexp_os: $(regexp_os_binout)
+regexp_os_test: regexp_os
+	$(regexp_os_binout)
 
-os_basic: $(os_basic_binout)
-os_basic_test: os_basic
-	$(os_basic_binout) "ca*ar" "caaar"
-	$(os_basic_binout) "ca*ar" "Acaaa"
-
+$(regexp_os_binout): $(regexp_root)os/l.c
 ifeq ($(NM_SYSTEM),Linux)
-$(os_basic_binout): $(regexp_root)os/l.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-else
-$(os_basic_binout):
-endif
+endif # end of Linux
+ifeq ($(NM_SYSTEM),Darwin)
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+endif # end of Drawin
+
