@@ -13,8 +13,8 @@ static char errbuf[ERRBUF_SIZE];
 void
 test_basic(const char *pattern, const char *subject)
 {
-  regex_t re;
   int errcode = 0;
+  regex_t re;
   regmatch_t match;
 
   printf("----------\npattern = %s\nsubject = %s\n----------\n",
@@ -29,7 +29,7 @@ test_basic(const char *pattern, const char *subject)
     }
 
   memset(&match, 0, sizeof(match));
-  errcode = regexec(&re, subject, 0, &match, 0);
+  errcode = regexec(&re, subject, 1, &match, 0);
   if (REG_NOMATCH == errcode)
     {
       regerror(errcode, &re, errbuf, ERRBUF_SIZE);
@@ -37,7 +37,10 @@ test_basic(const char *pattern, const char *subject)
       return;
     }
 
-  printf("Matched: start = %i, end = %i\n",
+  memset(errbuf, 0, ERRBUF_SIZE);
+  strncpy(errbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
+  printf("matched(%s): start = %i, end = %i\n",
+         errbuf,
          (int)match.rm_so,
          (int)match.rm_eo);
 }
@@ -48,7 +51,9 @@ main(int argc, char **argv)
   _unused_(argc);
   _unused_(argv);
 
+  test_basic("car", "caaar");
   test_basic("ca*r", "caaar");
+  test_basic("ca*r", "acaaar");
     
   return 0;
 }
