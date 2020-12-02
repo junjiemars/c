@@ -56,6 +56,27 @@ test_merge_int(void)
   list_array(am, amnel, sizeof(*am), print_int);
 }
 
+void
+test_merge_str(void)
+{
+  char *al[] = {"bb", "dddd", "eeeee", "ff", "i", "j"};
+  char *ar[] = {"a", "ccc", "gg", "hhh" };
+  char *am[sizeof(al)/sizeof(*al) + sizeof(ar)/sizeof(*ar)];
+  size_t alnel = sizeof(al)/sizeof(*al);
+  size_t arnel = sizeof(ar)/sizeof(*ar);
+  size_t amnel = sizeof(am)/sizeof(*am);
+
+  printf("merge int array ...\n----------\n");
+  list_array(al, alnel, sizeof(*al), print_str);
+  list_array(ar, arnel, sizeof(*ar), print_str);
+  printf("----------\n");
+  
+  merge(al, alnel, ar, arnel, am, 0, sizeof(char*), comp_str);
+
+  list_array(am, amnel, sizeof(*am), print_str);
+}
+
+
 int
 main(int argc, char **argv)
 {
@@ -63,6 +84,7 @@ main(int argc, char **argv)
 	_unused_(argv);
 
   test_merge_int();
+  test_merge_str();
   
 	return 0;
 }
