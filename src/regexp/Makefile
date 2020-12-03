@@ -35,20 +35,17 @@ $(regexp_pcre_binout): $(regexp_root)pcre/a.c
 # os
 regexp_os_binout := $(bin_path)$(regexp_prefix)_os$(bin_ext)
 
+
+ifneq ($(NM_SYSTEM),WinNT)
+regexp_os: $(regexp_os_binout)
 regexp_os_test: regexp_os
 	$(regexp_os_binout)
-
-ifeq ($(NM_SYSTEM),Linux)
-regexp_os: $(regexp_os_binout)
-endif # end of Linux
-
-ifeq ($(NM_SYSTEM),Darwin)
-regexp_os: $(regexp_os_binout)
-endif # end of Darwin
+endif # end of Linux or Darwin
 
 ifeq ($(NM_SYSTEM),WinNT)
 regexp_os:
 	@echo "skipped, no builtin support in msvc on WinNT"
+regexp_os_test: regexp_os
 endif # end of WinNT
 
 $(regexp_os_binout): $(regexp_root)os/l.c
