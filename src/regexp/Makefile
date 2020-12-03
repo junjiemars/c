@@ -8,9 +8,11 @@ regexp_test: regexp_pcre_test										\
              regexp_os_test
 
 regexp_prefix := regexp
-
 INC += -I$(regexp_root)
 
+ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
+	CFLAGS += $(cflags_sanitize)
+endif
 
 # pcre
 pcre_cflags := $(shell pkg-config --cflags libpcre 2>/dev/null)
@@ -34,7 +36,6 @@ $(regexp_pcre_binout): $(regexp_root)pcre/a.c
 
 # os
 regexp_os_binout := $(bin_path)$(regexp_prefix)_os$(bin_ext)
-
 
 ifneq ($(NM_SYSTEM),WinNT)
 regexp_os: $(regexp_os_binout)

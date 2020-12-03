@@ -14,34 +14,183 @@
 #define ERRBUF_SIZE 1024
 static char errbuf[ERRBUF_SIZE];
 
+int
+test_bone(const char *pattern,
+          const char *subject,
+          int cflags,
+          int eflags,
+          size_t nmatch,
+          regmatch_t *matches,
+          size_t errbuf_size,
+          char *errbuf)
+{
+  int errcode = 0;
+  regex_t re;
+  
+  errcode = regcomp(&re, pattern, cflags);
+  if (errcode)
+    {
+      regerror(errcode, &re, errbuf, errbuf_size);
+      return errcode;
+    }
+
+  errcode = regexec(&re, subject, nmatch, matches, eflags);
+  if (REG_NOMATCH == errcode)
+    {
+      regerror(errcode, &re, errbuf, errbuf_size);
+      goto clean_exit;
+    }
+
+ clean_exit:
+  regfree(&re);
+  return errcode;
+}
+
 void
 test_basic(const char *pattern, const char *subject)
 {
   int errcode = 0;
-  regex_t re;
+  int nmatch = 1;
   regmatch_t match;
 
-  printf("----------\npattern = %s\nsubject = %s\n----------\n",
+  printf("----------\n"
+         "cflags: REG_BASIC\n"
+         "eflags: 0\n"
+         "pattern = %s\n"
+         "subject = %s\n"
+         "----------\n",
          pattern, subject);
-  
-  errcode = regcomp(&re, pattern, REG_BASIC);
-  if (errcode)
-    {
-      regerror(errcode, &re, errbuf, ERRBUF_SIZE);
-      fprintf(stderr, "%s\n", errbuf);
-      return;
-    }
-
-  memset(&match, 0, sizeof(match));
-  errcode = regexec(&re, subject, 1, &match, 0);
-  if (REG_NOMATCH == errcode)
-    {
-      regerror(errcode, &re, errbuf, ERRBUF_SIZE);
-      fprintf(stderr, "%s\n", errbuf);
-      return;
-    }
 
   memset(errbuf, 0, ERRBUF_SIZE);
+
+  errcode = test_bone(pattern,
+                      subject,
+                      REG_BASIC,
+                      0,
+                      nmatch,
+                      &match,
+                      ERRBUF_SIZE,
+                      errbuf);
+  if (errcode)
+    {
+      fprintf(stderr, "%s\n", errbuf);
+      return;
+    }
+
+  strncpy(errbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
+  printf("matched(%s): start = %i, end = %i\n",
+         errbuf,
+         (int)match.rm_so,
+         (int)match.rm_eo);
+}
+
+void
+test_ignore_case(const char *pattern, const char *subject)
+{
+  int errcode = 0;
+  int nmatch = 1;
+  regmatch_t match;
+
+  printf("----------\n"
+         "cflags: REG_ICASE\n"
+         "eflags: 0\n"
+         "pattern = %s\n"
+         "subject = %s\n"
+         "----------\n",
+         pattern, subject);
+
+  memset(errbuf, 0, ERRBUF_SIZE);
+
+  errcode = test_bone(pattern,
+                      subject,
+                      REG_ICASE,
+                      0,
+                      nmatch,
+                      &match,
+                      ERRBUF_SIZE,
+                      errbuf);
+  if (errcode)
+    {
+      fprintf(stderr, "%s\n", errbuf);
+      return;
+    }
+
+  strncpy(errbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
+  printf("matched(%s): start = %i, end = %i\n",
+         errbuf,
+         (int)match.rm_so,
+         (int)match.rm_eo);
+}
+
+void
+test_no_report_matches(const char *pattern, const char *subject)
+{
+  int errcode = 0;
+  int nmatch = 1;
+  regmatch_t match;
+
+  printf("----------\n"
+         "cflags: REG_NOSUB\n"
+         "eflags: 0\n"
+         "pattern = %s\n"
+         "subject = %s\n"
+         "----------\n",
+         pattern, subject);
+
+  memset(errbuf, 0, ERRBUF_SIZE);
+
+  errcode = test_bone(pattern,
+                      subject,
+                      REG_NOSUB,
+                      0,
+                      nmatch,
+                      &match,
+                      ERRBUF_SIZE,
+                      errbuf);
+  if (errcode)
+    {
+      fprintf(stderr, "%s\n", errbuf);
+      return;
+    }
+
+  strncpy(errbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
+  printf("matched(%s): start = %i, end = %i\n",
+         errbuf,
+         (int)match.rm_so,
+         (int)match.rm_eo);
+}
+
+void
+test_newline(const char *pattern, const char *subject)
+{
+  int errcode = 0;
+  int nmatch = 1;
+  regmatch_t match;
+
+  printf("----------\n"
+         "cflags: REG_NEWLINE\n"
+         "eflags: 0\n"
+         "pattern = %s\n"
+         "subject = %s\n"
+         "----------\n",
+         pattern, subject);
+
+  memset(errbuf, 0, ERRBUF_SIZE);
+
+  errcode = test_bone(pattern,
+                      subject,
+                      REG_NEWLINE,
+                      0,
+                      nmatch,
+                      &match,
+                      ERRBUF_SIZE,
+                      errbuf);
+  if (errcode)
+    {
+      fprintf(stderr, "%s\n", errbuf);
+      return;
+    }
+
   strncpy(errbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
   printf("matched(%s): start = %i, end = %i\n",
          errbuf,
@@ -58,6 +207,13 @@ main(int argc, char **argv)
   test_basic("car", "caaar");
   test_basic("ca*r", "caaar");
   test_basic("ca*r", "acaaar");
-    
+
+  test_basic("ca*r", "CAAAR");
+  test_ignore_case("ca*r", "CAAAR");
+
+  test_no_report_matches("ca*r", "acaaar");
+  
+  /* test_newline(); */
+
   return 0;
 }
