@@ -39,7 +39,7 @@ Let's start ...
 
 #+BEGIN_SRC sh
 # bootstrap Nore
-bash <(curl https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh)
+curl https://raw.githubusercontent.com/junjiemars/nore/master/bootstrap.sh -sSfL | sh
 
 # configure -> make -> test -> install
 ./configure --has-hi
