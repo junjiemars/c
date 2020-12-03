@@ -23,8 +23,7 @@ regexp_pcre_binout := $(bin_path)$(regexp_prefix)_pcre$(bin_ext)
 ifneq ($(pcre_cflags),)
 regexp_pcre: $(regexp_pcre_binout)
 regexp_pcre_test: regexp_pcre
-	$(regexp_pcre_binout) "ca*ar" "caaar"
-	$(regexp_pcre_binout) "ca*ar" "Acaaa"
+	$(regexp_pcre_binout)
 else
 regexp_pcre:
 	@echo "skipped, pcre library no found"

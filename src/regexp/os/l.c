@@ -11,8 +11,9 @@
 #  define REG_BASIC 0
 #endif
 
-#define ERRBUF_SIZE 1024
+#define ERRBUF_SIZE 512
 static char errbuf[ERRBUF_SIZE];
+static char matbuf[ERRBUF_SIZE];
 
 int
 test_bone(const char *pattern,
@@ -59,7 +60,8 @@ test_basic(const char *pattern, const char *subject)
          "pattern = %s\n"
          "subject = '%s'\n"
          "----------\n",
-         pattern, subject);
+         pattern,
+         subject);
 
   memset(errbuf, 0, ERRBUF_SIZE);
 
@@ -77,9 +79,10 @@ test_basic(const char *pattern, const char *subject)
       return;
     }
 
-  strncpy(errbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
+  memset(matbuf, 0, ERRBUF_SIZE);
+  strncpy(matbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
   printf("matched(%s): start = %i, end = %i\n",
-         errbuf,
+         matbuf,
          (int)match.rm_so,
          (int)match.rm_eo);
 }
@@ -97,7 +100,8 @@ test_ignore_case(const char *pattern, const char *subject)
          "pattern = %s\n"
          "subject = %s\n"
          "----------\n",
-         pattern, subject);
+         pattern,
+         subject);
 
   memset(errbuf, 0, ERRBUF_SIZE);
 
@@ -115,9 +119,10 @@ test_ignore_case(const char *pattern, const char *subject)
       return;
     }
 
+  memset(matbuf, 0, ERRBUF_SIZE);
   strncpy(errbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
   printf("matched(%s): start = %i, end = %i\n",
-         errbuf,
+         matbuf,
          (int)match.rm_so,
          (int)match.rm_eo);
 }
@@ -135,7 +140,8 @@ test_no_report_matches(const char *pattern, const char *subject)
          "pattern = %s\n"
          "subject = %s\n"
          "----------\n",
-         pattern, subject);
+         pattern,
+         subject);
 
   memset(errbuf, 0, ERRBUF_SIZE);
 
@@ -153,9 +159,10 @@ test_no_report_matches(const char *pattern, const char *subject)
       return;
     }
 
+  memset(matbuf, 0, ERRBUF_SIZE);
   strncpy(errbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
   printf("matched(%s): start = %i, end = %i\n",
-         errbuf,
+         matbuf,
          (int)match.rm_so,
          (int)match.rm_eo);
 }
@@ -173,7 +180,8 @@ test_newline(const char *pattern, const char *subject)
          "pattern = %s\n"
          "subject = '%s'\n"
          "----------\n",
-         pattern, subject);
+         pattern,
+         subject);
 
   memset(errbuf, 0, ERRBUF_SIZE);
 
@@ -191,9 +199,10 @@ test_newline(const char *pattern, const char *subject)
       return;
     }
 
+  memset(matbuf, 0, ERRBUF_SIZE);
   strncpy(errbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
   printf("matched(%s): start = %i, end = %i\n",
-         errbuf,
+         matbuf,
          (int)match.rm_so,
          (int)match.rm_eo);
 }
@@ -229,9 +238,10 @@ test_extended(const char *pattern, const char *subject)
       return;
     }
 
-  strncpy(errbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
+  memset(matbuf, 0, ERRBUF_SIZE);
+  strncpy(matbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
   printf("matched(%s): start = %i, end = %i\n",
-         errbuf,
+         matbuf,
          (int)match.rm_so,
          (int)match.rm_eo);
 }
@@ -249,7 +259,8 @@ test_group(const char *pattern, const char *subject)
          "pattern = %s\n"
          "subject = '%s'\n"
          "----------\n",
-         pattern, subject);
+         pattern,
+         subject);
 
   memset(errbuf, 0, ERRBUF_SIZE);
   match = calloc(nmatch + 1, sizeof(*match));
@@ -275,10 +286,10 @@ test_group(const char *pattern, const char *subject)
         {
           break;
         }
-      memset(errbuf, 0, ERRBUF_SIZE);
-      strncpy(errbuf, subject + m->rm_so, m->rm_eo - m->rm_so);
+      memset(matbuf, 0, ERRBUF_SIZE);
+      strncpy(matbuf, subject + m->rm_so, m->rm_eo - m->rm_so);
       printf("matched(%s): start = %i, end = %i\n",
-             errbuf,
+             matbuf,
              (int)m->rm_so,
              (int)m->rm_eo);
     }
