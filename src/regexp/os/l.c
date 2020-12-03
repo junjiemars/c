@@ -57,7 +57,7 @@ test_basic(const char *pattern, const char *subject)
          "cflags: REG_BASIC\n"
          "eflags: 0\n"
          "pattern = %s\n"
-         "subject = %s\n"
+         "subject = '%s'\n"
          "----------\n",
          pattern, subject);
 
@@ -171,7 +171,7 @@ test_newline(const char *pattern, const char *subject)
          "cflags: REG_NEWLINE\n"
          "eflags: 0\n"
          "pattern = %s\n"
-         "subject = %s\n"
+         "subject = '%s'\n"
          "----------\n",
          pattern, subject);
 
@@ -180,6 +180,44 @@ test_newline(const char *pattern, const char *subject)
   errcode = test_bone(pattern,
                       subject,
                       REG_NEWLINE,
+                      REG_NOTBOL | REG_NOTEOL,
+                      nmatch,
+                      &match,
+                      ERRBUF_SIZE,
+                      errbuf);
+  if (errcode)
+    {
+      fprintf(stderr, "%s\n", errbuf);
+      return;
+    }
+
+  strncpy(errbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
+  printf("matched(%s): start = %i, end = %i\n",
+         errbuf,
+         (int)match.rm_so,
+         (int)match.rm_eo);
+}
+
+void
+test_extended(const char *pattern, const char *subject)
+{
+  int errcode = 0;
+  int nmatch = 1;
+  regmatch_t match;
+
+  printf("----------\n"
+         "cflags: REG_EXTENDED\n"
+         "eflags: 0\n"
+         "pattern = %s\n"
+         "subject = '%s'\n"
+         "----------\n",
+         pattern, subject);
+
+  memset(errbuf, 0, ERRBUF_SIZE);
+
+  errcode = test_bone(pattern,
+                      subject,
+                      REG_EXTENDED,
                       0,
                       nmatch,
                       &match,
@@ -213,9 +251,12 @@ main(int argc, char **argv)
 
   test_no_report_matches("ca*r", "acaaar");
 
-  test_basic("^ca*r$", "\ncaaar\n");
+  test_basic("^ca*r", "\ncaaar");
+  test_basic("ca*r$", "caaar\n");
   test_newline("^ca*r$", "\ncaaar\n");
 
+  test_basic("c[abc]+r", "caaar");
+  test_extended("c[abc]+r", "caaar");
 
   return 0;
 }

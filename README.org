@@ -2428,6 +2428,14 @@ on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see
 ** Algorithm References
 - [[http://www.cse.yorku.ca/~oz/hash.html][Hash Functions]]
 
+* Regex
+	:PROPERTIES:
+	:CUSTOM_ID: regex
+	:END:
+
+In POSIX-Extended regular expressions, all characters match themselves
+ except for the following special characters: =.[{}()\*+?|^$=
+
 * WebAssembly
 
 Run example in browser:
