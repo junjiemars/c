@@ -78,14 +78,14 @@ test_do() {
 
 # basic test
 if [ "basic" = "$_TEST_" ]; then
-  test_do --has-hi       || exit 1
-  test_do --has-algo     || exit 1
-  test_do --has-ds       || exit 1
-  test_do --has-library  || exit 1
-  test_do --has-lang     || exit 1
-  test_do --has-memory   || exit 1
-  test_do --has-regexp   || exit 1
-  test_do --has-unicode  || exit 1
+  test_do --has-hi      2>&1 || exit 1
+  test_do --has-algo    2>&1 || exit 1
+  test_do --has-ds      2>&1 || exit 1
+  test_do --has-library 2>&1 || exit 1
+  test_do --has-lang    2>&1 || exit 1
+  test_do --has-memory  2>&1 || exit 1
+  test_do --has-regexp  2>&1 || exit 1
+  test_do --has-unicode 2>&1 || exit 1
 fi
 
 # eof
