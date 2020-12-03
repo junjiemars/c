@@ -236,6 +236,57 @@ test_extended(const char *pattern, const char *subject)
          (int)match.rm_eo);
 }
 
+void
+test_group(const char *pattern, const char *subject)
+{
+  int errcode = 0;
+  int nmatch = 4;
+  regmatch_t *match;
+
+  printf("----------\n"
+         "cflags: REG_EXTENDED\n"
+         "eflags: 0\n"
+         "pattern = %s\n"
+         "subject = '%s'\n"
+         "----------\n",
+         pattern, subject);
+
+  memset(errbuf, 0, ERRBUF_SIZE);
+  match = calloc(nmatch + 1, sizeof(*match));
+  
+  errcode = test_bone(pattern,
+                      subject,
+                      REG_EXTENDED,
+                      0,
+                      nmatch,
+                      match,
+                      ERRBUF_SIZE,
+                      errbuf);
+  if (errcode)
+    {
+      fprintf(stderr, "%s\n", errbuf);
+      goto clean_exit;
+    }
+
+  for (int i = 0; i < nmatch; i++)
+    {
+      const regmatch_t *m = &match[i];
+      if (m->rm_so < 0 || m->rm_eo < 0)
+        {
+          break;
+        }
+      memset(errbuf, 0, ERRBUF_SIZE);
+      strncpy(errbuf, subject + m->rm_so, m->rm_eo - m->rm_so);
+      printf("matched(%s): start = %i, end = %i\n",
+             errbuf,
+             (int)m->rm_so,
+             (int)m->rm_eo);
+    }
+  
+ clean_exit:
+  free(match);
+}
+
 int
 main(int argc, char **argv)
 {
@@ -257,6 +308,8 @@ main(int argc, char **argv)
 
   test_basic("c[abc]+r", "caaar");
   test_extended("c[abc]+r", "caaar");
+
+  test_group("abc(Ca*r|Tru*ck)?", "abcTruuuck");
 
   return 0;
 }
