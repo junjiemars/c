@@ -75,7 +75,7 @@ test_basic(const char *pattern, const char *subject)
                       errbuf);
   if (errcode)
     {
-      fprintf(stderr, "%s\n", errbuf);
+      fprintf(stdout, "%s\n", errbuf);
       return;
     }
 
@@ -115,7 +115,7 @@ test_ignore_case(const char *pattern, const char *subject)
                       errbuf);
   if (errcode)
     {
-      fprintf(stderr, "%s\n", errbuf);
+      fprintf(stdout, "%s\n", errbuf);
       return;
     }
 
@@ -155,7 +155,7 @@ test_no_report_matches(const char *pattern, const char *subject)
                       errbuf);
   if (errcode)
     {
-      fprintf(stderr, "%s\n", errbuf);
+      fprintf(stdout, "%s\n", errbuf);
       return;
     }
 
@@ -195,7 +195,7 @@ test_newline(const char *pattern, const char *subject)
                       errbuf);
   if (errcode)
     {
-      fprintf(stderr, "%s\n", errbuf);
+      fprintf(stdout, "%s\n", errbuf);
       return;
     }
 
@@ -234,7 +234,7 @@ test_extended(const char *pattern, const char *subject)
                       errbuf);
   if (errcode)
     {
-      fprintf(stderr, "%s\n", errbuf);
+      fprintf(stdout, "%s\n", errbuf);
       return;
     }
 
@@ -275,7 +275,7 @@ test_group(const char *pattern, const char *subject)
                       errbuf);
   if (errcode)
     {
-      fprintf(stderr, "%s\n", errbuf);
+      fprintf(stdout, "%s\n", errbuf);
       goto clean_exit;
     }
 
