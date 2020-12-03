@@ -7,11 +7,6 @@ int
 main(int argc, char **argv) {
   _unused_(argc);
   _unused_(argv);
-
-  if (argc < 3) {
-    fprintf(stderr, "%s %s\n", "pattern", "subject");
-    return 1;
-  }
   
   pcre *re;
   int options = 0;
@@ -21,8 +16,8 @@ main(int argc, char **argv) {
   const size_t N = 64;
   int ovector[N];
   int match = 0;
-  const char *pattern = argv[1];
-  const char *subject = argv[2];
+  const char *pattern = "ca*r";
+  const char *subject = "caaar";
   
   re = pcre_compile(pattern, options, &errptr, &erroffset, 0);
   if (!re) {
