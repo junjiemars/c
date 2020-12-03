@@ -212,8 +212,10 @@ main(int argc, char **argv)
   test_ignore_case("ca*r", "CAAAR");
 
   test_no_report_matches("ca*r", "acaaar");
-  
-  /* test_newline(); */
+
+  test_basic("^ca*r$", "\ncaaar\n");
+  test_newline("^ca*r$", "\ncaaar\n");
+
 
   return 0;
 }
