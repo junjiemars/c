@@ -35,18 +35,24 @@ $(regexp_pcre_binout): $(regexp_root)pcre/a.c
 # os
 regexp_os_binout := $(bin_path)$(regexp_prefix)_os$(bin_ext)
 
-regexp_os: $(regexp_os_binout)
 regexp_os_test: regexp_os
 	$(regexp_os_binout)
 
-$(regexp_os_binout): $(regexp_root)os/l.c
 ifeq ($(NM_SYSTEM),Linux)
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+regexp_os: $(regexp_os_binout)
 endif # end of Linux
-ifeq ($(NM_SYSTEM),Darwin)
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-endif # end of Drawin
-ifeq ($(NM_SYSTEM),WinNT)
-	@echo "skipped, no builtin support in msvc on WinNT"
-endif
 
+ifeq ($(NM_SYSTEM),Darwin)
+regexp_os: $(regexp_os_binout)
+endif # end of Darwin
+
+ifeq ($(NM_SYSTEM),WinNT)
+regexp_os:
+	@echo "skipped, no builtin support in msvc on WinNT"
+endif # end of WinNT
+
+$(regexp_os_binout): $(regexp_root)os/l.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# eof
