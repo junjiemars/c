@@ -11,6 +11,8 @@
 #  define REG_BASIC 0
 #endif
 
+#define STR(x) #x
+
 #define ERRBUF_SIZE 512
 static char errbuf[ERRBUF_SIZE];
 static char matbuf[ERRBUF_SIZE];
@@ -22,6 +24,7 @@ test_bone(const char *pattern,
           int eflags,
           size_t nmatch,
           regmatch_t *matches,
+          size_t *re_nsub,
           size_t errbuf_size,
           char *errbuf)
 {
@@ -41,6 +44,7 @@ test_bone(const char *pattern,
       regerror(errcode, &re, errbuf, errbuf_size);
       goto clean_exit;
     }
+  *re_nsub = re.re_nsub;
 
  clean_exit:
   regfree(&re);
@@ -48,229 +52,39 @@ test_bone(const char *pattern,
 }
 
 void
-test_basic(const char *pattern, const char *subject)
+test_basic(const char *pattern,
+           const char *subject,
+           int cflags,
+           const char *cflags_str,
+           int eflags,
+           const char *eflags_str,
+           int nmatch)
 {
   int errcode = 0;
-  int nmatch = 1;
-  regmatch_t match;
+  size_t nsub = 0;
+  regmatch_t *match = NULL;
 
   printf("----------\n"
-         "cflags: REG_BASIC\n"
-         "eflags: 0\n"
+         "cflags: %s\n"
+         "eflags: %s\n"
          "pattern = %s\n"
          "subject = '%s'\n"
          "----------\n",
+         cflags_str,
+         eflags_str,
          pattern,
          subject);
 
-  memset(errbuf, 0, ERRBUF_SIZE);
-
-  errcode = test_bone(pattern,
-                      subject,
-                      REG_BASIC,
-                      0,
-                      nmatch,
-                      &match,
-                      ERRBUF_SIZE,
-                      errbuf);
-  if (errcode)
-    {
-      fprintf(stdout, "%s\n", errbuf);
-      return;
-    }
-
-  memset(matbuf, 0, ERRBUF_SIZE);
-  strncpy(matbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
-  printf("matched(%s): start = %i, end = %i\n",
-         matbuf,
-         (int)match.rm_so,
-         (int)match.rm_eo);
-}
-
-void
-test_ignore_case(const char *pattern, const char *subject)
-{
-  int errcode = 0;
-  int nmatch = 1;
-  regmatch_t match;
-
-  printf("----------\n"
-         "cflags: REG_ICASE\n"
-         "eflags: 0\n"
-         "pattern = %s\n"
-         "subject = %s\n"
-         "----------\n",
-         pattern,
-         subject);
-
-  memset(errbuf, 0, ERRBUF_SIZE);
-
-  errcode = test_bone(pattern,
-                      subject,
-                      REG_ICASE,
-                      0,
-                      nmatch,
-                      &match,
-                      ERRBUF_SIZE,
-                      errbuf);
-  if (errcode)
-    {
-      fprintf(stdout, "%s\n", errbuf);
-      return;
-    }
-
-  memset(matbuf, 0, ERRBUF_SIZE);
-  strncpy(errbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
-  printf("matched(%s): start = %i, end = %i\n",
-         matbuf,
-         (int)match.rm_so,
-         (int)match.rm_eo);
-}
-
-void
-test_no_report_matches(const char *pattern, const char *subject)
-{
-  int errcode = 0;
-  int nmatch = 1;
-  regmatch_t match;
-
-  printf("----------\n"
-         "cflags: REG_NOSUB\n"
-         "eflags: 0\n"
-         "pattern = %s\n"
-         "subject = %s\n"
-         "----------\n",
-         pattern,
-         subject);
-
-  memset(errbuf, 0, ERRBUF_SIZE);
-
-  errcode = test_bone(pattern,
-                      subject,
-                      REG_NOSUB,
-                      0,
-                      nmatch,
-                      &match,
-                      ERRBUF_SIZE,
-                      errbuf);
-  if (errcode)
-    {
-      fprintf(stdout, "%s\n", errbuf);
-      return;
-    }
-
-  memset(matbuf, 0, ERRBUF_SIZE);
-  strncpy(errbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
-  printf("matched(%s): start = %i, end = %i\n",
-         matbuf,
-         (int)match.rm_so,
-         (int)match.rm_eo);
-}
-
-void
-test_newline(const char *pattern, const char *subject)
-{
-  int errcode = 0;
-  int nmatch = 1;
-  regmatch_t match;
-
-  printf("----------\n"
-         "cflags: REG_NEWLINE\n"
-         "eflags: 0\n"
-         "pattern = %s\n"
-         "subject = '%s'\n"
-         "----------\n",
-         pattern,
-         subject);
-
-  memset(errbuf, 0, ERRBUF_SIZE);
-
-  errcode = test_bone(pattern,
-                      subject,
-                      REG_NEWLINE,
-                      REG_NOTBOL | REG_NOTEOL,
-                      nmatch,
-                      &match,
-                      ERRBUF_SIZE,
-                      errbuf);
-  if (errcode)
-    {
-      fprintf(stdout, "%s\n", errbuf);
-      return;
-    }
-
-  memset(matbuf, 0, ERRBUF_SIZE);
-  strncpy(errbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
-  printf("matched(%s): start = %i, end = %i\n",
-         matbuf,
-         (int)match.rm_so,
-         (int)match.rm_eo);
-}
-
-void
-test_extended(const char *pattern, const char *subject)
-{
-  int errcode = 0;
-  int nmatch = 1;
-  regmatch_t match;
-
-  printf("----------\n"
-         "cflags: REG_EXTENDED\n"
-         "eflags: 0\n"
-         "pattern = %s\n"
-         "subject = '%s'\n"
-         "----------\n",
-         pattern, subject);
-
-  memset(errbuf, 0, ERRBUF_SIZE);
-
-  errcode = test_bone(pattern,
-                      subject,
-                      REG_EXTENDED,
-                      0,
-                      nmatch,
-                      &match,
-                      ERRBUF_SIZE,
-                      errbuf);
-  if (errcode)
-    {
-      fprintf(stdout, "%s\n", errbuf);
-      return;
-    }
-
-  memset(matbuf, 0, ERRBUF_SIZE);
-  strncpy(matbuf, subject + match.rm_so, match.rm_eo - match.rm_so);
-  printf("matched(%s): start = %i, end = %i\n",
-         matbuf,
-         (int)match.rm_so,
-         (int)match.rm_eo);
-}
-
-void
-test_group(const char *pattern, const char *subject)
-{
-  int errcode = 0;
-  int nmatch = 4;
-  regmatch_t *match;
-
-  printf("----------\n"
-         "cflags: REG_EXTENDED\n"
-         "eflags: 0\n"
-         "pattern = %s\n"
-         "subject = '%s'\n"
-         "----------\n",
-         pattern,
-         subject);
-
-  memset(errbuf, 0, ERRBUF_SIZE);
   match = calloc(nmatch + 1, sizeof(*match));
-  
+  memset(errbuf, 0, ERRBUF_SIZE);
+
   errcode = test_bone(pattern,
                       subject,
-                      REG_EXTENDED,
-                      0,
+                      cflags,
+                      eflags,
                       nmatch,
                       match,
+                      &nsub,
                       ERRBUF_SIZE,
                       errbuf);
   if (errcode)
@@ -279,21 +93,17 @@ test_group(const char *pattern, const char *subject)
       goto clean_exit;
     }
 
-  for (int i = 0; i < nmatch; i++)
+  for (size_t i = 0; i <= nsub; i++)
     {
-      const regmatch_t *m = &match[i];
-      if (m->rm_so < 0 || m->rm_eo < 0)
-        {
-          break;
-        }
+      const regmatch_t m = match[i];
       memset(matbuf, 0, ERRBUF_SIZE);
-      strncpy(matbuf, subject + m->rm_so, m->rm_eo - m->rm_so);
+      strncpy(matbuf, subject + m.rm_so, m.rm_eo - m.rm_so);
       printf("matched(%s): start = %i, end = %i\n",
              matbuf,
-             (int)m->rm_so,
-             (int)m->rm_eo);
+             (int)m.rm_so,
+             (int)m.rm_eo);
     }
-  
+
  clean_exit:
   free(match);
 }
@@ -304,23 +114,68 @@ main(int argc, char **argv)
   _unused_(argc);
   _unused_(argv);
 
-  test_basic("car", "caaar");
-  test_basic("ca*r", "caaar");
-  test_basic("ca*r", "acaaar");
+  test_basic("car", "caaar",
+             REG_BASIC, STR(REG_BASIC),
+             0, STR(0),
+             0);
+  test_basic("ca*r", "caaar",
+             REG_BASIC, STR(REG_BASIC),
+             0, STR(0),
+             1);
+  test_basic("ca*r", "acaaar",
+             REG_BASIC, STR(REG_BASIC),
+             0, STR(0),
+             1);
 
-  test_basic("ca*r", "CAAAR");
-  test_ignore_case("ca*r", "CAAAR");
 
-  test_no_report_matches("ca*r", "acaaar");
+  test_basic("ca*r", "CAAAR",
+             REG_BASIC, STR(REG_BASIC),
+             0, STR(0),
+             1);
+  test_basic("ca*r", "CAAAR",
+             REG_ICASE, STR(REG_ICASE),
+             0, STR(0),
+             1);
 
-  test_basic("^ca*r", "\ncaaar");
-  test_basic("ca*r$", "caaar\n");
-  test_newline("^ca*r$", "\ncaaar\n");
 
-  test_basic("c[abc]+r", "caaar");
-  test_extended("c[abc]+r", "caaar");
+  test_basic("ca*r", "acaaar",
+             REG_NOSUB, STR(REG_NOSUB),
+             0, STR(0),
+             1);
+  test_basic("ca*r", "acaaar",
+             REG_BASIC, STR(REG_BASIC),
+             0, STR(0),
+             0);
 
-  test_group("abc(Ca*r|Tru*ck)?", "abcTruuuck");
+
+  test_basic("^ca*r", "\ncaaar",
+             REG_BASIC, STR(REG_BASIC),
+             0, STR(0),
+             1);
+  test_basic("ca*r$", "caaar\n",
+             REG_BASIC, STR(REG_BASIC),
+             0, STR(0),
+             1);
+  test_basic("^ca*r$", "\ncaaar\n",
+             REG_NEWLINE, STR(REG_NEWLINE),
+             0, STR(0),
+             1);
+
+
+  test_basic("c[abc]+r", "caaar",
+             REG_BASIC, STR(REG_BASIC),
+             0, STR(0),
+             1);
+  test_basic("c[abc]+r", "caaar",
+             REG_EXTENDED, STR(REG_EXTENDED),
+             0, STR(0),
+             1);
+
+
+  test_basic("abc(Ca*r|Tru*ck)?", "abcTruuuck",
+             REG_EXTENDED, STR(REG_EXTENDED),
+             0, STR(0),
+             2);
 
   return 0;
 }
