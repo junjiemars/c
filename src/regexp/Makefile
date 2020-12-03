@@ -47,6 +47,6 @@ ifeq ($(NM_SYSTEM),Darwin)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 endif # end of Drawin
 ifeq ($(NM_SYSTEM),WinNT)
-	echo "skipped, there are no builtin support in msvc on WinNT"
+	@echo "skipped, no builtin support in msvc on WinNT"
 endif
 
