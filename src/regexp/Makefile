@@ -13,21 +13,24 @@ INC += -I$(regexp_root)
 
 
 # pcre
-pcre_cflags := $(CFLAGS) $(shell pkg-config --cflags libpcre)
-pcre_libs := $(LIBS) $(shell pkg-config --libs libpcre)
+pcre_cflags := $(shell pkg-config --cflags libpcre 2>/dev/null)
+pcre_libs := $(shell pkg-config --libs libpcre 2>/dev/null)
 
-regexp_pcre: pcre_basic
-regexp_pcre_test: pcre_basic_test
+regexp_pcre_binout := $(bin_path)$(regexp_prefix)_pcre$(bin_ext)
 
-pcre_basic_binout := $(bin_path)$(regexp_prefix)_pcre_basic$(bin_ext)
+ifneq ($(pcre_cflags),)
+regexp_pcre: $(regexp_pcre_binout)
+regexp_pcre_test: regexp_pcre
+	$(regexp_pcre_binout) "ca*ar" "caaar"
+	$(regexp_pcre_binout) "ca*ar" "Acaaa"
+else
+regexp_pcre:
+	@echo "skipped, pcre library no found"
+regexp_pcre_test: regexp_pcre
+endif # end of pcre
 
-pcre_basic: $(pcre_basic_binout)
-pcre_basic_test: pcre_basic
-	$(pcre_basic_binout) "ca*ar" "caaar"
-	$(pcre_basic_binout) "ca*ar" "Acaaa"
-
-$(pcre_basic_binout): $(regexp_root)pcre/a.c
-	$(CC) $(pcre_cflags) $(INC) $^ $(bin_out)$@ $(pcre_libs)
+$(regexp_pcre_binout): $(regexp_root)pcre/a.c
+	$(CC) $(CFLAGS) $(pcre_cflags) $(INC) $^ $(bin_out)$@ $(LIBS) $(pcre_libs)
 
 # os
 regexp_os_binout := $(bin_path)$(regexp_prefix)_os$(bin_ext)
@@ -43,4 +46,7 @@ endif # end of Linux
 ifeq ($(NM_SYSTEM),Darwin)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 endif # end of Drawin
+ifeq ($(NM_SYSTEM),WinNT)
+	echo "skipped, there are no builtin support in msvc on WinNT"
+endif
 
