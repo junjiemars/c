@@ -7,6 +7,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef REG_BASIC
+#  define REG_BASIC 0
+#endif
+
 #define ERRBUF_SIZE 1024
 static char errbuf[ERRBUF_SIZE];
 
