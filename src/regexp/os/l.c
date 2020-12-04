@@ -1,7 +1,4 @@
 #include <_regexp_.h>
-#if LINUX
-#  include <sys/types.h>
-#endif
 #include <regex.h>
 #include <stdio.h>
 #include <stdlib.h>
