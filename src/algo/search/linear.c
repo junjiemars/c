@@ -7,11 +7,11 @@ void test_linear_search_str(void);
 
 long
 linear_search(void *what, void *base, size_t nel, size_t width,
-							int (*comp)(const void *, const void *))
+							int (*cmp)(const void *, const void *))
 {
   for (size_t i = 0; i < nel; i++)
     {
-      if (0 == comp((char*)what, (char*)base + i * width))
+      if (0 == cmp((char*)what, (char*)base + i * width))
         {
           return (long)i;
         }
@@ -31,7 +31,7 @@ test_linear_search_int(void)
 	printf("linear search for %i\n----------\n", what);
 	list_array(a1, sizeof(a1)/sizeof(*a1), sizeof(*a1), print_int);
   found = linear_search(&what, a1, sizeof(a1)/sizeof(*a1), sizeof(*a1),
-                        comp_int);
+                        cmp_int);
   if (found >= 0)
     {
       if (0 == verify(&what, &a1[found], sizeof(*a1)))
@@ -45,7 +45,7 @@ test_linear_search_int(void)
 	printf("linear search for %i\n----------\n", what);
 	list_array(a1, sizeof(a1)/sizeof(*a1), sizeof(*a1), print_int);
   found = linear_search(&what, a1, sizeof(a1)/sizeof(*a1), sizeof(*a1),
-                        comp_int);
+                        cmp_int);
   xxi = 1;
   if (found >= 0)
     {
@@ -70,7 +70,7 @@ test_linear_search_str(void)
 	printf("linear search for %s\n----------\n", what);
 	list_array(s1, sizeof(s1)/sizeof(*s1), sizeof(*s1), print_str);
   found = linear_search(&what, s1, sizeof(s1)/sizeof(*s1), sizeof(*s1),
-                        comp_str);
+                        cmp_str);
 
   if (found >= 0)
     {
@@ -85,7 +85,7 @@ test_linear_search_str(void)
 	printf("linear search for %s\n----------\n", what);
 	list_array(s1, sizeof(s1)/sizeof(*s1), sizeof(*s1), print_str);
   found = linear_search(&what, s1, sizeof(s1)/sizeof(*s1), sizeof(*s1),
-                        comp_str);
+                        cmp_str);
 
   xxi = 1;
   if (found >= 0)

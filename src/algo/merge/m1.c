@@ -8,7 +8,7 @@ merge(void * const l, size_t lnel,
       void * const r, size_t rnel,
       void * const m, size_t midx,
       size_t width,
-      int (*comp)(const void*lhs, const void *rhs))
+      int (*cmp)(const void*lhs, const void *rhs))
 {
   if (NULL == l && NULL == r)
     {
@@ -17,22 +17,22 @@ merge(void * const l, size_t lnel,
   else if (0 == lnel)
     {
       memcpy((char*)m + midx * width, r, width * rnel);
-      merge(0, 0, 0, 0, m, midx + rnel, width, comp);
+      merge(0, 0, 0, 0, m, midx + rnel, width, cmp);
     }
   else if (0 == rnel)
     {
       memcpy((char*)m + midx * width, l, width * lnel);
-      merge(0, 0, 0, 0, m, midx + lnel, width, comp);
+      merge(0, 0, 0, 0, m, midx + lnel, width, cmp);
     }
-  else if (comp(l, r) <= 0)
+  else if (cmp(l, r) <= 0)
     {
       memcpy((char*)m + midx * width, l, width);
-      merge((char*)l + width, lnel-1, r, rnel, m, midx+1, width, comp);
+      merge((char*)l + width, lnel-1, r, rnel, m, midx+1, width, cmp);
     }
   else
     {
       memcpy((char*)m + midx * width, r, width);
-      merge(l, lnel, (char*)r + width, rnel-1, m, midx+1, width, comp);
+      merge(l, lnel, (char*)r + width, rnel-1, m, midx+1, width, cmp);
     }
 }
 
@@ -51,7 +51,7 @@ test_merge_int(void)
   list_array(ar, arnel, sizeof(*ar), print_int);
   printf("----------\n");
   
-  merge(al, alnel, ar, arnel, am, 0, sizeof(int), comp_int);
+  merge(al, alnel, ar, arnel, am, 0, sizeof(int), cmp_int);
 
   list_array(am, amnel, sizeof(*am), print_int);
 }
@@ -71,7 +71,7 @@ test_merge_str(void)
   list_array(ar, arnel, sizeof(*ar), print_str);
   printf("----------\n");
   
-  merge(al, alnel, ar, arnel, am, 0, sizeof(char*), comp_str);
+  merge(al, alnel, ar, arnel, am, 0, sizeof(char*), cmp_str);
 
   list_array(am, amnel, sizeof(*am), print_str);
 }

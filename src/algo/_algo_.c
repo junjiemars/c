@@ -25,13 +25,13 @@ print_str(const void *el)
 }
 
 int
-comp_int(const void *lhs, const void *rhs)
+cmp_int(const void *lhs, const void *rhs)
 {
 	return *(const int*)lhs - *(const int*)rhs;
 }
 
 int
-comp_str(const void *lhs, const void *rhs)
+cmp_str(const void *lhs, const void *rhs)
 {
 	return strcmp(*(const char**)lhs, *(const char**)rhs);
 }
@@ -45,29 +45,29 @@ verify(const void *lhs, const void *rhs, size_t size)
 #if _ALGO_TEST_
 
 void
-test_comp_int(void)
+test_cmp_int(void)
 {
 	int i1 = 0x1122, i2 = 0x3344;
-	int cmp = comp_int((void*)&i1, (void*)&i2);
+	int cmp = cmp_int((void*)&i1, (void*)&i2);
   _unused_(cmp);
-	assert(cmp < 0 && "comp_int(0x1122, 0x3344) should < 0");
-	cmp = comp_int((void*)&i1, (void*)&i1);
-	assert(cmp == 0 && "comp_int(0x1122, 0x1122) should == 0");
-	cmp = comp_int((void*)&i2, (void*)&i1);
-	assert(cmp > 0 && "comp_int(0x3344, 0x1122) should > 0");
-	printf("test comp_int fn ... ok\n");
+	assert(cmp < 0 && "cmp_int(0x1122, 0x3344) should < 0");
+	cmp = cmp_int((void*)&i1, (void*)&i1);
+	assert(cmp == 0 && "cmp_int(0x1122, 0x1122) should == 0");
+	cmp = cmp_int((void*)&i2, (void*)&i1);
+	assert(cmp > 0 && "cmp_int(0x3344, 0x1122) should > 0");
+	printf("test cmp_int fn ... ok\n");
 }
 
 void
-test_comp_str(void)
+test_cmp_str(void)
 {
 	char *ss[] = { "abc123", "123", };
-	assert(0 == comp_str(ss, ss));
-	assert(0 != comp_str(&ss[0], &ss[1]));
+	assert(0 == cmp_str(ss, ss));
+	assert(0 != cmp_str(&ss[0], &ss[1]));
 	char *s1 = ss[0]+3;
   _unused_(s1);
-	assert(0 == comp_str(&s1, &ss[1]));
-	printf("test comp_str fn ... ok\n");
+	assert(0 == cmp_str(&s1, &ss[1]));
+	printf("test cmp_str fn ... ok\n");
 }
 
 void
@@ -111,8 +111,8 @@ main(int argc, char **argv)
 	_unused_(argc);
 	_unused_(argv);
 
-	test_comp_int();
-	test_comp_str();
+	test_cmp_int();
+	test_cmp_str();
   test_verify();
 	test_swap();
 	
