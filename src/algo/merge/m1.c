@@ -66,7 +66,7 @@ test_merge_str(void)
   size_t arnel = sizeof(ar)/sizeof(*ar);
   size_t amnel = sizeof(am)/sizeof(*am);
 
-  printf("merge int array ...\n----------\n");
+  printf("merge str array ...\n----------\n");
   list_array(al, alnel, sizeof(*al), print_str);
   list_array(ar, arnel, sizeof(*ar), print_str);
   printf("----------\n");

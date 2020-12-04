@@ -48,12 +48,12 @@ void
 test_cmp_int(void)
 {
 	int i1 = 0x1122, i2 = 0x3344;
-	int cmp = cmp_int((void*)&i1, (void*)&i2);
+	int cmp = cmp_int(&i1, &i2);
   _unused_(cmp);
 	assert(cmp < 0 && "cmp_int(0x1122, 0x3344) should < 0");
-	cmp = cmp_int((void*)&i1, (void*)&i1);
+	cmp = cmp_int(&i1, &i1);
 	assert(cmp == 0 && "cmp_int(0x1122, 0x1122) should == 0");
-	cmp = cmp_int((void*)&i2, (void*)&i1);
+	cmp = cmp_int(&i2, &i1);
 	assert(cmp > 0 && "cmp_int(0x3344, 0x1122) should > 0");
 	printf("test cmp_int fn ... ok\n");
 }
