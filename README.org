@@ -1649,9 +1649,12 @@ RFLAGS Register
 |  22-63 | 0     | Reserved                                        |
 
 ** Addressing
-
-
 ** References
+	 :PROPERTIES:
+	 :CUSTOM_ID: x86_references
+	 :END:
+
+- [[https://wiki.osdev.org][OS Dev]]
 - [[https://gist.github.com/mishurov/6bcf04df329973c15044][AT&T assembly syntax and IA-32 instructions]]
 - [[https://www.cs.yale.edu/flint/cs421/papers/x86-asm/asm.html][Yale: x86 Assembly Guide]]
 - [[https://www.cs.virginia.edu/~evans/cs216/guides/x86.html][Virginia: x86 Assembly Guide]]
