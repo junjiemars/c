@@ -1600,6 +1600,24 @@ of any specific processor design or computer architecture.
 
 ** Registers
 
+*** rsp
+
+*** rbp
+
+*** callq
+
+#+BEGIN_SRC asm
+pushq <address-of-after-callq>
+#+END_SRC
+
+*** retq
+
+#+BEGIN_SRC asm
+jmp <address-of-$rsp>
+#+END_SRC
+
+*** =cmp inst=
+
 =cmp dst src= perfomans a substraction but does not store result. Such
 as =sub dst src=.
 
@@ -1612,6 +1630,7 @@ as =sub dst src=.
 | if MSB of (src-dst) == 1                 |    |    |    |    |  1 |    |
 | sign bit of src != sign bit of (src-dst) |    |    |    |    |    |  1 |
 
+*** =jmp inst=
 
 | Jump | Description              | signed-ness | Flags              |
 |------+--------------------------+-------------+--------------------|
@@ -1621,6 +1640,7 @@ as =sub dst src=.
 | jl   | jump if less             | signed      | SF != OF           |
 | jle  | jump if less or equal    | signed      | ZF = 1 or SF != OF |
 
+*** rflags
 
 RFLAGS Register
 | Bit(s) | Label | Description                                     |

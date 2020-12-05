@@ -1,7 +1,7 @@
 #include <_x86_.h>
 
-void B();
-void C();
+void B(void);
+void C(void);
 
 void A(void) {
 	int x;
@@ -14,10 +14,11 @@ void A(void) {
 }
 
 void B(void) {
-	long x;
+	long x, z;
 	int y;
 	_unused_(x);
 	_unused_(y);
+  _unused_(z);
 	C();
 }
 
