@@ -2,7 +2,6 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <time.h>
 #include <unistd.h>
 #include <errno.h>
@@ -11,18 +10,25 @@
 #include <sys/msg.h>
 #include <fcntl.h>
 #include <getopt.h>
+#include <string.h>
 
-struct msgbuf {
+
+#define M_KEY 0x1234
+#define M_TYPE 1
+#define M_SIZE sizeof(long) * 1
+
+typedef struct s_msgbuf {
   long mtype;
-  char mtext[80];
-};
+  char mtext[M_SIZE];
+} msgbuf_t;
+
 
 static void
-usage(char *prog_name, char *msg)
+usage(char *prog_name, char *errmsg)
 {
-  if (msg != NULL)
+  if (errmsg != NULL)
     {
-      fputs(msg, stderr);
+      fputs(errmsg, stderr);
     }
 
   fprintf(stderr, "Usage: %s [options]\n", prog_name);
@@ -35,17 +41,17 @@ usage(char *prog_name, char *msg)
 }
 
 static void
-send_msg(int qid, int msgtype)
+send_msg(int qid, int mtype, const char *mtext)
 {
-  struct msgbuf msg;
-  time_t t;
+  msgbuf_t msg;
+  if (snprintf(&msg.mtext[0], sizeof(msg.mtext), "%s", mtext) < 0)
+    {
+      perror(NULL);
+      return;
+    }
+  msg.mtype = mtype;
 
-  msg.mtype = msgtype;
-
-  time(&t);
-  snprintf(msg.mtext, sizeof(msg.mtext), "a message at %s", ctime(&t));
-
-  if (msgsnd(qid, (void *) &msg, sizeof(msg.mtext), IPC_NOWAIT) == -1)
+  if (msgsnd(qid, &msg, sizeof(msg.mtext), IPC_NOWAIT) == -1)
     {
       perror("msgsnd error");
       exit(EXIT_FAILURE);
@@ -54,11 +60,11 @@ send_msg(int qid, int msgtype)
 }
 
 static void
-get_msg(int qid, int msgtype)
+get_msg(int qid, int mtype)
 {
-  struct msgbuf msg;
+  msgbuf_t msg;
 
-  if (msgrcv(qid, &msg, sizeof(msg.mtext), msgtype,
+  if (msgrcv(qid, &msg, sizeof(msg.mtext), mtype,
              MSG_NOERROR | IPC_NOWAIT) == -1)
     {
       if (errno != ENOMSG)
@@ -79,8 +85,9 @@ main(int argc, char *argv[])
 
   int qid, opt;
   int mode = 0;               /* 's' = send, 'r' = receive */
-  int msgtype = 1;
-  int msgkey = 1234;
+  int msgkey = M_KEY;
+  int mtype = M_TYPE;
+  char mtext[M_SIZE];
 
   while ((opt = getopt(argc, argv, "srt:k:")) != -1)
     {
@@ -93,8 +100,8 @@ main(int argc, char *argv[])
           mode = 'r';
           break;
         case 't':
-          msgtype = atoi(optarg);
-          if (msgtype <= 0)
+          mtype = atoi(optarg);
+          if (mtype <= 0)
             {
               usage(argv[0], "-t option must be greater than 0\n");
             }
@@ -112,6 +119,16 @@ main(int argc, char *argv[])
       usage(argv[0], "must use either -s or -r option\n");
     }
 
+  if (optind < argc)
+    {
+      size_t size = 0;
+      for (int i = optind; i < argc; i++)
+        {
+          snprintf((char*)&mtext[0] + size, M_SIZE - size, "%s", argv[i]);
+          size += strnlen(argv[i], M_SIZE);
+        }
+    }
+
   qid = msgget(msgkey, IPC_CREAT | 0666);
   if (qid == -1)
     {
@@ -121,11 +138,11 @@ main(int argc, char *argv[])
 
   if (mode == 'r')
     {
-      get_msg(qid, msgtype);
+      get_msg(qid, mtype);
     }
   else
     {
-      send_msg(qid, msgtype);
+      send_msg(qid, mtype, mtext);
     }
 
   exit(EXIT_SUCCESS);
