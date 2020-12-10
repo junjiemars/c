@@ -87,6 +87,7 @@ if [ "basic" = "$_TEST_" ]; then
   test_do --has-regexp   || exit 1
   test_do --has-unicode  || exit 1
   test_do --has-x86      || exit 1
+  test_do --has-os       || exit 1
 fi
 
 # eof

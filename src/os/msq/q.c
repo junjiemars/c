@@ -35,8 +35,8 @@ usage(char *prog_name, char *errmsg)
   fprintf(stderr, "Options are:\n");
   fprintf(stderr, "-s        send message using msgsnd()\n");
   fprintf(stderr, "-r        read message using msgrcv()\n");
-  fprintf(stderr, "-t        message type (default is 's')\n");
-  fprintf(stderr, "-k        message queue key (default is 1234)\n");
+  fprintf(stderr, "-t        message type (default is %i)\n", M_TYPE);
+  fprintf(stderr, "-k        message queue key (default is 0x%08x)\n", M_KEY);
   exit(EXIT_FAILURE);
 }
 
@@ -89,10 +89,13 @@ main(int argc, char *argv[])
   int mtype = M_TYPE;
   char mtext[M_SIZE];
 
-  while ((opt = getopt(argc, argv, "srt:k:")) != -1)
+  while ((opt = getopt(argc, argv, "hsrt:k:")) != -1)
     {
       switch (opt)
         {
+        case 'h':
+          usage(argv[0], NULL);
+          break;
         case 's':
           mode = 's';
           break;
@@ -121,11 +124,10 @@ main(int argc, char *argv[])
 
   if (optind < argc)
     {
-      size_t size = 0;
+      int n = 0;
       for (int i = optind; i < argc; i++)
         {
-          snprintf((char*)&mtext[0] + size, M_SIZE - size, "%s", argv[i]);
-          size += strnlen(argv[i], M_SIZE);
+          n = snprintf((char*)&mtext[0] + n, M_SIZE - n, "%s", argv[i]);
         }
     }
 

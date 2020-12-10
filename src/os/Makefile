@@ -19,8 +19,11 @@ ifeq ($(NM_SYSTEM), Linux)
 CFLAGS += -D_GNU_SOURCE
 os_msq: $(os_msq_binout)
 os_msq_test: os_msq
-	$(os_msq_binout) -s abc 123 defghijklmn
+	$(os_msq_binout) -s abcd ABCDEFGHIJKLMN
 	$(os_msq_binout) -r
+	$(os_msq_binout) -s abcd
+	$(os_msq_binout) -r -t 2
+	$(os_msq_binout) -r -t 1
 else
 os_msq: 
 os_msq_test: os_msq
