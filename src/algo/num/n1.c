@@ -1,5 +1,9 @@
 #include <_algo_.h>
 
+#if MSVC
+#  pragma warning(disable : 4996)
+#endif
+
 int
 max_sub(int n, int m, int *seq, int seqi, int acc)
 {
