@@ -20,6 +20,7 @@ algo: _algo_																		\
 			algo_is_unsigned_integer									\
 			algo_is_unsigned_type											\
       algo_merge																\
+			algo_num																	\
 			algo_reverse															\
 			algo_search																\
 			algo_sizeof																\
@@ -36,6 +37,7 @@ algo_test: _algo_test														\
 					 algo_is_unsigned_integer_test				\
 					 algo_is_unsigned_type_test						\
            algo_merge_test											\
+					 algo_num_test												\
 					 algo_reverse_test										\
 					 algo_search_test											\
 					 algo_sizeof_test											\
@@ -183,6 +185,19 @@ $(algo_merge_binout): $(algo_root)_algo_.c			\
                       $(algo_root)merge/m1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+# num
+algo_num_int_binout := $(bin_path)$(algo_prefix)_int$(bin_ext)
+
+algo_num: $(algo_num_int_binout)
+algo_num_test: algo_num
+	$(algo_num_int_binout) 2835 1
+	$(algo_num_int_binout) 2835 2
+	$(algo_num_int_binout) 2835 3
+	$(algo_num_int_binout) 2835 4
+
+$(algo_num_int_binout): $(algo_root)_algo_.c		\
+                        $(algo_root)num/n1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # reverse
 algo_reverse_string_binout := $(bin_path)$(algo_prefix)_reverse_string$(bin_ext)
