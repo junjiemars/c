@@ -22,12 +22,12 @@ jobs:
       - name: Build and Test
         run: |
           ./test.sh
-          tar -cvzf c-linux-`uname -m`.tgz out/
+          tar -cvzf c-linux-$(uname -m).tgz out/
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: c-linux-`uname -m`.tgz
-          path: c-linux-`uname -m`.tgz
+          name: c-linux-$(uname -m).tgz
+          path: c-linux-$(uname -m).tgz
 
   MacOS:
     runs-on: macos-latest
@@ -42,12 +42,12 @@ jobs:
       - name: Build and Test
         run: |
           ./test.sh
-          tar -cvzf c-macos-`uname -m`.tgz out/
+          tar -cvzf c-macos-$(uname -m).tgz out/
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: c-macos-`uname -m`.tgz
-          path: c-macos-`uname -m`.tgz
+          name: c-macos-$(uname -m).tgz
+          path: c-macos-$(uname -m).tgz
 
   Windows:
     runs-on: windows-latest
@@ -70,11 +70,11 @@ jobs:
     - name: Build and Test
       run: |
         CC=cl ./test.sh
-        tar -cvzf c-winnt-`uname -m`.tgz out/
+        tar -cvzf c-winnt-$(uname -m).tgz out/
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v1
       with:
-        name: c-winnt-`uname -m`.tgz
-        path: c-winnt-`uname -m`.tgz
+        name: c-winnt-$(uname -m).tgz
+        path: c-winnt-$(uname -m).tgz
 
 # EOF
