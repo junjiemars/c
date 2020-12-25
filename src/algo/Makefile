@@ -19,6 +19,7 @@ algo: _algo_																		\
 			algo_hash																	\
 			algo_is_unsigned_integer									\
 			algo_is_unsigned_type											\
+      algo_levenshtein													\
       algo_merge																\
 			algo_num																	\
 			algo_reverse															\
@@ -36,6 +37,7 @@ algo_test: _algo_test														\
 					 algo_hash_test												\
 					 algo_is_unsigned_integer_test				\
 					 algo_is_unsigned_type_test						\
+           algo_levenshtein_test								\
            algo_merge_test											\
 					 algo_num_test												\
 					 algo_reverse_test										\
@@ -173,6 +175,16 @@ $(algo_is_utype_binout): $(algo_is_utype_cppout)
 
 $(algo_is_utype_cppout): $(algo_root)is_unsigned_type/is_utype.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+# levenshtein
+algo_levenshtein_binout := $(bin_path)$(algo_prefix)_levenshtein$(bin_ext)
+
+algo_levenshtein: $(algo_levenshtein_binout)
+algo_levenshtein_test: algo_levenshtein
+	$(algo_levenshtein_binout) "GUMBO" "GAMBOL"
+
+$(algo_levenshtein_binout): $(algo_root)levenshtein/ld.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # merge
 algo_merge_binout := $(bin_path)$(algo_prefix)_merge$(bin_ext)
