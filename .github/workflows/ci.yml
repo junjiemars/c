@@ -30,46 +30,58 @@ jobs:
           name: c-linux.tgz
           path: c-linux.tgz
 
-  # MacOS:
-  #   runs-on: macos-latest
-  #   strategy:
-  #     matrix:
-  #       include:
-  #         - CC: "clang"
+  MacOS:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        include:
+          - CC: "clang"
 
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
-  #     - name: Build and Test
-  #       run: |
-  #         ./test.sh
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Build and Test
+        run: |
+          _CLEAN_="" ./test.sh
+          tar cvzf c-macos.tgz out/
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: c-macos.tgz
+          path: c-macos.tgz
 
-  # Windows:
-  #   runs-on: windows-latest
-  #   strategy:
-  #     matrix:
-  #       include:
-  #         - CC: "cl"
+  Windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - CC: "cl"
 
-  #   defaults:
-  #     run:
-  #       shell: msys2 {0}
+    defaults:
+      run:
+        shell: msys2 {0}
 
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #     with:
-  #       fetch-depth: 0 # checkout history and tags
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # checkout history and tags
 
-  #   - name: Install Dependencies
-  #     uses: msys2/setup-msys2@v2
-  #     with:
-  #       update: true
-  #       install: git make mingw-w64-x86_64-gcc mingw-w64-x86_64
+    - name: Install Dependencies
+      uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        install: git make mingw-w64-x86_64-gcc mingw-w64-x86_64
 
-  #   - name: Build and Test
-  #     run: |
-  #       CC=cl ./test.sh
+    - name: Build and Test
+      run: |
+          CC=cl _CLEAN_="" ./test.sh
+          tar cvzf c-winnt.tgz out/
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: c-winnt.tgz
+          path: c-winnt.tgz
 
 
 # EOF
