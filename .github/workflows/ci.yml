@@ -15,7 +15,6 @@ jobs:
       matrix:
         include:
           - CC: "gcc"
-
     steps:
       - uses: actions/checkout@v2
         with:
@@ -36,7 +35,6 @@ jobs:
       matrix:
         include:
           - CC: "clang"
-
     steps:
       - uses: actions/checkout@v2
         with:
@@ -57,31 +55,26 @@ jobs:
       matrix:
         include:
           - CC: "cl"
-
     defaults:
       run:
         shell: msys2 {0}
-
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0 # checkout history and tags
-
     - name: Install Dependencies
       uses: msys2/setup-msys2@v2
       with:
         update: true
         install: git make mingw-w64-x86_64-gcc mingw-w64-x86_64
-
     - name: Build and Test
       run: |
         CC=cl ./test.sh
         tar cvzf c-winnt.tgz out/
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: c-winnt.tgz
-          path: c-winnt.tgz
-
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: c-winnt.tgz
+        path: c-winnt.tgz
 
 # EOF
