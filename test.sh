@@ -2,6 +2,7 @@
 
 _ROOT_DIR_="`cd -- $(dirname -- $0) && pwd`"
 _TEST_="${_TEST_:-basic}"
+_CLEAN_="${_CLEAN_:-clean}"
 _OS_NAME_="`uname -s 2>/dev/null`"
 _WIN_ENV_=
 _WIN_ENV_MSVC_=
@@ -63,9 +64,9 @@ fi
 test_do() {
   local retval=0
   if [ -z "$_WIN_ENV_" ]; then
-    ${_ROOT_DIR_%/}/configure "$@" && make clean test
+    ${_ROOT_DIR_%/}/configure "$@" && make $_CLEAN_ test
   else
-    ${_WIN_ENV_MSVC_} "$_WIN_ENV_" "./configure $@" "make clean test"
+    ${_WIN_ENV_MSVC_} "$_WIN_ENV_" "./configure $@" "make $_CLEAN_ test"
   fi
   retval=$?
   if [ 0 -ne $retval ]; then

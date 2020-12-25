@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0
       - name: Build and Test
         run: |
-          ./test.sh
+          _CLEAN_="" ./test.sh
           tar cvzf c-linux.tgz out/
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
