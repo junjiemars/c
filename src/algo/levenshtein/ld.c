@@ -3,27 +3,15 @@
 #define Mij(M, i, j, n) ((M) + (i) + ((j) * ((n)+1)))
 
 int min(int a, int b, int c);
-int ld1(const char *s, const char *t);
+typedef void (*dump_fn)(int *M, const char *s, const char *t, int n, int m);
 
+int ld1(const char *s, const char *t, dump_fn dump);
+void dumpMij(int *M, const char *s, const char *t, int n, int m);
 void test_ld1(const char *s, const char *t);
 
-int
-min(int a, int b, int c)
-{
-  int m = a;
-  if (b < m)
-    {
-      m = b;
-    }
-  if (c < m)
-    {
-      m = c;
-    }
-  return m;
-}
 
 int
-ld1(const char *s, const char *t)
+ld1(const char *s, const char *t, dump_fn dump)
 {
   int n, m;
   int si, tj;
@@ -31,8 +19,8 @@ ld1(const char *s, const char *t)
   int *d;
   int above, left, diag, x;
 
-  n = strlen(s);
-  m = strlen(t);
+  n = (int)strlen(s);
+  m = (int)strlen(t);
 
   if (n == 0)
     {
@@ -82,16 +70,67 @@ ld1(const char *s, const char *t)
     }
 
   x = *Mij(d, n, m, n);
+  if (dump)
+    {
+      dump(d, s, t, n, m);
+    }
   free(d);
   
   return x;
+}
+
+int
+min(int a, int b, int c)
+{
+  int m = a;
+  if (b < m)
+    {
+      m = b;
+    }
+  if (c < m)
+    {
+      m = c;
+    }
+  return m;
+}
+
+void
+dumpMij(int *M, const char *s, const char *t, int n, int m)
+{
+  printf("         ");
+  for (int i = 0; i < n; i++) {
+    printf("%4c ", s[i]);
+  }
+  printf("\n");
+  
+  for (int j = 0; j <= m; j++)
+    {
+      if (j == 0)
+        {
+          printf("     ");
+        }
+      if (j == 1)
+        {
+          printf("%4c ", t[j-1]);
+        }
+      if (j > 1)
+        {
+          printf("%4c ", t[j-1]);
+        }
+      
+      for (int i = 0; i <= n; i++)
+        {
+          printf("%04i ", *Mij(M, i, j, n));
+        }
+      printf("\n");
+    }
 }
 
 void
 test_ld1(const char *s, const char *t)
 {
   printf("s=%s, t=%s\n", s, t);
-  printf("ld=%04i\n", ld1(s, t));
+  printf("ld=%04i\n", ld1(s, t, dumpMij));
 }
 
 int
