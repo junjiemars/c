@@ -23,7 +23,7 @@ jobs:
       - name: Build and Test
         run: |
           ./test.sh
-          tar cvzf out/c-linux.tgz out/
+          tar cvzf c-linux.tgz out/
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
         with:
