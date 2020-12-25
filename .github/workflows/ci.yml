@@ -24,12 +24,12 @@ jobs:
           ./test.sh
       - name: Tar Artifact
         run: |
-          tar -cvzf c-linux-${{ $(uname -m) }}.tgz out/
+          tar -cvzf c-linux-${{ $(sh -c 'uname -m') }}.tgz out/
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: c-linux-${{ $(uname -m) }}.tgz
-          path: c-linux-${{ $(uname -m) }}.tgz
+          name: c-linux-${{ $(sh -c 'uname -m') }}.tgz
+          path: c-linux-${{ $(sh -c 'uname -m') }}.tgz
 
   # MacOS:
   #   runs-on: macos-latest
