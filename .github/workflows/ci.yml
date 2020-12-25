@@ -20,18 +20,18 @@ jobs:
         with:
           fetch-depth: 0
       - name: Env
-        run: echo "GITHUB_OS_ARCH=$(uname -m)" >> $GITHUB_ENV
+        run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
       - name: Build and Test
         run: |
           ./test.sh
       - name: Tar Artifact
         run: |
-          tar -cvzf c-linux-${{ env.GITHUB_OS_ARCH }}.tgz out/
+          tar -cvzf c-linux-${{ env._OS_ARCH_ }}.tgz out/
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: c-linux-${{ env.GITHUB_OS_ARCH }}.tgz
-          path: c-linux-${{ env.GITHUB_OS_ARCH }}.tgz
+          name: c-linux-${{ env._OS_ARCH_ }}.tgz
+          path: c-linux-${{ env._OS_ARCH_ }}.tgz
 
   # MacOS:
   #   runs-on: macos-latest
