@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0
       - name: Build and Test
         run: |
-          _CLEAN_="" ./test.sh
+          ./test.sh
           tar cvzf c-linux.tgz out/
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
@@ -43,7 +43,7 @@ jobs:
           fetch-depth: 0
       - name: Build and Test
         run: |
-          _CLEAN_="" ./test.sh
+          ./test.sh
           tar cvzf c-macos.tgz out/
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
@@ -75,7 +75,7 @@ jobs:
 
     - name: Build and Test
       run: |
-          CC=cl _CLEAN_="" ./test.sh
+          CC=cl ./test.sh
           tar cvzf c-winnt.tgz out/
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1

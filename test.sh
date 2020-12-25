@@ -2,7 +2,7 @@
 
 _ROOT_DIR_="`cd -- $(dirname -- $0) && pwd`"
 _TEST_="${_TEST_:-basic}"
-_CLEAN_="${_CLEAN_:-clean}"
+_CLEAN_="${_CLEAN_}"
 _OS_NAME_="`uname -s 2>/dev/null`"
 _WIN_ENV_=
 _WIN_ENV_MSVC_=
