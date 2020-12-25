@@ -23,44 +23,53 @@ jobs:
       - name: Build and Test
         run: |
           ./test.sh
-
-  MacOS:
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        include:
-          - CC: "clang"
-
-    steps:
-      - uses: actions/checkout@v2
+          tar cvzf out/c-linux.tgz out/
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v1
         with:
-          fetch-depth: 0
-      - name: Build and Test
-        run: |
-          ./test.sh
+          name: c-linux.tgz
+          path: out/c-linux.tgz
 
-  Windows:
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        include:
-          - CC: "cl"
+  # MacOS:
+  #   runs-on: macos-latest
+  #   strategy:
+  #     matrix:
+  #       include:
+  #         - CC: "clang"
 
-    defaults:
-      run:
-        shell: msys2 {0}
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Build and Test
+  #       run: |
+  #         ./test.sh
 
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0 # checkout history and tags
+  # Windows:
+  #   runs-on: windows-latest
+  #   strategy:
+  #     matrix:
+  #       include:
+  #         - CC: "cl"
 
-    - name: Install Dependencies
-      uses: msys2/setup-msys2@v2
-      with:
-        update: true
-        install: git make mingw-w64-x86_64-gcc mingw-w64-x86_64
+  #   defaults:
+  #     run:
+  #       shell: msys2 {0}
 
-    - name: Build and Test
-      run: |
-        CC=cl ./test.sh
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #     with:
+  #       fetch-depth: 0 # checkout history and tags
+
+  #   - name: Install Dependencies
+  #     uses: msys2/setup-msys2@v2
+  #     with:
+  #       update: true
+  #       install: git make mingw-w64-x86_64-gcc mingw-w64-x86_64
+
+  #   - name: Build and Test
+  #     run: |
+  #       CC=cl ./test.sh
+
+
+# EOF
