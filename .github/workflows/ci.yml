@@ -26,12 +26,12 @@ jobs:
           ./test.sh
       - name: Tar Artifact
         run: |
-          tar -cvzf c-linux-${{ GITHUB_OS_ARCH }}.tgz out/
+          tar -cvzf c-linux-${{ env.GITHUB_OS_ARCH }}.tgz out/
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: c-linux-${{ GITHUB_OS_ARCH }}.tgz
-          path: c-linux-${{ GITHUB_OS_ARCH }}.tgz
+          name: c-linux-${{ env.GITHUB_OS_ARCH }}.tgz
+          path: c-linux-${{ env.GITHUB_OS_ARCH }}.tgz
 
   # MacOS:
   #   runs-on: macos-latest
