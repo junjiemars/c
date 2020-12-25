@@ -2,7 +2,7 @@
 
 #define Mij(M, i, j, n) ((M) + (i) + ((j) * ((n)+1)))
 
-int min(int a, int b, int c);
+int min_distance(int a, int b, int c);
 typedef void (*dump_fn)(int *M, const char *s, const char *t, int n, int m);
 
 int ld1(const char *s, const char *t, dump_fn dump);
@@ -63,7 +63,7 @@ ld1(const char *s, const char *t, dump_fn dump)
           above = *Mij(d, i, j-1, n) + 1;
           left = *Mij(d, i-1, j, n) + 1;
           diag = *Mij(d, i-1, j-1, n) + cost;
-          x = min(above, left, diag);
+          x = min_distance(above, left, diag);
 
           *Mij(d, i, j, n) = x;
         }
@@ -80,7 +80,7 @@ ld1(const char *s, const char *t, dump_fn dump)
 }
 
 int
-min(int a, int b, int c)
+min_distance(int a, int b, int c)
 {
   int m = a;
   if (b < m)
