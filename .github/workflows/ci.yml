@@ -22,7 +22,7 @@ jobs:
       - name: Build and Test
         run: |
           ./test.sh
-          tar cvzf c-linux.tgz out/
+          tar -cvzf c-linux.tgz out/
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
         with:
@@ -42,7 +42,7 @@ jobs:
       - name: Build and Test
         run: |
           ./test.sh
-          tar cvzf c-macos.tgz out/
+          tar -cvzf c-macos.tgz out/
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
         with:
@@ -70,7 +70,7 @@ jobs:
     - name: Build and Test
       run: |
         CC=cl ./test.sh
-        tar cvzf c-winnt.tgz out/
+        tar -cvzf c-winnt.tgz out/
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v1
       with:
