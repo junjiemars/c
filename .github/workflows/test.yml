@@ -9,54 +9,54 @@ on:
       - master
 
 jobs:
-  Linux:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - CC: "gcc"
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Env
-        run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
-      - name: Build and Test
-        run: |
-          ./test.sh
-      - name: Tar Build Artifact
-        run: |
-          mkdir -p dist
-          tar -cvzf c-linux-${{ env._OS_ARCH_ }}.tgz out/
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: c-linux-${{ env._OS_ARCH_ }}.tgz
-          path: c-linux-${{ env._OS_ARCH_ }}.tgz
+  # Linux:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       include:
+  #         - CC: "gcc"
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Env
+  #       run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
+  #     - name: Build and Test
+  #       run: |
+  #         ./test.sh
+  #     - name: Tar Build Artifact
+  #       run: |
+  #         mkdir -p dist
+  #         tar -cvzf c-linux-${{ env._OS_ARCH_ }}.tgz out/
+  #     - name: Upload Build Artifact
+  #       uses: actions/upload-artifact@v1
+  #       with:
+  #         name: c-linux-${{ env._OS_ARCH_ }}.tgz
+  #         path: c-linux-${{ env._OS_ARCH_ }}.tgz
 
-  MacOS:
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        include:
-          - CC: "clang"
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Env
-        run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
-      - name: Build and Test
-        run: |
-          ./test.sh
-      - name: Tar Build Artifact
-        run: |
-          tar -cvzf c-macos-${{ env._OS_ARCH_ }}.tgz out/
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: c-macos-${{ env._OS_ARCH_ }}.tgz
-          path: c-macos-${{ env._OS_ARCH_ }}.tgz
+  # MacOS:
+  #   runs-on: macos-latest
+  #   strategy:
+  #     matrix:
+  #       include:
+  #         - CC: "clang"
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Env
+  #       run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
+  #     - name: Build and Test
+  #       run: |
+  #         ./test.sh
+  #     - name: Tar Build Artifact
+  #       run: |
+  #         tar -cvzf c-macos-${{ env._OS_ARCH_ }}.tgz out/
+  #     - name: Upload Build Artifact
+  #       uses: actions/upload-artifact@v1
+  #       with:
+  #         name: c-macos-${{ env._OS_ARCH_ }}.tgz
+  #         path: c-macos-${{ env._OS_ARCH_ }}.tgz
 
   Windows:
     runs-on: windows-latest
@@ -81,9 +81,12 @@ jobs:
     - name: Build and Test
       run: |
         CC=cl ./test.sh
+    - name: Release Build
+      run: |
+        CC=cl _RLS_CONFIG_='--with-release=yes --with-optimize=yes' ./test.sh
     - name: Tar Build Artifact
       run: |
-        tar -cvzf c-windows-${{ env._OS_ARCH_ }}.tgz out/
+        tar -Xtarx -cvzf c-windows-${{ env._OS_ARCH_ }}.tgz out/
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v1
       with:
