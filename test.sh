@@ -65,8 +65,8 @@ fi
 test_do() {
   local retval=0
   if [ -z "$_WIN_ENV_" ]; then
-    which gcc
-    gcc --version
+    which $CC
+    $CC --version
     # echo "${_ROOT_DIR_%/}/configure $_RLS_CONFIG_ $@ && make $_RLS_CLEAN_ test"
     ${_ROOT_DIR_%/}/configure "$_RLS_CONFIG_ $@" && make $_RLS_CLEAN_ test
   else
