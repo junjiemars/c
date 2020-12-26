@@ -12,7 +12,6 @@ compress1(char const *ss, int len, char *ds)
 {
   int di = 0;
   int i = 0;
-  int n = 0;
   while (i < len)
     {
       int j = i;
@@ -20,7 +19,7 @@ compress1(char const *ss, int len, char *ds)
         {
           ++i;
         }
-      n = sprintf(&ds[di], "%c%i", ss[j], (i-j)+1);
+      int n = sprintf(&ds[di], "%c%i", ss[j], (i-j)+1);
       if (n < 0)
         {
           perror(NULL);
