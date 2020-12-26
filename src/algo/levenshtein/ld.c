@@ -2,7 +2,7 @@
 
 #define Mij(M, i, j, n) ((M) + (i) + ((j) * ((n)+1)))
 
-int inline min_ld(int a, int b, int c);
+inline int min_ld(int a, int b, int c);
 typedef void (*dump_fn)(int *M, const char *s, const char *t, int n, int m);
 
 int ld1(const char *s, const char *t, dump_fn dump);
