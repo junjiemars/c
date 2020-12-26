@@ -15,6 +15,7 @@ ifeq ($(NM_SYSTEM), Linux)
 endif
 
 algo: _algo_																		\
+      algo_compress															\
 			algo_duff_device													\
 			algo_dynamic_array												\
 			algo_fibonacci														\
@@ -34,6 +35,7 @@ algo: _algo_																		\
 			algo_strscpy
 
 algo_test: _algo_test														\
+           algo_compress_test										\
 					 algo_duff_device_test								\
 					 algo_dynamic_array_test							\
 					 algo_fibonacci_test									\
@@ -63,6 +65,16 @@ _algo_test: _algo_
 $(_algo_binout): $(algo_root)_algo_.c
 	$(CC) $(CFLAGS) $(INC) $(nm_def_opt)_ALGO_TEST_=1 $^ $(bin_out)$@
 
+# compress
+algo_compress_binout := $(bin_path)$(algo_prefix)_compress$(bin_ext)
+
+algo_compress: $(algo_compress_binout)
+algo_compress_test: algo_compress
+	$(algo_compress_binout) abbccc
+	$(algo_compress_binout) 'a122333____^^(((('
+
+$(algo_compress_binout): $(algo_root)compress/c1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # duff device
 algo_duff_device_binout := $(bin_path)$(algo_prefix)_duff_device$(bin_ext)
