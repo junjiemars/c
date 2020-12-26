@@ -76,7 +76,7 @@ jobs:
       with:
         update: true
         install: git make tar mingw-w64-x86_64-gcc mingw-w64-x86_64
-    - name: Env
+    - name: Setup Env
       run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
     - name: Build and Test
       run: |
@@ -86,7 +86,7 @@ jobs:
         CC=cl _RLS_CONFIG_='--with-release=yes --with-optimize=yes' ./test.sh
     - name: Tar Build Artifact
       run: |
-        tar -X./tarx -cvzf c-windows-${{ env._OS_ARCH_ }}.tgz out/
+        tar -X.tar.x -cvzf c-windows-${{ env._OS_ARCH_ }}.tgz out/
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v1
       with:
