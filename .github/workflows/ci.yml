@@ -21,6 +21,10 @@ jobs:
           fetch-depth: 0
       - name: Setup Env
         run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
+      # - name: Install Dependencies
+      #   run: |
+      #     sudo apt update
+      #     sudo apt install build-essential
       - name: Build and Test
         run: |
           CC=gcc ./test.sh
