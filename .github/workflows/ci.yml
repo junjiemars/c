@@ -20,10 +20,10 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup Env
-        run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
-      - name: Build and Test
         env:
           _RLS_CONFIG_: --with-release=yes --with-optimize=yes
+        run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
+      - name: Build and Test
         run: |
           ./test.sh
       - name: Tar Build Artifact
