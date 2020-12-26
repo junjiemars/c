@@ -47,8 +47,10 @@ jobs:
       - name: Setup Env
         run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
       - name: Build and Test
+        env:
+          _RLS_CONFIG_: --with-release=yes --with-optimize=yes
         run: |
-          CC=clang _RLS_CONFIG_='--with-release=yes --with-optimize=yes' ./test.sh
+          ./test.sh
       - name: Tar Build Artifact
         run: |
           tar -X.tar.x -cvzf c-macos-${{ env._OS_ARCH_ }}.tgz out/
@@ -80,7 +82,7 @@ jobs:
   #     run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
   #   - name: Build and Test
   #     run: |
-  #       CC=cl _RLS_CONFIG_='--with-release=yes --with-optimize=yes' ./test.sh
+  #       _RLS_CONFIG_='--with-release=yes --with-optimize=yes' ./test.sh
   #   - name: Tar Build Artifact
   #     run: |
   #       tar -X.tar.x -cvzf c-windows-${{ env._OS_ARCH_ }}.tgz out/
