@@ -12,6 +12,7 @@ compress1(char const *ss, int len, char *ds)
 {
   int di = 0;
   int i = 0;
+  int n = 0;
   while (i < len)
     {
       int j = i;
@@ -19,7 +20,13 @@ compress1(char const *ss, int len, char *ds)
         {
           ++i;
         }
-      di += sprintf(&ds[di], "%c%i", ss[j], (i-j)+1);
+      n = sprintf(&ds[di], "%c%i", ss[j], (i-j)+1);
+      if (n < 0)
+        {
+          perror(NULL);
+          return NULL;
+        }
+      di += n;
       i++;
     }
   return ds;
@@ -31,7 +38,7 @@ test(char const *ss)
   char *ds1;
   int len = (int)strlen(ss);
 
-  ds1 = malloc(sizeof(*ds1) * len);
+  ds1 = malloc(sizeof(*ds1) * len + 1);
   compress1(ss, len, ds1);
 
   printf("compress:\n------------\n");
