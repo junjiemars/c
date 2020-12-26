@@ -23,7 +23,7 @@ jobs:
         run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
       - name: Build and Test
         run: |
-         CC=gcc _RLS_CONFIG_='--with-release=yes --with-optimize=yes' ./test.sh
+         _RLS_CONFIG_='--with-release=yes --with-optimize=yes' ./test.sh
       - name: Tar Build Artifact
         run: |
           mkdir -p dist
@@ -34,60 +34,60 @@ jobs:
           name: c-linux-${{ env._OS_ARCH_ }}.tgz
           path: c-linux-${{ env._OS_ARCH_ }}.tgz
 
-  MacOS:
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        include:
-          - CC: "clang"
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Setup Env
-        run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
-      - name: Build and Test
-        run: |
-          CC=clang _RLS_CONFIG_='--with-release=yes --with-optimize=yes' ./test.sh
-      - name: Tar Build Artifact
-        run: |
-          tar -X.tar.x -cvzf c-macos-${{ env._OS_ARCH_ }}.tgz out/
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: c-macos-${{ env._OS_ARCH_ }}.tgz
-          path: c-macos-${{ env._OS_ARCH_ }}.tgz
+  # MacOS:
+  #   runs-on: macos-latest
+  #   strategy:
+  #     matrix:
+  #       include:
+  #         - CC: "clang"
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Setup Env
+  #       run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
+  #     - name: Build and Test
+  #       run: |
+  #         CC=clang _RLS_CONFIG_='--with-release=yes --with-optimize=yes' ./test.sh
+  #     - name: Tar Build Artifact
+  #       run: |
+  #         tar -X.tar.x -cvzf c-macos-${{ env._OS_ARCH_ }}.tgz out/
+  #     - name: Upload Build Artifact
+  #       uses: actions/upload-artifact@v1
+  #       with:
+  #         name: c-macos-${{ env._OS_ARCH_ }}.tgz
+  #         path: c-macos-${{ env._OS_ARCH_ }}.tgz
 
-  Windows:
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        include:
-          - CC: "cl"
-    defaults:
-      run:
-        shell: msys2 {0}
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0 # checkout history and tags
-    - name: Install Dependencies
-      uses: msys2/setup-msys2@v2
-      with:
-        update: true
-        install: git make tar mingw-w64-x86_64-gcc mingw-w64-x86_64
-    - name: Setup Env
-      run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
-    - name: Build and Test
-      run: |
-        CC=cl _RLS_CONFIG_='--with-release=yes --with-optimize=yes' ./test.sh
-    - name: Tar Build Artifact
-      run: |
-        tar -X.tar.x -cvzf c-windows-${{ env._OS_ARCH_ }}.tgz out/
-    - name: Upload Build Artifact
-      uses: actions/upload-artifact@v1
-      with:
-        name: c-windows-${{ env._OS_ARCH_ }}.tgz
-        path: c-windows-${{ env._OS_ARCH_ }}.tgz
+  # Windows:
+  #   runs-on: windows-latest
+  #   strategy:
+  #     matrix:
+  #       include:
+  #         - CC: "cl"
+  #   defaults:
+  #     run:
+  #       shell: msys2 {0}
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #     with:
+  #       fetch-depth: 0 # checkout history and tags
+  #   - name: Install Dependencies
+  #     uses: msys2/setup-msys2@v2
+  #     with:
+  #       update: true
+  #       install: git make tar mingw-w64-x86_64-gcc mingw-w64-x86_64
+  #   - name: Setup Env
+  #     run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
+  #   - name: Build and Test
+  #     run: |
+  #       CC=cl _RLS_CONFIG_='--with-release=yes --with-optimize=yes' ./test.sh
+  #   - name: Tar Build Artifact
+  #     run: |
+  #       tar -X.tar.x -cvzf c-windows-${{ env._OS_ARCH_ }}.tgz out/
+  #   - name: Upload Build Artifact
+  #     uses: actions/upload-artifact@v1
+  #     with:
+  #       name: c-windows-${{ env._OS_ARCH_ }}.tgz
+  #       path: c-windows-${{ env._OS_ARCH_ }}.tgz
 
 # EOF
