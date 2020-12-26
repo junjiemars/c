@@ -24,10 +24,10 @@ jobs:
       - name: Build and Test
         run: |
           ./test.sh
-      - name: Tar Artifact
+      - name: Tar Build Artifact
         run: |
           tar -cvzf c-linux-${{ env._OS_ARCH_ }}.tgz out/
-      - name: Upload Artifact
+      - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
         with:
           name: c-linux-${{ env._OS_ARCH_ }}.tgz
@@ -78,11 +78,11 @@ jobs:
     - name: Build and Test
       run: |
         CC=cl ./test.sh
-        tar -cvzf c-winnt-${{ env._OS_ARCH_ }}.tgz out/
+        tar -cvzf c-windows-${{ env._OS_ARCH_ }}.tgz out/
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v1
       with:
-        name: c-winnt-${{ env._OS_ARCH_ }}.tgz
-        path: c-winnt-${{ env._OS_ARCH_ }}.tgz
+        name: c-windows-${{ env._OS_ARCH_ }}.tgz
+        path: c-windows-${{ env._OS_ARCH_ }}.tgz
 
 # EOF

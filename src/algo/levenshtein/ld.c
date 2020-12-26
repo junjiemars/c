@@ -1,21 +1,8 @@
 #include <_algo_.h>
 
 #define Mij(M, i, j, n) ((M) + (i) + ((j) * ((n)+1)))
-#define MIN_LD(x, a, b, c)                      \
-do                                              \
-  {                                             \
-    (x) = (a);                                  \
-    if ((b) < (x))                              \
-      {                                         \
-        (x) = (b);                              \
-      }                                         \
-    if ((c) < (x))                              \
-      {                                         \
-        (x) = (c);                              \
-      }                                         \
- } while (0)
 
-
+int inline min_ld(int a, int b, int c);
 typedef void (*dump_fn)(int *M, const char *s, const char *t, int n, int m);
 
 int ld1(const char *s, const char *t, dump_fn dump);
@@ -77,7 +64,7 @@ ld1(const char *s, const char *t, dump_fn dump)
           left = *Mij(d, i-1, j, n) + 1;
           diag = *Mij(d, i-1, j-1, n) + cost;
           
-          MIN_LD(x, above, left, diag);
+          x = min_ld(above, left, diag);
           *Mij(d, i, j, n) = x;
         }
     }
@@ -90,6 +77,21 @@ ld1(const char *s, const char *t, dump_fn dump)
   free(d);
   
   return x;
+}
+
+int
+min_ld(int a, int b, int c)
+{
+  int m = a;
+  if (b < m)
+    {
+      m = b;
+    }
+  if (c < m)
+    {
+      m = c;
+    }
+  return m;
 }
 
 void
