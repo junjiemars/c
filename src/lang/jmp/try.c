@@ -48,7 +48,7 @@ void g(jmp_buf *env) {
 	}
 
 	/* never reached when throw() jmp */
-	fputs("leaving g()...\n", stdout);
+	/* fputs("leaving g()...\n", stdout); */
 }
 
 void throw(jmp_buf *env) {
