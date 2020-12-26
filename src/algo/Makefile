@@ -10,6 +10,9 @@ ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
 	CFLAGS += $(cflags_sanitize)
 endif
 
+ifeq ($(NM_SYSTEM), Linux)
+  LDLIBS += -lm
+endif
 
 algo: _algo_																		\
 			algo_duff_device													\
@@ -223,7 +226,7 @@ algo_prime_test: algo_prime
 	$(algo_prime_binout) 1 64
 
 $(algo_prime_binout): $(algo_root)prime/p1.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(LDLIBS)
 
 # reverse
 algo_reverse_string_binout := $(bin_path)$(algo_prefix)_reverse_string$(bin_ext)

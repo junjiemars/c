@@ -1,6 +1,10 @@
 #include <_algo_.h>
 #include <math.h>
 
+#if (MSVC)
+#  pragma warning(disable : 4996)
+#endif
+
 typedef int (*is_prime_fn)(int n);
 
 int prime1(int n);
@@ -24,7 +28,7 @@ prime1(int n)
 int
 prime2(int n)
 {
-  for (int i = 2, r = sqrt(n); i <= r; i++)
+  for (int i = 2, r = (int)sqrt(n); i <= r; i++)
     {
       if (n % i == 0)
         {
