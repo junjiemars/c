@@ -22,6 +22,7 @@ algo: _algo_																		\
       algo_levenshtein													\
       algo_merge																\
 			algo_num																	\
+      algo_prime																\
 			algo_reverse															\
 			algo_search																\
 			algo_sizeof																\
@@ -40,6 +41,7 @@ algo_test: _algo_test														\
            algo_levenshtein_test								\
            algo_merge_test											\
 					 algo_num_test												\
+           algo_prime														\
 					 algo_reverse_test										\
 					 algo_search_test											\
 					 algo_sizeof_test											\
@@ -104,7 +106,7 @@ algo_gcd_binout := $(bin_path)$(algo_prefix)_gcd$(bin_ext)
 algo_gcd: $(algo_gcd_binout)
 algo_gcd_test: algo_gcd
 	$(algo_gcd_binout) 5 0
-	$(algo_gcd_binout) 206 40
+	$(algo_gcd_binout) 30 45
 
 $(algo_gcd_binout): $(algo_root)gcd/gcd.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -181,6 +183,8 @@ algo_levenshtein_binout := $(bin_path)$(algo_prefix)_levenshtein$(bin_ext)
 
 algo_levenshtein: $(algo_levenshtein_binout)
 algo_levenshtein_test: algo_levenshtein
+	$(algo_levenshtein_binout) "abc" "abc"
+	$(algo_levenshtein_binout) "AB" "ABCDEF"
 	$(algo_levenshtein_binout) "GUMBO" "GAMBOL"
 
 $(algo_levenshtein_binout): $(algo_root)levenshtein/ld.c
@@ -209,6 +213,16 @@ algo_num_test: algo_num
 
 $(algo_num_int_binout): $(algo_root)_algo_.c		\
                         $(algo_root)num/n1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# prime
+algo_prime_binout := $(bin_path)$(algo_prefix)_prime$(bin_ext)
+
+algo_prime: $(algo_prime_binout)
+algo_prime_test: algo_prime
+	$(algo_prime_binout) 1 64
+
+$(algo_prime_binout): $(algo_root)prime/p1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # reverse

@@ -1,12 +1,25 @@
 #include <_algo_.h>
 
 #define Mij(M, i, j, n) ((M) + (i) + ((j) * ((n)+1)))
+#define MIN_LD(x, a, b, c)                      \
+do                                              \
+  {                                             \
+    (x) = (a);                                  \
+    if ((b) < (x))                              \
+      {                                         \
+        (x) = (b);                              \
+      }                                         \
+    if ((c) < (x))                              \
+      {                                         \
+        (x) = (c);                              \
+      }                                         \
+ } while (0)
 
-int min_distance(int a, int b, int c);
+
 typedef void (*dump_fn)(int *M, const char *s, const char *t, int n, int m);
 
 int ld1(const char *s, const char *t, dump_fn dump);
-void dumpMij(int *M, const char *s, const char *t, int n, int m);
+void dump_Mij(int *M, const char *s, const char *t, int n, int m);
 void test_ld1(const char *s, const char *t);
 
 
@@ -63,8 +76,8 @@ ld1(const char *s, const char *t, dump_fn dump)
           above = *Mij(d, i, j-1, n) + 1;
           left = *Mij(d, i-1, j, n) + 1;
           diag = *Mij(d, i-1, j-1, n) + cost;
-          x = min_distance(above, left, diag);
-
+          
+          MIN_LD(x, above, left, diag);
           *Mij(d, i, j, n) = x;
         }
     }
@@ -79,23 +92,8 @@ ld1(const char *s, const char *t, dump_fn dump)
   return x;
 }
 
-int
-min_distance(int a, int b, int c)
-{
-  int m = a;
-  if (b < m)
-    {
-      m = b;
-    }
-  if (c < m)
-    {
-      m = c;
-    }
-  return m;
-}
-
 void
-dumpMij(int *M, const char *s, const char *t, int n, int m)
+dump_Mij(int *M, const char *s, const char *t, int n, int m)
 {
   printf("         ");
   for (int i = 0; i < n; i++) {
@@ -130,7 +128,7 @@ void
 test_ld1(const char *s, const char *t)
 {
   printf("s=%s, t=%s\n", s, t);
-  printf("ld=%04i\n", ld1(s, t, dumpMij));
+  printf("ld=%04i\n", ld1(s, t, dump_Mij));
 }
 
 int
