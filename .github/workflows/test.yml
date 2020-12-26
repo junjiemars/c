@@ -48,7 +48,9 @@ jobs:
       - name: Build and Test
         run: |
           ./test.sh
-          tar -cvzf c-macos-${{ env._OS_ARCH_ }}.tgz out/
+      - name: Tar Build Artifact
+        run: |
+          tar -cvzf c-linux-${{ env._OS_ARCH_ }}.tgz out/
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
         with:
@@ -78,7 +80,9 @@ jobs:
     - name: Build and Test
       run: |
         CC=cl ./test.sh
-        tar -cvzf c-windows-${{ env._OS_ARCH_ }}.tgz out/
+      - name: Tar Build Artifact
+        run: |
+          tar -cvzf c-linux-${{ env._OS_ARCH_ }}.tgz out/
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v1
       with:

@@ -1,5 +1,9 @@
 #include <_algo_.h>
 
+#if (MSVC)
+#  pragma warning(disable : 4996)
+#endif
+
 char *compress1(char const *ss, int len, char *ds);
 void test(char const *ss);
 
@@ -29,10 +33,11 @@ test(char const *ss)
 
   ds1 = malloc(sizeof(*ds1) * len);
   compress1(ss, len, ds1);
-  free(ds1);
 
   printf("compress:\n------------\n");
   printf("src=%s\ndst=%s\n", ss, ds1);
+
+  free(ds1);
 }
 
 int
