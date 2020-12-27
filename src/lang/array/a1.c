@@ -8,6 +8,7 @@ char *s1[] =
 
 char s2[][3][4] =
 {
+  { "a", "b", "c" },
 	{ "aa", "bb", "cc" },
 	{ "aaa", "bbb", "ccc" },
 };
@@ -39,7 +40,6 @@ f1(char **args)
   printf("\n\n");
 }
 
-/* illife vector */
 void
 f2(char *args[])
 {
@@ -56,29 +56,40 @@ f2(char *args[])
 }
 
 void 
-g1(char (*args)[3][4])
+g1(char (*args)[3][4], int n)
 {
 	char x = args[1][2][3];
 	_unused_(x);
 
-  /* printf("(*args)[3][4]\n------------\n"); */
-  /* while (*args) */
-  /*   { */
-  /*     char ss[3][4] = (char (*)[4])(*args); */
-  /*     for (int i = 0; i < 3; i++) */
-  /*       { */
-  /*         printf("%s,", ss[i]); */
-  /*       } */
-  /*     args++; */
-  /*   } */
-  /* printf("\n"); */
+  printf("(*args)[3][4]\n------------\n");
+  for (int i = 0; i < n; i++)
+    {
+      for (int j = 0; j < 3; j++)
+        {
+          printf("%4s,", args[i][j]);
+        }
+      printf("\n");
+    }
+  printf("\n");
 }
 
 void
-g2(char args[][3][4])
+g2(char args[][3][4], int n)
 {
 	char x = args[1][2][3];
 	_unused_(x);
+
+  printf("args[][3][4]\n------------\n");
+  for (int i = 0; i < n; i++)
+    {
+      for (int j = 0; j < 3; j++)
+        {
+          char *ss = (char*)&args[0] + i*3*4 + j*4;
+          printf("%4s, ", ss);
+        }
+      printf("\n");
+    }
+  printf("\n");
 }
 
 void
@@ -103,8 +114,8 @@ main(int argc, char **argv)
 
 	f1(s1);
 	f2(s1);
-	g1(s2);
-	g2(s2);
+	g1(s2, 3);
+	g2(s2, 3);
   h1(i1);
 	h2(i2);
 	
