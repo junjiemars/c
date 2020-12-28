@@ -31,6 +31,7 @@ jobs:
           _TAR_X_: .github/workflows/.tar.X
         run: |
           tar -X${{ env._TAR_X_ }} -cvzf c-linux-${{ env._OS_ARCH_ }}.tgz out/
+          git tag -d ${{ github.ref }}/linux
       - name: Create Release Ref
         id: create_release
         uses: actions/create-release@v1
@@ -51,8 +52,7 @@ jobs:
           asset_path: c-linux-${{ env._OS_ARCH_ }}.tgz
           asset_name: c-linux-${{ env._OS_ARCH_ }}.tgz
           asset_content_type: application/zip
-        run: |
-          git tag -d ${{ github.ref }}/linux
+          
 
   # MacOS:
   #   runs-on: macos-latest
