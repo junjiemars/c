@@ -27,12 +27,10 @@ jobs:
           _RLS_CONFIG_: --with-release=yes --with-optimize=yes
         run: |
           ./test.sh
-      - name: Tar Build Artifact
+      - name: Zip Build Artifact
         env:
-          _TAR_X_: .github/workflows/.tar.X
           _ZIP_X_: -x "out/tmp" -x "out/bin/*.o" -x "out/lib/*.o"
         run: |
-          # tar -X${{ env._TAR_X_ }} -cvzf c-linux-${{ env._OS_ARCH_ }}.tgz out/
           zip -r c-linux-${{ env._OS_ARCH_ }}.zip out/ ${{ env._ZIP_X_ }}
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
@@ -41,70 +39,70 @@ jobs:
           path: c-linux-${{ env._OS_ARCH_ }}.zip
 
 
-  # MacOS:
-  #   runs-on: macos-latest
-  #   strategy:
-  #     matrix:
-  #       include:
-  #         - CC: "clang"
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
-  #     - name: Setup Env
-  #       run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
-  #     - name: Build and Test
-  #       env:
-  #         _RLS_CONFIG_: --with-release=yes --with-optimize=yes
-  #       run: |
-  #         ./test.sh
-  #     - name: Tar Build Artifact
-  #       env:
-  #         _TAR_X_: .github/workflows/.tar.X
-  #       run: |
-  #         tar -X${{ env._TAR_X_ }} -cvzf c-macos-${{ env._OS_ARCH_ }}.tgz out/
-  #     - name: Upload Build Artifact
-  #       uses: actions/upload-artifact@v1
-  #       with:
-  #         name: c-macos-${{ env._OS_ARCH_ }}.tgz
-  #         path: c-macos-${{ env._OS_ARCH_ }}.tgz
+  MacOS:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        include:
+          - CC: "clang"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Env
+        run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
+      - name: Build and Test
+        env:
+          _RLS_CONFIG_: --with-release=yes --with-optimize=yes
+        run: |
+          ./test.sh
+      - name: Zip Build Artifact
+        env:
+          _ZIP_X_: -x "out/tmp" -x "out/bin/*.dSYM" -x "out/bin/*.o" -x "out/lib/*.dSYM" -x "out/lib/*.o"
+        run: |
+          zip -r c-macos-${{ env._OS_ARCH_ }}.zip out/ ${{ env._ZIP_X_ }}
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: c-macos-${{ env._OS_ARCH_ }}.zip
+          path: c-macos-${{ env._OS_ARCH_ }}.zip
 
 
-  # Windows:
-  #   runs-on: windows-latest
-  #   strategy:
-  #     matrix:
-  #       include:
-  #         - CC: "cl"
-  #   defaults:
-  #     run:
-  #       shell: msys2 {0}
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #     with:
-  #       fetch-depth: 0 # checkout history and tags
-  #   - name: Install Dependencies
-  #     uses: msys2/setup-msys2@v2
-  #     with:
-  #       update: true
-  #       install: git make tar mingw-w64-x86_64-gcc mingw-w64-x86_64
-  #   - name: Setup Env
-  #     run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
-  #   - name: Build and Test
-  #     env:
-  #       _RLS_CONFIG_: --with-release=yes --with-optimize=yes
-  #     run: |
-  #        ./test.sh
-  #   - name: Tar Build Artifact
-  #     env:
-  #       _TAR_X_: .github/workflows/.tar.X
-  #     run: |
-  #       tar -X${{ env._TAR_X_ }} -cvzf c-windows-${{ env._OS_ARCH_ }}.tgz out/
-  #   - name: Upload Build Artifact
-  #     uses: actions/upload-artifact@v1
-  #     with:
-  #       name: c-windows-${{ env._OS_ARCH_ }}.tgz
-  #       path: c-windows-${{ env._OS_ARCH_ }}.tgz
+  Windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        include:
+          - CC: "cl"
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # checkout history and tags
+    - name: Install Dependencies
+      uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        install: git make tar mingw-w64-x86_64-gcc mingw-w64-x86_64
+    - name: Setup Env
+      run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
+    - name: Build and Test
+      env:
+        _RLS_CONFIG_: --with-release=yes --with-optimize=yes
+      run: |
+         ./test.sh
+    - name: Zip Build Artifact
+      env:
+        _ZIP_X_: -x "out/tmp" -x "out/bin/*.ilk" -x "out/bin/*.pdb" -x "out/bin/*.o" -x "out/lib/*.ilk" -x "out/lib/*.pdb" -x "out/lib/*.o"
+      run: |
+        zip -r c-windows-${{ env._OS_ARCH_ }}.zip out/ ${{ env._ZIP_X_ }}
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: c-windows-${{ env._OS_ARCH_ }}.zip
+        path: c-windows-${{ env._OS_ARCH_ }}.zip
 
 
 # EOF
