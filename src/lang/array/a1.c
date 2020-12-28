@@ -31,7 +31,7 @@ f1(char **args)
 	char x = args[1][2];
   _unused_(x);
 
-  printf("**args\n------------\n");
+  printf("char **args\n------------\n");
   while (*args)
     {
       printf("%s,", *args);
@@ -61,7 +61,7 @@ g1(char (*args)[3][4], int n)
 	char x = args[1][2][3];
 	_unused_(x);
 
-  printf("(*args)[3][4]\n------------\n");
+  printf("char (*args)[3][4]\n------------\n");
   for (int i = 0; i < n; i++)
     {
       for (int j = 0; j < 3; j++)
@@ -79,7 +79,7 @@ g2(char args[][3][4], int n)
 	char x = args[1][2][3];
 	_unused_(x);
 
-  printf("args[][3][4]\n------------\n");
+  printf("char args[][3][4]\n------------\n");
   for (int i = 0; i < n; i++)
     {
       for (int j = 0; j < 3; j++)
@@ -93,10 +93,21 @@ g2(char args[][3][4], int n)
 }
 
 void
-h1(int (*i)[4])
+h1(int (*i)[4], int n)
 {
 	int x = i[1][2];
 	_unused_(x);
+
+  printf("int (*i)[4]\n------------\n");
+  for (int j = 0; j < n; j++)
+    {
+      for (int k = 0; k < 4; k++)
+        {
+          printf("0x%02x, ", i[j][k]);
+        }
+      printf("\n");
+    }
+  printf("\n");
 }
 
 void
@@ -116,7 +127,7 @@ main(int argc, char **argv)
 	f2(s1);
 	g1(s2, 3);
 	g2(s2, 3);
-  h1(i1);
+  h1(i1, sizeof(i1)/sizeof(i1[0]));
 	h2(i2);
 	
 	return 0;
