@@ -30,7 +30,7 @@ jobs:
       - name: Tar Build Artifact
         run: |
           mkdir -p dist
-          tar -X${{ _TAR_X_ }} -cvzf c-linux-${{ env._OS_ARCH_ }}.tgz out/
+          tar -X${{ env._TAR_X_ }} -cvzf c-linux-${{ env._OS_ARCH_ }}.tgz out/
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
         with:
