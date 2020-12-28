@@ -33,7 +33,7 @@ jobs:
           _ZIP_X_: -x out/tmp -x out/bin/*.o -x out/lib/*.o
         run: |
           # tar -X${{ env._TAR_X_ }} -cvzf c-linux-${{ env._OS_ARCH_ }}.tgz out/
-          zip -r ${{ _ZIP_X_ }} c-linux-${{ env._OS_ARCH_ }}.zip out/
+          zip -r ${{ env._ZIP_X_ }} c-linux-${{ env._OS_ARCH_ }}.zip out/
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
         with:
