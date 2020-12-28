@@ -30,10 +30,10 @@ jobs:
       - name: Tar Build Artifact
         env:
           _TAR_X_: .github/workflows/.tar.X
-          _ZIP_X_: -x out/tmp -x out/bin/*.o -x out/lib/*.o
+          _ZIP_X_: -x "out/tmp" -x "out/bin/*.o" -x "out/lib/*.o"
         run: |
           # tar -X${{ env._TAR_X_ }} -cvzf c-linux-${{ env._OS_ARCH_ }}.tgz out/
-          zip -r c-linux-${{ env._OS_ARCH_ }}.zip ${{ env._ZIP_X_ }} out/
+          zip -r c-linux-${{ env._OS_ARCH_ }}.zip out/ ${{ env._ZIP_X_ }}
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
         with:
