@@ -49,7 +49,7 @@ f2(char *args[])
 	char x = args[1][2];
 	_unused_(x);
 
-  printf("*args[]\n------------\n");
+  printf("char *args[]\n------------\n");
   while (*args)
     {
       printf("%s,", *args);
