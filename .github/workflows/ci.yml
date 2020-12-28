@@ -51,6 +51,9 @@ jobs:
           asset_path: c-linux-${{ env._OS_ARCH_ }}.tgz
           asset_name: c-linux-${{ env._OS_ARCH_ }}.tgz
           asset_content_type: application/zip
+      - name: Post Release
+        run: |
+          git tag -d release/linux
 
   # MacOS:
   #   runs-on: macos-latest
