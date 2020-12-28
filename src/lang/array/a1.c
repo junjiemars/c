@@ -1,6 +1,9 @@
 #include "_lang_.h"
 #include <stdio.h>
 
+/* base, row-index, col-index, col-n, width */
+#define Aij(b, r, c, n, w) ((char*)(b) + (r)*(n)*(w) + (c)*(w))
+
 char *s1[] =
 {
 	"aaa", "bbb", "ccc", 0,
@@ -103,7 +106,7 @@ h1(int (*i)[4], int n)
     {
       for (int k = 0; k < 4; k++)
         {
-          printf("0x%02x, ", i[j][k]);
+          printf("0x%02x, ", *(int*)Aij(i, j, k, 4, sizeof(int)));
         }
       printf("\n");
     }
