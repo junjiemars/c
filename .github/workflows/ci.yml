@@ -37,8 +37,8 @@ jobs:
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: c-linux-${{ env._OS_ARCH_ }}.tgz
-          path: c-linux-${{ env._OS_ARCH_ }}.tgz
+          name: c-linux-${{ env._OS_ARCH_ }}.zip
+          path: c-linux-${{ env._OS_ARCH_ }}.zip
 
 
   # MacOS:
