@@ -31,11 +31,26 @@ jobs:
           _TAR_X_: .github/workflows/.tar.X
         run: |
           tar -X${{ env._TAR_X_ }} -cvzf c-linux-${{ env._OS_ARCH_ }}.tgz out/
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v1
+      - name: Create Release Ref
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: c-linux-${{ env._OS_ARCH_ }}.tgz
-          path: c-linux-${{ env._OS_ARCH_ }}.tgz
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: c-linux-${{ env._OS_ARCH_ }}.tgz
+          asset_name: c-linux-${{ env._OS_ARCH_ }}.tgz
+          asset_content_type: application/zip
 
   MacOS:
     runs-on: macos-latest
@@ -59,7 +74,7 @@ jobs:
           _TAR_X_: .github/workflows/.tar.X
         run: |
           tar -X${{ env._TAR_X_ }} -cvzf c-macos-${{ env._OS_ARCH_ }}.tgz out/
-      - name: Create Release
+      - name: Create Release Ref
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -77,13 +92,8 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: c-macos-${{ env._OS_ARCH_ }}.tgz
-          asset_name: ./my-artifact.zip
+          asset_name: c-macos-${{ env._OS_ARCH_ }}.tgz
           asset_content_type: application/zip
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: c-macos-${{ env._OS_ARCH_ }}.tgz
-          path: c-macos-${{ env._OS_ARCH_ }}.tgz
 
   Windows:
     runs-on: windows-latest
@@ -115,10 +125,25 @@ jobs:
         _TAR_X_: .github/workflows/.tar.X
       run: |
         tar -X${{ env._TAR_X_ }} -cvzf c-windows-${{ env._OS_ARCH_ }}.tgz out/
-    - name: Upload Build Artifact
-      uses: actions/upload-artifact@v1
-      with:
-        name: c-windows-${{ env._OS_ARCH_ }}.tgz
-        path: c-windows-${{ env._OS_ARCH_ }}.tgz
+      - name: Create Release Ref
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: c-windows-${{ env._OS_ARCH_ }}.tgz
+          asset_name: c-windows-${{ env._OS_ARCH_ }}.tgz
+          asset_content_type: application/zip
 
 # EOF
