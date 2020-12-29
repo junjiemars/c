@@ -42,17 +42,17 @@ tile(char *const table, int row_size, int col_size) {
 
 int
 validate(const char *a, const char *b) {
-  int i = 0;
+  int r = 0;
   for (int i = 0; i < ROW_SIZE; i++) {
     for (int j = 0; j < COL_SIZE; j++) {
       if (a[i*j+j] != b[i*j+j]) {
-        i = 1;
+        r = 1;
         goto clean_exit;
       }
     }
   }
  clean_exit:
-  return i;
+  return r;
 }
 
 void
