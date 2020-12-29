@@ -16,7 +16,7 @@ cpu_prefix := cpu
 
 INC += -I$(cpu_root)
 
-_VECTORIZE_ ?= 0
+_VECTORIZE_ ?= 1
 
 # info
 cpu_info_binout := $(bin_path)$(cpu_prefix)_info$(bin_ext)
