@@ -52,7 +52,7 @@ vectorize(int *const dst, int *const src, int row_size) {
 int
 validate(int *const a, int *const b, int row_size) {
   int i = 0;
-  for (int i = 0; i < row_size; i++) {
+  for (; i < row_size; i++) {
     if (a[i] != b[i]) {
       goto clean_exit;
     }
