@@ -1,6 +1,12 @@
 #include "_cpu_.h"
 #include <stdio.h>
-#include <unistd.h>
+
+#if defined(WINNT)
+#  include <windows.h>
+#  define sleep(x) Sleep((x) * 1000)
+#else
+#  include <unistd.h>
+#endif
 
 int
 main(int argc, char **argv) {
