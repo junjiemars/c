@@ -65,11 +65,11 @@ fi
 test_do() {
   local retval=0
   if [ -z "$_WIN_ENV_" ]; then
-    echo "${_ROOT_DIR_%/}/configure $_RLS_CONFIG_ $@ && make test"
+    echo "${_ROOT_DIR_%/}/configure $_RLS_CONFIG_ $@"
     ${_ROOT_DIR_%/}/configure $_RLS_CONFIG_ $@
     make test
   else
-    echo "${_WIN_ENV_MSVC_} $_WIN_ENV_ ./configure $_RLS_CONFIG_ $@ make test"
+    echo "${_WIN_ENV_MSVC_} $_WIN_ENV_ ./configure $_RLS_CONFIG_ $@"
     ${_WIN_ENV_MSVC_} "$_WIN_ENV_" "./configure $_RLS_CONFIG_ $@" "make test"
   fi
   retval=$?
@@ -84,16 +84,16 @@ test_do() {
 # basic test
 if [ "basic" = "$_TEST_" ]; then
   test_do --has-hi       || exit 1
-  # test_do --has-algo     || exit 1
-  # test_do --has-cpu      || exit 1
-  # test_do --has-ds       || exit 1
-  # test_do --has-lang     || exit 1
-  # test_do --has-library  || exit 1
-  # test_do --has-memory   || exit 1
-  # test_do --has-os       || exit 1
-  # test_do --has-regexp   || exit 1
-  # test_do --has-unicode  || exit 1
-  # test_do --has-x86      || exit 1
+  test_do --has-algo     || exit 1
+  test_do --has-cpu      || exit 1
+  test_do --has-ds       || exit 1
+  test_do --has-lang     || exit 1
+  test_do --has-library  || exit 1
+  test_do --has-memory   || exit 1
+  test_do --has-os       || exit 1
+  test_do --has-regexp   || exit 1
+  test_do --has-unicode  || exit 1
+  test_do --has-x86      || exit 1
 fi
 
 # eof
