@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #if defined(WINNT)
+#  pragma warning(disable : 4996)
 #  include <windows.h>
 #  define sleep(x) Sleep((x) * 1000)
 #else
