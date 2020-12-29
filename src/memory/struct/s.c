@@ -23,7 +23,7 @@ basic_layout() {
 	((fraction_s*)&f.denominator)->numerator = f.numerator;
 	/* f.numerator == f.denominator) => true */
 
-#if defined (RISKY) && (RISKY) > 0
+#if defined (_RISKY_) && (_RISKY_) > 0
 	int gap[sizeof(fraction_s)/sizeof(int)];
 
 
@@ -48,6 +48,7 @@ complex_layout() {
 
   friends[2].units = 0x11223344;
 
+#if _RISKY_
 #ifdef CLANG
 	memcpy((char*)&friends[0].units,
          (const char*)&friends[2].units,
@@ -57,8 +58,6 @@ complex_layout() {
          (const char*)&friends[2].units);
 #endif
 
-#if defined (RISKY) && (RISKY) > 0
-
   student_s gap;
   _unused_(gap);
 
@@ -67,7 +66,7 @@ complex_layout() {
 	*(char***)&(((fraction_s*)&friends)[3].denominator)
     = &friends[0].name+1;
 
-#endif /* end of RISKY */
+#endif
 }
 
 int 
@@ -78,6 +77,6 @@ main(int argc, char *argv[]) {
 	printf("sizeof(struct fraction_s)=%zu\n", sizeof(fraction_s));
 	printf("sizeof(struct student_s)=%zu\n", sizeof(student_s));
 
-	basic_layout();
+	/* basic_layout(); */
 	complex_layout();
 }

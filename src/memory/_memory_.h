@@ -24,14 +24,14 @@
 #  pragma warning(disable : 4214) /* bit field types other than int */
 #endif
 
-#ifdef RISKY
+#ifdef _RISKY_
 #  ifdef MSVC
 #    pragma warning(disable : 4090) /* different const qualifiers */
 #    pragma warning(disable : 4244)
 #    pragma warning(disable : 4204) /* or Compiler Option: -Ze */
 #    pragma warning(disable : 4789) /* will be overrun */
 #  endif /* end of MSVC */
-#endif /* end of RISKY */
+#endif /* end of _RISKY_ */
 
 
 #endif /* end of _MEMORY_H_ */

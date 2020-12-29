@@ -15,7 +15,7 @@ char_short() {
 
 	s = 0xff + 4;
 	printf("short: %" PRIi16 "\t\t =  " BIT_FMT_16 "\n", s, BIT_16(s));
-#if defined (RISKY) && (RISKY) > 0
+#if defined (_RISKY_) && (_RISKY_) > 0
 	c = s;
   printf("short -> char: %" PRIi8 " \t =  " BIT_FMT_8 "\n", c, BIT_8(c));
 #endif
@@ -28,7 +28,7 @@ char_short() {
 
 	s = 0xff01;
   printf("short: %" PRIi16 "\t\t =  " BIT_FMT_16 "\n", s, BIT_16((uint16_t)s));
-#if defined (RISKY) && (RISKY) > 0
+#if defined (_RISKY_) && (_RISKY_) > 0
 	c = s;
 	printf("short -> char: %" PRIi8 "\t =  " BIT_FMT_8 "\n", c, BIT_8((uint8_t)c));
 #endif
@@ -45,7 +45,7 @@ int_float() {
 	printf("int -> *(float*)&int: %f\n\t\t\t =  " BIT_FMT_32 "\n", 
 		*(float*)&i, BIT_32(*(uint32_t*)&i));
 
-#if defined (RISKY) && (RISKY) > 0
+#if defined (_RISKY_) && (_RISKY_) > 0
 	float f = i;
 	printf("int -> float: %f\n\t\t\t =  " BIT_FMT_32 "\n", f, BIT_32(*(uint32_t*)&f));
 #endif
@@ -62,7 +62,7 @@ float_short() {
 	printf("float -> *(short*)&float: %" PRIi16 "\n\t\t\t =  " BIT_FMT_16 "\n", 
 		*(short*)&f, BIT_16(*(uint16_t*)&f));
 
-#if defined (RISKY) && (RISKY) > 0
+#if defined (_RISKY_) && (_RISKY_) > 0
 	int16_t s = f;
   printf("float -> short: %" PRIi16 "\n \t\t\t =  " BIT_FMT_16 "\n", 
 		s, BIT_16(*(uint16_t*)&s));

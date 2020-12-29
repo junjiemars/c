@@ -39,9 +39,9 @@ swap_test() {
   swap(&i32, &i16, sizeof(int16_t));
   printf("0x%x \t 0x%x\n", i32, i16);
 
-#ifdef RISKY 
-  // 1) use $(nm_def_opt)RISKY=1 in makefile;
-  // 2) or, use CFLAGS=-DRISKY=1 in make command lien;
+#ifdef _RISKY_ 
+  // 1) use $(nm_def_opt)_RISKY_=1 in makefile;
+  // 2) or, use CFLAGS=-D_RISKY_=1 in make command lien;
   printf("swap(0x%x, 0x%x, %zu) \t\t => ", i32, i16, sizeof(int32_t));
   swap(&i32, &i16, sizeof(int32_t));
   printf("0x%x \t 0x%x | 0x%x\n", i32, i16, _gap_);

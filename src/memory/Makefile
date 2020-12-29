@@ -28,8 +28,12 @@ memory_prefix := memory
 
 INC += -I$(memory_root) -I$(root)posix
 
-ifdef RISKY
-CFLAGS += -DRISKY=$(RISKY)
+ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
+	CFLAGS += $(cflags_sanitize)
+endif
+
+ifdef _RISKY_
+CFLAGS += -D_RISKY_=$(_RISKY_)
 #NO_STACK_ALIGN = 1
 NO_STRUCT_ALIGN = 1
 NO_STACK_PROTECTOR = 1
