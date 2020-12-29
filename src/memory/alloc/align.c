@@ -24,7 +24,7 @@ main(int argc, const char *argv[]) {
 	p = aligned_alloc(1024, 4096);
 
 #elif NM_HAVE_POSIX_MEMALIGN_FN
-	posix_memalign((void **)&p, 1024, 4096);
+	(void)posix_memalign((void **)&p, 1024, 4096);
 
 #endif
 
