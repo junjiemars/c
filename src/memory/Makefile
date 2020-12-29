@@ -1,28 +1,28 @@
 # ./configure --has-memory --with-std=c99
 
 memory: memory_alloc														\
-				bitfield																\
+				memory_bitfield													\
 				memory_bit															\
 				memory_byte															\
 				memory_copy															\
-				endian																	\
-				generic																	\
-				layout																	\
-				rotate																	\
-				memory_shift													  \
-				struct
+				memory_endian														\
+				memory_generic													\
+				memory_layout														\
+				memory_rotate														\
+				memory_shift														\
+				memory_struct
 
 memory_test: 	memory_alloc_test									\
-							bitfield_test											\
+							memory_bitfield_test							\
 				      memory_bit_test										\
 				      memory_byte_test									\
 				      memory_copy_test									\
-				      endian_test												\
-				      generic_test											\
-				      layout_test												\
-				      rotate_test												\
-				      memory_shift_test								  \
-				      struct_test
+				      memory_endian_test								\
+				      memory_generic_test								\
+				      memory_layout_test								\
+				      memory_rotate_test								\
+				      memory_shift_test									\
+				      memory_struct_test
 
 memory_prefix := memory
 
@@ -110,7 +110,6 @@ memory_alloc: $(memory_alloc_a_binout)					\
               $(memory_alloc_c_binout)					\
               $(memory_alloc_re_binout)					\
 			        $(memory_align_binout)
-
 memory_alloc_test: memory_alloc_a_test					\
 					         memory_alloc_m_test					\
 						       memory_alloc_c_test					\
@@ -143,14 +142,14 @@ $(memory_alloc_re_binout): $(memory_root)alloc/re.c
 $(memory_align_binout): $(memory_root)alloc/align.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-#bitfield
-bitfield_binout := $(bin_path)$(memory_prefix)_bitfield$(bin_ext)
+# bitfield
+memory_bitfield_binout := $(bin_path)$(memory_prefix)_bitfield$(bin_ext)
 
-bitfield: $(bitfield_binout)
-bitfield_test: bitfield
-	$(bitfield_binout)
+memory_bitfield: $(memory_bitfield_binout)
+memory_bitfield_test: memory_bitfield
+	$(memory_bitfield_binout)
 
-$(bitfield_binout): $(memory_root)bitfield/bitfield.c
+$(memory_bitfield_binout): $(memory_root)bitfield/bitfield.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -191,24 +190,24 @@ $(mem_copy_binout): $(memory_root)copy/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # endian
-endian_binout := $(bin_path)$(memory_prefix)_endian$(bin_ext)
+memory_endian_binout := $(bin_path)$(memory_prefix)_endian$(bin_ext)
 
-endian: $(endian_binout)
-endian_test: endian
-	$(endian_binout)
+memory_endian: $(memory_endian_binout)
+memory_endian_test: memory_endian
+	$(memory_endian_binout)
 
-$(endian_binout): $(memory_root)endian/e.c
+$(memory_endian_binout): $(memory_root)endian/e.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # generic
-generic_binout := $(bin_path)$(memory_prefix)_generic$(bin_ext)
+memory_generic_binout := $(bin_path)$(memory_prefix)_generic$(bin_ext)
 
-generic: $(generic_binout)
-generic_test: generic
-	$(generic_binout)
+memory_generic: $(memory_generic_binout)
+memory_generic_test: memory_generic
+	$(memory_generic_binout)
 
-$(generic_binout): $(memory_root)generic/g.c
+$(memory_generic_binout): $(memory_root)generic/g.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # layout
@@ -219,29 +218,29 @@ ldflags_layout := -Wl,-stack_size -Wl,0x10000
 endif
 endif
 
-layout_size_binout := $(bin_path)$(memory_prefix)_layout_size$(bin_ext)
+memory_layout_size_binout := $(bin_path)$(memory_prefix)_layout_size$(bin_ext)
 
-layout: $(layout_size_binout)
-layout_test: layout
-	$(layout_size_binout)
+memory_layout: $(memory_layout_size_binout)
+memory_layout_test: memory_layout
+	$(memory_layout_size_binout)
 
-$(layout_size_binout): $(memory_root)layout/size.c
+$(memory_layout_size_binout): $(memory_root)layout/size.c
 	$(CC) $(CFLAGS) $(INC) $^ $(ldflags_layout) $(bin_out)$@
 
 # rotate
-rotate_binout := $(bin_path)$(memory_prefix)_rotate$(bin_ext)
+memory_rotate_binout := $(bin_path)$(memory_prefix)_rotate$(bin_ext)
 
-rotate: $(rotate_binout)
-rotate_test: rotate
-	$(rotate_binout)
-rotate_valgrind_test: rotate
-	valgrind --leak-check=full --track-origins=yes $(rotate_binout)
+memory_rotate: $(memory_rotate_binout)
+memory_rotate_test: memory_rotate
+	$(memory_rotate_binout)
+memory_rotate_valgrind_test: memory_rotate
+	valgrind --leak-check=full --track-origins=yes $(memory_rotate_binout)
 
-$(rotate_binout): $(memory_root)rotate/rotate.h	\
-				  $(memory_root)rotate/rotate.c	\
-				  $(memory_root)rotate/r.c
-	$(CC) $(CFLAGS) $(INC) $(bin_out)$@			\
-		$(memory_root)rotate/rotate.c			\
+$(memory_rotate_binout): $(memory_root)rotate/rotate.h	\
+			         				   $(memory_root)rotate/rotate.c	\
+                         $(memory_root)rotate/r.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@						\
+		$(memory_root)rotate/rotate.c								\
 		$(memory_root)rotate/r.c
 
 
@@ -257,11 +256,11 @@ $(memory_shift_binout): $(memory_root)shift/shift.c
 
 
 # struct
-struct_binout := $(bin_path)$(memory_prefix)_struct$(bin_ext)
+memory_struct_binout := $(bin_path)$(memory_prefix)_struct$(bin_ext)
 
-struct: $(struct_binout)
-struct_test: struct
-	$(struct_binout)
+memory_struct: $(memory_struct_binout)
+memory_struct_test: memory_struct
+	$(memory_struct_binout)
 
-$(struct_binout): $(memory_root)struct/s.c
+$(memory_struct_binout): $(memory_root)struct/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

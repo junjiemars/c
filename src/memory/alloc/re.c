@@ -45,10 +45,14 @@ as_free(void) {
 	char **p = &s;
 	printf("realloc: allocated = %zu\n", malloc_size(s));
 	printf("realloc: +realloc = 0x%x\n", **p);
+
+#if _RISKY_
 	char *s1 = realloc(s, 0);
 	printf("realloc: -realloc = 0x%x\n", **p);
 	printf("realloc: freed? = %i\n", 0 == s1);
-	/* free(s1); */
+#else
+	free(*p);
+#endif  /* end of _RISKY_ */
 }
 
 void
