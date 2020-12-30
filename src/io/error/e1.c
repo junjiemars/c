@@ -4,28 +4,37 @@
 #include <errno.h>
 
 int
-main(int argc, char **argv) {
-	_unused_(argc);
-	_unused_(argv);
+main(int argc, char **argv)
+{
+  if (argc < 2)
+    {
+      fprintf(stderr, "where the where.c find locate?\n");
+      return 0;
+    }
 
-	char *path = "e1.c";
+	char *path = argv[1];
 	FILE *file = fopen(path, "r");
-	if (0 == file) {
-		int errnum = errno;
-		printf("!panic: %s\n", strerror(errnum));
-		perror("!panic");
-		perror(0);
-	} else {
-		int ch;
-		while (EOF != (ch = fgetc(file))) {
-			fputc(ch, stdout);
-		}
-		if (ferror(file)) {
-			perror(0);
-			clearerr(file);
-		}
-		fclose(file);
-	}
-	
+	if (0 == file)
+    {
+      int errnum = errno;
+      fprintf(stdout, "!panic1: %s\n", strerror(errnum));
+      perror("!panic2");
+    }
+  else
+    {
+      fprintf(stdout, "%s found\n", path);
+      int ch;
+      while (EOF != (ch = fgetc(file)))
+        {
+          fputc(ch, stdout);
+        }
+      if (ferror(file))
+        {
+          perror(NULL);
+          clearerr(file);
+        }
+      fclose(file);
+    }
+
 	return 0;
 }
