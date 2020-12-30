@@ -21,6 +21,7 @@ void out(const char *path, const sassy_s *ss, size_t nss);
 
 void test_in(const char *path);
 void test_out(const char *path);
+void test_out1(const char *path);
 
 void
 in(const char *path, sassy_s *ss, size_t *nss, size_t max)
@@ -66,7 +67,7 @@ in(const char *path, sassy_s *ss, size_t *nss, size_t max)
 void
 out(const char *path, const sassy_s *ss, const size_t nss)
 {
-  FILE *out = fopen(path, "wb");
+  FILE *out = fopen(path, "ab");
   if (!out)
     {
       perror(PANIC);
@@ -96,22 +97,38 @@ test_out(const char *path)
   sassy_s ss[] =
     {
       {
-        .name = {'A','n','n','e'},
+        .name = {"Anne"},
         .age = 0x11,
         .gender = 'F',
         .allowance = 11.22,
       },
       {
-        .name = {'B','o','u','r','n'},
+        .name = {"Bourn"},
         .age = 0x22,
         .gender = 'M',
         .allowance = 22.33,
       },
       {
-        .name = {'C','a','t','o','n'},
+        .name = {"Caton"},
         .age = 0x33,
         .gender = 'M',
         .allowance = 33.44,
+      },
+    };
+
+  out(path, ss, sizeof(ss)/sizeof(*ss));
+}
+
+void
+test_out1(const char *path)
+{
+  sassy_s ss[] =
+    {
+      {
+        .name = { "Daisy" },
+        .age = 0x11,
+        .gender = 'F',
+        .allowance = 11.22,
       },
     };
 
@@ -162,6 +179,8 @@ main(int argc, char **argv)
     }
 
   test_out(argv[1]);
+  test_out(argv[1]);
+  test_out1(argv[1]);
   test_in(argv[1]);
 
   return 0;
