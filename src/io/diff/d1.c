@@ -2,19 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifdef MSVC
-#  include <windows.h>
-#  include <tchar.h>
-#  define PATH_MAX MAX_PATH
-#else
-#  ifdef LINUX
-#    include <linux/limits.h>
-#  else
-#    include <limits.h>
-#  endif
-#endif
-
-#define MAX_LINE PATH_MAX
+#define MAX_PATH 256
+#define MAX_LINE 512
 
 void diff(const char *src, const char *dst);
 
@@ -107,9 +96,9 @@ main(int argc, char **argv)
       return 1;
     }
 
-  char src[PATH_MAX], dst[PATH_MAX];
-  strncpy(src, argv[1], PATH_MAX);
-  strncpy(dst, argv[2], PATH_MAX);
+  char src[MAX_PATH], dst[MAX_PATH];
+  strncpy(src, argv[1], MAX_PATH);
+  strncpy(dst, argv[2], MAX_PATH);
   
   diff(src, dst);
 
