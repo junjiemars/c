@@ -21,7 +21,6 @@ void out(const char *path, const sassy_s *ss, size_t nss);
 
 void test_in(const char *path);
 void test_out(const char *path);
-void test_out1(const char *path);
 
 void
 in(const char *path, sassy_s *ss, size_t *nss, size_t max)
@@ -120,22 +119,6 @@ test_out(const char *path)
 }
 
 void
-test_out1(const char *path)
-{
-  sassy_s ss[] =
-    {
-      {
-        .name = { "Daisy" },
-        .age = 0x11,
-        .gender = 'F',
-        .allowance = 11.22,
-      },
-    };
-
-  out(path, ss, sizeof(ss)/sizeof(*ss));
-}
-
-void
 test_in(const char *path)
 {
   sassy_s *ss;
@@ -159,7 +142,7 @@ test_in(const char *path)
               "age:%d\n"
               "gender:%c\n"
               "allowance:%lf\n",
-              i,
+              i+1,
               ss[i].name,
               ss[i].age,
               ss[i].gender,
@@ -179,8 +162,6 @@ main(int argc, char **argv)
     }
 
   test_out(argv[1]);
-  test_out(argv[1]);
-  test_out1(argv[1]);
   test_in(argv[1]);
 
   return 0;
