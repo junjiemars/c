@@ -58,7 +58,7 @@ jobs:
           ./test.sh
       - name: Zip Build Artifact
         env:
-          _ZIP_X_: -x "out/tmp/**" -x "*.dSYM/**" -x "*.o"
+          _ZIP_X_: -x "out/tmp" -x "*.dSYM" -x "*.o"
         run: |
           zip -r c-macos-${{ env._OS_ARCH_ }}.zip out/ ${{ env._ZIP_X_ }}
       - name: Upload Build Artifact
