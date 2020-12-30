@@ -4,81 +4,165 @@
 #include <string.h>
 #include <errno.h>
 
-typedef struct sassy_s {
-  char name[16];
+#define NAME_SIZE 16
+#define MAX 16
+#define PANIC "!panic"
+
+typedef struct sassy_s
+{
+  char name[NAME_SIZE];
   int age;
   char gender;
   double allowance;
 } sassy_s;
 
-void
-in(const char *path, sassy_s *ss, const size_t len) {
-  FILE *i = fopen(path, "rb");
-  if (!i) {
-    perror("!panic");
-    return;
-  }
+void in(const char *path, sassy_s *ss, size_t *nss, size_t max);
+void out(const char *path, const sassy_s *ss, size_t nss);
 
-  size_t n = fread(ss, sizeof(sassy_s), len, i);
-  if (n < len) {
-    fprintf(stderr, "!panic, read %zu/%zu, caused by %s\n",
-            n, len, strerror(errno));
-  }
-  
-  fclose(i);
+void test_in(const char *path);
+void test_out(const char *path);
+
+void
+in(const char *path, sassy_s *ss, size_t *nss, size_t max)
+{
+  FILE *in = fopen(path, "rb");
+  if (!in)
+    {
+      perror(PANIC);
+      return;
+    }
+
+  size_t n = 0;
+  *nss = 0;
+
+  while (*nss < max)
+    {
+      n = fread(ss, sizeof(sassy_s), 1, in);
+
+      if (ferror(in))
+        {
+          perror(PANIC);
+          goto clean_exit;
+        }
+
+      if (n != 1)
+        {
+          if (feof(in))
+            {
+              goto clean_exit;
+            }
+          fprintf(stderr, "!panic, read %zu/%i failed\n", n, 1);
+          goto clean_exit;
+        }
+
+      ss++;
+      *nss += 1;
+    }
+
+ clean_exit:
+  fclose(in);
 }
 
 void
-out(const char *path, const sassy_s *ss, const size_t len) {
-  FILE *o = fopen(path, "wb");
-  if (!o) {
-    perror("!panic");
-    return;
-  }
+out(const char *path, const sassy_s *ss, const size_t nss)
+{
+  FILE *out = fopen(path, "wb");
+  if (!out)
+    {
+      perror(PANIC);
+      return;
+    }
 
-  size_t n = fwrite(ss, sizeof(sassy_s), len, o);
-  if (n < len) {
-    fprintf(stderr, "!panic, write %zu/%zu, caused by %s\n",
-            n, len, strerror(errno));
-  }
+  size_t n = fwrite(ss, sizeof(sassy_s), nss, out);
 
-  fclose(o);
+  if (ferror(out))
+    {
+      perror(path);
+      goto clean_exit;
+    }
+
+  if (n < nss)
+    {
+      fprintf(stderr, "!panic, write %zu/%zu failed\n", n, nss);
+    }
+
+ clean_exit:
+  fclose(out);
+}
+
+void
+test_out(const char *path)
+{
+  sassy_s ss[] =
+    {
+      {
+        .name = {'A','n','n','e'},
+        .age = 0x11,
+        .gender = 'F',
+        .allowance = 11.22,
+      },
+      {
+        .name = {'B','o','u','r','n'},
+        .age = 0x22,
+        .gender = 'M',
+        .allowance = 22.33,
+      },
+      {
+        .name = {'C','a','t','o','n'},
+        .age = 0x33,
+        .gender = 'M',
+        .allowance = 33.44,
+      },
+    };
+
+  out(path, ss, sizeof(ss)/sizeof(*ss));
+}
+
+void
+test_in(const char *path)
+{
+  sassy_s *ss;
+  size_t nss = 0;
+
+  ss = malloc(sizeof(sassy_s) * MAX);
+  if (!ss)
+    {
+      perror(PANIC);
+      return;
+    }
+
+  in(path, ss, &nss, MAX);
+
+  for (size_t i = 0; i < nss; i++)
+    {
+      fprintf(stdout,
+              "No.%zu\n"
+              "----\n"
+              "name:%s\n"
+              "age:%d\n"
+              "gender:%c\n"
+              "allowance:%lf\n",
+              i,
+              ss[i].name,
+              ss[i].age,
+              ss[i].gender,
+              ss[i].allowance);
+    }
+
+  free(ss);
 }
 
 int
-main(int argc, char **argv) {
-  _unused_(argc);
-  _unused_(argv);
+main(int argc, char **argv)
+{
+  if (argc < 2)
+    {
+      fprintf(stderr, "where the sassy file located?\n");
+      return 1;
+    }
 
-  if (argc < 2) {
-    fprintf(stderr, "where the sassy file located?\n");
-    return 0;
-  }
+  test_out(argv[1]);
+  test_in(argv[1]);
 
-  size_t n = 2;
-  sassy_s *ss = malloc(sizeof(sassy_s)*2*n);
-  strncpy(ss[0].name, "Anne", 16-1);
-  ss[0].age = 0x11;
-  ss[0].gender = 'F';
-  ss[0].allowance = 11.22;
-  strncpy(ss[1].name, "Bourn", 16-1);
-  ss[1].age = 0x22;
-  ss[1].gender = 'M';
-  ss[1].allowance = 22.33;
-  
-  out(argv[1], ss, n);
-  in(argv[1], &ss[n], n);
-
-  for (size_t i = n; i < 2*n; i++) {
-    fprintf(stdout,
-            "No.%zu\n----\nname:%s\nage:%d\ngender:%c\nallowance:%lf\n",
-            i,
-            ss[i].name,
-            ss[i].age,
-            ss[i].gender,
-            ss[i].allowance);
-  }
-  
-  free(ss);
   return 0;
 }

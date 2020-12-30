@@ -116,9 +116,9 @@ main(int argc, char **argv)
   char filename[PATH_MAX];
   rect_s rect;
   memset(&rect, 0, sizeof(rect));
-  char *pathname = dirname(argv[0]);
+  char *pathname = dirname(dirname(argv[0]));
   strcpy(filename, pathname);
-  strcat(filename, "/.rect_s");
+  strcat(filename, "/tmp/rect_s.bin");
 
   if (argc < 4)
     {
