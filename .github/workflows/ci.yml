@@ -29,7 +29,7 @@ jobs:
           ./test.sh
       - name: Zip Build Artifact
         env:
-          _ZIP_X_: -x "out/tmp/**" -x "*.o"
+          _ZIP_X_: -x "out/tmp" -x "*.o"
         run: |
           zip -r c-linux-${{ env._OS_ARCH_ }}.zip out/ ${{ env._ZIP_X_ }}
       - name: Upload Build Artifact
@@ -95,7 +95,7 @@ jobs:
          ./test.sh
     - name: Zip Build Artifact
       env:
-        _ZIP_X_: -x "out/tmp/**" -x "*.ilk" -x "*.pdb" -x "*.o"
+        _ZIP_X_: -x "out/tmp" -x "*.ilk" -x "*.pdb" -x "*.o"
       run: |
         zip -r c-windows-${{ env._OS_ARCH_ }}.zip out/ ${{ env._ZIP_X_ }}
     - name: Upload Build Artifact

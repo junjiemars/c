@@ -161,7 +161,7 @@ io_line_test: io_line_basic_test								\
               io_line_gets_test
 io_line_basic_test: $(io_line_basic_binout)
 	$(io_line_basic_binout) $(CURDIR)/src/io/line/zigzag
-io_line_gets_binout: $(io_line_gets_binout)
+io_line_gets_test: $(io_line_gets_binout)
 	$(io_line_gets_binout) $(CURDIR)/src/io/line/zigzag
 
 $(io_line_basic_binout): $(io_root)line/l.c
