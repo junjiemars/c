@@ -7,7 +7,7 @@ main(int argc, char **argv)
   if (argc < 2)
     {
       fprintf(stderr, "where the free txt located?\n");
-      return 0;
+      return 1;
     }
 
   int n = 0;
@@ -35,8 +35,7 @@ main(int argc, char **argv)
 
   if (!feof(in))
     {
-      fprintf(stderr, "!panic, meet a no-number.");
-      goto clean_exit;
+      fprintf(stderr, "!panic, meet a non-number.");
     }
   else
     {
