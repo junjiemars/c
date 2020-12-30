@@ -16,6 +16,7 @@ endif
 
 io: io_basic																		\
     io_binary																		\
+    io_diff																			\
 		io_error																		\
 		io_fileno																		\
     io_flight																		\
@@ -28,10 +29,11 @@ io: io_basic																		\
     io_seek																			\
 		io_variadic																	\
 		io_wc																				\
-		io_wchar																		\
+		io_wchar
 
 io_test: io_basic_test													\
          io_binary_test													\
+         io_diff_test														\
          io_error_test													\
          io_fileno_test													\
          io_flight_test													\
@@ -44,7 +46,7 @@ io_test: io_basic_test													\
          io_seek_test														\
          io_variadic_test												\
          io_wc_test															\
-         io_wchar_test													\
+         io_wchar_test
 
 
 # basic I/O
@@ -80,6 +82,16 @@ $(io_binary_basic_binout): $(io_root)binary/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_binary_array_binout): $(io_root)binary/b1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# diff
+io_diff_binout := $(bin_path)$(io_prefix)_diff$(bin_ext)
+
+io_diff: $(io_diff_binout)
+io_diff_test: io_diff
+	$(io_diff_binout) $(io_root)diff/lhs.txt $(io_root)diff/rhs.txt
+
+$(io_diff_binout): $(io_root)diff/d1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # error
@@ -284,4 +296,3 @@ io_wc_valgrind_test: io_wc
 
 $(io_wc_binout): $(io_root)wc/wc.c $(getopt_c)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
