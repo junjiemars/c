@@ -2,7 +2,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#define NUM_LEN 7
+#define NUM_LEN 8
+#define NAME_LEN 32
+
 #define OUT_FMT                                 \
   "> No.%d found\n"                             \
   "------------\n"                              \
@@ -16,7 +18,7 @@
 typedef struct record_s
 {
   char num[NUM_LEN];
-  char name[25];
+  char name[NAME_LEN];
   int stock;
   double price;
 } record_s;
@@ -185,7 +187,7 @@ find_record(const char *binpath,
               if (1 == fread(&ss, sizeof(record_s), 1, bin))
                 {
                   fprintf(stdout, OUT_FMT,
-                          is.idx, ss.num, ss.name, ss.stock, ss.price);
+                          is.idx+1, ss.num, ss.name, ss.stock, ss.price);
                   goto clean_exit;
                 }
             }
