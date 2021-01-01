@@ -21,7 +21,8 @@
   "  num: %s\n"                                 \
   " name: %s\n"                                 \
   "stock: %d\n"                                 \
-  "price: %lf\n"
+  "price: %lf\n"                                \
+  "------------\n"
 
 #define PANIC "!panic"
 
@@ -72,11 +73,9 @@ int merge_bin(const record_s *rs, long *offset, FILE *stream);
 int merge_idx(const record_s *rs, long offset, FILE *stream);
 
 /*
- * Seek record by OFFSET in STREAM.
+ * Seek RS by OFFSET in STREAM.
  */
 int seek_record(long offset, record_s *rs, FILE *stream);
-
-void test_seek(const char *path, int n);
 
 void test_find(const char *binpath,
                const char *idxpath,
@@ -142,8 +141,7 @@ read_records(const char *inpath, size_t max,
           goto clean_exit;
         }
 
-      ++n;
-      if (n >= max)
+      if (++n >= max)
         {
           fprintf(stdout, PANIC
                   ", exceed the max read limit: %zu(%zu bytes)\n",
@@ -245,7 +243,7 @@ merge_bin(const record_s *rs, long *offset, FILE *inout)
           perror(PANIC);
           goto clean_exit;
         }
-      
+
       *offset = ftell(inout);
       if (ferror(inout))
         {
@@ -424,16 +422,6 @@ main(int argc, char **argv)
   test_find(bin, idx, "GSF555");
   test_find(bin, idx, "AAPL");
   test_find(bin, idx, "GOOG");
-  
-  /* test_seek(bin, 1); */
-  /* test_seek(bin, 3); */
-
-  /* test_seek(bin, 7); */
-
-  /* test_find(bin, idx, "PKL070"); */
-  /* test_find(bin, idx, "DKP080"); */
-
-  /* test_find(bin, idx, "AAPL"); */
 
   return 0;
 }
