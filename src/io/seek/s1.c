@@ -73,9 +73,9 @@ int merge_bin(const record_s *rs, long *offset, FILE *stream);
 int merge_idx(const record_s *rs, long offset, FILE *stream);
 
 /*
- * Seek RS by OFFSET in STREAM.
+ * Retrieve RS by OFFSET in STREAM.
  */
-int seek_record(long offset, record_s *rs, FILE *stream);
+int retrieve_record(long offset, record_s *rs, FILE *stream);
 
 void test_find(const char *binpath,
                const char *idxpath,
@@ -321,7 +321,7 @@ merge_idx(const record_s *rs, long offset, FILE *inout)
 }
 
 int
-seek_record(long offset, record_s *rs, FILE *in)
+retrieve_record(long offset, record_s *rs, FILE *in)
 {
   fseek(in, offset, SEEK_SET);
   if (ferror(in))
@@ -374,7 +374,7 @@ test_find(const char *binpath,
     }
   else
     {
-      if (seek_record(is.idx*sizeof(record_s), &rs, bin))
+      if (retrieve_record(is.idx*sizeof(record_s), &rs, bin))
         {
           fprintf(stdout, "! No.%zu no found in %s\n------------\n",
                   offset/sizeof(record_s), binpath);
