@@ -248,7 +248,7 @@ io_seek_test: io_seek
                           $(CURDIR)/$(tmp_path)records.txt	\
                           $(CURDIR)/$(tmp_path)records.bin	\
                           $(CURDIR)/$(tmp_path)records.idx
-	cp $(CURDIR)/$(io_root)seek/ins.txt $(CURDIR)/$(tmp_path)/records.txt
+	cp $(CURDIR)/$(io_root)seek/merge.txt $(CURDIR)/$(tmp_path)/records.txt
 	$(io_seek_basic_binout) 64																\
                           $(CURDIR)/$(tmp_path)records.txt	\
                           $(CURDIR)/$(tmp_path)records.bin	\

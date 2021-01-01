@@ -3,6 +3,15 @@
 #include <string.h>
 #include <stdlib.h>
 
+#if (MSVC)
+#  include <io.h>
+#  define F_OK 0
+#  define access _access
+#else
+#  include <unistd.h>
+#endif
+
+
 #define NUM_LEN 8
 #define NAME_LEN 16
 
@@ -30,46 +39,83 @@ typedef struct index_s
   int idx;
 } index_s;
 
-typedef int (*out_fn)(const record_s *record, FILE *out);
+typedef int (*outbin_fn)(const record_s *record, long *offset, FILE *out);
+typedef int (*outidx_fn)(const record_s *record, long offset, FILE *out);
+
+void create_empty_file(const char *path);
 
 /* read record from plain text file */
 void read_records(const char *inpath, size_t max,
-                  const char *binpath, out_fn outbin,
-                  const char *idxpath, out_fn outidx);
+                  const char *binpath, outbin_fn outbin_fn,
+                  const char *idxpath, outidx_fn outidx_fn);
 
-/* generate bin and idx files */
-void out_records(const char *inpath,
-                 const char *binpath,
-                 const char *idxpath);
+/*
+ * Return 0 if find RS in IN success, otherwise 1.
+ * If success the OFFSET is the position from the start of IN.
+ */
+int find_record(const record_s *rs, long *offset, FILE *in);
 
+/*
+ * Return 0 if find IS in IN success, otherwise 1.
+ * If success the OFFSET is the postion from the start of IN.
+ */
+int find_index(index_s *const is, long *offset, FILE *in);
 
-/* seek record by idx */
-void seek_record(const char *path, int n);
+/*
+ * Return 0 if merge success, otherwise 1.
+ */
+int merge_bin(const record_s *rs, long *offset, FILE *stream);
 
-/* find record by num filed */
-void find_record(const char *binpath,
-                 const char *idxpath,
-                 const char *num);
+/*
+ * Return 0 if merge success, otherwise 1.
+ */
+int merge_idx(const record_s *rs, long offset, FILE *stream);
+
+/*
+ * Seek record by OFFSET in STREAM.
+ */
+int seek_record(long offset, record_s *rs, FILE *stream);
+
+void test_seek(const char *path, int n);
+
+void test_find(const char *binpath,
+               const char *idxpath,
+               const char *num);
+
+void
+create_empty_file(const char *path)
+{
+  if (EOF == access(path, F_OK))
+    {
+      FILE *f = fopen(path, "wb");
+      fclose(f);
+    }
+}
 
 void
 read_records(const char *inpath, size_t max,
-             const char *binpath, out_fn outbin_fn,
-             const char *idxpath, out_fn outidx_fn)
+             const char *binpath, outbin_fn outbin_fn,
+             const char *idxpath, outidx_fn outidx_fn)
 {
   FILE *in = 0, *outbin = 0, *outidx = 0;
+
   in = fopen(inpath, "r");
   if (!in)
     {
       perror(PANIC);
       goto clean_exit;
     }
-  outbin = fopen(binpath, "ab");
+
+  create_empty_file(binpath);
+  outbin = fopen(binpath, "rb+");
   if (!outbin)
     {
       perror(PANIC);
       goto clean_exit;
     }
-  outidx = fopen(idxpath, "ab");
+
+  create_empty_file(idxpath);
+  outidx = fopen(idxpath, "rb+");
   if (!outidx)
     {
       perror(PANIC);
@@ -86,11 +132,12 @@ read_records(const char *inpath, size_t max,
                      &ss.stock,
                      &ss.price))
     {
-      if (outbin_fn(&ss, outbin))
+      long offset = 0;
+      if (outbin_fn(&ss, &offset, outbin))
         {
           goto clean_exit;
         }
-      if (outidx_fn(&ss, outidx))
+      if (outidx_fn(&ss, offset, outidx))
         {
           goto clean_exit;
         }
@@ -121,175 +168,191 @@ read_records(const char *inpath, size_t max,
 }
 
 int
-insert_bin(const record_s *ss, FILE *out)
+find_record(const record_s *rs, long *offset, FILE *in)
 {
-  fseek(out, 0, SEEK_END);
-  if (ferror(out))
-    {
-      return EXIT_FAILURE;
-    }
+  int ret = EXIT_FAILURE;
+  clearerr(in);
 
-  if (1 != fwrite(ss, sizeof(record_s), 1, out))
-    {
-      perror(PANIC);
-      return EXIT_FAILURE;
-    }
-
-  return EXIT_SUCCESS;
-}
-
-int
-insert_idx(const record_s *ss, FILE *out)
-{
-  fseek(out, 0, SEEK_END);
-  if (ferror(out))
-    {
-      perror(PANIC);
-      return EXIT_FAILURE;
-    }
-
-  long n = ftell(out);
-  if (-1 == n)
-    {
-      perror(PANIC);
-      return EXIT_FAILURE;
-    }
-
-  index_s is;
-  strncpy(is.num, ss->num, NUM_LEN);
-  is.idx = (n+1) / sizeof(index_s);
-
-  if (1 != fwrite(&is, sizeof(is), 1, out))
-    {
-      perror(PANIC);
-      return EXIT_FAILURE;
-    }
-
-  return EXIT_SUCCESS;
-}
-
-void
-out_records(const char *inpath,
-            const char *binpath,
-            const char *idxpath)
-{
-  FILE *in = 0, *out_bin = 0, *out_idx = 0;
-  in = fopen(inpath, "r");
-  if (!in)
-    {
-      perror(PANIC);
-      return;
-    }
-  out_bin = fopen(binpath, "wb");
-  if (!out_bin)
-    {
-      perror(PANIC);
-      goto clean_exit;
-    }
-  out_idx = fopen(idxpath, "wb");
-  if (!out_idx)
+  fseek(in, 0, SEEK_SET);
+  if (ferror(in))
     {
       perror(PANIC);
       goto clean_exit;
     }
 
   record_s ss;
-  index_s is;
-  memset(&ss, 0, sizeof(record_s));
-  memset(&is, 0, sizeof(index_s));
-
   int n = 0;
-  while (4 == fscanf(in, "%s %s %d %lf",
-                     ss.num,
-                     ss.name,
-                     &ss.stock,
-                     &ss.price))
+
+  while (1 == fread(&ss, sizeof(record_s), 1, in))
     {
-      if (1 != fwrite(&ss, sizeof(record_s), 1, out_bin))
+      if (0 == strncmp(ss.num, rs->num, NUM_LEN))
         {
-          perror(PANIC);
-          goto clean_exit;
-        }
-      strncpy(is.num, ss.num, NUM_LEN);
-      is.idx = n;
-      if (1 != fwrite(&is, sizeof(index_s), 1, out_idx))
-        {
-          perror(PANIC);
+          *offset = n*sizeof(record_s);
+          ret = EXIT_SUCCESS;
           goto clean_exit;
         }
       n++;
     }
 
  clean_exit:
-  if (out_idx)
-    {
-      fclose(out_idx);
-    }
-  if (out_bin)
-    {
-      fclose(out_bin);
-    }
-  if (in)
-    {
-      fclose(in);
-    }
+  clearerr(in);
+  return ret;
 }
 
-void
-seek_record(const char *path, int n)
+int
+find_index(index_s *const is, long *offset, FILE *in)
 {
-  fprintf(stdout, "\nseeking %i ...\n", n);
+  int ret = EXIT_FAILURE;
+  clearerr(in);
 
-  FILE *in = fopen(path, "rb");
-  if (!in)
-    {
-      perror(PANIC);
-      return;
-    }
-
-  if (fseek(in, (n-1)*sizeof(record_s), SEEK_SET))
+  fseek(in, 0, SEEK_SET);
+  if (ferror(in))
     {
       perror(PANIC);
       goto clean_exit;
     }
 
-  record_s ss;
-  memset(&ss, 0, sizeof(record_s));
-  if (1 != fread(&ss, sizeof(record_s), 1, in))
+  index_s ss;
+  int n = 0;
+
+  while (1 == fread(&ss, sizeof(index_s), 1, in))
     {
-      if (ferror(in))
+      if (0 == strncmp(ss.num, is->num, NUM_LEN))
         {
-          perror(PANIC);
+          *offset = n*sizeof(index_s);
+          is->idx = ss.idx;
+          ret = EXIT_SUCCESS;
+          goto clean_exit;
         }
-      if (feof(in))
-        {
-          fprintf(stderr, "! No.%i no found\n------------\n", n);
-        }
-      goto clean_exit;
+      n++;
     }
-  fprintf(stdout, OUT_FMT,
-          n, ss.num, ss.name, ss.stock, ss.price);
 
  clean_exit:
-  if (in)
+  clearerr(in);
+  return ret;
+}
+
+int
+merge_bin(const record_s *rs, long *offset, FILE *inout)
+{
+  int ret = EXIT_FAILURE;
+
+  if (find_record(rs, offset, inout))
     {
-      fclose(in);
+      fseek(inout, 0, SEEK_END);
+      if (ferror(inout))
+        {
+          perror(PANIC);
+          goto clean_exit;
+        }
+      
+      *offset = ftell(inout);
+      if (ferror(inout))
+        {
+          perror(PANIC);
+          goto clean_exit;
+        }
     }
+  else
+    {
+      fseek(inout, *offset, SEEK_SET);
+      if (ferror(inout))
+        {
+          perror(PANIC);
+          goto clean_exit;
+        }
+    }
+
+  if (1 != fwrite(rs, sizeof(*rs), 1, inout))
+    {
+      perror(PANIC);
+      goto clean_exit;
+    }
+  ret = EXIT_SUCCESS;
+
+ clean_exit:
+  clearerr(inout);
+  return ret;
+}
+
+int
+merge_idx(const record_s *rs, long offset, FILE *inout)
+{
+  int ret = EXIT_FAILURE;
+  index_s is;
+  strncpy(&is.num[0], rs->num, NUM_LEN);
+  is.idx = offset / sizeof(record_s);
+
+  long offs = 0;
+  if (find_index(&is, &offs, inout))
+    {
+      fseek(inout, 0, SEEK_END);
+      if (ferror(inout))
+        {
+          perror(PANIC);
+          goto clean_exit;
+        }
+
+      offs = ftell(inout);
+      if (ferror(inout))
+        {
+          perror(PANIC);
+          goto clean_exit;
+        }
+    }
+  else
+    {
+      fseek(inout, offs, SEEK_SET);
+      if (ferror(inout))
+        {
+          perror(PANIC);
+          goto clean_exit;
+        }
+    }
+
+  if (1 != fwrite(&is, sizeof(index_s), 1, inout))
+    {
+      perror(PANIC);
+      goto clean_exit;
+    }
+  ret = EXIT_SUCCESS;
+
+ clean_exit:
+  clearerr(inout);
+  return ret;
+}
+
+int
+seek_record(long offset, record_s *rs, FILE *in)
+{
+  fseek(in, offset, SEEK_SET);
+  if (ferror(in))
+    {
+      perror(PANIC);
+      return EXIT_FAILURE;
+    }
+
+  if (1 != fread(rs, sizeof(record_s), 1, in))
+    {
+      perror(PANIC);
+      return EXIT_FAILURE;
+    }
+
+  return EXIT_SUCCESS;
 }
 
 void
-find_record(const char *binpath,
-            const char *idxpath,
-            const char *num)
+test_find(const char *binpath,
+          const char *idxpath,
+          const char *num)
 {
-  fprintf(stdout, "\nfinding %s ...\n", num);
-
   FILE *idx = 0, *bin = 0;
+
   idx = fopen(idxpath, "rb");
   if (!idx)
     {
       perror(PANIC);
-      return;
+      goto clean_exit;
     }
   bin = fopen(binpath, "rb");
   if (!bin)
@@ -299,33 +362,30 @@ find_record(const char *binpath,
     }
 
   index_s is;
-  record_s ss;
+  record_s rs;
+  long offset = 0;
   memset(&is, 0, sizeof(index_s));
-  memset(&ss, 0, sizeof(record_s));
+  memset(&rs, 0, sizeof(record_s));
+  strncpy(&is.num[0], num, NUM_LEN);
 
-  while (1 == fread(&is, sizeof(index_s), 1, idx))
+  fprintf(stdout, "\nfinding %s ...\n", num);
+  if (find_index(&is, &offset, idx))
     {
-      if (0 == strncmp(num, is.num, NUM_LEN))
+      fprintf(stdout, "! Num.%s no found in %s\n------------\n",
+              num, idxpath);
+    }
+  else
+    {
+      if (seek_record(is.idx*sizeof(record_s), &rs, bin))
         {
-          if (0 == fseek(bin, (is.idx)*sizeof(record_s), SEEK_SET))
-            {
-              if (1 == fread(&ss, sizeof(record_s), 1, bin))
-                {
-                  fprintf(stdout, OUT_FMT,
-                          is.idx+1, ss.num, ss.name, ss.stock, ss.price);
-                  goto clean_exit;
-                }
-            }
+          fprintf(stdout, "! No.%zu no found in %s\n------------\n",
+                  offset/sizeof(record_s), binpath);
         }
-    }
-
-  if (ferror(idx))
-    {
-      perror(PANIC);
-    }
-  if (feof(idx))
-    {
-      fprintf(stdout, "! %s no found\n------------\n", num);
+      else
+        {
+          fprintf(stdout, OUT_FMT,
+                  is.idx+1, rs.num, rs.name, rs.stock, rs.price);
+        }
     }
 
  clean_exit:
@@ -357,20 +417,23 @@ main(int argc, char **argv)
   const char *idx = argv[4];
 
   read_records(txt, max,
-               bin, insert_bin,
-               idx, insert_idx);
+               bin, merge_bin,
+               idx, merge_idx);
 
-  /* out_records(txt, bin, idx); */
+  test_find(bin, idx, "PKL070");
+  test_find(bin, idx, "GSF555");
+  test_find(bin, idx, "AAPL");
+  test_find(bin, idx, "GOOG");
+  
+  /* test_seek(bin, 1); */
+  /* test_seek(bin, 3); */
 
-  seek_record(bin, 1);
-  seek_record(bin, 3);
+  /* test_seek(bin, 7); */
 
-  seek_record(bin, 7);
+  /* test_find(bin, idx, "PKL070"); */
+  /* test_find(bin, idx, "DKP080"); */
 
-  find_record(bin, idx, "PKL070");
-  find_record(bin, idx, "DKP080");
-
-  find_record(bin, idx, "AAPL");
+  /* test_find(bin, idx, "AAPL"); */
 
   return 0;
 }
