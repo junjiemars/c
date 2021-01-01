@@ -243,7 +243,14 @@ io_seek_basic_binout := $(bin_path)$(io_prefix)_seek_basic$(bin_ext)
 
 io_seek: $(io_seek_basic_binout)
 io_seek_test: io_seek
-	$(io_seek_basic_binout) $(CURDIR)/src/io/seek/records.txt	\
+	cp $(CURDIR)/$(io_root)seek/records.txt $(CURDIR)/$(tmp_path)records.txt
+	$(io_seek_basic_binout) 64																\
+                          $(CURDIR)/$(tmp_path)records.txt	\
+                          $(CURDIR)/$(tmp_path)records.bin	\
+                          $(CURDIR)/$(tmp_path)records.idx
+	cp $(CURDIR)/$(io_root)seek/ins.txt $(CURDIR)/$(tmp_path)/records.txt
+	$(io_seek_basic_binout) 64																\
+                          $(CURDIR)/$(tmp_path)records.txt	\
                           $(CURDIR)/$(tmp_path)records.bin	\
                           $(CURDIR)/$(tmp_path)records.idx
 

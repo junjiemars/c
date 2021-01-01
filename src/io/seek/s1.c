@@ -1,9 +1,10 @@
 #include <_io_.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define NUM_LEN 8
-#define NAME_LEN 32
+#define NAME_LEN 16
 
 #define OUT_FMT                                 \
   "> No.%d found\n"                             \
@@ -29,19 +30,143 @@ typedef struct index_s
   int idx;
 } index_s;
 
+typedef int (*out_fn)(const record_s *record, FILE *out);
+
+/* read record from plain text file */
+void read_records(const char *inpath, size_t max,
+                  const char *binpath, out_fn outbin,
+                  const char *idxpath, out_fn outidx);
+
 /* generate bin and idx files */
 void out_records(const char *inpath,
                  const char *binpath,
                  const char *idxpath);
 
-/* seek record by idx */
 
+/* seek record by idx */
 void seek_record(const char *path, int n);
 
 /* find record by num filed */
 void find_record(const char *binpath,
                  const char *idxpath,
                  const char *num);
+
+void
+read_records(const char *inpath, size_t max,
+             const char *binpath, out_fn outbin_fn,
+             const char *idxpath, out_fn outidx_fn)
+{
+  FILE *in = 0, *outbin = 0, *outidx = 0;
+  in = fopen(inpath, "r");
+  if (!in)
+    {
+      perror(PANIC);
+      goto clean_exit;
+    }
+  outbin = fopen(binpath, "ab");
+  if (!outbin)
+    {
+      perror(PANIC);
+      goto clean_exit;
+    }
+  outidx = fopen(idxpath, "ab");
+  if (!outidx)
+    {
+      perror(PANIC);
+      goto clean_exit;
+    }
+
+  record_s ss;
+  size_t n = 0;
+  memset(&ss, 0, sizeof(record_s));
+
+  while (4 == fscanf(in, "%s %s %d %lf",
+                     ss.num,
+                     ss.name,
+                     &ss.stock,
+                     &ss.price))
+    {
+      if (outbin_fn(&ss, outbin))
+        {
+          goto clean_exit;
+        }
+      if (outidx_fn(&ss, outidx))
+        {
+          goto clean_exit;
+        }
+
+      ++n;
+      if (n >= max)
+        {
+          fprintf(stdout, PANIC
+                  ", exceed the max read limit: %zu(%zu bytes)\n",
+                  max, max * sizeof(record_s));
+          goto clean_exit;
+        }
+    }
+
+ clean_exit:
+  if (in)
+    {
+      fclose(in);
+    }
+  if (outbin)
+    {
+      fclose(outbin);
+    }
+  if (outidx)
+    {
+      fclose(outidx);
+    }
+}
+
+int
+insert_bin(const record_s *ss, FILE *out)
+{
+  fseek(out, 0, SEEK_END);
+  if (ferror(out))
+    {
+      return EXIT_FAILURE;
+    }
+
+  if (1 != fwrite(ss, sizeof(record_s), 1, out))
+    {
+      perror(PANIC);
+      return EXIT_FAILURE;
+    }
+
+  return EXIT_SUCCESS;
+}
+
+int
+insert_idx(const record_s *ss, FILE *out)
+{
+  fseek(out, 0, SEEK_END);
+  if (ferror(out))
+    {
+      perror(PANIC);
+      return EXIT_FAILURE;
+    }
+
+  long n = ftell(out);
+  if (-1 == n)
+    {
+      perror(PANIC);
+      return EXIT_FAILURE;
+    }
+
+  index_s is;
+  strncpy(is.num, ss->num, NUM_LEN);
+  is.idx = (n+1) / sizeof(index_s);
+
+  if (1 != fwrite(&is, sizeof(is), 1, out))
+    {
+      perror(PANIC);
+      return EXIT_FAILURE;
+    }
+
+  return EXIT_SUCCESS;
+}
 
 void
 out_records(const char *inpath,
@@ -139,7 +264,7 @@ seek_record(const char *path, int n)
       if (feof(in))
         {
           fprintf(stderr, "! No.%i no found\n------------\n", n);
-        } 
+        }
       goto clean_exit;
     }
   fprintf(stdout, OUT_FMT,
@@ -218,27 +343,34 @@ find_record(const char *binpath,
 int
 main(int argc, char **argv)
 {
-  if (argc < 4)
+  if (argc < 5)
     {
       fprintf(stderr,
-              "where the records.txt/records.bin/records.idx"
-              "located?\n");
+              "please, input max read limit and "
+              "where records.txt/records.bin/records.idx located?\n");
       return 1;
     }
 
-  const char *txt = argv[1];
-  const char *bin = argv[2];
-  const char *idx = argv[3];
+  size_t max = (size_t)atol(argv[1]);
+  const char *txt = argv[2];
+  const char *bin = argv[3];
+  const char *idx = argv[4];
 
-  out_records(txt, bin, idx);
+  read_records(txt, max,
+               bin, insert_bin,
+               idx, insert_idx);
+
+  /* out_records(txt, bin, idx); */
 
   seek_record(bin, 1);
   seek_record(bin, 3);
-  seek_record(bin, 10);
+
+  seek_record(bin, 7);
 
   find_record(bin, idx, "PKL070");
   find_record(bin, idx, "DKP080");
-  find_record(bin, idx, "DKP081");
+
+  find_record(bin, idx, "AAPL");
 
   return 0;
 }
