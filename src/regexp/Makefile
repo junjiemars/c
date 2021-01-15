@@ -12,24 +12,27 @@ INC += -I$(regexp_root) -I$(root)
 
 ifeq ($(CC_NAME),msvc)
 getopt_c := $(root)posix/getopt.c
-endif
+endif # end of msvc
+
+
+ifeq ($(NM_SYSTEM),Linux)
+	CFLAGS += -D_GNU_SOURCE
+endif # end of Linux
 
 ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
 	CFLAGS += $(cflags_sanitize)
-endif
-
-ifeq ($(NM_SYSTEM), Linux)
-	CFLAGS += -D_GNU_SOURCE
-endif
+endif # end of sanitize
 
 # pcre
 pcre_exists := $(shell pkg-config --exists libpcre && echo "YES")
 ifeq ($(pcre_exists),YES)
-pcre_cflags := $(shell pkg-config --cflags libpcre 2>/dev/null)
-pcre_libs := $(shell pkg-config --libs libpcre 2>/dev/null)
+ifeq ($(NM_SYSTEM),WinNT)
+	pcre_cflags := $(shell pkg-config --cflags --msvc-syntax libpcre 2>/dev/null)
+	pcre_libs := $(shell pkg-config --libs --msvc-syntax libpcre 2>/dev/null)
 else
-pcre_cflags :=
-pcre_libs :=
+	pcre_cflags := $(shell pkg-config --cflags libpcre 2>/dev/null)
+	pcre_libs := $(shell pkg-config --libs libpcre 2>/dev/null)
+endif # end of WinNT
 endif # end of pcre_exists
 
 regexp_pcre_binout := $(bin_path)$(regexp_prefix)_pcre$(bin_ext)

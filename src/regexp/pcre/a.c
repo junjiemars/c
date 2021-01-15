@@ -9,7 +9,10 @@ extern char *optarg;
 extern int errno;
 
 void usage(const char *pcre);
-int regexp(const char *pattern, const char *subject, int options);
+int regexp(const char *pattern,
+           const char *subject,
+           size_t subject_len,
+           int options);
 
 static struct option long_options[] =
   {
@@ -33,7 +36,10 @@ usage(const char *pcre)
 }
 
 int
-regexp(const char *pattern, const char *subject, int options)
+regexp(const char *pattern,
+       const char *subject,
+       size_t subject_len,
+       int options)
 {
   int has_error = 0;
   pcre *re = 0;
@@ -66,13 +72,13 @@ regexp(const char *pattern, const char *subject, int options)
       goto clean_exit;
     }
   match = pcre_exec(re,
-                    0,
+                    0,          /* const pcre_extra *extra */
                     subject,
-                    strnlen(subject, N),
-                    0,
+                    subject_len,
+                    0,                   /* startoffset */
                     options,
-                    ovector,
-                    N);
+                    ovector,    /* ovector */
+                    N);         /* ovecsize */
   if (match > 0)
     {
       for (int i = 0; i < match; i++)
@@ -88,10 +94,10 @@ regexp(const char *pattern, const char *subject, int options)
   switch (match)
     {
     case PCRE_ERROR_NOMATCH:
-      fprintf(stderr, "no match\n");
+      fprintf(stderr, "!panic, no match\n");
       break;
     default:
-      fprintf(stderr, "error while matching: %d\n", match);
+      fprintf(stderr, "!panic, error: %d\n", match);
       break;
     }
 
@@ -107,10 +113,10 @@ main(int argc, char **argv)
   int opt_options = 0;
   char *opt_pattern = 0;
   char *opt_subject = 0;
+  size_t opt_subject_len = 0;
 
   int has_error = 0;
   int ch;
-
   while (EOF != (ch = getopt_long(argc, argv, "hp:s:o:", long_options, 0)))
     {
       switch (ch) {
@@ -132,15 +138,15 @@ main(int argc, char **argv)
         break;
       case 's':
         {
-          size_t n = strnlen(optarg, N) + 1;
-          opt_subject = malloc(n);
+          opt_subject_len = strnlen(optarg, N);
+          opt_subject = malloc(opt_subject_len+1);
           if (!opt_subject)
             {
               has_error = errno;
               perror(0);
               goto clean_exit;
             }
-          strncpy(opt_subject, optarg, n);
+          strncpy(opt_subject, optarg, opt_subject_len+1);
         }
         break;
       case 'o':
@@ -154,7 +160,7 @@ main(int argc, char **argv)
       }
     }
 
-  has_error = regexp(opt_pattern, opt_subject, opt_options);
+  has_error = regexp(opt_pattern, opt_subject, opt_subject_len, opt_options);
 
  clean_exit:
   free(opt_pattern);
