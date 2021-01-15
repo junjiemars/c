@@ -92,6 +92,7 @@ jobs:
       env:
         _RLS_CONFIG_: --with-release=yes --with-optimize=yes
       run: |
+        pkg-config --cflags --libs libpcre
          ./test.sh
     - name: Zip Build Artifact
       env:

@@ -29,8 +29,7 @@ ifeq ($(has_pcre),YES)
 pcre_cflags := $(shell pkg-config --cflags libpcre 2>/dev/null)
 pcre_libs := $(shell pkg-config --libs libpcre 2>/dev/null)
 ifeq ($(CC_NAME),msvc)
-pcre_cflags := $(shell echo "$(pcre_cflags)"|sed "s/$(pcre_cflags)/$(nm_inc_opt)/g")
-pcre_libs := $(shell echo "$(pcre_libs)"|sed "s/$(pcre_libs)/$(nm_lib_opt)/g")
+pcre_libs := $(subst -l,$(nm_lib_opt),$(pcre_libs))
 endif # end of msvc
 endif # end of has_pcre
 
