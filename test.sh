@@ -89,6 +89,12 @@ if [ "basic" = "$_TEST_" ]; then
   test_do --has-hi
   test_do --has-io
   test_do --has-lang
+  test_do --has-library
+  test_do --has-memory
+  test_do --has-os
+  test_do --has-regexp
+  test_do --has-unicode
+  test_do --has-x86
 fi
 
 # eof
