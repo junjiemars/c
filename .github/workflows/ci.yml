@@ -92,8 +92,6 @@ jobs:
       env:
         _RLS_CONFIG_: --with-release=yes --with-optimize=yes
       run: |
-        pkg-config --msvc-syntax --cflags libpcre
-        pkg-config --msvc-syntax --libs libpcre
          ./test.sh
     - name: Zip Build Artifact
       env:

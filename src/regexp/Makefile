@@ -26,13 +26,12 @@ endif # end of sanitize
 # pcre
 has_pcre := $(shell pkg-config --exists libpcre && echo "YES")
 ifeq ($(has_pcre),YES)
-ifeq ($(CC_NAME),msvc)
-pcre_cflags := $(shell pkg-config --cflags libpcre --msvc-syntax 2>/dev/null)
-pcre_libs := $(shell pkg-config --libs libpcre --msvc-syntax 2>/dev/null)
-else
 pcre_cflags := $(shell pkg-config --cflags libpcre 2>/dev/null)
 pcre_libs := $(shell pkg-config --libs libpcre 2>/dev/null)
-endif # end of WinNT
+ifeq ($(CC_NAME),msvc)
+pcre_cflags := $(shell echo "$(pcre_cflags)"|sed "s/^$(pcre_cflags)/$(nm_inc_opt)/g")
+pcre_libs := $(shell echo "$(pcre_libs)"|sed "s/^$(pcre_libs)/$(nm_libdir_opt)/g")
+endif # end of msvc
 endif # end of has_pcre
 
 regexp_pcre_binout := $(bin_path)$(regexp_prefix)_pcre$(bin_ext)
