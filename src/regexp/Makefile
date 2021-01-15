@@ -15,12 +15,18 @@ ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
 endif
 
 # pcre
+pcre_exists := $(shell pkg-config --exists libpcre && echo "YES")
+ifeq ($(pcre_exists),YES)
 pcre_cflags := $(shell pkg-config --cflags libpcre 2>/dev/null)
 pcre_libs := $(shell pkg-config --libs libpcre 2>/dev/null)
+else
+pcre_cflags :=
+pcre_libs :=
+endif # end of pcre_exists
 
 regexp_pcre_binout := $(bin_path)$(regexp_prefix)_pcre$(bin_ext)
 
-ifneq ($(pcre_cflags),)
+ifeq ($(pcre_exists),YES)
 regexp_pcre: $(regexp_pcre_binout)
 regexp_pcre_test: regexp_pcre
 	$(regexp_pcre_binout)
@@ -28,7 +34,7 @@ else
 regexp_pcre:
 	@echo "skipped, pcre library no found"
 regexp_pcre_test: regexp_pcre
-endif # end of pcre
+endif # end of pcre_exists
 
 $(regexp_pcre_binout): $(regexp_root)pcre/a.c
 	$(CC) $(CFLAGS) $(pcre_cflags) $(INC) $^ $(bin_out)$@ $(LIBS) $(pcre_libs)
