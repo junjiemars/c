@@ -27,11 +27,11 @@ endif # end of sanitize
 pcre_exists := $(shell pkg-config --exists libpcre && echo "YES")
 ifeq ($(pcre_exists),YES)
 ifeq ($(CC_NAME),msvc)
-	pcre_cflags := $(shell pkg-config --cflags --msvc-syntax libpcre 2>/dev/null)
-	pcre_libs := $(shell pkg-config --libs --msvc-syntax libpcre 2>/dev/null)
+pcre_cflags := $(shell pkg-config --cflags libpcre --msvc-syntax 2>/dev/null)
+pcre_libs := $(shell pkg-config --libs libpcre --msvc-syntax 2>/dev/null)
 else
-	pcre_cflags := $(shell pkg-config --cflags libpcre 2>/dev/null)
-	pcre_libs := $(shell pkg-config --libs libpcre 2>/dev/null)
+pcre_cflags := $(shell pkg-config --cflags libpcre 2>/dev/null)
+pcre_libs := $(shell pkg-config --libs libpcre 2>/dev/null)
 endif # end of WinNT
 endif # end of pcre_exists
 
