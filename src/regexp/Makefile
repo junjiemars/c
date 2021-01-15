@@ -8,10 +8,18 @@ regexp_test: regexp_pcre_test										\
              regexp_os_test
 
 regexp_prefix := regexp
-INC += -I$(regexp_root)
+INC += -I$(regexp_root) -I$(root)
+
+ifeq ($(CC_NAME),msvc)
+getopt_c := $(root)posix/getopt.c
+endif
 
 ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
 	CFLAGS += $(cflags_sanitize)
+endif
+
+ifeq ($(NM_SYSTEM), Linux)
+	CFLAGS += -D_GNU_SOURCE
 endif
 
 # pcre
@@ -29,14 +37,16 @@ regexp_pcre_binout := $(bin_path)$(regexp_prefix)_pcre$(bin_ext)
 ifeq ($(pcre_exists),YES)
 regexp_pcre: $(regexp_pcre_binout)
 regexp_pcre_test: regexp_pcre
-	$(regexp_pcre_binout)
+	$(regexp_pcre_binout) -h
+	$(regexp_pcre_binout) -pca*r -scaaar
+	$(regexp_pcre_binout) -pcaa*r -scr
 else
 regexp_pcre:
 	@echo "skipped, pcre library no found"
 regexp_pcre_test: regexp_pcre
 endif # end of pcre_exists
 
-$(regexp_pcre_binout): $(regexp_root)pcre/a.c
+$(regexp_pcre_binout): $(regexp_root)pcre/a.c  $(getopt_c)
 	$(CC) $(CFLAGS) $(pcre_cflags) $(INC) $^ $(bin_out)$@ $(LIBS) $(pcre_libs)
 
 # os
