@@ -10,62 +10,62 @@ on:
 
 jobs:
 
-  Linux:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - CC: "gcc"
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Setup Env
-        run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
-      - name: Build and Test
-        env:
-          _RLS_CONFIG_: --with-release=yes --with-optimize=yes
-        run: |
-          ./test.sh
-      - name: Zip Build Artifact
-        env:
-          _ZIP_X_: -x "out/tmp/*" -x "*.o"
-        run: |
-          zip -r c-linux-${{ env._OS_ARCH_ }}.zip out/ ${{ env._ZIP_X_ }}
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: c-linux-${{ env._OS_ARCH_ }}.zip
-          path: c-linux-${{ env._OS_ARCH_ }}.zip
+  # Linux:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       include:
+  #         - CC: "gcc"
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Setup Env
+  #       run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
+  #     - name: Build and Test
+  #       env:
+  #         _RLS_CONFIG_: --with-release=yes --with-optimize=yes
+  #       run: |
+  #         ./test.sh
+  #     - name: Zip Build Artifact
+  #       env:
+  #         _ZIP_X_: -x "out/tmp/*" -x "*.o"
+  #       run: |
+  #         zip -r c-linux-${{ env._OS_ARCH_ }}.zip out/ ${{ env._ZIP_X_ }}
+  #     - name: Upload Build Artifact
+  #       uses: actions/upload-artifact@v1
+  #       with:
+  #         name: c-linux-${{ env._OS_ARCH_ }}.zip
+  #         path: c-linux-${{ env._OS_ARCH_ }}.zip
 
 
-  MacOS:
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        include:
-          - CC: "clang"
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Setup Env
-        run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
-      - name: Build and Test
-        env:
-          _RLS_CONFIG_: --with-release=yes --with-optimize=yes
-        run: |
-          ./test.sh
-      - name: Zip Build Artifact
-        env:
-          _ZIP_X_: -x "out/tmp/*" -x "**/*.dSYM/*" -x "**/.DS_Store" -x "*.o"
-        run: |
-          zip -r c-macos-${{ env._OS_ARCH_ }}.zip out/ ${{ env._ZIP_X_ }}
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: c-macos-${{ env._OS_ARCH_ }}.zip
-          path: c-macos-${{ env._OS_ARCH_ }}.zip
+  # MacOS:
+  #   runs-on: macos-latest
+  #   strategy:
+  #     matrix:
+  #       include:
+  #         - CC: "clang"
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Setup Env
+  #       run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
+  #     - name: Build and Test
+  #       env:
+  #         _RLS_CONFIG_: --with-release=yes --with-optimize=yes
+  #       run: |
+  #         ./test.sh
+  #     - name: Zip Build Artifact
+  #       env:
+  #         _ZIP_X_: -x "out/tmp/*" -x "**/*.dSYM/*" -x "**/.DS_Store" -x "*.o"
+  #       run: |
+  #         zip -r c-macos-${{ env._OS_ARCH_ }}.zip out/ ${{ env._ZIP_X_ }}
+  #     - name: Upload Build Artifact
+  #       uses: actions/upload-artifact@v1
+  #       with:
+  #         name: c-macos-${{ env._OS_ARCH_ }}.zip
+  #         path: c-macos-${{ env._OS_ARCH_ }}.zip
 
 
   Windows:
@@ -92,7 +92,7 @@ jobs:
       env:
         _RLS_CONFIG_: --with-release=yes --with-optimize=yes
       run: |
-        _TEST_="pkg-config" ./test.sh
+        pkg-config --cflags --libs libpcre
          ./test.sh
     - name: Zip Build Artifact
       env:

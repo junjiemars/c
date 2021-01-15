@@ -81,15 +81,6 @@ test_do() {
   return $retval
 }
 
-# pkg-config test
-if [ "pkg-config" = "$_TEST_" ]; then
-  if `type -p pkg-config >/dev/null`; then
-    pkg-config --list-all
-  else
-    echo "!panic, pkg-config no found."
-  fi
-fi # end of pkg-config test
-
 # basic test
 if [ "basic" = "$_TEST_" ]; then
   test_do --has-algo
