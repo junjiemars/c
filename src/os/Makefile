@@ -18,7 +18,7 @@ endif # end of msvc
 
 ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
 	CFLAGS += $(cflags_sanitize)
-endif
+endif # end of _MEMORY_
 
 # echo
 os_echo_binout := $(bin_path)$(os_prefix)_echo$(bin_ext)
