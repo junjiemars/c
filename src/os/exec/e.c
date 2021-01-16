@@ -6,9 +6,11 @@
 
 #if (LINUX) || (DARWIN)
 #  include <unistd.h>
+#  define _execve_t int
 #elif (WINNT)
 #  include <process.h>
 #  define execve _execve
+#  define _execve_t intptr_t
 #endif
 
 /* extern char **environ; */
@@ -26,8 +28,9 @@ main(int argc, char **argv, char **envp)
   /* while (*p) { */
   /*   printf("%s\n", *p++); */
   /* } */
-  
-  int has_err = execve(argv[1], &argv[2], envp);
+
+  _execve_t has_err;
+  has_err = execve(argv[1], &argv[2], envp);
   if (has_err)
     {
       perror(0);
