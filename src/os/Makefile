@@ -2,17 +2,35 @@
 # ./configure --without-debug --has-os
 #
 
-os: os_exec																			\
+os: os_echo																			\
+    os_exec																			\
     os_msq
-os_test: os_exec_test														\
+os_test: os_echo																\
+         os_exec_test														\
          os_msq_test
 
 os_prefix := os
-INC += -I$(os_root)
+INC += -I$(os_root) -I$(root)
+
+ifeq ($(CC_NAME),msvc)
+	getopt_c := $(root)posix/getopt.c
+endif # end of msvc
 
 ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
 	CFLAGS += $(cflags_sanitize)
 endif
+
+# echo
+os_echo_binout := $(bin_path)$(os_prefix)_echo$(bin_ext)
+
+os_echo: $(os_echo_binout)
+os_echo_test: os_echo
+	$(os_echo_binout)
+	$(os_echo_binout) -n abc
+	$(os_echo_binout) abc 123 "xxx zzz"
+
+$(os_echo_binout): $(os_root)echo/e.c $(getopt_c)
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # exec
 os_exec_binout := $(bin_path)$(os_prefix)_exec$(bin_ext)
