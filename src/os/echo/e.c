@@ -3,7 +3,6 @@
 #include <posix/getopt.h>
 
 extern char *optarg;
-extern int errno;
 
 void usage(const char *echo);
 
