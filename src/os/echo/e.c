@@ -18,7 +18,7 @@ usage(const char *pcre)
 int
 main(int argc, char **argv)
 {
-  int opt_n;
+  int opt_n = 0;
   int ch;
 
   while (EOF != (ch = getopt(argc, argv, "hn")))
@@ -26,7 +26,7 @@ main(int argc, char **argv)
       switch (ch)
         {
         case 'n':
-          opt_n = 1;
+          opt_n++;
           break;
         case 'h':
         default:
