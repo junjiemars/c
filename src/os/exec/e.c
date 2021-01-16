@@ -30,10 +30,10 @@ main(int argc, char **argv, char **envp)
   /* } */
 
   _execve_t has_err;
-  has_err = execve(argv[1], &argv[2], envp);
+  has_err = execve(argv[1], &argv[1], envp);
   if (has_err)
     {
       perror(0);
     }
-  return has_err;
+  return (int)has_err;
 }
