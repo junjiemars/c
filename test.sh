@@ -97,4 +97,6 @@ if [ "basic" = "$_TEST_" ]; then
   test_do --has-x86
 fi
 
+echo "!completed"
+
 # eof

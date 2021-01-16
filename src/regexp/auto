@@ -42,3 +42,37 @@ case "$CC_NAME" in
    msvc)
      ;;
 esac
+
+# # check pkg-config
+# #----------------------------------------
+# case "$NM_SYSTEM" in
+#    Linux|Darwin)
+#      nm_feature="$NM_SYSTEM pkg-config"
+#      nm_feature_name=
+#      nm_feature_indent=yes
+#      nm_feature_run=no
+#      nm_feature_h=
+#      nm_feature_flags=
+#      nm_feature_test=
+#      . ${NORE_ROOT}/auto/feature
+
+#      if [ yes = $nm_found ]; then
+#        flag=cflags_sanitize op="+=" value=$nm_feature_flags \
+#            . ${NORE_ROOT}/auto/make_define
+#      fi
+#   WinNT)
+#      nm_feature="$NM_SYSTEM pkg-config"
+#      nm_feature_name=
+#      nm_feature_indent=yes
+#      nm_feature_run=no
+#      nm_feature_h=
+#      nm_feature_flags=
+#      nm_feature_test=
+#      . ${NORE_ROOT}/auto/feature
+
+#      if [ yes = $nm_found ]; then
+#        flag=cflags_santize op="+=" value=$nm_feature_flags \
+#            . ${NORE_ROOT}/auto/make_define
+#      fi
+#      ;;		 
+# esac

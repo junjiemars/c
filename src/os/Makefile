@@ -2,8 +2,10 @@
 # ./configure --without-debug --has-os
 #
 
-os: os_msq
-os_test: os_msq_test
+os: os_exec																			\
+    os_msq
+os_test: os_exec_test														\
+         os_msq_test
 
 os_prefix := os
 INC += -I$(os_root)
@@ -11,6 +13,16 @@ INC += -I$(os_root)
 ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
 	CFLAGS += $(cflags_sanitize)
 endif
+
+# exec
+os_exec_binout := $(bin_path)$(os_prefix)_exec$(bin_ext)
+
+os_exec: $(os_exec_binout)
+os_exec_test: os_exec
+	$(os_exec_binout) "ls" "/tmp/"
+
+$(os_exec_binout): $(os_root)exec/e.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # msq
 os_msq_binout := $(bin_path)$(os_prefix)_msq$(bin_ext)
