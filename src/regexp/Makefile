@@ -24,6 +24,8 @@ ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
 endif # end of sanitize
 
 # pcre
+regexp_pcre_binout := $(bin_path)$(regexp_prefix)_pcre$(bin_ext)
+
 has_pcre := $(shell pkg-config --exists libpcre && echo "YES")
 ifeq ($(has_pcre),YES)
 	pcre_cflags := $(shell pkg-config --cflags libpcre 2>/dev/null)
@@ -38,7 +40,7 @@ regexp_pcre_test: regexp_pcre
 	$(regexp_pcre_binout) -pcaa*r -scr
 else
 regexp_pcre:
-	@echo "skipped, pcre library no found"
+	@echo "#skip, pcre library no found"
 regexp_pcre_test: regexp_pcre
 endif # end of has_pcre
 
