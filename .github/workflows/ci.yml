@@ -85,14 +85,13 @@ jobs:
       uses: msys2/setup-msys2@v2
       with:
         update: true
-        install: git make zip pkg-config pcre-devel mingw-w64-x86_64-gcc mingw-w64-x86_64
+        install: git make zip mingw-w64-x86_64-gcc mingw-w64-x86_64
     - name: Setup Env
       run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
     - name: Build and Test
       env:
         _RLS_CONFIG_: --with-release=yes --with-optimize=yes
       run: |
-        pkg-config --cflags --libs libpcre
          ./test.sh
     - name: Zip Build Artifact
       env:
