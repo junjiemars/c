@@ -18,8 +18,13 @@ endif
 os_exec_binout := $(bin_path)$(os_prefix)_exec$(bin_ext)
 
 os_exec: $(os_exec_binout)
+ifeq ($(NM_SYSTEM),WinNT)
 os_exec_test: os_exec
-	$(os_exec_binout) "ls" "/tmp/"
+	$(os_exec_binout) "dir" "%userprofile%"
+else
+os_exec_test: os_exec
+	$(os_exec_binout) "/bin/ls" "~/"
+endif # end of WinNT
 
 $(os_exec_binout): $(os_root)exec/e.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

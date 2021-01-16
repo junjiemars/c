@@ -7,6 +7,8 @@
 #if (LINUX) || (DARWIN)
 #  include <unistd.h>
 #elif (WINNT)
+#  include <process.h>
+#  define execve _execve
 #endif
 
 /* extern char **environ; */
