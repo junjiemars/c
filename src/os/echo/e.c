@@ -22,13 +22,14 @@ main(int argc, char **argv)
   int opt_n;
   int ch;
 
-  while (EOF != (ch = getopt(argc, argv, "n")))
+  while (EOF != (ch = getopt(argc, argv, "hn")))
     {
       switch (ch)
         {
         case 'n':
           opt_n = 1;
           break;
+        case 'h':
         default:
           usage(argv[0]);
           return 0;

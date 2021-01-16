@@ -25,7 +25,7 @@ os_echo_binout := $(bin_path)$(os_prefix)_echo$(bin_ext)
 
 os_echo: $(os_echo_binout)
 os_echo_test: os_echo
-	$(os_echo_binout)
+	$(os_echo_binout) -h
 	$(os_echo_binout) -n abc
 	$(os_echo_binout) abc 123 "xxx zzz"
 
