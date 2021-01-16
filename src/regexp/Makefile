@@ -11,7 +11,7 @@ regexp_prefix := regexp
 INC += -I$(regexp_root) -I$(root)
 
 ifeq ($(CC_NAME),msvc)
-getopt_c := $(root)posix/getopt.c
+	getopt_c := $(root)posix/getopt.c
 endif # end of msvc
 
 
@@ -26,11 +26,8 @@ endif # end of sanitize
 # pcre
 has_pcre := $(shell pkg-config --exists libpcre && echo "YES")
 ifeq ($(has_pcre),YES)
-pcre_cflags := $(shell pkg-config --cflags libpcre 2>/dev/null)
-pcre_libs := $(shell pkg-config --libs libpcre 2>/dev/null)
-ifeq ($(CC_NAME),msvc)
-pcre_libs := $(subst -l,$(nm_lib_opt),$(pcre_libs))
-endif # end of msvc
+	pcre_cflags := $(shell pkg-config --cflags libpcre 2>/dev/null)
+	pcre_libs := $(shell pkg-config --libs libpcre 2>/dev/null)
 endif # end of has_pcre
 
 ifeq ($(has_pcre),YES)
