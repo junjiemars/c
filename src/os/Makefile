@@ -5,7 +5,7 @@
 os: os_echo																			\
     os_exec																			\
     os_msq
-os_test: os_echo																\
+os_test: os_echo_test														\
          os_exec_test														\
          os_msq_test
 
