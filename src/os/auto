@@ -42,3 +42,30 @@ case "$CC_NAME" in
    msvc)
      ;;
 esac
+
+# check libwrap
+#----------------------------------------
+case "$NM_SYSTEM" in
+   Linux)
+     nm_feature="library: tcp wrapper"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h='#include <tcpd.h>'
+     nm_feature_flags=
+     nm_feature_tails="${nm_lib_opt}wrap"
+     nm_feature_test='hosts_access(0);'
+     . ${NORE_ROOT}/auto/feature
+
+     if [ yes = $nm_found ]; then
+       flag=has_tcpwrapper op="=" value="YES" \
+           . ${NORE_ROOT}/auto/make_define
+       flag=ldlibs_tcpwrapper op="=" value=$nm_feature_tails \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     ;;
+	 Darwin)
+     ;;
+   WinNT)
+     ;;
+esac

@@ -4,10 +4,12 @@
 
 os: os_echo																			\
     os_exec																			\
-    os_msq
+    os_msq																			\
+    os_tcpwrapper
 os_test: os_echo_test														\
          os_exec_test														\
-         os_msq_test
+         os_msq_test														\
+         os_tcpwrapper_test
 
 os_prefix := os
 INC += -I$(os_root) -I$(root)
@@ -63,5 +65,20 @@ endif
 $(os_msq_binout): $(os_root)msq/q.c
 	$(CC) $(CFLAGS) $(msq_cflags) $(INC) $^ $(bin_out)$@
 
+# tcp wrapper
+os_tcpwrapper_binout := $(bin_path)$(os_prefix)_tcpwrapper$(bin_ext)
+
+ifeq ($(has_tcpwrapper),YES)
+os_tcpwrapper: $(os_tcpwrapper_binout)
+os_tcpwrapper_test: os_tcpwrapper
+	$(os_tcpwrapper_binout)
+else
+os_tcpwrapper:
+	@echo "#skip os_tcpwrapper_test ..."
+os_tcpwrapper_test: os_tcpwrapper
+endif
+
+$(os_tcpwrapper_binout): $(os_root)tcpwrapper/tw.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ldlibs_tcpwrapper)
 
 # eof
