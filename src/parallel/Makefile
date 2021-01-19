@@ -49,7 +49,7 @@ $(parallel_omp_for_binout): $(parallel_root)openmp/for.c
 parallel_pthread_basic_binout := $(bin_path)$(parallel_prefix)_pthread_basic$(bin_ext)
 
 parallel_pthread: parallel_pthread_basic
-parallel_pthread_test: parallel_pthread
+parallel_pthread_test: parallel_pthread_basic_test
 
 parallel_pthread_basic: $(parallel_pthread_basic_binout)
 parallel_pthread_basic_test: parallel_pthread_basic
