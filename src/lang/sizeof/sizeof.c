@@ -14,8 +14,8 @@
 int main(){
     peval(sizeof(double));
     peval(sizeof(int));
-    double *plist = (double[]){1, 2, 3};
+    /* double *plist = (double[]){1, 2, 3}; */
     double list[] = {1, 2, 3};
-    peval(sizeof(plist)/(sizeof(double)));
+    /* peval(sizeof(plist)/(sizeof(double))); */
     peval(sizeof(list)/(sizeof(double)));
 }
