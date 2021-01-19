@@ -4,11 +4,11 @@
 
 parallel: parallel_omp_basic \
 					parallel_omp_for \
-					pthread_basic
+					parallel_pthread_basic
 
 parallel_test: parallel_omp_basic_test \
 							 parallel_omp_for_test \
-							 pthread_basic_test
+							 parallel_pthread_basic_test
 
 parallel_prefix := parallel
 INC += -I$(parallel_root)
@@ -46,11 +46,14 @@ $(parallel_omp_for_binout): $(parallel_root)openmp/for.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # pthread
-pthread_basic_binout := $(bin_path)$(parallel_prefix)_pthread_basic$(bin_ext)
+parallel_pthread_basic_binout := $(bin_path)$(parallel_prefix)_pthread_basic$(bin_ext)
 
-pthread_basic: $(pthread_basic_binout)
-pthread_basic_test: pthread_basic
-	$(pthread_basic_binout)
+parallel_pthread: parallel_pthread_basic
+parallel_pthread_test: parallel_pthread
 
-$(pthread_basic_binout): $(parallel_root)pthread/b.c
+parallel_pthread_basic: $(parallel_pthread_basic_binout)
+parallel_pthread_basic_test: parallel_pthread_basic
+	$(parallel_pthread_basic_binout)
+
+$(parallel_pthread_basic_binout): $(parallel_root)pthread/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
