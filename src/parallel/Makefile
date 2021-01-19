@@ -24,6 +24,11 @@ endif # end of msvc checking
 parallel_omp_basic_binout := $(bin_path)$(parallel_prefix)_omp_basic$(bin_ext)
 parallel_omp_for_binout := $(bin_path)$(parallel_prefix)_omp_for$(bin_ext)
 
+parallel_omp: parallel_omp_basic								\
+              parallel_omp_for
+parallel_omp_test: parallel_omp_basic_test			\
+                   parallel_omp_for_test
+
 parallel_omp_basic: $(parallel_omp_basic_binout)
 parallel_omp_basic_test: parallel_omp_basic
 	$(parallel_omp_basic_binout)
