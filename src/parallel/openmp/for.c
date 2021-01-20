@@ -6,6 +6,10 @@
 #  include <omp.h>
 #endif
 
+#if (MSVC)
+#  pragma warning (disable : 4996)
+#endif  /* end of MSVC */
+
 double calc_pi(long n);
 
 double
