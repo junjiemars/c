@@ -24,7 +24,7 @@ jobs:
         run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
       - name: Build and Test
         env:
-          _RLS_CONFIG_: --with-release=yes --with-optimize=yes
+          _RLS_CONFIG_: --with-release=yes --with-optimize=yes --with-symbol=no
         run: |
           ./test.sh
       - name: Zip Build Artifact
@@ -53,7 +53,7 @@ jobs:
         run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
       - name: Build and Test
         env:
-          _RLS_CONFIG_: --with-release=yes --with-optimize=yes
+          _RLS_CONFIG_: --with-release=yes --with-optimize=yes --with-symbol=no
         run: |
           ./test.sh
       - name: Zip Build Artifact
@@ -90,7 +90,7 @@ jobs:
       run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
     - name: Build and Test
       env:
-        _RLS_CONFIG_: --with-release=yes --with-optimize=yes
+        _RLS_CONFIG_: --with-release=yes --with-optimize=yes --with-symbol=no
       run: |
          ./test.sh
     - name: Zip Build Artifact
