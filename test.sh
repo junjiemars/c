@@ -31,7 +31,7 @@ if [ ! -f "${_ROOT_DIR_%/}/configure" ]; then
     echo "!panic: install Nore failed"
     exit 1
   fi
-  sh bootstrap.sh
+  sh bootstrap.sh --branch=edge
   rm bootstrap.sh
 fi
 
