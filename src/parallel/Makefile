@@ -48,8 +48,14 @@ $(parallel_omp_for_binout): $(parallel_root)openmp/for.c
 # pthread
 parallel_pthread_basic_binout := $(bin_path)$(parallel_prefix)_pthread_basic$(bin_ext)
 
+ifeq ($(has_pthread),YES)
 parallel_pthread: parallel_pthread_basic
 parallel_pthread_test: parallel_pthread_basic_test
+else
+parallel_pthread:
+	@echo "#skip parallel_pthread_test ..."
+parallel_pthread_test: parallel_pthread
+endif # end of has_pthread
 
 parallel_pthread_basic: $(parallel_pthread_basic_binout)
 parallel_pthread_basic_test: parallel_pthread_basic

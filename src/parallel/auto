@@ -124,7 +124,11 @@ nm_feature_run=no
 nm_feature_h="#include <pthread.h>"
 nm_feature_flags=
 nm_feature_test='pthread_t t[4];'
-. ${NORE_ROOT}/auto/feature
+if [ yes = $nm_found ]; then
+  flag=has_pthread op="=" value="YES" \
+      . ${NORE_ROOT}/auto/make_define
+fi
+
 
 
 # eof
