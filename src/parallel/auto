@@ -93,9 +93,10 @@
 #	  ;;
 #esac
 
+
 # check OpenMP features
 #----------------------------------------
-nm_feature="openmp feature"
+nm_feature="openmp"
 nm_feature_name="nm_have_openmp"
 nm_feature_run=no
 nm_feature_h='#include <omp.h>'
@@ -113,3 +114,17 @@ if [ yes = $nm_found ]; then
 	nm_feature_test='omp_get_num_procs();'
 	. ${NORE_ROOT}/auto/feature
 fi
+
+
+# check OS features
+#----------------------------------------
+nm_feature="pthread"
+nm_feature_name="nm_have_pthread_h"
+nm_feature_run=no
+nm_feature_h="#include <pthread.h>"
+nm_feature_flags=
+nm_feature_test='pthread_t t[4];'
+. ${NORE_ROOT}/auto/feature
+
+
+# eof
