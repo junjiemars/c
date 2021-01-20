@@ -2,12 +2,16 @@
 #include <stdio.h>
 #include <pthread.h>
 
+#if (MSVC)
+#  pragma warning (disable : 2220)
+#endif  /* end of MSVC */
+
 #define N_THREADS 6
 
 void *
 echo(void *tid)
 {
-	fprintf(stdout, "Hello, tid=%d\n", *(int*)tid);
+	fprintf(stderr, "Hello, tid=%d\n", *(int*)tid);
 	pthread_exit(0);
 }
 
