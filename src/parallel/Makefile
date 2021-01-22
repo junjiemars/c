@@ -64,7 +64,8 @@ parallel_pthread_exit1_binout := $(bin_path)$(parallel_prefix)_pthread_exit1$(bi
 ifeq ($(has_pthread),YES)
 parallel_pthread: parallel_pthread_basic				\
                   parallel_pthread_exit1
-parallel_pthread_test: parallel_pthread_basic_test
+parallel_pthread_test: parallel_pthread_basic_test	\
+                       parallel_pthread_exit1_test
 else
 parallel_pthread:
 	@echo "#skip parallel_pthread_test ..."

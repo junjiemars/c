@@ -1,6 +1,7 @@
 #include "_parallel_.h"
 #include <stdio.h>
 #include <pthread.h>
+#include <stdlib.h>
 
 #if (DARWIN) || (LINUX)
 #  include <unistd.h>
@@ -9,16 +10,18 @@
 #  define sleep(x) Sleep((x) * 1000)
 #endif
 
-#define N_SLEEP 2
+#define N_THREAD 4
 
 void *sleep_routine(void *arg);
 
 void*
 sleep_routine(void *arg)
 {
-  fprintf(stderr, "sleep %i seconds ...\n", N_SLEEP);
-  sleep(N_SLEEP);
-  return arg;
+  int *seconds = (int*) arg;
+  fprintf(stderr, "> #%i sleep %i seconds ...\n", *seconds, *seconds);
+  sleep(*seconds);
+  fprintf(stderr, "< #%i exit ...\n", *seconds);
+  return seconds;
 }
 
 int
@@ -27,15 +30,20 @@ main(int argc, char **argv)
   _unused_(argc);
   _unused_(argv);
   
-  pthread_t thread;
-  int r = pthread_create(&thread, 0, sleep_routine, 0);
-  if (r)
+  pthread_t threads[N_THREAD];
+  int states[N_THREAD];
+
+  for (long i = 0; i < N_THREAD; i++)
     {
-      perror(0);
+      states[i] = i;
+      int r = pthread_create(&threads[i], 0, sleep_routine, &states[i]);
+      if (r)
+        {
+          perror(0);
+        }
     }
 
-  int exit_state = 0;
-  pthread_exit(&exit_state);
+  pthread_exit(0);
 
   /* unreached code */
   fprintf(stderr, "pthread exit\n");
