@@ -7,91 +7,55 @@
 ####
 
 
-## check header file existing
-##----------------------------------------
-#echo " + checking C99 header files ..."
-#include="complex.h" . ${NORE_ROOT}/auto/include
-#include="fenv.h" . ${NORE_ROOT}/auto/include
-#include="inttypes.h" . ${NORE_ROOT}/auto/include
-#include="stdint.h" . ${NORE_ROOT}/auto/include
-#include="tgmath.h" . ${NORE_ROOT}/auto/include
-# include="threads.h" . ${NORE_ROOT}/auto/include
-# include="stdatomic.h" . ${NORE_ROOT}/auto/include
-#
-#
-#echo " + checking C11 header files ..."
-#include="stdalign.h" . ${NORE_ROOT}/auto/include
-#include="stdatomic.h" . ${NORE_ROOT}/auto/include
-#include="stdnoreturn.h" . ${NORE_ROOT}/auto/include
-#include="threads.h" . ${NORE_ROOT}/auto/include
-#include="uchar.h" . ${NORE_ROOT}/auto/include
-#
-#echo " + checking NA1 header files ..."
-#include="iso646.h" . ${NORE_ROOT}/auto/include
-#include="wchar.h" . ${NORE_ROOT}/auto/include
-#include="wctype.h" . ${NORE_ROOT}/auto/include
-#
-#echo " + checking nonstandard posix header files ..."
-#include="unistd.h" . ${NORE_ROOT}/auto/include
-#include="signal.h" . ${NORE_ROOT}/auto/include
-#
+# check compiler sanitize features
+#----------------------------------------
+case "$CC_NAME" in
+  gcc|clang)
+    nm_feature="$CC_NAME -fsanitize=address"
+    nm_feature_name=
+    nm_feature_indent=yes
+    nm_feature_run=no
+    nm_feature_h=
+    nm_feature_flags='-fsanitize=address'
+    nm_feature_test=
+    . ${NORE_ROOT}/auto/feature
+    if [ yes = $nm_found ]; then
+      flag=has_sanitize op=":=" value="YES" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=has_sanitize_address op=":=" value="YES" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=cflags_sanitize op="+=" value=$nm_feature_flags \
+          . ${NORE_ROOT}/auto/make_define
+    fi
+    ;;		 
+  msvc)
+    ;;
+esac
 
-## check machine features
-##----------------------------------------
-#nm_feature="endian"
-#nm_feature_name="nm_have_little_endian"
-#nm_feature_run=value
-#nm_feature_h="#include <stdio.h>"
-#nm_feature_flags=
-#nm_feature_test='int i=0x11223344;
-#                 char *p = (char *)&i;
-#                 int le = (0x44 == *p);
-#                 printf("%i", le);'
-#. ${NORE_ROOT}/auto/feature
-
-
-## check compiler features
-##----------------------------------------
-#case "$CC_NAME" in
-#	clang)
-#		;;
-#	gcc)
-#		nm_feature="$CC_NAME -Wl,-E|--export-dynamic"
-#		nm_feature_name=
-#		nm_feature_run=no
-#		nm_feature_h=
-#		nm_feature_flags='-Wl,-E'
-#		nm_feature_test=
-#		. ${NORE_ROOT}/auto/feature
-#
-#		if [ yes = $nm_found ]; then
-#			flag=LDFLAGS op="+=" value=$nm_feature_flags . ${NORE_ROOT}/auto/make_define
-#		fi
-#		;;
-#	msvc)
-#		;;
-#esac
-
-
-## check OS features
-##----------------------------------------
-#case "$NM_SYSTEM" in
-#	Darwin)
-#		nm_feature="libuv"
-#		nm_feature_name="nm_have_uv_h"
-#		nm_feature_run=no
-#		nm_feature_h="#include <uv.h>"
-#		nm_feature_flags='-I/opt/local/include -L/opt/local/lib -luv'
-#		nm_feature_test=
-#		. ${NORE_ROOT}/auto/feature
-#	  ;;
-#	Linux)
-#	  ;;
-#	WinNT)
-#	  ;;
-#	*)
-#	  ;;
-#esac
+# check compiler sanitize features
+#----------------------------------------
+case "$CC_NAME" in
+  gcc|clang)
+    nm_feature="$CC_NAME -fsanitize=leak"
+    nm_feature_name=
+    nm_feature_indent=yes
+    nm_feature_run=no
+    nm_feature_h=
+    nm_feature_flags='-fsanitize=leak'
+    nm_feature_test=
+    . ${NORE_ROOT}/auto/feature
+    if [ yes = $nm_found ]; then
+      flag=has_sanitize op=":=" value="YES" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=has_sanitize_leak op=":=" value="YES" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=cflags_sanitize op="+=" value=$nm_feature_flags \
+          . ${NORE_ROOT}/auto/make_define
+    fi
+    ;;
+  msvc)
+    ;;
+esac
 
 
 # check OpenMP features

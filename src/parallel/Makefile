@@ -18,6 +18,13 @@ getopt_c := $(root)posix/getopt.c
 endif # end of msvc checking
 
 
+ifeq ($(_MEMORY_),1)
+ifeq ($(has_sanitize),YES)
+CFLAGS += $(cflags_sanitize)
+endif # end of has_sanitize
+endif # end of _MEMORY_
+
+
 # openmp
 parallel_omp_basic_binout := $(bin_path)$(parallel_prefix)_omp_basic$(bin_ext)
 parallel_omp_for_binout := $(bin_path)$(parallel_prefix)_omp_for$(bin_ext)
