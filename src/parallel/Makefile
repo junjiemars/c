@@ -2,13 +2,11 @@
 # ./configure --without-debug --has-parallel
 #
 
-parallel: parallel_omp_basic \
-					parallel_omp_for \
+parallel: parallel_omp													\
 					parallel_pthread_basic
 
-parallel_test: parallel_omp_basic_test \
-							 parallel_omp_for_test \
-							 parallel_pthread_basic_test
+parallel_test: parallel_omp_test								\
+							 parallel_pthread_test
 
 parallel_prefix := parallel
 INC += -I$(parallel_root)
