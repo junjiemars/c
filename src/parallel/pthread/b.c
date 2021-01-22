@@ -20,6 +20,8 @@ echo(void *arg)
 	fprintf(stderr, "Hello, sn=%li\n", *sn);
   assert(((thread_info_t*) arg)->tid == pthread_self()
          && "calling thread id");
+  assert(pthread_equal(((thread_info_t*) arg)->tid, pthread_self())
+         && "same as above");
   return sn;
 }
 
