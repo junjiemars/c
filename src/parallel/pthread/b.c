@@ -54,7 +54,9 @@ main(int argc, char **argv)
           perror("!panic, when join");
           continue;
         }
-      fprintf(stderr, "tid=%li, return %li\n", tinfo[i].tid, *(long*) retval);
+      fprintf(stderr, "tid=%zu, return %li\n",
+              (unsigned long) tinfo[i].tid,
+              *(long*) retval);
     }
   
  clean_exit:
