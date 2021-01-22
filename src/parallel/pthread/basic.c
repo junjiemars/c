@@ -4,23 +4,23 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#define N_THREADS 8
+#define N_THREAD 8
 
-typedef struct thread_info_s
+typedef struct thread_in_s
 {
   pthread_t tid;
   long sn;
-} thread_info_t;
+} thread_in_t;
 
 
 void *
 echo(void *arg)
 {
-  long *sn = &((thread_info_t*) arg)->sn;
+  long *sn = &((thread_in_t*) arg)->sn;
 	fprintf(stderr, "Hello, sn=%li\n", *sn);
-  assert(((thread_info_t*) arg)->tid == pthread_self()
+  assert(((thread_in_t*) arg)->tid == pthread_self()
          && "calling thread id");
-  assert(pthread_equal(((thread_info_t*) arg)->tid, pthread_self())
+  assert(pthread_equal(((thread_in_t*) arg)->tid, pthread_self())
          && "same as above");
   return sn;
 }
@@ -31,15 +31,15 @@ main(int argc, char **argv)
 	_unused_(argc);
 	_unused_(argv);
 
-  thread_info_t *tinfo = 0;
-  tinfo = calloc(N_THREADS, sizeof(thread_info_t));
+  thread_in_t *tinfo = 0;
+  tinfo = calloc(N_THREAD, sizeof(thread_in_t));
   if (!tinfo)
     {
       perror(0);
       return 1;
     }
 
-	for (long i = 0; i < N_THREADS; i++)
+	for (long i = 0; i < N_THREAD; i++)
     {
       fprintf(stdout, "creating thread %ld\n", i);
       tinfo[i].sn = i;
@@ -52,7 +52,7 @@ main(int argc, char **argv)
     }
 
   void *retval;
-  for (long i = 0; i < N_THREADS; i++)
+  for (long i = 0; i < N_THREAD; i++)
     {
       int r = pthread_join(tinfo[i].tid, &retval);
       if (r)
