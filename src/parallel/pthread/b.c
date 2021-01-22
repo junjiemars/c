@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #define N_THREADS 8
 
@@ -15,8 +16,11 @@ typedef struct thread_info_s
 void *
 echo(void *arg)
 {
-	fprintf(stderr, "Hello, sn=%li\n", ((thread_info_t*) arg)->sn);
-  return &(((thread_info_t*) arg)->sn);
+  long *sn = &((thread_info_t*) arg)->sn;
+	fprintf(stderr, "Hello, sn=%li\n", *sn);
+  assert(((thread_info_t*) arg)->tid == pthread_self()
+         && "calling thread id");
+  return sn;
 }
 
 int
