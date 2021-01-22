@@ -59,9 +59,11 @@ $(parallel_omp_for_binout): $(parallel_root)openmp/for.c
 
 # pthread
 parallel_pthread_basic_binout := $(bin_path)$(parallel_prefix)_pthread_basic$(bin_ext)
+parallel_pthread_exit1_binout := $(bin_path)$(parallel_prefix)_pthread_exit1$(bin_ext)
 
 ifeq ($(has_pthread),YES)
-parallel_pthread: parallel_pthread_basic
+parallel_pthread: parallel_pthread_basic				\
+                  parallel_pthread_exit1
 parallel_pthread_test: parallel_pthread_basic_test
 else
 parallel_pthread:
@@ -73,5 +75,12 @@ parallel_pthread_basic: $(parallel_pthread_basic_binout)
 parallel_pthread_basic_test: parallel_pthread_basic
 	$(parallel_pthread_basic_binout)
 
-$(parallel_pthread_basic_binout): $(parallel_root)pthread/b.c
+parallel_pthread_exit1: $(parallel_pthread_exit1_binout)
+parallel_pthread_exit1_test: parallel_pthread_exit1
+	$(parallel_pthread_exit1_binout)
+
+$(parallel_pthread_basic_binout): $(parallel_root)pthread/basic.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(parallel_pthread_exit1_binout): $(parallel_root)pthread/exit1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
