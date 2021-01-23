@@ -62,15 +62,18 @@ parallel_pthread_basic_binout := $(bin_path)$(parallel_prefix)_pthread_basic$(bi
 parallel_pthread_exit_binout := $(bin_path)$(parallel_prefix)_pthread_exit$(bin_ext)
 parallel_pthread_stacksize_binout := $(bin_path)$(parallel_prefix)_pthread_stacksize$(bin_ext)
 parallel_pthread_detach_binout := $(bin_path)$(parallel_prefix)_pthread_detach$(bin_ext)
+parallel_pthread_mutex_binout := $(bin_path)$(parallel_prefix)_pthread_mutex$(bin_ext)
 
 ifeq ($(has_pthread),YES)
 parallel_pthread: parallel_pthread_basic				\
                   parallel_pthread_detach				\
                   parallel_pthread_exit					\
+                  parallel_pthread_mutex				\
                   parallel_pthread_stacksize
 parallel_pthread_test: parallel_pthread_basic_test			\
                        parallel_pthread_detach_test			\
                        parallel_pthread_exit_test				\
+                       parallel_pthread_mutex_test			\
                        parallel_pthread_stacksize_test
 else
 parallel_pthread:
@@ -90,6 +93,11 @@ parallel_pthread_exit: $(parallel_pthread_exit_binout)
 parallel_pthread_exit_test: parallel_pthread_exit
 	$(parallel_pthread_exit_binout)
 
+parallel_pthread_mutex: $(parallel_pthread_mutex_binout)
+parallel_pthread_mutex_test: parallel_pthread_mutex
+	$(parallel_pthread_mutex_binout)	 # without mutex
+	$(parallel_pthread_mutex_binout) 1 # with mutex
+
 parallel_pthread_stacksize: $(parallel_pthread_stacksize_binout)
 parallel_pthread_stacksize_test: parallel_pthread_stacksize
 	$(parallel_pthread_stacksize_binout)
@@ -101,6 +109,9 @@ $(parallel_pthread_detach_binout): $(parallel_root)pthread/detach.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(parallel_pthread_exit_binout): $(parallel_root)pthread/exit.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(parallel_pthread_mutex_binout): $(parallel_root)pthread/mutex.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(parallel_pthread_stacksize_binout): $(parallel_root)pthread/stacksize.c
