@@ -29,14 +29,9 @@ main(int argc, char **argv)
 	_unused_(argc);
 	_unused_(argv);
 
-  thread_in_t *tinfo = 0;
-  tinfo = calloc(N_THREAD, sizeof(thread_in_t));
-  if (!tinfo)
-    {
-      perror(0);
-      return 1;
-    }
+  thread_in_t tinfo[N_THREAD];
 
+  /* create threads */
 	for (long i = 0; i < N_THREAD; i++)
     {
       fprintf(stdout, "creating thread %ld\n", i);
@@ -44,18 +39,19 @@ main(int argc, char **argv)
       int r = pthread_create(&tinfo[i].tid, 0, echo, &tinfo[i]);
       if (r)
         {
-          perror("!panic, when create");
-          goto clean_exit;
+          perror("!panic, pthread_create");
+          return 1;
         }
     }
 
+  /* join threads */
   void *retval;
   for (long i = 0; i < N_THREAD; i++)
     {
       int r = pthread_join(tinfo[i].tid, &retval);
       if (r)
         {
-          perror("!panic, when join");
+          perror("!panic, pthread_join");
           continue;
         }
       fprintf(stderr, "tid=0x%016zx, return %li\n",
@@ -63,8 +59,5 @@ main(int argc, char **argv)
               *(long*) retval);
     }
   
- clean_exit:
-  free(tinfo);
-	
 	return 0;
 }
