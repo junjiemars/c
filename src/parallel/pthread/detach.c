@@ -23,15 +23,15 @@ is_detached(int state, long sn)
   switch (state)
     {
     case PTHREAD_CREATE_DETACHED:
-      fprintf(stderr, "#%02li, tid = 0x%016zx, PTHREAD_CREATE_DETACHED\n",
+      fprintf(stderr, "#%02li, tid=0x%016zx, PTHREAD_CREATE_DETACHED\n",
               sn, (long) tid);
       break;
     case PTHREAD_CREATE_JOINABLE:
-      fprintf(stderr, "#%02li, tid = 0x%016zx, PTHREAD_CREATE_JOINABLE\n",
+      fprintf(stderr, "#%02li, tid=0x%016zx, PTHREAD_CREATE_JOINABLE\n",
               sn, (long) tid);
       break;
     default:
-      fprintf(stderr, "#%02li, tid = 0x%016zx, %i (unknown)\n",
+      fprintf(stderr, "#%02li, tid=0x%016zx, %i (unknown)\n",
               sn, (long) tid, state);
       break;
     }
