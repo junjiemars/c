@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#define N_THREAD 8
+#define N_THREAD 4
 
 typedef struct thread_in_s
 {
@@ -16,13 +16,11 @@ typedef struct thread_in_s
 void *
 echo(void *arg)
 {
-  long *sn = &((thread_in_t*) arg)->sn;
-	fprintf(stderr, "Hello, sn=%li\n", *sn);
-  assert(((thread_in_t*) arg)->tid == pthread_self()
-         && "calling thread id");
-  assert(pthread_equal(((thread_in_t*) arg)->tid, pthread_self())
-         && "same as above");
-  return sn;
+  thread_in_t *in = (thread_in_t*) arg;
+	fprintf(stderr, "Hello, sn=%li\n", in->sn);
+  assert(in->tid == pthread_self() && "calling thread id");
+  assert(pthread_equal(in->tid, pthread_self()) && "same as above");
+  return &in->sn;
 }
 
 int
