@@ -104,6 +104,7 @@ main(int argc, char **argv)
         }
     }
 
+  /* destroy mutex */
   for (int i = 0; i < N_THREAD; i++)
     {
       rc = pthread_mutex_destroy(&state.mutex[i]);
