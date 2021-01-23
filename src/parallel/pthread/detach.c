@@ -110,9 +110,9 @@ main(int argc, char **argv)
         }
 
       rc = pthread_create(&states[i].tid,
-                         &states[i].attr,
-                         detached_routine,
-                         &states[i]);
+                          &states[i].attr,
+                          detached_routine,
+                          &states[i]);
       if (rc)
         {
           perror("!panic, pthread_create");
