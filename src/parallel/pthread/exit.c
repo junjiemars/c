@@ -3,12 +3,6 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-#if (DARWIN) || (LINUX)
-#  include <unistd.h>
-#elif (WINNT)
-#  include <process.h>
-#  define sleep(x) Sleep((x) * 1000)
-#endif
 
 #define N_THREAD 4
 
