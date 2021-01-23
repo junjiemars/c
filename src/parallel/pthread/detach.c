@@ -6,10 +6,10 @@
 
 typedef struct thread_state_s
 {
-  long sn;
-  pthread_t tid;
+  long           sn;
+  pthread_t      tid;
   pthread_attr_t attr;
-  int detached;
+  int            detached;
 } thread_state_t;
 
 void is_detached(int state, long sn);
@@ -41,11 +41,11 @@ void *
 detached_routine(void *arg)
 {
   thread_state_t *state;
-  int r;
-  int detached;
+  int             rc;
+  int             detached;
   state = (thread_state_t *) arg;
-  r = pthread_attr_getdetachstate(&state->attr, &detached);
-  if (r)
+  rc = pthread_attr_getdetachstate(&state->attr, &detached);
+  if (rc)
     {
       perror("!panic, detached_routine");
     }
@@ -63,26 +63,26 @@ main(int argc, char **argv)
   _unused_(argv);
 
   pthread_attr_t attr;
-  int detach;
-  int r;
+  int            detach;
+  int            rc;
   thread_state_t states[N_THREAD];
 
   /* check main thread is detached */
-  r = pthread_attr_init(&attr);
-  if (r)
+  rc = pthread_attr_init(&attr);
+  if (rc)
     {
       perror("!panic, pthread_attr_init");
       return 1;
     }
-  r = pthread_attr_getdetachstate(&attr, &detach);
-  if (r)
+  rc = pthread_attr_getdetachstate(&attr, &detach);
+  if (rc)
     {
       perror("!panic, pthread_attr_getdetachstate");
       return 1;
     }
   is_detached(detach, 0);
-  r = pthread_attr_destroy(&attr);
-  if (r)
+  rc = pthread_attr_destroy(&attr);
+  if (rc)
     {
       perror("!panic, pthread_attr_destroy");
       return 1;
@@ -91,8 +91,8 @@ main(int argc, char **argv)
   /* create joinable and detached threads */
   for (long i = 0; i < N_THREAD; i++)
     {
-      r = pthread_attr_init(&states[i].attr);
-      if (r)
+      rc = pthread_attr_init(&states[i].attr);
+      if (rc)
         {
           perror("!panic, pthread_attr_init");
           return 1;
@@ -102,18 +102,18 @@ main(int argc, char **argv)
       states[i].detached = (1 == (i & 1))
         ? PTHREAD_CREATE_JOINABLE : PTHREAD_CREATE_DETACHED;
 
-      r = pthread_attr_setdetachstate(&states[i].attr, states[i].detached);
-      if (r)
+      rc = pthread_attr_setdetachstate(&states[i].attr, states[i].detached);
+      if (rc)
         {
           perror("!panic, pthread_attr_setdetachstate");
           return 1;
         }
 
-      r = pthread_create(&states[i].tid,
+      rc = pthread_create(&states[i].tid,
                          &states[i].attr,
                          detached_routine,
                          &states[i]);
-      if (r)
+      if (rc)
         {
           perror("!panic, pthread_create");
           return 1;
@@ -125,14 +125,14 @@ main(int argc, char **argv)
     {
       if (PTHREAD_CREATE_JOINABLE == states[i].detached)
         {
-          r = pthread_join(states[i].tid, 0);
-          if (r)
+          rc = pthread_join(states[i].tid, 0);
+          if (rc)
             {
               perror("!panic, pthread_join");
             }
         }
-      r = pthread_attr_destroy(&states[i].attr);
-      if (r)
+      rc = pthread_attr_destroy(&states[i].attr);
+      if (rc)
         {
           perror("!panic, pthread_attr_destroy");
         }
