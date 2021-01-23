@@ -31,7 +31,7 @@ check_stacksize(void *arg)
     {
       perror("!panic, check_stacksize");
     }
-  fprintf(stderr, "#%02li, tid = 0x%016zx, stacksize = 0x%zx\n",
+  fprintf(stderr, "#%02li, tid = 0x%016zx, stacksize = 0x%08zx\n",
           state->sn,
           (long) pthread_self(),
           stacksize);
@@ -63,7 +63,9 @@ main(int argc, char **argv)
       perror("!panic, pthread_attr_getstacksize");
       return 1;
     }
-  fprintf(stderr, "default stacksize = %li\n", stacksize);
+  fprintf(stderr, "#00, tid = 0x%016zx, stacksize = 0x%08zx\n",
+          (long) pthread_self(),
+          stacksize);
   r = pthread_attr_destroy(&attr);
   if (r)
     {
