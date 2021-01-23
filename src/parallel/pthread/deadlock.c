@@ -22,8 +22,13 @@ race(void *arg)
   thread_state_t  *state = (thread_state_t *) arg;
   pthread_mutex_t *mutex1, *mutex2;
 
-  mutex1 = &state->mutex[state->offset+0 % N_THREAD];
-  mutex2 = &state->mutex[state->offset+1 % N_THREAD];
+  fprintf(stderr, "< #%02li, tid=0x%016zx, counter=%02i\n",
+          state->sn[state->offset],
+          (long) state->tid[state->offset],
+          race_counter);
+
+  mutex1 = &state->mutex[(state->offset+0) % N_THREAD];
+  mutex2 = &state->mutex[(state->offset+1) % N_THREAD];
 
   rc = pthread_mutex_lock(mutex1);
   if (rc)
@@ -105,7 +110,7 @@ main(int argc, char **argv)
     }
 
   /* destroy mutex */
-  for (int i = 0; i < N_THREAD; i++)
+  for (long i = 0; i < N_THREAD; i++)
     {
       rc = pthread_mutex_destroy(&state.mutex[i]);
       if (rc)
