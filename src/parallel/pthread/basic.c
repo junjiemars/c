@@ -60,7 +60,7 @@ main(int argc, char **argv)
           perror("!panic, when join");
           continue;
         }
-      fprintf(stderr, "tid=%zu, return %li\n",
+      fprintf(stderr, "tid=0x%016zx, return %li\n",
               (unsigned long) tinfo[i].tid,
               *(long*) retval);
     }
