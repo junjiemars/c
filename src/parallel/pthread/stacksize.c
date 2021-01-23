@@ -104,13 +104,11 @@ main(int argc, char **argv)
       if (r)
         {
           perror("!panic, pthread_join");
-          return 1;
         }
       r = pthread_attr_destroy(&states[i].attr);
       if (r)
         {
           perror("!panic, pthread_attr_destroy");
-          return 1;
         }
     }
 
