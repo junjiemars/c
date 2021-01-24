@@ -7,13 +7,14 @@
 
 typedef struct thread_state_s
 {
-  long sn;
+  long      sn;
   pthread_t tid;
-  pthread_mutex_t *mutex;
 } thread_state_t;
 
-static int opt_has_mutex = 0;
-static int race_counter = 0;
+static int              opt_has_mutex = 0;
+static int              race_counter  = 0;
+static pthread_mutex_t  mutex;
+
 void *race(void *arg);
 
 void *
@@ -24,7 +25,7 @@ race(void *arg)
 
   if (opt_has_mutex)
     {
-      rc = pthread_mutex_lock(state->mutex);
+      rc = pthread_mutex_lock(&mutex);
       if (rc)
         {
           perror("!panic, pthread_mutex_lock");
@@ -39,7 +40,7 @@ race(void *arg)
 
   if (opt_has_mutex)
     {
-      rc = pthread_mutex_unlock(state->mutex);
+      rc = pthread_mutex_unlock(&mutex);
       if (rc)
         {
           perror("!panic, pthread_mutex_unlock");
@@ -56,7 +57,6 @@ main(int argc, char **argv)
   _unused_(argv);
 
   thread_state_t  states[N_THREAD];
-  pthread_mutex_t mutex;
   int             rc;
 
   if (argc > 1)
@@ -76,8 +76,6 @@ main(int argc, char **argv)
   for (long i = 0; i < N_THREAD; i++)
     {
       states[i].sn = i+1;
-      states[i].mutex = &mutex;
-
       rc = pthread_create(&states[i].tid, 0, race, &states[i]);
       if (rc)
         {
