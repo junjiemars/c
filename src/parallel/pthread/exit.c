@@ -3,44 +3,86 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-
 #define N_THREAD 4
 
-void *sleep_routine(void *arg);
-
-void*
-sleep_routine(void *arg)
+typedef struct thread_state_s
 {
-  int *seconds = (int*) arg;
-  fprintf(stderr, "> #%i sleep %i seconds ...\n", *seconds, *seconds);
-  sleep(*seconds);
-  fprintf(stderr, "< #%i exit ...\n", *seconds);
-  return seconds;
+  unsigned int idle;
+  long         sn;
+  pthread_t    tid;
+} thread_state_t;
+
+void *do_(void *arg);
+void do__(void *arg);
+
+void *
+do_(void *arg)
+{
+  thread_state_t *state = (thread_state_t *) arg;
+  fprintf(stderr, "> #%02li do_ %is ...\n",
+          state->sn,
+          state->idle);
+
+  sleep(state->idle);
+  do__(state);
+
+  fprintf(stderr, "< #%02li do_ exit\n", state->sn);
+
+  pthread_exit(arg);
 }
 
+void
+do__(void *arg)
+{
+  thread_state_t *state = (thread_state_t *) arg;
+  fprintf(stderr, ">> #%02li, do__ %is ...\n",
+          state->sn,
+          state->idle);
+
+  sleep(state->idle);
+
+  if (1 == (state->sn & 1))
+    {
+      fprintf(stderr, "<< #%02li, do__ exit |\n", state->sn);
+      pthread_exit(state);
+    }
+  else
+    {
+      fprintf(stderr, "<< #%02li, do__ exit ...\n", state->sn);
+    }
+}
+
+
 int
-main(int argc, char **argv) 
+main(int argc, char **argv)
 {
   _unused_(argc);
   _unused_(argv);
-  
-  pthread_t threads[N_THREAD];
-  int states[N_THREAD];
 
+  thread_state_t state[N_THREAD];
+  int            rc;
+
+  /* create threads */
   for (long i = 0; i < N_THREAD; i++)
     {
-      states[i] = i;
-      int r = pthread_create(&threads[i], 0, sleep_routine, &states[i]);
-      if (r)
+      state[i].sn = i+1;
+      state[i].idle = i;
+      rc = pthread_create(&state[i].tid, 0, do_, &state[i]);
+      if (rc)
         {
           perror(0);
         }
     }
 
-  pthread_exit(0);
-
-  /* unreached code */
-  fprintf(stderr, "pthread exit\n");
+  /* join threads */
+  for (long i = 0; i < N_THREAD; i++)
+    {
+      rc = pthread_join(state[i].tid, 0);
+      if (rc)
+        {
+          perror(0);
+        }
+    }
 
   return 0;
 }
