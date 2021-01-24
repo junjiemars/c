@@ -13,12 +13,12 @@ typedef struct thread_state_s
   pthread_attr_t attr;
 } thread_state_t;
 
-void is_detached(int state, long sn);
-void join_error(int err, long sn);
+int   is_detached(int state, long sn);
+void  join_error(int err, long sn);
 void *detached_routine(void *arg);
 
 
-void
+int
 is_detached(int state, long sn)
 {
   pthread_t tid = pthread_self();
@@ -27,15 +27,15 @@ is_detached(int state, long sn)
     case PTHREAD_CREATE_DETACHED:
       fprintf(stderr, "#%02li, tid=0x%016zx, PTHREAD_CREATE_DETACHED\n",
               sn, (long) tid);
-      break;
+      return 1;
     case PTHREAD_CREATE_JOINABLE:
       fprintf(stderr, "#%02li, tid=0x%016zx, PTHREAD_CREATE_JOINABLE\n",
               sn, (long) tid);
-      break;
+      return 0;
     default:
       fprintf(stderr, "#%02li, tid=0x%016zx, %i (unknown)\n",
               sn, (long) tid, state);
-      break;
+      return 0;
     }
 }
 
