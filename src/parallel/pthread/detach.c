@@ -1,18 +1,20 @@
 #include <_parallel_.h>
 #include <pthread.h>
 #include <stdio.h>
+#include <errno.h>
 
 #define N_THREAD 4
+#define N_ERRSTR 64
 
 typedef struct thread_state_s
 {
   long           sn;
   pthread_t      tid;
   pthread_attr_t attr;
-  int            detached;
 } thread_state_t;
 
 void is_detached(int state, long sn);
+void join_error(int err, long sn);
 void *detached_routine(void *arg);
 
 
@@ -37,13 +39,36 @@ is_detached(int state, long sn)
     }
 }
 
+void
+join_error(int err, long sn)
+{
+  char ss[N_ERRSTR];
+  switch (err)
+    {
+    case EINVAL:
+      snprintf(ss, N_ERRSTR, "!panic, join at #%02li, EINVAL", sn);
+      break;
+    case ESRCH:
+      snprintf(ss, N_ERRSTR, "!panic, join at #%02li, ESRCH", sn);
+      break;
+    case EDEADLK:
+      snprintf(ss, N_ERRSTR, "!panic, join at #%02li, EDEADLK", sn);
+      break;
+    default:
+      snprintf(ss, N_ERRSTR, "!panic, join at #%02li, unknown", sn);
+      break;
+    }
+  perror(ss);
+}
+
 void *
 detached_routine(void *arg)
 {
-  thread_state_t *state;
+  thread_state_t *state = (thread_state_t *) arg;
   int             rc;
   int             detached;
-  state = (thread_state_t *) arg;
+
+  sleep(1);
   rc = pthread_attr_getdetachstate(&state->attr, &detached);
   if (rc)
     {
@@ -99,10 +124,10 @@ main(int argc, char **argv)
         }
 
       state[i].sn = i+1;
-      state[i].detached = (1 == (i & 1))
+      detach = (1 == (state[i].sn & 1))
         ? PTHREAD_CREATE_JOINABLE : PTHREAD_CREATE_DETACHED;
 
-      rc = pthread_attr_setdetachstate(&state[i].attr, state[i].detached);
+      rc = pthread_attr_setdetachstate(&state[i].attr, detach);
       if (rc)
         {
           perror("!panic, pthread_attr_setdetachstate");
@@ -120,21 +145,13 @@ main(int argc, char **argv)
         }
     }
 
-  /* join joinable threads */
+  /* join threads */
   for (long i = 0; i < N_THREAD; i++)
     {
-      if (PTHREAD_CREATE_JOINABLE == state[i].detached)
-        {
-          rc = pthread_join(state[i].tid, 0);
-          if (rc)
-            {
-              perror("!panic, pthread_join");
-            }
-        }
-      rc = pthread_attr_destroy(&state[i].attr);
+      rc = pthread_join(state[i].tid, 0);
       if (rc)
         {
-          perror("!panic, pthread_attr_destroy");
+          join_error(rc, state[i].sn);
         }
     }
 
