@@ -56,7 +56,7 @@ race(void *arg)
 
   ++race_counter;
   sleep(1);
-  fprintf(stderr, ">> #%02li, tid=0x%016zx, counter=%02i\n",
+  fprintf(stderr, ">>> #%02li, tid=0x%016zx, counter=%02i\n",
           state->sn,
           (long) state->tid,
           race_counter);
@@ -65,7 +65,7 @@ race(void *arg)
   if (rc)
     {
       snprintf(errstr, N_ERRSTR,
-               "< !panic, #%02li, pthread_mutex_unlock",
+               "<< !panic, #%02li, pthread_mutex_unlock",
                state->sn);
       perror(errstr);
     }
@@ -81,7 +81,7 @@ race(void *arg)
       perror(errstr);
     }
 
-  fprintf(stderr, "> #%02li, tid=0x%016zx, counter=%02i\n",
+  fprintf(stderr, "< #%02li, tid=0x%016zx, counter=%02i\n",
           state->sn,
           (long) state->tid,
           race_counter);
