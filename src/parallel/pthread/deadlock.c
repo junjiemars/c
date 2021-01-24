@@ -1,6 +1,7 @@
 #include <_parallel_.h>
 #include <stdio.h>
 #include <pthread.h>
+#include <stdlib.h>
 
 #define N_THREAD 2
 #define N_MUTEX  2
@@ -12,7 +13,8 @@ typedef struct thread_state_s
   pthread_t        tid;
 } thread_state_t;
 
-static int             race_counter = 0;
+static int             opt_has_deadlock = 0;
+static int             race_counter     = 0;
 static pthread_mutex_t mutex[N_MUTEX];
 
 void *race(void *arg);
@@ -40,18 +42,22 @@ race(void *arg)
                "> !panic, #%02li, pthread_mutex_trylock",
                state->sn);
       perror(errstr);
+      goto exit;
     }
-
   sleep(1);
 
-  rc = pthread_mutex_trylock(m2);
-  if (rc)
+  if (opt_has_deadlock)
     {
-      /* EBUSY on Darwin */
-      snprintf(errstr, N_ERRSTR,
-               ">> !panic, #%02li, pthread_mutex_trylock",
-              state->sn);
-      perror(errstr);
+      rc = pthread_mutex_trylock(m2);
+      if (rc)
+        {
+          /* EBUSY on Darwin */
+          snprintf(errstr, N_ERRSTR,
+                   ">> !panic, #%02li, pthread_mutex_trylock",
+                   state->sn);
+          perror(errstr);
+          goto exit_lock1;
+        }
     }
 
   ++race_counter;
@@ -61,17 +67,20 @@ race(void *arg)
           (long) state->tid,
           race_counter);
 
-  rc = pthread_mutex_unlock(m2);
-  if (rc)
+  if (opt_has_deadlock)
     {
-      snprintf(errstr, N_ERRSTR,
-               "<< !panic, #%02li, pthread_mutex_unlock",
-               state->sn);
-      perror(errstr);
+      rc = pthread_mutex_unlock(m2);
+      if (rc)
+        {
+          snprintf(errstr, N_ERRSTR,
+                   "<< !panic, #%02li, pthread_mutex_unlock",
+                   state->sn);
+          perror(errstr);
+        }
     }
 
+ exit_lock1:
   sleep(1);
-
   rc = pthread_mutex_unlock(m1);
   if (rc)
     {
@@ -80,12 +89,11 @@ race(void *arg)
                state->sn);
       perror(errstr);
     }
-
+ exit:
   fprintf(stderr, "< #%02li, tid=0x%016zx, counter=%02i\n",
           state->sn,
           (long) state->tid,
           race_counter);
-
   return arg;
 }
 
@@ -94,6 +102,11 @@ main(int argc, char **argv)
 {
   _unused_(argc);
   _unused_(argv);
+
+  if (argc > 1)
+    {
+      opt_has_deadlock = atoi(argv[1]);
+    }
 
   thread_state_t state[N_THREAD];
   int            rc      = 0;

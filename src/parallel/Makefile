@@ -90,7 +90,8 @@ parallel_pthread_basic_test: parallel_pthread_basic
 
 parallel_pthread_deadlock: $(parallel_pthread_deadlock_binout)
 parallel_pthread_deadlock_test: parallel_pthread_deadlock
-	$(parallel_pthread_deadlock_binout)
+	$(parallel_pthread_deadlock_binout) #without deadlock
+	$(parallel_pthread_deadlock_binout) 1 #with deadlock
 
 parallel_pthread_detach: $(parallel_pthread_detach_binout)
 parallel_pthread_detach_test: parallel_pthread_detach
