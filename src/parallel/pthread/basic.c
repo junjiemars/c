@@ -6,21 +6,24 @@
 
 #define N_THREAD 4
 
-typedef struct thread_in_s
+typedef struct thread_state_s
 {
+  long      sn;
   pthread_t tid;
-  long sn;
-} thread_in_t;
+} thread_state_t;
 
 
 void *
 echo(void *arg)
 {
-  thread_in_t *in = (thread_in_t*) arg;
-	fprintf(stderr, "Hello, sn=%li\n", in->sn);
-  assert(in->tid == pthread_self() && "calling thread id");
-  assert(pthread_equal(in->tid, pthread_self()) && "same as above");
-  return &in->sn;
+  thread_state_t *state = (thread_state_t *) arg;
+
+	fprintf(stderr, "> #%02li, Hello\n", state->sn);
+
+  assert(state->tid == pthread_self() && "calling thread id");
+  assert(pthread_equal(state->tid, pthread_self()) && "same as above");
+
+  return &state->sn;
 }
 
 int
@@ -29,15 +32,17 @@ main(int argc, char **argv)
 	_unused_(argc);
 	_unused_(argv);
 
-  thread_in_t tinfo[N_THREAD];
+  thread_state_t  state[N_THREAD];
+  void           *retval;
+  int             rc;
 
   /* create threads */
 	for (long i = 0; i < N_THREAD; i++)
     {
-      fprintf(stdout, "creating thread %ld\n", i);
-      tinfo[i].sn = i;
-      int r = pthread_create(&tinfo[i].tid, 0, echo, &tinfo[i]);
-      if (r)
+      fprintf(stdout, "+ creating thread #%02li\n", i);
+      state[i].sn = i;
+      rc = pthread_create(&state[i].tid, 0, echo, &state[i]);
+      if (rc)
         {
           perror("!panic, pthread_create");
           return 1;
@@ -45,19 +50,20 @@ main(int argc, char **argv)
     }
 
   /* join threads */
-  void *retval;
   for (long i = 0; i < N_THREAD; i++)
     {
-      int r = pthread_join(tinfo[i].tid, &retval);
-      if (r)
+      fprintf(stderr, "- joining thread #%02li\n", i);
+      rc = pthread_join(state[i].tid, &retval);
+      if (rc)
         {
           perror("!panic, pthread_join");
           continue;
         }
-      fprintf(stderr, "tid=0x%016zx, return %li\n",
-              (unsigned long) tinfo[i].tid,
+      fprintf(stderr, "#%02li, tid=0x%016zx, return %li\n",
+              state[i].sn,
+              (long) state[i].tid,
               *(long*) retval);
     }
-  
+
 	return 0;
 }
