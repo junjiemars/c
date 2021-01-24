@@ -25,7 +25,7 @@ race(void *arg)
   pthread_mutex_t *m1, *m2;
   char             errstr[N_ERRSTR];
 
-  fprintf(stderr, "+ #%02li, tid=0x%016zx, counter=%02i\n",
+  fprintf(stderr, "> #%02li, tid=0x%016zx, counter=%02i\n",
           state->sn,
           (long) state->tid,
           race_counter);
@@ -80,7 +80,7 @@ race(void *arg)
       perror(errstr);
     }
 
-  fprintf(stderr, "- #%02li, tid=0x%016zx, counter=%02i\n",
+  fprintf(stderr, "> #%02li, tid=0x%016zx, counter=%02i\n",
           state->sn,
           (long) state->tid,
           race_counter);
