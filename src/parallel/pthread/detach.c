@@ -65,9 +65,9 @@ main(int argc, char **argv)
   pthread_attr_t attr;
   int            detach;
   int            rc;
-  thread_state_t states[N_THREAD];
+  thread_state_t state[N_THREAD];
 
-  /* check main thread is detached */
+  /* check main thread detached */
   rc = pthread_attr_init(&attr);
   if (rc)
     {
@@ -91,28 +91,28 @@ main(int argc, char **argv)
   /* create joinable and detached threads */
   for (long i = 0; i < N_THREAD; i++)
     {
-      rc = pthread_attr_init(&states[i].attr);
+      rc = pthread_attr_init(&state[i].attr);
       if (rc)
         {
           perror("!panic, pthread_attr_init");
           return 1;
         }
 
-      states[i].sn = i+1;
-      states[i].detached = (1 == (i & 1))
+      state[i].sn = i+1;
+      state[i].detached = (1 == (i & 1))
         ? PTHREAD_CREATE_JOINABLE : PTHREAD_CREATE_DETACHED;
 
-      rc = pthread_attr_setdetachstate(&states[i].attr, states[i].detached);
+      rc = pthread_attr_setdetachstate(&state[i].attr, state[i].detached);
       if (rc)
         {
           perror("!panic, pthread_attr_setdetachstate");
           return 1;
         }
 
-      rc = pthread_create(&states[i].tid,
-                          &states[i].attr,
+      rc = pthread_create(&state[i].tid,
+                          &state[i].attr,
                           detached_routine,
-                          &states[i]);
+                          &state[i]);
       if (rc)
         {
           perror("!panic, pthread_create");
@@ -123,15 +123,15 @@ main(int argc, char **argv)
   /* join joinable threads */
   for (long i = 0; i < N_THREAD; i++)
     {
-      if (PTHREAD_CREATE_JOINABLE == states[i].detached)
+      if (PTHREAD_CREATE_JOINABLE == state[i].detached)
         {
-          rc = pthread_join(states[i].tid, 0);
+          rc = pthread_join(state[i].tid, 0);
           if (rc)
             {
               perror("!panic, pthread_join");
             }
         }
-      rc = pthread_attr_destroy(&states[i].attr);
+      rc = pthread_attr_destroy(&state[i].attr);
       if (rc)
         {
           perror("!panic, pthread_attr_destroy");
