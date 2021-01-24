@@ -47,6 +47,7 @@ race(void *arg)
   rc = pthread_mutex_trylock(m2);
   if (rc)
     {
+      /* EBUSY on Darwin */
       snprintf(errstr, N_ERRSTR,
                ">> !panic, #%02li, pthread_mutex_trylock",
               state->sn);
