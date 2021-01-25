@@ -4,17 +4,20 @@
 
 #define N_THREAD 4
 #define N_ERRSTR 128
+#define QSIZE    2
 
 typedef struct thread_state_s
 {
-  long sn;
+  long            sn;
 } thread_state_t;
 
 static int             opt_terminate = 0;
-static int             has_produce   = 0;
-static int             race_counter  = 0;
 static pthread_mutex_t mutex;
-static pthread_cond_t  cond;
+static pthread_cond_t  less, more;
+static int             queue[QSIZE];
+static int             next_in, next_out;
+static int             occupied;
+static int             alphabet;
 
 void *consume(void *arg);
 void *produce(void *arg);
@@ -25,52 +28,51 @@ consume(void *arg)
   thread_state_t *state = (thread_state_t *) arg;
   int             rc;
   char            errstr[N_ERRSTR];
+  char            item;
 
-  fprintf(stderr, "> #%02li, consume\n", state->sn);
-
-  while (opt_terminate)
+  while (!opt_terminate)
     {
-      fprintf(stderr, ">> #%02li, consume, locking ...\n", state->sn);
       rc = pthread_mutex_lock(&mutex);
       if (rc)
         {
-          snprintf(errstr, N_ERRSTR, ">> !panic, #%02li, consume, lock",
-                   state->sn);
+          snprintf(errstr, N_ERRSTR, "--- !panic, #%02li, lock\n", state->sn);
           perror(errstr);
           goto exit;
         }
-      fprintf(stderr, ">> #%02li, consume, locked\n", state->sn);
 
-      while (has_produce == 0)
+      while (occupied <= 0)
         {
-          fprintf(stderr, ">>> #%02li, consume, waiting ...\n", state->sn);
-          rc = pthread_cond_wait(&cond, &mutex);
+          rc = pthread_cond_wait(&more, &mutex);
           if (rc)
             {
-              snprintf(errstr, N_ERRSTR, ">>> !panic, #%02li, consume, wait", state->sn);
+              snprintf(errstr, N_ERRSTR, "--- !panic, #%02li, wait", state->sn);
               perror(errstr);
               goto exit_unlock;
             }
-          fprintf(stderr, "<<< #%02li, consume, wait\n", state->sn);
         }
-      has_produce = 0;
-      ++race_counter;
-      fprintf(stderr, "<< #%02li, consume, %04i", state->sn, race_counter);
+      item = queue[next_out++];
+      next_out %= QSIZE;
+      occupied--;
+      fprintf(stderr, "--- #%02li, consume: %c\n", state->sn, item);
+
+      rc = pthread_cond_signal(&less);
+      if (rc)
+        {
+          snprintf(errstr, N_ERRSTR, "--- !panic, #%02li", state->sn);
+          perror(errstr);
+        }
 
     exit_unlock:
-      fprintf(stderr, "<< #%02li, consume, unlocking ...\n", state->sn);
       rc = pthread_mutex_unlock(&mutex);
       if (rc)
         {
-          snprintf(errstr, N_ERRSTR, "<< !panic, #%02li, consume, unlock", state->sn);
+          snprintf(errstr, N_ERRSTR, "--- !panic, #%02li, unlock", state->sn);
           perror(errstr);
           goto exit;
         }
-      fprintf(stderr, "<< #%02li, consume, unlock\n", state->sn);
     }
 
  exit:
-  fprintf(stderr, "< #%02li, consume\n", state->sn);
   return arg;
 }
 
@@ -80,51 +82,53 @@ produce(void *arg)
   thread_state_t *state = (thread_state_t *) arg;
   int             rc;
   char            errstr[N_ERRSTR];
-
-  fprintf(stderr, "> #%02li, produce\n", state->sn);
+  char            item;
 
   while (!opt_terminate)
     {
-      fprintf(stderr, ">> #%02li, produce, lock ...\n", state->sn);
       rc = pthread_mutex_lock(&mutex);
       if (rc)
         {
-          snprintf(errstr, N_ERRSTR, ">> #%02li, produce, lock", state->sn);
+          snprintf(errstr, N_ERRSTR, "+++ !panic, #%02li, lock", state->sn);
           perror(errstr);
           goto exit;
         }
 
-      while (has_produce == 1)
+      while (occupied >= QSIZE)
         {
-          fprintf(stderr, ">>> #%02li, produce, wait ...\n", state->sn);
-          rc = pthread_cond_wait(&cond, &mutex);
+          fprintf(stderr, "+++ #%02li ...\n", state->sn);
+          rc = pthread_cond_wait(&less, &mutex);
           if (rc)
             {
-              snprintf(errstr, N_ERRSTR, ">>> #%02li, produce, wait", state->sn);
+              snprintf(errstr, N_ERRSTR, "+++ !panic, #%02li, wait", state->sn);
               goto exit_unlock;
             }
         }
-      has_produce = 1;
-      ++race_counter;
-      fprintf(stderr, "<<< #%02li, produce, "
-              "opt_terminate=%02i, race_counter=%04i\n",
-              state->sn,
-              opt_terminate,
-              race_counter);
+
+      item = (alphabet++ % 26) + 'A';
+      queue[next_in++] = item;
+      next_in %= QSIZE;
+      occupied++;
+      fprintf(stderr, "+++ #%02li, produce: %c\n", state->sn, item);
+
+      rc = pthread_cond_signal(&more);
+      if (rc)
+        {
+          snprintf(errstr, N_ERRSTR, "+++ !panic, #%02li, signal", state->sn);
+          perror(errstr);
+        }
 
     exit_unlock:
       rc = pthread_mutex_unlock(&mutex);
       if (rc)
         {
-          snprintf(errstr, N_ERRSTR, "<< #%02li, produce, unlock", state->sn);
+          snprintf(errstr, N_ERRSTR, "+++ !panic, #%02li, unlock", state->sn);
           perror(errstr);
           goto exit;
         }
-      fprintf(stderr, "<< #%02li, produce, unlock\n", state->sn);
     }
 
  exit:
-  fprintf(stderr, "< #%02li, produce\n", state->sn);
   return arg;
 }
 
@@ -134,64 +138,75 @@ main(int argc, char **argv)
   _unused_(argc);
   _unused_(argv);
 
-  /* thread_state_t state[N_THREAD]; */
-  /* pthread_t thread[N_THREAD]; */
-  /* int rc; */
+  thread_state_t state[N_THREAD];
+  pthread_t      thread[N_THREAD];
+  int            rc;
 
-  /* /\* init mutex *\/ */
-  /* rc = pthread_mutex_init(&mutex, 0); */
-  /* if (rc) */
-  /*   { */
-  /*     perror("!panic, pthread_mutex_init"); */
-  /*     return 1; */
-  /*   } */
+  /* init mutex */
+  rc = pthread_mutex_init(&mutex, 0);
+  if (rc)
+    {
+      perror("!panic, pthread_mutex_init");
+      return 1;
+    }
 
-  /* /\* init cond *\/ */
-  /* rc = pthread_cond_init(&cond, 0); */
-  /* if (rc) */
-  /*   { */
-  /*     perror("!panic, pthread_cond_init"); */
-  /*     return 1; */
-  /*   } */
+  /* init cond */
+  rc = pthread_cond_init(&less, 0);
+  if (rc)
+    {
+      perror("!panic, pthread_cond_init, less");
+      return 1;
+    }
+  rc = pthread_cond_init(&more, 0);
+  if (rc)
+    {
+      perror("!panic, pthread_cond_init, more");
+      return 1;
+    }
 
-  /* /\* create one producer *\/ */
-  /* state[0].sn = 0; */
-  /* rc = pthread_create(&thread[0], 0, produce, &state[0]); */
-  /* if (rc) */
-  /*   { */
-  /*     perror("!panic, create produce"); */
-  /*     return 1; */
-  /*   } */
+  /* create one producer */
+  state[0].sn = 0;
+  rc = pthread_create(&thread[0], 0, produce, &state[0]);
+  if (rc)
+    {
+      perror("!panic, create produce");
+      return 1;
+    }
 
-  /* /\* create many consumers *\/ */
-  /* for (long i = 1; i < N_THREAD; i++) */
-  /*   { */
-  /*     state[i].sn = i+1; */
-  /*     rc = pthread_create(&thread[i], 0, consume, &state[i]); */
-  /*     if (rc) */
-  /*       { */
-  /*         perror("!panic, create consumer"); */
-  /*         return 1; */
-  /*       } */
-  /*   } */
+  /* create many consumers */
+  for (long i = 1; i < N_THREAD; i++)
+    {
+      state[i].sn = i;
+      rc = pthread_create(&thread[i], 0, consume, &state[i]);
+      if (rc)
+        {
+          perror("!panic, create consumer");
+          return 1;
+        }
+    }
 
-  /* sleep(2); */
-  /* opt_terminate = 1; */
-  /* sleep(2); */
+  sleep(1);
+  opt_terminate = 1;
+  sleep(1);
 
-  /* /\* destroy cond *\/ */
-  /* rc = pthread_cond_destroy(&cond); */
-  /* if (rc) */
-  /*   { */
-  /*     perror("!panic, pthread_cond_destroy"); */
-  /*   } */
+  /* destroy cond */
+  rc = pthread_cond_destroy(&more);
+  if (rc)
+    {
+      perror("!panic, pthread_cond_destroy, more");
+    }
+  rc = pthread_cond_destroy(&less);
+  if (rc)
+    {
+      perror("!panic, pthread_cond_destroy, less");
+    }
 
-  /* /\* destroy mutex *\/ */
-  /* rc = pthread_mutex_destroy(&mutex); */
-  /* if (rc) */
-  /*   { */
-  /*     perror("!panic, pthread_mutex_destroy"); */
-  /*   } */
+  /* destroy mutex */
+  rc = pthread_mutex_destroy(&mutex);
+  if (rc)
+    {
+      perror("!panic, pthread_mutex_destroy");
+    }
 
   return 0;
 }
