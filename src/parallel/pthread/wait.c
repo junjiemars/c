@@ -9,50 +9,73 @@ typedef struct thread_state_s
   long sn;
 } thread_state_t;
 
+static int             opt_terminate = 0;
+static int             has_produce   = 0;
+static int             race_counter  = 0;
 static pthread_mutex_t mutex;
 static pthread_cond_t  cond;
-static long            race_counter = N_THREAD;
 
-void *race(void *arg);
+void *consume(void *arg);
+void *produce(void *arg);
 
 void *
-race(void *arg)
+consume(void *arg)
 {
   thread_state_t *state = (thread_state_t *) arg;
   int             rc;
+  fprintf(stderr, "> #%02li, consume\n", state->sn);
 
-  fprintf(stderr, "> #%02li\n", state->sn);
-
-  rc = pthread_mutex_lock(&mutex);
-  if (rc)
+  while (opt_terminate)
     {
-      perror("!panic, pthread_mutex_lock");
-      goto exit;
+      rc = pthread_mutex_lock(&mutex);
+      fprintf(stderr, ">> #%02li, consume, lock\n", state->sn);
+
+      while (has_produce == 0)
+        {
+          rc = pthread_cond_wait(&cond, &mutex);
+        }
+      --has_produce;
+      ++race_counter;
+      fprintf(stderr, ">> #%02li, consume, %04i", state->sn, race_counter);
+
+      rc = pthread_mutex_unlock(&mutex);
+      fprintf(stderr, "<< #%02li, consume, unlock\n", state->sn);
     }
 
-  sleep(1);
-  fprintf(stderr, ">> #%02li, waiting ...\n", state->sn);
+  fprintf(stderr, "< #%02li, consume\n", state->sn);
+  return arg;
+}
 
-  rc = pthread_cond_wait(&cond, &mutex);
-  if (rc)
+void *
+produce(void *arg)
+{
+  thread_state_t *state = (thread_state_t *) arg;
+  int rc;
+  fprintf(stderr, "> #%02li, produce\n", state->sn);
+
+  while (!opt_terminate)
     {
-      perror("!panic, pthread_cond_wait");
-      goto exit_lock;
+      rc = pthread_mutex_lock(&mutex);
+      fprintf(stderr, ">> #%02li, produce, lock\n", state->sn);
+
+      while (has_produce == 1)
+        {
+          fprintf(stderr, ">>> #%02li, produce, wait ...\n", state->sn);
+          rc = pthread_cond_wait(&cond, &mutex);
+        }
+      ++has_produce;
+      ++race_counter;
+      fprintf(stderr, "<<< #%02li, produce, "
+              "opt_terminate=%02i, race_counter=%04i\n",
+              state->sn,
+              opt_terminate,
+              race_counter);
+
+      rc = pthread_mutex_unlock(&mutex);
+      fprintf(stderr, "<< #%02li, produce, unlock\n", state->sn);
     }
 
-  sleep(1);
-  --race_counter;
-  fprintf(stderr, "<< #%02li, counter=%04li\n", state->sn, race_counter);
-
- exit_lock:
-  rc = pthread_mutex_unlock(&mutex);
-  if (rc)
-    {
-      perror("!panic, pthread_mutex_unlock");
-    }
-  fprintf(stderr, "<< #%02li\n", state->sn);
- exit:
-  fprintf(stderr, "< #%02li\n", state->sn);
+  fprintf(stderr, "< #%02li, produce\n", state->sn);
   return arg;
 }
 
@@ -82,42 +105,31 @@ main(int argc, char **argv)
       return 1;
     }
 
-  /* create threads */
-  for (long i = 0; i < N_THREAD; i++)
+  /* create one producer */
+  state[0].sn = 0;
+  rc = pthread_create(&thread[0], 0, produce, &state[0]);
+  if (rc)
+    {
+      perror("!panic, create produce");
+      return 1;
+    }
+
+  /* create many consumers */
+  for (long i = 1; i < N_THREAD; i++)
     {
       state[i].sn = i+1;
-      rc = pthread_create(&thread[i], 0, race, &state[i]);
+      rc = pthread_create(&thread[i], 0, consume, &state[i]);
       if (rc)
         {
-          perror("!panic, pthread_create");
+          perror("!panic, create consumer");
           return 1;
         }
     }
 
-  /* while (race_counter > 0) */
-  /*   { */
-  /*     sleep(1); */
-  /*   } */
-  /* sleep(2); */
+  sleep(2);
+  opt_terminate = 1;
+  sleep(2);
 
-  rc = pthread_cond_broadcast(&cond);
-  if (rc)
-    {
-      perror("!panic, pthread_cond_signal");
-      goto clean_exit;
-    }
-
-  /* /\* join threads *\/ */
-  /* for (long i = 0; i < N_THREAD; i++) */
-  /*   { */
-  /*     rc = pthread_join(thread[i], 0); */
-  /*     if (rc) */
-  /*       { */
-  /*         perror("!panic, pthread_join"); */
-  /*       } */
-  /*   } */
-
-clean_exit:
   /* destroy cond */
   rc = pthread_cond_destroy(&cond);
   if (rc)
