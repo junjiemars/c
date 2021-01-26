@@ -70,6 +70,7 @@ consume(void *arg)
           perror(errstr);
           goto exit;
         }
+      sleep(1);
     }
 
  exit:
