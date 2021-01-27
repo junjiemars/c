@@ -1,10 +1,12 @@
 #include <_parallel_.h>
 #include <stdio.h>
 #include <pthread.h>
+#include <errno.h>
 
-#define N_THREAD 4
-#define N_ERRSTR 128
-#define QSIZE    2
+#define N_CONSUMER 4
+#define N_PRODUCER 2
+#define N_ERRSTR   128
+#define QSIZE      2
 
 typedef struct thread_state_s
 {
@@ -30,7 +32,7 @@ consume(void *arg)
   char            errstr[N_ERRSTR];
   char            item;
 
-  while (!opt_terminate)
+  while (1)
     {
       rc = pthread_mutex_lock(&mutex);
       if (rc)
@@ -58,7 +60,7 @@ consume(void *arg)
       rc = pthread_cond_signal(&less);
       if (rc)
         {
-          snprintf(errstr, N_ERRSTR, "--- !panic, #%02li", state->sn);
+          snprintf(errstr, N_ERRSTR, "--- !panic, #%02li, consumer", state->sn);
           perror(errstr);
         }
 
@@ -68,6 +70,11 @@ consume(void *arg)
         {
           snprintf(errstr, N_ERRSTR, "--- !panic, #%02li, unlock", state->sn);
           perror(errstr);
+          goto exit;
+        }
+
+      if (opt_terminate)
+        {
           goto exit;
         }
       sleep(1);
@@ -85,7 +92,7 @@ produce(void *arg)
   char            errstr[N_ERRSTR];
   char            item;
 
-  while (!opt_terminate)
+  while (1)
     {
       rc = pthread_mutex_lock(&mutex);
       if (rc)
@@ -127,6 +134,11 @@ produce(void *arg)
           perror(errstr);
           goto exit;
         }
+
+      if (opt_terminate)
+        {
+          goto exit;
+        }
     }
 
  exit:
@@ -139,8 +151,10 @@ main(int argc, char **argv)
   _unused_(argc);
   _unused_(argv);
 
-  thread_state_t state[N_THREAD];
-  pthread_t      thread[N_THREAD];
+  thread_state_t consumer_state[N_CONSUMER];
+  thread_state_t producer_state[N_CONSUMER];
+  pthread_t      consumer[N_CONSUMER];
+  pthread_t      producer[N_PRODUCER];
   int            rc;
 
   /* init mutex */
@@ -165,20 +179,11 @@ main(int argc, char **argv)
       return 1;
     }
 
-  /* create one producer */
-  state[0].sn = 0;
-  rc = pthread_create(&thread[0], 0, produce, &state[0]);
-  if (rc)
-    {
-      perror("!panic, create produce");
-      return 1;
-    }
-
   /* create many consumers */
-  for (long i = 1; i < N_THREAD; i++)
+  for (long i = 1; i < N_CONSUMER; i++)
     {
-      state[i].sn = i;
-      rc = pthread_create(&thread[i], 0, consume, &state[i]);
+      consumer_state[i].sn = i+10;
+      rc = pthread_create(&consumer[i], 0, consume, &consumer_state[i]);
       if (rc)
         {
           perror("!panic, create consumer");
@@ -186,6 +191,19 @@ main(int argc, char **argv)
         }
     }
 
+  /* create producer */
+  for (long i = 0; i < N_PRODUCER; i++)
+    {
+      producer_state[i].sn = i;
+      rc = pthread_create(&producer[i], 0, produce, &producer_state[i]);
+      if (rc)
+        {
+          perror("!panic, create produce");
+          return 1;
+        }
+    }
+
+  /* terminate */
   sleep(1);
   opt_terminate = 1;
   sleep(1);
