@@ -57,10 +57,6 @@ consume(void *arg)
       occupied--;
       fprintf(stderr, "--- #%02li, consume: %c\n", state->sn, item);
 
-      if (opt_terminate)
-        {
-          goto exit_unlock;
-        }
       rc = pthread_cond_signal(&cond_less);
       if (rc)
         {
@@ -117,17 +113,20 @@ produce(void *arg)
             }
         }
 
-      item = (alphabet++ % 26) + 'A';
-      queue[next_in++] = item;
-      next_in %= QSIZE;
-      occupied++;
-      fprintf(stderr, "+++ #%02li, produce: %c\n", state->sn, item);
-
-      rc = pthread_cond_signal(&cond_more);
-      if (rc)
+      if (!opt_terminate)
         {
-          snprintf(errstr, N_ERRSTR, "+++ !panic, #%02li, signal", state->sn);
-          perror(errstr);
+          item = (alphabet++ % 26) + 'A';
+          queue[next_in++] = item;
+          next_in %= QSIZE;
+          occupied++;
+          fprintf(stderr, "+++ #%02li, produce: %c\n", state->sn, item);
+
+          rc = pthread_cond_signal(&cond_more);
+          if (rc)
+            {
+              snprintf(errstr, N_ERRSTR, "+++ !panic, #%02li, signal", state->sn);
+              perror(errstr);
+            }
         }
 
     exit_unlock:
