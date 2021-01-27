@@ -6,7 +6,7 @@
 #define N_CONSUMER 4
 #define N_PRODUCER 2
 #define N_ERRSTR   128
-#define QSIZE      2
+#define QSIZE      4
 
 typedef struct thread_state_s
 {
@@ -15,7 +15,7 @@ typedef struct thread_state_s
 
 static int             opt_terminate = 0;
 static pthread_mutex_t mutex;
-static pthread_cond_t  less, more;
+static pthread_cond_t  cond_less, cond_more;
 static int             queue[QSIZE];
 static int             next_in, next_out;
 static int             occupied;
@@ -42,9 +42,9 @@ consume(void *arg)
           goto exit;
         }
 
-      while (occupied <= 0)
+      while (occupied <= 0 && !opt_terminate)
         {
-          rc = pthread_cond_wait(&more, &mutex);
+          rc = pthread_cond_wait(&cond_more, &mutex);
           if (rc)
             {
               snprintf(errstr, N_ERRSTR, "--- !panic, #%02li, wait", state->sn);
@@ -57,7 +57,11 @@ consume(void *arg)
       occupied--;
       fprintf(stderr, "--- #%02li, consume: %c\n", state->sn, item);
 
-      rc = pthread_cond_signal(&less);
+      if (opt_terminate)
+        {
+          goto exit_unlock;
+        }
+      rc = pthread_cond_signal(&cond_less);
       if (rc)
         {
           snprintf(errstr, N_ERRSTR, "--- !panic, #%02li, consumer", state->sn);
@@ -102,10 +106,10 @@ produce(void *arg)
           goto exit;
         }
 
-      while (occupied >= QSIZE)
+      while (occupied >= QSIZE && !opt_terminate)
         {
           fprintf(stderr, "+++ #%02li ...\n", state->sn);
-          rc = pthread_cond_wait(&less, &mutex);
+          rc = pthread_cond_wait(&cond_less, &mutex);
           if (rc)
             {
               snprintf(errstr, N_ERRSTR, "+++ !panic, #%02li, wait", state->sn);
@@ -119,7 +123,7 @@ produce(void *arg)
       occupied++;
       fprintf(stderr, "+++ #%02li, produce: %c\n", state->sn, item);
 
-      rc = pthread_cond_signal(&more);
+      rc = pthread_cond_signal(&cond_more);
       if (rc)
         {
           snprintf(errstr, N_ERRSTR, "+++ !panic, #%02li, signal", state->sn);
@@ -166,13 +170,13 @@ main(int argc, char **argv)
     }
 
   /* init cond */
-  rc = pthread_cond_init(&less, 0);
+  rc = pthread_cond_init(&cond_less, 0);
   if (rc)
     {
       perror("!panic, pthread_cond_init, less");
       return 1;
     }
-  rc = pthread_cond_init(&more, 0);
+  rc = pthread_cond_init(&cond_more, 0);
   if (rc)
     {
       perror("!panic, pthread_cond_init, more");
@@ -180,7 +184,7 @@ main(int argc, char **argv)
     }
 
   /* create many consumers */
-  for (long i = 1; i < N_CONSUMER; i++)
+  for (long i = 0; i < N_CONSUMER; i++)
     {
       consumer_state[i].sn = i+10;
       rc = pthread_create(&consumer[i], 0, consume, &consumer_state[i]);
@@ -209,12 +213,12 @@ main(int argc, char **argv)
   sleep(1);
 
   /* destroy cond */
-  rc = pthread_cond_destroy(&more);
+  rc = pthread_cond_destroy(&cond_more);
   if (rc)
     {
       perror("!panic, pthread_cond_destroy, more");
     }
-  rc = pthread_cond_destroy(&less);
+  rc = pthread_cond_destroy(&cond_less);
   if (rc)
     {
       perror("!panic, pthread_cond_destroy, less");
