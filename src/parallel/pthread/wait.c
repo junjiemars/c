@@ -11,7 +11,7 @@
 typedef struct thread_state_s
 {
   long            sn;
-} thread_state_t;
+} thread_state_s;
 
 static int             opt_terminate = 0;
 static pthread_mutex_t mutex;
@@ -27,7 +27,7 @@ void *produce(void *arg);
 void *
 consume(void *arg)
 {
-  thread_state_t *state = (thread_state_t *) arg;
+  thread_state_s *state = (thread_state_s *) arg;
   int             rc;
   char            errstr[N_ERRSTR];
   char            item;
@@ -87,7 +87,7 @@ consume(void *arg)
 void *
 produce(void *arg)
 {
-  thread_state_t *state = (thread_state_t *) arg;
+  thread_state_s *state = (thread_state_s *) arg;
   int             rc;
   char            errstr[N_ERRSTR];
   char            item;
@@ -154,8 +154,8 @@ main(int argc, char **argv)
   _unused_(argc);
   _unused_(argv);
 
-  thread_state_t consumer_state[N_CONSUMER];
-  thread_state_t producer_state[N_CONSUMER];
+  thread_state_s consumer_state[N_CONSUMER];
+  thread_state_s producer_state[N_CONSUMER];
   pthread_t      consumer[N_CONSUMER];
   pthread_t      producer[N_PRODUCER];
   int            rc;
