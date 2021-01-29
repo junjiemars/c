@@ -128,7 +128,7 @@ $(lang_duration_extern_objout): $(lang_root)duration/extern.c
 $(lang_duration_d_objout): $(lang_root)duration/d.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
-# enum 
+# enum
 lang_enum_binout := $(bin_path)$(lang_prefix)_enum$(bin_ext)
 lang_enum_cppout := $(tmp_path)$(lang_prefix)_enum$(cpp_ext)
 
@@ -146,7 +146,7 @@ $(lang_enum_cppout): $(lang_root)enum/e.c
 lang_env_var_binout := $(bin_path)$(lang_prefix)_env_var$(bin_ext)
 
 $(lang_env_var_binout): $(lang_root)env/var/var.c
-	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@ 
+	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
 
 lang_env: $(lang_env_var_binout)
 lang_env_test: lang_env
@@ -520,36 +520,36 @@ $(lang_sizeof_binout): $(lang_root)sizeof/sizeof.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # stage
-ifneq ($(CC_NAME),msvc)
 stage_binout := $(bin_path)$(lang_prefix)_stage$(bin_ext)
 stage_objout := $(tmp_path)$(lang_prefix)_stage$(obj_ext)
 stage_asmout := $(tmp_path)$(lang_prefix)_stage$(asm_ext)
 stage_cppout := $(tmp_path)$(lang_prefix)_stage$(cpp_ext)
 
+ifeq ($(CC_NAME),msvc)
 lang_stage: $(stage_binout)
-lang_stage_test: lang_stage
-	$(stage_binout)
-
-$(stage_binout): $(stage_objout)
-	$(LINK) $^ $(bin_out)$@ $(stage_ldflags)
-
-$(stage_objout): $(stage_asmout) 
-	$(AS) $(ASFLAGS) $(obj_out)$@ $(nm_stage_c) $^
-
-$(stage_asmout): $(stage_cppout)
-	$(AS) $(CFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
-
-$(stage_cppout): $(lang_root)stage/s.c
-	$(CPP) $(CPPFLAGS) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
-
-else
-lang_stage:
 lang_stage_test:
 stage_ldflags := -link -FORCE:MULTIPLE
 ifeq ($(NM_VERBOSE),YES)
 stage_ldflags += -VERBOSE:LIB
-endif
-endif
+endif														# end of NM_VERBOSE
+else
+lang_stage: $(stage_binout)
+lang_stage_test: lang_stage
+	$(stage_binout)
+endif														# end of CC_NAME
+
+$(stage_binout): $(stage_objout)
+	$(LINK) $^ $(bin_out)$@ $(stage_ldflags)
+
+$(stage_objout): $(stage_asmout)
+	$(CC) $(CFLAGS) $(nm_stage_c) $^ $(obj_out)$@
+
+$(stage_asmout): $(stage_cppout)
+	$(AS) $(ASFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
+
+$(stage_cppout): $(lang_root)stage/s.c
+	$(CPP) $(CPPFLAGS) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
+
 
 
 # storage
@@ -794,4 +794,3 @@ $(volatile_pointer_binout): $(lang_root)volatile/pointer.c
 
 $(volatile_struct_binout): $(lang_root)volatile/struct.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
