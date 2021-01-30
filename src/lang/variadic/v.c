@@ -42,13 +42,32 @@ self_fprintf(FILE *stream, const char *fmt, ...)
             }
           else if (n == 'd' || n == 'i')
             {
-              int d = va_arg(args, int);
-              int len = snprintf(&buf[next], 16, "%d", d);
-              next += len;
+              static const char digit[] = "0123456789";
+              int i = va_arg(args, int);
+              if (i < 0)
+                {
+                  buf[next++] = '-';
+                  i = -i;
+                }
+              int shift = i;
+              int nx = 0;
+              do
+                {
+                  next++;
+                  shift /= 10;
+                } while (shift);
+              shift = i;
+              nx = next - 1;
+              do
+                {
+                  buf[nx--] = digit[shift % 10];
+                  shift /= 10;
+                } while (shift);
               ++fmt;
             }
           else if (n == 'f')
             {
+              /* !TODO: float to string in raw */
               double d = va_arg(args, double);
               int len = snprintf(&buf[next], 16, "%f", d);
               next += len;
@@ -104,6 +123,10 @@ test_self_fprintf(void)
 
   rc1 = fprintf(stdout, "%d\n", 123);
   rc2 = self_fprintf(stdout, "%d\n", 123);
+  assert(rc1 == rc2);
+
+  rc1 = fprintf(stdout, "%d\n", -123);
+  rc2 = self_fprintf(stdout, "%d\n", -123);
   assert(rc1 == rc2);
 
   rc1 = fprintf(stdout, "%i\n", 0x11223344);
