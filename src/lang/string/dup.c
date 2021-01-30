@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <posix/strs.h>
+#include <string.h>
 
 typedef char *(*strdup_fn)(const char *s);
 typedef char *(*strndup_fn)(const char *s, size_t n);

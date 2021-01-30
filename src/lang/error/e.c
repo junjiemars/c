@@ -1,8 +1,16 @@
 #include "_lang_.h"
-#include <errno.h>
 #include <stdio.h>
 #include <math.h>
-#include <posix/strs.h>
+#include <string.h>
+
+#if (LINUX)
+#  if defined(_GNU_SOURCE)
+#    undef _GNU_SOURCE
+#  endif  /* _GNU_SOURCE */
+#  include <errno.h>
+#else
+#  include <errno.h>
+#endif  /* LINUX */
 
 void
 test_open_file(const char *filename) {

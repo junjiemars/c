@@ -1,6 +1,7 @@
 #include <_io_.h>
 #include <stdio.h>
 #include <wchar.h>
+#include <string.h>
 
 int
 main(int argc, char **argv) {

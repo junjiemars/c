@@ -15,11 +15,6 @@ endif # end of has_sanitize
 endif # end of _MEMORY_
 
 
-ifeq ($(NM_SYSTEM), Linux)
-CFLAGS += -D_GNU_SOURCE
-endif
-
-
 lang: lang_array																\
       lang_assert																\
       lang_duration															\
@@ -169,9 +164,7 @@ lang_env_test: lang_env
 # error
 lang_error_basic_binout := $(bin_path)$(lang_prefix)_error_basic$(bin_ext)
 
-ifeq ($(NM_SYSTEM), Linux)
-  error_cflags := $(CFLAGS)
-  error_cflags += -D_POSIX_C_SOURCE=200112L
+ifeq ($(NM_SYSTEM),Linux)
 	error_lflags := $(LFLAGS)
 	error_lflags += -lm
 else
@@ -254,6 +247,7 @@ lang_linkage_lnk_objout := $(tmp_path)$(lang_prefix)_linkage_lnk$(obj_ext)
 lang_linkage_c_objout := $(tmp_path)$(lang_prefix)_linkage_c$(obj_ext)
 lang_linkage_whole_binout := $(bin_path)$(lang_prefix)_linkage_whole$(bin_ext)
 
+# has_sanitize conflict
 lang_linkage: $(lang_linkage_lnkc_binout)				\
               $(lang_linkage_whole_binout)
 lang_linkage_test: lang_linkage_lnkc_test				\
@@ -827,3 +821,5 @@ $(volatile_pointer_binout): $(lang_root)volatile/pointer.c
 
 $(volatile_struct_binout): $(lang_root)volatile/struct.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# eof

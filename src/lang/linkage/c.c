@@ -1,4 +1,4 @@
-#include "_lang_.h"
+#include <_lang_.h>
 #include "lnk.h"
 #include <assert.h>
 

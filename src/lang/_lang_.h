@@ -3,7 +3,15 @@
 
 #include <nore.h>
 
-#define _unused_(x) ((void)(x))
+#if GCC
+#  if defined(_GNU_SOURCE)
+#    undef _GNU_SOURCE
+#  endif  /* _GNU_SOURCE */
+#  if defined(_POSIX_C_SOURCE)
+#    undef _POSIX_C_SOURCE
+#  endif  /* _POSIX_C_SOURCE */
+#  define _POSIX_C_SOURCE 200809L
+#endif  /* GCC */
 
 
 #if MSVC
@@ -15,7 +23,8 @@
 #  if NM_HAVE_CC_OPT_IMPLICIT_FALLTHROUGH
 #    pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #  endif
-#endif
+#endif  /* MSVC */
+
 
 #ifdef NM_HAVE_STDINT_H
 # include <stdint.h>
@@ -31,6 +40,7 @@
   typedef unsigned __int64 uint64_t;
 #endif /* end of NM_HAVE_STDINT_H */
 
+
 #if NM_HAVE_TYPEOF
 #  if CLANG || GCC
 #    define typeof __typeof__
@@ -39,13 +49,16 @@
 #  elif MSVC
 #    define typeof decltype
 #  endif
-#endif
+#endif  /* NM_HAVE_TYPEOF */
+
 
 #ifdef NDEBUG
 #  define _assert_(x) _unused_(x)
 #else
 #  define _assert_(x) assert(x)
-#endif
+#endif  /* NDEBUG */
 
+
+#define _unused_(x) ((void)(x))
 
 #endif /* _LANG_H_ */
