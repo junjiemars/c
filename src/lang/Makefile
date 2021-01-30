@@ -3,15 +3,22 @@
 #
 
 lang_prefix := lang
-INC += -I$(root) -I$(lang_root)
+INC += -I$(root) -I$(lang_root) -I$(root)posix
 
 _ERROR_ ?= 0
-_MEMORY_ ?= 0
 
-# CFLAGS += $(if $(strip $(nm_build_opt)),,$(cflags_sanitize))
-ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
-	CFLAGS += $(cflags_sanitize)
+
+ifeq ($(_MEMORY_),1)
+ifeq ($(has_sanitize),YES)
+CFLAGS += $(cflags_sanitize)
+endif # end of has_sanitize
+endif # end of _MEMORY_
+
+
+ifeq ($(NM_SYSTEM), Linux)
+CFLAGS += -D_GNU_SOURCE
 endif
+
 
 lang: lang_array																\
       lang_assert																\
@@ -342,13 +349,11 @@ lang_math_complex_test: $(lang_math_complex_binout)
 lang_math_fcmp_test: $(lang_math_fcmp_binout)
 	$(lang_math_fcmp_binout)
 
-math_inc := $(INC) -I$(root)posix
-
 $(lang_math_complex_binout): $(lang_root)math/c.c
-	$(CC) $(CFLAGS) $(math_inc) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_math_fcmp_binout): $(lang_root)math/fcmp.c
-	$(CC) $(CFLAGS) $(math_inc) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # random
 lang_random_binout := $(bin_path)$(lang_prefix)_random_raw$(bin_ext)
@@ -586,15 +591,6 @@ $(lang_stor_extern_objout): $(lang_root)storage/extern.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
 # string
-ifeq ($(NM_SYSTEM), Linux)
-string_cflags := $(CFLAGS)
-string_cflags += -D_GNU_SOURCE
-else
-string_cflags = $(CFLAGS)
-endif
-
-string_inc := $(INC) -I$(root)posix
-
 lang_str_basic_binout := $(bin_path)$(lang_prefix)_string_basic$(bin_ext)
 lang_str_n_binout := $(bin_path)$(lang_prefix)_string_n$(bin_ext)
 lang_str_s_binout := $(bin_path)$(lang_prefix)_string_s$(bin_ext)
@@ -671,13 +667,13 @@ $(lang_str_basic_binout): $(lang_root)string/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_str_n_binout): $(lang_root)string/n.c
-	$(CC) $(string_cflags) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_str_s_binout): $(lang_root)string/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_str_dup_binout): $(lang_root)string/dup.c
-	$(CC) $(string_cflags) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_str_tok_binout): $(lang_root)string/tok.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

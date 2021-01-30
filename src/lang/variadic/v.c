@@ -59,7 +59,7 @@ self_fprintf(FILE *stream, const char *fmt, ...)
               char *s = va_arg(args, char *);
               size_t len = strnlen(s, BSIZE);
               strncpy(&buf[next], s, len);
-              next += len;
+              next += (int) len;
               ++fmt;
             }
           else
