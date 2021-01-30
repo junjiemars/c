@@ -1365,11 +1365,41 @@ There has an good answer of [[http://stackoverflow.com/questions/17206568/what-i
 
 *** headers
 
-| name      | std  | intro |
-|-----------+------+-------|
-| assert.h  |      |       |
-| complex.h | c99+ |       |
-|           |      |       |
+| name          | std | intro                                                                 |
+|---------------+-----+-----------------------------------------------------------------------|
+| assert.h      | C90 | conditionally compiled macro that compare its argument to zero        |
+| ctype.h       | C90 | functions to determine the type contained in character data           |
+| errno.h       | C90 | macros reporting error conditions                                     |
+| float.h       | C90 | limits of float types                                                 |
+| limits.h      | C90 | sizes of basic types                                                  |
+| locale.h      | C90 | localization utilities                                                |
+| math.h        | C90 | common mathematics functions                                          |
+| setjmp        | C90 | nonlocal jumps                                                        |
+| signal.h      | C90 | signal handling                                                       |
+| stdarg.h      | C90 | variable arguments                                                    |
+| stddef.h      | C90 | common macro definitions                                              |
+| stdio.h       | C90 | input/output                                                          |
+| stdlib.h      | C90 | general utilities: memory, program, string, random, algorithms        |
+| string.h      | C90 | string handling                                                       |
+| time.h        | C90 | time/date utilites                                                    |
+|---------------+-----+-----------------------------------------------------------------------|
+| iso646.h      | C95 | alternative operator spellings                                        |
+| wchar.h       | C95 | extended multibyte and wide character                                 |
+| wctype.h      | C95 | functions to determine the type contained in wide character utilities |
+|---------------+-----+-----------------------------------------------------------------------|
+| complex.h     | C99 | complex number arithmetic                                             |
+| fenv.h        | C99 | floating-point environment                                            |
+| inttypes.h    | C99 | format conversion of integer types                                    |
+| stdbool.h     | C99 | macros for boolean types                                              |
+| tgmath.h      | C99 | type-generic math                                                     |
+|---------------+-----+-----------------------------------------------------------------------|
+| stdalign.h    | C11 | alignas and alignof convenience macros                                |
+| stdatomic.h   | C11 | atomic types                                                          |
+| stdnoreturn.h | C11 | noreturn convenience macros                                           |
+| threads.h     | C11 | thread library                                                        |
+| uchar.h       | C11 | UTF-16/32 character utilities                                         |
+|               |     |                                                                       |
+
 
 ** References
 	 :PROPERTIES:
