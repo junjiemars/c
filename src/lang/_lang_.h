@@ -11,6 +11,10 @@
 #    undef _POSIX_C_SOURCE
 #  endif  /* _POSIX_C_SOURCE */
 #  define _POSIX_C_SOURCE 200809L
+#
+# if !defined(__USE_MISC)
+#   define __USE_MISC
+# endif
 #endif  /* GCC */
 
 
