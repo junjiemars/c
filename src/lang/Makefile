@@ -41,6 +41,7 @@ lang: lang_array																\
       lang_string																\
       lang_struct																\
       lang_time																	\
+      lang_trigraphs														\
       lang_type																	\
       lang_typedef															\
       lang_typeof																\
@@ -76,6 +77,7 @@ lang_test:  lang_array_test											\
             lang_string_test										\
             lang_struct_test										\
             lang_time_test											\
+            lang_trigraphs_test									\
             lang_type_test											\
             lang_typedef_test										\
             lang_typeof_test										\
@@ -728,6 +730,18 @@ $(lang_time_clock_binout): $(lang_root)time/c.c
 
 $(lang_time_conv_binout): $(lang_root)time/conv.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# trigraphs
+lang_trigraphs_binout := $(bin_path)$(lang_prefix)_trigraphs$(bin_ext)
+
+lang_trigraphs: $(lang_trigraphs_binout)
+lang_trigraphs_test: lang_trigraphs
+	$(lang_trigraphs_binout) trigraphs
+
+$(lang_trigraphs_binout): $(lang_root)trigraphs/tri.c
+	$(CC) $(CFLAGS) $(nm_trigraph_opt) $(INC) $^ $(bin_out)$@
+
 
 # type
 lang_type_int_binout := $(bin_path)$(lang_prefix)_type_int$(bin_ext)
