@@ -526,15 +526,18 @@ stage_asmout := $(tmp_path)$(lang_prefix)_stage$(asm_ext)
 stage_cppout := $(tmp_path)$(lang_prefix)_stage$(cpp_ext)
 
 ifeq ($(CC_NAME),msvc)
+lang_stage:
+	@echo "#skip lang_stage_test"
+lang_stage_test: lang_stage
 stage_ldflags := -link -FORCE:MULTIPLE
 ifeq ($(NM_VERBOSE),YES)
 stage_ldflags += -VERBOSE:LIB
 endif														# end of NM_VERBOSE
-endif														# end of CC_NAME
-
+else
 lang_stage: $(stage_binout)
 lang_stage_test: lang_stage
 	$(stage_binout)
+endif														# end of CC_NAME
 
 $(stage_binout): $(stage_objout)
 	$(LINK) $^ $(bin_out)$@ $(stage_ldflags)
