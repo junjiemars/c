@@ -22,6 +22,7 @@ lang: lang_array																\
       lang_exit																	\
       lang_fn																		\
       lang_goto																	\
+      lang_iso646																\
       lang_jmp																	\
       lang_linkage															\
       lang_locale																\
@@ -56,6 +57,7 @@ lang_test:  lang_array_test											\
             lang_exit_test											\
             lang_fn_test												\
             lang_goto_test											\
+            lang_iso646_test										\
             lang_jmp_test												\
             lang_linkage_test										\
             lang_locale_test										\
@@ -205,6 +207,16 @@ lang_goto_test: lang_goto
 	$(lang_goto_binout)
 
 $(lang_goto_binout): $(lang_root)goto/g.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# iso646
+lang_iso646_binout := $(bin_path)$(lang_prefix)_iso646$(bin_ext)
+
+lang_iso646: $(lang_iso646_binout)
+lang_iso646_test: lang_iso646
+	$(lang_iso646_binout) iso646
+
+$(lang_iso646_binout): $(lang_root)iso646/646.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # jmp

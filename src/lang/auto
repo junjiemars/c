@@ -124,7 +124,9 @@ fi # end of check cache line size
 #----------------------------------------
 include="stdint.h" . ${NORE_ROOT}/auto/include
 include="inttypes.h" . ${NORE_ROOT}/auto/include
-
+include="iso646.h" . ${NORE_ROOT}/auto/include
+include="wchar.h" . ${NORE_ROOT}/auto/include
+include="wctype.h" . ${NORE_ROOT}/auto/include
 
 # check compiler features
 #----------------------------------------
