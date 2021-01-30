@@ -3,18 +3,20 @@
 
 #include <nore.h>
 
+
 #if GCC
 #  if defined(_GNU_SOURCE)
 #    undef _GNU_SOURCE
 #  endif  /* _GNU_SOURCE */
+#
 #  if defined(_POSIX_C_SOURCE)
 #    undef _POSIX_C_SOURCE
 #  endif  /* _POSIX_C_SOURCE */
 #  define _POSIX_C_SOURCE 200809L
 #
-# if !defined(__USE_MISC)
-#   define __USE_MISC
-# endif
+#  if !defined(_DEFAULT_SOURCE)
+#    define _DEFAULT_SOURCE
+#  endif
 #endif  /* GCC */
 
 

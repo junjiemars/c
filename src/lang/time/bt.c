@@ -3,6 +3,10 @@
 #include <assert.h>
 #include <string.h>
 
+# if !defined(__USE_MISC)
+#   define __USE_MISC
+# endif
+
 #include <time.h>
 #include <posix/ints.h>
 
