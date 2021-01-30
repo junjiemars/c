@@ -46,6 +46,7 @@ lang: lang_array																\
       lang_typedef															\
       lang_typeof																\
       lang_union																\
+      lang_variadic															\
       lang_volatile
 
 
@@ -82,6 +83,7 @@ lang_test:  lang_array_test											\
             lang_typedef_test										\
             lang_typeof_test										\
             lang_union_test											\
+            lang_variadic_test									\
             lang_volatile_test
 
 
@@ -96,15 +98,13 @@ $(lang_array_binout): $(lang_root)array/a1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
-# assert at runtime
-# static_assert at compile time
-
+# assert
 lang_assert_binout := $(bin_path)$(lang_prefix)_assert$(bin_ext)
 lang_assert_cppout := $(tmp_path)$(lang_prefix)_assert$(cpp_ext)
 
 lang_assert: $(lang_assert_binout)
 lang_assert_test: lang_assert
-		-$(lang_assert_binout) 49
+	-$(lang_assert_binout) 49
 
 $(lang_assert_binout): $(lang_assert_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
@@ -792,6 +792,16 @@ lang_union_test: lang_union
 	$(lang_union_binout)
 
 $(lang_union_binout): $(lang_root)union/u.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# variadic
+lang_variadic_binout := $(bin_path)$(lang_prefix)_variadic$(bin_ext)
+
+lang_variadic: $(lang_variadic_binout)
+lang_variadic_test: lang_variadic
+	$(lang_variadic_binout) "%c %d-dimentional continuum." A 4
+
+$(lang_variadic_binout): $(lang_root)variadic/v.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # volatile
