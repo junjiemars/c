@@ -6,12 +6,14 @@
 #include <assert.h>
 
 #define BSIZE 64
-#define SELF_PRINTF(fmt, ...) self_printf((fmt), __VA_ARGS__)
+#define SELF_FPRINTF(stream, ...) self_fprintf((stream), __VA_ARGS__)
 
-int self_printf(const char *fmt, ...);
+int self_fprintf(FILE *stream, const char *fmt, ...);
+
+void test_self_fprintf(void);
 
 int
-self_printf(const char *fmt, ...)
+self_fprintf(FILE *stream, const char *fmt, ...)
 {
   char *buf = 0;
   int next = 0;
@@ -27,7 +29,7 @@ self_printf(const char *fmt, ...)
   va_list args;
   va_start(args, fmt);
 
-  while (*fmt)
+  while (*fmt && next < BSIZE)
     {
       if (*fmt == '%')
         {
@@ -38,10 +40,18 @@ self_printf(const char *fmt, ...)
               buf[next++] = (char) c;
               ++fmt;
             }
-          else if (n == 'd')
+          else if (n == 'd' || n == 'i')
             {
               int d = va_arg(args, int);
-              int len = snprintf(&buf[next], 5, "%d", d);
+              int len = snprintf(&buf[next], 16, "%d", d);
+              next += len;
+              ++fmt;
+            }
+          else if (n == 's')
+            {
+              char *s = va_arg(args, char *);
+              size_t len = strnlen(s, BSIZE);
+              strncpy(&buf[next], s, len);
               next += len;
               ++fmt;
             }
@@ -60,7 +70,7 @@ self_printf(const char *fmt, ...)
 
   va_end(args);
   
-  rc = puts(buf);
+  rc = fputs(buf, stream);
   if (rc < 0)
     {
       goto clean_exit;
@@ -71,24 +81,48 @@ self_printf(const char *fmt, ...)
   free(buf);
   return rc;
 }
+
+void
+test_self_fprintf(void)
+{
+  int rc1, rc2;
+
+  rc1 = fprintf(stdout, "abc\n");
+  rc2 = self_fprintf(stdout, "abc\n");
+  assert(rc1 == rc2);
+
+  rc1 = fprintf(stdout, "%s\n", "abc");
+  rc2 = self_fprintf(stdout, "%s\n", "abc");
+  assert(rc1 == rc2);
+
+  rc1 = fprintf(stdout, "%d\n", 123);
+  rc2 = self_fprintf(stdout, "%d\n", 123);
+  assert(rc1 == rc2);
+
+  rc1 = fprintf(stdout, "%i\n", 0x11223344);
+  rc2 = self_fprintf(stdout, "%i\n", 0x11223344);
+  assert(rc1 == rc2);
+
+  rc1 = fprintf(stdout, "%c\n", 'A');
+  rc2 = fprintf(stdout, "%c\n", 'A');
+  assert(rc1 == rc2);
+  
+  rc1 = fprintf(stdout, "%c %d-dimentional continuum.\n", 'A', 4);
+  rc2 = self_fprintf(stdout, "%c %d-dimentional continuum.\n", 'A', 4);
+  assert(rc1 == rc2);
+
+  rc1 = fprintf(stdout, "abc, abcd, icjjckkkc, %s\n", "icjjcllllc");
+  rc2 = SELF_FPRINTF(stdout, "abc, abcd, icjjckkkc, %s\n", "icjjcllllc");
+  assert(rc1 == rc2);
+}
   
 int
 main(int argc, char **argv)
 {
-  if (argc < 4)
-    {
-      printf("please, input a character and an integer.\n");
-      return 1;
-    }
+  _unused_(argc);
+  _unused_(argv);
 
-  int rc1, rc2;
-  rc1 = self_printf(argv[1], argv[2][0], atoi(argv[3]));
-  rc2 = printf(argv[1], argv[2][0], atoi(argv[3]));
-  assert(rc1 == rc2);
-
-  putchar('\n');
-  rc1 = SELF_PRINTF(argv[1], argv[2][0], atoi(argv[3]));
-  assert(rc1 > 0);
+  test_self_fprintf();
 
   return 0;
 }
