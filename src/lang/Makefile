@@ -740,7 +740,7 @@ lang_trigraphs_test: lang_trigraphs
 	$(lang_trigraphs_binout) trigraphs
 
 $(lang_trigraphs_binout): $(lang_root)trigraphs/tri.c
-	$(CC) $(CFLAGS) $(nm_trigraph_opt) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(nm_trigraphs_opt) $(INC) $^ $(bin_out)$@
 
 
 # type
