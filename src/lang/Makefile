@@ -800,8 +800,6 @@ lang_variadic_binout := $(bin_path)$(lang_prefix)_variadic$(bin_ext)
 lang_variadic: $(lang_variadic_binout)
 lang_variadic_test: lang_variadic
 	$(lang_variadic_binout)
-	# $(lang_variadic_binout) "abc, abd, icjjckkkc, %s" "icjjcllllc"
-	# $(lang_variadic_binout) "%c %d-dimentional continuum." A 4
 
 $(lang_variadic_binout): $(lang_root)variadic/v.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

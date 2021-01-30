@@ -47,6 +47,13 @@ self_fprintf(FILE *stream, const char *fmt, ...)
               next += len;
               ++fmt;
             }
+          else if (n == 'f')
+            {
+              double d = va_arg(args, double);
+              int len = snprintf(&buf[next], 16, "%f", d);
+              next += len;
+              ++fmt;
+            }
           else if (n == 's')
             {
               char *s = va_arg(args, char *);
@@ -101,6 +108,10 @@ test_self_fprintf(void)
 
   rc1 = fprintf(stdout, "%i\n", 0x11223344);
   rc2 = self_fprintf(stdout, "%i\n", 0x11223344);
+  assert(rc1 == rc2);
+
+  rc1 = fprintf(stdout, "%f\n", 3.14159);
+  rc2 = self_fprintf(stdout, "%f\n", 3.14159);
   assert(rc1 == rc2);
 
   rc1 = fprintf(stdout, "%c\n", 'A');
