@@ -58,6 +58,13 @@
 #endif  /* NM_HAVE_TYPEOF */
 
 
+#if (WINNT) && (MSVC)
+#  define strerror_r(errno, buf, len) strerror_s(buf, len, errno)
+#  define strtok_r                    strtok_s
+#  define strdup                      _strdup
+#endif
+
+
 #ifdef NDEBUG
 #  define _assert_(x) _unused_(x)
 #else
