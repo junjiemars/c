@@ -246,6 +246,9 @@ void
 test_fprintf_basic(void)
 {
   int rc1, rc2, rc3;
+  _unused_(rc1);
+  _unused_(rc2);
+  _unused_(rc3);
 
   /* escape % */
   rc1 = fprintf(stdout, "%%\n");
@@ -269,7 +272,7 @@ test_fprintf_basic(void)
   rc1 = fprintf(stdout, "%s\n", "abc");
   rc2 = buffered_fprintf(stdout, "%s\n", "abc");
   rc3 = stream_fprintf(stdout, "%s\n", "abc");
-  assert(rc1 == rc2);
+  assert(rc1 == rc2 && rc2 == rc3);
 
   /* %d */
   rc1 = fprintf(stdout, "%d\n", 123);
@@ -324,6 +327,9 @@ void
 test_fprintf_macro(void)
 {
   int rc1, rc2, rc3;
+  _unused_(rc1);
+  _unused_(rc2);
+  _unused_(rc3);
 
   /* %d */
   rc1 = fprintf(stdout, "%d\n", -123);
@@ -336,6 +342,8 @@ void
 test_fprintf_fn(fbsprintf fn)
 {
   int rc1, rc2;
+  _unused_(rc1);
+  _unused_(rc2);
 
   /* %d */
   rc1 = fprintf(stdout, "%d\n", -123);
