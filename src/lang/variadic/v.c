@@ -219,28 +219,27 @@ int
 itoa(int i, char *buf)
 {
   static const char digit[] = "0123456789";
-  int na = 0;
+  int nz = 0;
   if (i < 0)
     {
-      buf[na++] = '-';
+      buf[nz++] = '-';
       i = -i;
     }
   int shift = i;
-  int nz = 0;
-  do
+  int na = nz;
+  while (shift)
     {
-      na++;
+      buf[nz++] = digit[shift % 10];
       shift /= 10;
-    } while (shift);
-  shift = i;
-  nz = na - 1;
-  do
+    }
+  for (int j = na, k = nz-1; j < k; j++, k--)
     {
-      buf[nz--] = digit[shift % 10];
-      shift /= 10;
-    } while (shift);
-  buf[na] = 0;
-  return na;
+      int m = buf[j];
+      buf[j] = buf[k];
+      buf[k] = m;
+    }
+  buf[nz] = 0;
+  return nz;
 }
 
 void
