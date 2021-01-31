@@ -786,13 +786,17 @@ $(lang_union_binout): $(lang_root)union/u.c
 
 # variadic
 lang_variadic_binout := $(bin_path)$(lang_prefix)_variadic$(bin_ext)
+lang_variadic_cppout := $(tmp_path)$(lang_prefix)_variadic$(cpp_ext)
 
 lang_variadic: $(lang_variadic_binout)
 lang_variadic_test: lang_variadic
 	$(lang_variadic_binout)
 
-$(lang_variadic_binout): $(lang_root)variadic/v.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(lang_variadic_binout): $(lang_variadic_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(lang_variadic_cppout): $(lang_root)variadic/v.c
+	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # volatile
 volatile_basic_binout := $(bin_path)$(lang_prefix)_volatile_basic$(bin_ext)
