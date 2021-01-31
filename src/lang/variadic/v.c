@@ -38,7 +38,7 @@ typedef int (*fbsprintf)(FILE *stream, const char *fmt, ...);
   do                                            \
     {                                           \
       int _n1_ = fputs((s), stream);            \
-      if (EOF == n)                             \
+      if (EOF == _n1_)                          \
         {                                       \
           return EOF;                           \
         }                                       \
