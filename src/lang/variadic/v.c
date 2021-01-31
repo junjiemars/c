@@ -43,10 +43,19 @@ self_fprintf(FILE *stream, const char *fmt, ...)
 
   while (*fmt)
     {
-      if (*fmt == '%')
+      if (*fmt == '%')          /* % as format specifier */
         {
           char n = *(fmt + 1);
-          if (n == 'c')
+          if (n == '%')         /* escape % */
+            {
+              if ((next + 1) >= bsize)
+                {
+                  RESIZE(buf, bsize);
+                }
+              buf[next++] = '%';
+              ++fmt;
+            }
+          else if (n == 'c')         /* %c */
             {
               int c = va_arg(args, int);
               if ((next + 1) >= bsize)
@@ -56,7 +65,7 @@ self_fprintf(FILE *stream, const char *fmt, ...)
               buf[next++] = (char) c;
               ++fmt;
             }
-          else if (n == 'd' || n == 'i')
+          else if (n == 'd' || n == 'i') /* %d or %i */
             {
               static const char digit[] = "0123456789";
               int i = va_arg(args, int);
@@ -81,7 +90,7 @@ self_fprintf(FILE *stream, const char *fmt, ...)
                 } while (shift);
               ++fmt;
             }
-          else if (n == 'f')
+          else if (n == 'f')    /* %f */
             {
               /* !TODO: float to string in raw */
               double d = va_arg(args, double);
@@ -89,7 +98,7 @@ self_fprintf(FILE *stream, const char *fmt, ...)
               next += len;
               ++fmt;
             }
-          else if (n == 's')
+          else if (n == 's')    /* %s */
             {
               char *s = va_arg(args, char *);
               size_t len = strnlen(s, BSIZE);
@@ -140,50 +149,67 @@ test_self_fprintf(void)
 {
   int rc1, rc2;
 
-  /* rc1 = fprintf(stdout, "abc\n"); */
-  /* rc2 = self_fprintf(stdout, "abc\n"); */
-  /* assert(rc1 == rc2); */
+  /* escape % */
+  rc1 = fprintf(stdout, "%%\n");
+  rc2 = self_fprintf(stdout, "%%\n");
+  assert(rc1 == rc2);
 
-  /* rc1 = fprintf(stdout, "%s\n", "abc"); */
-  /* rc2 = self_fprintf(stdout, "%s\n", "abc"); */
-  /* assert(rc1 == rc2); */
+  /* raw */
+  rc1 = fprintf(stdout, "abc\n");
+  rc2 = self_fprintf(stdout, "abc\n");
+  assert(rc1 == rc2);
 
-  /* rc1 = fprintf(stdout, "%d\n", 123); */
-  /* rc2 = self_fprintf(stdout, "%d\n", 123); */
-  /* assert(rc1 == rc2); */
+  /* %c */
+  rc1 = fprintf(stdout, "%c\n", 'A');
+  rc2 = fprintf(stdout, "%c\n", 'A');
+  assert(rc1 == rc2);
 
-  /* rc1 = fprintf(stdout, "%d\n", -123); */
-  /* rc2 = self_fprintf(stdout, "%d\n", -123); */
-  /* assert(rc1 == rc2); */
+  /* %s */
+  rc1 = fprintf(stdout, "%s\n", "abc");
+  rc2 = self_fprintf(stdout, "%s\n", "abc");
+  assert(rc1 == rc2);
 
-  /* rc1 = fprintf(stdout, "%i\n", 0x11223344); */
-  /* rc2 = self_fprintf(stdout, "%i\n", 0x11223344); */
-  /* assert(rc1 == rc2); */
+  /* %d */
+  rc1 = fprintf(stdout, "%d\n", 123);
+  rc2 = self_fprintf(stdout, "%d\n", 123);
+  assert(rc1 == rc2);
 
-  /* rc1 = fprintf(stdout, "%f\n", 3.14159); */
-  /* rc2 = self_fprintf(stdout, "%f\n", 3.14159); */
-  /* assert(rc1 == rc2); */
+  /* %d */
+  rc1 = fprintf(stdout, "%d\n", -123);
+  rc2 = self_fprintf(stdout, "%d\n", -123);
+  assert(rc1 == rc2);
 
-  /* rc1 = fprintf(stdout, "%c\n", 'A'); */
-  /* rc2 = fprintf(stdout, "%c\n", 'A'); */
-  /* assert(rc1 == rc2); */
+  /* %i */
+  rc1 = fprintf(stdout, "%d\n", 012);
+  rc2 = self_fprintf(stdout, "%d\n", 012);
+  assert(rc1 == rc2);
+  
+  /* %i */
+  rc1 = fprintf(stdout, "%i\n", 0x11223344);
+  rc2 = self_fprintf(stdout, "%i\n", 0x11223344);
+  assert(rc1 == rc2);
 
-  /* rc1 = fprintf(stdout, "%c %d-dimentional continuum.\n", 'A', 4); */
-  /* rc2 = self_fprintf(stdout, "%c %d-dimentional continuum.\n", 'A', 4); */
-  /* assert(rc1 == rc2); */
+  /* %f */
+  rc1 = fprintf(stdout, "%f\n", 3.14159);
+  rc2 = self_fprintf(stdout, "%f\n", 3.14159);
+  assert(rc1 == rc2);
 
-  /* rc1 = fprintf(stdout, "abc, abcd, icjjckkkc, %s\n", "icjjcllllc"); */
-  /* rc2 = SELF_FPRINTF(stdout, "abc, abcd, icjjckkkc, %s\n", "icjjcllllc"); */
-  /* assert(rc1 == rc2); */
+  /* %s */
+  rc1 = fprintf(stdout, "%c %d-dimentional continuum.\n", 'A', 4);
+  rc2 = self_fprintf(stdout, "%c %d-dimentional continuum.\n", 'A', 4);
+  assert(rc1 == rc2);
 
-  /* char *s36 = "abcdefghijklmnopqrstuvwxyz0123456789"; */
-  /* rc1 = fprintf(stdout, "%s, %s\n", s36, s36); */
-  /* rc2 = self_fprintf(stdout, "%s, %s\n", s36, s36); */
-  /* assert(rc1 == rc2); */
+  /* %s, resize buffer */
+  rc1 = fprintf(stdout, "abc, abcd, icjjckkkc, %s\n", "icjjcllllc");
+  rc2 = SELF_FPRINTF(stdout, "abc, abcd, icjjckkkc, %s\n", "icjjcllllc");
+  assert(rc1 == rc2);
 
-  /* rc1 = fprintf(stdout, "%s, %s\n", "abcd", "efgh"); */
-  /* rc2 = self_fprintf(stdout, "%s, %s\n", "abcd", "efgh"); */
-  /* assert(rc1 == rc2); */
+  /* %s, resize buffer */
+  char *s36 = "abcdefghijklmnopqrstuvwxyz0123456789";
+  rc1 = fprintf(stdout, "%s, %s\n", s36, s36);
+  rc2 = self_fprintf(stdout, "%s, %s\n", s36, s36);
+  assert(rc1 == rc2);
+
 }
 
 int
