@@ -48,7 +48,7 @@ typedef int (*fbsprintf)(FILE *stream, const char *fmt, ...);
 
 int buffered_fprintf(FILE *stream, const char *fmt, ...);
 int stream_fprintf(FILE *stream, const char *fmt, ...);
-int itoa(int i, char *buf);
+int itos(int i, char *buf);
 
 void test_fprintf_basic(void);
 void test_fprintf_macro(void);
@@ -100,7 +100,7 @@ buffered_fprintf(FILE *stream, const char *fmt, ...)
             {
               char ibuf[sizeof(int)*8];
               int i = va_arg(args, int);
-              int len = itoa(i, ibuf);
+              int len = itos(i, ibuf);
               strncpy(&buf[next], ibuf, len);
               next += len;
               ++fmt;
@@ -188,7 +188,7 @@ stream_fprintf(FILE *stream, const char *fmt, ...)
             {
               char buf[sizeof(int)*8];
               int i = va_arg(args, int);
-              itoa(i, buf);
+              itos(i, buf);
               FPUTS(buf, stream, next);
               ++fmt;
             }
@@ -216,7 +216,7 @@ stream_fprintf(FILE *stream, const char *fmt, ...)
 }
 
 int
-itoa(int i, char *buf)
+itos(int i, char *buf)
 {
   static const char digit[] = "0123456789";
   int nz = 0;
