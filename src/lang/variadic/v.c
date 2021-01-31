@@ -42,7 +42,7 @@ typedef int (*fbsprintf)(FILE *stream, const char *fmt, ...);
         {                                       \
           return EOF;                           \
         }                                       \
-      inc += n;                                 \
+      inc += _n1_;                              \
     } while (0)
 
 
