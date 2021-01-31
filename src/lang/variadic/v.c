@@ -10,6 +10,8 @@
 #define BUFFERED_FPRINTF(stream, ...) buffered_fprintf((stream), __VA_ARGS__)
 #define STREAM_FPRINTF(stream, ...) buffered_fprintf((stream), __VA_ARGS__)
 
+typedef int (*fbsprintf)(FILE *stream, const char *fmt, ...);
+
 #define RESIZE(ptr, size)                       \
   do                                            \
     {                                           \
@@ -47,7 +49,10 @@
 int buffered_fprintf(FILE *stream, const char *fmt, ...);
 int stream_fprintf(FILE *stream, const char *fmt, ...);
 int itoa(int i, char *buf);
-void test_fprintf(void);
+
+void test_fprintf_basic(void);
+void test_fprintf_macro(void);
+void test_fprintf_fn(fbsprintf fn);
 
 int
 buffered_fprintf(FILE *stream, const char *fmt, ...)
@@ -239,7 +244,7 @@ itoa(int i, char *buf)
 }
 
 void
-test_fprintf(void)
+test_fprintf_basic(void)
 {
   int rc1, rc2, rc3;
 
@@ -316,13 +321,39 @@ test_fprintf(void)
   assert(rc1 == rc2 && rc2 == rc3);
 }
 
+void
+test_fprintf_macro(void)
+{
+  int rc1, rc2, rc3;
+
+  /* %d */
+  rc1 = fprintf(stdout, "%d\n", -123);
+  rc2 = BUFFERED_FPRINTF(stdout, "%d\n", -123);
+  rc3 = STREAM_FPRINTF(stdout, "%d\n", -123);
+  assert(rc1 == rc2 && rc2 == rc3);
+}
+
+void
+test_fprintf_fn(fbsprintf fn)
+{
+  int rc1, rc2;
+
+  /* %d */
+  rc1 = fprintf(stdout, "%d\n", -123);
+  rc2 = fn(stdout, "%d\n", -123);
+  assert(rc1 == rc2);
+}
+
 int
 main(int argc, char **argv)
 {
   _unused_(argc);
   _unused_(argv);
 
-  test_fprintf();
+  test_fprintf_basic();
+  test_fprintf_macro();
+  test_fprintf_fn(buffered_fprintf);
+  test_fprintf_fn(stream_fprintf);
 
   return 0;
 }
