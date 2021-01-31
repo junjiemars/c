@@ -8,7 +8,7 @@
 #define BSIZE 64
 
 #define BUFFERED_FPRINTF(stream, ...) buffered_fprintf((stream), __VA_ARGS__)
-#define STREAM_FPRINTF(stream, ...) buffered_fprintf((stream), __VA_ARGS__)
+#define STREAM_FPRINTF(stream, ...) stream_fprintf((stream), __VA_ARGS__)
 
 typedef int (*fbsprintf)(FILE *stream, const char *fmt, ...);
 
