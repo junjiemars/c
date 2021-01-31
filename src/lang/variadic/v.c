@@ -6,10 +6,11 @@
 #include <assert.h>
 
 #define BSIZE 64
+
 #define BUFFERED_FPRINTF(stream, ...) buffered_fprintf((stream), __VA_ARGS__)
 #define STREAM_FPRINTF(stream, ...) buffered_fprintf((stream), __VA_ARGS__)
 
-#define RESIZE_BUFFER(ptr, size)                \
+#define RESIZE(ptr, size)                       \
   do                                            \
     {                                           \
       size += BSIZE;                            \
@@ -75,7 +76,7 @@ buffered_fprintf(FILE *stream, const char *fmt, ...)
             {
               if ((next + 1) >= bsize)
                 {
-                  RESIZE_BUFFER(buf, bsize);
+                  RESIZE(buf, bsize);
                 }
               buf[next++] = '%';
               ++fmt;
@@ -85,34 +86,18 @@ buffered_fprintf(FILE *stream, const char *fmt, ...)
               int c = va_arg(args, int);
               if ((next + 1) >= bsize)
                 {
-                  RESIZE_BUFFER(buf, bsize);
+                  RESIZE(buf, bsize);
                 }
               buf[next++] = (char) c;
               ++fmt;
             }
           else if (n == 'd' || n == 'i') /* %d or %i */
             {
-              static const char digit[] = "0123456789";
+              char ibuf[sizeof(int)*8];
               int i = va_arg(args, int);
-              if (i < 0)
-                {
-                  buf[next++] = '-';
-                  i = -i;
-                }
-              int shift = i;
-              int nx = 0;
-              do
-                {
-                  next++;
-                  shift /= 10;
-                } while (shift);
-              shift = i;
-              nx = next - 1;
-              do
-                {
-                  buf[nx--] = digit[shift % 10];
-                  shift /= 10;
-                } while (shift);
+              int len = itoa(i, ibuf);
+              strncpy(&buf[next], ibuf, len);
+              next += len;
               ++fmt;
             }
           else if (n == 'f')    /* %f */
@@ -130,7 +115,7 @@ buffered_fprintf(FILE *stream, const char *fmt, ...)
               size_t total = len;
               while (len > (bsize - next) || len == BSIZE)
                 {
-                  RESIZE_BUFFER(buf, bsize);
+                  RESIZE(buf, bsize);
                   len = strnlen(s+total, BSIZE);
                   total += len;
                 }
@@ -147,7 +132,7 @@ buffered_fprintf(FILE *stream, const char *fmt, ...)
         {
           if ((next + 1) >= bsize)
             {
-              RESIZE_BUFFER(buf, bsize);
+              RESIZE(buf, bsize);
             }
           buf[next++] = *fmt;
         }
@@ -307,9 +292,9 @@ test_fprintf(void)
   assert(rc1 == rc2 && rc2 == rc3);
 
   /* %f */
-  /* rc1 = fprintf(stdout, "%f\n", 3.14159); */
-  /* rc2 = buffered_fprintf(stdout, "%f\n", 3.14159); */
-  /* assert(rc1 == rc2); */
+  rc1 = fprintf(stdout, "%f\n", 3.14159);
+  rc2 = buffered_fprintf(stdout, "%f\n", 3.14159);
+  assert(rc1 == rc2);
 
   /* %s */
   rc1 = fprintf(stdout, "%c %d-dimentional continuum.\n", 'A', 4);
@@ -319,8 +304,8 @@ test_fprintf(void)
 
   /* %s */
   rc1 = fprintf(stdout, "abc, abcd, icjjckkkc, %s\n", "icjjcllllc");
-  rc2 = BUFFERED_FPRINTF(stdout, "abc, abcd, icjjckkkc, %s\n", "icjjcllllc");
-  rc3 = STREAM_FPRINTF(stdout, "abc, abcd, icjjckkkc, %s\n", "icjjcllllc");
+  rc2 = buffered_fprintf(stdout, "abc, abcd, icjjckkkc, %s\n", "icjjcllllc");
+  rc3 = stream_fprintf(stdout, "abc, abcd, icjjckkkc, %s\n", "icjjcllllc");
   assert(rc1 == rc2 && rc2 == rc3);
 
   /* %s */
