@@ -37,7 +37,7 @@ typedef int (*fbsprintf)(FILE *stream, const char *fmt, ...);
 #define FPUTS(s, stream, inc)                   \
   do                                            \
     {                                           \
-      int n = fputs((s), stream);               \
+      int _n1_ = fputs((s), stream);            \
       if (EOF == n)                             \
         {                                       \
           return EOF;                           \
@@ -212,7 +212,7 @@ stream_fprintf(FILE *stream, const char *fmt, ...)
 
   va_end(args);
 
-  return next;
+  return (int) next;
 }
 
 int
@@ -236,7 +236,7 @@ itoa(int i, char *buf)
     {
       int m = buf[j];
       buf[j] = buf[k];
-      buf[k] = m;
+      buf[k] = (char) m;
     }
   buf[nz] = 0;
   return nz;
