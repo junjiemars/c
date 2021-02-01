@@ -24,31 +24,29 @@ typedef int (*fbsprintf)(FILE *stream, const char *fmt, ...);
         }                                       \
     } while (0)
 
-#define FPUTC(c, stream, inc)                   \
+#define FPUTC(c, stream)                        \
   do                                            \
     {                                           \
       if (EOF == fputc((int) (c), stream))      \
         {                                       \
           return EOF;                           \
         }                                       \
-      inc++;                                    \
     } while (0)
 
-#define FPUTS(s, stream, inc)                   \
+#define FPUTS(s, stream)                        \
   do                                            \
     {                                           \
-      int _n1_ = fputs((s), stream);            \
-      if (EOF == _n1_)                          \
+      int _rc1_ = fputs((s), stream);           \
+      if (EOF == _rc1_)                         \
         {                                       \
           return EOF;                           \
         }                                       \
-      inc += _n1_;                              \
     } while (0)
 
 
 int buffered_fprintf(FILE *stream, const char *fmt, ...);
 int stream_fprintf(FILE *stream, const char *fmt, ...);
-int itos(int i, char *buf);
+char *_itoa_(int i, char *buf, size_t *size);
 
 void test_fprintf_basic(void);
 void test_fprintf_macro(void);
@@ -100,7 +98,8 @@ buffered_fprintf(FILE *stream, const char *fmt, ...)
             {
               char ibuf[sizeof(int)*8];
               int i = va_arg(args, int);
-              int len = itos(i, ibuf);
+              size_t len;
+              _itoa_(i, ibuf, &len);
               strncpy(&buf[next], ibuf, len);
               next += len;
               ++fmt;
@@ -175,27 +174,33 @@ stream_fprintf(FILE *stream, const char *fmt, ...)
           n = *(fmt + 1);
           if (n == '%')         /* %% */
             {
-              FPUTC('%', stream, next);
+              FPUTC('%', stream);
+              next++;
               ++fmt;
             }
           else if (n == 'c')    /* %c */
             {
               int c = va_arg(args, int);
-              FPUTC(c, stream, next);
+              FPUTC(c, stream);
+              next++;
               ++fmt;
             }
           else if (n == 'd' || n == 'i') /* %d or %i */
             {
               char buf[sizeof(int)*8];
               int i = va_arg(args, int);
-              itos(i, buf);
-              FPUTS(buf, stream, next);
+              size_t len;
+              _itoa_(i, buf, &len);
+              FPUTS(buf, stream);
+              next += len;
               ++fmt;
             }
           else if (n == 's')    /* %s */
             {
               char *s = va_arg(args, char *);
-              FPUTS(s, stream, next);
+              size_t len = strnlen(s, BSIZE);
+              FPUTS(s, stream);
+              next += len;
               ++fmt;
             }
           else
@@ -205,7 +210,8 @@ stream_fprintf(FILE *stream, const char *fmt, ...)
         }
       else
         {
-          FPUTC(*fmt, stream, next);
+          FPUTC(*fmt, stream);
+          next++;
         }
       ++fmt;
     }
@@ -215,8 +221,8 @@ stream_fprintf(FILE *stream, const char *fmt, ...)
   return (int) next;
 }
 
-int
-itos(int i, char *buf)
+char *
+_itoa_(int i, char *buf, size_t *size)
 {
   static const char digit[] = "0123456789";
   int nz = 0;
@@ -239,7 +245,8 @@ itos(int i, char *buf)
       buf[k] = (char) m;
     }
   buf[nz] = 0;
-  return nz;
+  *size = nz;
+  return buf;
 }
 
 void
