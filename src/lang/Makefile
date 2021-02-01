@@ -735,7 +735,9 @@ $(lang_trigraphs_binout): $(lang_root)trigraphs/tri.c
 
 # type
 lang_type_int_binout := $(bin_path)$(lang_prefix)_type_int$(bin_ext)
+lang_type_int_cppout := $(tmp_path)$(lang_prefix)_type_int$(cpp_ext)
 lang_type_c_binout := $(bin_path)$(lang_prefix)_type_c$(bin_ext)
+lang_type_c_cppout := $(tmp_path)$(lang_prefix)_type_c$(cpp_ext)
 
 lang_type: $(lang_type_int_binout)						\
            $(lang_type_c_binout)
@@ -747,11 +749,17 @@ lang_type_int_test: $(lang_type_int_binout)
 lang_type_c_test: $(lang_type_c_binout)
 	$(lang_type_c_binout) 11ff22aa
 
-$(lang_type_int_binout): $(lang_root)type/int.c
-	$(CPP) $(INC) $(CFLAGS) $^ $(bin_out)$@
+$(lang_type_int_binout): $(lang_type_int_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(lang_type_c_binout): $(lang_root)type/ct.c
-	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@
+$(lang_type_int_cppout): $(lang_root)type/int.c
+	$(CPP) $(INC) $(CPPFLAGS) $(nm_stage_pre) $^ $(cpp_out)$@
+
+$(lang_type_c_binout): $(lang_type_c_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(lang_type_c_cppout): $(lang_root)type/ct.c
+	$(CPP) $(INC) $(CPPFLAGS) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
 # typedef

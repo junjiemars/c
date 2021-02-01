@@ -1400,7 +1400,6 @@ There has an good answer of [[http://stackoverflow.com/questions/17206568/what-i
 | uchar.h       | C11 | UTF-16/32 character utilities                                         |
 |               |     |                                                                       |
 
-
 ** References
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_references
