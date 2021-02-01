@@ -47,6 +47,7 @@ typedef int (*fbsprintf)(FILE *stream, const char *fmt, ...);
 int buffered_fprintf(FILE *stream, const char *fmt, ...);
 int stream_fprintf(FILE *stream, const char *fmt, ...);
 char *_itoa_(int i, char *buf, size_t *size);
+char *_dtoa_(double d, char *buf, size_t *size, size_t frac);
 
 void test_fprintf_basic(void);
 void test_fprintf_macro(void);
@@ -203,6 +204,16 @@ stream_fprintf(FILE *stream, const char *fmt, ...)
               next += len;
               ++fmt;
             }
+          else if (n == 'f')    /* %f */
+            {
+              double d = va_arg(args, double);
+              size_t len;
+              char buf[sizeof(int)*8];
+              _dtoa_(d, buf, &len, 6);
+              FPUTS(buf, stream);
+              next += len;
+              ++fmt;
+            }
           else
             {
               /* do nonthing */
@@ -246,6 +257,26 @@ _itoa_(int i, char *buf, size_t *size)
     }
   buf[nz] = 0;
   *size = nz;
+  return buf;
+}
+
+char *
+_dtoa_(double d, char *buf, size_t *size, size_t frac)
+{
+  int i = (int) d;
+  double f1 = d - i;
+  int pow = 1;
+  for (size_t j = 0; j < frac; j++)
+    {
+      pow *= 10;
+    }
+  int f = (int) (pow * f1 + 0.5);
+  size_t li, lf;
+  _itoa_(i, buf, &li);
+  buf[li++] = '.';
+  _itoa_(f, &buf[li], &lf);
+  
+  *size = li + lf;
   return buf;
 }
 
@@ -308,7 +339,8 @@ test_fprintf_basic(void)
   /* %f */
   rc1 = fprintf(stdout, "%f\n", 3.14159);
   rc2 = buffered_fprintf(stdout, "%f\n", 3.14159);
-  assert(rc1 == rc2);
+  rc3 = stream_fprintf(stdout, "%f\n", 3.14159);
+  assert(rc1 == rc2 && rc2 == rc3);
 
   /* %s */
   rc1 = fprintf(stdout, "%c %d-dimentional continuum.\n", 'A', 4);
