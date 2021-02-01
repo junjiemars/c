@@ -47,7 +47,7 @@ typedef int (*fbsprintf)(FILE *stream, const char *fmt, ...);
 int buffered_fprintf(FILE *stream, const char *fmt, ...);
 int stream_fprintf(FILE *stream, const char *fmt, ...);
 char *_itoa_(int i, char *buf, size_t *size);
-char *_dtoa_(double d, char *buf, size_t *size, size_t frac);
+char *_ftoa_(double d, char *buf, size_t *size, size_t frac);
 
 void test_fprintf_basic(void);
 void test_fprintf_macro(void);
@@ -107,9 +107,8 @@ buffered_fprintf(FILE *stream, const char *fmt, ...)
             }
           else if (n == 'f')    /* %f */
             {
-              /* !TODO: float to string in raw */
               double d = va_arg(args, double);
-              int len = snprintf(&buf[next], 16, "%f", d);
+              int len = snprintf(&buf[next], sizeof(int)*8, "%f", d);
               next += len;
               ++fmt;
             }
@@ -209,7 +208,7 @@ stream_fprintf(FILE *stream, const char *fmt, ...)
               double d = va_arg(args, double);
               size_t len;
               char buf[sizeof(int)*8];
-              _dtoa_(d, buf, &len, 6);
+              _ftoa_(d, buf, &len, 6);
               FPUTS(buf, stream);
               next += len;
               ++fmt;
@@ -261,7 +260,7 @@ _itoa_(int i, char *buf, size_t *size)
 }
 
 char *
-_dtoa_(double d, char *buf, size_t *size, size_t frac)
+_ftoa_(double d, char *buf, size_t *size, size_t frac)
 {
   int i = (int) d;
   double f1 = d - i;
@@ -275,7 +274,7 @@ _dtoa_(double d, char *buf, size_t *size, size_t frac)
   _itoa_(i, buf, &li);
   buf[li++] = '.';
   _itoa_(f, &buf[li], &lf);
-  
+
   *size = li + lf;
   return buf;
 }
