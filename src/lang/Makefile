@@ -327,23 +327,28 @@ $(lang_main_entry_binout): $(lang_root)main/m_entry.c
 
 # math
 lang_math_complex_binout := $(bin_path)$(lang_prefix)_math_complex$(bin_ext)
-lang_math_fcmp_binout := $(bin_path)$(lang_prefix)_math_fcmp$(bin_ext)
+lang_math_float_binout := $(bin_path)$(lang_prefix)_math_float$(bin_ext)
+lang_math_float_cppout := $(tmp_path)$(lang_prefix)_math_float$(cpp_ext)
 
 lang_math: $(lang_math_complex_binout)					\
-           $(lang_math_fcmp_binout)
+           $(lang_math_float_binout)
 lang_math_test: lang_math_complex_test					\
-                lang_math_fcmp_test
+                lang_math_float_test
 
 lang_math_complex_test: $(lang_math_complex_binout)
 	$(lang_math_complex_binout)
-lang_math_fcmp_test: $(lang_math_fcmp_binout)
-	$(lang_math_fcmp_binout)
+
+lang_math_float_test: $(lang_math_float_binout)
+	$(lang_math_float_binout)
 
 $(lang_math_complex_binout): $(lang_root)math/c.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(lang_math_fcmp_binout): $(lang_root)math/fcmp.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(lang_math_float_binout): $(lang_math_float_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(lang_math_float_cppout): $(lang_root)math/f.c
+	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # random
 lang_random_binout := $(bin_path)$(lang_prefix)_random_raw$(bin_ext)
