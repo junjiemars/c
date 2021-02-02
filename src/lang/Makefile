@@ -165,11 +165,7 @@ lang_env_test: lang_env
 lang_error_basic_binout := $(bin_path)$(lang_prefix)_error_basic$(bin_ext)
 
 ifeq ($(NM_SYSTEM),Linux)
-	error_lflags := $(LFLAGS)
-	error_lflags += -lm
-else
-  error_cflags = $(CFLAGS)
-	error_lflags = $(LFLAGS)
+	error_ldlibs += $(nm_lib_opt)m
 endif
 
 lang_error: $(lang_error_basic_binout)
@@ -178,7 +174,7 @@ lang_error_test: lang_error
 	$(lang_error_basic_binout) $(CURDIR)/Makefile
 
 $(lang_error_basic_binout): $(lang_root)error/e.c
-	$(CC) $(error_cflags) $(INC) $^ $(bin_out)$@ $(error_lflags)
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(error_ldlibs)
 
 # exit
 lang_exit_binout := $(bin_path)$(lang_prefix)_exit$(bin_ext)
