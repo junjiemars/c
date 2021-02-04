@@ -73,7 +73,7 @@ test_cmp_float(void)
   
   int less, greater, lessgreater, unordered, lessequal, greaterequal;
   less = isless(d3, d1+d2);
-  greater = islessgreater(d3, d1+d2);
+  greater = isgreater(d3, d1+d2);
   lessgreater = islessgreater(d3, d1+d2);
   lessequal = islessequal(d3, d1+d2);
   greaterequal = isgreaterequal(d3, d1+d2);
