@@ -6,9 +6,9 @@
 #  pragma warning(disable: 4204)
 #endif
 
-
 int
-main(int argc, char **argv) {
+main(int argc, char **argv)
+{
 	_unused_(argc);
 	_unused_(argv);
 

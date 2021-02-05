@@ -348,7 +348,7 @@ lang_math_complex_test: $(lang_math_complex_binout)
 lang_math_float_test: $(lang_math_float_binout)
 	$(lang_math_float_binout)
 
-$(lang_math_complex_binout): $(lang_root)math/c.c
+$(lang_math_complex_binout): $(lang_root)math/m.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_math_float_binout): $(lang_math_float_cppout)
