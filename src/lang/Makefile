@@ -275,6 +275,13 @@ lang_locale_binout := $(bin_path)$(lang_prefix)_locale$(bin_ext)
 lang_locale: $(lang_locale_binout)
 lang_locale_test: lang_locale
 	$(lang_locale_binout)
+	$(lang_locale_binout) "C"
+	$(lang_locale_binout) "POSIX"
+	$(lang_locale_binout) "en_US"
+	$(lang_locale_binout) "fr_FR"
+	$(lang_locale_binout) "zh_CN"
+	$(lang_locale_binout) "zh_HK"
+	$(lang_locale_binout) "XXX"
 
 $(lang_locale_binout): $(lang_root)locale/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
