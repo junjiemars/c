@@ -50,14 +50,14 @@ psignal(int sig, const char *s)
 void
 on_sigint_stop(int sig)
 {
-	psignal(sig, "on_sigint_stop");
+	psignal(sig, "^ on_sigint_stop");
 	s_flag = sig;
 }
 
 void
 on_sigint_continue(int sig)
 {
-	psignal(sig, "on_sigint_continue");
+	psignal(sig, "^ on_sigint_continue");
 	/* continue put into pending signals */
 	signal(sig, on_sigint_stop);
 }
