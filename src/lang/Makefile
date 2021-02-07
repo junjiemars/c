@@ -504,13 +504,6 @@ $(lang_scope_binout): $(lang_root)scope/scope.c
 
 
 # signal
-ifeq ($(NM_SYSTEM), Linux)
-signal_cflags := $(CFLAGS)
-signal_cflags += -D_DEFAULT_SOURCE
-signal_cflags += -D_BSD_SOURCE
-signal_cflags += -D_XOPEN_SOURCE
-endif
-
 lang_signal_basic_binout := $(bin_path)$(lang_prefix)_signal_basic$(bin_ext)
 lang_signal_list_binout := $(bin_path)$(lang_prefix)_signal_list$(bin_ext)
 lang_signal_fork_binout := $(bin_path)$(lang_prefix)_signal_fork$(bin_ext)
@@ -535,13 +528,13 @@ lang_signal_fork_test: lang_signal_fork
 	$(lang_signal_fork_binout)
 
 $(lang_signal_basic_binout): $(lang_root)signal/basic/sig.c
-	$(CC) $(signal_cflags) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_signal_list_binout): $(lang_root)signal/list/list-sig.c
-	$(CC) $(signal_cflags) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_signal_fork_binout): $(lang_root)signal/fork/f.c
-	$(CC) $(signal_cflags) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # sizeof
 lang_sizeof_binout := $(bin_path)sizeof$(bin_ext)
