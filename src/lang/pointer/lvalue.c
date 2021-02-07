@@ -13,7 +13,7 @@ test_raw(int a) {
   /* d + 1 is a value, not a lvalue */
   /* d + 1 = a; */
 
-  _assert_(d);
+  ASSERT(d);
 }
 
 void
@@ -30,17 +30,17 @@ test_ptr(int c) {
   cp1 = cp;
 
   /* cp as rvalue */
-  _assert_(*cp == (char) c);
+  ASSERT(*cp == (char) c);
 
   /* cp as lvalue */
   *cp = 'A';
 
-  _assert_((*cp + 1) == 'B');
+  ASSERT((*cp + 1) == 'B');
 
   /* a value not a lvalue */
   /* *cp + 1 = 'C'; */
   
-  _assert_(cp1);
+  ASSERT(cp1);
 }
 
 void
@@ -51,7 +51,7 @@ test_ptr_ptr(int c) {
 
   /* cpp = &cp; */
 
-  _assert_(cp);
+  ASSERT(cp);
 }
 
 int

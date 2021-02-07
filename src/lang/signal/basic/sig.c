@@ -39,7 +39,7 @@ psignal(int sig, const char *s)
     };
 
 	char *msg = (sig < 0 || sig >= sizeof(tbl)/sizeof(*tbl))
-		? "unknown signal" : tbl[sig];
+		? "Unknown signal" : tbl[sig];
 
 	if (0 == s || '\0' == s[0])
     {
