@@ -6,6 +6,12 @@
 #include <string.h>
 #include <assert.h>
 
+#if NDEBUG
+#  define ASSERT(x) ((void)(x))
+#else
+#  define ASSERT assert
+#endif
+
 #if (MSVC)
 #  pragma warning(disable: 4293)
 #endif
@@ -68,8 +74,8 @@ test_cmp_float(void)
   printf(BPRI32(u12));
   printf(BPRI32(u3));
 
-  assert(u3 == u12);
-  assert(d3 == d1 + d2);
+  ASSERT(u3 == u12);
+  ASSERT(d3 == d1 + d2);
   
   int less, greater, lessgreater, unordered, lessequal, greaterequal;
   less = isless(d3, d1+d2);
@@ -79,12 +85,12 @@ test_cmp_float(void)
   greaterequal = isgreaterequal(d3, d1+d2);
   unordered = isunordered(d3, d1+d2);
 
-  assert(!unordered);
-  assert(!less);
-  assert(!greater);
-  assert(!lessgreater);
-  assert((less || greater) == lessgreater);
-  assert(lessequal && greaterequal);
+  ASSERT(!unordered);
+  ASSERT(!less);
+  ASSERT(!greater);
+  ASSERT(!lessgreater);
+  ASSERT((less || greater) == lessgreater);
+  ASSERT(lessequal && greaterequal);
 
   int less1, greater1, lessgreater1;
   float lg1 = 0.1f, lg2 = 0.2f, lg3 = 0.3001f;
@@ -92,9 +98,9 @@ test_cmp_float(void)
   greater1 = isgreater(lg3, lg1+lg2);
   lessgreater1 = islessgreater(lg3, lg1+lg2);
 
-  assert(less1 || greater1);
-  assert(lessgreater1);
-  assert((less1 || greater1) == lessgreater1);
+  ASSERT(less1 || greater1);
+  ASSERT(lessgreater1);
+  ASSERT((less1 || greater1) == lessgreater1);
 }
 
 void
@@ -117,8 +123,8 @@ test_cmp_double(void)
   printf(BPRI64(u12));
   printf(BPRI64(u3));
 
-  assert(u3 != u12);
-  assert(d3 != d1 + d2);
+  ASSERT(u3 != u12);
+  ASSERT(d3 != d1 + d2);
   
   int less, greater, lessgreater, unordered, lessequal, greaterequal;
   less = isless(d3, d1+d2);
@@ -128,12 +134,12 @@ test_cmp_double(void)
   greaterequal = isgreaterequal(d3, d1+d2);
   unordered = isunordered(d3, d1+d2);
 
-  assert(!unordered);
-  assert(less);
-  assert(greater);
-  assert(lessgreater);
-  assert(lessequal || greaterequal);
-  assert(less && greater);
+  ASSERT(!unordered);
+  ASSERT(less);
+  ASSERT(greater);
+  ASSERT(lessgreater);
+  ASSERT(lessequal || greaterequal);
+  ASSERT(less && greater);
 
   int less1, greater1, lessgreater1;
   double lg1 = 0.1, lg2 = 0.2, lg3 = 0.3001;
@@ -141,9 +147,9 @@ test_cmp_double(void)
   greater1 = isgreater(lg3, lg1+lg2);
   lessgreater1 = islessgreater(lg3, lg1+lg2);
 
-  assert(less1 || greater1);
-  assert(lessgreater1);
-  assert((less1 || greater1) == lessgreater1);
+  ASSERT(less1 || greater1);
+  ASSERT(lessgreater1);
+  ASSERT((less1 || greater1) == lessgreater1);
 }
 
 void
@@ -168,7 +174,7 @@ test_epsilon_double(void)
   double d1 = 0.1, d2 = 0.2, d3 = 0.3;
   double epsilon = DBL_EPSILON;
   int x = fabs((d1+d2) - d3) < epsilon;
-  assert(x);
+  ASSERT(x);
 }
 
 void
@@ -180,9 +186,9 @@ test_double_zero(void)
   le = islessequal(d1, d2);
   ge = isgreaterequal(d1, d2);
 
-  assert(FP_ZERO == fpclassify(d1));
-  assert(d1 == d2);
-  assert(le && ge);
+  ASSERT(FP_ZERO == fpclassify(d1));
+  ASSERT(d1 == d2);
+  ASSERT(le && ge);
 }
 
 void
@@ -196,30 +202,30 @@ test_double_equal(void)
   l = isless(d1+d2, d3);
   g = isgreater(d1+d2, d3);
 
-  assert((le || ge) && (l || g));
-  assert(g && ge);
+  ASSERT((le || ge) && (l || g));
+  ASSERT(g && ge);
 }
 
 void
 test_double_classify(void) 
 {
-  assert(FP_ZERO == fpclassify(0.0));
-  assert(FP_ZERO == fpclassify(0.0/DBL_MAX));
-  assert(FP_NORMAL == fpclassify(1.0));
-  assert(FP_NORMAL != fpclassify(0.0));
+  ASSERT(FP_ZERO == fpclassify(0.0));
+  ASSERT(FP_ZERO == fpclassify(0.0/DBL_MAX));
+  ASSERT(FP_NORMAL == fpclassify(1.0));
+  ASSERT(FP_NORMAL != fpclassify(0.0));
 
 #if !defined(MSVC)
-  assert(FP_INFINITE == fpclassify(1.0/0.0));
-  assert(FP_INFINITE == fpclassify(-1.0/0.0));
-  assert(FP_NAN == fpclassify((1.0L/0.0) / (1.0/0.0)));
+  ASSERT(FP_INFINITE == fpclassify(1.0/0.0));
+  ASSERT(FP_INFINITE == fpclassify(-1.0/0.0));
+  ASSERT(FP_NAN == fpclassify((1.0L/0.0) / (1.0/0.0)));
 #endif
 
-  assert(isfinite(0.0));
+  ASSERT(isfinite(0.0));
 #if !defined(MSVC)
-  assert(isinf(1.0/0.0));
-  assert(isnan((1.0/0.0)/(1.0/0.0)));
+  ASSERT(isinf(1.0/0.0));
+  ASSERT(isnan((1.0/0.0)/(1.0/0.0)));
 #endif
-  assert(isnormal(0.1));
+  ASSERT(isnormal(0.1));
 }
 
 int
