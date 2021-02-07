@@ -9,13 +9,15 @@ static void psignal(int sig, const char *s);
 #include <unistd.h>
 #endif
 
-#define N_CNT 16
+#define N_CNT 8
+
+typedef void (*on_signal)(int);
 
 static volatile int s_flag = 0;
 
 static void on_sigint_stop(int sig);
 static void on_sigint_continue(int sig);
-static void on_sigkill_continue(int sig);
+/* static void on_sigkill_continue(int sig); */
 
 #ifdef MSVC
 #  pragma warning(disable: 4996)
@@ -80,9 +82,13 @@ main(int argc, char **argv)
 
 	printf("pid=%d\n", getpid());
 	
-	int n = N_CNT;
-	signal(SIGINT, on_sigint_continue);
-  signal(SIGKILL, on_sigkill_continue);
+	int n = 0;
+	on_signal onsig = signal(SIGINT, on_sigint_continue);
+  if (SIG_ERR == onsig)
+    {
+      perror("!panic, signal");
+      return 1;
+    }
 
 	do
     {
@@ -91,7 +97,7 @@ main(int argc, char **argv)
           fprintf(stderr, "stop, s_flag = %i\n", s_flag);
           break;
         }
-      if (6 == n /* 7th */)
+      if (3 == n)
         {
           int rc = raise(SIGINT);
           if (rc)
@@ -101,10 +107,10 @@ main(int argc, char **argv)
         }
       else
         {
-          fprintf(stderr, "sleeping 1s (%i/%i)...\n", n, N_CNT);
+          fprintf(stderr, "sleeping 1s (%i/%i)...\n", n+1, N_CNT);
         }
       sleep(1);
-    } while (--n > 0);
+    } while (++n < N_CNT);
 
 	return 0;
 }
