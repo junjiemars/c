@@ -65,11 +65,11 @@
 #endif
 
 
-#ifdef NDEBUG
-#  define _assert_(x) _unused_(x)
+#if NDEBUG
+#  define ASSERT(x) ((void)(x))
 #else
-#  define _assert_(x) assert(x)
-#endif  /* NDEBUG */
+#  define ASSERT assert
+#endif
 
 
 #define _unused_(x) ((void)(x))

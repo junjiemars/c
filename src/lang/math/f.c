@@ -6,12 +6,6 @@
 #include <string.h>
 #include <assert.h>
 
-#if NDEBUG
-#  define ASSERT(x) ((void)(x))
-#else
-#  define ASSERT assert
-#endif
-
 #if (MSVC)
 #  pragma warning(disable: 4293)
 #endif

@@ -20,7 +20,7 @@ test_null(int c) {
   cp = 0;
   cp = (char*) &c;
   
-  _assert_(cp);
+  ASSERT(cp);
 }
 
 void
@@ -36,7 +36,7 @@ test_arr_tail(void) {
   for (ap = &a[0]; ap < &a[N]; ) {
     *ap++ = 0;
   }
-  _assert_(ap == &a[N]);
+  ASSERT(ap == &a[N]);
 }
 
 void
@@ -49,16 +49,16 @@ test_diff(int *a) {
   p1 = &a[1];
 
   one = p1 - p0;
-  _assert_(one == 1);
+  ASSERT(one == 1);
 
   offset = (ssize_t)p1 - (ssize_t)p0;
-  _assert_(offset == sizeof(int));
+  ASSERT(offset == sizeof(int));
 
   one = p0 - p1;
-  _assert_(-one == 1);
+  ASSERT(-one == 1);
   
   offset = (ssize_t)p0 - (ssize_t)p1;
-  _assert_(-offset == sizeof(int));
+  ASSERT(-offset == sizeof(int));
 }
 
 void
@@ -66,9 +66,9 @@ test_comp(int *a) {
   int *p0, *p1;
   p0 = &a[0];
   p1 = &a[1];
-  _assert_(p0 < p1);
-  _assert_(p0 <= p1-1);
-  _assert_(p1 > p0);
+  ASSERT(p0 < p1);
+  ASSERT(p0 <= p1-1);
+  ASSERT(p1 > p0);
 }
 
 int
