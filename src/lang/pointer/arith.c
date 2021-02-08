@@ -4,18 +4,18 @@
 #include <assert.h>
 #include <errno.h>
 #include <stdio.h>
-#include <posix/ints.h>
 
 #define N 8
 
 void test_null(int);
-void test_array_boundary1(char**);
+void test_array_boundary(char**);
 void test_arr_tail(void);
 void test_diff(int*);
 void test_comp(int*);
 
 void
-test_null(int c) {
+test_null(int c)
+{
   char *cp;
   cp = 0;
   cp = (char*) &c;
@@ -24,23 +24,27 @@ test_null(int c) {
 }
 
 void
-test_array_boundary1(char **a) {
+test_array_boundary(char **a)
+{
   _unused_(a);
 }
 
 void
-test_arr_tail(void) {
+test_arr_tail(void)
+{
   int a[N];
   int *ap;
 
-  for (ap = &a[0]; ap < &a[N]; ) {
-    *ap++ = 0;
-  }
+  for (ap = &a[0]; ap < &a[N]; )
+    {
+      *ap++ = 0;
+    }
   ASSERT(ap == &a[N]);
 }
 
 void
-test_diff(int *a) {
+test_diff(int *a)
+{
   int *p0, *p1;
   ptrdiff_t one;
   ssize_t offset;
@@ -62,7 +66,8 @@ test_diff(int *a) {
 }
 
 void
-test_comp(int *a) {
+test_comp(int *a)
+{
   int *p0, *p1;
   p0 = &a[0];
   p1 = &a[1];
@@ -72,21 +77,24 @@ test_comp(int *a) {
 }
 
 int
-main(int argc, char **argv) {
+main(int argc, char **argv)
+{
   _unused_(argc);
   _unused_(argv);
 
   int *a = malloc(N*sizeof(a[0]));
-  if (!a) {
-    perror(0);
-    return errno;
-  }
-  for (int i = 0; i < N; i++) {
-    a[i] = i;
-  }
+  if (!a)
+    {
+      perror(0);
+      return errno;
+    }
+  for (int i = 0; i < N; i++)
+    {
+      a[i] = i;
+    }
   
   test_null('a'); 
-  test_array_boundary1(argv);
+  test_array_boundary(argv);
   test_arr_tail();
   test_diff(a);
   test_comp(a);

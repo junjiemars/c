@@ -4,7 +4,7 @@
 
 
 #if MSVC
- /* C4456: declaration of 'i' hides previous local declaration */
+/* C4456: declaration of 'i' hides previous local declaration */
 # pragma warning(disable : 4456)
 #endif
 
@@ -17,41 +17,46 @@ void array_decay(char *);
 void external_storage_class(void);
 
 void
-automatic_storage_class(void) {
+automatic_storage_class(void)
+{
 	auto int x; /* garbage value */
 #if GCC
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wuninitialized"
-  _assert_(x == x);
+  ASSERT(x == x);
 # pragma GCC diagnostic pop
 #else
   _unused_(x);
 #endif
 
 	auto int i = 0x1122;
-	{
+	
+  {
 		auto int i = 0x3344;
-    _assert_(0x3344 == i);
+    ASSERT(0x3344 == i);
 	}
-  _assert_(0x1122 == i);
+  ASSERT(0x1122 == i);
 }
 
 
 void
-array_decay(char *a) {
+array_decay(char *a)
+{
 	printf("a[0] = 0x%02x\n", a[0]);
 }
 
 
 void
-register_storage_class(register int x) {
+register_storage_class(register int x)
+{
 	register int i;
   i = x;
 	printf("i = 0x%08x\n", i++);
 	/* error: address of register variable requested */
 	/* int *p = &i; */
 
-	register char a[] = { 0x11, 0x22, 0x33, 0x44, };
+	register char a[] =
+    { 0x11, 0x22, 0x33, 0x44, };
 #if MSVC
 	printf("a[0/%zu]\n", sizeof(a));
 #elif CLANG || GCC
@@ -65,24 +70,27 @@ register_storage_class(register int x) {
 
 
 void
-static_storage_class_fn(void) {
+static_storage_class_fn(void)
+{
 	static int i;
-	{
+	
+  {
     static int x;
     x = i;
 		static int i = 0x11223344;
-    _assert_((0x11223344 + x) == i);
+    ASSERT((0x11223344 + x) == i);
     i++;
 	}
-  _assert_((0 + i) == f_int);
+  ASSERT((0 + i) == f_int);
   f_int++;
   i++;
 }
 
 int
-static_storage_class_fn_raw(int x) {
+static_storage_class_fn_raw(int x)
+{
   static int v;
-  _assert_(0 == v);
+  ASSERT(0 == v);
   v += x;
   return v;
 }
@@ -91,7 +99,8 @@ static_storage_class_fn_raw(int x) {
 int g_var_x = 0x1122;
 
 void
-external_storage_class(void) {
+external_storage_class(void)
+{
 	extern int g_var_x;
   extern int g_var_y;
 	printf("g_var_x = 0x%08x\n", g_var_x++);
@@ -100,7 +109,8 @@ external_storage_class(void) {
 
 
 int
-main(int argc, char *argv[]) {
+main(int argc, char *argv[])
+{
 	_unused_(argc);
 	_unused_(argv);
 

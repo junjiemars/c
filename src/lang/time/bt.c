@@ -8,7 +8,6 @@
 # endif
 
 #include <time.h>
-#include <posix/ints.h>
 
 void test_epoch(time_t *);
 void test_localtime(const time_t *);
@@ -20,23 +19,29 @@ void test_ctime(const time_t *);
 void test_difftime(const time_t *);
 
 void
-test_epoch(time_t *epoch) {
-	if ((time_t) -1 == time(epoch)) {
-		perror(0);
-	} else {
-		printf("epoch since 1/1/1970 UTC: %zu\n", *epoch);
-	}
+test_epoch(time_t *epoch)
+{
+	if ((time_t) -1 == time(epoch))
+    {
+      perror(0);
+    }
+  else
+    {
+      printf("epoch since 1/1/1970 UTC: %zu\n", *epoch);
+    }
 }
 
 void
-test_localtime(const time_t *epoch) {
+test_localtime(const time_t *epoch)
+{
   struct tm *local = localtime(epoch);
   _unused_(local);
 }
 
 #if !(MSVC)
 void
-test_timelocal(const time_t *epoch) {
+test_timelocal(const time_t *epoch)
+{
   struct tm *local = localtime(epoch);
   time_t lacol = timelocal(local);
   assert(*epoch == lacol && "localtime <=> timelocal");
@@ -46,7 +51,8 @@ test_timelocal(const time_t *epoch) {
 #endif
 
 void
-test_gmtime(const time_t *epoch) {
+test_gmtime(const time_t *epoch)
+{
   struct tm *gm = gmtime(epoch);
   time_t mg = timegm(gm);
   assert(*epoch == mg);
@@ -55,7 +61,8 @@ test_gmtime(const time_t *epoch) {
 }
 
 void
-test_ctime(const time_t *epoch) {
+test_ctime(const time_t *epoch)
+{
   char *c = ctime(epoch);
   char *c1 = asctime(localtime(epoch));
   assert(0 == strcmp(c, c1));
@@ -63,14 +70,16 @@ test_ctime(const time_t *epoch) {
 }
 
 void
-test_difftime(const time_t *epoch) {
+test_difftime(const time_t *epoch)
+{
   time_t end = (time_t)(*epoch + 60*60*24);
 	double d = difftime(end, *epoch);
 	printf("difftime(%zu, %zu) in seconds = %lf\n", end, *epoch, d);
 }
 
 int
-main(int argc, char **argv) {
+main(int argc, char **argv)
+{
 	_unused_(argc);
 	_unused_(argv);
 
