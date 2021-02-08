@@ -17,7 +17,7 @@ static volatile int s_flag = 0;
 
 static void on_sigint_stop(int sig);
 static void on_sigint_continue(int sig);
-/* static void on_sigkill_continue(int sig); */
+static void on_sigterm_continue(int sig);
 
 #ifdef MSVC
 #  pragma warning(disable: 4996)
@@ -68,9 +68,9 @@ on_sigint_continue(int sig)
 }
 
 void
-on_sigkill_continue(int sig)
+on_sigterm_continue(int sig)
 {
-  psignal(sig, "^ on_sigkill_continue");
+  psignal(sig, "^ on_sigterm_continue");
   signal(sig, on_sigint_stop);
 }
 
@@ -85,6 +85,12 @@ main(int argc, char **argv)
 	int n = 0;
 	on_signal onsig = signal(SIGINT, on_sigint_continue);
   if (SIG_ERR == onsig)
+    {
+      perror("!panic, signal");
+      return 1;
+    }
+  on_signal onterm = signal(SIGTERM, on_sigterm_continue);
+  if (SIG_ERR == onterm)
     {
       perror("!panic, signal");
       return 1;
