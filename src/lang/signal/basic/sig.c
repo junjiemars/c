@@ -9,7 +9,7 @@ static void psignal(int sig, const char *s);
 #include <unistd.h>
 #endif
 
-#define N_CNT 8
+#define N_CNT 16
 
 typedef void (*on_signal)(int);
 
@@ -109,6 +109,14 @@ main(int argc, char **argv)
           if (rc)
             {
               perror("!panic, raise SIGINT");
+            }
+        }
+      if (5 == n)
+        {
+          int rc = raise(SIGTERM);
+          if (rc)
+            {
+              perror("!panic, raise SIGTERM");
             }
         }
       else
