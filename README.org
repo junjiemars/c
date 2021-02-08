@@ -1391,6 +1391,7 @@ There has an good answer of [[http://stackoverflow.com/questions/17206568/what-i
 | fenv.h        | C99 | floating-point environment                                            |
 | inttypes.h    | C99 | format conversion of integer types                                    |
 | stdbool.h     | C99 | macros for boolean types                                              |
+| stdint.h      | C99 | Fixed-width integer types                                             |
 | tgmath.h      | C99 | type-generic math                                                     |
 |---------------+-----+-----------------------------------------------------------------------|
 | stdalign.h    | C11 | alignas and alignof convenience macros                                |
