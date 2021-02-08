@@ -1,7 +1,7 @@
 #include <_lang_.h>
 #include <stdio.h>
-#include <assert.h>
 #include <string.h>
+#include <assert.h>
 
 # if !defined(__USE_MISC)
 #   define __USE_MISC
@@ -44,18 +44,18 @@ test_timelocal(const time_t *epoch)
 {
   struct tm *local = localtime(epoch);
   time_t lacol = timelocal(local);
-  assert(*epoch == lacol && "localtime <=> timelocal");
+  ASSERT(*epoch == lacol && "localtime <=> timelocal");
   char *asc = asctime(local);
   printf("asctime of localtime: %s", asc);
 }
-#endif
+#endif  /* end of !MSVC */
 
 void
 test_gmtime(const time_t *epoch)
 {
   struct tm *gm = gmtime(epoch);
   time_t mg = timegm(gm);
-  assert(*epoch == mg);
+  ASSERT(*epoch == mg);
   char *asc = asctime(gm);
   printf("asctime of gmtime: %s", asc);
 }
@@ -65,7 +65,7 @@ test_ctime(const time_t *epoch)
 {
   char *c = ctime(epoch);
   char *c1 = asctime(localtime(epoch));
-  assert(0 == strcmp(c, c1));
+  ASSERT(0 == strcmp(c, c1));
   printf("ctime of epoch: %s", c);
 }
 
@@ -85,7 +85,6 @@ main(int argc, char **argv)
 
   time_t epoch = 0;
 
-  test_epoch(&epoch);
   test_epoch(&epoch);
 
   test_localtime(&epoch);
