@@ -70,7 +70,7 @@ test_ctime(const time_t *epoch)
 void
 test_difftime(const time_t *epoch)
 {
-  time_t end = (time_t)(*epoch + 60*60*24);
+  time_t end = (time_t) (*epoch + 60*60*24);
 	double d = difftime(end, *epoch);
 	printf("difftime(%zu, %zu) in seconds = %lf\n", end, *epoch, d);
 }
