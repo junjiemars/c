@@ -11,9 +11,11 @@
 
 void test_epoch(time_t *);
 void test_localtime(const time_t *);
+
 #if !(MSVC)
 void test_timelocal(const time_t *);
 #endif  /* end of !MSVC */
+
 void test_gmtime(const time_t *);
 void test_ctime(const time_t *);
 void test_difftime(const time_t *);
