@@ -720,7 +720,7 @@ lang_time_test: lang_time_basic_test						\
 lang_time_basic_test: $(lang_time_basic_binout)
 	$(lang_time_basic_binout)
 lang_time_clock_test: $(lang_time_clock_binout)
-	$(lang_time_clock_binout) 65536
+	$(lang_time_clock_binout) 64
 lang_time_conv_test: $(lang_time_conv_binout)
 	$(lang_time_conv_binout)
 	$(lang_time_conv_binout) 1594560256

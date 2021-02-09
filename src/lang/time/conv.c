@@ -34,20 +34,12 @@ main(int argc, char **argv)
 
   if (0 == strncmp("-", argv[1], sizeof(int)))
     {
-      if (EOF == fscanf(stdin, "%lu", (unsigned long*) &epoch))
-        {
-          perror(0);
-          return 1;
-        }
+      fscanf(stdin, "%lu", (unsigned long*) &epoch);
       printf("%s", to_asctime(&epoch));      
       return 0;
     }
 
-  if (EOF == sscanf(argv[1], "%lu", (unsigned long*) &epoch))
-    {
-      perror(0);
-      return 1;
-    }
+  sscanf(argv[1], "%lu", (unsigned long*) &epoch);
   printf("%s", to_asctime(&epoch));
 
   return 0;
