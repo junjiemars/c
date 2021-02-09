@@ -13,10 +13,11 @@ void test_epoch(time_t *);
 void test_localtime(const time_t *);
 #if !(MSVC)
 void test_timelocal(const time_t *);
-#endif
+#endif  /* end of !MSVC */
 void test_gmtime(const time_t *);
 void test_ctime(const time_t *);
 void test_difftime(const time_t *);
+void test_mktime(const time_t *);
 
 void
 test_epoch(time_t *epoch)
@@ -75,6 +76,15 @@ test_difftime(const time_t *epoch)
 	printf("difftime(%zu, %zu) in seconds = %lf\n", end, *epoch, d);
 }
 
+void
+test_mktime(const time_t *epoch)
+{
+  struct tm *local = gmtime(epoch);
+  local->tm_year++;
+  char *asc = asctime(local);
+  printf("asctime of localtime: %s", asc);  
+}
+
 int
 main(int argc, char **argv)
 {
@@ -86,12 +96,15 @@ main(int argc, char **argv)
   test_epoch(&epoch);
 
   test_localtime(&epoch);
+
 #if !(MSVC)
   test_timelocal(&epoch);
-#endif
+#endif  /* end of !MSVC */
+
   test_gmtime(&epoch);
   test_ctime(&epoch);
   test_difftime(&epoch);
+  test_mktime(&epoch);
 
 	return 0;
 }
