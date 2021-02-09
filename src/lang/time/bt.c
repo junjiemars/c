@@ -9,6 +9,10 @@
 
 #include <time.h>
 
+/*
+ * time_t -> struct tm -> char*
+ */
+
 void test_epoch(time_t *);
 void test_localtime(const time_t *);
 
@@ -84,7 +88,7 @@ test_mktime(const time_t *epoch)
   struct tm *local = gmtime(epoch);
   local->tm_year++;
   char *asc = asctime(local);
-  printf("asctime of localtime: %s", asc);  
+  printf("asctime of localtime: %s", asc);
 }
 
 int
