@@ -317,11 +317,13 @@ case "$CC_NAME" in
 		;;
 	gcc)
 		nm_feature="$CC_NAME -Wimplicit-fallthrough"
-		nm_feature_name='nm_have_cc_opt_implicit_fallthrough'
+		nm_feature_name='nm_have_no_implicit_fallthrough'
 		nm_feature_run=no
 		nm_feature_h=
-		nm_feature_flags='-Wimplicit-fallthrough'
+		nm_feature_flags='-Wno-implicit-fallthrough'
 		nm_feature_test=
+    flag=CFLAGS op="+=" value=$nm_feature_flags  \
+        . ${NORE_ROOT}/auto/make_define    
 		. ${NORE_ROOT}/auto/feature
 		;;
 	msvc)

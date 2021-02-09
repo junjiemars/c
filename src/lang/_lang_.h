@@ -25,11 +25,7 @@
 	 unsafe. Consider using strcpy_s instead. To disable deprecation,
 	 use _CRT_SECURE_NO_WARNINGS. */
 #  pragma warning(disable : 4996)
-#elif GCC
-#  if NM_HAVE_CC_OPT_IMPLICIT_FALLTHROUGH
-#    pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
-#  endif
-#endif  /* MSVC */
+#endif  /* end of MSVC */
 
 
 #ifdef NM_HAVE_STDINT_H
