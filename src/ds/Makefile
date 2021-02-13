@@ -6,9 +6,10 @@
 ds_prefix := ds
 INC += -I$(ds_root)
 
-# CFLAGS += $(if $(strip $(nm_build_opt)),,$(cflags_sanitize))
-ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
-	CFLAGS += $(cflags_sanitize)
+ifeq (1, $(_MEMORY_))
+ifeq (YES, $(has_sanitize))
+CFLAGS += $(cflags_sanitize)
+endif
 endif
 
 ifeq ($(shell test -n "$(NDEBUG)" && test $(NDEBUG) -gt 0; echo $$?),0)
@@ -64,7 +65,7 @@ single_linked_list_valgrind_test: single_linked_list
 $(single_linked_list_binout): $(ds_root)single_linked_list/test.c \
 												      $(ds_root)single_linked_list/list.c \
 													 	  $(ds_root)single_linked_list/list.h
-	$(CC) $(CFLAGS) $(INC) \
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) \
 		$(ds_root)single_linked_list/test.c \
 		$(ds_root)single_linked_list/list.c \
 		$(bin_out)$@

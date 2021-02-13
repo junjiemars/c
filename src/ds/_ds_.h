@@ -7,6 +7,13 @@
 #pragma warning(disable:4996) /*_CRT_SECURE_NO_WARNINGS*/
 #endif
 
+#if NDEBUG
+#  define ASSERT(x) ((void)(x))
+#else
+#  define ASSERT assert
+#endif  /* end of NDEBUG */
+
+
 #define _unused_(x) ((void)(x))
 
-#endif
+#endif  /* end of _DS_H_ */
