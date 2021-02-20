@@ -28,13 +28,14 @@ dns_binout := $(bin_path)$(uv_prefix)_dns$(bin_ext)
 
 ifeq (YES, $(has_libuv))
 uv_dns: $(dns_binout)
+uv_dns_test: uv_dns
+	$(dns_binout) "www.bing.com"
 else
 uv_dns:
 	@echo "#skip uv_dns_test"
+uv_dns_test: uv_dns
 endif
 
-uv_dns_test: uv_dns
-	$(dns_binout) "www.bing.com"
 
 $(dns_binout): $(uv_root)dns/d1.c
 	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@ $(LDLIBS)
@@ -44,13 +45,14 @@ neti_binout := $(bin_path)$(uv_prefix)_neti$(bin_ext)
 
 ifeq (YES, $(has_libuv))
 uv_neti: $(neti_binout)
+uv_neti_test: uv_neti
+	$(neti_binout)
 else
 uv_neti:
 	@echo "#skip uv_neti_test"
+uv_neti_test: uv_neti
 endif
 
-uv_neti_test: uv_neti
-	$(neti_binout)
 
 $(neti_binout): $(uv_root)neti/neti.c
 	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@ $(LDLIBS)
@@ -61,13 +63,14 @@ uv_parser_binout := $(bin_path)$(uv_prefix)_parser$(bin_ext)
 
 ifeq (YES, $(has_libuv))
 uv_parser: $(uv_parser_binout)
+uv_parser_test: uv_parser
+	$(uv_parser_binout)
 else
 uv_parser:
 	@echo "#skip uv_parser_test"
+uv_parser_test: uv_parser
 endif
 
-uv_parser_test: uv_parser
-	$(uv_parser_binout)
 
 $(uv_parser_objout): $(uv_root)parser/http_parser.c $(uv_root)parser/http_parser.h
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $< $(obj_out)$@
@@ -80,14 +83,15 @@ uv_httpd_binout := $(bin_path)$(uv_prefix)_httpd$(bin_ext)
 
 ifeq (YES, $(has_libuv))
 uv_httpd: $(uv_httpd_binout)
-else
-uv_httpd:
-	@echo "#skip uv_httpd_test"
-endif
-
 uv_httpd_test: uv_httpd $(uv_root)httpd/cgi.c
 	@cp $(uv_root)httpd/cgi.c $(bin_path)
 	$(uv_httpd_binout) -H
+else
+uv_httpd:
+	@echo "#skip uv_httpd_test"
+uv_httpd_test: uv_httpd
+endif
+
 
 $(uv_httpd_binout): $(uv_root)httpd/h.c $(uv_parser_objout) $(getopt_c)
 	$(CC) $(INC) $(CFLAGS) $? $(bin_out)$@ $(LDLIBS)
