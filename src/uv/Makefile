@@ -16,8 +16,7 @@ uv_test: uv_dns_test														\
 uv_prefix := uv
 
 INC += -I$(uv_root)
-CFLAGS += $(shell pkg-config --cflags libuv)
-LDLIBS += $(shell pkg-config --libs libuv)
+
 
 ifeq ($(CC_NAME), msvc)
 INC += -I$(root)posix
@@ -27,7 +26,13 @@ endif
 # dns
 dns_binout := $(bin_path)$(uv_prefix)_dns$(bin_ext)
 
+ifeq (YES, $(has_libuv))
 uv_dns: $(dns_binout)
+else
+uv_dns:
+	@echo "#skip uv_dns_test"
+endif
+
 uv_dns_test: uv_dns
 	$(dns_binout) "www.bing.com"
 
@@ -37,7 +42,13 @@ $(dns_binout): $(uv_root)dns/d1.c
 # neti
 neti_binout := $(bin_path)$(uv_prefix)_neti$(bin_ext)
 
+ifeq (YES, $(has_libuv))
 uv_neti: $(neti_binout)
+else
+uv_neti:
+	@echo "#skip uv_neti_test"
+endif
+
 uv_neti_test: uv_neti
 	$(neti_binout)
 
@@ -48,7 +59,13 @@ $(neti_binout): $(uv_root)neti/neti.c
 uv_parser_objout := $(lib_path)$(uv_prefix)_parser$(obj_ext)
 uv_parser_binout := $(bin_path)$(uv_prefix)_parser$(bin_ext)
 
+ifeq (YES, $(has_libuv))
 uv_parser: $(uv_parser_binout)
+else
+uv_parser:
+	@echo "#skip uv_parser_test"
+endif
+
 uv_parser_test: uv_parser
 	$(uv_parser_binout)
 
@@ -61,7 +78,13 @@ $(uv_parser_binout): $(uv_parser_objout) $(uv_root)parser/test.c
 # httpd
 uv_httpd_binout := $(bin_path)$(uv_prefix)_httpd$(bin_ext)
 
+ifeq (YES, $(has_libuv))
 uv_httpd: $(uv_httpd_binout)
+else
+uv_httpd:
+	@echo "#skip uv_httpd_test"
+endif
+
 uv_httpd_test: uv_httpd $(uv_root)httpd/cgi.c
 	@cp $(uv_root)httpd/cgi.c $(bin_path)
 	$(uv_httpd_binout) -H

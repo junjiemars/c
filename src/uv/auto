@@ -1,0 +1,85 @@
+# -*- mode:sh -*- vim:ft=sh
+#
+
+# check libuv
+#----------------------------------------
+has_pkg_config=NO
+has_libuv=NO
+if pkg-config --version &> /dev/null; then
+  has_pkg_config=YES
+  flag=has_pkg_config op=":=" value="$has_pkg_config" \
+      . ${NORE_ROOT}/auto/make_define
+  uv_ldlibs=$(pkg-config --libs libuv)
+  if [ -n "$uv_ldlibs" ]; then
+    nm_feature="libuv"
+    nm_feature_name="nm_have_libuv"
+    nm_feature_indent=yes
+    nm_feature_run=no
+    nm_feature_h="#include <uv.h>"
+    nm_feature_flags=
+    nm_feature_tails="$uv_ldlibs"
+    nm_feature_test='printf("%u", uv_version());'
+    . ${NORE_ROOT}/auto/feature
+    if [ yes = $nm_found ]; then
+      flag=has_libuv op=":=" value="YES" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=uv_ldlibs op=":=" value="$uv_ldlibs" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=LDLIBS op="+=" value="$uv_ldlibs" \
+          . ${NORE_ROOT}/auto/make_define
+    fi
+  fi
+fi
+
+
+# check compiler sanitize features
+#----------------------------------------
+case "$CC_NAME" in
+  gcc|clang)
+    nm_feature="$CC_NAME -fsanitize=address"
+    nm_feature_name=
+    nm_feature_indent=yes
+    nm_feature_run=no
+    nm_feature_h=
+    nm_feature_flags='-fsanitize=address'
+    nm_feature_test=
+    . ${NORE_ROOT}/auto/feature
+    if [ yes = $nm_found ]; then
+      flag=has_sanitize op=":=" value="YES" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=has_sanitize_address op=":=" value="YES" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=cflags_sanitize op="+=" value=$nm_feature_flags \
+          . ${NORE_ROOT}/auto/make_define
+    fi
+    ;;
+  msvc)
+    ;;
+esac
+
+# check compiler sanitize features
+#----------------------------------------
+case "$CC_NAME" in
+  gcc|clang)
+    nm_feature="$CC_NAME -fsanitize=leak"
+    nm_feature_name=
+    nm_feature_indent=yes
+    nm_feature_run=no
+    nm_feature_h=
+    nm_feature_flags='-fsanitize=leak'
+    nm_feature_test=
+    . ${NORE_ROOT}/auto/feature
+    if [ yes = $nm_found ]; then
+      flag=has_sanitize op=":=" value="YES" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=has_sanitize_leak op=":=" value="YES" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=cflags_sanitize op="+=" value=$nm_feature_flags \
+          . ${NORE_ROOT}/auto/make_define
+    fi
+    ;;
+  msvc)
+    ;;
+esac
+
+# eof
