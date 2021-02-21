@@ -2,7 +2,7 @@
 
 _ROOT_DIR_="`cd -- $(dirname -- $0) && pwd`"
 _TEST_="${_TEST_:-basic}"
-_CFG_OPTS_="${_CFG_OPTS_}"
+_CFG_OPT_="${_CFG_OPT_}"
 _OS_NAME_="`uname -s 2>/dev/null`"
 _WIN_ENV_=
 _WIN_ENV_MSVC_=
@@ -63,7 +63,7 @@ fi
 
 test_do() {
   local rc=0
-  local cfg="$_CFG_OPTS_ $@"
+  local cfg="$_CFG_OPT_ $@"
   if [ -z "$_WIN_ENV_" ]; then
     echo "${_ROOT_DIR_%/}/configure $cfg"
     ${_ROOT_DIR_%/}/configure $cfg
@@ -83,18 +83,18 @@ test_do() {
 
 # basic test
 if [ "basic" = "$_TEST_" ]; then
-  # test_do --has-algo
-  # test_do --has-cpu
-  # test_do --has-ds
-  # test_do --has-hi
-  # test_do --has-io
-  # test_do --has-lang
-  # test_do --has-library
-  # test_do --has-memory
-  # test_do --has-os
-  # test_do --has-parallel
-  # test_do --has-regexp
-  # test_do --has-unicode
+  test_do --has-algo
+  test_do --has-cpu
+  test_do --has-ds
+  test_do --has-hi
+  test_do --has-io
+  test_do --has-lang
+  test_do --has-library
+  test_do --has-memory
+  test_do --has-os
+  test_do --has-parallel
+  test_do --has-regexp
+  test_do --has-unicode
   test_do --has-uv --with-std=no
   test_do --has-x86
 fi
