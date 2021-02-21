@@ -63,40 +63,42 @@ END
 fi
 
 test_do() {
-  local retval=0
+  local rc=0
+  local cfg=$_RLS_CONFIG_
   if [ -z "$_WIN_ENV_" ]; then
     echo "${_ROOT_DIR_%/}/configure $_RLS_CONFIG_ $@"
     ${_ROOT_DIR_%/}/configure $_RLS_CONFIG_ $@
     make test
   else
-    echo "${_WIN_ENV_MSVC_} $_WIN_ENV_ ./configure $_RLS_CONFIG_ $@"
-    ${_WIN_ENV_MSVC_} "$_WIN_ENV_" "./configure $_RLS_CONFIG_ $@" "make test"
+    cfg="${cfg:+$cfg }$@"
+    echo "${_WIN_ENV_MSVC_} $_WIN_ENV_ ./configure $cfg"
+    ${_WIN_ENV_MSVC_} "$_WIN_ENV_" "./configure $cfg" "make test"
   fi
-  retval=$?
-  if [ 0 -ne $retval ]; then
+  rc=$?
+  if [ 0 -ne $rc ]; then
     echo "------------"
     echo "! $@ <failed>"
     echo "------------"
   fi
-  return $retval
+  return $rc
 }
 
 # basic test
 if [ "basic" = "$_TEST_" ]; then
-  test_do --has-algo
-  test_do --has-cpu
-  test_do --has-ds
-  test_do --has-hi
-  test_do --has-io
-  test_do --has-lang
-  test_do --has-library
-  test_do --has-memory
-  test_do --has-os
-  test_do --has-parallel
-  test_do --has-regexp
-  test_do --has-unicode
+  # test_do --has-algo
+  # test_do --has-cpu
+  # test_do --has-ds
+  # test_do --has-hi
+  # test_do --has-io
+  # test_do --has-lang
+  # test_do --has-library
+  # test_do --has-memory
+  # test_do --has-os
+  # test_do --has-parallel
+  # test_do --has-regexp
+  # test_do --has-unicode
   test_do --has-uv --with-std=no
-  test_do --has-x86
+  # test_do --has-x86
 fi
 
 echo "!completed"
