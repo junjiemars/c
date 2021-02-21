@@ -2,8 +2,7 @@
 
 _ROOT_DIR_="`cd -- $(dirname -- $0) && pwd`"
 _TEST_="${_TEST_:-basic}"
-_RLS_CONFIG_="${_RLS_CONFIG_}"
-_RLS_CLEAN_="${_RLS_CLEAN_}"
+_CFG_OPTS_="${_CFG_OPTS_}"
 _OS_NAME_="`uname -s 2>/dev/null`"
 _WIN_ENV_=
 _WIN_ENV_MSVC_=
@@ -64,13 +63,12 @@ fi
 
 test_do() {
   local rc=0
-  local cfg=$_RLS_CONFIG_
+  local cfg="$_CFG_OPTS_ $@"
   if [ -z "$_WIN_ENV_" ]; then
-    echo "${_ROOT_DIR_%/}/configure $_RLS_CONFIG_ $@"
-    ${_ROOT_DIR_%/}/configure $_RLS_CONFIG_ $@
+    echo "${_ROOT_DIR_%/}/configure $cfg"
+    ${_ROOT_DIR_%/}/configure $cfg
     make test
   else
-    cfg="${cfg:+$cfg }$@"
     echo "${_WIN_ENV_MSVC_} $_WIN_ENV_ ./configure $cfg"
     ${_WIN_ENV_MSVC_} "$_WIN_ENV_" "./configure $cfg" "make test"
   fi
@@ -98,7 +96,7 @@ if [ "basic" = "$_TEST_" ]; then
   # test_do --has-regexp
   # test_do --has-unicode
   test_do --has-uv --with-std=no
-  # test_do --has-x86
+  test_do --has-x86
 fi
 
 echo "!completed"
