@@ -7,10 +7,10 @@ has_pkg_config=NO
 has_libuv=NO
 echo $echo_n "checking for pkg-config ... $echo_c"
 if pkg-config --version &> /dev/null; then
+  echo "yes"  
   has_pkg_config=YES
   flag=has_pkg_config op=":=" value="$has_pkg_config" \
       . ${NORE_ROOT}/auto/make_define
-  echo "yes"
 else
   echo "no"
 fi
