@@ -17,13 +17,13 @@ jobs:
         include:
           - CC: "gcc"
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Install Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install libuv1-dev
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
       - name: Setup Env
         run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
       - name: Build and Test
@@ -50,12 +50,12 @@ jobs:
         include:
           - CC: "clang"
     steps:
-      - name: Install Dependencies
-        run: |
-          brew install pkg-config libuv
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Install Dependencies
+        run: |
+          brew install pkg-config libuv
       - name: Setup Env
         run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
       - name: Build and Test
@@ -85,6 +85,9 @@ jobs:
       run:
         shell: msys2 {0}
     steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # checkout history and tags
     - name: Install Dependencies
       uses: msys2/setup-msys2@v2
       with:
@@ -93,10 +96,6 @@ jobs:
           git
           make
           zip
-          mingw-w64-x86_64
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0 # checkout history and tags
     - name: Setup Env
       run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
     - name: Build and Test
