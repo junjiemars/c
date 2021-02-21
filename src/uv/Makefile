@@ -18,9 +18,13 @@ uv_prefix := uv
 INC += -I$(uv_root)
 
 
-ifeq ($(CC_NAME), msvc)
+ifeq (msvc, $(CC_NAME))
 INC += -I$(root)posix
 getopt_c := $(root)posix/getopt.c
+endif
+
+ifeq (gcc, $(CC_NAME))
+CFLAGS += -D_GNU_SOURCE
 endif
 
 # dns
