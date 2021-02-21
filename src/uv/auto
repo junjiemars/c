@@ -10,13 +10,14 @@ if pkg-config --version &> /dev/null; then
   flag=has_pkg_config op=":=" value="$has_pkg_config" \
       . ${NORE_ROOT}/auto/make_define
   uv_ldlibs=$(pkg-config --libs libuv)
+  uv_cflags=$(pkg-config --cflags libuv)
   if [ -n "$uv_ldlibs" ]; then
     nm_feature="libuv"
     nm_feature_name="nm_have_libuv"
     nm_feature_indent=yes
     nm_feature_run=no
     nm_feature_h="#include <uv.h>"
-    nm_feature_flags=
+    nm_feature_flags="$uv_cflags"
     nm_feature_tails="$uv_ldlibs"
     nm_feature_test='printf("%u", uv_version());'
     . ${NORE_ROOT}/auto/feature
@@ -26,6 +27,8 @@ if pkg-config --version &> /dev/null; then
       flag=uv_ldlibs op=":=" value="$uv_ldlibs" \
           . ${NORE_ROOT}/auto/make_define
       flag=LDLIBS op="+=" value="$uv_ldlibs" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=CFLAGS op="+=" value="$uv_cflags" \
           . ${NORE_ROOT}/auto/make_define
     fi
   fi

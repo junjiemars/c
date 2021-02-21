@@ -18,7 +18,7 @@ nm_feature_name="nm_have_alignof"
 nm_feature_run=no
 nm_feature_h='#include <stdalign.h>'
 nm_feature_flags=
-nm_feature_test='1 == alignof(char);'
+nm_feature_test='(void) (1 == alignof(char));'
 . ${NORE_ROOT}/auto/feature
 
 nm_feature="alignas"
@@ -62,14 +62,6 @@ nm_feature_flags=
 nm_feature_test='atomic_is_lock_free(&a);'
 . ${NORE_ROOT}/auto/feature
 
-nm_feature="strcpy_s"
-nm_feature_name="nm_have_strcpy_s"
-nm_feature_run=no
-nm_feature_h="#include <string.h>"
-nm_feature_flags=
-nm_feature_flags=
-nm_feature_test="char s[16]; strcpy_s(s,sizeof(s),\"hello strcpy_s\");"
-. ${NORE_ROOT}/auto/feature
 
 
 # eof
