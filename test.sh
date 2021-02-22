@@ -63,7 +63,7 @@ fi
 
 test_do() {
   local rc=0
-  local cfg="$_CFG_OPT_ $@"
+  local cfg="$_CFG_OPT_ $*"
   if [ -z "$_WIN_ENV_" ]; then
     echo "${_ROOT_DIR_%/}/configure $cfg"
     ${_ROOT_DIR_%/}/configure $cfg
@@ -95,7 +95,7 @@ if [ "basic" = "$_TEST_" ]; then
   # test_do --has-parallel
   # test_do --has-regexp
   # test_do --has-unicode
-  test_do --has-uv --with-std=no --with-verbose=yes
+  test_do --has-uv --with-std=no
   test_do --has-x86
 fi
 
