@@ -10,18 +10,17 @@ typedef struct thread_state_s
 {
   long      sn;
   pthread_t tid;
-} thread_state_t;
+} thread_state_s;
 
 
 void *
 echo(void *arg)
 {
-  thread_state_t *state = (thread_state_t *) arg;
+  thread_state_s *state = (thread_state_s *) arg;
 
 	fprintf(stderr, "> #%02li, Hello\n", state->sn);
 
-  assert(state->tid == pthread_self() && "calling thread id");
-  assert(pthread_equal(state->tid, pthread_self()) && "same as above");
+  assert(pthread_equal(state->tid, pthread_self()) && "same thread");
 
   return &state->sn;
 }
@@ -32,16 +31,16 @@ main(int argc, char **argv)
 	_unused_(argc);
 	_unused_(argv);
 
-  thread_state_t  state[N_THREAD];
+  thread_state_s  state[N_THREAD];
   void           *retval;
   int             rc;
 
   /* create threads */
 	for (long i = 0; i < N_THREAD; i++)
     {
-      fprintf(stdout, "+ creating thread #%02li\n", i);
+      fprintf(stderr, "+ creating thread #%02li\n", i);
       state[i].sn = i;
-      rc = pthread_create(&state[i].tid, 0, echo, &state[i]);
+      rc = pthread_create(&state[i].tid, NULL, echo, &state[i]);
       if (rc)
         {
           perror("!panic, pthread_create");
