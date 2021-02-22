@@ -10,7 +10,7 @@ typedef struct thread_state_s
   unsigned int idle;
   long         sn;
   pthread_t    tid;
-} thread_state_t;
+} thread_state_s;
 
 void *do_(void *arg);
 void do__(void *arg);
@@ -18,7 +18,7 @@ void do__(void *arg);
 void *
 do_(void *arg)
 {
-  thread_state_t *state = (thread_state_t *) arg;
+  thread_state_s *state = (thread_state_s *) arg;
   fprintf(stderr, "> #%02li do_ %is ...\n",
           state->sn,
           state->idle);
@@ -34,7 +34,7 @@ do_(void *arg)
 void
 do__(void *arg)
 {
-  thread_state_t *state = (thread_state_t *) arg;
+  thread_state_s *state = (thread_state_s *) arg;
   fprintf(stderr, ">> #%02li, do__ %is ...\n",
           state->sn,
           state->idle);
@@ -59,7 +59,7 @@ main(int argc, char **argv)
   _unused_(argc);
   _unused_(argv);
 
-  thread_state_t state[N_THREAD];
+  thread_state_s state[N_THREAD];
   int            rc;
 
   /* create threads */
@@ -67,20 +67,20 @@ main(int argc, char **argv)
     {
       state[i].sn = i+1;
       state[i].idle = i;
-      rc = pthread_create(&state[i].tid, 0, do_, &state[i]);
+      rc = pthread_create(&state[i].tid, NULL, do_, &state[i]);
       if (rc)
         {
-          perror(0);
+          perror(NULL);
         }
     }
 
   /* join threads */
   for (long i = 0; i < N_THREAD; i++)
     {
-      rc = pthread_join(state[i].tid, 0);
+      rc = pthread_join(state[i].tid, NULL);
       if (rc)
         {
-          perror(0);
+          perror(NULL);
         }
     }
 
