@@ -34,7 +34,7 @@ main(int argc, char **argv)
 
   if (0 == strncmp("-", argv[1], sizeof(int)))
     {
-      fscanf(stdin, "%lu", (unsigned long*) &epoch);
+      (void) fscanf(stdin, "%lu", (unsigned long*) &epoch);
       printf("%s", to_asctime(&epoch));      
       return 0;
     }
