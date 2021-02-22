@@ -23,9 +23,6 @@ INC += -I$(root)posix
 getopt_c := $(root)posix/getopt.c
 endif
 
-# ifeq (gcc, $(CC_NAME))
-# CFLAGS += -D_GNU_SOURCE
-# endif
 
 # dns
 dns_binout := $(bin_path)$(uv_prefix)_dns$(bin_ext)
