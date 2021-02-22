@@ -12,14 +12,14 @@ parallel_prefix := parallel
 INC += -I$(parallel_root)
 
 
-ifeq ($(CC_NAME),msvc)
+ifeq (msvc, $(CC_NAME))
 INC += -I$(root)posix
 getopt_c := $(root)posix/getopt.c
 endif # end of msvc checking
 
 
-ifeq ($(_MEMORY_),1)
-ifeq ($(has_sanitize),YES)
+ifeq (1, $(_MEMORY_))
+ifeq (YES, $(has_sanitize)))
 CFLAGS += $(cflags_sanitize)
 endif # end of has_sanitize
 endif # end of _MEMORY_
@@ -29,7 +29,7 @@ endif # end of _MEMORY_
 parallel_omp_basic_binout := $(bin_path)$(parallel_prefix)_omp_basic$(bin_ext)
 parallel_omp_for_binout := $(bin_path)$(parallel_prefix)_omp_for$(bin_ext)
 
-ifeq ($(has_openmp),YES)
+ifeq (YES, $(has_openmp))
 parallel_omp: parallel_omp_basic								\
               parallel_omp_for
 parallel_omp_test: parallel_omp_basic_test			\
@@ -67,7 +67,7 @@ parallel_pthread_stacksize_binout := $(bin_path)$(parallel_prefix)_pthread_stack
 parallel_pthread_private_binout := $(bin_path)$(parallel_prefix)_pthread_private$(bin_ext)
 parallel_pthread_wait_binout := $(bin_path)$(parallel_prefix)_pthread_wait$(bin_ext)
 
-ifeq ($(has_pthread),YES)
+ifeq (YES, $(has_pthread))
 parallel_pthread: parallel_pthread_basic				\
                   parallel_pthread_deadlock			\
                   parallel_pthread_detach				\
