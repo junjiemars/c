@@ -7,72 +7,96 @@
 ####
 
 
-# check compiler features
+# check libuv
+#----------------------------------------
+has_pkg_config=NO
+has_libpcre=NO
+echo $echo_n " + checking for pkg-config ... $echo_c"
+if pkg-config --version 2>&1 1>/dev/null; then
+  echo "yes"
+  has_pkg_config=YES
+  flag=has_pkg_config op=":=" value="$has_pkg_config" \
+      . ${NORE_ROOT}/auto/make_define
+else
+  echo "no"
+fi
+if [ "$has_pkg_config" = "YES" ]; then
+  pcre_ldlibs=$(pkg-config --libs libpcre)
+  pcre_cflags=$(pkg-config --cflags libpcre)
+  if [ -n "$pcre_ldlibs" ]; then
+    nm_feature="libpcre"
+    nm_feature_name="nm_have_libpcre"
+    nm_feature_indent=yes
+    nm_feature_run=no
+    nm_feature_h='#include <pcre.h>'
+    nm_feature_flags="$pcre_cflags"
+    nm_feature_tails="$pcre_ldlibs"
+    nm_feature_test='(void) pcre_version();'
+    . ${NORE_ROOT}/auto/feature
+    if [ yes = $nm_found ]; then
+      flag=has_libpcre op=":=" value="YES" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=pcre_ldlibs op=":=" value="$pcre_ldlibs" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=LDLIBS op="+=" value="$pcre_ldlibs" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=CFLAGS op="+=" value="$pcre_cflags" \
+          . ${NORE_ROOT}/auto/make_define
+    fi
+  fi
+fi
+
+
+
+# check compiler sanitize features
 #----------------------------------------
 case "$CC_NAME" in
-   gcc|clang)
-     nm_feature="$CC_NAME -fsanitize=address"
-     nm_feature_name=
-     nm_feature_indent=yes
-     nm_feature_run=no
-     nm_feature_h=
-     nm_feature_flags='-fsanitize=address'
-     nm_feature_test=
-     . ${NORE_ROOT}/auto/feature
-
-     if [ yes = $nm_found ]; then
-       flag=cflags_sanitize op="+=" value=$nm_feature_flags \
-           . ${NORE_ROOT}/auto/make_define
-     fi
-
-     nm_feature="$CC_NAME -fsanitize=leak"
-     nm_feature_name=
-     nm_feature_indent=yes
-     nm_feature_run=no
-     nm_feature_h=
-     nm_feature_flags='-fsanitize=leak'
-     nm_feature_test=
-     . ${NORE_ROOT}/auto/feature
-
-     if [ yes = $nm_found ]; then
-       flag=cflags_santize op="+=" value=$nm_feature_flags \
-           . ${NORE_ROOT}/auto/make_define
-     fi
-     ;;		 
-   msvc)
-     ;;
+  gcc|clang)
+    nm_feature="$CC_NAME -fsanitize=address"
+    nm_feature_name=
+    nm_feature_indent=yes
+    nm_feature_run=no
+    nm_feature_h=
+    nm_feature_flags='-fsanitize=address'
+    nm_feature_test=
+    . ${NORE_ROOT}/auto/feature
+    if [ yes = $nm_found ]; then
+      flag=has_sanitize op=":=" value="YES" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=has_sanitize_address op=":=" value="YES" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=cflags_sanitize op="+=" value=$nm_feature_flags \
+          . ${NORE_ROOT}/auto/make_define
+    fi
+    ;;
+  msvc)
+    ;;
 esac
 
-# # check pkg-config
-# #----------------------------------------
-# case "$NM_SYSTEM" in
-#    Linux|Darwin)
-#      nm_feature="$NM_SYSTEM pkg-config"
-#      nm_feature_name=
-#      nm_feature_indent=yes
-#      nm_feature_run=no
-#      nm_feature_h=
-#      nm_feature_flags=
-#      nm_feature_test=
-#      . ${NORE_ROOT}/auto/feature
+# check compiler sanitize features
+#----------------------------------------
+case "$CC_NAME" in
+  gcc|clang)
+    nm_feature="$CC_NAME -fsanitize=leak"
+    nm_feature_name=
+    nm_feature_indent=yes
+    nm_feature_run=no
+    nm_feature_h=
+    nm_feature_flags='-fsanitize=leak'
+    nm_feature_test=
+    . ${NORE_ROOT}/auto/feature
+    if [ yes = $nm_found ]; then
+      flag=has_sanitize op=":=" value="YES" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=has_sanitize_leak op=":=" value="YES" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=cflags_sanitize op="+=" value=$nm_feature_flags \
+          . ${NORE_ROOT}/auto/make_define
+    fi
+    ;;
+  msvc)
+    ;;
+esac
 
-#      if [ yes = $nm_found ]; then
-#        flag=cflags_sanitize op="+=" value=$nm_feature_flags \
-#            . ${NORE_ROOT}/auto/make_define
-#      fi
-#   WinNT)
-#      nm_feature="$NM_SYSTEM pkg-config"
-#      nm_feature_name=
-#      nm_feature_indent=yes
-#      nm_feature_run=no
-#      nm_feature_h=
-#      nm_feature_flags=
-#      nm_feature_test=
-#      . ${NORE_ROOT}/auto/feature
 
-#      if [ yes = $nm_found ]; then
-#        flag=cflags_santize op="+=" value=$nm_feature_flags \
-#            . ${NORE_ROOT}/auto/make_define
-#      fi
-#      ;;		 
-# esac
+# EOF

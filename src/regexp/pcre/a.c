@@ -3,6 +3,7 @@
 #include <pcre.h>
 #include <posix/getopt.h>
 #include <string.h>
+#include <errno.h>
 
 #define N 64
 extern char *optarg;
