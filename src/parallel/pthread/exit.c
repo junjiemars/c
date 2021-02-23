@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <stdlib.h>
+#include <assert.h> 
 
 #define N_THREAD 4
 
@@ -77,11 +78,13 @@ main(int argc, char **argv)
   /* join threads */
   for (long i = 0; i < N_THREAD; i++)
     {
-      rc = pthread_join(state[i].tid, NULL);
+      thread_state_s *s1 = 0;
+      rc = pthread_join(state[i].tid, (void **) &s1);
       if (rc)
         {
           perror(NULL);
         }
+      ASSERT(s1->sn == state[i].sn);
     }
 
   return 0;
