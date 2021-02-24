@@ -29,6 +29,7 @@ do_(void *arg)
 
   fprintf(stderr, "< #%02li do_ exit\n", state->sn);
 
+  /* must: otherwise non-void return */
   pthread_exit(arg);
 }
 
@@ -60,8 +61,9 @@ main(int argc, char **argv)
   _unused_(argc);
   _unused_(argv);
 
-  thread_state_s state[N_THREAD];
-  int            rc;
+  thread_state_s  state[N_THREAD];
+  void           *retval = 0;
+  int             rc;
 
   /* create threads */
   for (long i = 0; i < N_THREAD; i++)
@@ -78,13 +80,14 @@ main(int argc, char **argv)
   /* join threads */
   for (long i = 0; i < N_THREAD; i++)
     {
-      thread_state_s *s1 = 0;
-      rc = pthread_join(state[i].tid, (void **) &s1);
+      rc = pthread_join(state[i].tid, (void **) &retval);
       if (rc)
         {
           perror(NULL);
         }
-      ASSERT(s1->sn == state[i].sn);
+      
+      ASSERT(PTHREAD_CANCELED != retval
+             && ((thread_state_s *) retval)->sn == state[i].sn);
     }
 
   return 0;
