@@ -21,8 +21,8 @@ static int             next_in, next_out;
 static int             occupied;
 static int             alphabet;
 
-void *consume(void *arg);
-void *produce(void *arg);
+static void *consume(void *arg);
+static void *produce(void *arg);
 
 void *
 consume(void *arg)
@@ -182,7 +182,7 @@ main(int argc, char **argv)
       return 1;
     }
 
-  /* create many consumers */
+  /* create consumers */
   for (long i = 0; i < N_CONSUMER; i++)
     {
       consumer_state[i].sn = i+10;
