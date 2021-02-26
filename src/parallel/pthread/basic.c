@@ -18,9 +18,11 @@ echo(void *arg)
 {
   thread_state_s *state = (thread_state_s *) arg;
 
-	fprintf(stderr, "> #%02li, Hello\n", state->sn);
+  fprintf(stderr, "> #%02li, Hello\n", state->sn);
 
   assert(pthread_equal(state->tid, pthread_self()) && "same thread");
+
+  sleep(1);
 
   return &state->sn;
 }
@@ -28,17 +30,17 @@ echo(void *arg)
 int
 main(int argc, char **argv)
 {
-	_unused_(argc);
-	_unused_(argv);
+  _unused_(argc);
+  _unused_(argv);
 
   thread_state_s  state[N_THREAD];
   void           *retval;
   int             rc;
 
   /* create threads */
-	for (long i = 0; i < N_THREAD; i++)
+  for (long i = 0; i < N_THREAD; i++)
     {
-      fprintf(stderr, "+ creating thread #%02li\n", i);
+      fprintf(stderr, "+ creating thread #%02li ...\n", i);
       state[i].sn = i;
       rc = pthread_create(&state[i].tid, NULL, echo, &state[i]);
       if (rc)
@@ -51,18 +53,18 @@ main(int argc, char **argv)
   /* join threads */
   for (long i = 0; i < N_THREAD; i++)
     {
-      fprintf(stderr, "- joining thread #%02li\n", i);
+      fprintf(stderr, "- joining thread #%02li ...\n", i);
       rc = pthread_join(state[i].tid, &retval);
       if (rc)
         {
           perror("!panic, pthread_join");
           continue;
         }
-      fprintf(stderr, "#%02li, tid=0x%016zx, return %li\n",
+      fprintf(stderr, "< #%02li, tid=0x%016zx, return %li\n",
               state[i].sn,
               (long) state[i].tid,
               *(long*) retval);
     }
 
-	return 0;
+  return 0;
 }
