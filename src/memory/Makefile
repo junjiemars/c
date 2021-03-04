@@ -106,13 +106,10 @@ memory_alloc_c_binout := $(bin_path)$(memory_prefix)_calloc$(bin_ext)
 memory_alloc_re_binout := $(bin_path)$(memory_prefix)_realloc$(bin_ext)
 memory_alloc_align_binout := $(bin_path)$(memory_prefix)_align$(bin_ext)
 
-ifeq (YES, $(has_jemalloc))
 memory_alloc: memory_alloc_std									\
               memory_alloc_je
-else
 memory_alloc_test: memory_alloc_std_test				\
                    memory_alloc_je_test
-endif														# end of has_jemalloc
 
 memory_alloc_std: $(memory_alloc_a_binout)			\
 		    	 		    $(memory_alloc_m_binout)			\
@@ -125,8 +122,14 @@ memory_alloc_std_test: memory_alloc_a_test			\
 				    		       memory_alloc_re_test			\
 				    		       memory_alloc_align_test
 
+ifeq (YES, $(has_jemalloc))
 memory_alloc_je: $(memory_alloc_je_binout)
 memory_alloc_je_test: memory_alloc_je
+else
+memory_alloc_je:
+	@echo "#skip memory_alloc_je_test ..."
+memory_alloc_je_test: memory_alloc_je
+endif
 
 memory_alloc_a_test: $(memory_alloc_a_binout)
 	$(memory_alloc_a_binout)
