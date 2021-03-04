@@ -24,6 +24,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install libuv1-dev
+          sudo apt-get install libjemalloc-dev
       - name: Setup Env
         run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
       - name: Build and Test
@@ -55,7 +56,9 @@ jobs:
           fetch-depth: 0
       - name: Install Dependencies
         run: |
-          brew install pkg-config libuv
+          brew install pkg-config
+          brew install libuv
+          brew install jemalloc
       - name: Setup Env
         run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
       - name: Build and Test

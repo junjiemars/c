@@ -343,5 +343,45 @@ case "$CC_NAME" in
      ;;
 esac
 
+# check jemalloc
+#----------------------------------------
+has_pkg_config=NO
+has_libuv=NO
+echo $echo_n " + checking for pkg-config ... $echo_c"
+if [ 0 -eq $(pkg-config --version 2>&1 1>/dev/null;echo $?) ]; then
+  echo "yes"
+  has_pkg_config=YES
+  flag=has_pkg_config op=":=" value="$has_pkg_config" \
+      . ${NORE_ROOT}/auto/make_define
+else
+  echo "no"
+fi
+if [ "$has_pkg_config" = "YES" ]; then
+  jemalloc_ldlibs="$(pkg-config --libs jemalloc)"
+  jemalloc_cflags="$(pkg-config --cflags jemalloc)"
+  if [ -n "$jemalloc_ldlibs" ]; then
+    nm_feature="jemalloc"
+    nm_feature_name="nm_have_jemalloc"
+    nm_feature_indent=yes
+    nm_feature_run=yes
+    nm_feature_h="#include <jemalloc/jemalloc.h>
+                  #include <stdio.h>"
+    nm_feature_flags="$jemalloc_cflags"
+    nm_feature_tails="$jemalloc_ldlibs"
+    nm_feature_test='printf("%s", JEMALLOC_VERSION);'
+    . ${NORE_ROOT}/auto/feature
+    if [ yes = $nm_found ]; then
+      flag=has_jemalloc op=":=" value="YES" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=jemalloc_ldlibs op=":=" value="$jemalloc_ldlibs" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=LDLIBS op="+=" value="$jemalloc_ldlibs" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=CFLAGS op="+=" value="$jemalloc_cflags" \
+          . ${NORE_ROOT}/auto/make_define
+    fi
+  fi
+fi
+
 
 # EOF

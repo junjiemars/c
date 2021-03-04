@@ -100,35 +100,52 @@ endif
 
 # alloc
 memory_alloc_a_binout := $(bin_path)$(memory_prefix)_alloca$(bin_ext)
+memory_alloc_je_binout := $(bin_path)$(memory_prefix)_je$(bin_ext)
 memory_alloc_m_binout := $(bin_path)$(memory_prefix)_malloc$(bin_ext)
 memory_alloc_c_binout := $(bin_path)$(memory_prefix)_calloc$(bin_ext)
 memory_alloc_re_binout := $(bin_path)$(memory_prefix)_realloc$(bin_ext)
-memory_align_binout := $(bin_path)$(memory_prefix)_align$(bin_ext)
+memory_alloc_align_binout := $(bin_path)$(memory_prefix)_align$(bin_ext)
 
-memory_alloc: $(memory_alloc_a_binout)					\
-			 		    $(memory_alloc_m_binout)					\
-              $(memory_alloc_c_binout)					\
-              $(memory_alloc_re_binout)					\
-			        $(memory_align_binout)
-memory_alloc_test: memory_alloc_a_test					\
-					         memory_alloc_m_test					\
-						       memory_alloc_c_test					\
-						       memory_alloc_re_test					\
-						       memory_align_test
+ifeq (YES, $(has_jemalloc))
+memory_alloc: memory_alloc_std									\
+              memory_alloc_je
+else
+memory_alloc_test: memory_alloc_std_test				\
+                   memory_alloc_je_test
+endif														# end of has_jemalloc
+
+memory_alloc_std: $(memory_alloc_a_binout)			\
+		    	 		    $(memory_alloc_m_binout)			\
+                  $(memory_alloc_c_binout)			\
+                  $(memory_alloc_re_binout)			\
+		    	        $(memory_alloc_align_binout)
+memory_alloc_std_test: memory_alloc_a_test			\
+				    	         memory_alloc_m_test			\
+				    		       memory_alloc_c_test			\
+				    		       memory_alloc_re_test			\
+				    		       memory_alloc_align_test
+
+memory_alloc_je: $(memory_alloc_je_binout)
+memory_alloc_je_test: memory_alloc_je
 
 memory_alloc_a_test: $(memory_alloc_a_binout)
 	$(memory_alloc_a_binout)
+memory_alloc_je_test: $(memory_alloc_je_binout)
+	$(memory_alloc_je_binout)
 memory_alloc_m_test: $(memory_alloc_m_binout)
 	$(memory_alloc_m_binout)
 memory_alloc_c_test: $(memory_alloc_c_binout)
 	$(memory_alloc_c_binout)
 memory_alloc_re_test: $(memory_alloc_re_binout)
 	$(memory_alloc_re_binout)
-memory_align_test: $(memory_align_binout)
-	$(memory_align_binout)
+memory_alloc_align_test: $(memory_alloc_align_binout)
+	$(memory_alloc_align_binout)
 
 $(memory_alloc_a_binout): $(memory_root)alloc/a.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(memory_alloc_je_binout): $(memory_root)alloc/je.c
+	$(CC) $(CFLAGS) $(INC) $(jemalloc_cflags) $^ $(bin_out)$@ $(jemalloc_ldlibs)
 
 $(memory_alloc_m_binout): $(memory_root)alloc/m.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -139,7 +156,7 @@ $(memory_alloc_c_binout): $(memory_root)alloc/c.c
 $(memory_alloc_re_binout): $(memory_root)alloc/re.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(memory_align_binout): $(memory_root)alloc/align.c
+$(memory_alloc_align_binout): $(memory_root)alloc/align.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # bitfield
