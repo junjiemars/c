@@ -1,14 +1,19 @@
 #
-# ./configure --has-flex
+# ./configure --has-flex -Wno-unused-function
 #
 
 flex_prefix := flex
 INC += -I$(flex_root)
 LDLIBS += -ll
 
+ifeq (WinNT, $(NM_SYSTEM))
+flex:
+	@echo "#skip flex_test ..."
+flex_test: flex_basic_test
+else
 flex: flex_basic
-
-flex_test: flex_basic
+flex_test: flex_basic_test
+endif
 
 
 # basic

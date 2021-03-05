@@ -1,19 +1,24 @@
 %{
 #include "_flex_.h"
+int count = 0;
 %}
 
 %%
-username  printf( "%s", getlogin() );
-
+red|blue { printf("{%s}", yytext); count++; }
 
 %%
+
 int
-main(int argc, char **argv) {
-  if (argc > 1) {
-    yyin = fopen(argv[1], "r");
-  } else {
-    yyin = stdin;
-  }
+main(int argc, char **argv)
+{
+  if (argc > 1)
+    {
+      yyin = fopen(argv[1], "r");
+    }
+  else
+    {
+      yyin = stdin;
+    }
   
   yylex();
 	return 0;
