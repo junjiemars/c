@@ -33,7 +33,7 @@ $(flex_basic_lexout): $(flex_root)basic/b.lex
 
 # c
 flex_c_binout := $(bin_path)$(flex_prefix)_c$(bin_ext)
-flex_c_lexout := $(tmp_path)$(flex_prefix)c_lex.c
+flex_c_lexout := $(tmp_path)c_lex.c
 
 flex_c: $(flex_c_binout)
 flex_c_test: flex_c
