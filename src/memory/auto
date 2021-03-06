@@ -375,10 +375,6 @@ if [ "$has_pkg_config" = "YES" ]; then
           . ${NORE_ROOT}/auto/make_define
       flag=jemalloc_ldlibs op=":=" value="$jemalloc_ldlibs" \
           . ${NORE_ROOT}/auto/make_define
-      flag=LDLIBS op="+=" value="$jemalloc_ldlibs" \
-          . ${NORE_ROOT}/auto/make_define
-      flag=CFLAGS op="+=" value="$jemalloc_cflags" \
-          . ${NORE_ROOT}/auto/make_define
     fi
   fi
 fi
