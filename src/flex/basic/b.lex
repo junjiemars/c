@@ -1,5 +1,5 @@
 %{
-#include "_flex_.h"
+#include <nore.h>
 int count = 0;
 %}
 
