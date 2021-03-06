@@ -4,7 +4,6 @@
 
 flex_prefix := flex
 INC += -I$(flex_root)
-LDLIBS += -ll
 
 ifeq (WinNT, $(NM_SYSTEM))
 flex:
@@ -19,7 +18,12 @@ flex_test: flex_basic_test											\
 
 ifeq (Linux, $(NM_SYSTEM))
 CFLAGS += -D_POSIX_C_SOURCE=200809L
-endif
+LDLIBS += -lfl
+endif # end of Linux
+
+ifeq (Darwin, $(NM_SYSTEM))
+LDLIBS += -ll
+endif # end of Darwin
 
 
 # basic
