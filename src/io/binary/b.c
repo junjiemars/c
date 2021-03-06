@@ -128,7 +128,7 @@ main(int argc, char **argv)
   else
     {
       /* write to binary file */
-      strncpy(rect.name, argv[1], NAME_SIZE);
+      strncpy(rect.name, argv[1], NAME_SIZE-1);
       rect.width = (int)strtol(argv[2], 0, 16);
       rect.height = (int)strtol(argv[3], 0, 16);
 

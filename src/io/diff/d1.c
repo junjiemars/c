@@ -97,8 +97,8 @@ main(int argc, char **argv)
     }
 
   char src[MAX_PATH], dst[MAX_PATH];
-  strncpy(src, argv[1], MAX_PATH);
-  strncpy(dst, argv[2], MAX_PATH);
+  strncpy(src, argv[1], MAX_PATH-1);
+  strncpy(dst, argv[2], MAX_PATH-1);
   
   diff(src, dst);
 
