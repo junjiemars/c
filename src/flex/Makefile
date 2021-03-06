@@ -15,6 +15,10 @@ flex: flex_basic
 flex_test: flex_basic_test
 endif
 
+ifeq (Linux, $(NM_SYSTEM))
+CFLAGS += -D_POSIX_C_SOURCE=200809L
+endif
+
 
 # basic
 flex_basic_binout := $(bin_path)$(flex_prefix)_basic$(bin_ext)
