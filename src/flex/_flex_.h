@@ -1,8 +1,9 @@
 #ifndef _FLEX_H_
 #define _FLEX_H_
 
+
 #include "nore.h"
-#include <stdio.h>
+
 
 #define _unused_(x) (void)(x)
 
