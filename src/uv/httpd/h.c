@@ -308,13 +308,13 @@ main(int argc, char **argv) {
 			usage(argv[0]);
 			return 0;
 		case 'h':
-			strncpy(opt_host, optarg, sizeof(opt_host));
+			strncpy(opt_host, optarg, sizeof(opt_host)-1);
 			break;
 		case 'p':
       opt_port = atol(optarg);
 			break;
     case 'w':
-      strncpy(opt_root, optarg, sizeof(opt_root));
+      strncpy(opt_root, optarg, sizeof(opt_root)-1);
       break;
     case 'v':
       ++opt_verbose;

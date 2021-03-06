@@ -73,10 +73,12 @@ uv_parser_test: uv_parser
 endif
 
 
-$(uv_parser_objout): $(uv_root)parser/http_parser.c $(uv_root)parser/http_parser.h
+$(uv_parser_objout): $(uv_root)parser/http_parser.c	\
+                     $(uv_root)parser/http_parser.h
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $< $(obj_out)$@
 
-$(uv_parser_binout): $(uv_parser_objout) $(uv_root)parser/test.c
+$(uv_parser_binout): $(uv_parser_objout)				\
+                     $(uv_root)parser/test.c
 	$(CC) $(CFLAGS) $(INC) $? $(bin_out)$@
 
 # httpd
