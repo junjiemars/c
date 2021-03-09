@@ -632,11 +632,8 @@ lang_str_basic_test: lang_str_basic
 
 lang_str_n: $(lang_str_n_binout)
 lang_str_n_test: lang_str_n
-	$(lang_str_n_binout) "abcd1234" "abcd" "4"
-	$(lang_str_n_binout) "abcd1234" "abcd1" "4"
-	$(lang_str_n_binout) "abcd1234" "abcde" "5"
-	$(lang_str_n_binout) "abcd1234" "abcde" "0"
-	$(lang_str_n_binout) "abcd1234" "abcd" "10"
+	$(lang_str_n_binout) "abcd12345678" "abcd"
+	$(lang_str_n_binout) "abcd" "abcd12345678"
 
 lang_str_s: $(lang_str_s_binout)
 lang_str_s_test: lang_str_s
