@@ -104,7 +104,8 @@ get_vendor_id(cpu_s *cpu)
   __asm__ (
            "cpuid"
            : "=a" (eax), "=b" (ebx), "=c" (ecx), "=d" (edx)
-           : "a" (fn) );
+           : "a" (fn)
+  );
 
   buf[0] = eax;
   buf[1] = ebx;
@@ -123,9 +124,9 @@ get_vendor_id(cpu_s *cpu)
   char *p = (char*)&cpu->vendor_id[0];
 
   /* ebx, edx, ecx */
-  strncpy(p, (const char *) &buf[1], w);
-  strncpy(p += w, (const char *) &buf[3], w);
-  strncpy(p += w, (const char *) &buf[2], w);
+  memcpy(p, (const char *) &buf[1], w);
+  memcpy(p += w, (const char *) &buf[3], w);
+  memcpy(p += w, (const char *) &buf[2], w);
 
   return cpu;
 }

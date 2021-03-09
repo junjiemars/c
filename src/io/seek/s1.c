@@ -364,7 +364,7 @@ test_find(const char *binpath,
   long offset = 0;
   memset(&is, 0, sizeof(index_s));
   memset(&rs, 0, sizeof(record_s));
-  strncpy(&is.num[0], num, NUM_LEN);
+  strncpy(&is.num[0], num, NUM_LEN-1);
 
   fprintf(stdout, "\nfinding %s ...\n", num);
   if (find_index(&is, &offset, idx))
