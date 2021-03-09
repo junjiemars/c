@@ -149,7 +149,6 @@ void
 fill_str(char *dst, char c, size_t n)
 {
   for (size_t i = 0; i < n; i++)
-
     {
       dst[i] = c;
     }
