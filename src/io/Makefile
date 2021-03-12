@@ -76,7 +76,7 @@ io_binary_basic_test: io_binary_basic
 
 io_binary_array: $(io_binary_array_binout)
 io_binary_array_test: io_binary_array
-	$(io_binary_array_binout) $(tmp_path)sassy.bin
+	$(io_binary_array_binout) $(tmp_path)/sassy.bin
 
 $(io_binary_basic_binout): $(io_root)/binary/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
@@ -99,9 +99,9 @@ io_error_binout := $(bin_path)/$(io_prefix)_error$(bin_ext)
 
 io_error: $(io_error_binout)
 io_error_test: io_error
-	$(io_error_binout) $(tmp_path)where.c
-	echo "abc" > $(tmp_path)where.c
-	$(io_error_binout) $(tmp_path)where.c
+	$(io_error_binout) $(tmp_path)/where.c
+	echo "abc" > $(tmp_path)/where.c
+	$(io_error_binout) $(tmp_path)/where.c
 
 $(io_error_binout): $(io_root)/error/e1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
@@ -189,8 +189,8 @@ io_reopen_binout := $(bin_path)/$(io_prefix)_reopen$(bin_ext)
 
 io_reopen: $(io_reopen_binout)
 io_reopen_test: io_reopen
-	-@cp $(CURDIR)/src/io/reopen/sample.txt $(tmp_path)
-	$(io_reopen_binout) $(tmp_path)sample.txt
+	-@cp $(CURDIR)/src/io/reopen/sample.txt $(tmp_path)/
+	$(io_reopen_binout) $(tmp_path)/sample.txt
 
 $(io_reopen_binout): $(io_root)/reopen/ro.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
@@ -243,16 +243,16 @@ io_seek_basic_binout := $(bin_path)/$(io_prefix)_seek_basic$(bin_ext)
 
 io_seek: $(io_seek_basic_binout)
 io_seek_test: io_seek
-	cp $(CURDIR)/$(io_root)/seek/records.txt $(CURDIR)/$(tmp_path)records.txt
+	cp $(CURDIR)/$(io_root)/seek/records.txt $(CURDIR)/$(tmp_path)/records.txt
 	$(io_seek_basic_binout) 64																\
-                          $(CURDIR)/$(tmp_path)records.txt	\
-                          $(CURDIR)/$(tmp_path)records.bin	\
-                          $(CURDIR)/$(tmp_path)records.idx
-	cp $(CURDIR)/$(io_root)/seek/merge.txt $(CURDIR)/$(tmp_path)/records.txt
+                          $(CURDIR)/$(tmp_path)/records.txt	\
+                          $(CURDIR)/$(tmp_path)/records.bin	\
+                          $(CURDIR)/$(tmp_path)/records.idx
+	cp $(CURDIR)/$(io_root)/seek/merge.txt $(CURDIR)/$(tmp_path)//records.txt
 	$(io_seek_basic_binout) 64																\
-                          $(CURDIR)/$(tmp_path)records.txt	\
-                          $(CURDIR)/$(tmp_path)records.bin	\
-                          $(CURDIR)/$(tmp_path)records.idx
+                          $(CURDIR)/$(tmp_path)/records.txt	\
+                          $(CURDIR)/$(tmp_path)/records.bin	\
+                          $(CURDIR)/$(tmp_path)/records.idx
 
 $(io_seek_basic_binout): $(io_root)/seek/s1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
@@ -285,7 +285,7 @@ $(io_wchar_wc_binout): $(io_root)/wchar/wc.c
 
 # wc
 io_wc_binout := $(bin_path)/$(io_prefix)_wc$(bin_ext)
-io_wc_cppout := $(tmp_path)$(io_prefix)_wc$(cpp_ext)
+io_wc_cppout := $(tmp_path)/$(io_prefix)_wc$(cpp_ext)
 
 io_wc: $(io_wc_binout)
 io_wc_test: io_wc
