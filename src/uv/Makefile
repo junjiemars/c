@@ -59,7 +59,7 @@ $(neti_binout): $(uv_root)/neti/neti.c
 	$(CC) $(INC) $(CFLAGS) $^ $(bin_out) $@ $(LDLIBS)
 
 # parser
-uv_parser_objout := $(lib_path)$(uv_prefix)_parser$(obj_ext)
+uv_parser_objout := $(lib_path)/$(uv_prefix)_parser$(obj_ext)
 uv_parser_binout := $(bin_path)/$(uv_prefix)_parser$(bin_ext)
 
 ifeq (YES, $(has_libuv))
