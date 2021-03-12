@@ -25,7 +25,7 @@ unicode_utf8_test: unicode_utf8
 	$(unicode_utf8_binout)
 
 $(unicode_utf8_binout): $(unicode_root)/utf8/utf8.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # mb
 unicode_mb_binout := $(bin_path)/$(unicode_prefix)_mb$(bin_ext)
@@ -35,4 +35,4 @@ unicode_mb_test: unicode_mb
 	$(unicode_mb_binout) "abc中文def"
 
 $(unicode_mb_binout): $(unicode_root)/mb/mb.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

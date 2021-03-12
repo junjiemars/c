@@ -145,22 +145,22 @@ memory_alloc_align_test: $(memory_alloc_align_binout)
 	$(memory_alloc_align_binout)
 
 $(memory_alloc_a_binout): $(memory_root)/alloc/a.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(memory_alloc_je_binout): $(memory_root)/alloc/je.c
-	$(CC) $(CFLAGS) $(INC) $(jemalloc_cflags) $^ $(bin_out) $@ $(jemalloc_ldlibs)
+	$(CC) $(CFLAGS) $(INC) $(jemalloc_cflags) $^ $(bin_out)$@ $(jemalloc_ldlibs)
 
 $(memory_alloc_m_binout): $(memory_root)/alloc/m.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(memory_alloc_c_binout): $(memory_root)/alloc/c.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(memory_alloc_re_binout): $(memory_root)/alloc/re.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(memory_alloc_align_binout): $(memory_root)/alloc/align.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # bitfield
 memory_bitfield_binout := $(bin_path)/$(memory_prefix)_bitfield$(bin_ext)
@@ -170,7 +170,7 @@ memory_bitfield_test: memory_bitfield
 	$(memory_bitfield_binout)
 
 $(memory_bitfield_binout): $(memory_root)/bitfield/bitfield.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # bit
@@ -181,7 +181,7 @@ memory_bit_test: bit
 	$(memory_bit_binout)
 
 $(memory_bit_binout): $(memory_root)/bit/bit.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # byte
@@ -193,7 +193,7 @@ memory_byte_test: byte
 	$(memory_byte_binout)
 
 $(memory_byte_binout): $(memory_byte_cppout)
-	$(CC) $(CFLAGS) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(memory_byte_cppout): $(memory_root)/byte/byte.c
 	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
@@ -207,7 +207,7 @@ memory_copy_test: memory_copy
 	$(mem_copy_binout) 5698 10
 
 $(mem_copy_binout): $(memory_root)/copy/c.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # endian
 memory_endian_binout := $(bin_path)/$(memory_prefix)_endian$(bin_ext)
@@ -217,7 +217,7 @@ memory_endian_test: memory_endian
 	$(memory_endian_binout)
 
 $(memory_endian_binout): $(memory_root)/endian/e.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # generic
@@ -228,7 +228,7 @@ memory_generic_test: memory_generic
 	$(memory_generic_binout)
 
 $(memory_generic_binout): $(memory_root)/generic/g.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # layout
 
@@ -245,7 +245,7 @@ memory_layout_test: memory_layout
 	$(memory_layout_size_binout)
 
 $(memory_layout_size_binout): $(memory_root)/layout/size.c
-	$(CC) $(CFLAGS) $(INC) $^ $(ldflags_layout) $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(ldflags_layout) $(bin_out)$@
 
 # rotate
 memory_rotate_binout := $(bin_path)/$(memory_prefix)_rotate$(bin_ext)
@@ -259,7 +259,7 @@ memory_rotate_valgrind_test: memory_rotate
 $(memory_rotate_binout): $(memory_root)/rotate/rotate.h	\
 			         				   $(memory_root)/rotate/rotate.c	\
                          $(memory_root)/rotate/r.c
-	$(CC) $(CFLAGS) $(INC) $(bin_out) $@						\
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@						\
 		$(memory_root)/rotate/rotate.c								\
 		$(memory_root)/rotate/r.c
 
@@ -272,7 +272,7 @@ memory_shift_test: memory_shift
 	$(memory_shift_binout)
 
 $(memory_shift_binout): $(memory_root)/shift/shift.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # struct
@@ -283,4 +283,4 @@ memory_struct_test: memory_struct
 	$(memory_struct_binout)
 
 $(memory_struct_binout): $(memory_root)/struct/s.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

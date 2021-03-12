@@ -10,6 +10,6 @@ hi_test: hi
 	$(hi_binout) arlo
 
 $(hi_binout): $(hi_root)/hi.c 
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

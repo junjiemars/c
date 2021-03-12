@@ -91,7 +91,7 @@ x86_array_test: x86_array
 	$(x86_array_binout)
 
 $(x86_array_binout): $(x86_root)/array/array.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # bone
@@ -101,7 +101,7 @@ x86_bone: $(bone_binout)
 x86_bone_test: x86_bone
 
 $(bone_binout): $(x86_root)/bone/bone.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # branch
@@ -111,7 +111,7 @@ x86_branch: $(branch_binout)
 x86_branch_test: x86_branch
 
 $(branch_binout): $(x86_root)/branch/branch.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # call
@@ -122,7 +122,7 @@ x86_call_test: x86_call
 	$(call_binout) 1 2 3
 
 $(call_binout): $(x86_root)/call/call.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # convert
@@ -133,7 +133,7 @@ x86_convert_test: x86_convert
 	$(convert_binout)
 
 $(convert_binout): $(x86_root)/convert/convert.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # loop 
@@ -144,7 +144,7 @@ x86_loop_test: x86_loop
 	$(loop_binout)
 
 $(loop_binout): $(x86_root)/loop/loop.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # pointer
@@ -155,7 +155,7 @@ x86_pointer_test: x86_pointer
 	$(pointer_binout)
 
 $(pointer_binout): $(x86_root)/pointer/pointer.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # retval
@@ -165,7 +165,7 @@ x86_retval: $(retval_binout)
 x86_retval_test: x86_retval
 
 $(retval_binout): $(x86_root)/retval/retval.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # structure
@@ -175,7 +175,7 @@ x86_structure: $(structure_binout)
 x86_structure_test: x86_structure
 
 $(structure_binout): $(x86_root)/structure/structure.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # typecast
@@ -185,7 +185,7 @@ x86_typecast: $(typecast_binout)
 x86_typecast_test: x86_typecast
 
 $(typecast_binout): $(x86_root)/typecast/typecast.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # variable
@@ -196,7 +196,7 @@ x86_var_test: x86_var
 	$(var_binout)
 
 $(var_binout): $(x86_root)/var/var.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 #@$(foreach f,$(stack_binout),$(f);)

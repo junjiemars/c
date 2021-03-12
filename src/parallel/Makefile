@@ -46,7 +46,7 @@ parallel_omp_basic_test: parallel_omp_basic
 	$(parallel_omp_basic_binout)
 
 $(parallel_omp_basic_binout): $(parallel_root)/openmp/b.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 parallel_omp_for: $(parallel_omp_for_binout)
 parallel_omp_for_test: parallel_omp_for
@@ -55,7 +55,7 @@ parallel_omp_for_test: parallel_omp_for
 	$(parallel_omp_for_binout) 1000000
 
 $(parallel_omp_for_binout): $(parallel_root)/openmp/for.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # pthread
 parallel_pthread_basic_binout := $(bin_path)/$(parallel_prefix)_pthread_basic$(bin_ext)
@@ -132,30 +132,30 @@ parallel_pthread_once_test: parallel_pthread_once
 	$(parallel_pthread_once_binout)
 
 $(parallel_pthread_basic_binout): $(parallel_root)/pthread/basic.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(parallel_pthread_deadlock_binout): $(parallel_root)/pthread/deadlock.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(parallel_pthread_detach_binout): $(parallel_root)/pthread/detach.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(parallel_pthread_exit_binout): $(parallel_root)/pthread/exit.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(parallel_pthread_mutex_binout): $(parallel_root)/pthread/mutex.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(parallel_pthread_stacksize_binout): $(parallel_root)/pthread/stacksize.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(parallel_pthread_private_binout): $(parallel_root)/pthread/private.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(parallel_pthread_wait_binout): $(parallel_root)/pthread/wait.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(parallel_pthread_once_binout): $(parallel_root)/pthread/once.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # EOF

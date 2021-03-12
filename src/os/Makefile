@@ -32,7 +32,7 @@ os_echo_test: os_echo
 	$(os_echo_binout) abc 123 "xxx zzz"
 
 $(os_echo_binout): $(os_root)/echo/e.c $(getopt_c)
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # exec
 os_exec_binout := $(bin_path)/$(os_prefix)_exec$(bin_ext)
@@ -42,7 +42,7 @@ os_exec_test: os_exec
 	$(os_exec_binout) "/bin/ls" "-lh" "."
 
 $(os_exec_binout): $(os_root)/exec/e.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # msq
 os_msq_binout := $(bin_path)/$(os_prefix)_msq$(bin_ext)
@@ -63,7 +63,7 @@ os_msq_test: os_msq
 endif
 
 $(os_msq_binout): $(os_root)/msq/q.c
-	$(CC) $(CFLAGS) $(msq_cflags) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(msq_cflags) $(INC) $^ $(bin_out)$@
 
 # tcp wrapper
 os_tcpwrapper_binout := $(bin_path)/$(os_prefix)_tcpwrapper$(bin_ext)
@@ -79,6 +79,6 @@ os_tcpwrapper_test: os_tcpwrapper
 endif
 
 $(os_tcpwrapper_binout): $(os_root)/tcpwrapper/tw.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@ $(ldlibs_tcpwrapper)
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ldlibs_tcpwrapper)
 
 # eof

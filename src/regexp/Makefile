@@ -44,7 +44,7 @@ regexp_pcre_test: regexp_pcre
 endif # end of has_libpcre
 
 $(regexp_pcre_binout): $(regexp_root)/pcre/a.c  $(getopt_c)
-	$(CC) $(CFLAGS) $(pcre_cflags) $(INC) $^ $(bin_out) $@ $(LIBS) $(pcre_ldlibs)
+	$(CC) $(CFLAGS) $(pcre_cflags) $(INC) $^ $(bin_out)$@ $(LIBS) $(pcre_ldlibs)
 
 # os
 regexp_os_binout := $(bin_path)/$(regexp_prefix)_os$(bin_ext)
@@ -62,7 +62,7 @@ regexp_os_test: regexp_os
 endif # end of WinNT
 
 $(regexp_os_binout): $(regexp_root)/os/l.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # eof
