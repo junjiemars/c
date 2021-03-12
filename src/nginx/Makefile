@@ -33,38 +33,6 @@ $(nginx_home):
 	git clone --depth=1 --branch=master $(nginx_git_src) $@
 
 
-# build
-$(nginx_home)/Makefile: $(nd_sh)
-	$(nd_sh) --home=$(nginx_home)                   \
-           --prefix=$(nginx_prefix)               \
-           --target=http                          \
-           --gen-shell=no                         \
-           --opt-add-module=$(hello_module_root)  \
-           --opt-debug=$(opt_debug)               \
-           make configure												  
-
-$(nginx_home)/objs/nginx: $(nginx_home)/Makefile
-	$(nd_sh) --home=$(nginx_home)                   \
-           --prefix=$(nginx_prefix)               \
-           --target=http                          \
-           --gen-shell=no                         \
-           --opt-add-module=$(hello_module_root)  \
-           --opt-debug=$(opt_debug)               \
-           make make
-
-
-$(nginx_module_hello_binout): $(nginx_home)/objs/nginx
-	$(nd_sh) --home=$(nginx_home)                   \
-           --prefix=$(nginx_prefix)               \
-           --target=http                          \
-           --gen-dir=$(CURDIR)/$(nginx_root)      \
-           --gen-shell=yes                        \
-           --opt-add-module=$(hello_module_root)  \
-           --opt-debug=$(opt_debug)               \
-           make install
-	cp $(nginx_root)/hello/nginx.conf $(tmp_path)conf/nginx.conf
-
-
 # clean
 nginx_clean: clean_nd_sh												\
              clean_nginx_home
@@ -76,10 +44,23 @@ clean_nginx_home: $(nginx_home)
 	rm -r $(nginx_home)
 
 
-# module
+# hello
 nginx_module_hello: $(nginx_module_hello_binout)
 nginx_module_hello_test: nginx_module_hello
 	$(nginx_module_hello_binout) -T
+
+$(nginx_module_hello_binout): $(nd_sh)
+	$(nd_sh) --home=$(nginx_home)										\
+           --prefix=$(nginx_prefix)								\
+           --target=http													\
+           --gen-dir=$(CURDIR)/$(nginx_root)			\
+           --gen-shell=yes												\
+           --opt-add-module=$(hello_module_root)	\
+           --opt-debug=$(opt_debug)								\
+           --chain=yes														\
+           make configure make install
+	cp $(nginx_root)/hello/nginx.conf $(tmp_path)conf/nginx.conf
+
 
 
 .PHONY: nginx_clean nginx_priori
