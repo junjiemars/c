@@ -1,47 +1,20 @@
 # ./configure --has-nginx
 
 
-nginx_prefix := $(CURDIR)/$(tmp_path)
+nginx_out := $(CURDIR)/$(out)
 
-nd_sh := $(CURDIR)/src/nginx/nd.sh
-nd_sh_src := 'https://raw.githubusercontent.com/junjiemars/kit/master/ul/nd.sh'
 nginx_git_src := 'https://github.com/nginx/nginx.git'
-nginx_home := $(CURDIR)/src/nginx/nginx_home
+nginx_home := $(nginx_root)/nginx_home
+nginx_configure := $(nginx_home)/auto/configure
+
+hello_module_root := $(CURDIR)/$(nginx_root)/hello
+nginx_module_hello_binout := $(nginx_out)/bin/nginx
 
 
-opt_debug :=
-ifeq (YES, $(NM_DEBUG))
-opt_debug := yes
-endif
+nginx: nginx_module_hello
 
+nginx_test: nginx_module_hello_test
 
-hello_module_root := $(CURDIR)/src/nginx/hello
-nginx_module_hello_binout := $(tmp_path)sbin/nginx
-
-
-# priori
-nginx_priori: $(nd_sh)													\
-              $(nginx_home)
-
-# check or download nd.sh
-$(nd_sh):
-	curl -sqL -o $@ $(nd_sh_src) && chmod u+x $@
-
-
-# make nginx_home directory
-$(nginx_home):
-	git clone --depth=1 --branch=master $(nginx_git_src) $@
-
-
-# clean
-nginx_clean: clean_nd_sh												\
-             clean_nginx_home
-
-clean_nd_sh: $(nd_sh)
-	rm $(nd_sh)
-
-clean_nginx_home: $(nginx_home)
-	rm -r $(nginx_home)
 
 
 # hello
@@ -49,18 +22,37 @@ nginx_module_hello: $(nginx_module_hello_binout)
 nginx_module_hello_test: nginx_module_hello
 	$(nginx_module_hello_binout) -T
 
-$(nginx_module_hello_binout): $(nd_sh)
-	$(nd_sh) --home=$(nginx_home)										\
-           --prefix=$(nginx_prefix)								\
-           --target=http													\
-           --gen-dir=$(CURDIR)/$(nginx_root)			\
-           --gen-shell=yes												\
-           --opt-add-module=$(hello_module_root)	\
-           --opt-debug=$(opt_debug)								\
-           --chain=yes														\
-           make configure make install
-	cp $(nginx_root)/hello/nginx.conf $(tmp_path)conf/nginx.conf
+$(nginx_module_hello_binout): $(nginx_home)
+	cd $(nginx_home)																															\
+		&& auto/configure --prefix=$(nginx_out)																			\
+                      --sbin-path=$(nginx_out)/bin															\
+                      --without-http_fastcgi_module															\
+                      --without-http_uwsgi_module																\
+                      --without-http_scgi_module																\
+                      --without-http_memcached_module														\
+                      --without-http_rewrite_module															\
+                      --without-http-cache																			\
+                      --without-pcre																						\
+                      --add-module=$(hello_module_root)													\
+                      --with-cc-opt=-O0																					\
+                      --with-debug																							\
+    && make -j4 install																													\
+    && cp $(hello_module_root)/nginx.conf $(nginx_out)/conf/nginx.conf
+
+
+$(nginx_home):
+	git clone --depth=1 --branch=master $(nginx_git_src) $@
+
+
+# clean
+nginx_clean: clean_nginx_home
+
+clean_nginx_home: $(nginx_home)
+	rm -r $(nginx_home)
 
 
 
 .PHONY: nginx_clean nginx_priori
+
+# eof
+
