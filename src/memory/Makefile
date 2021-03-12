@@ -186,7 +186,7 @@ $(memory_bit_binout): $(memory_root)/bit/bit.c
 
 # byte
 memory_byte_binout := $(bin_path)/$(memory_prefix)_byte$(bin_ext)
-memory_byte_cppout := $(tmp_path)byte$(cpp_ext)
+memory_byte_cppout := $(tmp_path)/byte$(cpp_ext)
 
 byte: $(memory_byte_binout)
 memory_byte_test: byte

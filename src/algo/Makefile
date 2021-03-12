@@ -166,7 +166,7 @@ $(algo_hash_jenkins_binout): $(algo_root)/hash/jenkins.c
 
 # is unsigned integer
 algo_is_uint_binout := $(bin_path)/$(algo_prefix)_is_uint$(bin_ext)
-algo_is_uint_cppout := $(tmp_path)$(algo_prefix)_is_uint$(cpp_ext)
+algo_is_uint_cppout := $(tmp_path)/$(algo_prefix)_is_uint$(cpp_ext)
 
 algo_is_unsigned_integer: $(algo_is_uint_binout)
 algo_is_unsigned_integer_test: algo_is_unsigned_integer
@@ -181,7 +181,7 @@ $(algo_is_uint_cppout): $(algo_root)/is_unsigned_integer/is_uint.c
 
 # is unsigned type
 algo_is_utype_binout := $(bin_path)/$(algo_prefix)_is_utype$(bin_ext)
-algo_is_utype_cppout := $(tmp_path)$(algo_prefix)_is_utype$(cpp_ext)
+algo_is_utype_cppout := $(tmp_path)/$(algo_prefix)_is_utype$(cpp_ext)
 
 algo_is_unsigned_type: $(algo_is_utype_binout)
 algo_is_unsigned_type_test: algo_is_unsigned_type
@@ -262,7 +262,7 @@ $(algo_reverse_linked_list_binout): $(algo_root)/reverse/rev_linked_list.c
 
 # sizeof
 algo_sizeof_binout := $(bin_path)/$(algo_prefix)_sizeof$(bin_ext)
-algo_sizeof_cppout := $(tmp_path)$(algo_prefix)_sizeof$(cpp_ext)
+algo_sizeof_cppout := $(tmp_path)/$(algo_prefix)_sizeof$(cpp_ext)
 
 algo_sizeof: $(algo_sizeof_binout)
 algo_sizeof_test: algo_sizeof
