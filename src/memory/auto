@@ -346,7 +346,7 @@ esac
 # check jemalloc
 #----------------------------------------
 has_pkg_config=NO
-has_libuv=NO
+has_jemalloc=NO
 echo $echo_n " + checking for pkg-config ... $echo_c"
 if [ 0 -eq $(pkg-config --version 2>&1 1>/dev/null;echo $?) ]; then
   echo "yes"
@@ -372,6 +372,8 @@ if [ "$has_pkg_config" = "YES" ]; then
     . ${NORE_ROOT}/auto/feature
     if [ yes = $nm_found ]; then
       flag=has_jemalloc op=":=" value="YES" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=jemalloc_cflags op=":=" value="$jemalloc_cflags" \
           . ${NORE_ROOT}/auto/make_define
       flag=jemalloc_ldlibs op=":=" value="$jemalloc_ldlibs" \
           . ${NORE_ROOT}/auto/make_define

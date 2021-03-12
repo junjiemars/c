@@ -16,9 +16,9 @@ library_test: cffix_test												\
 
 
 # cffix
-cffix_libout := $(lib_path)libcffix$(lib_ext)
+cffix_libout := $(lib_path)/libcffix$(lib_ext)
 cffix_h := $(inc_path)cffix.h
-cffix_binout := $(bin_path)cffix_call$(bin_ext)
+cffix_binout := $(bin_path)/cffix_call$(bin_ext)
 
 cffix: $(cffix_libout) $(cffix_binout)
 cffix_test: cffix
@@ -38,40 +38,40 @@ else
 	endif
 endif
 
-$(cffix_libout): $(library_root)cffi/cffix.c $(cffix.h)
-	$(CC) $(CFLAGS) -DEXPORT=1 $(INC) $(nm_shared_opt) $< $(bin_out)$@
+$(cffix_libout): $(library_root)/cffi/cffix.c $(cffix.h)
+	$(CC) $(CFLAGS) -DEXPORT=1 $(INC) $(nm_shared_opt) $< $(bin_out) $@
 
-$(cffix_h): $(library_root)cffi/cffix.h
+$(cffix_h): $(library_root)/cffi/cffix.h
 	cp $< $(inc_path)
 
-$(cffix_binout): $(library_root)cffi/call.c $(cffix_libout)
-	$(CC) $(CFLAGS) -DEXPORT=0 $(INC) $< $(bin_out)$@ $(LDFLAGS) $(cffix_ldlibs)
+$(cffix_binout): $(library_root)/cffi/call.c $(cffix_libout)
+	$(CC) $(CFLAGS) -DEXPORT=0 $(INC) $< $(bin_out) $@ $(LDFLAGS) $(cffix_ldlibs)
 
 
 # geo
-geo_arout := $(lib_path)geo$(ar_ext)
-geo_binout := $(tmp_path)geo$(bin_ext)
-geo_objout := $(tmp_path)geo$(obj_ext)
-geo_libout := $(lib_path)libgeo$(lib_ext)
-geo_h := $(inc_path)geo.h
+geo_arout := $(lib_path)/geo$(ar_ext)
+geo_binout := $(tmp_path)/geo$(bin_ext)
+geo_objout := $(tmp_path)/geo$(obj_ext)
+geo_libout := $(lib_path)/libgeo$(lib_ext)
+geo_h := $(inc_path)/geo.h
 
 geo: $(geo_binout)
 geo_test: geo
 	$(geo_binout)
 
-$(geo_binout): $(library_root)geo/test.c $(geo_arout)
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(geo_binout): $(library_root)/geo/test.c $(geo_arout)
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
 
 $(geo_arout): $(geo_objout) $(geo_h)
-	$(AR) $(ARFLAGS) $(ar_out)$@ $<
+	$(AR) $(ARFLAGS) $(ar_out) $@ $<
 
-$(geo_objout): $(library_root)geo/geo.c
-	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(bin_out)$@ 
+$(geo_objout): $(library_root)/geo/geo.c
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(bin_out) $@ 
 
-$(geo_libout): $(library_root)geo/geo.c $(geo_h)
-	$(CC) $(CFLAGS) -DSHARED=0 $(INC) $(nm_shared_opt) $< $(bin_out)$@
+$(geo_libout): $(library_root)/geo/geo.c $(geo_h)
+	$(CC) $(CFLAGS) -DSHARED=0 $(INC) $(nm_shared_opt) $< $(bin_out) $@
 
-$(geo_h): $(library_root)geo/geo.h
+$(geo_h): $(library_root)/geo/geo.h
 	cp $< $(inc_path)
 
 
@@ -93,8 +93,8 @@ else
 	endif
 endif
 
-math_static_binout := $(bin_path)math_static$(bin_ext)
-math_shared_binout := $(bin_path)math_shared$(bin_ext)
+math_static_binout := $(bin_path)/math_static$(bin_ext)
+math_shared_binout := $(bin_path)/math_shared$(bin_ext)
 
 math_static: $(math_static_binout)
 math_shared: $(math_shared_binout)
@@ -103,11 +103,11 @@ math_static_test: math_static
 math_shared_test: math_shared
 	$(LD_LIBRARY_PATH)=$(geo_lib_path) $(math_shared_binout)
 
-$(math_static_binout): $(library_root)math/math1.c $(geo_arout) $(stdmath_lib)
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(math_static_binout): $(library_root)/math/math1.c $(geo_arout) $(stdmath_lib)
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
 
-$(math_shared_binout): $(library_root)math/math1.c $(geo_libout)
-	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $< $(bin_out)$@ $(LDFLAGS) $(LDLIBS)
+$(math_shared_binout): $(library_root)/math/math1.c $(geo_libout)
+	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $< $(bin_out) $@ $(LDFLAGS) $(LDLIBS)
 
 
 .PHONY: geo geo_test math_static math_static_test math_shared math_shared_test

@@ -27,29 +27,29 @@ endif # end of Darwin
 
 
 # basic
-flex_basic_binout := $(bin_path)$(flex_prefix)_basic$(bin_ext)
+flex_basic_binout := $(bin_path)/$(flex_prefix)_basic$(bin_ext)
 flex_basic_lexout := $(tmp_path)b_lex.c
 
 flex_basic: $(flex_basic_binout)
 flex_basic_test: flex_basic
-	$(flex_basic_binout) $(flex_root)basic/b.in
+	$(flex_basic_binout) $(flex_root)/basic/b.in
 
 $(flex_basic_binout): $(flex_basic_lexout)
-	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $^ $(bin_out)$@ $(LDLIBS)
+	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $^ $(bin_out) $@ $(LDLIBS)
 
-$(flex_basic_lexout): $(flex_root)basic/b.lex
+$(flex_basic_lexout): $(flex_root)/basic/b.lex
 	flex -o $@ $^
 
 # c
-flex_c_binout := $(bin_path)$(flex_prefix)_c$(bin_ext)
+flex_c_binout := $(bin_path)/$(flex_prefix)_c$(bin_ext)
 flex_c_lexout := $(tmp_path)c_lex.c
 
 flex_c: $(flex_c_binout)
 flex_c_test: flex_c
-	$(flex_c_binout) $(flex_root)c/c.c
+	$(flex_c_binout) $(flex_root)/c/c.c
 
 $(flex_c_binout): $(flex_c_lexout)
-	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $^ $(bin_out)$@ $(LDLIBS)
+	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $^ $(bin_out) $@ $(LDLIBS)
 
-$(flex_c_lexout): $(flex_root)c/c.lex
+$(flex_c_lexout): $(flex_root)/c/c.lex
 	flex -o $@ $^

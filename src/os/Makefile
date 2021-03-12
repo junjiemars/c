@@ -15,7 +15,7 @@ os_prefix := os
 INC += -I$(os_root) -I$(root)
 
 ifeq ($(CC_NAME),msvc)
-	getopt_c := $(root)posix/getopt.c
+	getopt_c := $(root)/posix/getopt.c
 endif # end of msvc
 
 ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
@@ -23,7 +23,7 @@ ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
 endif # end of _MEMORY_
 
 # echo
-os_echo_binout := $(bin_path)$(os_prefix)_echo$(bin_ext)
+os_echo_binout := $(bin_path)/$(os_prefix)_echo$(bin_ext)
 
 os_echo: $(os_echo_binout)
 os_echo_test: os_echo
@@ -31,21 +31,21 @@ os_echo_test: os_echo
 	$(os_echo_binout) -n abc
 	$(os_echo_binout) abc 123 "xxx zzz"
 
-$(os_echo_binout): $(os_root)echo/e.c $(getopt_c)
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(os_echo_binout): $(os_root)/echo/e.c $(getopt_c)
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
 
 # exec
-os_exec_binout := $(bin_path)$(os_prefix)_exec$(bin_ext)
+os_exec_binout := $(bin_path)/$(os_prefix)_exec$(bin_ext)
 
 os_exec: $(os_exec_binout)
 os_exec_test: os_exec
 	$(os_exec_binout) "/bin/ls" "-lh" "."
 
-$(os_exec_binout): $(os_root)exec/e.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(os_exec_binout): $(os_root)/exec/e.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@
 
 # msq
-os_msq_binout := $(bin_path)$(os_prefix)_msq$(bin_ext)
+os_msq_binout := $(bin_path)/$(os_prefix)_msq$(bin_ext)
 
 ifeq ($(NM_SYSTEM), Linux)
 CFLAGS += -D_GNU_SOURCE
@@ -62,11 +62,11 @@ os_msq_test: os_msq
 	@echo "#skip os_msq_test ..."
 endif
 
-$(os_msq_binout): $(os_root)msq/q.c
-	$(CC) $(CFLAGS) $(msq_cflags) $(INC) $^ $(bin_out)$@
+$(os_msq_binout): $(os_root)/msq/q.c
+	$(CC) $(CFLAGS) $(msq_cflags) $(INC) $^ $(bin_out) $@
 
 # tcp wrapper
-os_tcpwrapper_binout := $(bin_path)$(os_prefix)_tcpwrapper$(bin_ext)
+os_tcpwrapper_binout := $(bin_path)/$(os_prefix)_tcpwrapper$(bin_ext)
 
 ifeq ($(has_tcpwrapper),YES)
 os_tcpwrapper: $(os_tcpwrapper_binout)
@@ -78,7 +78,7 @@ os_tcpwrapper:
 os_tcpwrapper_test: os_tcpwrapper
 endif
 
-$(os_tcpwrapper_binout): $(os_root)tcpwrapper/tw.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ldlibs_tcpwrapper)
+$(os_tcpwrapper_binout): $(os_root)/tcpwrapper/tw.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out) $@ $(ldlibs_tcpwrapper)
 
 # eof
