@@ -44,6 +44,7 @@ $(nginx_module_hello_binout): $(nginx_home)
                       --without-http_memcached_module					\
                       --without-http_rewrite_module						\
                       --without-http-cache										\
+                      --without-http_proxy_module							\
                       --without-pcre													\
                       --add-module=$(hello_module_root)				\
                       --with-cc-opt="$(nginx_cc_opt)"					\

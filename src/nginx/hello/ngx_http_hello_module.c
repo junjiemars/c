@@ -6,15 +6,14 @@ static ngx_int_t ngx_http_hello_handler(ngx_http_request_t *r);
 static char *ngx_http_hello(ngx_conf_t *cf, ngx_command_t *cmd, void *conf);
 
 static ngx_command_t  ngx_http_hello_commands[] = {
-    {
-        ngx_string("hello"),
-        NGX_HTTP_LOC_CONF | NGX_CONF_NOARGS,
-        ngx_http_hello,
-        0,
-        0,
-        NULL
-    },
-    ngx_null_command
+    { ngx_string("hello"),
+      NGX_HTTP_LOC_CONF | NGX_CONF_NOARGS,
+      ngx_http_hello,
+      0,
+      0,
+      NULL },
+
+      ngx_null_command
 };
 
 
@@ -87,7 +86,7 @@ ngx_http_hello_handler(ngx_http_request_t *r)
 
     out.buf = b;
     out.next = NULL;
-	
+
     return ngx_http_output_filter(r, &out);
 }
 
@@ -99,4 +98,3 @@ ngx_http_hello(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
     clcf->handler = ngx_http_hello_handler;
     return NGX_CONF_OK;
 }
-		
