@@ -98,6 +98,10 @@ nginx_clean: clean_nginx_home										\
 clean_nginx_home:
 	-$(RM) -rf $(nginx_home)
 
+clean_nginx_objs:
+	test ! -f $(CURDIR)/$(nginx_home)/Makefile		\
+		|| make -C $(CURDIR)/$(nginx_home) clean
+
 clean_nginx_out: clean
 	-$(RM) -r $(out)/*_temp
 	-$(RM) -r $(out)/html
@@ -106,6 +110,6 @@ clean_nginx_out: clean
 
 
 
-.PHONY: nginx_clean clean_nginx_home clean_nginx_out xxx
+.PHONY: nginx_clean clean_nginx_home clean_nginx_objs clean_nginx_out
 
 # eof
