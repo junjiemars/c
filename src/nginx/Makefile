@@ -51,7 +51,7 @@ $(nginx_module_hello_binout): $(nginx_home)
                       --with-ld-opt="$(nginx_ld_opt)"					\
                       --with-debug														\
     && make -j4 install																				\
-    && cp $(hello_module_root)/nginx.conf								\
+    && cp $(hello_module_root)/nginx.conf											\
 					$(nginx_module_hello_prefix)/conf/nginx.conf
 
 # njs
@@ -94,9 +94,11 @@ nginx_clean: clean_nginx_home										\
 clean_nginx_home:
 	-$(RM) -rf $(nginx_home)
 
-clean_nginx_out: clean
+clean_nginx_objs:
 	test ! -f $(CURDIR)/$(nginx_home)/Makefile		\
 		|| make -C $(CURDIR)/$(nginx_home) clean
+
+clean_nginx_out: clean clean_nginx_objs
 	-$(RM) -r $(out)/*_temp
 	-$(RM) -r $(out)/html
 	-$(RM) -r $(out)/logs
