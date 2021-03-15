@@ -72,14 +72,10 @@ nginx_module_njs_test: nginx_module_njs
 $(nginx_module_njs_binout): $(njs_module_root)/src
 	cd $(nginx_home)																								\
 		&& auto/configure --prefix=$(nginx_module_njs_prefix)					\
-                      --without-http_fastcgi_module								\
-                      --without-http_uwsgi_module									\
-                      --without-http_scgi_module									\
                       --without-http_memcached_module							\
                       --without-http_rewrite_module								\
                       --without-http-cache												\
                       --without-http_proxy_module									\
-                      --without-pcre															\
                       --add-module=$(njs_module_root)/src/nginx		\
                       --with-cc-opt="$(nginx_cc_opt)"							\
                       --with-ld-opt="$(nginx_ld_opt)"							\
@@ -87,8 +83,8 @@ $(nginx_module_njs_binout): $(njs_module_root)/src
     && make -j4 install																						\
     && cp $(njs_module_root)/nginx.conf														\
 					$(nginx_module_njs_prefix)/conf/nginx.conf							\
-    && cp $(njs_module_root)/hello.js															\
-          $(nginx_module_njs_prefix)/conf/hello.js
+    && cp $(njs_module_root)/http.js															\
+          $(nginx_module_njs_prefix)/conf/http.js
 
 
 # clean
@@ -98,11 +94,9 @@ nginx_clean: clean_nginx_home										\
 clean_nginx_home:
 	-$(RM) -rf $(nginx_home)
 
-clean_nginx_objs:
+clean_nginx_out: clean
 	test ! -f $(CURDIR)/$(nginx_home)/Makefile		\
 		|| make -C $(CURDIR)/$(nginx_home) clean
-
-clean_nginx_out: clean
 	-$(RM) -r $(out)/*_temp
 	-$(RM) -r $(out)/html
 	-$(RM) -r $(out)/logs
