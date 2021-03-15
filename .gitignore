@@ -84,3 +84,4 @@ src/nginx/nd.sh
 src/nginx/nginx.sh
 src/nginx/nginx.conf
 src/nginx/nginx_home
+src/nginx/njs/src

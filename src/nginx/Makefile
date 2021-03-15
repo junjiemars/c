@@ -54,6 +54,42 @@ $(nginx_module_hello_binout): $(nginx_home)
     && cp $(hello_module_root)/nginx.conf								\
 					$(nginx_module_hello_prefix)/conf/nginx.conf
 
+# njs
+njs_src := 'https://github.com/nginx/njs.git'
+njs_module_root := $(CURDIR)/$(nginx_root)/njs
+
+$(njs_module_root)/src:
+	git clone --depth=1 --branch=master $(njs_src) $@
+
+
+nginx_module_njs_prefix := $(nginx_out)/var/njs
+nginx_module_njs_binout := $(nginx_module_njs_prefix)/sbin/nginx
+
+nginx_module_njs: $(nginx_module_njs_binout)
+nginx_module_njs_test: nginx_module_njs
+	$(nginx_module_njs_binout) -T
+
+$(nginx_module_njs_binout): $(njs_module_root)/src
+	cd $(nginx_home)																								\
+		&& auto/configure --prefix=$(nginx_module_njs_prefix)					\
+                      --without-http_fastcgi_module								\
+                      --without-http_uwsgi_module									\
+                      --without-http_scgi_module									\
+                      --without-http_memcached_module							\
+                      --without-http_rewrite_module								\
+                      --without-http-cache												\
+                      --without-http_proxy_module									\
+                      --without-pcre															\
+                      --add-module=$(njs_module_root)/src/nginx		\
+                      --with-cc-opt="$(nginx_cc_opt)"							\
+                      --with-ld-opt="$(nginx_ld_opt)"							\
+                      --with-debug																\
+    && make -j4 install																						\
+    && cp $(njs_module_root)/nginx.conf														\
+					$(nginx_module_njs_prefix)/conf/nginx.conf							\
+    && cp $(njs_module_root)/hello.js															\
+          $(nginx_module_njs_prefix)/conf/hello.js
+
 
 # clean
 nginx_clean: clean_nginx_home										\
@@ -70,7 +106,6 @@ clean_nginx_out: clean
 
 
 
-.PHONY: nginx_clean clean_nginx_home clean_nginx_out
+.PHONY: nginx_clean clean_nginx_home clean_nginx_out xxx
 
 # eof
-
