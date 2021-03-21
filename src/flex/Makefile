@@ -53,3 +53,8 @@ $(flex_c_binout): $(flex_c_lexout)
 
 $(flex_c_lexout): $(flex_root)/c/c.lex
 	flex -o $@ $^
+
+
+.PHONY: flex_basic flex_basic_test
+
+#eof
