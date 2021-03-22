@@ -1,5 +1,6 @@
 #
 # ./configure --has-flex -Wno-unused-function
+# make --keep-going --no-builtin-rules --debug=b clean test
 #
 
 flex_prefix := flex
