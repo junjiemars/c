@@ -9,20 +9,20 @@ ffi: ffi_jni
 ffi_test: ffi_jni_test
 
 # jni
-square_libout := $(lib_path)libsquare$(lib_ext)
+square_libout := $(lib_path)/libsquare$(lib_ext)
 jni_classpath += -classpath .$(nm_p)$(bin_path)
 
 jni_inc += $(INC)
 jni_cflags += $(CFLAGS) $(nm_shared_opt)
 
-java2c_h := $(inc_path)Java2c.h
-java2c_classout := $(bin_path)Java2c.class
+java2c_h := $(inc_path)/Java2c.h
+java2c_classout := $(bin_path)/Java2c.class
 
-$(square_libout): $(java2c_h) $(ffi_root)jni/square.c
-	$(CC) $(jni_cflags) $(jni_inc) $(ffi_root)jni/square.c $(bin_out)$@
+$(square_libout): $(java2c_h) $(ffi_root)/jni/square.c
+	$(CC) $(jni_cflags) $(jni_inc) $(ffi_root)/jni/square.c $(bin_out)$@
 
-$(java2c_h): $(ffi_root)jni/Java2c.java
-	$(JAVAH) $(inc_path) -d $(bin_path) $(ffi_root)jni/Java2c.java
+$(java2c_h): $(ffi_root)/jni/Java2c.java
+	$(JAVAH) $(inc_path) -d $(bin_path) $(ffi_root)/jni/Java2c.java
 
 ifeq (YES, $(javac_ge_8))
 ffi_jni: $(square_libout)

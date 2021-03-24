@@ -3,7 +3,7 @@
 # javac version
 #----------------------------------------
 echo ${echo_n} " + checking for javac version ... " ${echo_c}
-javac_ver=`javac -version &>/dev/null`
+javac_ver="`javac -version 2>/dev/null`"
 if [ -n "$javac_ver" ]; then
   javac_ver=`echo ${javac_ver}|sed -e 's/^javac \([0-9][0-9]*\)\..*$/\1/'`
   if [ 0 -eq $? ]; then
@@ -27,7 +27,13 @@ java_home=
 echo $echo_n " + checking for java home ... $echo_c"
 case ${NM_SYSTEM} in
   Darwin)
-    echo "no"
+    java_home="`/usr/libexec/java_home`"
+    if [ -d "$java_home" ]; then
+      flag=java_home op=":=" value="$java_home" . ${NORE_ROOT}/auto/make_define
+      echo "yes"
+    else
+      echo "no"
+    fi
     ;;
   Linux)
     java_home="$(dirname $(dirname $(readlink -f $(which javac))))"
