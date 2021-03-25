@@ -7,11 +7,13 @@
 
 #define N 8
 
-#if (MSVC) && defined(_WIN64)
+#if (MSVC)
+#ifdef (_WIN64)
 typedef __int64             ssize_t;
 #else
 typedef int                 ssize_t;
-#endif
+#endif  /* end of _WIN64 */
+#endif  /* end of MSVC */
 
 
 void test_null(int);

@@ -63,7 +63,7 @@ $(geo_binout): $(library_root)/geo/test.c $(geo_arout)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(geo_arout): $(geo_objout) $(geo_h)
-	$(AR) $(ARFLAGS) $(ar_out)$@ $<
+	$(AR) $(ARFLAGS) $(ar_out) $@ $<
 
 $(geo_objout): $(library_root)/geo/geo.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(bin_out)$@ 

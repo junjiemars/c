@@ -8,14 +8,8 @@ nginx_home := $(nginx_root)/nginx_home
 nginx_configure := $(nginx_home)/auto/configure
 
 
-ifeq (msvc, $(CC_NAME))
-nginx:
-	@echo "#skip nginx_test ..."
-nginx_test: nginx_module_hello_test
-else
 nginx: nginx_module_hello
 nginx_test: nginx_module_hello_test
-endif # end of MSVC
 
 
 nginx_cc_opt := $(nm_optimize_opt)
@@ -36,9 +30,16 @@ nginx_hello_module_root := $(CURDIR)/$(nginx_root)/hello
 nginx_module_hello_prefix := $(nginx_out)/var/hello
 nginx_module_hello_binout := $(nginx_module_hello_prefix)/sbin/nginx
 
+ifeq (msvc, $(CC_NAME))
+nginx_module_hello:
+	@echo "#skip nginx_module_hello_test ..."
+nginx_module_hello_test: nginx_module_hello
+else
 nginx_module_hello: $(nginx_module_hello_binout)
 nginx_module_hello_test: nginx_module_hello
 	$(nginx_module_hello_binout) -T
+endif # end of msvc
+
 
 $(nginx_module_hello_binout): $(nginx_home)
 	cd $(nginx_home)																						\
