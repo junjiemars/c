@@ -8,7 +8,7 @@ nginx_home := $(nginx_root)/nginx_home
 nginx_configure := $(nginx_home)/auto/configure
 
 
-ifeq (MSVC, $(CC_NAME))
+ifeq (msvc, $(CC_NAME))
 nginx:
 	@echo "#skip nginx_test ..."
 nginx_test: nginx_module_hello_test
