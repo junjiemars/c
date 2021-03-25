@@ -350,8 +350,7 @@ has_jemalloc=NO
 echo $echo_n " + checking for pkg-config ... $echo_c"
 if pkg-config --version >/dev/null; then
   echo "yes"
-  has_pkg_config=YES
-  flag=has_pkg_config op=":=" value="$has_pkg_config" \
+  flag=has_pkg_config op=":=" value="YES" \
       . ${NORE_ROOT}/auto/make_define
 else
   echo "no"
