@@ -8,7 +8,7 @@
 #define N 8
 
 #if (MSVC)
-#ifdef (_WIN64)
+#if defined(_WIN64)
 typedef __int64             ssize_t;
 #else
 typedef int                 ssize_t;
