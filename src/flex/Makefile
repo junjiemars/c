@@ -29,13 +29,13 @@ flex_basic_lexout := $(tmp_path)/b_lex.c
 
 ifeq (YES, $(has_flex))
 flex_basic: $(flex_basic_binout)
+flex_basic_test: flex_basic
+	$(flex_basic_binout) $(flex_root)/basic/b.in
 else
 flex_basic:
 	@echo "#skip flex_test, missing flex."
-endif # end of has_flex
-
 flex_basic_test: flex_basic
-	$(flex_basic_binout) $(flex_root)/basic/b.in
+endif # end of has_flex
 
 $(flex_basic_binout): $(flex_basic_lexout)
 	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $^ $(bin_out)$@ $(LDLIBS)
