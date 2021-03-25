@@ -6,7 +6,7 @@ io_prefix := io
 INC += -I$(io_root) -I$(root)
 
 ifeq ($(CC_NAME),msvc)
-getopt_c := $(root)posix/getopt.c
+getopt_c := $(root)/posix/getopt.c
 endif
 
 _MEMORY_ ?= 0
