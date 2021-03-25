@@ -1,6 +1,20 @@
 # -*- mode:sh -*- vim:ft=sh
 #
 
+# check flex
+#----------------------------------------
+has_flex=NO
+echo $echo_n " + checking for flex ... $echo_c"
+if flex --version >/dev/null; then
+  echo "yes"
+  has_flex=YES
+  flag=has_flex op=":=" value="$has_flex" \
+      . ${NORE_ROOT}/auto/make_define
+else
+  echo "no"
+fi
+
+
 # check compiler options
 #----------------------------------------
 case "$CC_NAME" in

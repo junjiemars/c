@@ -6,13 +6,9 @@
 flex_prefix := flex
 INC += -I$(flex_root)
 
-ifeq (WinNT, $(NM_SYSTEM))
-flex:
-	@echo "#skip flex_test ..."
-else
+
 flex: flex_basic																\
       flex_c
-endif
 
 flex_test: flex_basic_test											\
            flex_c_test
@@ -31,7 +27,13 @@ endif # end of Darwin
 flex_basic_binout := $(bin_path)/$(flex_prefix)_basic$(bin_ext)
 flex_basic_lexout := $(tmp_path)/b_lex.c
 
+ifeq (YES, $(has_flex))
 flex_basic: $(flex_basic_binout)
+else
+flex_basic:
+	@echo "#skip flex_test, missing flex."
+endif # end of has_flex
+
 flex_basic_test: flex_basic
 	$(flex_basic_binout) $(flex_root)/basic/b.in
 
@@ -45,7 +47,13 @@ $(flex_basic_lexout): $(flex_root)/basic/b.lex
 flex_c_binout := $(bin_path)/$(flex_prefix)_c$(bin_ext)
 flex_c_lexout := $(tmp_path)/c_lex.c
 
+ifeq (YES, $(has_flex))
 flex_c: $(flex_c_binout)
+else
+flex_c:
+	@echo "#skip flex_test, missing flex."
+endif # end of has_flex
+
 flex_c_test: flex_c
 	$(flex_c_binout) $(flex_root)/c/c.c
 
