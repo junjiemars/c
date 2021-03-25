@@ -7,6 +7,13 @@
 
 #define N 8
 
+#if (MSVC) && defined(_WIN64)
+typedef __int64             ssize_t;
+#else
+typedef int                 ssize_t;
+#endif
+
+
 void test_null(int);
 void test_array_boundary(char**);
 void test_arr_tail(void);
