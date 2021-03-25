@@ -28,7 +28,7 @@ main(int argc, char **argv)
           perror(0);
           return 1;
         }
-      printf("%lu\n", epoch);
+      printf("%lu\n", (long) epoch);
       return 0;
     }
 
