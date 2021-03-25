@@ -49,13 +49,13 @@ flex_c_lexout := $(tmp_path)/c_lex.c
 
 ifeq (YES, $(has_flex))
 flex_c: $(flex_c_binout)
+flex_c_test: flex_c
+	$(flex_c_binout) $(flex_root)/c/c.c
 else
 flex_c:
 	@echo "#skip flex_test, missing flex."
-endif # end of has_flex
-
 flex_c_test: flex_c
-	$(flex_c_binout) $(flex_root)/c/c.c
+endif # end of has_flex
 
 $(flex_c_binout): $(flex_c_lexout)
 	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $^ $(bin_out)$@ $(LDLIBS)
