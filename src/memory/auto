@@ -163,7 +163,7 @@ nm_feature_test='int size; int buffer[size];'
 #----------------------------------------
 case $NM_SYSTEM in
 	Darwin|Linux)
-		nm_feature="alloca fn"
+		nm_feature="alloca()"
 		nm_feature_name="nm_have_alloca_fn"
 		nm_feature_run=yes
 		nm_feature_h='#include <alloca.h>'
@@ -173,7 +173,7 @@ case $NM_SYSTEM in
 		. ${NORE_ROOT}/auto/feature
 	  ;;
 	WinNT)
-		nm_feature="alloca fn"
+		nm_feature="alloca()"
 		nm_feature_name="nm_have_alloca_fn"
 		nm_feature_run=no
 		nm_feature_h='#include <malloc.h>'
@@ -189,7 +189,7 @@ esac
 
 case $NM_SYSTEM in
 	Darwin)
-		nm_feature="malloc_size fn"
+		nm_feature="malloc_size()"
 		nm_feature_name="nm_have_malloc_size_fn"
 		nm_feature_run=no
 		nm_feature_h='#include <malloc/malloc.h>
@@ -201,7 +201,7 @@ case $NM_SYSTEM in
 		. ${NORE_ROOT}/auto/feature
 	  ;;
 	Linux)
-		nm_feature="malloc_size fn"
+		nm_feature="malloc_size()"
 		nm_feature_name="nm_have_malloc_size_fn"
 		nm_feature_run=no
 		nm_feature_h='#include <malloc.h>
@@ -213,7 +213,7 @@ case $NM_SYSTEM in
 		. ${NORE_ROOT}/auto/feature
 	  ;;
 	WinNT)
-		nm_feature="malloc_size fn"
+		nm_feature="malloc_size()"
 		nm_feature_name="nm_have_malloc_size_fn"
 		nm_feature_run=no
 		nm_feature_h='#include <malloc.h>'
@@ -229,7 +229,7 @@ esac
 
 case "$NM_SYSTEM" in
 	Darwin|Linux)
-		nm_feature="aligned_alloc fn"
+		nm_feature="aligned_alloc()"
 		nm_feature_name="nm_have_aligned_alloc_fn"
 		nm_feature_run=no
 		nm_feature_h='#include <stdlib.h>'
@@ -239,7 +239,7 @@ case "$NM_SYSTEM" in
 		. ${NORE_ROOT}/auto/feature
 
 		if [ "yes" != $nm_found ]; then
-			nm_feature="posix_memalign fn"
+			nm_feature="posix_memalign()"
 			nm_feature_name="nm_have_posix_memalign_fn"
 			nm_feature_run=no
 			nm_feature_h='#include <stdlib.h>'
@@ -250,7 +250,7 @@ case "$NM_SYSTEM" in
 		fi
 		;;
 	WinNT)
-		nm_feature="memalign fn"
+		nm_feature="memalign()"
 		nm_feature_name="nm_have_memalign_fn"
 		nm_feature_run=no
 		nm_feature_h=' #include <malloc.h>'
@@ -348,7 +348,7 @@ esac
 has_pkg_config=NO
 has_jemalloc=NO
 echo $echo_n " + checking for pkg-config ... $echo_c"
-if [ 0 -eq $(pkg-config --version 2>&1 1>/dev/null;echo $?) ]; then
+if pkg-config --version >/dev/null; then
   echo "yes"
   has_pkg_config=YES
   flag=has_pkg_config op=":=" value="$has_pkg_config" \

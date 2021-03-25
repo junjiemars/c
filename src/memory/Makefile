@@ -127,7 +127,7 @@ memory_alloc_je: $(memory_alloc_je_binout)
 memory_alloc_je_test: memory_alloc_je
 else
 memory_alloc_je:
-	@echo "#skip memory_alloc_je_test ..."
+	@echo "#skip memory_alloc_je_test, missing jemalloc."
 memory_alloc_je_test: memory_alloc_je
 endif
 
@@ -176,8 +176,8 @@ $(memory_bitfield_binout): $(memory_root)/bitfield/bitfield.c
 # bit
 memory_bit_binout := $(bin_path)/$(memory_prefix)_bit$(bin_ext)
 
-bit: $(memory_bit_binout)
-memory_bit_test: bit
+memory_bit: $(memory_bit_binout)
+memory_bit_test: memory_bit
 	$(memory_bit_binout)
 
 $(memory_bit_binout): $(memory_root)/bit/bit.c
@@ -188,8 +188,8 @@ $(memory_bit_binout): $(memory_root)/bit/bit.c
 memory_byte_binout := $(bin_path)/$(memory_prefix)_byte$(bin_ext)
 memory_byte_cppout := $(tmp_path)/byte$(cpp_ext)
 
-byte: $(memory_byte_binout)
-memory_byte_test: byte
+memory_byte: $(memory_byte_binout)
+memory_byte_test: memory_byte
 	$(memory_byte_binout)
 
 $(memory_byte_binout): $(memory_byte_cppout)
@@ -230,8 +230,8 @@ memory_generic_test: memory_generic
 $(memory_generic_binout): $(memory_root)/generic/g.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-# layout
 
+# layout
 ifdef STACK_SIZE
 ifeq ($(CC_NAME), clang)
 ldflags_layout := -Wl,-stack_size -Wl,0x10000
@@ -284,3 +284,18 @@ memory_struct_test: memory_struct
 
 $(memory_struct_binout): $(memory_root)/struct/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+.PHONY: memory_alloc memory_alloc_test					\
+        memory_bit memory_bit_test							\
+        memory_bitfield memory_bitfield_test		\
+        memory_byte memory_byte_test						\
+        memory_copy memory_copy_test						\
+        memory_endian memory_endian_test				\
+        memory_generic memory_generic_test			\
+        memory_layout memory_layout_test				\
+        memory_rotate memory_rotate_test				\
+        memory_shift memory_shift_test					\
+        memory_struct memory_struct_test
+
+# eof
