@@ -8,9 +8,14 @@ nginx_home := $(nginx_root)/nginx_home
 nginx_configure := $(nginx_home)/auto/configure
 
 
-nginx: nginx_module_hello
-
+ifeq (MSVC, $(CC_NAME))
+nginx:
+	@echo "#skip nginx_test ..."
 nginx_test: nginx_module_hello_test
+else
+nginx: nginx_module_hello
+nginx_test: nginx_module_hello_test
+endif # end of MSVC
 
 
 nginx_cc_opt := $(nm_optimize_opt)
@@ -46,7 +51,6 @@ $(nginx_module_hello_binout): $(nginx_home)
                       --without-http-cache										\
                       --without-http_proxy_module							\
                       --without-pcre													\
-                      --without-http_gzip_module							\
                       --add-module=$(nginx_hello_module_root)	\
                       --with-cc-opt="$(nginx_cc_opt)"					\
                       --with-ld-opt="$(nginx_ld_opt)"					\
