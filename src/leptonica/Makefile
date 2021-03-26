@@ -26,13 +26,20 @@ leptonica_build := $(leptonica_out_incdir)/leptonica/allheaders.h	\
 # env
 leptonica_prefix := leptonica
 
-INC += $(nm_inc_opt)$(leptonica_root) $(nm_inc_opt)$(leptonica_out_incdir)
+INC += $(nm_inc_opt)$(leptonica_root) $(nm_inc_opt)$(root)
+INC += $(nm_inc_opt)$(leptonica_out_incdir)
 LDFLAGS += $(nm_libdir_opt)$(leptonica_out_libdir)
 
 ifneq (msvc, $(CC_NAME))
 leptonica_cc_opt += -O0 -g
 leptonica_cc_opt += -Wno-unused-variable -Wno-unused-const-variable
 endif # end of !msvc
+
+
+ifeq (msvc, $(CC_NAME))
+getopt_c := $(root)/posix/getopt.c
+endif # end of msvc
+
 
 $(leptonica_build): $(leptonica_home)
 	CFLAGS="$(leptonica_cc_opt)" cd $(leptonica_home)						\
@@ -57,11 +64,18 @@ leptonica_basic: $(leptonica_build) 						\
                  $(leptonica_basic_in_image)
 leptonica_basic_test: leptonica_basic
 	LD_LIBRARY_PATH=$(leptonica_out_libdir) $(leptonica_basic_binout)	\
-			$(CURDIR)/$(leptonica_basic_in_image)													\
-			$(CURDIR)/$(leptonica_basic_out_image)
+			-i $(CURDIR)/$(leptonica_basic_in_image)											\
+			-o $(CURDIR)/$(tmp_path)/bs1.png
+	LD_LIBRARY_PATH=$(leptonica_out_libdir) $(leptonica_basic_binout)	\
+			-i $(CURDIR)/$(leptonica_basic_in_image)											\
+			-o $(CURDIR)/$(tmp_path)/bs2.png															\
+      -x 0.90																												\
+      -y 0.75
 
-$(leptonica_basic_binout): $(leptonica_root)/basic/b.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ 																			\
+
+$(leptonica_basic_binout): $(leptonica_root)/basic/b.c	\
+                           $(getopt_c)
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@														\
 		$(nm_libdir_opt)$(leptonica_out_libdir) $(nm_lib_opt)leptonica
 
 $(leptonica_basic_in_image): $(leptonica_root)/basic/b.png
