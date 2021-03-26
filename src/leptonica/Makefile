@@ -69,8 +69,8 @@ leptonica_basic_test: leptonica_basic
 	LD_LIBRARY_PATH=$(leptonica_out_libdir) $(leptonica_basic_binout)	\
 			-i $(CURDIR)/$(leptonica_basic_in_image)											\
 			-o $(CURDIR)/$(tmp_path)/bs2.png															\
-      -x 0.90																												\
-      -y 0.75
+      -x 0.50																												\
+      -y 0.25
 
 
 $(leptonica_basic_binout): $(leptonica_root)/basic/b.c	\
