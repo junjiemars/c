@@ -6,9 +6,9 @@ int
 {
   _unused_(argc);
   _unused_(argv);
-  
+
   char *s, *d;
-  PIX *pixs, *pixd;  
+  PIX *pixs, *pixd;
 
   if (argc < 3)
     {
