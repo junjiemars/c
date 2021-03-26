@@ -3,14 +3,15 @@
 #
 
 
-ifeq (msvc, $(CC_NAME))
+ifeq (Linux, $(NM_SYSTEM))
+leptonica: leptonica_basic
+leptonica_test: leptonica_basic_test
+else
 leptonica:
 	@echo "#skip leptonica_test ..."
 leptonica_test: leptonica
-else
-leptonica: leptonica_basic
-leptonica_test: leptonica_basic_test
 endif # end of msvc
+
 
 # leptonica src & out
 leptonica_home := $(leptonica_root)/leptonica_home
