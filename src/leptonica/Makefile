@@ -29,11 +29,17 @@ leptonica_prefix := leptonica
 INC += $(nm_inc_opt)$(leptonica_root) $(nm_inc_opt)$(leptonica_out_incdir)
 LDFLAGS += $(nm_libdir_opt)$(leptonica_out_libdir)
 
+ifneq (msvc, $(CC_NAME))
+leptonica_cc_opt += -O0 -g
+leptonica_cc_opt += -Wno-unused-variable -Wno-unused-const-variable
+endif # end of !msvc
 
 $(leptonica_build): $(leptonica_home)
-	cd $(leptonica_home)																				\
+	CFLAGS="$(leptonica_cc_opt)" cd $(leptonica_home)						\
     && ./autogen.sh																						\
 		&& ./configure --prefix=$(CURDIR)/$(leptonica_out_prefix)	\
+                   --enable-share															\
+                   --enable-debug															\
 		&& make -j4 install
 
 $(leptonica_home):
@@ -55,7 +61,8 @@ leptonica_basic_test: leptonica_basic
 			$(CURDIR)/$(leptonica_basic_out_image)
 
 $(leptonica_basic_binout): $(leptonica_root)/basic/b.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(LDFLAGS) $(nm_lib_opt)leptonica
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ 																			\
+		$(nm_libdir_opt)$(leptonica_out_libdir) $(nm_lib_opt)leptonica
 
 $(leptonica_basic_in_image): $(leptonica_root)/basic/b.png
 	cp $< $@
