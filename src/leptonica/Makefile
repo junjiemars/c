@@ -6,7 +6,14 @@
 ifeq (Linux, $(NM_SYSTEM))
 leptonica: leptonica_basic
 leptonica_test: leptonica_basic_test
-else
+endif # end of Linux
+
+ifeq (Darwin, $(NM_SYSTEM))
+leptonica:
+	@echo "#skip leptonica_test ..."
+endif # end of Darwin
+
+ifeq (msvc, $(NM_SYSTEM))
 leptonica:
 	@echo "#skip leptonica_test ..."
 leptonica_test: leptonica
