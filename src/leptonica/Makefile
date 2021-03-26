@@ -4,12 +4,12 @@
 
 
 ifeq (msvc, $(CC_NAME))
-leptonica: leptonica_basic
-leptonica_test: leptonica_basic_test
-else
 leptonica:
 	@echo "#skip leptonica_test ..."
 leptonica_test: leptonica
+else
+leptonica: leptonica_basic
+leptonica_test: leptonica_basic_test
 endif # end of msvc
 
 # leptonica src & out
@@ -29,7 +29,7 @@ INC += $(nm_inc_opt)$(leptonica_root) $(nm_inc_opt)$(leptonica_out_incdir)
 LDFLAGS += $(nm_libdir_opt)$(leptonica_out_libdir)
 
 
-$(leptonica_build): $(lepontica_home)
+$(leptonica_build): $(leptonica_home)
 	cd $(leptonica_home)																				\
     && ./autogen.sh																						\
 		&& ./configure --prefix=$(CURDIR)/$(leptonica_out_prefix)	\
@@ -47,11 +47,11 @@ leptonica_basic_out_image := $(tmp_path)/b-scaled.png
 
 leptonica_basic: $(leptonica_build) 						\
                  $(leptonica_basic_binout)			\
-                 $(leptonica_basic_example)
+                 $(leptonica_basic_in_image)
 leptonica_basic_test: leptonica_basic
-	LD_LIBRARY_PATH=$(leptonica_out_libdir)										\
-		$(leptonica_basic_binout) $(leptonica_basic_in_image)		\
-                              $(leptonica_basic_out_image)
+	LD_LIBRARY_PATH=$(leptonica_out_libdir) $(leptonica_basic_binout)	\
+			$(CURDIR)/$(leptonica_basic_in_image)													\
+			$(CURDIR)/$(leptonica_basic_out_image)
 
 $(leptonica_basic_binout): $(leptonica_root)/basic/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(LDFLAGS) $(nm_lib_opt)leptonica
