@@ -57,6 +57,7 @@ jobs:
           fetch-depth: 0
       - name: Install Dependencies
         run: |
+          brew install automake autoconf libtool
           brew install pkg-config
           brew install libuv
       - name: Setup Env
