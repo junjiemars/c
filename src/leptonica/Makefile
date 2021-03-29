@@ -17,7 +17,7 @@ leptonica_test: leptonica_basic_test
 # env
 leptonica_inc_dir := $(leptonica_out)/include
 leptonica_lib_dir := $(leptonica_out)/lib
-leptonica_build := $(leptonica_inc_dir)/allheaders.h						\
+leptonica_build := $(leptonica_inc_dir)/leptonica/allheaders.h	\
                    $(leptonica_lib_dir)/libleptonica$(lib_ext)
 
 
@@ -115,11 +115,11 @@ clean_leptonica_out:
 	test ! -f $(CURDIR)/$(leptonica_home)/Makefile		\
 		|| make -C $(CURDIR)/$(leptonica_home) clean
 
-clean_leptonica_lib:
+clean_leptonica_bin:
 	test ! -f $(leptonica_basic_binout) || rm -r $(leptonica_basic_binout)
 
 
-.PHONY: leptonica_clean clean_leptoonica_home clean_leptonica_out	clean_leptonica_lib	\
+.PHONY: leptonica_clean clean_leptoonica_home clean_leptonica_out	clean_leptonica_bin	\
         leptonica_basic leptonica_basic_test 
 
 
