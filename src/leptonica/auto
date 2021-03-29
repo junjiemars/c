@@ -1,0 +1,50 @@
+# -*- mode:sh -*- vim:ft=sh
+
+has_leptonica_required=NO
+echo $echo_n " + checking for leptonica required ... $echo_c"
+if ((which libtoolize >/dev/null && libtoolize --version >/dev/null)            \
+     || (which glibtoolize >/dev/null && glibtoolize --version >/dev/null))     \
+    && ((which aclocal >/dev/null && aclocal --version >/dev/null)              \
+        && (which autoheader >/dev/null && autoheader --version >/dev/null)     \
+        && (which autoconf >/dev/null && autoconf --version >/dev/null)         \
+        && (which automake >/dev/null && automake --version >/dev/null)); then
+  echo "yes"
+  has_leptonica_required=YES
+  flag=has_leptonica_required op=":=" value="YES" \
+      . ${NORE_ROOT}/auto/make_define
+else
+  echo "no"
+fi
+
+# check sanitize feature
+#----------------------------------------
+case "$CC_NAME" in
+   gcc|clang)
+     nm_feature="$CC_NAME -fsanitize=address"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-fsanitize=address'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=f_sanitize op="+=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     nm_feature="$CC_NAME -fsanitize=leak"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-fsanitize=leak'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=f_sanitize op="+=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     ;;		 
+   msvc)
+     ;;
+esac
