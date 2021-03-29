@@ -51,7 +51,6 @@ $(leptonica_build): $(leptonica_home)
 		&& ./configure --prefix=$(CURDIR)/$(leptonica_out_prefix)	\
                    --disable-static														\
                    --disable-programs													\
-                   --enable-share															\
                    $(leptonica_enable_debug)									\
 		&& make -j4 install
 
