@@ -27,7 +27,7 @@ LDFLAGS += $(nm_libdir_opt)$(leptonica_out_libdir)
 
 
 leptonica_enable_debug :=
-ifeq (YES, $(_DEBUG_))
+ifeq (1, $(_DEBUG_))
 leptonica_enable_debug := --enable-debug
 endif # end of _DEBUG_
 
