@@ -1,5 +1,8 @@
 # -*- mode:sh -*- vim:ft=sh
 
+
+# check leptonica requirements
+#----------------------------------------
 has_leptonica_required=NO
 echo $echo_n " + checking for leptonica required ... $echo_c"
 if ((which libtoolize >/dev/null && libtoolize --version >/dev/null)            \

@@ -104,6 +104,9 @@ clean_leptonica_home:
 clean_leptonica_objs:
 	test ! -f $(CURDIR)/$(leptonica_home)/Makefile		\
 		|| make -C $(CURDIR)/$(leptonica_home) clean
+	test ! -f $(CURDIR)/$(leptonica_home)/Makefile		\
+		|| make -C $(CURDIR)/$(leptonica_home) uninstall
+
 
 clean_leptonica_bin:
 	test ! -f $(leptonica_basic_binout) || rm -r $(leptonica_basic_binout)
