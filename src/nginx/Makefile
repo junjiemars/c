@@ -5,7 +5,6 @@ nginx_out := $(CURDIR)/$(out)/var/nginx
 
 nginx_git_src := 'https://github.com/nginx/nginx.git'
 nginx_home := $(nginx_root)/nginx_home
-nginx_configure := $(nginx_home)/auto/configure
 
 
 nginx: nginx_module_hello												\
