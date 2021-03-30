@@ -85,12 +85,12 @@ main(int argc, char **argv)
 #if (NM_HAVE_STRDUP)
     test_strdup(strdup, s);
 
-#endif  /* end of NM_HAVE_STRDUP */
+#endif  /* NM_HAVE_STRDUP */
 
 #if (NM_HAVE_STRNDUP)
     test_strndup(strndup, s, 5);
 
-#endif  /* end of NM_HAVE_STRNDUP */
+#endif  /* NM_HAVE_STRNDUP */
 
     test_strdup(self_strdup, s);
     test_strndup(self_strndup, s, 5);
