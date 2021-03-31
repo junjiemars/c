@@ -5,13 +5,13 @@
 #include <assert.h>
 
 
-typedef size_t (*strnlen_fn)(const char *src, size_t maxlen);
-typedef char *(*strncpy_fn)(char *dst, const char *src, size_t len);
+typedef size_t (*strnlen_fn)(const char *src, size_t n);
+typedef char *(*strncpy_fn)(char *dst, const char *src, size_t n);
 typedef int (*strncmp_fn)(const char *s1, const char *s2, size_t n);
 
 
-size_t self_strnlen(const char *src, size_t len);
-char *self_strncpy(char *dst, const char *src, size_t len);
+static size_t self_strnlen(const char *src, size_t len);
+static char *self_strncpy(char *dst, const char *src, size_t len);
 
 
 static void test_strnlen(strnlen_fn fn, const char *src);
@@ -21,15 +21,15 @@ static void test_strncmp(strncmp_fn fn, const char *s1, const char *s2);
 static void fill_str(char *dst, char c, size_t n);
 
 size_t
-self_strnlen(const char *s, size_t maxlen)
+self_strnlen(const char *s, size_t n)
 {
-    size_t  n  =  0;
+    size_t  len  =  0;
 
-    while (*s++ && maxlen--) {
-        n++;
+    while (*s++ && n--) {
+        len++;
     }
 
-    return n;
+    return len;
 }
 
 char *
