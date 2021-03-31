@@ -61,32 +61,25 @@ self_strncmp(const char *s1, const char *s2, size_t n)
 void
 test_strnlen(strnlen_fn fn, const char *s)
 {
-    size_t  n;
-    size_t  len;
-    size_t  rn;
+    size_t  n, r;
+    size_t  eq, gt, lt;
 
     n = strlen(s);
 
-    /* len = n */
-    len = n;
-    rn = fn(s, len);
-    ASSERT(rn == len);
-    printf("strnlen | len = %zu, n = %zu, rn = %zu: %s\n",
-           len, n, rn, s);
+    eq = n;
+    r = fn(s, eq);
+    ASSERT(r == eq);
+    printf("strnlen | n = %zu, eq = %zu, r = %zu: %s\n", n, eq, r, s);
 
-    /* len < n */
-    len = n - 1;
-    rn = fn(s, len);
-    ASSERT(rn == len);
-    printf("strnlen | len = %zu, n = %zu, rn = %zu: %s\n",
-           len, n, rn, s);
+    lt = n - 1;
+    r = fn(s, lt);
+    ASSERT(r == lt);
+    printf("strnlen | n = %zu, lt = %zu, r = %zu: %s\n", n, lt, r, s);
 
-    /* len < n */
-    len = n + 1;
-    rn = fn(s, len);
-    ASSERT(rn < len);
-    printf("strnlen | len = %zu, n = %zu, rn = %zu: %s\n",
-           len, n, rn, s);
+    gt = n + 1;
+    r = fn(s, gt);
+    ASSERT(r < gt);
+    printf("strnlen | n = %zu, gt = %zu, r = %zu: %s\n", n, gt, r, s);
 }
 
 void
@@ -94,33 +87,34 @@ test_strncpy(strncpy_fn fn, char *src)
 {
     char    *dst  =  0;
     char    *d    =  0;
-    size_t   n, len;
+    size_t   n, r;
+    size_t   eq, gt, lt;
 
     n = strlen(src);
     dst = malloc(n + 1);
     fill_str(dst, '_', n);
 
-    /* len = n */
-    len = n;
+    eq = n;
     d = fn(dst, src, n);
     ASSERT(d == dst);
-    printf("strncpy | len = %zu, n = %zu: %s, %s\n",
-           len, n, src, dst);
+    r = strlen(d);
+    printf("strncpy | n = %zu, eq = %zu, r = %zu: %s, %s\n",
+           n, eq, r, src, dst);
 
-    /* len < n */
-    len = n - 1;
-    d = fn(dst, src, len);
-    ASSERT(dst[len-1] != 0);
-    dst[len] = 0;
-    printf("strncpy | len = %zu, n = %zu: %s, %s\n",
-           len, n, src, dst);
+    lt = n - 1;
+    d = fn(dst, src, lt);
+    ASSERT(dst[lt] != 0);
+    dst[n] = 0;
+    r = strlen(d);
+    printf("strncpy | n = %zu, lt = %zu, r = %zu: %s, %s\n",
+           n, lt, r, src, dst);
 
-    /* len > n */
-    len = n + 1;
-    d = fn(dst, src, len);
-    ASSERT(dst[n] == 0);
-    printf("strncpy | len = %zu, n = %zu: %s, %s\n",
-           len, n, src, dst);
+    gt = n + 1;
+    d = fn(dst, src, gt);
+    ASSERT(dst[gt - 1] == 0);
+    r = strlen(d);
+    printf("strncpy | n = %zu, gt = %zu, r = %zu: %s, %s\n",
+           n, gt, r, src, dst);
 
     free(dst);
 }
@@ -128,32 +122,29 @@ test_strncpy(strncpy_fn fn, char *src)
 void
 test_strncmp(strncmp_fn fn, const char *s1, const char *s2)
 {
-    int     cmp;
-    size_t  n1, n2, n;
-    size_t  len;
+    int     r;
+    size_t  n, n1, n2;
+    size_t  eq, gt, lt;
 
     n1 = strlen(s1);
     n2 = strlen(s2);
     n = n1 < n2 ? n1 : n2;
 
-    /* len = n */
-    len = n;
-    cmp = fn(s1, s2, len);
-    ASSERT(cmp == 0);
-    printf("strncmp | len = %zu, n = %zu, cmp = %02i: %s, %s\n",
-           len, n, cmp, s1, s2);
+    eq = n;
+    r = fn(s1, s2, eq);
+    ASSERT(r == 0);
+    printf("strncmp | n = %zu, eq = %zu, r = %02i: %s, %s\n",
+           n, eq, r, s1, s2);
 
-    /* len < n */
-    len = n - 1;
-    cmp = fn(s1, s2, len);
-    printf("strncmp | len = %zu, n = %zu, cmp = %02i: %s, %s\n",
-           len, n, cmp, s1, s2);
+    lt = n - 1;
+    r = fn(s1, s2, lt);
+    printf("strncmp | n = %zu, lt = %zu, r = %02i: %s, %s\n",
+           n, lt, r, s1, s2);
 
-    /* len > n */
-    len = n + 1;
-    cmp = fn(s1, s2, len);
-    printf("strncmp | len = %zu, n = %zu, cmp = %02i: %s, %s\n",
-           len, n, cmp, s1, s2);
+    gt = n + 1;
+    r = fn(s1, s2, gt);
+    printf("strncmp | n = %zu, gt = %zu, r = %02i: %s, %s\n",
+           n, gt, r, s1, s2);
 }
 
 void
@@ -170,13 +161,15 @@ fill_str(char *dst, char c, size_t n)
 int
 main(int argc, char **argv)
 {
+    char  *s1, *s2;
+
     if (argc < 3) {
         printf("where the lhs and rhs strings\n");
         return 0;
     }
 
-    char *s1 = argv[1];
-    char *s2 = argv[2];
+    s1 = argv[1];
+    s2 = argv[2];
 
 #if (NM_HAVE_STRNLEN)
     printf("----------\n");
