@@ -18,7 +18,9 @@ char *
 self_strdup(const char *s)
 {
     char    *s1;
-    size_t   n  =  strlen(s);
+    size_t   n;
+
+    n = strlen(s);
 
     s1 = malloc(n + 1);
     if (s1) {
