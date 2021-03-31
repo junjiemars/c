@@ -38,7 +38,7 @@ self_strncpy(char *dst, const char *src, size_t n)
     char  *p  =  dst;
 
     while (n-- && (0 != (*p++ = *src++))) {
-        /* do nothing */
+        /* void */
     }
 
     return dst;
@@ -47,15 +47,15 @@ self_strncpy(char *dst, const char *src, size_t n)
 int
 self_strncmp(const char *s1, const char *s2, size_t n)
 {
-    int  cmp;
+    int  rc;
 
     while (*s1 && *s2 && (*s1 == *s2) && n > 1) {
         s1++, s2++, n--;
     }
 
-    cmp = *(unsigned char *)s1 - *(unsigned char *)s2;
+    rc = *(unsigned char *) s1 - *(unsigned char *) s2;
 
-    return cmp % 2;
+    return rc % 2;
 }
 
 void
