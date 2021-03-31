@@ -17,11 +17,13 @@ static void test_strndup(strndup_fn fn, const char *s);
 char *
 self_strdup(const char *s)
 {
-    char  *s1;
+    char    *s1;
+    size_t   n  =  strlen(s);
 
-    s1 = malloc(strlen(s) + 1);
+    s1 = malloc(n + 1);
     if (s1) {
-        strcpy(s1, s);
+        memcpy(s1, s, n);
+        s1[n] = 0;
         return s1;
     }
 
@@ -33,9 +35,10 @@ self_strndup(const char *s, size_t n)
 {
     char  *s1;
 
-    s1 = malloc(n+1);
+    s1 = malloc(n + 1);
     if (s1) {
-        strncpy(s1, s, n);
+        memcpy(s1, s, n);
+        s1[n] = 0;
         return s1;
     }
 
@@ -60,7 +63,7 @@ test_strdup(strdup_fn fn, const char *s)
 void
 test_strndup(strndup_fn fn, const char *s)
 {
-    char    *eq, *gt, *lt;                                                   \
+    char    *eq, *gt, *lt;
     size_t   n;
 
     n = strlen(s);
@@ -111,12 +114,13 @@ main(int argc, char **argv)
 
 #endif  /* NM_HAVE_STRDUP */
 
+    test_strdup(self_strdup, s);
+
 #if (NM_HAVE_STRNDUP)
     test_strndup(strndup, s);
 
 #endif  /* NM_HAVE_STRNDUP */
 
-    test_strdup(self_strdup, s);
     test_strndup(self_strndup, s);
 
     return 0;
