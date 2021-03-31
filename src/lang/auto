@@ -225,30 +225,37 @@ snprintf(buf, sizeof(buf), \"%s\", \"xyz\")";
 . ${NORE_ROOT}/auto/feature
 
 
-nm_feature="strn* fn: strnlen,strncpy,strncmp"
-nm_feature_name="nm_have_strn_any_fn"
+# check strnlen
+#----------------------------------------
+nm_feature="strnlen()"
+nm_feature_name="NM_HAVE_STRNLEN"
 nm_feature_run=no
 nm_feature_h="#include <string.h>"
 nm_feature_flags=
-nm_feature_test="
-char *xyz = \"xyz\";
-char buf[16];
-size_t len = strnlen(xyz, 16);
-strncpy(buf, xyz, sizeof(buf));
-strncmp(buf, xyz, len)";
+nm_feature_test='size_t len = strnlen("xyz", 16);'
 . ${NORE_ROOT}/auto/feature
 
 
-nm_feature="str*_s fn: strlen_s,strcpy_s"
-nm_feature_name="nm_have_str_any_s fn"
+# check strncpy
+#----------------------------------------
+nm_feature="strncpy()"
+nm_feature_name="NM_HAVE_STRNCPY"
 nm_feature_run=no
 nm_feature_h="#include <string.h>"
 nm_feature_flags=
-nm_feature_test="
-char *xyz = \"xyz\";
-char buf[16];
-size_t len = strlen(xyz);
-strcpy_s(buf, sizeof(buf), xyz);"
+nm_feature_test='char buf[16];
+                 strncpy(buf, "xyz", sizeof(buf));'
+. ${NORE_ROOT}/auto/feature
+
+
+# check strncmp
+#----------------------------------------
+nm_feature="strncmp()"
+nm_feature_name="NM_HAVE_STRNCMP"
+nm_feature_run=no
+nm_feature_h="#include <string.h>"
+nm_feature_flags=
+nm_feature_test='strncmp("abc", "aBc", 1);'
 . ${NORE_ROOT}/auto/feature
 
 
