@@ -311,23 +311,25 @@ case "$CC_NAME" in
 esac
 
 
-nm_feature="restrict keyword"
-nm_feature_name="nm_have_restrict_keyword"
+# check restrict keyword
+#----------------------------------------
+nm_feature="restrict"
+nm_feature_name="NM_HAVE_RESTRICT"
 nm_feature_run=
 nm_feature_h=
 nm_feature_flags=
 nm_feature_test='int x = 0x11; int *restrict p = &x;'
 . ${NORE_ROOT}/auto/feature
-
 if [ "yes" != $nm_found ]; then
 	nm_feature="__restrict keyword"
-	nm_feature_name="nm_have___restrict_keyword"
+	nm_feature_name="NM_HAVE___RESTRICT"
 	nm_feature_run=
 	nm_feature_h=
 	nm_feature_flags=
 	nm_feature_test='int x = 0x11; int *__restrict p = &x;'
 	. ${NORE_ROOT}/auto/feature
 fi
+
 
 nm_feature="arc4random_uniform fn"
 nm_feature_name='nm_have_arc4random_uniform_fn'
