@@ -106,6 +106,8 @@ lang_assert_cppout := $(tmp_path)/$(lang_prefix)_assert$(cpp_ext)
 
 lang_assert: $(lang_assert_binout)
 lang_assert_test: lang_assert
+	-$(lang_assert_binout) -1
+	-$(lang_assert_binout) 101
 	-$(lang_assert_binout) 49
 
 $(lang_assert_binout): $(lang_assert_cppout)
