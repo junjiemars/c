@@ -78,11 +78,12 @@ $(nginx_module_hello_binout): $(nginx_home)
 # njs
 nginx_njs_git_src := 'https://github.com/nginx/njs.git'
 nginx_njs_module_root := $(CURDIR)/$(nginx_root)/njs
+nginx_njs_module_src := $(nginx_njs_module_root)/src
 nginx_module_njs_prefix := $(nginx_out)/njs
 nginx_module_njs_binout := $(nginx_module_njs_prefix)/sbin/nginx
 
 
-$(nginx_njs_module_root)/src:
+$(nginx_njs_module_src):
 	git clone --depth=1 --branch=master $(nginx_njs_git_src) $@
 
 
@@ -97,7 +98,7 @@ nginx_module_njs_test: nginx_module_njs
 endif # end of msvc
 
 
-$(nginx_module_njs_binout): $(nginx_njs_module_root)/src
+$(nginx_module_njs_binout): $(nginx_njs_module_src)
 	cd $(nginx_home)																										\
 		&& auto/configure --prefix=$(nginx_module_njs_prefix)							\
                       --without-http_memcached_module									\
