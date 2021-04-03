@@ -105,7 +105,7 @@ $(nginx_module_njs_binout): $(nginx_njs_module_src)
                       --without-http_rewrite_module										\
                       --without-http-cache														\
                       --without-http_proxy_module											\
-                      --add-module=$(nginx_njs_module_root)/src/nginx	\
+                      --add-module=$(nginx_njs_module_src)/nginx	    \
                       --with-cc-opt="$(nginx_cc_opt)"									\
                       --with-ld-opt="$(nginx_ld_opt)"									\
                       $(nginx_debug_opt)															\
