@@ -14,30 +14,29 @@
 int
 sqr(int x)
 {
-	assert(((0 < x) && (x < 100)) && "0 < x < 100");
-	return (x * x);
+    assert(((0 < x) && (x < 100)) && "x !in (0, 100)");
+    return (x * x);
 }
 
 int
-main(int argc, const char* argv[])
+main(int argc, const char **argv)
 {
-	assert((argc > 1) && "usage: one <int>");
+    assert((argc > 1) && "usage: one <int>");
 
-  char *mode =
+    printf("in %s mode\n",
 #if (NDEBUG)
-    "RELEASE";
+           "RELEASE"
 #else
-  "DEBUG";
-#endif
-	printf("in %s mode\n", mode);
+           "DEBUG"
+#endif  /* NDEBUG */
+        );
 
-	static_assert(4 == sizeof(int), "sizeof(int) != 4 bytes");
+    static_assert(4 == sizeof(int), "sizeof(int) != 4 bytes");
 
-	if (argc > 1)
-    {
-      int n = atoi(argv[1]);
-      printf("sqr(%i)=%u\n", n, sqr(n));
+    if (argc > 1) {
+        int n = atoi(argv[1]);
+        printf("sqr(%i)=%u\n", n, sqr(n));
     }
 
-	return 0;
+    return 0;
 }
