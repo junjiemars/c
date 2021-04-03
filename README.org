@@ -269,6 +269,20 @@ purposes. =#pragma= is commonly used to suppress warnings.
   abbreviated month, =Date= is the current day of the month (1-31),
   and =yyyy= is the four digit year, such as "Tue Sep 25 16:44:08 2018"
 
+** main
+	 :PROPERTIES:
+	 :CUSTOM_ID: language_main
+	 :END:
+
+** exit
+	 :PROPERTIES:
+	 :CUSTOM_ID: language_exit
+	 :END:
+
+Most C programs call the library routine =exit=, which flushes
+buffers, closes streams, unlinks temporary files, etc., before calling
+=_exit=.
+
 ** assert
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_assert

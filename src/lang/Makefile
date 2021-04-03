@@ -180,12 +180,18 @@ $(lang_error_basic_binout): $(lang_root)/error/e.c
 
 # exit
 lang_exit_binout := $(bin_path)/$(lang_prefix)_exit$(bin_ext)
+lang__exit_binout := $(bin_path)/$(lang_prefix)__exit$(bin_ext)
 
-lang_exit: $(lang_exit_binout)
+lang_exit: $(lang_exit_binout)									\
+           $(lang__exit_binout)
 lang_exit_test: lang_exit
 	$(lang_exit_binout)
+	$(lang__exit_binout)
 
 $(lang_exit_binout): $(lang_root)/exit/e.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(lang__exit_binout): $(lang_root)/exit/e1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
