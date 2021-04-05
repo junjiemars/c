@@ -42,12 +42,12 @@ endif
 
 
 # node.js
-ffi_nodejs_prefix := $(CURDIR)/$(out)/nodejs
-ffi_nodejs_libm_js := $(CURDIR)/$(ffi_root)/node/libm.js
+ffi_nodejs_prefix := $(CURDIR)/$(out)/var/nodejs
+ffi_nodejs_libm_js := $(CURDIR)/$(ffi_root)/node/n.js
 
 ifeq (YES, $(has_nodejs))
 ffi_nodejs:
-	-@npm explain --prefix=$(ffi_nodejs_prefix) ffi-napi		\
+	-@npm explain --prefix=$(ffi_nodejs_prefix) ffi-napi >/dev/null	\
 		|| npm install --prefix=$(ffi_nodejs_prefix) ffi-napi
 else
 ffi_nodejs:
@@ -57,10 +57,8 @@ endif														# has_nodejs
 ffi_nodejs_test: ffi_nodejs
 	NODE_PATH=$(ffi_nodejs_prefix)/node_modules node $(ffi_nodejs_libm_js)
 
-ffi_nodejs_clean: clean
-	-$(RM) -r $(ffi_nodejs_prefix)
 
-.PHONY: ffi_jni ffi_jni_test												\
-        ffi_nodejs ffi_nodejs_test ffi_nodejs_clean
+.PHONY: ffi_jni ffi_jni_test										\
+        ffi_nodejs ffi_nodejs_test
 
 # eof
