@@ -43,13 +43,13 @@ cffix_test: cffix
 
 
 $(cffix_libout): $(library_root)/cffi/cffix.c $(cffix.h)
-	$(CC) $(CFLAGS) -DEXPORT=1 $(INC) $(nm_shared_opt) $< $(bin_out)$@
+	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $(nm_shared_opt) $< $(bin_out)$@
 
 $(cffix_h): $(library_root)/cffi/cffix.h
 	cp $< $(inc_path)
 
 $(cffix_binout): $(library_root)/cffi/call.c $(cffix_libout)
-	$(CC) $(CFLAGS) -DEXPORT=0 $(INC) $< $(bin_out)$@ $(LDFLAGS) $(cffix_ldlibs)
+	$(CC) $(CFLAGS) -DSHARED=0 $(INC) $< $(bin_out)$@ $(LDFLAGS) $(cffix_ldlibs)
 
 
 # geo

@@ -6,11 +6,11 @@
 
 
 #if (MSVC)
-#  if (1 == EXPORT)
+#  if (1 == SHARED)
 #    define CFFIX_API __declspec(dllexport) __stdcall
-#  elif (0 == EXPORT)
+#  elif (0 == SHARED)
 #    define CFFIX_API __declspec(dllimport) __stdcall
-#  endif /* EXPORT */
+#  endif /* SHARED */
 #else
 #  define CFFIX_API
 #endif /* MSVC */
