@@ -14,11 +14,11 @@ if [ -n "$javac_ver" ]; then
 else
   echo "no"
 fi
-flag=javac_ver value=${javac_ver} . ${NORE_ROOT}/auto/make_define
+flag=javac_ver op=":=" value=${javac_ver} . ${NORE_ROOT}/auto/make_define
 javac_ge_8=NO
 if test ${javac_ver} -ge 8 &> /dev/null; then
   javac_ge_8=YES
-  flag=javac_ge_8 value="$javac_ge_8" . ${NORE_ROOT}/auto/make_define
+  flag=javac_ge_8 op=":=" value="$javac_ge_8" . ${NORE_ROOT}/auto/make_define
 fi
 
 # java home
@@ -128,5 +128,21 @@ if [ -d "$java_home" ]; then
 	    ;;
   esac
 fi
+
+
+# check nodejs
+#----------------------------------------
+echo ${echo_n} " + checking for node.js version ... " ${echo_c}
+has_nodejs=NO
+nodejs_ver="`node --version 2>/dev/null`"
+if [ -n "nodejs_ver" ]; then
+  has_nodejs="YES"
+  echo "yes"
+else
+  echo "no"
+fi
+flag=nodejs_ver op=":=" value=${node_ver} . ${NORE_ROOT}/auto/make_define
+flag=has_nodejs op=":=" value=${has_nodejs} . ${NORE_ROOT}/auto/make_define
+
 
 # EOF

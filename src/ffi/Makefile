@@ -5,8 +5,12 @@
 ffi_prefix := ffi
 INC += -I$(ffi_root)
 
-ffi: ffi_jni
-ffi_test: ffi_jni_test
+ffi: ffi_jni																		\
+     ffi_nodejs
+
+ffi_test: ffi_jni_test													\
+          ffi_nodejs_test
+
 
 # jni
 jni_square_libout := $(lib_path)/libsquare$(lib_ext)
@@ -36,6 +40,22 @@ ffi_jni:
 ffi_jni_test: ffi_jni
 endif
 
-.PHONY: ffi_jni ffi_jni_test
+
+# node.js
+ffi_nodejs_libm_js := $(CURDIR)/$(ffi_root)/node/libm.js
+
+ifeq (YES, $(has_nodejs))
+ffi_nodejs:
+	-@npm explain ffi-napi || npm install ffi-napi
+else
+ffi_nodejs:
+	@echo "#skip ffi_nodejs_test ..."
+endif														# has_nodejs
+
+ffi_nodejs_test: ffi_nodejs
+	node $(ffi_nodejs_libm_js)
+
+.PHONY: ffi_jni ffi_jni_test										\
+        ffi_nodejs ffi_nodejs_test
 
 # eof

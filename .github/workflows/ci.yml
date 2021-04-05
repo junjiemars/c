@@ -26,6 +26,7 @@ jobs:
           sudo apt-get install libuv1-dev
           sudo apt-get install libjemalloc-dev
           sudo apt-get install libfl-dev
+          sudo apt-get install nodejs npm
       - name: Setup Env
         run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
       - name: Build and Test

@@ -80,10 +80,17 @@ nore/
 **/*.html
 **/*.odt
 
+# nginx
 src/nginx/nd.sh
 src/nginx/nginx.sh
 src/nginx/nginx.conf
 src/nginx/nginx_home
 src/nginx/njs/src
 
+# leptonica
 src/leptonica/leptonica_home
+
+# node.js
+**/node_modules/
+**/package-lock.json
+**/package.json
