@@ -4,16 +4,16 @@
 #include "nore.h"
 #include <stddef.h>
 
-/* make: CFLAGS=-DSHARED=1 */
+
 #if (MSVC)
 #  if (1 == EXPORT)
 #    define CFFIX_API __declspec(dllexport) __stdcall
 #  elif (0 == EXPORT)
 #    define CFFIX_API __declspec(dllimport) __stdcall
-#  endif /* end of EXPORT */
+#  endif /* EXPORT */
 #else
 #  define CFFIX_API
-#endif /* end of MSVC */
+#endif /* MSVC */
 
 
 #ifdef __cplusplus
@@ -25,7 +25,7 @@ extern "C" {
 
 #ifdef __cplusplus
 }
-#endif
+#endif  /* __cplusplus */
 
 
 #endif /* _CFFIX_H_ */
