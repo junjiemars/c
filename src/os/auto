@@ -43,11 +43,39 @@ case "$CC_NAME" in
      ;;
 esac
 
+
+# check brk
+#----------------------------------------
+case "$NM_SYSTEM" in
+   Linux)
+     nm_feature="brk()"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h='#include <unistd.h>'
+     nm_feature_flags=
+     nm_feature_tails=
+     nm_feature_test='brk(0);'
+     . ${NORE_ROOT}/auto/feature
+
+     if [ yes = $nm_found ]; then
+       flag=has_brk op="=" value="YES" \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     ;;
+	 Darwin)
+     ;;
+   WinNT)
+     ;;
+esac
+
+
+
 # check libwrap
 #----------------------------------------
 case "$NM_SYSTEM" in
    Linux)
-     nm_feature="library: tcp wrapper"
+     nm_feature="tcp wrapper"
      nm_feature_name=
      nm_feature_indent=yes
      nm_feature_run=no

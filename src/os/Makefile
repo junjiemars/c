@@ -2,14 +2,17 @@
 # ./configure --without-debug --has-os
 #
 
-os: os_echo																			\
+os: os_brk																			\
+    os_echo																			\
     os_exec																			\
     os_msq																			\
     os_tcpwrapper
-os_test: os_echo_test														\
+os_test: os_brk_test														\
+         os_echo_test														\
          os_exec_test														\
          os_msq_test														\
          os_tcpwrapper_test
+
 
 os_prefix := os
 INC += -I$(os_root) -I$(root)
@@ -21,6 +24,24 @@ endif # msvc
 ifeq (1, $(_MEMORY_))
 	CFLAGS += $(cflags_sanitize)
 endif # _MEMORY_
+
+
+# brk
+os_brk_binout := $(bin_path)/$(os_prefix)_brk$(bin_ext)
+
+ifeq (YES, $(has_brk))
+os_brk: $(os_brk_binout)
+os_brk_test: os_brk
+	$(os_brk_binout)
+else
+os_brk:
+	@echo "#skip os_brk_test ..."
+os_brk_test: os_brk
+endif														# LINUX
+
+
+$(os_brk_binout): $(os_root)/brk/b.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # echo
