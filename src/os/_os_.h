@@ -3,7 +3,7 @@
 
 #include "nore.h"
 
-#define _unused_(x) (void)(x)
+#define _unused_(x)  ((void)(x))
 
 
 #endif /* end of _OS_H_ */

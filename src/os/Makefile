@@ -14,13 +14,14 @@ os_test: os_echo_test														\
 os_prefix := os
 INC += -I$(os_root) -I$(root)
 
-ifeq ($(CC_NAME),msvc)
+ifeq (msvc, $(CC_NAME))
 	getopt_c := $(root)/posix/getopt.c
-endif # end of msvc
+endif # msvc
 
-ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
+ifeq (1, $(_MEMORY_))
 	CFLAGS += $(cflags_sanitize)
-endif # end of _MEMORY_
+endif # _MEMORY_
+
 
 # echo
 os_echo_binout := $(bin_path)/$(os_prefix)_echo$(bin_ext)
@@ -47,7 +48,7 @@ $(os_exec_binout): $(os_root)/exec/e.c
 # msq
 os_msq_binout := $(bin_path)/$(os_prefix)_msq$(bin_ext)
 
-ifeq ($(NM_SYSTEM), Linux)
+ifeq (Linux, $(NM_SYSTEM))
 CFLAGS += -D_GNU_SOURCE
 os_msq: $(os_msq_binout)
 os_msq_test: os_msq
@@ -65,10 +66,11 @@ endif
 $(os_msq_binout): $(os_root)/msq/q.c
 	$(CC) $(CFLAGS) $(msq_cflags) $(INC) $^ $(bin_out)$@
 
+
 # tcp wrapper
 os_tcpwrapper_binout := $(bin_path)/$(os_prefix)_tcpwrapper$(bin_ext)
 
-ifeq ($(has_tcpwrapper),YES)
+ifeq (YES, $(has_tcpwrapper))
 os_tcpwrapper: $(os_tcpwrapper_binout)
 os_tcpwrapper_test: os_tcpwrapper
 	$(os_tcpwrapper_binout)
@@ -80,5 +82,6 @@ endif
 
 $(os_tcpwrapper_binout): $(os_root)/tcpwrapper/tw.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ldlibs_tcpwrapper)
+
 
 # eof
