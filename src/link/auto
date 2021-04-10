@@ -1,0 +1,27 @@
+# -*- mode:sh -*- vim:ft=sh
+#
+
+
+# # check nlist
+# #----------------------------------------
+# case "$NM_SYSTEM" in
+# 	Darwin)
+#     nm_feature="nlist()"
+#     nm_feature_name='NM_HAVE_NLIST'
+#     nm_feature_indent=yes
+#     nm_feature_run=no
+#     nm_feature_h='#include <mach-o/nlist.h>'
+#     nm_feature_flags='-v'
+#     nm_feature_tails='-L/usr/lib -F/Library/Frameworks -F/System/Library/Frameworks -lSystem -lxcselect'
+#     nm_feature_value=
+#     nm_feature_test='struct nlist n = {0};
+#                      nlist("x", &n);'
+#     . ${NORE_ROOT}/auto/feature
+# 		;;
+# 	Linux)
+# 		;;
+# 	WinNT)
+# 		;;
+# esac
+
+# eof

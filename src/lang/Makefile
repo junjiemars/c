@@ -1,5 +1,5 @@
 #
-# ./configure --without-debug --has-lang
+# ./configure --has-lang
 #
 
 lang_prefix := lang

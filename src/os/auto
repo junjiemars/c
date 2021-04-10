@@ -59,11 +59,10 @@ case "$NM_SYSTEM" in
      . ${NORE_ROOT}/auto/feature
 
      if [ yes = $nm_found ]; then
-       flag=has_brk op="=" value="YES" \
-           . ${NORE_ROOT}/auto/make_define
+       flag=has_brk op="=" value="YES" . ${NORE_ROOT}/auto/make_define
      fi
      ;;
-	 Darwin)
+   Darwin)
      ;;
    WinNT)
      ;;

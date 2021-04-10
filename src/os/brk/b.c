@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 
-#if (LINUX)
+#if (LINUX) || (DARWIN)
 #  include <unistd.h>
 #endif  /* LINUX */
 
@@ -13,7 +13,7 @@ static void test_brk(void);
 void
 test_brk(void)
 {
-    int rc;
+    int    rc;
     
     rc = brk(0);
     if (rc) {
