@@ -2586,6 +2586,17 @@ table in a executable.
 |       |      | nm -m <bin>  |
 | Linux | nm   | nm <bin>     |
 
+** Remove symbols
+	 :PROPERTIES:
+	 :CUSTOM_ID: remove-symbols
+	 :END:
+
+| OS    | name  | command line |
+|-------+-------+--------------|
+| MacOS | strip | nm <bin>     |
+| Linux | strip | nm <bin>     |
+
+
 ** Disassembly
 
 | OS    | name    | command line     |
