@@ -13,8 +13,8 @@ test_setenv(const char *name, const char *value)
 {
     int    rc;
     char  *env;
-    char   new_value[N]  =  {0};
-    char   new_env[N]    =  {0};
+    char  *new_value  =  0;
+    char  *new_env    =  0;
     
     rc = setenv(name, value, 0);
     if (rc) {
@@ -23,6 +23,18 @@ test_setenv(const char *name, const char *value)
     }
     env = getenv(name);
     printf("%s=%s\n", name, env);
+
+    new_value = malloc(N + 1);
+    if (!new_value) {
+        perror(0);
+        goto clean_exit;
+    }
+
+    new_env = malloc(N + 1);
+    if (!new_env) {
+        perror(0);
+        goto clean_exit;
+    }
 
     strcpy(new_value, value);
     strcat(new_value, "Zzz");
@@ -37,7 +49,7 @@ test_setenv(const char *name, const char *value)
     rc = putenv(new_env);
     if (rc) {
         perror(0);
-        return;
+        goto clean_exit;
     }
     env = getenv(name);
     printf("%s=%s\n", name, env);
@@ -45,10 +57,14 @@ test_setenv(const char *name, const char *value)
     rc = unsetenv(name);
     if (rc) {
         perror(0);
-        return;
+        goto clean_exit;
     }
     env = getenv(name);
     printf("%s=%s\n", name, env);
+    
+clean_exit:
+    free(new_value);
+    free(new_env);
 }
 
 int 
