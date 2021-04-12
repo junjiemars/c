@@ -16,8 +16,9 @@ nm_feature_test='int i=0x11223344;
                  printf("%d", le);'
 . ${NORE_ROOT}/auto/feature
 
-## check machine features
-##----------------------------------------
+
+# check machine features
+#----------------------------------------
 case "$NM_SYSTEM" in
   Darwin)
     nm_feature="cache line size"
@@ -434,7 +435,32 @@ case "$CC_NAME" in
 esac
 
 
-# entry
+# check machine features
+#----------------------------------------
+case "$NM_SYSTEM" in
+  Darwin)
+    ;;
+  Linux)
+    nm_feature="secure_getenv()"
+    nm_feature_name='NM_HAVE_SECURE_GETENV'
+    nm_feature_indent=yes
+    nm_feature_run=no
+    nm_feature_h='#include <stdlib.h>'
+    nm_feature_flags=
+    nm_feature_value=
+    nm_feature_test='secure_getenv("SHELL");'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  WinNT)
+    ;;
+  *)
+    nm_found=no
+    ;;
+esac
+
+
+# check entry
+#----------------------------------------
 case "$NM_SYSTEM" in
 	Darwin)
     case "$CC_NAME" in
@@ -462,5 +488,7 @@ case "$NM_SYSTEM" in
     # esac
 		;;
 esac
+
+
 
 # eof

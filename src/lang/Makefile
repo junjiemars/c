@@ -153,6 +153,7 @@ $(lang_enum_cppout): $(lang_root)/enum/e.c
 # env
 lang_env_get_binout := $(bin_path)/$(lang_prefix)_env_get$(bin_ext)
 lang_env_set_binout := $(bin_path)/$(lang_prefix)_env_set$(bin_ext)
+lang_env_put_binout := $(bin_path)/$(lang_prefix)_env_put$(bin_ext)
 
 lang_env: lang_env_get													\
           lang_env_set
@@ -177,6 +178,9 @@ $(lang_env_get_binout): $(lang_root)/env/get.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_env_set_binout): $(lang_root)/env/set.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(lang_env_put_binout): $(lang_root)/env/put.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
