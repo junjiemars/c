@@ -151,17 +151,34 @@ $(lang_enum_cppout): $(lang_root)/enum/e.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # env
-lang_env_var_binout := $(bin_path)/$(lang_prefix)_env_var$(bin_ext)
+lang_env_get_binout := $(bin_path)/$(lang_prefix)_env_get$(bin_ext)
+lang_env_set_binout := $(bin_path)/$(lang_prefix)_env_set$(bin_ext)
 
-$(lang_env_var_binout): $(lang_root)/env/var/var.c
-	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
+lang_env: lang_env_get													\
+          lang_env_set
 
-lang_env: $(lang_env_var_binout)
-lang_env_test: lang_env
-	$(lang_env_var_binout) --COUNT=2 --TEXT=Bonjour
-	COUNT=2 $(lang_env_var_binout)
-	COUNT=3 TEXT="Bonjor" $(lang_env_var_binout)
-	COUNT=2 $(lang_env_var_binout) --TEXT=Bonjour
+lang_env_test: lang_env_get_test								\
+               lang_env_set_test
+
+lang_env_get: $(lang_env_get_binout)
+lang_env_set: $(lang_env_set_binout)
+
+lang_env_get_test: lang_env_get
+	$(lang_env_get_binout) --COUNT=2 --TEXT=Bonjour
+	COUNT=2 $(lang_env_get_binout)
+	COUNT=3 TEXT="Bonjor" $(lang_env_get_binout)
+	COUNT=2 $(lang_env_get_binout) --TEXT=Bonjour
+
+lang_env_set_test: lang_env_set
+	$(lang_env_set_binout) "" "zzz"
+	$(lang_env_set_binout) "XXX" "zzz"
+
+$(lang_env_get_binout): $(lang_root)/env/get.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(lang_env_set_binout): $(lang_root)/env/set.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # error
 lang_error_basic_binout := $(bin_path)/$(lang_prefix)_error_basic$(bin_ext)
