@@ -178,7 +178,7 @@ lang_env_get_test: lang_env_get
 	COUNT=2 $(lang_env_get_binout) --TEXT=Bonjour
 
 lang_env_set_test: lang_env_set
-	$(lang_env_set_binout) "" "zzz"
+	# $(lang_env_set_binout) "" "zzz"
 	$(lang_env_set_binout) "XXX" "zzz"
 
 $(lang_env_lst_binout): $(lang_root)/env/lst.c
