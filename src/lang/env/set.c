@@ -13,7 +13,7 @@ test_setenv(const char *name, const char *value)
 {
     int          rc;
     char        *env;
-    char        *new_value  =  0;
+    char        new_value[N] = {0};
     
     rc = setenv(name, value, 0);
     if (rc) {
@@ -22,12 +22,6 @@ test_setenv(const char *name, const char *value)
     }
     env = getenv(name);
     printf("%s=%s\n", name, env);
-
-    new_value = malloc(N + 1);
-    if (!new_value) {
-        perror(0);
-        goto clean_exit;
-    }
 
     strcpy(&new_value[0], value);
     strcat(&new_value[0], "Zzz");
@@ -38,9 +32,6 @@ test_setenv(const char *name, const char *value)
     }
 
     printf("%s=%s\n", name, new_value);
-
-clean_exit:
-    free(new_value);
 }
 
 int 
