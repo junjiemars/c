@@ -58,8 +58,7 @@ jobs:
           fetch-depth: 0
       - name: Install Dependencies
         run: |
-          brew install automake autoconf libtool
-          brew install pkg-config
+          brew install automake
           brew install libuv
       - name: Setup Env
         run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
