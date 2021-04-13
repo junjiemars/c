@@ -6,10 +6,10 @@
 #  include <unistd.h>
 #endif
 
-static void on_exit(void);
+static void on_exit__(void);
 
 void
-on_exit(void)
+on_exit__(void)
 {
     printf("----------\n");
     printf("existing ...\n");
@@ -18,7 +18,7 @@ on_exit(void)
 int
 main(void)
 {
-    atexit(&on_exit);
+    atexit(&on_exit__);
     
     printf("calling exit() ...\n");
     _exit(EXIT_SUCCESS);
