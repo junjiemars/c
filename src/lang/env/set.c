@@ -7,6 +7,7 @@
 
 #if (MSVC)
 #  define setenv(name, value, _)  _putenv_s(name, value)
+#  define unsetenv(name)   _putenv_s(name, "");
 #endif  /* MSVC */
 
 static void test_setenv(const char *name, const char *value);
