@@ -5,7 +5,7 @@
 
 static void at_exit_first(void);
 static void at_exit_second(void);
-static void on_exit_third(int, void *);
+
 
 void
 at_exit_first(void)
@@ -19,13 +19,6 @@ at_exit_second(void)
 {
     printf("----------\n");
     printf("existing second ...\n");
-}
-
-void
-on_exit_third(int status, void *ss)
-{
-    printf("----------\n");
-    printf("existing third (%i, %s) ...\n", status, (const char*) ss);
 }
 
 
@@ -45,7 +38,7 @@ main(int argc, char **argv)
         return 1;
     }
 
-    if (on_exit(on_exit_third, "what?")) {
+    if (atexit(at_exit_second)) {
       perror("3rd");
       return 1;
     }
