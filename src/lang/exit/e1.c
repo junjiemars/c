@@ -6,23 +6,20 @@
 #  include <unistd.h>
 #endif
 
-static void on_exit__(void);
+static void at_exit(void);
 
 void
-on_exit__(void)
+at_exit(void)
 {
     printf("----------\n");
     printf("existing ...\n");
 }
 
+
 int
 main(void)
 {
-    atexit(&on_exit__);
-    
-    printf("calling exit() ...\n");
-    _exit(EXIT_SUCCESS);
+    atexit(&at_exit);
 
-    /* unreachable code */
-    /* return 0; */
+    _exit(EXIT_SUCCESS);
 }
