@@ -5,7 +5,7 @@
 
 #define N  32
 
-#if (MSVC)
+#if (MSVC) && (WINNT)
 #  define setenv(name, value, _)  _putenv_s(name, value)
 #  define unsetenv(name)   _putenv_s(name, "");
 #endif  /* MSVC */

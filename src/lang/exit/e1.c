@@ -23,5 +23,6 @@ main(void)
     printf("calling exit() ...\n");
     _exit(EXIT_SUCCESS);
 
-    return 0;
+    /* unreachable code */
+    /* return 0; */
 }
