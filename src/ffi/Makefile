@@ -29,6 +29,7 @@ $(jni_square_libout): $(java2c_h)								\
 $(java2c_h) $(java2c_classout): $(ffi_root)/jni/Java2c.java
 	$(JAVAC) -h $(inc_path) -d $(bin_path) $^
 
+
 ifeq (YES, $(javac_ge_8))
 ffi_jni: $(jni_square_libout)										\
          $(java2c_classout)
@@ -44,18 +45,20 @@ endif
 # node.js
 ffi_nodejs_prefix := $(CURDIR)/$(out)/var/nodejs
 ffi_nodejs_libm_js := $(CURDIR)/$(ffi_root)/node/n.js
+ffi_nodejs := $(ffi_nodejs_prefix)/package-lock.json
 
 ifeq (YES, $(has_nodejs))
-ffi_nodejs:
+$(ffi_nodejs):
 	-@npm explain --prefix=$(ffi_nodejs_prefix) ffi-napi >/dev/null	\
 		|| npm install --prefix=$(ffi_nodejs_prefix) ffi-napi
+ffi_nodejs_test: $(ffi_nodejs)
+	NODE_PATH=$(ffi_nodejs_prefix)/node_modules node $(ffi_nodejs_libm_js)
 else
 ffi_nodejs:
 	@echo "#skip ffi_nodejs_test ..."
+ffi_nodejs_test: ffi_nodejs
 endif														# has_nodejs
 
-ffi_nodejs_test: ffi_nodejs
-	NODE_PATH=$(ffi_nodejs_prefix)/node_modules node $(ffi_nodejs_libm_js)
 
 
 .PHONY: ffi_jni ffi_jni_test										\

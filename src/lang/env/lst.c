@@ -10,9 +10,9 @@ main(int argc, char **argv)
     _unused_(argc);
     _unused_(argv);
 
-    printf("environ at 0x%zx\n----------\n", (unsigned long) environ);
+    printf("environ at 0x%p\n----------\n", (void *) environ);
 
-    while (*environ++) {
+    for (char *p = *environ; p; p = *++environ) {
         printf("%s\n", *environ);
     }
 
