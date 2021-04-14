@@ -135,7 +135,7 @@ fi
 echo ${echo_n} " + checking for node.js version ... " ${echo_c}
 has_nodejs=NO
 nodejs_ver="`node --version 2>/dev/null`"
-if [ -n "nodejs_ver" ]; then
+if [ -n "$nodejs_ver"]; then
   has_nodejs="YES"
   echo "yes"
 else
