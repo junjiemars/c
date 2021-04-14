@@ -5,8 +5,8 @@
 
 #define N  32
 
-#if (MSVC) && (WINNT)
-#  define setenvx(name, value, _)  _putenv_s(name, value)
+#if (MSVC)
+#define setenvx(name, value, _)  _putenv_s(name, value)
 #endif  /* MSVC */
 
 static void test_setenv(const char *name, const char *value);
