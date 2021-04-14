@@ -8,6 +8,11 @@
 #  include <unistd.h>
 #endif  /* DARWIN || LINUX */
 
+#if (MSVC) && (WINNT)
+#  include <process.h>
+#  define execve(path, argv, _)  (int) _execv(path, argv)
+#endif  /* MSVC && WINNT */
+
 
 #define N_ENVP  2
 #define N_LEN   16    
