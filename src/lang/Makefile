@@ -229,7 +229,7 @@ lang_exec_binout := $(bin_path)/$(lang_prefix)_exec$(bin_ext)
 
 lang_exec: $(lang_exec_binout)
 lang_exec_test: lang_exec
-	$(lang_exec_binout) $(lang_root)/exec/x.sh a bb ccc
+	$(lang_exec_binout) $(CURDIR)/$(lang_root)/exec/x.sh a bb ccc
 
 $(lang_exec_binout): $(lang_root)/exec/ve.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

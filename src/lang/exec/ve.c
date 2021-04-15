@@ -29,13 +29,12 @@ main(int argc, char **argv)
         return 1;
     }
 
-    printf("%s ", argv[0]);
     for (int i = 1; i < argc; i++) {
         printf("%s ", argv[i]);
     }
     printf("\n");
 
-    envp = calloc(N_ENVP, sizeof(char*));
+    envp = calloc(N_ENVP, sizeof(char *));
     envp[0] = malloc(N_LEN + 1);
     strcpy(envp[0], "XXX=zzz");
     
