@@ -29,15 +29,17 @@ main(int argc, char **argv)
         return 1;
     }
 
+    printf("%s ", argv[1]);
     for (int i = 1; i < argc; i++) {
         printf("%s ", argv[i]);
     }
-    printf("\n");
+    printf("\n----------\n");
 
     envp = calloc(N_ENVP + 1, sizeof(char *));
     envp[0] = malloc(N_LEN + 1);
     strcpy(envp[0], "XXX=zzz");
-    
+
+    printf("execve() ...\n----------\n");
     rc = execve((const char *) argv[1],
                 (char *const *) &argv[1],
                 (char *const *) envp);
