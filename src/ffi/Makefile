@@ -49,6 +49,7 @@ ffi_nodejs := $(ffi_nodejs_prefix)/package-lock.json
 
 ifeq (YES, $(has_nodejs))
 $(ffi_nodejs):
+	@echo "npm install --prefix=$(ffi_nodejs_prefix) ffi-napi ..."
 	-@npm explain --prefix=$(ffi_nodejs_prefix) ffi-napi >/dev/null	\
 		|| npm install --prefix=$(ffi_nodejs_prefix) ffi-napi
 ffi_nodejs_test: $(ffi_nodejs)
