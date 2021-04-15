@@ -226,10 +226,15 @@ $(lang__exit_binout): $(lang_root)/exit/e1.c
 
 # exec
 lang_exec_binout := $(bin_path)/$(lang_prefix)_exec$(bin_ext)
+lang_exec_target := $(CURDIR)/$(lang_root)/exec/x.sh
+
+ifeq (WinNT, $(NM_SYSTEM))
+lang_exec_target := $(CURDIR)/$(lang_root)/exec/x.bat
+endif 													# WinNT
 
 lang_exec: $(lang_exec_binout)
 lang_exec_test: lang_exec
-	$(lang_exec_binout) $(CURDIR)/$(lang_root)/exec/x.sh a bb ccc
+	$(lang_exec_binout) $(lang_exec_target) a bb ccc
 
 $(lang_exec_binout): $(lang_root)/exec/ve.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

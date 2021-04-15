@@ -14,7 +14,7 @@
 #endif  /* MSVC && WINNT */
 
 
-#define N_ENVP  2
+#define N_ENVP  1
 #define N_LEN   16    
 
 
@@ -34,7 +34,7 @@ main(int argc, char **argv)
     }
     printf("\n");
 
-    envp = calloc(N_ENVP, sizeof(char *));
+    envp = calloc(N_ENVP + 1, sizeof(char *));
     envp[0] = malloc(N_LEN + 1);
     strcpy(envp[0], "XXX=zzz");
     
@@ -43,6 +43,10 @@ main(int argc, char **argv)
                 (char *const *) envp);
     if (rc) {
         perror(0);
+        for (int i = 0; i < N_ENVP; i++) {
+          free(envp[i]);
+        }
+        free(envp);
         return rc;
     }
 
