@@ -1,12 +1,12 @@
 #!/bin/sh
 
-echo "\$@=$@"
-echo "----------"
+echo "\$@={$@}"
+echo "**********"
 
 echo "ps \$\$"
-echo "----------"
+echo "**********"
 ps $$
 
 echo "env"
-echo "----------"
+echo "**********"
 env
