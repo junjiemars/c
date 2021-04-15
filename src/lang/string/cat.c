@@ -35,8 +35,8 @@ self_strcat(char *s1, const char *s2)
 int
 main(int argc, char **argv)
 {
-    char    *s1  =  0, *s2 = 0;
     size_t   s1_len, s2_len;
+    char    *s1 = 0, *s2 = 0;
 
     if (argc < 3) {
         printf("!panic, concate s2 to s1.\n");

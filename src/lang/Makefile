@@ -707,6 +707,8 @@ lang_str_tok_test: lang_str_tok
 lang_strcat: $(lang_strcat_binout)
 lang_strcat_test: lang_strcat
 	$(lang_strcat_binout) "the quick brown fox" " jumps over the lazy dog"
+	$(lang_strcat_binout) "the quick brown fo" ""
+	$(lang_strcat_binout) "" "umps over the lazy dog"
 
 lang_strchr: $(lang_strchr_binout)
 lang_strchr_test: lang_strchr
