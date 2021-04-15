@@ -657,6 +657,7 @@ lang_str_n_binout := $(bin_path)/$(lang_prefix)_string_n$(bin_ext)
 lang_str_s_binout := $(bin_path)/$(lang_prefix)_string_s$(bin_ext)
 lang_str_dup_binout := $(bin_path)/$(lang_prefix)_string_dup$(bin_ext)
 lang_str_tok_binout := $(bin_path)/$(lang_prefix)_string_tok$(bin_ext)
+lang_strcat_binout := $(bin_path)/$(lang_prefix)_strchr$(bin_ext)
 lang_strchr_binout := $(bin_path)/$(lang_prefix)_string_chr$(bin_ext)
 lang_str_pbrk_binout := $(bin_path)/$(lang_prefix)_string_pbrk$(bin_ext)
 lang_str_spn_binout := $(bin_path)/$(lang_prefix)_string_spn$(bin_ext)
@@ -666,6 +667,7 @@ lang_string: lang_str_basic											\
              lang_str_s													\
              lang_str_dup												\
              lang_str_tok												\
+             lang_strcat												\
              lang_strchr												\
              lang_str_pbrk											\
              lang_str_spn
@@ -675,6 +677,7 @@ lang_string_test: lang_str_basic_test						\
                   lang_str_s_test								\
                   lang_str_dup_test							\
                   lang_str_tok_test							\
+                  lang_strcat_test							\
                   lang_strchr_test							\
                   lang_str_pbrk_test						\
                   lang_str_spn_test
@@ -700,6 +703,10 @@ lang_str_tok: $(lang_str_tok_binout)
 lang_str_tok_test: lang_str_tok
 	$(lang_str_tok_binout) "this is a simple sample for strtok." " ."
 	$(lang_str_tok_binout) "this is a simple    sample for strtok." " ."
+
+lang_strcat: $(lang_strcat_binout)
+lang_strcat_test: lang_strcat
+	$(lang_strcat_binout) "the quick brown fox" " jumps over the lazy dog"
 
 lang_strchr: $(lang_strchr_binout)
 lang_strchr_test: lang_strchr
@@ -734,6 +741,9 @@ $(lang_str_dup_binout): $(lang_root)/string/dup.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_str_tok_binout): $(lang_root)/string/tok.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(lang_strcat_binout): $(lang_root)/string/cat.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_strchr_binout): $(lang_root)/string/chr.c
