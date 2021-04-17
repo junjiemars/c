@@ -3,51 +3,65 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#if MSVC
-#  pragma warning(disable: 4244)
-#endif
 
+static size_t randomize(size_t n /* RAND_MAX */);
+static int ranged_randomize(int min, int max);
 
 size_t
-randomize(size_t n /* RAND_MAX */) {
-	size_t r = rand() % n;	
-	return r;
+randomize(size_t n)
+{
+    size_t r = rand() % n;	
+    return r;
 }
 
 int
 ranged_randomize(int min, int max) {
-	int r = rand() / (RAND_MAX + 1.0) * (max - min) + min;
-	return r;
+    int r = min + rand() / (RAND_MAX + 1.0) * (max - min);
+    return r;
 }
 
 int
-main(int argc, char **argv) {
-	/* initialize random number generator */
-	srand(time(0));
+main(int argc, char **argv)
+{
+    size_t  n;
+    int     min = 0, max = 10;
 
-	size_t n;
+    if (argc < 2) {
+        fprintf(stderr, "please input: <N> [,MIN] [,MAX]\n");
+        return 1;
+    }
 
-	if (4 == argc) {
-		n = atoi(argv[1]);
-		int min = atoi(argv[2]);
-		int max = atoi(argv[3]);
+    /* N */
+    n = atoi(argv[1]);
 
-		printf("raw random [%i, %i)\n", min, max);
-		printf("--------------------\n");
-		for (size_t i = 0; i < n; i++) {
-			printf("%i ", ranged_randomize(min, max));
-		}
-		putchar('\n');
-	} else if (argc > 1) {
-		n = atoi(argv[1]);
-		printf("raw random [%i, %zu)\n", 0, n);
-		printf("--------------------\n");
-		for (size_t i = 0; i < n; i++) {
-			printf("%zu ", randomize(n));
-		}
-		putchar('\n');
-	}
-	
+    /* MIN */
+    if (argc >=3) {
+        min = atoi(argv[2]);
+    }
 
-	return 0;
+    /* MAX */
+    if (argc >= 4) {
+        max = atoi(argv[3]);
+    }
+    
+    /* initialize random number generator */
+    srand(time(0));
+
+    printf("raw random [%i, %zu)\n", 0, n);
+    printf("--------------------\n");
+
+    for (size_t i = 0; i < n; i++) {
+        printf("%zu ", randomize(n));
+    }
+    putchar('\n');
+
+    printf("ranged random [%i, %i)\n", min, max);
+    printf("--------------------\n");
+
+    for (size_t i = 0; i < n; i++) {
+        printf("%i ", ranged_randomize(min, max));
+    }
+    putchar('\n');
+
+    return 0;
 }

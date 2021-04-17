@@ -4,7 +4,7 @@
 #include <nore.h>
 
 
-#if GCC
+#if (GCC)
 #  if defined(_GNU_SOURCE)
 #    undef _GNU_SOURCE
 #  endif  /* _GNU_SOURCE */
@@ -20,7 +20,7 @@
 #endif  /* GCC */
 
 
-#if MSVC
+#if (MSVC)
 /* warning C4996: 'strncpy': This function or variable may be
 	 unsafe. Consider using strcpy_s instead. To disable deprecation,
 	 use _CRT_SECURE_NO_WARNINGS. */
@@ -32,23 +32,23 @@
 # include <stdint.h>
 #else
 # include <stddef.h>
-  typedef __int8 int8_t;
-  typedef unsigned __int8 uint8_t;
-  typedef __int16 int16_t;
-  typedef unsigned __int16 uint16_t;
-  typedef __int32 int32_t;
-  typedef unsigned __int32 uint32_t;
-  typedef __int64 int64_t;
-  typedef unsigned __int64 uint64_t;
+typedef __int8 int8_t;
+typedef unsigned __int8 uint8_t;
+typedef __int16 int16_t;
+typedef unsigned __int16 uint16_t;
+typedef __int32 int32_t;
+typedef unsigned __int32 uint32_t;
+typedef __int64 int64_t;
+typedef unsigned __int64 uint64_t;
 #endif /* end of NM_HAVE_STDINT_H */
 
 
-#if NM_HAVE_TYPEOF
-#  if CLANG || GCC
+#if (NM_HAVE_TYPEOF)
+#  if (CLANG)
 #    define typeof __typeof__
-#  elif GCC
+#  elif (GCC)
 #    define typeof __typeof__
-#  elif MSVC
+#  elif (MSVC)
 #    define typeof decltype
 #  endif
 #endif  /* NM_HAVE_TYPEOF */
@@ -61,7 +61,7 @@
 #endif
 
 
-#if NDEBUG
+#if (NDEBUG)
 #  define ASSERT(x) ((void)(x))
 #else
 #  define ASSERT assert
