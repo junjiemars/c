@@ -16,7 +16,7 @@ randomize(size_t n)
 
 int
 ranged_randomize(int min, int max) {
-    int r = min + rand() / (RAND_MAX + 1.0) * (max - min);
+    int r = min + (int) (rand() / (RAND_MAX + 1.0) * (max - min));
     return r;
 }
 
@@ -45,7 +45,7 @@ main(int argc, char **argv)
     }
     
     /* initialize random number generator */
-    srand(time(0));
+    srand((unsigned) time(0));
 
     printf("raw random [%i, %zu)\n", 0, n);
     printf("--------------------\n");
