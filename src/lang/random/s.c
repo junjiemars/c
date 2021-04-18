@@ -18,25 +18,25 @@
 #include <stdlib.h>
 
 
-static unsigned int __rand_s(unsigned int *u);
+static unsigned int __rand_s(unsigned int u);
 
 
 unsigned int
-__rand_s(unsigned int *u)
+__rand_s(unsigned int u)
 {
 #if (NM_HAVE_ARC4RANDOM_UNIFORM)
-    return arc4random_uniform(*u);
+    return arc4random_uniform(u);
 
 #endif  /* NM_HAVE_ARC4RANDOM_UNIFORM */
 
 
 #if (NM_HAVE_CRT_RAND_S)
-    (error_t) rand_s(u);
-    return *u;
+    (error_t) rand_s(&u);
+    return u;
 
 #endif  /* NM_HAVE_RAND_S */ 
 
-    return (unsigned int) 0;
+    return u;
 }
 
 
@@ -60,7 +60,7 @@ main(int argc, char **argv)
     printf("--------------------\n");
 
     for (size_t i = 0; i < n; i++) {
-        r = __rand_s(&u);
+        r = __rand_s(u);
         printf("%i ", r);
     }
     putchar('\n');
