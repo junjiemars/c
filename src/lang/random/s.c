@@ -31,8 +31,13 @@ __rand_s(unsigned int u)
 
 
 #if (NM_HAVE_CRT_RAND_S)
-    (error_t) rand_s(&u);
-    return u;
+    unsigned int r;
+    error_t err = rand_s(&r);
+    if (err) {
+        perror(0);
+        return u;
+    }
+    return r % u;
 
 #endif  /* NM_HAVE_RAND_S */ 
 
