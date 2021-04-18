@@ -421,14 +421,17 @@ $(lang_math_float_cppout): $(lang_root)/math/f.c
 # random
 lang_random_basic_binout := $(bin_path)/$(lang_prefix)_random_raw$(bin_ext)
 lang_random_arc_binout := $(bin_path)/$(lang_prefix)_random_arc$(bin_ext)
-lang_random_s_binout := $(bin_path)/$(lang_prefix)_random_s$(bin_ext)
+lang_random_secure_binout := $(bin_path)/$(lang_prefix)_random_secure$(bin_ext)
+lang_random_seed_binout := $(bin_path)/$(lang_prefix)_random_seed$(bin_ext)
 
 lang_random: lang_random_basic									\
              lang_random_arc										\
-             lang_random_s
+             lang_random_secure									\
+             lang_random_seed
 lang_random_test: lang_random_basic_test				\
                   lang_random_arc_test					\
-                  lang_random_s_test
+                  lang_random_secure_test				\
+                  lang_random_seed_test
 
 lang_random_basic: $(lang_random_basic_binout)
 lang_random_basic_test: lang_random_basic
@@ -440,17 +443,26 @@ lang_random_arc_test: lang_random_arc
 	$(lang_random_arc_binout)
 	$(lang_random_arc_binout) 20
 
-lang_random_s: $(lang_random_s_binout)
-lang_random_s_test: lang_random_s
-	$(lang_random_s_binout)
+lang_random_secure: $(lang_random_secure_binout)
+lang_random_secure_test: lang_random_secure
+	$(lang_random_secure_binout)
 
-$(lang_random_basic_binout): $(lang_root)/random/r.c
+lang_random_seed: $(lang_random_seed_binout)
+lang_random_seed_test: lang_random_seed
+	$(lang_random_seed_binout) 1 10
+	$(lang_random_seed_binout) 1 10
+	$(lang_random_seed_binout) 2 10
+
+$(lang_random_basic_binout): $(lang_root)/random/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_random_arc_binout): $(lang_root)/random/arc.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(lang_random_s_binout): $(lang_root)/random/s.c
+$(lang_random_secure_binout): $(lang_root)/random/s.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(lang_random_seed_binout): $(lang_root)/random/seed.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # restrict
