@@ -445,7 +445,7 @@ lang_random_arc_test: lang_random_arc
 
 lang_random_secure: $(lang_random_secure_binout)
 lang_random_secure_test: lang_random_secure
-	$(lang_random_secure_binout)
+	$(lang_random_secure_binout) 10
 
 lang_random_seed: $(lang_random_seed_binout)
 lang_random_seed_test: lang_random_seed

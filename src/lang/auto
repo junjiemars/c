@@ -413,7 +413,16 @@ case "$NM_SYSTEM" in
     nm_feature_test='arc4random_uniform(1);'
     . ${NORE_ROOT}/auto/feature
     ;;
-  *)
+  WinNT)
+    nm_feature="crt_rand_s()"
+    nm_feature_name='NM_HAVE_CRT_RAND_S'
+    nm_feature_run=no
+    nm_feature_h='#define _CRT_RAND_S
+                  #include <stdlib.h>'
+    nm_feature_flags=
+    nm_feature_test='unsigned int u = 10;
+                     (error_t) rand_s(&u);'
+    . ${NORE_ROOT}/auto/feature
     ;;
 esac
 
