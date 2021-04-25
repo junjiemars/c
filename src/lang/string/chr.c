@@ -3,19 +3,19 @@
 #include <stdio.h>
 
 
-#if (MSVC)
-#pragma warning(disable : 4996)
-#endif  /* MSVC */
+/* #if (MSVC) */
+/* #pragma warning(disable : 4996) */
+/* #endif  /\* MSVC *\/ */
 
 
-typedef char *(*strchr_fn)(const char *, int);
-typedef char *(*strrchr_fn)(const char *, int);
+typedef char *(*strchr_fn)(const char *s, int);
+typedef char *(*strrchr_fn)(const char *s, int);
 
 
-static char *self_strchr(const char *, int);
-static char *self_strrchr(const char *, int);
+static char *self_strchr(const char *s, int);
+static char *self_strrchr(const char *s, int);
 
-static void test_strchr(strchr_fn, char *, int);
+static void test_strchr(strchr_fn, char *s, int);
 
 
 void
@@ -65,7 +65,7 @@ main(int argc, char **argv)
 
     if (argc < 2) {
         printf("what string and found what\n");
-        return 0;
+        return 1;
     }
 
     ss = argv[1];
