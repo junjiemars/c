@@ -3,11 +3,6 @@
 #include <stdio.h>
 
 
-/* #if (MSVC) */
-/* #pragma warning(disable : 4996) */
-/* #endif  /\* MSVC *\/ */
-
-
 typedef char *(*strchr_fn)(const char *s, int);
 typedef char *(*strrchr_fn)(const char *s, int);
 

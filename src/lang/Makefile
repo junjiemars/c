@@ -675,109 +675,109 @@ $(lang_stor_extern_objout): $(lang_root)/storage/extern.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
 # string
-lang_str_basic_binout := $(bin_path)/$(lang_prefix)_string_basic$(bin_ext)
-lang_str_n_binout := $(bin_path)/$(lang_prefix)_string_n$(bin_ext)
-lang_str_s_binout := $(bin_path)/$(lang_prefix)_string_s$(bin_ext)
-lang_str_dup_binout := $(bin_path)/$(lang_prefix)_string_dup$(bin_ext)
-lang_str_tok_binout := $(bin_path)/$(lang_prefix)_string_tok$(bin_ext)
-lang_strcat_binout := $(bin_path)/$(lang_prefix)_strchr$(bin_ext)
-lang_str_chr_binout := $(bin_path)/$(lang_prefix)_string_chr$(bin_ext)
-lang_str_pbrk_binout := $(bin_path)/$(lang_prefix)_string_pbrk$(bin_ext)
-lang_str_spn_binout := $(bin_path)/$(lang_prefix)_string_spn$(bin_ext)
+lang_string_basic_binout := $(bin_path)/$(lang_prefix)_string_basic$(bin_ext)
+lang_string_n_binout := $(bin_path)/$(lang_prefix)_string_n$(bin_ext)
+lang_string_s_binout := $(bin_path)/$(lang_prefix)_string_s$(bin_ext)
+lang_string_dup_binout := $(bin_path)/$(lang_prefix)_string_dup$(bin_ext)
+lang_string_tok_binout := $(bin_path)/$(lang_prefix)_string_tok$(bin_ext)
+lang_string_cat_binout := $(bin_path)/$(lang_prefix)_string_cat$(bin_ext)
+lang_string_chr_binout := $(bin_path)/$(lang_prefix)_string_chr$(bin_ext)
+lang_string_pbrk_binout := $(bin_path)/$(lang_prefix)_string_pbrk$(bin_ext)
+lang_string_spn_binout := $(bin_path)/$(lang_prefix)_string_spn$(bin_ext)
 
-lang_string: lang_str_basic											\
-             lang_str_n													\
-             lang_str_s													\
-             lang_str_dup												\
-             lang_str_tok												\
-             lang_strcat												\
-             lang_str_chr												\
-             lang_str_pbrk											\
-             lang_str_spn
+lang_string: lang_string_basic									\
+             lang_string_n											\
+             lang_string_s											\
+             lang_string_dup										\
+             lang_string_tok										\
+             lang_string_cat										\
+             lang_string_chr										\
+             lang_string_pbrk										\
+             lang_string_spn
 
-lang_string_test: lang_str_basic_test						\
-                  lang_str_n_test								\
-                  lang_str_s_test								\
-                  lang_str_dup_test							\
-                  lang_str_tok_test							\
-                  lang_strcat_test							\
-                  lang_str_chr_test							\
-                  lang_str_pbrk_test						\
-                  lang_str_spn_test
+lang_string_test: lang_string_basic_test				\
+                  lang_string_n_test						\
+                  lang_string_s_test						\
+                  lang_string_dup_test					\
+                  lang_string_tok_test					\
+                  lang_string_cat_test					\
+                  lang_string_chr_test					\
+                  lang_string_pbrk_test					\
+                  lang_string_spn_test
 
-lang_str_basic: $(lang_str_basic_binout)
-lang_str_basic_test: lang_str_basic
-	$(lang_str_basic_binout)
+lang_string_basic: $(lang_string_basic_binout)
+lang_string_basic_test: lang_string_basic
+	$(lang_string_basic_binout)
 
-lang_str_n: $(lang_str_n_binout)
-lang_str_n_test: lang_str_n
-	$(lang_str_n_binout) "abcd12345678" "abcd"
-	$(lang_str_n_binout) "abcd" "abcd12345678"
+lang_string_n: $(lang_string_n_binout)
+lang_string_n_test: lang_string_n
+	$(lang_string_n_binout) "abcd12345678" "abcd"
+	$(lang_string_n_binout) "abcd" "abcd12345678"
 
-lang_str_s: $(lang_str_s_binout)
-lang_str_s_test: lang_str_s
-	$(lang_str_s_binout)
+lang_string_s: $(lang_string_s_binout)
+lang_string_s_test: lang_string_s
+	$(lang_string_s_binout)
 
-lang_str_dup: $(lang_str_dup_binout)
-lang_str_dup_test: lang_str_dup
-	$(lang_str_dup_binout) "the quick brown fox"
+lang_string_dup: $(lang_string_dup_binout)
+lang_string_dup_test: lang_string_dup
+	$(lang_string_dup_binout) "the quick brown fox"
 
-lang_str_tok: $(lang_str_tok_binout)
-lang_str_tok_test: lang_str_tok
-	$(lang_str_tok_binout) "this is a simple sample for strtok." " ."
-	$(lang_str_tok_binout) "this is a simple    sample for strtok." " ."
+lang_string_tok: $(lang_string_tok_binout)
+lang_string_tok_test: lang_string_tok
+	$(lang_string_tok_binout) "this is a simple sample for strtok." " ."
+	$(lang_string_tok_binout) "this is a simple    sample for strtok." " ."
 
-lang_strcat: $(lang_strcat_binout)
-lang_strcat_test: lang_strcat
-	$(lang_strcat_binout) "the quick brown fox" " jumps over the lazy dog"
-	$(lang_strcat_binout) "the quick brown fo" ""
-	$(lang_strcat_binout) "" "umps over the lazy dog"
+lang_string_cat: $(lang_string_cat_binout)
+lang_string_cat_test: lang_string_cat
+	$(lang_string_cat_binout) "the quick brown fox" " jumps over the lazy dog"
+	$(lang_string_cat_binout) "the quick brown fo" ""
+	$(lang_string_cat_binout) "" "umps over the lazy dog"
 
-lang_str_chr: $(lang_str_chr_binout)
-lang_str_chr_test: lang_str_chr
-	$(lang_str_chr_binout) "the quick brown fox jumps over the lazy dog" "j"
-	$(lang_str_chr_binout) "the quick brown fox jumps over the lazy dog" "t"
-	$(lang_str_chr_binout) "the quick brown fox jumps over the lazy dog" "1"
+lang_string_chr: $(lang_string_chr_binout)
+lang_string_chr_test: lang_string_chr
+	$(lang_string_chr_binout) "the quick brown fox jumps over the lazy dog" "j"
+	$(lang_string_chr_binout) "the quick brown fox jumps over the lazy dog" "t"
+	$(lang_string_chr_binout) "the quick brown fox jumps over the lazy dog" "1"
 
-lang_str_pbrk: $(lang_str_pbrk_binout)
-lang_str_pbrk_test: lang_str_pbrk
-	$(lang_str_pbrk_binout) "the quick brown fox jumps over the lazy dog" "fxx"
-	$(lang_str_pbrk_binout) "the quick brown fox jumps over the lazy dog" "dxx"
-	$(lang_str_pbrk_binout) "the quick brown fox jumps over the lazy dog" "123"
+lang_string_pbrk: $(lang_string_pbrk_binout)
+lang_string_pbrk_test: lang_string_pbrk
+	$(lang_string_pbrk_binout) "the quick brown fox jumps over the lazy dog" "fxx"
+	$(lang_string_pbrk_binout) "the quick brown fox jumps over the lazy dog" "dxx"
+	$(lang_string_pbrk_binout) "the quick brown fox jumps over the lazy dog" "123"
 
-lang_str_spn: $(lang_str_spn_binout)
-lang_str_spn_test: lang_str_spn
-	$(lang_str_spn_binout) "the quick brown fox jumps over the lazy dog" "f"
-	$(lang_str_spn_binout) "the quick brown fox jumps over the lazy dog" "q"
-	$(lang_str_spn_binout) "the quick brown fox jumps over the lazy dog" "the q"
-	$(lang_str_spn_binout) "the quick brown fox jumps over the lazy dog" "fthe q"
-	$(lang_str_spn_binout) "the quick brown fox jumps over the lazy dog" "fthe x"
+lang_string_spn: $(lang_string_spn_binout)
+lang_string_spn_test: lang_string_spn
+	$(lang_string_spn_binout) "the quick brown fox jumps over the lazy dog" "f"
+	$(lang_string_spn_binout) "the quick brown fox jumps over the lazy dog" "q"
+	$(lang_string_spn_binout) "the quick brown fox jumps over the lazy dog" "the q"
+	$(lang_string_spn_binout) "the quick brown fox jumps over the lazy dog" "fthe q"
+	$(lang_string_spn_binout) "the quick brown fox jumps over the lazy dog" "fthe x"
 
-$(lang_str_basic_binout): $(lang_root)/string/basic.c
+$(lang_string_basic_binout): $(lang_root)/string/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(lang_str_n_binout): $(lang_root)/string/n.c
+$(lang_string_n_binout): $(lang_root)/string/n.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(lang_str_s_binout): $(lang_root)/string/s.c
+$(lang_string_s_binout): $(lang_root)/string/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(lang_str_dup_binout): $(lang_root)/string/dup.c
+$(lang_string_dup_binout): $(lang_root)/string/dup.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(lang_str_tok_binout): $(lang_root)/string/tok.c
+$(lang_string_tok_binout): $(lang_root)/string/tok.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(lang_strcat_binout): $(lang_root)/string/cat.c
+$(lang_string_cat_binout): $(lang_root)/string/cat.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(lang_str_chr_binout): $(lang_root)/string/chr.c
+$(lang_string_chr_binout): $(lang_root)/string/chr.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(lang_str_pbrk_binout): $(lang_root)/string/pbrk.c
+$(lang_string_pbrk_binout): $(lang_root)/string/pbrk.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(lang_str_spn_binout): $(lang_root)/string/spn.c
+$(lang_string_spn_binout): $(lang_root)/string/spn.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # struct
