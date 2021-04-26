@@ -5,15 +5,9 @@
 #include <limits.h>
 
 
-#if (NM_HAVE_ARC4RANDOM_UNIFORM) || (NM_HAVE_CRT_RAND_S)
-#  define NM_HAVE_RAND_S 1
-#endif
-
-
 #if (NM_HAVE_CRT_RAND_S)
 #  define _CRT_RAND_S
 #endif  /* NM_HAVE_CRT_RAND_S */
-
 
 #include <stdlib.h>
 
@@ -44,7 +38,8 @@ __rand_s(unsigned int u)
     }
     return r % u;
 }
-#endif  /* NM_HAVE_RAND_S */ 
+#endif  /* NM_HAVE_CRT_RAND_S */ 
+
 
 int
 main(int argc, char **argv)
@@ -60,7 +55,7 @@ main(int argc, char **argv)
     n = atoi(argv[1]);
     _unused_(n);
 
-#if (NM_HAVE_RAND_S)
+#if (NM_HAVE_ARC4RANDOM_UNIFORM) || (NM_HAVE_RAND_S)
 
     printf("raw random [%i, %zu)\n", 0, (size_t) u);
     printf("--------------------\n");
@@ -75,7 +70,7 @@ main(int argc, char **argv)
     _unused_(u);
     _unused_(r);
 
-#endif  /* NM_HAVE_RAND_S */
+#endif
 	
     return 0;
 }
