@@ -55,7 +55,7 @@ main(int argc, char **argv)
     n = atoi(argv[1]);
     _unused_(n);
 
-#if (NM_HAVE_ARC4RANDOM_UNIFORM) || (NM_HAVE_RAND_S)
+#if (NM_HAVE_ARC4RANDOM_UNIFORM) || (NM_HAVE_CRT_RAND_S)
 
     printf("raw random [%i, %zu)\n", 0, (size_t) u);
     printf("--------------------\n");
