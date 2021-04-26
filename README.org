@@ -1725,6 +1725,7 @@ RFLAGS Register
 - [[https://wiki.osdev.org/CPU_Registers_x86-64][CPU Registers x86-64]]
 - [[https://software.intel.com/content/www/us/en/develop/articles/introduction-to-x64-assembly.html][Introduction to x64 Assembly]]
 - [[https://www.amd.com/system/files/TechDocs/24594.pdf][AMD64 Architecutre Programmer's Manual]]
+- [[https://www.csee.umbc.edu/~chang/cs313.s02/stack.shtml][C Function Call Conventions and the Stack]]	
 
 * Memory
 	:PROPERTIES:
