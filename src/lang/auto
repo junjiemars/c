@@ -468,36 +468,4 @@ case "$NM_SYSTEM" in
 esac
 
 
-# check entry
-#----------------------------------------
-case "$NM_SYSTEM" in
-	Darwin)
-    case "$CC_NAME" in
-      clang)
-        flag=entry_opt op=":=" value="${nm_entry_opt}_entry" \
-            . ${NORE_ROOT}/auto/make_define
-
-        ;;
-    esac
-		;;
-	Linux)
-    # case "$CC_NAME" in
-    #   gcc)
-    #     flag=entry_opt op=":=" value="${nm_entry_opt}_entry" \
-    #         . ${NORE_ROOT}/auto/make_define
-    #     ;;
-    # esac
-		;;
-	WinNT)
-    # case "$CC_NAME" in
-    #   msvc)
-    #     flag=entry_opt op=":=" value="${nm_entry_opt}entry -subsystem:console" \
-    #         . ${NORE_ROOT}/auto/make_define
-    #     ;;
-    # esac
-		;;
-esac
-
-
-
 # eof

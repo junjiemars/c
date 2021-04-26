@@ -2,14 +2,34 @@
 # ./configure --without-debug --has-ld
 #
 
-ld: ld_static																		\
+ld: ld_entry																		\
+    ld_static																		\
     ld_nostdlib
 
-ld_test: ld_static															\
+ld_test: ld_entry_test													\
+         ld_static_test													\
          ld_nostdlib_test
 
 ld_prefix := ld
 INC += -I$(ld_root)
+
+
+# entry
+ld_entry_binout := $(bin_path)/$(ld_prefix)_entry$(bin_ext)
+
+ifeq ("", $(ld_entry_opt))
+ld_entry:
+	@echo "#skip ld_entry_test ..."
+ld_entry_test: ld_entry
+else
+ld_entry: $(ld_entry_binout)
+ld_entry_test: ld_entry
+	$(ld_entry_binout) "abc"
+
+endif
+
+$(ld_entry_binout): $(ld_root)/entry/e.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_entry_opt)
 
 
 # static

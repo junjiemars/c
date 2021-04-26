@@ -9,21 +9,28 @@
 
 # check ld's static option
 #----------------------------------------
+ld_entry_opt=
 ld_static_opt=
 ld_nostdlib_opt=NO
-
 case "$CC_NAME" in
   clang)
   ;;
   gcc)
     case "$NM_SYSTEM" in
       Linux)
+        echo $echo_n " + checking for $CC_NAME: -e ... $echo_c"
+        flag=ld_entry_opt op=":=" value="-eentry -nostartfiles" \
+            . ${NORE_ROOT}/auto/make_define
+        echo "yes"
+
         echo $echo_n " + checking for $CC_NAME: -static ... $echo_c"
-        flag=ld_static_opt op=":=" value="-static" . ${NORE_ROOT}/auto/make_define
+        flag=ld_static_opt op=":=" value="-static" \
+            . ${NORE_ROOT}/auto/make_define
         echo "yes"
 
         echo $echo_n " + checking for $CC_NAME: -nostdlib ... $echo_c"
-        flag=ld_nostdlib_opt op=":=" value="-nostdlib" . ${NORE_ROOT}/auto/make_define
+        flag=ld_nostdlib_opt op=":=" value="-nostdlib" \
+            . ${NORE_ROOT}/auto/make_define
         echo "yes"
         ;;
       Darwin)
