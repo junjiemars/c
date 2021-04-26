@@ -1,0 +1,34 @@
+#### -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## ds/auto
+####
+
+
+# check ld's static option
+#----------------------------------------
+ld_static_opt=
+ld_nostdlib_opt=NO
+case "$CC_NAME" in
+  clang)
+  ;;
+  gcc)
+    case "$NM_SYSTEM" in
+      Linux)
+        flag=ld_static_opt op=":=" value="-static" . ${NORE_ROOT}/auto/make_define
+        flag=ld_nostdlib_opt op=":=" value="-nostdlib" . ${NORE_ROOT}/auto/make_define
+        ;;
+      Darwin)
+        ;;
+      WinNT)
+        ;;
+    esac
+    ;;		 
+  msvc)
+    ;;
+esac
+
+
+# eof
