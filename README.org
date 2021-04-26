@@ -1719,7 +1719,6 @@ RFLAGS Register
 	 :END:
 
 - [[https://wiki.osdev.org][OS Dev]]
-- [[https://imada.sdu.dk/~kslarsen/dm546/Material/IntelnATT.htm][AT&T assembly syntax and IA-32 instructions]]
 - [[http://asm.sourceforge.net/articles/linasm.html][Using Assembly Language in Linux]]
 - [[https://www.cs.yale.edu/flint/cs421/papers/x86-asm/asm.html][Yale: x86 Assembly Guide]]
 - [[https://www.cs.virginia.edu/~evans/cs216/guides/x86.html][Virginia: x86 Assembly Guide]]
