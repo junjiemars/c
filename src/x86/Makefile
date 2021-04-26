@@ -1,3 +1,7 @@
+#
+# ./configure --has-x86
+#
+
 
 x86: 	x86_array																	\
 			x86_bone																	\
@@ -26,6 +30,7 @@ x86_test: x86_array_test												\
 x86_prefix = x86
 
 INC += -I$(x86_root)
+
 
 ifdef RISKY
 CFLAGS += -DRISKY=$(RISKY)
