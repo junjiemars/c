@@ -407,6 +407,7 @@ case "$NM_SYSTEM" in
   Darwin)
     nm_feature="arc4random_uniform()"
     nm_feature_name='NM_HAVE_ARC4RANDOM_UNIFORM'
+    nm_feature_indent=yes
     nm_feature_run=no
     nm_feature_h='#include <stdlib.h>'
     nm_feature_flags=
@@ -416,6 +417,7 @@ case "$NM_SYSTEM" in
   WinNT)
     nm_feature="crt_rand_s()"
     nm_feature_name='NM_HAVE_CRT_RAND_S'
+    nm_feature_indent=yes
     nm_feature_run=no
     nm_feature_h='#define _CRT_RAND_S
                   #include <stdlib.h>'
