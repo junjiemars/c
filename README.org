@@ -1719,11 +1719,12 @@ RFLAGS Register
 	 :END:
 
 - [[https://wiki.osdev.org][OS Dev]]
-- [[https://gist.github.com/mishurov/6bcf04df329973c15044][AT&T assembly syntax and IA-32 instructions]]
+- [[https://imada.sdu.dk/~kslarsen/dm546/Material/IntelnATT.htm][AT&T assembly syntax and IA-32 instructions]]
 - [[https://www.cs.yale.edu/flint/cs421/papers/x86-asm/asm.html][Yale: x86 Assembly Guide]]
 - [[https://www.cs.virginia.edu/~evans/cs216/guides/x86.html][Virginia: x86 Assembly Guide]]
 - [[https://wiki.osdev.org/CPU_Registers_x86-64][CPU Registers x86-64]]
 - [[https://software.intel.com/content/www/us/en/develop/articles/introduction-to-x64-assembly.html][Introduction to x64 Assembly]]
+- [[https://www.amd.com/system/files/TechDocs/24594.pdf][AMD64 Architecutre Programmer's Manual]]
 
 * Memory
 	:PROPERTIES:
