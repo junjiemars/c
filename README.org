@@ -2323,6 +2323,14 @@ time used only by the process.
 - [[https://linux-audit.com/elf-binaries-on-linux-understanding-and-analysis/#:~:text=ELF%2520is%2520the%2520abbreviation%2520for%2520Executable%2520and%2520Linkable,compiler%2520or%2520linker%2520and%2520are%2520a%2520binary%2520format.][The 101 of ELF files on Linux: Understanding and Analysis]]
 - [[https://developer.apple.com/library/archive/documentation/Performance/Conceptual/CodeFootprint/Articles/MachOOverview.html][Apple: Overview of the Mach-O Executable Format]]
 
+* OS
+	:PROPERTIES:
+	:CUSTOM_ID: os
+	:END:
+
+** References
+- [[https://0xax.gitbooks.io/linux-insides/content/][gitbooks: Linux Inside]]
+
 * Flex & Bison
 	:PROPERTIES:
 	:CUSTOM_ID: flex_and_bison
