@@ -55,7 +55,7 @@ case "$CC_NAME" in
     ;;
 esac
 if [ "NO" = "$ld_entry_opt" ]; then
-  echo " + checking for $CC_NAME: -nostdlib ... no"
+  echo " + checking for $CC_NAME: -e ... no"
 fi
 if [ "NO" = "$ld_static_opt" ]; then
   echo " + checking for $CC_NAME: -static ... no"
