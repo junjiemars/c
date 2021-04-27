@@ -5,7 +5,6 @@
 lang_prefix := lang
 
 INC += -I$(root) -I$(lang_root) -I$(root)/posix
-LINK := $(CC)
 
 _ERROR_ ?= 0
 
