@@ -7,7 +7,34 @@
 ####
 
 
-# check ld's static option
+# check as's option
+#----------------------------------------
+ld_tiny_opt=
+case "$CC_NAME" in
+  clang)
+    ;;
+  gcc)
+    case "$NM_SYSTEM" in
+      Linux)
+        case "$NM_MACHINE" in
+          x86_64)
+            ld_tiny_opt="YES"
+            flag=ld_tiny_opt op=":=" value="$ld_tiny_opt" \
+                . ${NORE_ROOT}/auto/make_define
+            ;;
+          *)
+          ;;
+        esac
+        ;;
+      *)
+        ;;
+    esac
+    ;;
+  msvc)
+    ;;
+esac
+
+# check ld's option
 #----------------------------------------
 ld_entry_opt=
 ld_static_opt=

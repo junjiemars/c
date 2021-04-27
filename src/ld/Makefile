@@ -5,12 +5,14 @@
 ld: ld_entry																		\
     ld_nostartfiles															\
     ld_nostdlib																	\
-    ld_static
+    ld_static																		\
+    ld_tiny
 
 ld_test: ld_entry_test													\
          ld_nostartfiles_test										\
          ld_nostdlib_test												\
-         ld_static_test
+         ld_static_test													\
+         ld_tiny_test
 
 
 ld_prefix := ld
@@ -84,6 +86,27 @@ endif
 
 $(ld_nostdlib_binout): $(ld_root)/nostdlib/nostd.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_nostdlib_opt)
+
+
+# tiny
+ld_tiny_binout := $(bin_path)/$(ld_prefix)_tiny$(bin_ext)
+ld_tiny_objout := $(bin_path)/$(ld_prefix)_tiny$(obj_ext)
+
+ifeq (YES, $(ld_tiny_opt))
+ld_tiny: $(ld_tiny_binout)
+ld_tiny_test: ld_tiny
+	$(ld_tiny_binout)
+else
+ld_tiny:
+	@echo "#skip ld_tiny_test ..."
+ld_tiny_test: ld_tiny
+endif
+
+$(ld_tiny_binout): $(ld_tiny_objout)
+	$(LD) $^ $(bin_out)$@
+
+$(ld_tiny_objout): $(ld_root)/tiny/t.s
+	$(CC) $(nm_stage_c) $^ $(bin_out)$@
 
 
 # eof
