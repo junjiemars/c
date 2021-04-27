@@ -9,7 +9,7 @@
 
 # check ld's static option
 #----------------------------------------
-ld_entry_opt=
+ld_entry_opt=NO
 ld_static_opt=NO
 ld_nostartfiles_opt=NO
 ld_nostdlib_opt=NO
