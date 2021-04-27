@@ -21,7 +21,7 @@ INC += -I$(ld_root)
 # entry
 ld_entry_binout := $(bin_path)/$(ld_prefix)_entry$(bin_ext)
 
-ifeq ("", $(ld_entry_opt))
+ifeq ("NO", $(ld_entry_opt))
 ld_entry:
 	@echo "#skip ld_entry_test ..."
 ld_entry_test: ld_entry

@@ -54,6 +54,18 @@ case "$CC_NAME" in
   msvc)
     ;;
 esac
+if [ "NO" = "$ld_entry_opt" ]; then
+  echo " + checking for $CC_NAME: -nostdlib ... no"
+fi
+if [ "NO" = "$ld_static_opt" ]; then
+  echo " + checking for $CC_NAME: -static ... no"
+fi
+if [ "NO" = "$ld_nostartfiles_opt" ]; then
+  echo " + checking for $CC_NAME: -nostartfiles ... no"
+fi
+if [ "NO" = "$ld_nostdlib_opt" ]; then
+  echo " + checking for $CC_NAME: -nostdlib ... no"
+fi
 
 
 # eof
