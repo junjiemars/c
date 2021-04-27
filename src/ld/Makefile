@@ -80,7 +80,6 @@ else
 ld_nostdlib:
 	@echo "#skip ld_nostdlib_test ..."
 ld_nostdlib_test: ld_nostdlib
-	$(ld_nostdlib_binout)
 endif
 
 $(ld_nostdlib_binout): $(ld_root)/nostdlib/n.c
