@@ -1,6 +1,6 @@
 #include <_ld_.h>
 #include <stdio.h>
-
+#include <stdlib.h>
 
 #define SS "enter _start ...\n"
 
@@ -10,7 +10,5 @@ _start(void)
 {
     printf(SS);
 
-    __asm__("mov $60, %rax;"
-            "mov  $0, %rdi;"
-            "syscall");
+    exit(0);
 }
