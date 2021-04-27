@@ -19,25 +19,31 @@ case "$CC_NAME" in
   gcc)
     case "$NM_SYSTEM" in
       Linux)
-        echo $echo_n " + checking for $CC_NAME: -e ... $echo_c"
-        flag=ld_entry_opt op=":=" value="-eentry -nostartfiles" \
-            . ${NORE_ROOT}/auto/make_define
-        echo "yes"
+        case "$NM_MACHINE" in
+          x86_64)
+            echo $echo_n " + checking for $CC_NAME: -e ... $echo_c"
+            flag=ld_entry_opt op=":=" value="-eentry -nostartfiles" \
+                . ${NORE_ROOT}/auto/make_define
+            echo "yes"
 
-        echo $echo_n " + checking for $CC_NAME: -nostartfiles ... $echo_c"
-        flag=ld_nostartfiles_opt op=":=" value="-nostartfiles" \
-            . ${NORE_ROOT}/auto/make_define
-        echo "yes"
+            echo $echo_n " + checking for $CC_NAME: -nostartfiles ... $echo_c"
+            flag=ld_nostartfiles_opt op=":=" value="-nostartfiles" \
+                . ${NORE_ROOT}/auto/make_define
+            echo "yes"
 
-        echo $echo_n " + checking for $CC_NAME: -static ... $echo_c"
-        flag=ld_static_opt op=":=" value="-static" \
-            . ${NORE_ROOT}/auto/make_define
-        echo "yes"
+            echo $echo_n " + checking for $CC_NAME: -static ... $echo_c"
+            flag=ld_static_opt op=":=" value="-static" \
+                . ${NORE_ROOT}/auto/make_define
+            echo "yes"
 
-        echo $echo_n " + checking for $CC_NAME: -nostdlib ... $echo_c"
-        flag=ld_nostdlib_opt op=":=" value="-nostdlib" \
-            . ${NORE_ROOT}/auto/make_define
-        echo "yes"
+            echo $echo_n " + checking for $CC_NAME: -nostdlib ... $echo_c"
+            flag=ld_nostdlib_opt op=":=" value="-nostdlib" \
+                . ${NORE_ROOT}/auto/make_define
+            echo "yes"
+            ;;
+          *)
+            ;;
+        esac
         ;;
       Darwin)
         ;;
