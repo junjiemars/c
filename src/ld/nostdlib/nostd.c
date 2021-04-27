@@ -11,7 +11,8 @@
     __asm__("mov x0, #0;"                                                    \
             "mov x8, #93;"                                                   \
             "svc #0")
-#endif
+
+#endif  /* sys_exit */
 
 void
 _start(void)
