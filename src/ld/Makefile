@@ -82,7 +82,7 @@ ld_nostdlib_test: ld_nostdlib
 	$(ld_nostdlib_binout)
 endif
 
-$(ld_nostdlib_binout): $(ld_root)/nostdlib/n.c
+$(ld_nostdlib_binout): $(ld_root)/nostdlib/nostd.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_nostdlib_opt)
 
 

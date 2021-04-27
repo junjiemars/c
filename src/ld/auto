@@ -45,6 +45,13 @@ case "$CC_NAME" in
                 . ${NORE_ROOT}/auto/make_define
             echo "yes"
             ;;
+          aarch64)
+            echo $echo_n " + checking for $CC_NAME: -nostdlib ... $echo_c"
+            ld_nostdlib_opt="-nostdlib"
+            flag=ld_nostdlib_opt op=":=" value="$ld_nostdlib_opt" \
+                . ${NORE_ROOT}/auto/make_define
+            echo "yes"
+            ;;
           *)
             ;;
         esac
