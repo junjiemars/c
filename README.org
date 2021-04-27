@@ -604,7 +604,7 @@ Macro name within another macro is called Nesting of Macro.
 
 #+BEGIN_SRC c
 #define SQUARE(x) ((x)*(x))
-#ddefine CUBE(x) (SQUARE(x)*(x))
+#define CUBE(x) (SQUARE(x)*(x))
 #+END_SRC
 
 *** Check expansion
