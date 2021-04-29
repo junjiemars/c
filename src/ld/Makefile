@@ -6,13 +6,15 @@ ld: ld_entry																		\
     ld_nostartfiles															\
     ld_nostdlib																	\
     ld_static																		\
-    ld_tiny
+    ld_tiny																			\
+    ld_wrap
 
 ld_test: ld_entry_test													\
          ld_nostartfiles_test										\
          ld_nostdlib_test												\
          ld_static_test													\
-         ld_tiny_test
+         ld_tiny_test														\
+         ld_wrap_test
 
 
 ld_prefix := ld
@@ -108,5 +110,21 @@ $(ld_tiny_binout): $(ld_tiny_objout)
 $(ld_tiny_objout): $(ld_root)/tiny/t.s
 	$(CC) $(nm_stage_c) $^ $(bin_out)$@
 
+
+# wrap
+ld_wrap_binout := $(bin_path)/$(ld_prefix)_wrap$(bin_ext)
+
+ifeq (NO, $(ld_wrap_opt))
+ld_wrap:
+	@echo "#skip ld_wrap_test ..."
+ld_wrap_test: ld_wrap
+else
+ld_wrap: $(ld_wrap_binout)
+ld_wrap_test: ld_wrap
+	$(ld_wrap_binout)
+endif
+
+$(ld_wrap_binout): $(ld_root)/wrap/w.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_wrap_opt)
 
 # eof

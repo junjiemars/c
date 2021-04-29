@@ -140,4 +140,41 @@ if [ -z "$ld_nostdlib_opt" ]; then
 fi
 
 
+# check ld's option
+#----------------------------------------
+ld_wrap_opt=NO
+case "$CC_NAME" in
+  clang)
+    ;;
+  gcc)
+    case "$NM_SYSTEM" in
+      Linux)
+        case "$NM_MACHINE" in
+          x86_64)
+            echo $echo_n " + checking for $CC_NAME: -Wl,--wrap ... $echo_c"
+            ld_wrap_opt="-Wl,--wrap=malloc"
+            flag=ld_wrap_opt op=":=" value="$ld_wrap_opt" \
+                . ${NORE_ROOT}/auto/make_define
+            echo "yes"
+            ;;
+          *)
+          ;;
+        esac
+        ;;
+      *)
+        ;;
+    esac
+    ;;
+  msvc)
+    ;;
+esac
+if [ -z "$ld_wrap_opt" ]; then
+  echo $echo_n " + checking for $CC_NAME: --wrap ... $echo_c"
+  ld_wrap_opt="NO"
+  flag=ld_wrap_opt op=":=" value="$ld_wrap_opt" \
+      . ${NORE_ROOT}/auto/make_define
+  echo "no"
+fi
+
+
 # eof
