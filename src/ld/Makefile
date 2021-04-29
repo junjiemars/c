@@ -119,12 +119,13 @@ ld_wrap:
 	@echo "#skip ld_wrap_test ..."
 ld_wrap_test: ld_wrap
 else
+ld_wrap_flags = $(ld_wrap_opt)malloc $(ld_wrap_opt)free
 ld_wrap: $(ld_wrap_binout)
 ld_wrap_test: ld_wrap
 	$(ld_wrap_binout)
 endif
 
 $(ld_wrap_binout): $(ld_root)/wrap/w.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_wrap_opt)
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_wrap_flags)
 
 # eof

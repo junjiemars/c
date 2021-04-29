@@ -152,7 +152,7 @@ case "$CC_NAME" in
         case "$NM_MACHINE" in
           x86_64)
             echo $echo_n " + checking for $CC_NAME: -Wl,--wrap ... $echo_c"
-            ld_wrap_opt="-Wl,--wrap=malloc"
+            ld_wrap_opt="-Wl,--wrap="
             flag=ld_wrap_opt op=":=" value="$ld_wrap_opt" \
                 . ${NORE_ROOT}/auto/make_define
             echo "yes"
