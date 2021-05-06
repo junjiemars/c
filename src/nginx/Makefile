@@ -7,10 +7,12 @@ nginx_git_src := 'https://github.com/nginx/nginx.git'
 nginx_home := $(nginx_root)/nginx_home
 
 
-nginx: nginx_module_hello												\
+nginx: nginx_logging														\
+       nginx_module_hello												\
        nginx_module_njs
 
-nginx_test: nginx_module_hello_test							\
+nginx_test: nginx_logging_test									\
+            nginx_module_hello_test							\
             nginx_module_njs_test
 
 
@@ -38,6 +40,43 @@ $(nginx_home):
 	git clone --depth=1 --branch=master $(nginx_git_src) $@
 
 
+# logging
+nginx_logging_root := $(CURDIR)/$(nginx_root)/logging
+nginx_logging_prefix := $(nginx_out)/logging
+nginx_logging_binout := $(nginx_logging_prefix)/sbin/nginx
+
+
+ifeq (msvc, $(CC_NAME))
+nginx_logging:
+	@echo "#skip nginx_logging_test ..."
+nginx_logging_test: nginx_logging
+else
+nginx_logging: $(nginx_logging_binout)
+nginx_logging_test: nginx_logging
+	$(nginx_logging_binout) -T
+endif # end of msvc
+
+
+$(nginx_logging_binout): $(nginx_home)										\
+                         $(nginx_logging_root)/nginx.conf
+	cd $(nginx_home)																			\
+		&& auto/configure --prefix=$(nginx_logging_prefix)	\
+                      --without-http_fastcgi_module			\
+                      --without-http_uwsgi_module				\
+                      --without-http_scgi_module				\
+                      --without-http_memcached_module		\
+                      --without-http_rewrite_module			\
+                      --without-http-cache							\
+                      --without-http_proxy_module				\
+                      --without-pcre										\
+                      --with-cc-opt="$(nginx_cc_opt)"		\
+                      --with-ld-opt="$(nginx_ld_opt)"		\
+                      $(nginx_debug_opt)								\
+    && make -j4 install																	\
+    && cp $(nginx_logging_root)/nginx.conf							\
+					$(nginx_logging_prefix)/conf/nginx.conf
+
+
 # hello
 nginx_hello_module_root := $(CURDIR)/$(nginx_root)/hello
 nginx_module_hello_prefix := $(nginx_out)/hello
@@ -55,7 +94,8 @@ nginx_module_hello_test: nginx_module_hello
 endif # end of msvc
 
 
-$(nginx_module_hello_binout): $(nginx_home)
+$(nginx_module_hello_binout): $(nginx_home)													\
+                              $(nginx_hello_module_root)/nginx.conf
 	cd $(nginx_home)																						\
 		&& auto/configure --prefix=$(nginx_module_hello_prefix)		\
                       --without-http_fastcgi_module						\
@@ -98,7 +138,9 @@ nginx_module_njs_test: nginx_module_njs
 endif # end of msvc
 
 
-$(nginx_module_njs_binout): $(nginx_njs_module_src)
+$(nginx_module_njs_binout): $(nginx_njs_module_src)							\
+                            $(nginx_njs_module_root)/nginx.conf	\
+                            $(nginx_njs_module_root)/http.js
 	cd $(nginx_home)																										\
 		&& auto/configure --prefix=$(nginx_module_njs_prefix)							\
                       --without-http_memcached_module									\
