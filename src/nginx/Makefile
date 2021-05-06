@@ -58,7 +58,8 @@ endif # end of msvc
 
 
 $(nginx_logging_binout): $(nginx_home)										\
-                         $(nginx_logging_root)/nginx.conf
+                         $(nginx_logging_root)/nginx.conf	\
+                         $(nginx_logging_root)/inc.conf
 	cd $(nginx_home)																			\
 		&& auto/configure --prefix=$(nginx_logging_prefix)	\
                       --without-http_fastcgi_module			\
@@ -73,6 +74,8 @@ $(nginx_logging_binout): $(nginx_home)										\
                       --with-ld-opt="$(nginx_ld_opt)"		\
                       $(nginx_debug_opt)								\
     && make -j4 install																	\
+    && cp $(nginx_logging_root)/inc.conf								\
+          $(nginx_logging_prefix)/conf/inc.conf					\
     && cp $(nginx_logging_root)/nginx.conf							\
 					$(nginx_logging_prefix)/conf/nginx.conf
 
