@@ -7,11 +7,11 @@ nginx_git_src := 'https://github.com/nginx/nginx.git'
 nginx_home := $(nginx_root)/nginx_home
 
 
-nginx: nginx_logging														\
+nginx: nginx_core																\
        nginx_module_hello												\
        nginx_module_njs
 
-nginx_test: nginx_logging_test									\
+nginx_test: nginx_core_test											\
             nginx_module_hello_test							\
             nginx_module_njs_test
 
@@ -40,28 +40,28 @@ $(nginx_home):
 	git clone --depth=1 --branch=master $(nginx_git_src) $@
 
 
-# logging
-nginx_logging_root := $(CURDIR)/$(nginx_root)/logging
-nginx_logging_prefix := $(nginx_out)/logging
-nginx_logging_binout := $(nginx_logging_prefix)/sbin/nginx
+# core
+nginx_core_root := $(CURDIR)/$(nginx_root)/core
+nginx_core_prefix := $(nginx_out)/core
+nginx_core_binout := $(nginx_core_prefix)/sbin/nginx
 
 
 ifeq (msvc, $(CC_NAME))
-nginx_logging:
-	@echo "#skip nginx_logging_test ..."
-nginx_logging_test: nginx_logging
+nginx_core:
+	@echo "#skip nginx_core_test ..."
+nginx_core_test: nginx_core
 else
-nginx_logging: $(nginx_logging_binout)
-nginx_logging_test: nginx_logging
-	$(nginx_logging_binout) -T
+nginx_core: $(nginx_core_binout)
+nginx_core_test: nginx_core
+	$(nginx_core_binout) -T
 endif # end of msvc
 
 
-$(nginx_logging_binout): $(nginx_home)										\
-                         $(nginx_logging_root)/nginx.conf	\
-                         $(nginx_logging_root)/inc.conf
+$(nginx_core_binout): $(nginx_home)										\
+                         $(nginx_core_root)/nginx.conf	\
+                         $(nginx_core_root)/inc.conf
 	cd $(nginx_home)																			\
-		&& auto/configure --prefix=$(nginx_logging_prefix)	\
+		&& auto/configure --prefix=$(nginx_core_prefix)	\
                       --without-http_fastcgi_module			\
                       --without-http_uwsgi_module				\
                       --without-http_scgi_module				\
@@ -74,10 +74,10 @@ $(nginx_logging_binout): $(nginx_home)										\
                       --with-ld-opt="$(nginx_ld_opt)"		\
                       $(nginx_debug_opt)								\
     && make -j4 install																	\
-    && cp $(nginx_logging_root)/inc.conf								\
-          $(nginx_logging_prefix)/conf/inc.conf					\
-    && cp $(nginx_logging_root)/nginx.conf							\
-					$(nginx_logging_prefix)/conf/nginx.conf
+    && cp $(nginx_core_root)/inc.conf								\
+          $(nginx_core_prefix)/conf/inc.conf					\
+    && cp $(nginx_core_root)/nginx.conf							\
+					$(nginx_core_prefix)/conf/nginx.conf
 
 
 # hello
