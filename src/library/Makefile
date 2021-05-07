@@ -84,7 +84,7 @@ $(geo_h): $(library_root)/geo/geo.h
 # math
 ifeq (msvc, $(CC_NAME))
 LD_LIBRARY_PATH := PATH
-LDLIBS := libgeo$(lib_ext)
+LDLIBS := libgeo$(ar_ext)
 endif
 
 ifeq (Linux, $(NM_SYSTEM))
