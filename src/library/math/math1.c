@@ -1,8 +1,8 @@
 #include "math1.h"
 #include "geo.h"
-#include <math.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 int 
 main(void)

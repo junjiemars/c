@@ -75,7 +75,7 @@ case $NM_SYSTEM in
 		nm_feature_name="nm_have_math_lib"
 		nm_feature_run=yes
 		nm_feature_h="#include <math.h>"
-		nm_feature_flags=
+		nm_feature_tails="${nm_lib_opt}m"
 		nm_feature_test='int x = round(2.5);
 										 return (2 == x);'
 		. ${NORE_ROOT}/auto/feature
