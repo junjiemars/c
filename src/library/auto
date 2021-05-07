@@ -73,6 +73,7 @@ case $NM_SYSTEM in
 	Linux)
 		nm_feature="math lib"
 		nm_feature_name="nm_have_math_lib"
+    nm_feature_indent=yes
 		nm_feature_run=yes
 		nm_feature_h="#include <math.h>"
 		nm_feature_tails="${nm_lib_opt}m"
