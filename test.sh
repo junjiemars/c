@@ -76,7 +76,7 @@ test_do() {
   if [ 0 -ne $rc ]; then
     echo "------------"
     echo "! $@ <failed>"
-    ehco "# dump out/auto.err ..."
+    echo "# dump out/auto.err ..."
     cat out/auto.err
     echo "------------"
   fi
