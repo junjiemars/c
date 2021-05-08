@@ -60,7 +60,7 @@ else
 ffi_nodejs:
 	@echo "#skip ffi_nodejs_test ..."
 ffi_nodejs_test: ffi_nodejs
-endif														# has_nodejs
+endif
 
 
 

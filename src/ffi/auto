@@ -12,8 +12,6 @@ nt_to_posix_path() {
 }
 
 
-# check java
-#----------------------------------------
 check_java_env () {
   local has_java=NO
   local javac_ver=
@@ -114,21 +112,36 @@ case $CC_NAME in
 esac
 
 
+check_nodejs () {
+  local has_nodejs=NO
+  loccal nodejs_ver=
+  local npm_ver=
+
+  echo ${echo_n} " + checking for node.js ... " ${echo_c}
+
+  nodejs_ver="`node --version 2>/dev/null`"
+  if [ 0 -ne $? -o -z "$nodejs_ver" ]; then
+    echo "no"
+    return
+  fi
+
+  npm_ver="`npm --version 2>/dev/null`"
+  if [ 0 -ne $> -o -z "$npm_ver" ]; then
+    echo "no"
+    return
+  fi
+
+  flag=has_nodejs value="YES" . ${NORE_ROOT}/auto/make_define
+  echo "yes"
+}
+
+
+# check java
+#----------------------------------------
+check_java_env
+
 # check nodejs
 #----------------------------------------
-echo ${echo_n} " + checking for node.js version ... " ${echo_c}
-has_nodejs=NO
-nodejs_ver="`node --version 2>/dev/null`"
-if [ -n "$nodejs_ver" ]; then
-  has_nodejs="YES"
-  echo "yes"
-else
-  echo "no"
-fi
-flag=nodejs_ver op=":=" value="${node_ver}" . ${NORE_ROOT}/auto/make_define
-flag=has_nodejs op=":=" value="${has_nodejs}" . ${NORE_ROOT}/auto/make_define
-
-
-check_java_env
+check_nodejs
 
 # EOF
