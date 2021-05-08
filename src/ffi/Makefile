@@ -3,7 +3,9 @@
 #
 
 ffi_prefix := ffi
+
 INC += -I$(ffi_root)
+
 
 ffi: ffi_jni																		\
      ffi_nodejs
@@ -27,17 +29,17 @@ $(jni_square_libout): $(java2c_h)								\
 	$(CC) $(jni_cflags) $(jni_inc) $(ffi_root)/jni/square.c $(bin_out)$@
 
 $(java2c_h) $(java2c_classout): $(ffi_root)/jni/Java2c.java
-	$(JAVAC) -h $(inc_path) -d $(bin_path) $^
+	$(JAVAH) $(inc_path) -d $(bin_path) $^
 
 
-ifeq (YES, $(javac_ge_8))
+ifeq (YES, $(has_java))
 ffi_jni: $(jni_square_libout)										\
          $(java2c_classout)
 ffi_jni_test: ffi_jni
 	$(JAVA) $(jni_classpath) -Djava.library.path=$(lib_path) Java2c
 else
 ffi_jni:
-	@echo "#skip ffi_jni_test, need java8."
+	@echo "#skip ffi_jni_test ..."
 ffi_jni_test: ffi_jni
 endif
 

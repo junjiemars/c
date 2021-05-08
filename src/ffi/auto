@@ -1,74 +1,95 @@
 # -*- mode:sh -*- vim:ft=sh
 
 
-# javac version
+nt_to_posix_path() {
+	if [[ $1 =~ ^[a-zA-Z]:\\.* ]]; then
+		echo "\\$1" | \
+			sed -e 's#^\\\([a-zA-Z]\):\\#\\\l\1\\#' | \
+			sed -e 's#\\#\/#g'
+	else
+		echo "$1"
+	fi
+}
+
+
+# check java
 #----------------------------------------
-echo ${echo_n} " + checking for javac version ... " ${echo_c}
-javac_ver="`javac -version 2>/dev/null`"
-if [ -n "$javac_ver" ]; then
-  javac_ver=`echo ${javac_ver}|sed -e 's/^javac \([0-9][0-9]*\)\..*$/\1/'`
-  if [ 0 -eq $? ]; then
-    echo "yes"
-  else
+check_java_env () {
+  local has_java=NO
+  local javac_ver=
+  local javac=javac
+  local javah=javah
+  local java_home=
+  local java=
+  local jni_inc=
+  local jni_cflags=
+  local jni_ldflags=
+  local jni_ldlibs=
+
+  echo ${echo_n} " + checking for java ... " ${echo_c}
+
+  javac_ver="`${javac} -version 2>/dev/null`"
+  if [ -z "$javac_ver" ]; then
     echo "no"
+    return
   fi
-else
-  echo "no"
-fi
-flag=javac_ver op=":=" value=${javac_ver} . ${NORE_ROOT}/auto/make_define
-javac_ge_8=NO
-if test ${javac_ver} -ge 8 &> /dev/null; then
-  javac_ge_8=YES
-  flag=javac_ge_8 op=":=" value="$javac_ge_8" . ${NORE_ROOT}/auto/make_define
-fi
 
-# java home
-#----------------------------------------
-java_home=
-echo $echo_n " + checking for java home ... $echo_c"
-case ${NM_SYSTEM} in
-  Darwin)
-    java_home="`/usr/libexec/java_home`"
-    if [ -d "$java_home" ]; then
-      flag=java_home op=":=" value="$java_home" . ${NORE_ROOT}/auto/make_define
-      echo "yes"
-    else
-      echo "no"
-    fi
-    ;;
-  Linux)
-    java_home="$(dirname $(dirname $(readlink -f $(which javac))))"
-    if [ 0 -eq $? ]; then
-      flag=java_home op=":=" value="$java_home" . ${NORE_ROOT}/auto/make_define
-      echo "yes"
-    else
-      echo "no"
-    fi
-    ;;
-  WinNT)
+  javac_ver=`echo ${javac_ver}|sed -e 's/^javac \([0-9][0-9]*\)\..*$/\1/'`
+  if [ 0 -ne $? ]; then
     echo "no"
-    ;;
-esac
+    return
+  fi
 
+  if [ "$javac_ver" -ge 8 ]; then
+    javah="javac -h"
+  fi
 
-flag=JAVAC value="javac" \
-    . ${NORE_ROOT}/auto/make_define
+  case ${NM_SYSTEM} in
+    Darwin)
+      java_home="`/usr/libexec/java_home`"
+      if [ -d "$java_home" ]; then
+		    jni_inc="-I${java_home}/include -I${java_home}/include/darwin"
+		    jni_ldflags="-L${java_home}/jre/lib/server"
+		    jni_ldlibs="-ljvm"
+      fi
+      ;;
+    Linux)
+      java_home="$(dirname $(dirname $(readlink -f $(which javac))))"
+      if [ 0 -eq $? -a -d "$java_home" ]; then
+		    jni_inc="-I${java_home}/include -I${java_home}/include/linux"
+		    jni_ldflags="-L${java_home}/lib"
+		    jni_ldlibs="-ljvm"
+      fi
+      ;;
+    WinNT)
+      java_home=`nt_to_posix_path "$java_home"`
+      if [ 0 -eq $? -a -d "$java_home" ]; then
+		    jni_inc="-I${java_home}/include -I${java_home}/include/win32"
+      fi
+      ;;
+  esac
 
-flag=JAVA  value="${java_home}/bin/java" \
-    . ${NORE_ROOT}/auto/make_define
+  if [ ! -f "${java_home}/bin/java" ]; then
+    echo "no"
+    return
+  fi
 
-if [ "$javac_ge_8" = "YES" ]; then
-  flag=JAVAH value="javac -h" \
-      . ${NORE_ROOT}/auto/make_define
-else
-  flag=JAVAH value="javah" \
-      . ${NORE_ROOT}/auto/make_define
-fi
+  if [ "$NM_SYMBOL" == "YES" ]; then
+    jni_cflags="-g"
+  fi
 
-if [ "$NM_SYMBOL" == "YES" ]; then
-	flag=jni_symbol value="-g" \
-      . ${NORE_ROOT}/auto/make_define
-fi
+  flag=JAVAC value="$javac" . ${NORE_ROOT}/auto/make_define
+  flag=JAVAH value="$javah" . ${NORE_ROOT}/auto/make_define
+  flag=JAVA  value="${java_home}/bin/java" . ${NORE_ROOT}/auto/make_define
+  flag=jni_inc value="$jni_inc" . ${NORE_ROOT}/auto/make_define
+  flag=jni_cflags value="$jni_cflags" . ${NORE_ROOT}/auto/make_define
+  flag=jni_ldflags value="$jni_ldflags" . ${NORE_ROOT}/auto/make_define
+  flag=jni_ldlibs value="$jni_ldlibs" . ${NORE_ROOT}/auto/make_define
+
+  flag=has_java value="YES" . ${NORE_ROOT}/auto/make_define
+  echo "yes"
+}
+
 
 # check compiler features
 #----------------------------------------
@@ -76,6 +97,7 @@ case $CC_NAME in
 	clang|gcc)
 		nm_feature="$CC_NAME -fPIC"
 		nm_feature_name=
+    nm_feature_indent=yes
 		nm_feature_run=no
 		nm_feature_h=
 		nm_feature_flags=-fPIC
@@ -92,15 +114,6 @@ case $CC_NAME in
 esac
 
 
-nt_to_posix_path() {
-	if [[ $1 =~ ^[a-zA-Z]:\\.* ]]; then
-		echo "\\$1" | \
-			sed -e 's#^\\\([a-zA-Z]\):\\#\\\l\1\\#' | \
-			sed -e 's#\\#\/#g' 
-	else
-		echo "$1"
-	fi
-}
 
 
 # check JNI include
@@ -108,24 +121,10 @@ nt_to_posix_path() {
 if [ -d "$java_home" ]; then
   case ${NM_SYSTEM} in
 	  Darwin)
-		  flag=jni_inc value="-I${java_home}/include -I${java_home}/include/darwin" \
-				  . ${NORE_ROOT}/auto/make_define
-		  flag=jni_ldflags value="-L${java_home}/jre/lib/server" \
-				  . ${NORE_ROOT}/auto/make_define
-		  flag=jni_ldlibs value="-ljvm" . ${NORE_ROOT}/auto/make_define
 	    ;;
 	  Linux)
-		  flag=jni_inc value="-I${java_home}/include -I${java_home}/include/linux" \
-			    . ${NORE_ROOT}/auto/make_define
-		  flag=jni_ldflags value="-L${java_home}/lib" \
-			    . ${NORE_ROOT}/auto/make_define
-		  flag=jni_ldlibs value="-ljvm" \
-          . ${NORE_ROOT}/auto/make_define
 	    ;;
 	  WinNT)
-		  java_home=`nt_to_posix_path "$java_home"`
-		  flag=jni_inc value="-I${java_home}/include -I${java_home}/include/win32" \
-				  . ${NORE_ROOT}/auto/make_define
 	    ;;
   esac
 fi
@@ -145,5 +144,7 @@ fi
 flag=nodejs_ver op=":=" value="${node_ver}" . ${NORE_ROOT}/auto/make_define
 flag=has_nodejs op=":=" value="${has_nodejs}" . ${NORE_ROOT}/auto/make_define
 
+
+check_java_env
 
 # EOF

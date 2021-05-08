@@ -90,6 +90,9 @@ src/nginx/njs/src
 # leptonica
 src/leptonica/leptonica_home
 
+# java
+**/*.jar
+
 # node.js
 **/node_modules/
 **/package-lock.json
