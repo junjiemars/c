@@ -43,7 +43,8 @@ case "$CC_NAME" in
            . ${NORE_ROOT}/auto/make_define
        flag=LDFLAGS op="+=" value=$nm_feature_flags \
            . ${NORE_ROOT}/auto/make_define
-       flag=ld_rpath_opt op=":=" value=YES \
+       ld_rpath_opt=YES
+       flag=ld_rpath_opt op=":=" value="$ld_rpath_opt" \
            . ${NORE_ROOT}/auto/make_define
      fi
      ;;
@@ -59,14 +60,15 @@ case "$CC_NAME" in
      if [ yes = $nm_found ]; then
        flag=LDFLAGS op="+=" value=$nm_feature_flags \
            . ${NORE_ROOT}/auto/make_define
-       flag=ld_rpath_opt op=":=" value=YES \
+       ld_rpath_opt=YES
+       flag=ld_rpath_opt op=":=" value="$ld_rpath_opt" \
            . ${NORE_ROOT}/auto/make_define
      fi
      ;;
    msvc)
      ;;
 esac
-if [ -z "$ld_rpath_opt" ]; then
+if [ "$ld_rpath_opt" != "YES" ]; then
   flag=ld_rpath_opt op=":=" value=NO \
       . ${NORE_ROOT}/auto/make_define
 fi
