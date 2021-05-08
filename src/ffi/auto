@@ -114,22 +114,6 @@ case $CC_NAME in
 esac
 
 
-
-
-# check JNI include
-#----------------------------------------
-if [ -d "$java_home" ]; then
-  case ${NM_SYSTEM} in
-	  Darwin)
-	    ;;
-	  Linux)
-	    ;;
-	  WinNT)
-	    ;;
-  esac
-fi
-
-
 # check nodejs
 #----------------------------------------
 echo ${echo_n} " + checking for node.js version ... " ${echo_c}
