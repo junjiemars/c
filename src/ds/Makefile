@@ -12,14 +12,10 @@ CFLAGS += $(cflags_sanitize)
 endif
 endif
 
-ifeq ($(shell test -n "$(NDEBUG)" && test $(NDEBUG) -gt 0; echo $$?),0)
-	CFLAGS += -DNDEBUG=1
-endif
-
 
 ds: double_linked_list													\
 		single_linked_list													\
-    list																				\
+    ds_list																			\
     queue																				\
 		ds_stack																		\
     ds_tree																			\
@@ -28,7 +24,7 @@ ds: double_linked_list													\
 
 ds_test: double_linked_list_test								\
 				 single_linked_list_test								\
-         list_test															\
+         ds_list_test														\
          queue_test															\
 				 ds_stack_test													\
          ds_tree_test														\
@@ -74,10 +70,10 @@ $(single_linked_list_binout): $(ds_root)/single_linked_list/test.c \
 list_link_binout := $(bin_path)/$(ds_prefix)_list_link$(bin_ext)
 list_sort_binout := $(bin_path)/$(ds_prefix)_list_sort$(bin_ext)
 
-list: list_link																	\
-      list_sort
-list_test: list_link_test												\
-           list_sort_test
+ds_list: list_link															\
+         list_sort
+ds_list_test: list_link_test										\
+              list_sort_test
 
 list_link: $(list_link_binout)
 list_sort: $(list_sort_binout)
@@ -86,11 +82,6 @@ list_link_test: list_link
 	$(list_link_binout)
 list_sort_test: list_sort
 	$(list_sort_binout)
-
-list_valgrind_test: list_link_test							\
-                    list_sort_test
-	valgrind --leak-check=full --track-origins=yes $(list_link_binout)
-	valgrind --leak-check=full --track-origins=yes $(list_sort_binout)
 
 $(list_link_binout): $(ds_root)/list/link/test.c	\
 										 $(ds_root)/list/link/list.h
@@ -161,6 +152,7 @@ $(stack_linklist_binout): $(ds_root)/stack/linklist/test.c		\
 	$(CC) $(CFLAGS) $(INC)												\
     $(ds_root)/stack/linklist/test.c							\
     $(bin_out)$@
+
 
 # tree
 
