@@ -20,24 +20,49 @@ typedef struct node_s {
 
 typedef struct list_s {
   size_t size;
+  int (*compare)(const void *lhs, const void *rhs);
   struct node_s *head;
 } list_s;
 
 
+list_s *list_new(list_s *l, size_t size,
+                 int (*compare)(const void *lhs, const void *rhs));
+void list_free(list_s *const l);
+
 node_s *list_node_new(list_s *const l);
 void list_node_free(node_s *const n);
 
-list_s *list_new(list_s *l, size_t size);
-void list_free(list_s *const l);
+node_s *list_insert(list_s *const l, void *val);
 
-
-node_s *list_insert(list_s *const l, void *val,
-                    int (*cmp)(const void *lhs, const void *rhs));
-
-node_s *list_find(list_s *const l, const void *val,
-                  int (*cmp)(const void *lhs, const void *rhs));
+node_s *list_find(list_s *const l, const void *val);
 
 int list_remove(list_s *const l, node_s *const n);
+
+
+list_s*
+list_new(list_s *l, size_t size,
+         int (*compare)(const void *lhs, const void *rhs))
+{
+  l = calloc(1, sizeof(list_s));
+  if (l) {
+    l->size = size;
+    l->compare = compare;
+  }
+  return l;
+}
+
+void
+list_free(list_s *const l)
+{
+  node_s *h = l->head;
+  node_s *c;
+  while (h) {
+    c = h;
+    h = h->next;
+    list_node_free(c);
+  }
+  free(l);
+}
 
 
 inline node_s*
@@ -59,32 +84,9 @@ list_node_free(node_s *const n)
   }
 }
 
-list_s*
-list_new(list_s *l, size_t size)
-{
-  l = calloc(1, sizeof(list_s));
-  if (l) {
-    l->size = size;
-  }
-  return l;
-}
-
-void
-list_free(list_s *const l)
-{
-  node_s *h = l->head;
-  node_s *c;
-  while (h) {
-    c = h;
-    h = h->next;
-    list_node_free(c);
-  }
-  free(l);
-}
 
 node_s*
-list_insert(list_s *const l, void *val,
-            int (*cmp)(const void *lhs, const void *rhs))
+list_insert(list_s *const l, void *val)
 {
   node_s *new_one = list_node_new(l);
   if (!new_one) {
@@ -94,7 +96,7 @@ list_insert(list_s *const l, void *val,
 
   node_s *h = l->head;
   node_s *pre = 0;
-  while (h && !_sort_(cmp(val, h->data))) {
+  while (h && !_sort_(l->compare(val, h->data))) {
     pre = h;
     h = h->next;
   }
@@ -110,15 +112,14 @@ list_insert(list_s *const l, void *val,
 }
 
 node_s
-*list_find(list_s *const l, const void *val,
-                  int (*cmp)(const void *lhs, const void *rhs))
+*list_find(list_s *const l, const void *val)
 {
-  if (_sort_(cmp(val, l->head->data))) {
+  if (_sort_(l->compare(val, l->head->data))) {
     return 0;
   }
   
   node_s *h = l->head->next;
-  while (h && 0 != cmp(val, h->data)) {
+  while (h && 0 != l->compare(val, h->data)) {
     h = h->next;
   }
   return h;
