@@ -64,6 +64,8 @@ geo_h := $(inc_path)/geo.h
 geo: $(geo_binout)
 geo_test: geo
 	$(geo_binout)
+geo_list_ar: $(geo_arout)
+	nm $<
 
 $(geo_binout): $(library_root)/geo/test.c $(geo_arout)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -121,7 +123,7 @@ $(math_shared_binout): $(library_root)/math/math1.c $(geo_libout)
 	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $< $(bin_out)$@ $(LDFLAGS) $(LDLIBS)
 
 
-.PHONY: geo geo_test														\
+.PHONY: geo geo_test geo_list_ar								\
         math_static math_static_test						\
         math_shared math_shared_test
 
