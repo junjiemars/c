@@ -19,7 +19,7 @@
 extern "C" {
 #endif
 
-    double GEO_API area_of_rect(double, double);
+double GEO_API area_of_rect(double, double);
 
 #ifdef __cplusplus
 }
