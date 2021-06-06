@@ -246,7 +246,7 @@ purposes. =#pragma= is commonly used to suppress warnings.
 #  pragma warning(disable:4706) /* assignment within conditional expression */
 #  pragma comment(lib, "Ws2_32.lib") /* link to Ws2_32.lib */
 #elif (GCC)
-#  pragma GCC diagnostic ignored "-Wstrict-aliasing" /* (unsigned*)&x */
+#  pragma GCC diagnostic ignored "-Wstrict-aliasing" /* (unsigned*) &x */
 #elif (CLANG)
 #  pragma clang diagnostic ignored "-Wparentheses"
 #endif
