@@ -114,7 +114,7 @@ should be careful when using =#define= in this way.
 - Defining a /parameterized macro/
 #+BEGIN_SRC c
 #define identifier(<arg> [, <arg> ...]) statement
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define max(a, b) ((a) > (b) ? (a) : (b))
 #+END_SRC
 
 *** =#undef=
@@ -151,13 +151,13 @@ understand block scope.
 =#if= check the value of the symbol when the symbol had been defined,
 =#ifdef= just check the existence of the symbol.
 
-Prefer =#if define(...)=, it's more flexible
+Prefer =#if defined(...)=, it's more flexible
 #+BEGIN_SRC c
 #if defined(LINUX) || defined(DARWIN)
 /* code: when on LINUX or DARWIN platform */
 #endif
 
-#if defined(CLANG) && (1==NM_CPU_LITTLE_ENDIAN)
+#if defined(CLANG) && (1 == NM_CPU_LITTLE_ENDIAN)
 /* code: when using clang compiler and on a little endian machine */
 #endif
 #+END_SRC
@@ -189,8 +189,8 @@ and checking that the identifier was not set at the top of that file.
 =#if !defined(identifier)= is equivalent to =#ifndef identifier=
 
 #+BEGIN_SRC c
-#if !defined(MIN)
-#  define MIN(a, b) ((a) < (b) ? (a) : (b))
+#if !defined(min)
+#  define min(a, b) ((a) < (b) ? (a) : (b))
 #endif
 #+END_SRC
 
@@ -209,8 +209,8 @@ most useful when combined with =#if/#elif/#else= to fail compilation
 if some condition is not true. For example:
 
 #+BEGIN_SRC c
-#if (1==_ERROR_)
-#  error "compile failed: because _ERROR_==1 is true"
+#if (1 == _ERROR_)
+#  error "compile failed: because _ERROR_ == 1 is true"
 #endif
 #+END_SRC
 
