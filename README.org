@@ -59,7 +59,7 @@ Run the example under =src/lang=.
 make clean test
 #+END_SRC
 
-** Preprocessor	
+** Preprocessor
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_preprocessor
 	 :END:
@@ -81,11 +81,16 @@ text manipulations, such as:
 make clean lang_preprocessor_test
 #+END_SRC
 
+*** =#ident=
+		:PROPERTIES:
+		:CUSTOM_ID: language_preprocessor_ident
+		:END:
+
 *** =#include=
 		:PROPERTIES:
 		:CUSTOM_ID: language_preprocessor_include
 		:END:
-		
+
 The =#include= directive instructs the preprocessor to paste the text
 of the given file into the current file. Generally, it is necessary to
 tell the preprocessor where to look for header files if they are not
@@ -218,7 +223,7 @@ if some condition is not true. For example:
 		:PROPERTIES:
 		:CUSTOM_ID: language_preprocessor_pragma
 		:END:
-		
+
 The =#pragma= directive is used to access compiler-specific
 preprocessor extensions.
 
@@ -399,7 +404,7 @@ Disadvantages of /Function Return Value/:
 		:END:
 
 =char * strerror(int errnum);=
-		
+
 Interprets the value of /errnum/, generating a string with a message
 that describes the error condition as if set to =errno= by a function
 of the library. The returned pointer points to a statically allocated
@@ -506,14 +511,14 @@ variable name, or any other identifier.
 DEFVAR(int, x, 1); /* expand to: int var_x = 1; */
 DEFVAR(float, y, 2.718); /* expand to: float var_y = 2.718; */
 #+END_SRC
-	 
+
 *** Expression
 		:PROPERTIES:
 		:CUSTOM_ID: language_macro_expression
 		:END:
 
 Expression-type macro will expand to expression, such as the following
-macro definition 
+macro definition
 #+BEGIN_SRC c
 #define double_v1(x) 2*x
 #+END_SRC
@@ -672,13 +677,13 @@ const int * const == int const * const; /* const pointer to const int  */
   int v = 0x11223344;
   const int *p = &v;
   #+END_SRC
- 
+
 - =const= pointer to object
   #+BEGIN_SRC c
   int v1=0x11223344;
   int *const p1 = &v1;
   #+END_SRC
- 
+
 - =const= pointer to =const= object
  #+BEGIN_SRC c
   int v1=0x11223344;
@@ -768,7 +773,7 @@ pointers.
 		:PROPERTIES:
 		:CUSTOM_ID: language_pointer_pointer_decay
 		:END:
-		
+
 
 Decay refers to the implicit conversion of an expression from an array
 type to a pointer type. In most contexts, when the compiler sees an
@@ -978,7 +983,7 @@ that identifier that:
 - for an enumeration constant or typedef name, is the only declaration
   of the identifier.
 
-	
+
 In the following example we declared a function. Using =extern=
 keyword is optional while declaring function. If we don't write
 =exern= keyword while declaring function, it is automatically appended
@@ -987,7 +992,7 @@ before it.
 int add(int, int);
 #+END_SRC
 
-*** Block scope 
+*** Block scope
 		:PROPERTIES:
 		:CUSTOM_ID: block_scope
 		:END:
@@ -1340,7 +1345,7 @@ Compare with =malloc(sizeof *x * length * width)= vs.
 
 =calloc= should zero intializes the allocated memory. Call =calloc= is
 not necessarily more expensive.
-		
+
 *** realloc
 	 :PROPERTIES:
 	 :custom_id: alloc-realloc
@@ -1732,7 +1737,7 @@ RFLAGS Register
 - [[https://wiki.osdev.org/CPU_Registers_x86-64][CPU Registers x86-64]]
 - [[https://software.intel.com/content/www/us/en/develop/articles/introduction-to-x64-assembly.html][Introduction to x64 Assembly]]
 - [[https://www.amd.com/system/files/TechDocs/24594.pdf][AMD64 Architecutre Programmer's Manual]]
-- [[https://www.csee.umbc.edu/~chang/cs313.s02/stack.shtml][C Function Call Conventions and the Stack]]	
+- [[https://www.csee.umbc.edu/~chang/cs313.s02/stack.shtml][C Function Call Conventions and the Stack]]
 
 * Memory
 	:PROPERTIES:
@@ -1755,11 +1760,11 @@ make clean test
 		:CUSTOM_ID: memory-bits-and-bytes-bits
 		:END:
 
-The smallest unit of memory is the /bit/. 
-A bit can be in one of two states: =on= vs. =off=, 
+The smallest unit of memory is the /bit/.
+A bit can be in one of two states: =on= vs. =off=,
 or alternately, =1= vs. =0=.
 
-Most computers don't work with bits individually, but instead group eight 
+Most computers don't work with bits individually, but instead group eight
 bits together to form a /byte/. Eash byte maintains one eight-bit pattern.
 A group of N bits can be arranged in 2^N different patterns.
 
@@ -1771,12 +1776,12 @@ Strictly speaking, a program can interpret a bit pattern any way it chooses.
 	 :END:
 
 The byte is sometimes defined as the /smallest addressable unit/ of memory.
-Most computers also support reading and writting larger units of 
-memory: 2 bytes /half-words/ (sometimes known as a /short/ word) 
+Most computers also support reading and writting larger units of
+memory: 2 bytes /half-words/ (sometimes known as a /short/ word)
 and 4 byte /word/.
 
-Most computers restrict half-word and word accesses to be /aligned/: 
-a half-word must start at an even address and a word must start at an 
+Most computers restrict half-word and word accesses to be /aligned/:
+a half-word must start at an even address and a word must start at an
 address that is a multiple of 4.
 
 *** Shift
@@ -1814,7 +1819,7 @@ Right shift, =x >> y=
   -	correct rounding towards 0 requires some care with signed numbers.
   -	=(unsigned)x >> y | ~(~0u >> y)=
 
-** Basic Types	
+** Basic Types
 	 :PROPERTIES:
 	 :CUSTOM_ID: memory-basic-types
 	 :END:
@@ -1825,33 +1830,33 @@ Right shift, =x >> y=
 		:END:
 
 The ASCII code defines 128 characters and a mapping of those
-characters onto the numbers 0..127. The letter 'A' is assigned 65 in the 
-ASCII table. Expressed in binary, that's 2^6 + 2^0 (64 + 1). 
-All standard ASCII characters have zero in the uppermost 
+characters onto the numbers 0..127. The letter 'A' is assigned 65 in the
+ASCII table. Expressed in binary, that's 2^6 + 2^0 (64 + 1).
+All standard ASCII characters have zero in the uppermost
 bit (the *most significant* bit) since they only span the range 0..127.
 
-*** Short Integer 
+*** Short Integer
 		:PROPERTIES:
 		:CUSTOM_ID: memory-basic-types-short-integer
 		:END:
 
 
 2 bytes or 16 bits. 16 bits provide 2^16 = 65536 patterns.
-This number is known as /64k/, where /1k/ of something is 2^10 = 1024. 
+This number is known as /64k/, where /1k/ of something is 2^10 = 1024.
 For non-negative numbers these patterns map to the numbers 0..65535. Systems
-that are /big-endian/ store the most-significant byte at the lower address. 
-A /litter-endian/ (Intel x86) system arranges the bytes in the opposite 
-order. This means when exchanging data through files or over a network 
+that are /big-endian/ store the most-significant byte at the lower address.
+A /litter-endian/ (Intel x86) system arranges the bytes in the opposite
+order. This means when exchanging data through files or over a network
 between different endian machines, there is often a substantial amount of
 /byte-swapping/ required to rearrange the data.
 
-*** Long Integer 
+*** Long Integer
 		:PROPERTIES:
 		:CUSTOM_ID: memory-basic-types-long-integer
 		:END:
 
 4 bytes or 32 bits. 32 bits provide 2^32 = 4294967296
-patterns. 4 bytes is the contemporary default size for an integer. Also 
+patterns. 4 bytes is the contemporary default size for an integer. Also
 known as a /word/.
 
 *** Fixed-point
@@ -1898,8 +1903,8 @@ fraction bits.
 		:END:
 
 The size of a record is equal to at least the sum of the size
-of its component fields. The record is laid out by allocating the components 
-sequentially in a contiguous block, working from low memory to high. 
+of its component fields. The record is laid out by allocating the components
+sequentially in a contiguous block, working from low memory to high.
 Sometimes a compiler will add invisible pad fields in a record to comply
 with processor alignment rectrictions.
 
@@ -1916,7 +1921,7 @@ constant-time code to figure the address of any element. As with records,
 there may be pad bytes added to the size of each element to comply with
 alignment retrictions.
 
-*** Pointer 
+*** Pointer
 		:PROPERTIES:
 		:custom_id: memory-basic-types-pointer
 		:END:
@@ -1925,7 +1930,7 @@ A pointer is an address. The size of the pointer depends on the
 range of addresses on the machine. Currently almost all machines use 4 bytes
 to store an address, creating a 4GB addressable range. There is actually
 very little distinction between a pointer and a 4 byte unsigned integer.
-They both just store integers-- the difference is in whether the number is 
+They both just store integers-- the difference is in whether the number is
 /interpreted/ as a number or as an address.
 
 *** Instruction
@@ -1935,7 +1940,7 @@ They both just store integers-- the difference is in whether the number is
 
 Machine instructions themselves are also encoded using bit
 patterns, most often using the same 4-byte native word size. The different
-bits in the instruction encoding indicate things such as what type of 
+bits in the instruction encoding indicate things such as what type of
 instruction it is (load, store, multiply, etc) and registers involved.
 
 ** Pointer Basics
@@ -1966,8 +1971,8 @@ The *dereference* operation starts at the pointer and follows its arrow
 over to access its pointee. The goal may be to look at the pointee state
 or to change the state.
 
-The dereference operation on a pointer only works if the pointer has a 
-pointee: the pointee must be allocated and the pointer must be set to 
+The dereference operation on a pointer only works if the pointer has a
+pointee: the pointee must be allocated and the pointer must be set to
 point to it.
 
 *** Pointer Assignment
@@ -1985,17 +1990,17 @@ assignment, the two pointers are said to be /sharing/ the pointee.
 	 :custom_id: memory-c-array
 	 :END:
 
-A C array is formed by laying out all the elements contiguously 
-in memory from low to high. 
+A C array is formed by laying out all the elements contiguously
+in memory from low to high.
 The array as a whole is referred to by the address of the first element.
 
 
-The programmer can refer to elements in the array with the simple =[]= syntax 
-such as =intArray[1]=. This scheme works by combing the base address of 
-the array with the simple arithmetic. 
-Each element takes up a fixed number of bytes known at compile-time. 
-So address of the _nth_ element in the array (0-based indexing) will be 
-at an offset of =(n * element_size)= bytes from the base address of the whole 
+The programmer can refer to elements in the array with the simple =[]= syntax
+such as =intArray[1]=. This scheme works by combing the base address of
+the array with the simple arithmetic.
+Each element takes up a fixed number of bytes known at compile-time.
+So address of the _nth_ element in the array (0-based indexing) will be
+at an offset of =(n * element_size)= bytes from the base address of the whole
 array.
 
 
@@ -2004,15 +2009,15 @@ array.
 		:custom_id: memory-c-array-[]-operator
 		:END:
 
-The square bracket syntax =[]= deals with this address arithmetic for you, but 
-it's useful to know what it's doing. The =[]= multiplies the integer index by  
+The square bracket syntax =[]= deals with this address arithmetic for you, but
+it's useful to know what it's doing. The =[]= multiplies the integer index by
 the element size, adds the resulting offset to the array base address, and finally
 deferences the resulting pointer to get to the desired element.
 
 
 #+BEGIN_SRC c
 a[3] == *(a + 3);
-a+3 == &a[3]; 
+a+3 == &a[3];
 
 a[b] == b[a];
 #+END_SRC
@@ -2022,17 +2027,17 @@ The C standard defines the =[]= operator as follows:
 =a[b] => *(a+b)=, and =b[a] => *(b+a) => *(a+b)=, so =a[b] == b[a]=.
 
 
-In a closely related piece of syntax, adding an integer to a pointer 
-does the same offset computation, but leaves the result as a pointer. 
-The square bracket syntax dereferences that pointer to access 
-the /nth/ element while the =+= syntax just computes the pointer 
+In a closely related piece of syntax, adding an integer to a pointer
+does the same offset computation, but leaves the result as a pointer.
+The square bracket syntax dereferences that pointer to access
+the /nth/ element while the =+= syntax just computes the pointer
 to the /nth/ element.
 
 
-Any =[]= expression can be written with the =+= syntax instead. We just need 
-to add in the pointer dereference. For most purposes, it's easiest 
-and most readable to use the =[]= syntax. Every once in a 
-while the =+= is convenient if you needed a pointer to the element 
+Any =[]= expression can be written with the =+= syntax instead. We just need
+to add in the pointer dereference. For most purposes, it's easiest
+and most readable to use the =[]= syntax. Every once in a
+while the =+= is convenient if you needed a pointer to the element
 instread of the element itself.
 
 
@@ -2042,8 +2047,8 @@ instread of the element itself.
 		:END:
 
 
-If =p= is a pointer to an element in an array, then =(p+1)= points to the 
-next element in the array. Code can exploit this using the construct =p++= to 
+If =p= is a pointer to an element in an array, then =(p+1)= points to the
+next element in the array. Code can exploit this using the construct =p++= to
 step a pointer over the elements in an array. It doesn't help readability any.
 
 
@@ -2052,8 +2057,8 @@ step a pointer over the elements in an array. It doesn't help readability any.
 		:custom_id: memory-c-array-pointer-type-effects
 		:END:
 
-Both =[]= and =++= implicitly use the compile time type of the pointer to 
-compute the element size which effects the offset arithmetic. 
+Both =[]= and =++= implicitly use the compile time type of the pointer to
+compute the element size which effects the offset arithmetic.
 
 
 #+BEGIN_SRC c
@@ -2063,8 +2068,8 @@ compute the element size which effects the offset arithmetic.
 	p = (int*) ((char*)p + 12); /* add 12 sizeof(char) */
 #+END_SRC
 
-Each =int= takes 4 bytes, so at runtime the code will effectively 
-increment the address in =p= by 48. The compiler figures all this out 
+Each =int= takes 4 bytes, so at runtime the code will effectively
+increment the address in =p= by 48. The compiler figures all this out
 based on the type of the pointer.
 
 
@@ -2074,12 +2079,12 @@ based on the type of the pointer.
 		:END:
 
 
-What is =sizeof(void)=? Unknown! Some compilers assume that it should be 
-treat it like a =(char*)=, but if you were to depend on this you would be 
+What is =sizeof(void)=? Unknown! Some compilers assume that it should be
+treat it like a =(char*)=, but if you were to depend on this you would be
 creating non-portable code.
 
 Note that you do not need to cast the result back to =(void*)=, a =(void*)= is
-the /universal recipient/ of pinter type and can be freely assigned 
+the /universal recipient/ of pinter type and can be freely assigned
 any type of pointer.
 
 
@@ -2088,7 +2093,7 @@ any type of pointer.
 		:custom_id: memory-c-array-arrays-and-pointers
 		:END:
 
-One effect of the C array scheme is that the compiler 
+One effect of the C array scheme is that the compiler
 does not meaningfully distinguish between arrays and pointers.
 
 *** Array Names are const
@@ -2096,10 +2101,10 @@ does not meaningfully distinguish between arrays and pointers.
 		:custom_id: memory-c-array-array-names-are-const
 		:END:
 
-One subtle distinction between an array and a pointer, 
-is that the pointer which represents the base address of an array 
-cannot be changed in the code. Technically, the array base 
-address is a =const= pointer. The constraint applies to 
+One subtle distinction between an array and a pointer,
+is that the pointer which represents the base address of an array
+cannot be changed in the code. Technically, the array base
+address is a =const= pointer. The constraint applies to
 the name of the array where it is declared in the code.
 
 
@@ -2108,8 +2113,8 @@ the name of the array where it is declared in the code.
 		:custom_id: memory-c-array-dynamic-arrays
 		:END:
 
-Since arrays are just contiguous areas of bytes, you can allocate your 
-own arrays in the heap using =malloc=. And you can change the size of 
+Since arrays are just contiguous areas of bytes, you can allocate your
+own arrays in the heap using =malloc=. And you can change the size of
 the =malloc=ed array at will at run time using =realloc=.
 
 
@@ -2124,7 +2129,7 @@ the =malloc=ed array at will at run time using =realloc=.
 		:custom_id: memory-c-array-iteration
 		:END:
 
-Row-major order, so load =a[0][0]= would potentially load =a[0][1]=, 
+Row-major order, so load =a[0][0]= would potentially load =a[0][1]=,
 but load =a[1][0]= would generate a second cache fault.
 
 ** Stack Implementation
@@ -2134,17 +2139,17 @@ but load =a[1][0]= would generate a second cache fault.
 
 Writing a generic container in pure C is hard, and it's hard for two reasons:
 
-The language doesn't offer any real support for /encapsulation/ or 
-/information hiding/. That means that the data structures expose information 
-about /internal representation/ right there in the interface file 
-for everyone to see and manipulate. The best we can do is document 
-that the data structure should be treated as an abstract data type, 
-and the client shouldn't directly manage the fields. Instead, he should just 
+The language doesn't offer any real support for /encapsulation/ or
+/information hiding/. That means that the data structures expose information
+about /internal representation/ right there in the interface file
+for everyone to see and manipulate. The best we can do is document
+that the data structure should be treated as an abstract data type,
+and the client shouldn't directly manage the fields. Instead, he should just
 rely on the fuctions provided to manage the internals for him.
 
-C doesn't allow data types to be passed as parameters. That means a generic 
-container needs to manually manage memory in terms of the client element size, 
-not client data type. This translates to a bunch of =malloc=, =realloc=, 
+C doesn't allow data types to be passed as parameters. That means a generic
+container needs to manually manage memory in terms of the client element size,
+not client data type. This translates to a bunch of =malloc=, =realloc=,
 =free=, =memcpy=, and =memmove= calls involving =void*=.
 
 ** Endian
@@ -2152,11 +2157,11 @@ not client data type. This translates to a bunch of =malloc=, =realloc=,
 	 :custom_id: memory-endian
 	 :END:
 
-Endianness refers to the sequential order used to numerically interpret 
+Endianness refers to the sequential order used to numerically interpret
 /a range of bytes/ in /computer memory/ as larger, composed word value.
 It also describes the order of byte transmission over a **digital link**.
 
-However, if you have a 32-bit register storing a 32-bit value, it makes no 
+However, if you have a 32-bit register storing a 32-bit value, it makes no
 to talk about endianness. The righmost bit is the least significant bit,
 and the leftmost bit is the most significant bit.
 
@@ -2182,9 +2187,9 @@ and the leftmost bit is the most significant bit.
 
 
 The little-endian system has the property that the same value can be read
-from memory at different lengths without using different addresses. 
+from memory at different lengths without using different addresses.
 For example, a 32-bit memory location with content 4A 00 00 00 can be read
-at the same address as either 8-bit (value = 4A), 16-bit (004A), 24-bit 
+at the same address as either 8-bit (value = 4A), 16-bit (004A), 24-bit
 (00004A), or 32-bit (0000004A), all of which retain the same numeric value.
 
 *** Bit Swapping
@@ -2192,18 +2197,18 @@ at the same address as either 8-bit (value = 4A), 16-bit (004A), 24-bit
 		:custom_id: memory-endian-bit-swapping
 		:END:
 
-Some CPU instruction sets provide native support for endian swapping, 
+Some CPU instruction sets provide native support for endian swapping,
 such as /bswap/ (x86 and later), and /rev/ (ARMv6 and later).
 
-Unicode text can optionally start with a /byte order mark/ (BOM) to 
-signal the endianness of the file or stream. Its code point is *U+FEFF*. 
-In UTF-32 for example, a big-endian file should start with =00 00 FE FF=; 
+Unicode text can optionally start with a /byte order mark/ (BOM) to
+signal the endianness of the file or stream. Its code point is *U+FEFF*.
+In UTF-32 for example, a big-endian file should start with =00 00 FE FF=;
 a little endian should start with =FF FE 00 00=.
 
-Endianness doesn't apply to everything. If you do bitwise or bitshift 
+Endianness doesn't apply to everything. If you do bitwise or bitshift
 operations on an int you don't notice the endianness.
 
-TCP/IP are defined to be big-endian. The multi-byte integer representation 
+TCP/IP are defined to be big-endian. The multi-byte integer representation
 used by the TCP/IP protocols is sometimes called /network byte order/.
 
 In =<arpa/inet.h>=:
@@ -2228,9 +2233,9 @@ In =<arpa/inet.h>=:
 	 :custom_id: memory-memory-model
 	 :END:
 
-The only thing that C must care about is the type of the object 
-which a pointer addresses. 
-Each pointer type is derived from another type, its base type, 
+The only thing that C must care about is the type of the object
+which a pointer addresses.
+Each pointer type is derived from another type, its base type,
 and each such derived type is a distinct new type.
 
 ** Memory Copy
@@ -2356,10 +2361,10 @@ The asteriod to kill this dinosaur is still in orbit. -- Lex Manual Page
 	:END:
 
 ** References
-	 
+
 - [[http://www.ibm.com/developerworks/library/l-linuni/][Linux Unicode programming]]
 - [[http://www.joelonsoftware.com/articles/Unicode.html][The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Set]]
-- [[https://en.wikipedia.org/wiki/UTF-8][Wikipedia: UTF-8]] 
+- [[https://en.wikipedia.org/wiki/UTF-8][Wikipedia: UTF-8]]
 
 * IO
 	:PROPERTIES:
@@ -2475,7 +2480,7 @@ printed on a terminal or printer.
 - [[https://stackoverflow.com/questions/20342772/buffered-and-unbuffered-inputs-in-c][Buffered and Unbuffered inputs in C]]
 - [[https://users.cs.cf.ac.uk/Dave.Marshall/C/node18.html][Input and Output:stdio.h]]
 - [[https://en.wikipedia.org/wiki/Printf_format_string][printf format string]]
-	 
+
 * Network
 
 ** DNS
@@ -2485,11 +2490,11 @@ printed on a terminal or printer.
 
 =simple.c= using =getaddrinfo()= API call to query name.
 
-=query.c= using domain name protocol to query name directly without =-lresolv= library. 
+=query.c= using domain name protocol to query name directly without =-lresolv= library.
 
 ** TIL
-		
-- =getaddrinfo()= is a POSIX.1g extension and is not available in pure C99, 
+
+- =getaddrinfo()= is a POSIX.1g extension and is not available in pure C99,
 on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see
 [[https://github.com/droe/sslsplit/issues/2][c99 does not define getaddrinfo]]).
 - =socklen_t= represents the size of an address structure, see [[https://yarchive.net/comp/linux/socklen_t.html][Linus
@@ -2519,7 +2524,7 @@ on Linux, so We need =-D_GNU_SOURCE= if =-std=c99= be specified (see
 - [[https://computing.llnl.gov/tutorials/pthreads/][POSIX Threads Programming]]
 
 * Algorithm
-  
+
 ** Hash
 ** Algorithm References
 - [[http://www.cse.yorku.ca/~oz/hash.html][Hash Functions]]
@@ -2586,7 +2591,7 @@ On Darwin, there are no readelf, but we can use /otool/ do the trick.
 | Windows |        |                |
 
 ** Metainformation about Libraries
-   
+
 =pkg-config=
 
 ** Display Symbol Table
@@ -2798,9 +2803,9 @@ table in a executable.
 
 - [[https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2008/e5ewb1h3(v=vs.90)][Microsoft: Memory Leak Detection Enabling]]
 - [[https://lldb.llvm.org/use/map.html][GDB to LLDB command map]]
-  
+
 ** CPU Features
-   
+
 - Linux:
 #+BEGIN_SRC sh
 lscpu
