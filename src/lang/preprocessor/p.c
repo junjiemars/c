@@ -1,3 +1,5 @@
+#ident "(#) Identity, some compiler ignore it."
+
 #include "_lang_.h"
 #include <stdio.h>
 
