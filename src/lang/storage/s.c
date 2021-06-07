@@ -3,11 +3,6 @@
 #include <assert.h>
 
 
-#if MSVC
-/* C4456: declaration of 'i' hides previous local declaration */
-# pragma warning(disable : 4456)
-#endif
-
 static int f_int;
 
 void automatic_storage_class(void);
@@ -20,7 +15,7 @@ void
 automatic_storage_class(void)
 {
 	auto int x; /* garbage value */
-#if GCC
+#if (GCC)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wuninitialized"
   ASSERT(x == x);
