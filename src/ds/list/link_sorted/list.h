@@ -128,20 +128,17 @@ node_s
 int
 list_remove(list_s *const l, node_s *const n)
 {
-  node_s *h = l->head;
-  node_s *pre = 0;
-  while (h) {
-    if (h == n) {
-      if (pre) {
-        pre->next = h->next;
-      } 
-      list_node_free(h);
-      return 1;
-    }
-    pre = h;
-    h = h->next;
+  node_s **h = &(l->head);
+  int rc = 0;
+
+  while ((*h) != n) {
+    h = &(*h)->next;
   }
-  return 0;
+
+  rc = ((*h) == n);
+  *h = n->next;
+  list_node_free(n);
+  return rc;
 }
 
 #endif /* end of _LIST_H_ */
