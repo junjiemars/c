@@ -115,14 +115,13 @@ node_s*
 list_find(list_s *const l, const void *val,
           int (*cmp)(const void *lhs, const void *rhs))
 {
-  node_s *h = l->head;
-  while (h) {
-    if (0 == cmp(val, h->data)) {
-      return h;
+  node_s **h = &(l->head);
+
+  while ((*h) && (0 != cmp(val, (*h)->data)))
+    {
+      h = &(*h)->next;
     }
-    h = h->next;
-  }
-  return 0;
+  return *h;
 }
 
 void
