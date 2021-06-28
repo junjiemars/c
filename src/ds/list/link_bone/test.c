@@ -92,11 +92,8 @@ test_list_int(void)
   }
 
   f = *(int*)n->data;
-  if (list_remove(s, n)) {
-    printf("%8s %16i  at %p\n", "remove", f, &f);
-  } else {
-    printf("%8s %16i  failed\n", "remove", f);
-  }
+  list_remove(s, n);
+  printf("%8s %16i  at %p\n", "remove", f, &f);
 
   f = 5;
   n = list_prepend(s, &f);
@@ -157,11 +154,8 @@ test_list_str(void)
   }
 
   f = *(char**) n->data;
-  if (list_remove(s, n)) {
-    printf("%8s %16s  at %p\n", "remove", f, &f);
-  } else {
-    printf("%8s %16s failed\n", "remove", f);
-  }
+  list_remove(s, n);
+  printf("%8s %16s  at %p\n", "remove", f, &f);
 
   f = "fffffff";
   n = list_prepend(s, &f);

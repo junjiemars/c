@@ -27,7 +27,7 @@ node_s *list_append(list_s *const l, void *val);
 node_s *list_prepend(list_s *const l, void *val);
 node_s *list_find(list_s *const l, const void *val,
                   int (*cmp)(const void *lhs, const void *rhs));
-int list_remove(list_s *const l, node_s *const n);
+void list_remove(list_s *const l, node_s *const n);
 
 
 inline node_s*
@@ -64,11 +64,13 @@ list_free(list_s *const l)
 {
   node_s *h = l->head;
   node_s *c;
-  while (h) {
-    c = h;
-    h = h->next;
-    list_node_free(c);
-  }
+
+  while (h)
+    {
+      c = h;
+      h = h->next;
+      list_node_free(c);
+    }
   free(l);
 }
 
@@ -80,7 +82,7 @@ list_append(list_s *const l, void *val)
     return 0;
   }
   memcpy(new_one->data, val, l->size);
-  
+
   if (!l->head) {
     l->head = l->tail = new_one;
   } else {
@@ -105,7 +107,7 @@ list_prepend(list_s *const l, void *val)
     new_one->next = l->head;
     l->head = new_one;
   }
-  
+
   return l->head;
 }
 
@@ -123,20 +125,18 @@ list_find(list_s *const l, const void *val,
   return 0;
 }
 
-int
+void
 list_remove(list_s *const l, node_s *const n)
 {
   node_s **h = &(l->head);
-  int rc = 0;
-  
-  while ((*h) != n) {
-    h = &(*h)->next;
-  }
 
-  rc = ((*h) == n);
+  while ((*h) != n)
+    {
+      h = &(*h)->next;
+    }
+
   *h = n->next;
   list_node_free(n);
-  return rc;
 }
 
 #endif /* end of _LIST_H_ */
