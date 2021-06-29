@@ -62,13 +62,13 @@ list_new(list_s *l, size_t size)
 void
 list_free(list_s *const l)
 {
-  node_s *h = l->head;
-  node_s *c;
+  node_s **h = &(l->head);
+  node_s *c = 0;
 
-  while (h)
+  while (*h)
     {
-      c = h;
-      h = h->next;
+      c = *h;
+      *h = (*h)->next;
       list_node_free(c);
     }
   free(l);
