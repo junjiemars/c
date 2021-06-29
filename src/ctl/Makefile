@@ -7,9 +7,11 @@ ctl_git_src := 'https://github.com/glouw/ctl.git'
 ctl_home := $(ctl_root)/ctl_home
 
 
-ctl: ctl_vec
+ctl: ctl_vec																		\
+     ctl_prefix
 
-ctl_test: ctl_vec_test
+ctl_test: ctl_vec_test													\
+          ctl_prefix_test
 
 
 INC += -I$(root) -I$(ctl_root) -I$(ctl_home)/ctl
@@ -17,8 +19,9 @@ INC += -I$(root) -I$(ctl_root) -I$(ctl_home)/ctl
 
 # _MEMORY_
 ifeq (1, $(_MEMORY_))
-ctl_cc_opt += $(f_sanitize)
-ctl_ld_opt += $(f_sanitize)
+ifeq (YES, $(has_sanitize))
+CFLAGS += $(cflags_sanitize)
+endif # end of has_sanitize
 endif # end of _MEMORY_
 
 
@@ -34,6 +37,17 @@ ctl_vec_test: ctl_vec
 	$(ctl_vec_binout)
 
 $(ctl_vec_binout): $(ctl_root)/vec/vec1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# prefix
+ctl_prefix_binout := $(bin_path)/$(ctl_prefix)_prefix$(bin_ext)
+
+ctl_prefix: $(ctl_home) $(ctl_prefix_binout)
+ctl_prefix_test: ctl_prefix
+	$(ctl_prefix_binout)
+
+$(ctl_prefix_binout): $(ctl_root)/prefix/prefix1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
