@@ -97,3 +97,6 @@ src/leptonica/leptonica_home
 **/node_modules/
 **/package-lock.json
 **/package.json
+
+# ctl
+**/ctl_home/
