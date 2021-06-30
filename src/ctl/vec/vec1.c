@@ -10,10 +10,19 @@
 #include <vec.h>
 
 
+#include <str.h>
+#define P
+#define T str
+#include <vec.h>
+
+
 static int compare_int(int *a, int *b);
 static int compare_double(double *a, double *b);
+static int compare_str(str *a, str *b);
+
 static void test_vec_int(void);
 static void test_vec_double(void);
+static void test_vec_str(void);
 
 
 int
@@ -26,6 +35,12 @@ int
 compare_double(double *a, double *b)
 {
   return (*a) > (*b);
+}
+
+int
+compare_str(str *a, str *b)
+{
+  return strcmp(str_c_str(a), str_c_str(b));
 }
 
 
@@ -67,11 +82,33 @@ test_vec_double(void) {
       printf("%lf\n", *it.ref);
     }
 
-  vec_double_free(&a);  
+  vec_double_free(&a);
+}
+
+void
+test_vec_str(void)
+{
+  vec_str a = vec_str_init();
+
+  vec_str_push_back(&a, str_init("9"));
+  vec_str_push_back(&a, str_init("1"));
+  vec_str_push_back(&a, str_init("8"));
+  vec_str_push_back(&a, str_init("3"));
+  vec_str_push_back(&a, str_init("4"));
+
+  vec_str_sort(&a, compare_str);
+
+  foreach(vec_str, &a, it)
+    {
+      printf("\"%s\"\n", str_c_str(it.ref));
+    }
+
+  vec_str_free(&a);
 }
 
 int main(void)
 {
   test_vec_int();
   test_vec_double();
+  test_vec_str();
 }
