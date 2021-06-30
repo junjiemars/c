@@ -11,7 +11,6 @@
 
 
 #include <str.h>
-#define P
 #define T str
 #include <vec.h>
 
