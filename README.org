@@ -2765,16 +2765,17 @@ table in a executable.
 
 *** Disassemble
 
-| *example*            | *command*            |
-|----------------------+----------------------|
-| disassemble          | *0:000>* =u=         |
-| disassemble function | *0:000>* =uf main=   |
-|                      |                      |
-| disassemble          | *(lldb)* =d=         |
-| disassemble function | *(lldb)* =d -nmain=  |
-| disassemble favor    | *(lldb)* =d -Fatt=   |
-|                      |                      |
-| disassemble          | *(gdb)* =d=          |
+| *example*            | *command*             |
+|----------------------+-----------------------|
+| disassemble          | *0:000>* =u=          |
+| disassemble function | *0:000>* =uf main=    |
+|                      |                       |
+| disassemble          | *(lldb)* =d=          |
+| disassemble function | *(lldb)* =d -nmain=   |
+| disassemble favor    | *(lldb)* =d -Fatt=    |
+|                      |                       |
+| disassemble          | *(gdb)* =disassemble= |
+
 
 *** Step
 
