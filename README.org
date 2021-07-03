@@ -2692,6 +2692,22 @@ table in a executable.
 
 *** Process
 
+| *example*                  | *command*                                         |
+|----------------------------+---------------------------------------------------|
+| run /process/              | *(lldb)* process launch                           |
+|                            | *(ldb)* r                                         |
+|                            | *(gdb)                                            |
+|                            |                                                   |
+| attach /process/ with pid  | *(lldb)* =process attach --pid 123=               |
+|                            | *(gdb)* =attach 123=                              |
+|                            |                                                   |
+| attach /process/ with name | *(lldb)* =process attach --name a.out=            |
+|                            | *(lldb)* =attach a.out=                           |
+|                            |                                                   |
+| wait for /process/         | *(lldb)* =process attach --name a.out --wait-for= |
+|                            | *(gdb)* =attach -waitfor a.out=                   |
+|                            |                                                   |
+
 *** Image
 
 | *example*                                     | *command*                                       |
