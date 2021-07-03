@@ -2685,7 +2685,8 @@ table in a executable.
 |                             |                                                       |
 | set /argv/ for /main/ entry | *(lldb)* =r arg1 arg2 arg3=                           |
 |                             | *(lldb)* =settings set target.run-args arg1 arg2=     |
-|                             | *(lldb)* =process launch -- arg1 arg2=                |
+|                             | *(gdb)* =r arg1 arg2 arg3=                            |
+|                             | *(gdb)* =set args arg1 arg2=                          |
 |                             | *0:000>* =.kill;= =.create <target> arg1 arg2=        |
 |                             | *0:000>* =.exepath+ <path>=                           |
 
