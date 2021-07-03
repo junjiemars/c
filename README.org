@@ -2678,12 +2678,18 @@ table in a executable.
 |                             |                                                       |
 | set /env/ var               | *(lldb)* =env XXX=zzz=                                |
 |                             | *(lldb)* =settings set target.env-vars XXX=aa YYY=bb= |
+|                             | *(gdb)* =set env XXX=zzz=                             |
+|                             |                                                       |
+| unset /env/ var             | *(lldb)* =settings remove target.env-vars XXX=        |
+|                             | *(gdb)* =unset env XXX=                               |
 |                             |                                                       |
 | set /argv/ for /main/ entry | *(lldb)* =r arg1 arg2 arg3=                           |
 |                             | *(lldb)* =settings set target.run-args arg1 arg2=     |
 |                             | *(lldb)* =process launch -- arg1 arg2=                |
 |                             | *0:000>* =.kill;= =.create <target> arg1 arg2=        |
 |                             | *0:000>* =.exepath+ <path>=                           |
+
+*** Process
 
 *** Image
 
@@ -2775,7 +2781,6 @@ table in a executable.
 | disassemble favor    | *(lldb)* =d -Fatt=    |
 |                      |                       |
 | disassemble          | *(gdb)* =disassemble= |
-
 
 *** Step
 
