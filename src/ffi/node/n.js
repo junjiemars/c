@@ -9,7 +9,11 @@ function on_sigint(x) {
 		console.log('on_sigint(%s)', x);
 }
 
+// sighandler_t signal(int signum, sighandler_t handler);
 const signal_cb = ffi.Callback('void', [ 'int' ], on_sigint);
+
+// typedef void (*sighandler_t)(int);
 const signal_fn = ffi.ForeignFunction(signal_cb, 'void', [ 'int' ]);
+
 
 signal_fn(2 /* SIGINT */);
