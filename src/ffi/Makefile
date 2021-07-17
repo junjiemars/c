@@ -51,9 +51,10 @@ ffi_nodejs := $(ffi_nodejs_prefix)/package-lock.json
 
 ifeq (YES, $(has_nodejs))
 $(ffi_nodejs):
+	@echo "----------"
 	@echo "npm install --prefix=$(ffi_nodejs_prefix) ffi-napi ..."
-	-@npm explain --prefix=$(ffi_nodejs_prefix) ffi-napi >/dev/null	\
-		|| npm install --prefix=$(ffi_nodejs_prefix) ffi-napi
+	-@npm explain --silent --prefix=$(ffi_nodejs_prefix) ffi-napi >/dev/null	\
+		|| npm install --silent --prefix=$(ffi_nodejs_prefix) ffi-napi
 ffi_nodejs_test: $(ffi_nodejs)
 	NODE_PATH=$(ffi_nodejs_prefix)/node_modules node $(ffi_nodejs_libm_js)
 else
@@ -61,6 +62,9 @@ ffi_nodejs:
 	@echo "#skip ffi_nodejs_test ..."
 ffi_nodejs_test: ffi_nodejs
 endif
+
+$(ffi_nodejs_prefix):
+	$(MD) -p $@
 
 
 
