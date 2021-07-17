@@ -60,6 +60,7 @@ jobs:
         run: |
           brew install automake
           brew install libuv
+          brew install node
       - name: Setup Env
         run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
       - name: Build and Test
