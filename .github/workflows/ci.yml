@@ -93,8 +93,6 @@ jobs:
       with:
         fetch-depth: 0 # checkout history and tags
     - uses: actions/setup-node@v2
-      with:
-        node-version: '14'
     - name: Install Dependencies
       uses: msys2/setup-msys2@v2
       with:
