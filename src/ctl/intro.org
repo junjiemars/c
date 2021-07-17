@@ -1,0 +1,13 @@
+#+TITLE: LLDB in Emacs
+#+AUTHOR: Junjie Mars
+#+STARTUP: overview
+
+
+* Features
+	
+- start or attach to process.
+- source code debugging.
+- command auto completion.
+- * show breakpoints on buffer in GUI/Terminal mode.
+- * frame buffer and register buffer.
+
