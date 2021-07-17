@@ -64,12 +64,15 @@ fi
 test_do() {
   local rc=0
   local cfg="$_CFG_OPT_ $*"
+  echo "------------"
   if [ -z "$_WIN_ENV_" ]; then
-    echo "${_ROOT_DIR_%/}/configure $cfg"
+    echo "# do: ${_ROOT_DIR_%/}/configure $cfg"
+    echo "------------"
     ${_ROOT_DIR_%/}/configure $cfg
     make test
   else
-    echo "${_WIN_ENV_MSVC_} $_WIN_ENV_ ./configure $cfg"
+    echo "# do: ${_WIN_ENV_MSVC_} $_WIN_ENV_ ./configure $cfg"
+    echo "------------"
     ${_WIN_ENV_MSVC_} "$_WIN_ENV_" "./configure $cfg" "make test"
   fi
   rc=$?
