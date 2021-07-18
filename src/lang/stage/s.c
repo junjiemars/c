@@ -5,7 +5,8 @@ int g_x1 = 0x11223344;
 int g_x2;
 
 int 
-main(int argc, char *argv[]) {
+main(int argc, char *argv[])
+{
   _unused_(argc);
   _unused_(argv);
 
@@ -16,6 +17,6 @@ main(int argc, char *argv[]) {
 	g_x2 = a[i+1];
 	
 	printf("Hello, %s: %d\n", "stage", 
-		a[i] + g_x1 + g_x2 + s_x3);
+         a[i] + g_x1 + g_x2 + s_x3);
 	return 0;
 }

@@ -274,13 +274,6 @@ purposes. =#pragma= is commonly used to suppress warnings.
   abbreviated month, =Date= is the current day of the month (1-31),
   and =yyyy= is the four digit year, such as "Tue Sep 25 16:44:08 2018"
 
-*** References
-		:PROPERTIES:
-		:CUSTOM_ID: language_preprocessor
-		:END:
-
-- [[https://gcc.gnu.org/onlinedocs/cpp/Preprocessor-Output.html][Preprocessor Output]]
-
 ** main
 	 :PROPERTIES:
 	 :CUSTOM_ID: language_main
@@ -1434,6 +1427,7 @@ There has an good answer of [[http://stackoverflow.com/questions/17206568/what-i
 
 - [[https://en.cppreference.com/w/c/language/history][History of C]]
 - [[https://en.cppreference.com/w/c/language/basic_concepts][Basic concepts]]
+- [[https://gcc.gnu.org/onlinedocs/cpp/Preprocessor-Output.html][Preprocessor Output]]
 - [[http://c-faq.com/decl/spiral.anderson.html][Clockwise/Spiral Rule]]
 - [[http://norswap.com/c_scope_duration_linkage/][C: Scope, Duration & Linkage]]
 - [[http://stackoverflow.com/documentation/c/1108/pointers#t=201702060822544818513][Pointers]]
@@ -1459,6 +1453,7 @@ There has an good answer of [[http://stackoverflow.com/questions/17206568/what-i
 - [[https://www.bell-labs.com/usr/dmr/www/chist.html][The Development of the C Lanuage]]
 - [[https://www.kernel.org/doc/html/latest/process/coding-style.html][Linux kernel coding style]]
 - [[https://www.cs.rit.edu/~kar/pointers.on.c/index.html][Kenneth A.Reek: Pointers on C]]
+
 
 * Compiler
 ** flex
