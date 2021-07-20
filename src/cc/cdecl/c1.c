@@ -62,7 +62,8 @@ pushback(void) {
 	}
 }
 
-void _vsprintf_(char *fmt, ...) {
+void
+_vsprintf_(char *fmt, ...) {
 	va_list args;
 	va_start(args, fmt);
 	int len = vsprintf(outptr, fmt, args);
