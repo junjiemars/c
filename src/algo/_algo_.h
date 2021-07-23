@@ -37,6 +37,16 @@
 #  define MIN(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
+#ifdef count
+#  undef count
+#endif
+#define count(a) sizeof(a)/sizeof(*a)
+
+#ifdef offset
+#  undef offset
+#endif
+#define offset(l, r, w) (((char*) (r) - (char*) (l)) / (w))
+
 void list_array(const void *base, size_t nel, size_t width,
 								void (*print)(const void *el));
 

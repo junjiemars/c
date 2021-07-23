@@ -289,11 +289,11 @@ algo_s_binary_test: $(algo_s_binary_binout)
 	$(algo_s_binary_binout)
 
 $(algo_s_linear_binout): $(algo_root)/_algo_.c \
-												 $(algo_root)/search/linear.c
+												 $(algo_root)/search/ls.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(algo_s_binary_binout): $(algo_root)/_algo_.c \
-												 $(algo_root)/search/binary.c
+												 $(algo_root)/search/bs.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
