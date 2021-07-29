@@ -38,7 +38,7 @@ test_stack_push_pop_int(stack_s *s)
   n = s->n + 3;
   i = 0;
 
-  printf("stack int push/pop [%zu/%i]\n", s->n, n);
+  printf("stack int push/pop [%i/%zu]\n", n, s->n);
   printf("---------------------\n");
 
   while (i++ < n)
@@ -95,7 +95,7 @@ test_stack_push_pop_str(stack_s *s)
   char *buf = 0;
 
   stack_new(s, 4, sizeof(char*), NULL);
-  printf("stack str push/pop [%zu/%zu]\n", s->n, sizeof(ss)/sizeof(ss[0]));
+  printf("stack str push/pop [%zu/%zu]\n", sizeof(ss)/sizeof(ss[0]), s->n);
   printf("---------------------\n");
   
   for (size_t i = 0; i < sizeof(ss)/sizeof(ss[0]); i++)
@@ -141,12 +141,12 @@ test_stack_push_pop_ptr(stack_s *s)
   int  *k;
   int  *one;
 
-  stack_new(s, 4, sizeof(int*), free);
-  n = s->n;
+  stack_new(s, 8, sizeof(int*), free);
+  n = s->n - 3;
   i = 0;
   k = 0;
 
-  printf("stack int* push/pop [%zu/%i]\n", s->n, n);
+  printf("stack int* push/pop [%i/%zu]\n", n, s->n);
   printf("---------------------\n");
 
   while (i++ < n)
