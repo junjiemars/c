@@ -123,40 +123,21 @@ $(queue_array_binout): $(ds_root)/queue/array/test.c		\
 
 
 # stack
-stack_array_binout := $(bin_path)/$(ds_prefix)_stack_array$(bin_ext)
-stack_linklist_binout := $(bin_path)/$(ds_prefix)_stack_linklist$(bin_ext)
+ds_stack_binout := $(bin_path)/$(ds_prefix)_stack$(bin_ext)
 
-ds_stack: $(stack_array_binout)										\
-          $(stack_linklist_binout)
+ds_stack: $(ds_stack_binout)
+# ds_stack_test: stack_array_test										\
+#                stack_linklist_test
 
-ds_stack_test: stack_array_test										\
-               stack_linklist_test
+ds_stack_test: ds_stack
+	$(ds_stack_binout)
 
-stack_valgrind_test: stack_valgrind_array_test 		\
-                     stack_valgrind_linklist_test
+ds_stack_valgrind_array_test: ds_stack_test
+		valgrind --leak-check=full --track-origins=yes $(ds_stabck_binout)
 
-stack_valgrind_array_test: stack_array_test
-	valgrind --leak-check=full --track-origins=yes $(stack_array_binout)
-stack_valgrind_linklist_test: stack_linklist_test
-	valgrind --leak-check=full --track-origins=yes $(stack_linklist_binout)
-
-stack_array_test: $(stack_array_binout)
-	$(stack_array_binout)
-stack_linklist_test: $(stack_linklist_binout)
-	$(stack_linklist_binout)
-
-$(stack_array_binout): $(ds_root)/stack/array/test.c		\
-								       $(ds_root)/stack/array/stack.h
-	$(CC) $(CFLAGS) $(INC)												\
-    $(ds_root)/stack/array/test.c								\
-    $(bin_out)$@
-
-$(stack_linklist_binout): $(ds_root)/stack/linklist/test.c		\
-								          $(ds_root)/stack/linklist/stack.h
-	$(CC) $(CFLAGS) $(INC)												\
-    $(ds_root)/stack/linklist/test.c							\
-    $(bin_out)$@
-
+$(ds_stack_binout): $(ds_root)/stack/test.c			\
+									  $(ds_root)/stack/stack.h
+	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
 
 # tree
 
