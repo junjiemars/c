@@ -102,7 +102,6 @@ $(list_link_sorted_binout): $(ds_root)/list/link_sorted/test.c	\
 
 # queue
 ds_queue_binout := $(bin_path)/$(ds_prefix)_queue$(bin_ext)
-# queue_array_binout := $(bin_path)/$(ds_prefix)_queue_array$(bin_ext)
 
 ds_queue: $(ds_queue_binout)
 
@@ -113,9 +112,6 @@ queue_valgrind_test: queue_valgrind_test
 
 queue_valgrind_test: queue_array_test
 	valgrind --leak-check=full --track-origins=yes $(queue_binout)
-
-# queue_array_test: $(queue_array_binout)
-# 	$(queue_array_binout)
 
 $(ds_queue_binout): $(ds_root)/queue/test.c			\
                     $(ds_root)/queue/queue.h
