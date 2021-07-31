@@ -5,11 +5,6 @@
 #include <assert.h>
 
 
-#if (MSVC)
-#  pragma warning(disable:4267) /* conversion from 'size_t' to 'int' */
-#endif
-
-
 static void print_queue(queue_s *const q);
 
 static void free_int_ptr(void *ptr);
