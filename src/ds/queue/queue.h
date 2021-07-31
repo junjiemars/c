@@ -88,13 +88,14 @@ queue_enq(queue_s *const q, void *item)
       offset = (char *) q->head - (char *) q->data;
       len = (char *) q->tail - (char *) q->head;
 
-      if (offset > (size_t) (q->n / 2))
+      if (offset > 0)
         {
           memmove(q->data, q->head, len);
         }
       else
         {
-          q->data = realloc(q->data, q->n * q->width * 2);
+          q->n *= 2;
+          q->data = realloc(q->data, q->n * q->width);
         }
       q->head = q->data;
       q->tail = (char *) q->head + len;
