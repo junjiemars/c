@@ -101,25 +101,25 @@ $(list_link_sorted_binout): $(ds_root)/list/link_sorted/test.c	\
 
 
 # queue
-queue_array_binout := $(bin_path)/$(ds_prefix)_queue_array$(bin_ext)
+ds_queue_binout := $(bin_path)/$(ds_prefix)_queue$(bin_ext)
+# queue_array_binout := $(bin_path)/$(ds_prefix)_queue_array$(bin_ext)
 
-queue: $(queue_array_binout)
+ds_queue: $(ds_queue_binout)
 
-queue_test: queue_array_test
+ds_queue_test: ds_queue
+	$(ds_queue_binout)
 
-queue_valgrind_test: queue_valgrind_array_test
+queue_valgrind_test: queue_valgrind_test
 
-queue_valgrind_array_test: queue_array_test
-	valgrind --leak-check=full --track-origins=yes $(queue_array_binout)
+queue_valgrind_test: queue_array_test
+	valgrind --leak-check=full --track-origins=yes $(queue_binout)
 
-queue_array_test: $(queue_array_binout)
-	$(queue_array_binout)
+# queue_array_test: $(queue_array_binout)
+# 	$(queue_array_binout)
 
-$(queue_array_binout): $(ds_root)/queue/array/test.c		\
-								       $(ds_root)/queue/array/queue.h
-	$(CC) $(CFLAGS) $(INC)												\
-    $(ds_root)/queue/array/test.c								\
-    $(bin_out)$@
+$(ds_queue_binout): $(ds_root)/queue/test.c			\
+                    $(ds_root)/queue/queue.h
+	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
 
 
 # stack

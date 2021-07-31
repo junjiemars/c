@@ -8,7 +8,7 @@
 
 #define stack_empty(s)  ((s)->top == (s)->data)
 #define stack_full(s)  \
-  ((s->n * s->width) == (size_t)((char*)(s)->top - (char*)(s)->data))
+  (((s)->n * s->width) == (size_t)((char*)(s)->top - (char*)(s)->data))
 #define stack_capcity(s)  ((s)->n)
 #define stack_size(s)  \
   (((char*)((s)->top) - (char*)((s)->data)) / (s)->width)
