@@ -282,10 +282,11 @@ main(int argc, char **argv)
   queue_free(&expr);
 
 #else
-  if (argc < 2) {
-    printf("where the expression?\n");
-    return 0;
-  }
+  if (argc < 2)
+    {
+      printf("where the expression?\n");
+      return 0;
+    }
   memcpy(_str_in_, argv[1], strlen(argv[1])+1);
 
   /* test_expt(); */
