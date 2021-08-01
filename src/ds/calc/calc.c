@@ -114,10 +114,10 @@ postfix(queue_s *const expr, char *const buf)
       if (isdigit(t))
         {
           i = 0;
-          buf[i++] = t;
+          buf[i++] = (char) t;
           while (isdigit(c = _getc_()))
             {
-              buf[i++] = c;
+              buf[i++] = (char) c;
             }
           buf[i] = 0;
           _ungetc_(c, stdin);
