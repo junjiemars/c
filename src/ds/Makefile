@@ -16,7 +16,7 @@ endif
 ds: double_linked_list													\
 		single_linked_list													\
     ds_list																			\
-    queue																				\
+    ds_queue																		\
 		ds_stack																		\
     ds_tree																			\
     ds_calc																			\
@@ -25,7 +25,7 @@ ds: double_linked_list													\
 ds_test: double_linked_list_test								\
 				 single_linked_list_test								\
          ds_list_test														\
-         queue_test															\
+         ds_queue_test													\
 				 ds_stack_test													\
          ds_tree_test														\
          ds_calc_test														\
