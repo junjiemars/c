@@ -13,19 +13,20 @@
 #define stack_size(s)  \
   (((char*)((s)->top) - (char*)((s)->data)) / (s)->width)
 
-typedef void  (*free_fn)(void *ptr);
+typedef void  (*stack_free_item_fn)(void *ptr);
 
 
 typedef struct {
-  size_t    n;
-  size_t    width;
-  free_fn   free;
-  void     *top;
-  void     *data;
+  size_t               n;
+  size_t               width;
+  void                *top;
+  void                *data;
+  stack_free_item_fn   free;
 } stack_s;
 
 
-stack_s *stack_new(stack_s *stack, size_t n, size_t width, free_fn free);
+stack_s *stack_new(stack_s *stack, size_t n, size_t width,
+                   stack_free_item_fn free);
 void stack_free(stack_s *const stack);
 void *stack_push(stack_s *const stack, void *item);
 void *stack_pop(stack_s *const stack, void *item);
@@ -33,7 +34,7 @@ void *stack_peek(stack_s *const stack, void *item);
 
 
 stack_s *
-stack_new(stack_s *stack, size_t n, size_t width, free_fn free)
+stack_new(stack_s *stack, size_t n, size_t width, stack_free_item_fn free)
 {
   if (NULL == stack)
     {

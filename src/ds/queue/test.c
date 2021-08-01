@@ -81,7 +81,7 @@ test_queue_enq_deq_int(queue_s *const q)
   int   n, i, k;
 
   queue_new(q, 4, sizeof(int), NULL);
-  n =  q->n + 3;
+  n = (int) (q->n + 3);
   printf("queue int enq/deq [%zu/%i]\n", q->n, n);
   printf("---------------------\n");
 
@@ -185,7 +185,7 @@ test_queue_realloc(queue_s *const q)
   int  n, i, k;
 
   queue_new(q, 4, sizeof(int), NULL);
-  n = q->n;
+  n = (int) q->n;
   printf("queue int enq/deq [%zu/%i]\n", q->n, n);
   printf("---------------------\n");
 

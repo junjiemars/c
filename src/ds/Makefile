@@ -166,11 +166,14 @@ ds_calc_test: ds_calc
 	$(ds_calc_binout) "(2+3)*4="
 	$(ds_calc_binout) "2*3^(4+5)="
 
-$(ds_calc_binout): $(ds_root)/stack/array/stack.h		\
-                   $(ds_root)/queue/array/queue.h		\
-                   $(ds_root)/calc/calc.c
+$(ds_calc_binout): $(ds_root)/calc/calc.c				\
+                   $(ds_root)/stack/stack.h			\
+                   $(ds_root)/queue/queue.h
 	$(CC) $(CFLAGS) $(INC)												\
-    -I$(ds_root)/stack/array										\
-    -I$(ds_root)/queue/array										\
-    $(ds_root)/calc/calc.c											\
+    -I$(ds_root)/stack													\
+    -I$(ds_root)/queue													\
+    $< \
     $(bin_out)$@
+
+
+# eof

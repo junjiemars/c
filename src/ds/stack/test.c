@@ -2,10 +2,6 @@
 #include "stack.h"
 #include <stdio.h>
 
-#if (MSVC)
-#  pragma warning(disable:4267) /* conversion from 'size_t' to 'int' */
-#endif
-
 
 static void test_stack_new_free_int(void);
 static void test_stack_push_pop_int(stack_s *s);
@@ -35,7 +31,7 @@ test_stack_push_pop_int(stack_s *s)
   int         i;
 
   stack_new(s, 4, sizeof(int), NULL);
-  n = s->n + 3;
+  n = (int) (s->n + 3);
   i = 0;
 
   printf("stack int push/pop [%i/%zu]\n", n, s->n);
@@ -91,14 +87,15 @@ test_stack_new_free_str()
 void
 test_stack_push_pop_str(stack_s *s)
 {
-  char *ss[] = {"a", "bb", "ccc", "dddd", "eeeee", "ffffff", };
-  char *buf = 0;
+  size_t   i;
+  char    *ss[]  =  {"a", "bb", "ccc", "dddd", "eeeee", "ffffff", };
+  char    *buf   =  0;
 
   stack_new(s, 4, sizeof(char*), NULL);
-  printf("stack str push/pop [%zu/%zu]\n", sizeof(ss)/sizeof(ss[0]), s->n);
+  printf("stack str push/pop [%zu/%zu]\n", sizeof(ss)/sizeof(*ss), s->n);
   printf("---------------------\n");
   
-  for (size_t i = 0; i < sizeof(ss)/sizeof(ss[0]); i++)
+  for (i = 0; i < sizeof(ss)/sizeof(ss[0]); i++)
     {
       char *one = stack_push(s, &ss[i]);
       if (0 == one)
@@ -117,7 +114,7 @@ test_stack_push_pop_str(stack_s *s)
   printf("%8s %16s\n", "peek", buf);
 
   printf("---------------------\n");
-  for (size_t i = 0; i < sizeof(ss)/sizeof(ss[0]); i++)
+  for (i = 0; i < sizeof(ss)/sizeof(*ss); i++)
     {
       buf = 0;
       char *empty = stack_pop(s, &buf);
@@ -142,7 +139,7 @@ test_stack_push_pop_ptr(stack_s *s)
   int  *one;
 
   stack_new(s, 8, sizeof(int*), free);
-  n = s->n - 3;
+  n = (int) (s->n - 3);
   i = 0;
   k = 0;
 

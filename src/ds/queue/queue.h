@@ -13,20 +13,21 @@
 #define queue_size(q)  ((size_t)((char*)(q)->tail - (char*)(q)->head) / (q)->width)
 
 
-typedef void (*free_fn)(void *ptr);
+typedef void (*queue_free_item_fn)(void *ptr);
 
 
 typedef struct {
-  size_t    n;
-  size_t    width;
-  free_fn   free;
-  void     *head;
-  void     *tail;
-  void     *data;
+  size_t               n;
+  size_t               width;
+  void                *head;
+  void                *tail;
+  void                *data;
+  queue_free_item_fn   free;
 } queue_s;
 
 
-queue_s *queue_new(queue_s *q, size_t n, size_t width, free_fn free);
+queue_s *queue_new(queue_s *q, size_t n, size_t width,
+                   queue_free_item_fn free);
 void queue_free(queue_s *const q);
 void *queue_enq(queue_s *const q, void *item);
 void *queue_deq(queue_s *const q, void *item);
@@ -34,7 +35,7 @@ void *queue_peek(queue_s *const q, void *item);
 
 
 queue_s *
-queue_new(queue_s *q, size_t n, size_t width, free_fn free)
+queue_new(queue_s *q, size_t n, size_t width, queue_free_item_fn free)
 {
   if (NULL == q)
     {
