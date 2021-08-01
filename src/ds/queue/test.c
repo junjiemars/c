@@ -139,14 +139,14 @@ void
 test_queue_enq_deq_str(queue_s *const q)
 {
   size_t   i;
-  char    *buf  =  0;
-  char *ss[]    =  {"a", "bb", "ccc", "dddd", "eeeee", "ffffff", };
+  char    *buf   =  0;
+  char    *ss[]  =  {"a", "bb", "ccc", "dddd", "eeeee", "ffffff", };
 
   queue_new(q, 4, sizeof(char *), NULL);
-  printf("queue str enq/deq [%zu/%zu]\n", q->n, sizeof(ss)/sizeof(ss[0]));
+  printf("queue str enq/deq [%zu/%zu]\n", q->n, sizeof(ss)/sizeof(*ss));
   printf("---------------------\n");
   
-  for (i = 0; i < sizeof(ss)/sizeof(ss[0]); i++)
+  for (i = 0; i < sizeof(ss)/sizeof(*ss); i++)
     {
       if (NULL == queue_enq(q, &ss[i]))
         {
@@ -164,10 +164,10 @@ test_queue_enq_deq_str(queue_s *const q)
   printf("%8s %16s\n", "peek", buf);
 
   printf("---------------------\n");
-  for (i = 0; i < sizeof(ss)/sizeof(ss[0]); i++)
+  for (i = 0; i < sizeof(ss)/sizeof(*ss); i++)
     {
       buf = 0;
-      if (queue_deq(q, &buf))
+      if (NULL == queue_deq(q, &buf))
         {
           fprintf(stderr, "deq failed, empty\n");
           break;

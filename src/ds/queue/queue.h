@@ -82,6 +82,7 @@ queue_enq(queue_s *const q, void *item)
 {
   size_t  offset;
   size_t  len;
+  size_t  n;
   
   if (queue_full(q))
     {
@@ -94,8 +95,9 @@ queue_enq(queue_s *const q, void *item)
         }
       else
         {
-          q->n *= 2;
-          q->data = realloc(q->data, q->n * q->width);
+          n = q->n * 2;
+          q->data = realloc(q->data, n * q->width);
+          q->n = n;
         }
       q->head = q->data;
       q->tail = (char *) q->head + len;
