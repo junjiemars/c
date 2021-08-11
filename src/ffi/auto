@@ -114,7 +114,7 @@ esac
 
 check_nodejs () {
   local has_nodejs=NO
-  loccal nodejs_ver=
+  local nodejs_ver=
   local npm_ver=
 
   echo ${echo_n} " + checking for node.js ... " ${echo_c}
@@ -126,7 +126,7 @@ check_nodejs () {
   fi
 
   npm_ver="`npm --version 2>/dev/null`"
-  if [ 0 -ne $> -o -z "$npm_ver" ]; then
+  if [ 0 -ne $? -o -z "$npm_ver" ]; then
     echo "no"
     return
   fi

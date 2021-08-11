@@ -17,3 +17,4 @@ const signal_fn = ffi.ForeignFunction(signal_cb, 'void', [ 'int' ]);
 
 
 signal_fn(2 /* SIGINT */);
+

@@ -4,7 +4,8 @@
 
 
 JNIEXPORT jint JNICALL 
-Java_Java2c_square(JNIEnv *env, jobject obj, jint n) {
+Java_Java2c_square(JNIEnv *env, jobject obj, jint n)
+{
 	_unused_(env);
 	_unused_(obj);
 
