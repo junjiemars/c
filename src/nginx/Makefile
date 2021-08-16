@@ -33,6 +33,7 @@ endif # end of _MEMORY_
 ifeq (1, $(_DEBUG_))
 nginx_cc_opt += -DNGX_DEBUG_PALLOC=1
 nginx_debug_opt := --with-debug
+nginx_conf_d := -d
 endif # end of _DEBUG_
 
 
@@ -57,11 +58,11 @@ nginx_core_test: nginx_core
 endif # end of msvc
 
 
-$(nginx_core_binout): $(nginx_home)										\
-                         $(nginx_core_root)/nginx.conf	\
-                         $(nginx_core_root)/inc.conf
+$(nginx_core_binout): $(nginx_home)									\
+                      $(nginx_core_root)/nginx.conf	\
+                      $(nginx_core_root)/inc.conf
 	cd $(nginx_home)																			\
-		&& auto/configure --prefix=$(nginx_core_prefix)	\
+		&& auto/configure --prefix=$(nginx_core_prefix)			\
                       --without-http_fastcgi_module			\
                       --without-http_uwsgi_module				\
                       --without-http_scgi_module				\
@@ -74,9 +75,9 @@ $(nginx_core_binout): $(nginx_home)										\
                       --with-ld-opt="$(nginx_ld_opt)"		\
                       $(nginx_debug_opt)								\
     && make -j4 install																	\
-    && cp $(nginx_core_root)/inc.conf								\
-          $(nginx_core_prefix)/conf/inc.conf					\
-    && cp $(nginx_core_root)/nginx.conf							\
+    && cp $(nginx_core_root)/inc$(ngixn_conf_d).conf		\
+          $(nginx_core_prefix)/conf/inc.conf						\
+    && cp $(nginx_core_root)/nginx$(nginx_conf_d).conf	\
 					$(nginx_core_prefix)/conf/nginx.conf
 
 
