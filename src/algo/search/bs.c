@@ -102,8 +102,7 @@ test_bs_int(const void *key, const void *base,
   list_array(base, n, width, print_int);
   found = bs(key, base, n, width, cmp_int);
   printf("found: [%ld]\n",
-         (long) (NULL == found
-                 ? -1 : offset(base, found, sizeof(*found))));
+         (NULL == found ? -1L : (long) offset(base, found, sizeof(*found))));
 }
 
 void
@@ -118,8 +117,7 @@ test_bs_str(const void *key, const void *base,
   list_array(base, n, width, print_str);
   found = bs(key, base, n, width, cmp_str);
   printf("found: [%ld]\n",
-         (long) (NULL == found
-                 ? -1 : offset(base, found, width)));
+         (NULL == found ? -1L : (long) offset(base, found, width)));
 }
 
 void
@@ -132,8 +130,7 @@ test_bs_iter_int(const void *key, const void *base,
   list_array(base, n, width, print_int);
   found = bs_iter(key, base, n, width, cmp_int);
   printf("found: [%ld]\n",
-         (long) (NULL == found
-                 ? -1 : offset(base, found, sizeof(*found))));
+         (NULL == found ? -1L : (long) offset(base, found, sizeof(*found))));
 }
 
 void
@@ -146,7 +143,7 @@ test_bs_iter_str(const void *key, const void *base,
   list_array(base, n, width, print_str);
   found = bs_iter(key, base, n, width, cmp_str);
   printf("found: [%ld]\n",
-         (long) (0 == found ? -1 : offset(base, found, width)));
+         (0 == found ? -1L : (long) offset(base, found, width)));
 }
 
 void
@@ -159,7 +156,7 @@ test_bsearch_int(const void *key, const void *base,
   list_array(base, n, width, print_int);
   found = bsearch(key, base, n, width, cmp_int);
   printf("found: [%ld]\n",
-         (long) (NULL == found ? -1 : offset(base, found, width)));
+         (NULL == found ? -1L : (long) offset(base, found, width)));
 }
 
 void
@@ -172,7 +169,7 @@ test_bsearch_str(const void *key, const void *base,
   list_array(base, n, width, print_str);
   found = bs(key, base, n, width, cmp_str);
   printf("found: [%ld]\n",
-         (long) (NULL == found ? -1 : offset(base, found, width)));
+         (NULL == found ? -1L : (long) offset(base, found, width)));
 }
 
 int
