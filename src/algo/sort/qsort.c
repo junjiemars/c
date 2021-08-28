@@ -33,6 +33,6 @@ sort(void *base, size_t n, size_t width,
         }
     }
 
-  sort(base, (hi + width - (char *) base) / width, width, cmp);
-  sort(hi + width, n - (hi + width - (char *) base) / width, width, cmp);
+  sort(base, offset(base, hi + width, width), width, cmp);
+  sort(hi + width, n - offset(base, hi + width, width), width, cmp);
 }

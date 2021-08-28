@@ -11,10 +11,10 @@
 
 #define _unused_(x) ((void)(x))
 
-#define swap(a, b, size)                        \
+#define swap(a, b, w)                           \
 do                                              \
   {                                             \
-    size_t __size = (size);                     \
+    size_t __w = (w);                           \
     char *__a = (char *) (a);                   \
     char *__b = (char *) (b);                   \
     do                                          \
@@ -22,7 +22,7 @@ do                                              \
         char __tmp = *__a;                      \
         *__a++ = *__b;                          \
         *__b++ = __tmp;                         \
-      } while (--__size > 0);                   \
+      } while (--__w > 0);                      \
   } while (0)
 
 
