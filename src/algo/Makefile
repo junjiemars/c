@@ -307,18 +307,20 @@ algo_sort: $(algo_root)/_algo_h									\
            $(algo_root)/sort/sort.h							\
            $(sort_bubble_binout)								\
 					 $(sort_insert_binout)								\
+           $(sort_qsort_binout)									\
            $(sort_select_binout)
-           # $(sort_qsort_binout)
 
 algo_sort_test: sort_bubble_test								\
 								sort_insert_test								\
+                sort_qsort_test									\
                 sort_select_test
-                # sort_qsort_test
 
 sort_bubble_test: $(sort_bubble_binout)
 	$(sort_bubble_binout)
 sort_insert_test: $(sort_insert_binout)
 	$(sort_insert_binout)
+
+sort_qsort: $(sort_qsort_binout)
 sort_qsort_test: $(sort_qsort_binout)
 	$(sort_qsort_binout)
 sort_select_test: $(sort_select_binout)

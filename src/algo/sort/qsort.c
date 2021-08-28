@@ -6,19 +6,33 @@ void
 sort(void *base, size_t n, size_t width,
      int (*cmp)(const void *, const void *))
 {
-  size_t  p, i;
-  
+  char  *pivot, *lo, *hi;
+
   if (n < 2)
     {
       return;
     }
 
-  p = n / 2;
-  for (i = 0; i < n; i++)
+  pivot = (char *) base;
+  lo = (char *) base - width;
+  hi = (char *) base + n * width;
+
+  while (lo < hi)
     {
-      
+      do
+        {
+          hi -= width;
+        } while (cmp(hi, pivot) > 0);
+      do
+        {
+          lo += width;
+        } while (cmp(lo, pivot) < 0);
+      if (lo < hi)
+        {
+          swap(lo, hi, width);
+        }
     }
-  
-  sort(base, p, width, cmp);
-  sort((char *) base + (p+1)*width, n - p, width, cmp);
+
+  sort(base, (hi + width - (char *) base) / width, width, cmp);
+  sort(hi + width, n - (hi + width - (char *) base) / width, width, cmp);
 }
