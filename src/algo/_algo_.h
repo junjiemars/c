@@ -11,23 +11,20 @@
 
 #define _unused_(x) ((void)(x))
 
-#if (MSVC)
-/* msvc does not support variable length array, C2057 */
-#define swap(a, b, w) do {                      \
-    unsigned char *_swap_1_ = malloc(w);        \
-		memcpy(_swap_1_, (a), (w));                 \
-		memmove((a), (b), (w));                     \
-		memcpy((b), _swap_1_, (w));                 \
-    free(_swap_1_);                             \
-	} while (0)
-#else
-#define swap(a, b, w) do {                      \
-		unsigned char _swap_1_[w];                  \
-		memcpy(_swap_1_, (a), (w));                 \
-		memmove((a), (b), (w));                     \
-		memcpy((b), _swap_1_, (w));                 \
-	} while (0)
-#endif
+#define swap(a, b, size)                        \
+do                                              \
+  {                                             \
+    size_t __size = (size);                     \
+    char *__a = (char *) (a);                   \
+    char *__b = (char *) (b);                   \
+    do                                          \
+      {                                         \
+        char __tmp = *__a;                      \
+        *__a++ = *__b;                          \
+        *__b++ = __tmp;                         \
+      } while (--__size > 0);                   \
+  } while (0)
+
 
 #ifndef MAX
 #  define MAX(a,b)            (((a) > (b)) ? (a) : (b))
