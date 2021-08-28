@@ -148,7 +148,6 @@ $(nginx_module_njs_binout): $(nginx_njs_module_src)							\
 	cd $(nginx_home)																										\
 		&& auto/configure --prefix=$(nginx_module_njs_prefix)							\
                       --without-http_memcached_module									\
-                      --without-http_rewrite_module										\
                       --without-http-cache														\
                       --without-http_proxy_module											\
                       --add-module=$(nginx_njs_module_src)/nginx	    \
