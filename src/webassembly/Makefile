@@ -42,7 +42,7 @@ ifeq ($(WASM),1)
                      -s SAFE_HEAP=1
   wasm_file_flags := $(wasm_flags)							\
                      -s NO_EXIT_RUNTIME=1       \
-                     --preload-file $(webassembly_root)@_wasm_.h@w1.h
+                     --preload-file $(webassembly_root)/@_wasm_.h@w1.h
 	wasm_str_flags := $(wasm_flags)																	\
                     -s NO_EXIT_RUNTIME=1													\
                     -s SAFE_HEAP=1																\
@@ -67,7 +67,7 @@ wasm_basic_test: wasm_basic
 	$(wasm_basic_binout)
 endif
 
-$(wasm_basic_binout): $(webassembly_root)basic/b.c
+$(wasm_basic_binout): $(webassembly_root)/basic/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_basic_flags)
 
 # bidir: ./configure --with-std=no
@@ -82,7 +82,7 @@ wasm_bidir_test: wasm_bidir
 	$(wasm_bidir_binout)
 endif
 
-$(wasm_bidir_binout): $(webassembly_root)bidir/bd.c
+$(wasm_bidir_binout): $(webassembly_root)/bidir/bd.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_bidir_flags)
 
 
@@ -98,7 +98,7 @@ wasm_export_test: wasm_export
 	$(wasm_export_binout)
 endif
 
-$(wasm_export_binout): $(webassembly_root)export/x.c
+$(wasm_export_binout): $(webassembly_root)/export/x.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_export_flags)
 
 # file
@@ -110,10 +110,10 @@ wasm_file_test: wasm_file
 	ls -lh $(bin_path)*
 else
 wasm_file_test: wasm_file
-	$(wasm_file_binout) $(webassembly_root)_wasm_.h
+	$(wasm_file_binout) $(webassembly_root)/_wasm_.h
 endif
 
-$(wasm_file_binout): $(webassembly_root)file/f.c
+$(wasm_file_binout): $(webassembly_root)/file/f.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_file_flags)
 
 
@@ -126,10 +126,10 @@ wasm_str_test: wasm_str
 	ls -lh $(bin_path)*
 else
 wasm_str_test: wasm_str
-	$(wasm_str_binout) $(webassembly_root)_wasm_.h
+	$(wasm_str_binout) $(webassembly_root)/_wasm_.h
 endif
 
-$(wasm_str_binout): $(webassembly_root)str/s.c
+$(wasm_str_binout): $(webassembly_root)/str/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_str_flags)
 
 # type
@@ -141,8 +141,8 @@ wasm_type_test: wasm_type
 	ls -lh $(bin_path)*
 else
 wasm_type_test: wasm_type
-	$(wasm_type_binout) $(webassembly_root)_wasm_.h
+	$(wasm_type_binout) $(webassembly_root)/_wasm_.h
 endif
 
-$(wasm_type_binout): $(webassembly_root)type/t.c
+$(wasm_type_binout): $(webassembly_root)/type/t.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(wasm_type_flags)
