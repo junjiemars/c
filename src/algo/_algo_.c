@@ -30,6 +30,13 @@ print_size_t(const void *el)
 	printf("%zu, ", *(size_t*) el);
 }
 
+void
+print_score_s(const void *e)
+{
+  const struct score_s *ss = (struct score_s *) e;
+  printf("name=%s, score=%d\n", ss->name, ss->score);
+}
+
 int
 cmp_int(const void *lhs, const void *rhs)
 {
@@ -40,6 +47,14 @@ int
 cmp_str(const void *lhs, const void *rhs)
 {
 	return strcmp(*(const char**)lhs, *(const char**)rhs);
+}
+
+int
+cmp_score_s(const void *lhs, const void *rhs)
+{
+  const struct score_s *s1 = (const struct score_s*) lhs;
+  const struct score_s *s2 = (const struct score_s*) rhs;
+  return s1->score - s2->score;
 }
 
 int
