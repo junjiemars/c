@@ -34,7 +34,7 @@ void
 print_score_s(const void *e)
 {
   const struct score_s *ss = (struct score_s *) e;
-  printf("name=%s, score=%d\n", ss->name, ss->score);
+  printf("name = %s, score = %d\n", ss->name, ss->score);
 }
 
 int
