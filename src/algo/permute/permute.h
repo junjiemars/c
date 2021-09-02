@@ -9,8 +9,7 @@
  *   1 0 0       x3     x1
  *
  */
-void permute(void *base, size_t n, size_t width,
-             const size_t *permutation, size_t size,
+void permute(void *base, size_t n, size_t width, const size_t *permutation,
              int (*cmp)(const void *, const void *));
 
 

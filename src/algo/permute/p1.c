@@ -2,14 +2,13 @@
 #include "permute.h"
 
 void
-permute(void *base, size_t n, size_t width,
-        const size_t *permutation, size_t size,
+permute(void *base, size_t n, size_t width, const size_t *permutation,
         int (*cmp)(const void *, const void *))
 {
   size_t   i;
   char    *src, *dst;
 
-  for (i = 0; i < size; i++)
+  for (i = 0; i < n; i++)
     {
       if (permutation[i] >= n)
         {
