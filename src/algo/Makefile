@@ -26,6 +26,7 @@ algo: _algo_																		\
       algo_levenshtein													\
       algo_merge																\
 			algo_num																	\
+      algo_permute															\
       algo_prime																\
 			algo_reverse															\
 			algo_search																\
@@ -46,6 +47,7 @@ algo_test: _algo_test														\
            algo_levenshtein_test								\
            algo_merge_test											\
 					 algo_num_test												\
+           algo_permute_test										\
            algo_prime														\
 					 algo_reverse_test										\
 					 algo_search_test											\
@@ -228,6 +230,18 @@ algo_num_test: algo_num
 
 $(algo_num_int_binout): $(algo_root)/_algo_.c		\
                         $(algo_root)/num/n1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# permute
+algo_permute_raw_binout := $(bin_path)/$(algo_prefix)_permute_raw$(bin_ext)
+
+algo_permute: $(algo_permute_raw_binout)
+algo_permute_test: algo_permute
+	$(algo_permute_raw_binout)
+
+$(algo_permute_raw_binout): $(algo_root)/_algo_.c				\
+                            $(algo_root)/permute/p1.c 	\
+                            $(algo_root)/permute/test.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # prime

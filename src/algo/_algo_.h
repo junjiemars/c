@@ -49,6 +49,7 @@ void list_array(const void *base, size_t nel, size_t width,
 
 void print_int(const void *el);
 void print_str(const void *el);
+void print_size_t(const void *el);
 
 int cmp_int(const void *lhs, const void *rhs);
 int cmp_str(const void *lhs, const void *rhs);

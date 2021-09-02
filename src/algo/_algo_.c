@@ -24,6 +24,12 @@ print_str(const void *el)
 	printf("%s, ", *(char**) el);
 }
 
+void
+print_size_t(const void *el)
+{
+	printf("%zu, ", *(size_t*) el);
+}
+
 int
 cmp_int(const void *lhs, const void *rhs)
 {
