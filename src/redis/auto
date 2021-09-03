@@ -1,0 +1,77 @@
+# -*- mode:sh -*- vim:ft=sh
+
+# check sanitize feature
+#----------------------------------------
+case "$CC_NAME" in
+   gcc|clang)
+     nm_feature="$CC_NAME -fsanitize=address"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-fsanitize=address'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=f_sanitize op="+=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     nm_feature="$CC_NAME -fsanitize=leak"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-fsanitize=leak'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=f_sanitize op="+=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     ;;		 
+   msvc)
+     ;;
+esac
+
+# check cc's -fno-common
+#----------------------------------------
+case "$CC_NAME" in
+   gcc|clang)
+     nm_feature="$CC_NAME -fno-common"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-fno-common'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=f_no_common op=":=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     ;;		 
+   msvc)
+     ;;
+esac
+
+# check cc's -fPIC
+#----------------------------------------
+case $CC_NAME in
+	clang|gcc)
+		nm_feature="$CC_NAME -fPIC"
+		nm_feature_name=
+    nm_feature_indent=yes
+		nm_feature_run=no
+		nm_feature_h=
+		nm_feature_flags='-fPIC'
+		nm_feature_test=
+		. ${NORE_ROOT}/auto/feature
+		if [ yes = $nm_found ]; then
+			flag=f_pic op=':=' value='-fPIC' . ${NORE_ROOT}/auto/make_define
+		fi
+	;;
+
+	msvc)
+    # msvc do not use position independent code
+  ;;
+esac
