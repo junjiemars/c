@@ -26,12 +26,12 @@ do                                              \
   } while (0)
 
 
-#ifndef MAX
-#  define MAX(a,b)            (((a) > (b)) ? (a) : (b))
+#ifndef max
+#  define max(a,b)            (((a) > (b)) ? (a) : (b))
 #endif
 
-#ifndef MIN
-#  define MIN(a,b)            (((a) < (b)) ? (a) : (b))
+#ifndef min
+#  define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
 #ifdef count

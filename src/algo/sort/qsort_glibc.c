@@ -147,7 +147,7 @@ sort(void *base, size_t n, size_t width,
   {
     char *const   end     =  &b[width * (n - 1)];
     char         *tmp     =  b;
-    char         *thresh  =  MIN(end, b + max_thresh);
+    char         *thresh  =  min(end, b + max_thresh);
     char         *run;
 
     for (run = tmp + width; run <= thresh; run += width)

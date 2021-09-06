@@ -14,7 +14,7 @@ typedef SSIZE_T ssize_t;
 */
 
 char *
-strscpy(char *dst, const char *src, ssize_t size)
+strscpy(char *dst, const char *src, size_t size)
 {
 	if (!size) return 0;
 	char *p = dst;
