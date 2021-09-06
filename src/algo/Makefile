@@ -315,6 +315,7 @@ $(algo_s_binary_binout): $(algo_root)/_algo_.c \
 sort_bubble_binout := $(bin_path)/$(algo_prefix)_sort_bubble$(bin_ext)
 sort_insert_binout := $(bin_path)/$(algo_prefix)_sort_insert$(bin_ext)
 sort_qsort_binout := $(bin_path)/$(algo_prefix)_sort_qsort$(bin_ext)
+sort_qsort_glibc_binout := $(bin_path)/$(algo_prefix)_sort_qsort_glibc$(bin_ext)
 sort_select_binout := $(bin_path)/$(algo_prefix)_sort_select$(bin_ext)
 
 algo_sort: $(algo_root)/_algo_h									\
@@ -322,11 +323,13 @@ algo_sort: $(algo_root)/_algo_h									\
            $(sort_bubble_binout)								\
 					 $(sort_insert_binout)								\
            $(sort_qsort_binout)									\
+           $(sort_qsort_glibc_binout)						\
            $(sort_select_binout)
 
 algo_sort_test: sort_bubble_test								\
 								sort_insert_test								\
                 sort_qsort_test									\
+                sort_qsort_glibc_test						\
                 sort_select_test
 
 sort_bubble_test: $(sort_bubble_binout)
@@ -337,6 +340,11 @@ sort_insert_test: $(sort_insert_binout)
 sort_qsort: $(sort_qsort_binout)
 sort_qsort_test: $(sort_qsort_binout)
 	$(sort_qsort_binout)
+
+sort_qsort_glibc: $(sort_qsort_glibc_binout)
+sort_qsort_glibc_test: $(sort_qsort_glibc_binout)
+	$(sort_qsort_glibc_binout)
+
 sort_select_test: $(sort_select_binout)
 	$(sort_select_binout)
 
@@ -352,6 +360,12 @@ $(sort_insert_binout): $(algo_root)/_algo_.c			\
 
 $(sort_qsort_binout): $(algo_root)/_algo_.c			\
                       $(algo_root)/sort/qsort.c	\
+                      $(algo_root)/sort/test.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+$(sort_qsort_glibc_binout): $(algo_root)/_algo_.c			\
+                      $(algo_root)/sort/qsort_glibc.c	\
                       $(algo_root)/sort/test.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
