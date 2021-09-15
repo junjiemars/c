@@ -54,7 +54,7 @@ ifeq ($(WASM),1)
                      -s SAFE_HEAP=1
   wasm_file_flags := $(wasm_flags)																			\
                      -s NO_EXIT_RUNTIME=1																\
-                     --preload-file $(webassembly_root)/@_wasm_.h@w1.h
+                     --preload-file $(webassembly_root)/file/@f.c
 	wasm_str_flags := $(wasm_flags)																		\
                     -s NO_EXIT_RUNTIME=1														\
                     -s SAFE_HEAP=1																	\
