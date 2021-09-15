@@ -104,3 +104,6 @@ src/leptonica/leptonica_home
 # redis
 **/dump.rdb
 src/redis/redis_home
+
+# webassembly
+src/webassembly/emsdk_home
