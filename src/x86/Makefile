@@ -205,3 +205,6 @@ $(var_binout): $(x86_root)/var/var.c
 
 
 #@$(foreach f,$(stack_binout),$(f);)
+
+
+# eof

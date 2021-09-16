@@ -3,7 +3,8 @@
 void B(void);
 void C(void);
 
-void A(void) {
+void A(void)
+{
 	int x;
 	short y;
 	_unused_(x);
@@ -13,7 +14,8 @@ void A(void) {
 	C();
 }
 
-void B(void) {
+void B(void)
+{
 	long x, z;
 	int y;
 	_unused_(x);
@@ -22,7 +24,8 @@ void B(void) {
 	C();
 }
 
-void C(void) {
+void C(void)
+{
 	double x;
 	long y;
 	_unused_(x);
@@ -30,6 +33,7 @@ void C(void) {
 }
 
 int 
-main(void) {
+main(void)
+{
 	A();
 }
