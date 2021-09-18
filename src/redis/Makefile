@@ -1,7 +1,6 @@
 #
 # ./configure --has-redis
 #
-# make clean test
 
 
 redis_out := $(CURDIR)/$(out)/var/redis
