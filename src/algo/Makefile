@@ -14,47 +14,47 @@ ifeq ($(NM_SYSTEM), Linux)
   LDLIBS += -lm
 endif
 
-algo: _algo_																		\
-      algo_compress															\
-			algo_duff_device													\
-			algo_dynamic_array												\
-			algo_fibonacci														\
-			algo_gcd																	\
-			algo_hash																	\
-			algo_is_unsigned_integer									\
-			algo_is_unsigned_type											\
-      algo_levenshtein													\
-      algo_merge																\
-			algo_num																	\
-      algo_permute															\
-      algo_prime																\
-			algo_reverse															\
-			algo_search																\
-			algo_sizeof																\
-			algo_sort																	\
-			algo_strlen_utf8													\
-			algo_strscpy
+algo: _algo_                                    \
+      algo_compress                             \
+      algo_duff_device                          \
+      algo_dynamic_array                        \
+      algo_fibonacci                            \
+      algo_gcd                                  \
+      algo_hash                                 \
+      algo_is_unsigned_integer                  \
+      algo_is_unsigned_type                     \
+      algo_levenshtein                          \
+      algo_merge                                \
+      algo_num                                  \
+      algo_permute                              \
+      algo_prime                                \
+      algo_reverse                              \
+      algo_search                               \
+      algo_sizeof                               \
+      algo_sort                                 \
+      algo_strlen_utf8                          \
+      algo_strscpy
 
-algo_test: _algo_test														\
-           algo_compress_test										\
-					 algo_duff_device_test								\
-					 algo_dynamic_array_test							\
-					 algo_fibonacci_test									\
-					 algo_gcd_test												\
-					 algo_hash_test												\
-					 algo_is_unsigned_integer_test				\
-					 algo_is_unsigned_type_test						\
-           algo_levenshtein_test								\
-           algo_merge_test											\
-					 algo_num_test												\
-           algo_permute_test										\
-           algo_prime														\
-					 algo_reverse_test										\
-					 algo_search_test											\
-					 algo_sizeof_test											\
-					 algo_sort_test												\
-					 algo_strlen_utf8_test								\
-					 algo_strscpy_test
+algo_test: _algo_test                           \
+           algo_compress_test                   \
+           algo_duff_device_test                \
+           algo_dynamic_array_test              \
+           algo_fibonacci_test                  \
+           algo_gcd_test                        \
+           algo_hash_test                       \
+           algo_is_unsigned_integer_test        \
+           algo_is_unsigned_type_test           \
+           algo_levenshtein_test                \
+           algo_merge_test                      \
+           algo_num_test                        \
+           algo_permute_test                    \
+           algo_prime                           \
+           algo_reverse_test                    \
+           algo_search_test                     \
+           algo_sizeof_test                     \
+           algo_sort_test                       \
+           algo_strlen_utf8_test                \
+           algo_strscpy_test
 
 
 # _algo
@@ -135,11 +135,11 @@ algo_hash_djb2_binout := $(bin_path)/$(algo_prefix)_hash_djb2$(bin_ext)
 algo_hash_sdbm_binout := $(bin_path)/$(algo_prefix)_hash_sdbm$(bin_ext)
 algo_hash_jenkins_binout := $(bin_path)/$(algo_prefix)_hash_jenkins$(bin_ext)
 
-algo_hash: $(algo_hash_kr1_binout) \
-				 	 $(algo_hash_kr2_binout) \
-			     $(algo_hash_djb2_binout) \
-			     $(algo_hash_sdbm_binout) \
-			     $(algo_hash_jenkins_binout)
+algo_hash: $(algo_hash_kr1_binout)              \
+           $(algo_hash_kr2_binout)              \
+           $(algo_hash_djb2_binout)             \
+           $(algo_hash_sdbm_binout)             \
+           $(algo_hash_jenkins_binout)
 algo_hash_test: algo_hash
 	$(algo_hash_kr1_binout) "abcABC"
 	$(algo_hash_kr1_binout) "ABCabc"
@@ -214,7 +214,7 @@ algo_merge: $(algo_merge_binout)
 algo_merge_test: algo_merge
 	$(algo_merge_binout)
 
-$(algo_merge_binout): $(algo_root)/_algo_.c			\
+$(algo_merge_binout): $(algo_root)/_algo_.c     \
                       $(algo_root)/merge/m1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
@@ -228,7 +228,7 @@ algo_num_test: algo_num
 	$(algo_num_int_binout) 2835 3
 	$(algo_num_int_binout) 2835 4
 
-$(algo_num_int_binout): $(algo_root)/_algo_.c		\
+$(algo_num_int_binout): $(algo_root)/_algo_.c   \
                         $(algo_root)/num/n1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
@@ -258,10 +258,10 @@ $(algo_prime_binout): $(algo_root)/prime/p1.c
 algo_reverse_string_binout := $(bin_path)/$(algo_prefix)_reverse_string$(bin_ext)
 algo_reverse_linked_list_binout := $(bin_path)/$(algo_prefix)_reverse_linked_list$(bin_ext)
 
-algo_reverse: $(algo_reverse_string_binout) \
-							$(algo_reverse_linked_list_binout)
-algo_reverse_test: algo_reverse_string_test \
-									 algo_reverse_linked_list_test
+algo_reverse: $(algo_reverse_string_binout)       \
+              $(algo_reverse_linked_list_binout)
+algo_reverse_test: algo_reverse_string_test       \
+                   algo_reverse_linked_list_test
 
 algo_reverse_string_test: $(algo_reverse_string_binout)
 	$(algo_reverse_string_binout)
@@ -292,9 +292,9 @@ $(algo_sizeof_cppout): $(algo_root)/sizeof/s.c
 algo_s_linear_binout := $(bin_path)/$(algo_prefix)_search_linear$(bin_ext)
 algo_s_binary_binout := $(bin_path)/$(algo_prefix)_search_binary$(bin_ext)
 
-algo_search: $(algo_s_linear_binout)						\
+algo_search: $(algo_s_linear_binout)            \
              $(algo_s_binary_binout)
-algo_search_test: algo_s_linear_test						\
+algo_search_test: algo_s_linear_test            \
                   algo_s_binary_test
 
 algo_s_linear_test: $(algo_s_linear_binout)
@@ -302,12 +302,12 @@ algo_s_linear_test: $(algo_s_linear_binout)
 algo_s_binary_test: $(algo_s_binary_binout)
 	$(algo_s_binary_binout)
 
-$(algo_s_linear_binout): $(algo_root)/_algo_.c \
-												 $(algo_root)/search/ls.c
+$(algo_s_linear_binout): $(algo_root)/_algo_.c    \
+                         $(algo_root)/search/ls.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(algo_s_binary_binout): $(algo_root)/_algo_.c \
-												 $(algo_root)/search/bs.c
+$(algo_s_binary_binout): $(algo_root)/_algo_.c    \
+                         $(algo_root)/search/bs.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -318,18 +318,18 @@ sort_qsort_binout := $(bin_path)/$(algo_prefix)_sort_qsort$(bin_ext)
 sort_qsort_glibc_binout := $(bin_path)/$(algo_prefix)_sort_qsort_glibc$(bin_ext)
 sort_select_binout := $(bin_path)/$(algo_prefix)_sort_select$(bin_ext)
 
-algo_sort: $(algo_root)/_algo_h									\
-           $(algo_root)/sort/sort.h							\
-           $(sort_bubble_binout)								\
-					 $(sort_insert_binout)								\
-           $(sort_qsort_binout)									\
-           $(sort_qsort_glibc_binout)						\
+algo_sort: $(algo_root)/_algo_h                 \
+           $(algo_root)/sort/sort.h             \
+           $(sort_bubble_binout)                \
+           $(sort_insert_binout)                \
+           $(sort_qsort_binout)                 \
+           $(sort_qsort_glibc_binout)           \
            $(sort_select_binout)
 
-algo_sort_test: sort_bubble_test								\
-								sort_insert_test								\
-                sort_qsort_test									\
-                sort_qsort_glibc_test						\
+algo_sort_test: sort_bubble_test                \
+                sort_insert_test                \
+                sort_qsort_test                 \
+                sort_qsort_glibc_test           \
                 sort_select_test
 
 sort_bubble_test: $(sort_bubble_binout)
@@ -348,29 +348,29 @@ sort_qsort_glibc_test: $(sort_qsort_glibc_binout)
 sort_select_test: $(sort_select_binout)
 	$(sort_select_binout)
 
-$(sort_bubble_binout): $(algo_root)/_algo_.c			\
-                       $(algo_root)/sort/bubble.c	\
+$(sort_bubble_binout): $(algo_root)/_algo_.c      \
+                       $(algo_root)/sort/bubble.c \
                        $(algo_root)/sort/test.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(sort_insert_binout): $(algo_root)/_algo_.c			\
-											 $(algo_root)/sort/insert.c	\
+$(sort_insert_binout): $(algo_root)/_algo_.c      \
+                       $(algo_root)/sort/insert.c \
                        $(algo_root)/sort/test.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(sort_qsort_binout): $(algo_root)/_algo_.c			\
-                      $(algo_root)/sort/qsort.c	\
+$(sort_qsort_binout): $(algo_root)/_algo_.c     \
+                      $(algo_root)/sort/qsort.c \
                       $(algo_root)/sort/test.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
-$(sort_qsort_glibc_binout): $(algo_root)/_algo_.c			\
-                      $(algo_root)/sort/qsort_glibc.c	\
+$(sort_qsort_glibc_binout): $(algo_root)/_algo_.c     \
+                      $(algo_root)/sort/qsort_glibc.c \
                       $(algo_root)/sort/test.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(sort_select_binout): $(algo_root)/_algo_.c			\
-                       $(algo_root)/sort/select.c	\
+$(sort_select_binout): $(algo_root)/_algo_.c      \
+                       $(algo_root)/sort/select.c \
                        $(algo_root)/sort/test.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
