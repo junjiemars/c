@@ -1,11 +1,16 @@
-cc: cc_recursive_descent \
-		cc_cdecl \
-		cc_lexer
+#
+# ./configure --has-cc
+# make clean test
+#
+
+cc: cc_recursive_descent                        \
+    cc_cdecl                                    \
+    cc_lexer
 
 
-cc_test: cc_recursive_descent_test \
-				 cc_cdecl_test \
-				 cc_lexer_test
+cc_test: cc_recursive_descent_test              \
+         cc_cdecl_test                          \
+         cc_lexer_test
 
 
 cc_prefix := cc
