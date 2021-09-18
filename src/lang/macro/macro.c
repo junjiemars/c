@@ -10,22 +10,25 @@
 #define check_blank(a)  strlen(#a)
 
 
-#define incr_v1(a, b)                                                        \
-    (a)++; (b)++;
+#define incr_v1(a, b)  (a)++; (b)++;
 
 
-#define incr_v2(a, b) do {                                                   \
-        (a)++; (b)++;                                                        \
-    } while (0)                     /* no ; at tail */
+#define incr_v2(a, b)                                   \
+  do                                                    \
+    {                                                   \
+      (a)++; (b)++;                                     \
+    } while (0)                 /* no ; at tail */
 
 
-#define sum(max, out) do {                                                   \
-        /* avoid name clash */                                               \
-        int  total_g123   =  0;                                              \
-        int  max_g124     =  max;                                            \
-        for (int i_g125=0; i_g125 < max_g124; i_g125++)                      \
-            total_g123     +=  i_g125;                                       \
-        out             =  total_g123;                                       \
+#define sum(max, out)                                 \
+  do                                                  \
+    {                                                 \
+      /* avoid name clash */                          \
+      int  total_g123   =  0;                         \
+      int  max_g124     =  max;                       \
+      for (int i_g125=0; i_g125 < max_g124; i_g125++) \
+        total_g123     +=  i_g125;                    \
+      out             =  total_g123;                  \
     } while (0)
 
 
@@ -40,41 +43,44 @@
 #endif  /* NM_HAVE_VARIADIC_MACRO */
 
 
-int 
-main(int argc, char *argv[]) {
-    _unused_(argc);
-    _unused_(argv);
+int
+main(int argc, char *argv[])
+{
+  _unused_(argc);
+  _unused_(argv);
 
-    printf("\ndouble macro\n");
-    printf("--------------\n");
-    printf("double_v1(1+1)*8=%i\n", double_v1(1+1)*8);
-    printf("double_v2(1+1)*8=%i\n", double_v2(1+1)*8);
+  printf("\ndouble macro\n");
+  printf("--------------\n");
+  printf("double_v1(1+1)*8=%i\n", double_v1(1+1)*8);
+  printf("double_v2(1+1)*8=%i\n", double_v2(1+1)*8);
 
-    printf("\nmax macro\n");
-    printf("-----------\n");
-    int a = 1, b = 2;
-    printf("a=%i, b=%i, |+ max\n", a, b);
-    printf("max(a,b++)=%i\n", max(a,b++));
-    printf("a=%i, b=%i, |- max\n", a, b);
+  printf("\nmax macro\n");
+  printf("-----------\n");
+  int a = 1, b = 2;
+  printf("a=%i, b=%i, |+ max\n", a, b);
+  printf("max(a,b++)=%i\n", max(a,b++));
+  printf("a=%i, b=%i, |- max\n", a, b);
 
-    printf("\nincr macro\n");
-    printf("------------\n");
-    a = 1, b = 2;
-    printf("a=%i, b=%i, |+ incr_v1\n", a, b);
-    if (a > b) {
-        incr_v1(a, b);
-    }
-    printf("if (a > b) incr_v1(a, b)\n");
-    printf("a=%i, b=%i, |- incr_v1\n", a, b);
-	
-    printf("------------\n");
-    a = 2, b = 1;
-    printf("a=%i, b=%i, |+ incr_v2\n", a, b);
-    if (a > b) {
-        incr_v2(a, b);
-        
-    } else {
-        printf("a=%i, b=%i, when a > b is flase\n", a, b);
+  printf("\nincr macro\n");
+  printf("------------\n");
+  a = 1, b = 2;
+  printf("a=%i, b=%i, |+ incr_v1\n", a, b);
+
+  {
+    incr_v1(a, b);
+  }
+  printf("if (a > b) incr_v1(a, b)\n");
+  printf("a=%i, b=%i, |- incr_v1\n", a, b);
+
+  printf("------------\n");
+  a = 2, b = 1;
+  printf("a=%i, b=%i, |+ incr_v2\n", a, b);
+
+  {
+    incr_v2(a, b);
+
+    {
+      printf("a=%i, b=%i, when a > b is flase\n", a, b);
     }
     printf("a=%i, b=%i, |- incr_v2\n", a, b);
 
@@ -106,4 +112,4 @@ main(int argc, char *argv[]) {
 #endif  /* NM_HAVE_VARIADIC_MACRO */
 
     return 0;
-}
+  }
