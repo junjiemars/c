@@ -17,18 +17,18 @@ emsdk_git_src := 'https://github.com/emscripten-core/emsdk.git'
 emsdk_home := $(webassembly_root)/emsdk_home
 
 
-webassembly: wasm_basic													\
-             wasm_bidir													\
-             wasm_export												\
-             wasm_file													\
-             wasm_str														\
+webassembly: wasm_basic                         \
+             wasm_bidir                         \
+             wasm_export                        \
+             wasm_file                          \
+             wasm_str                           \
              wasm_type
 
-webassembly_test: wasm_basic_test								\
-                  wasm_bidir_test								\
-                  wasm_export_test							\
-                  wasm_file_test								\
-                  wasm_str_test									\
+webassembly_test: wasm_basic_test               \
+                  wasm_bidir_test               \
+                  wasm_export_test              \
+                  wasm_file_test                \
+                  wasm_str_test                 \
                   wasm_type_test
 
 
@@ -39,30 +39,30 @@ wasm_flags :=
 
 
 ifeq ($(WASM),1)
-	wasm_flags := -s WASM=1
-	CFLAGS += -DWASM=1
-	bin_ext := .html
+  wasm_flags := -s WASM=1
+  CFLAGS += -DWASM=1
+  bin_ext := .html
 
-	wasm_basic_flags := $(wasm_flags)
-  wasm_bidir_flags := $(wasm_flags)														\
-                      -s SAFE_HEAP=1													\
+  wasm_basic_flags := $(wasm_flags)
+  wasm_bidir_flags := $(wasm_flags)                           \
+                      -s SAFE_HEAP=1                          \
                       -s "EXPORTED_RUNTIME_METHODS=['ccall']"
-	wasm_export_flags := $(wasm_flags)													\
-                     -fsanitize=undefined											\
-                     -s NO_EXIT_RUNTIME=1											\
-                     -s "EXPORTED_RUNTIME_METHODS=['ccall']"	\
+  wasm_export_flags := $(wasm_flags)                          \
+                     -fsanitize=undefined                     \
+                     -s NO_EXIT_RUNTIME=1                     \
+                     -s "EXPORTED_RUNTIME_METHODS=['ccall']"  \
                      -s SAFE_HEAP=1
-  wasm_file_flags := $(wasm_flags)																			\
-                     -s NO_EXIT_RUNTIME=1																\
+  wasm_file_flags := $(wasm_flags)                                \
+                     -s NO_EXIT_RUNTIME=1                         \
                      --preload-file $(webassembly_root)/file/@f.c
-	wasm_str_flags := $(wasm_flags)																		\
-                    -s NO_EXIT_RUNTIME=1														\
-                    -s SAFE_HEAP=1																	\
+  wasm_str_flags := $(wasm_flags)                                   \
+                    -s NO_EXIT_RUNTIME=1                            \
+                    -s SAFE_HEAP=1                                  \
                     -s "EXPORTED_RUNTIME_METHODS=['ccall','cwrap']"
-  wasm_type_flags := $(wasm_flags)													\
-                     -s NO_EXIT_RUNTIME=1										\
-                    -s SAFE_HEAP=1													\
-                    -s ASSERTIONS=1													\
+  wasm_type_flags := $(wasm_flags)                          \
+                     -s NO_EXIT_RUNTIME=1                   \
+                    -s SAFE_HEAP=1                          \
+                    -s ASSERTIONS=1                         \
                     -s "EXPORTED_RUNTIME_METHODS=['ccall']"
 endif
 

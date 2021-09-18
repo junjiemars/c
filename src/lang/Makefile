@@ -16,79 +16,79 @@ endif # end of has_sanitize
 endif # end of _MEMORY_
 
 
-lang: lang_array																\
-      lang_assert																\
-      lang_duration															\
-      lang_enum																	\
-      lang_env																	\
-      lang_error																\
-      lang_exit																	\
-      lang_exec																	\
-      lang_fn																		\
-      lang_goto																	\
-      lang_iso646																\
-      lang_jmp																	\
-      lang_linkage															\
-      lang_locale																\
-      lang_macro																\
-      lang_main																	\
-      lang_math																	\
-      lang_pointer															\
-      lang_preprocessor													\
-      lang_random																\
-      lang_restrict															\
-      lang_scope																\
-      lang_signal																\
-      lang_sizeof																\
-      lang_stage																\
-      lang_storage															\
-      lang_string																\
-      lang_struct																\
-      lang_time																	\
-      lang_trigraphs														\
-      lang_type																	\
-      lang_typedef															\
-      lang_typeof																\
-      lang_union																\
-      lang_variadic															\
+lang: lang_array                                \
+      lang_assert                               \
+      lang_duration                             \
+      lang_enum                                 \
+      lang_env                                  \
+      lang_error                                \
+      lang_exit                                 \
+      lang_exec                                 \
+      lang_fn                                   \
+      lang_goto                                 \
+      lang_iso646                               \
+      lang_jmp                                  \
+      lang_linkage                              \
+      lang_locale                               \
+      lang_macro                                \
+      lang_main                                 \
+      lang_math                                 \
+      lang_pointer                              \
+      lang_preprocessor                         \
+      lang_random                               \
+      lang_restrict                             \
+      lang_scope                                \
+      lang_signal                               \
+      lang_sizeof                               \
+      lang_stage                                \
+      lang_storage                              \
+      lang_string                               \
+      lang_struct                               \
+      lang_time                                 \
+      lang_trigraphs                            \
+      lang_type                                 \
+      lang_typedef                              \
+      lang_typeof                               \
+      lang_union                                \
+      lang_variadic                             \
       lang_volatile
 
 
-lang_test:  lang_array_test											\
-            lang_assert_test										\
-            lang_duration_test									\
-            lang_enum_test											\
-            lang_env_test												\
-            lang_error_test											\
-            lang_exit_test											\
-            lang_exec_test											\
-            lang_fn_test												\
-            lang_goto_test											\
-            lang_iso646_test										\
-            lang_jmp_test												\
-            lang_linkage_test										\
-            lang_locale_test										\
-            lang_macro_test											\
-            lang_main_test											\
-            lang_math_test											\
-            lang_pointer_test										\
-            lang_preprocessor_test							\
-            lang_random_test										\
-            lang_restrict_test									\
-            lang_scope_test											\
-            lang_signal_test										\
-            lang_sizeof_test										\
-            lang_stage_test											\
-            lang_storage_test										\
-            lang_string_test										\
-            lang_struct_test										\
-            lang_time_test											\
-            lang_trigraphs_test									\
-            lang_type_test											\
-            lang_typedef_test										\
-            lang_typeof_test										\
-            lang_union_test											\
-            lang_variadic_test									\
+lang_test:  lang_array_test                     \
+            lang_assert_test                    \
+            lang_duration_test                  \
+            lang_enum_test                      \
+            lang_env_test                       \
+            lang_error_test                     \
+            lang_exit_test                      \
+            lang_exec_test                      \
+            lang_fn_test                        \
+            lang_goto_test                      \
+            lang_iso646_test                    \
+            lang_jmp_test                       \
+            lang_linkage_test                   \
+            lang_locale_test                    \
+            lang_macro_test                     \
+            lang_main_test                      \
+            lang_math_test                      \
+            lang_pointer_test                   \
+            lang_preprocessor_test              \
+            lang_random_test                    \
+            lang_restrict_test                  \
+            lang_scope_test                     \
+            lang_signal_test                    \
+            lang_sizeof_test                    \
+            lang_stage_test                     \
+            lang_storage_test                   \
+            lang_string_test                    \
+            lang_struct_test                    \
+            lang_time_test                      \
+            lang_trigraphs_test                 \
+            lang_type_test                      \
+            lang_typedef_test                   \
+            lang_typeof_test                    \
+            lang_union_test                     \
+            lang_variadic_test                  \
             lang_volatile_test
 
 
@@ -158,12 +158,12 @@ lang_env_lst_binout := $(bin_path)/$(lang_prefix)_env_lst$(bin_ext)
 lang_env_get_binout := $(bin_path)/$(lang_prefix)_env_get$(bin_ext)
 lang_env_set_binout := $(bin_path)/$(lang_prefix)_env_set$(bin_ext)
 
-lang_env: lang_env_lst													\
-          lang_env_get													\
+lang_env: lang_env_lst                          \
+          lang_env_get                          \
           lang_env_set
 
-lang_env_test: lang_env_lst_test								\
-               lang_env_get_test								\
+lang_env_test: lang_env_lst_test                \
+               lang_env_get_test                \
                lang_env_set_test
 
 lang_env_lst: $(lang_env_lst_binout)
@@ -212,7 +212,7 @@ $(lang_error_basic_binout): $(lang_root)/error/e.c
 lang_exit_binout := $(bin_path)/$(lang_prefix)_exit$(bin_ext)
 lang__exit_binout := $(bin_path)/$(lang_prefix)__exit$(bin_ext)
 
-lang_exit: $(lang_exit_binout)									\
+lang_exit: $(lang_exit_binout)                  \
            $(lang__exit_binout)
 lang_exit_test: lang_exit
 	$(lang_exit_binout)
@@ -231,7 +231,7 @@ lang_exec_target := $(CURDIR)/$(lang_root)/exec/x.sh
 
 ifeq (WinNT, $(NM_SYSTEM))
 lang_exec_target := $(CURDIR)/$(lang_root)/exec/x.bat
-endif 													# WinNT
+endif # WinNT
 
 lang_exec: $(lang_exec_binout)
 lang_exec_test: lang_exec
@@ -276,9 +276,9 @@ lang_jmp_basic_binout := $(bin_path)/$(lang_prefix)_jmp_basic$(bin_ext)
 lang_jmp_catch_binout := $(bin_path)/$(lang_prefix)_jmp_catch$(bin_ext)
 lang_jmp_catch_cppout := $(tmp_path)/$(lang_prefix)_jmp_catch$(cpp_ext)
 
-lang_jmp: lang_jmp_basic												\
+lang_jmp: lang_jmp_basic                        \
           lang_jmp_catch
-lang_jmp_test: lang_jmp_basic_test							\
+lang_jmp_test: lang_jmp_basic_test              \
                lang_jmp_catch_test
 
 lang_jmp_basic: $(lang_jmp_basic_binout)
@@ -306,9 +306,9 @@ lang_linkage_c_objout := $(tmp_path)/$(lang_prefix)_linkage_c$(obj_ext)
 lang_linkage_whole_binout := $(bin_path)/$(lang_prefix)_linkage_whole$(bin_ext)
 
 # has_sanitize conflict
-lang_linkage: $(lang_linkage_lnkc_binout)				\
+lang_linkage: $(lang_linkage_lnkc_binout)       \
               $(lang_linkage_whole_binout)
-lang_linkage_test: lang_linkage_lnkc_test				\
+lang_linkage_test: lang_linkage_lnkc_test       \
                    lang_linkage_whole_test
 
 lang_linkage_lnkc_test: $(lang_linkage_lnkc_binout)
@@ -316,15 +316,15 @@ lang_linkage_lnkc_test: $(lang_linkage_lnkc_binout)
 lang_linkage_whole_test: $(lang_linkage_whole_binout)
 	$(lang_linkage_whole_binout)
 
-$(lang_linkage_lnkc_binout): $(lang_linkage_lnk_objout)	\
+$(lang_linkage_lnkc_binout): $(lang_linkage_lnk_objout) \
                              $(lang_linkage_c_objout)
 	$(LINK) $^ $(bin_out)$@
 
-$(lang_linkage_whole_binout): $(lang_root)/linkage/c.c \
+$(lang_linkage_whole_binout): $(lang_root)/linkage/c.c    \
                               $(lang_root)/linkage/lnk.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(lang_linkage_lnk_objout): $(lang_root)/linkage/lnk.c	\
+$(lang_linkage_lnk_objout): $(lang_root)/linkage/lnk.c  \
                             $(lang_root)/linkage/lnk.h
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $< $(obj_out)$@
 
@@ -375,7 +375,7 @@ $(lang_macro_nested_cppout): $(lang_root)/macro/nested.c
 lang_main_binout := $(bin_path)/$(lang_prefix)_main$(bin_ext)
 lang_main_envp_binout := $(bin_path)/$(lang_prefix)_main_envp$(bin_ext)
 
-lang_main: $(lang_main_binout)									\
+lang_main: $(lang_main_binout)                  \
            $(lang_main_envp_binout)
 
 lang_main_test: lang_main
@@ -394,9 +394,9 @@ lang_math_complex_binout := $(bin_path)/$(lang_prefix)_math_complex$(bin_ext)
 lang_math_float_binout := $(bin_path)/$(lang_prefix)_math_float$(bin_ext)
 lang_math_float_cppout := $(tmp_path)/$(lang_prefix)_math_float$(cpp_ext)
 
-lang_math: $(lang_math_complex_binout)					\
+lang_math: $(lang_math_complex_binout)          \
            $(lang_math_float_binout)
-lang_math_test: lang_math_complex_test					\
+lang_math_test: lang_math_complex_test          \
                 lang_math_float_test
 
 lang_math_complex_test: $(lang_math_complex_binout)
@@ -420,13 +420,13 @@ lang_random_arc_binout := $(bin_path)/$(lang_prefix)_random_arc$(bin_ext)
 lang_random_secure_binout := $(bin_path)/$(lang_prefix)_random_secure$(bin_ext)
 lang_random_seed_binout := $(bin_path)/$(lang_prefix)_random_seed$(bin_ext)
 
-lang_random: lang_random_basic									\
-             lang_random_arc										\
-             lang_random_secure									\
+lang_random: lang_random_basic                  \
+             lang_random_arc                    \
+             lang_random_secure                 \
              lang_random_seed
-lang_random_test: lang_random_basic_test				\
-                  lang_random_arc_test					\
-                  lang_random_secure_test				\
+lang_random_test: lang_random_basic_test        \
+                  lang_random_arc_test          \
+                  lang_random_secure_test       \
                   lang_random_seed_test
 
 lang_random_basic: $(lang_random_basic_binout)
@@ -480,20 +480,20 @@ lang_ptr_void_binout := $(bin_path)/$(lang_prefix)_ptr_void$(bin_ext)
 lang_ptr_lvalue_binout := $(bin_path)/$(lang_prefix)_ptr_lvalue$(bin_ext)
 lang_ptr_arith_binout := $(bin_path)/$(lang_prefix)_ptr_arith$(bin_ext)
 
-lang_pointer: lang_ptr_basic										\
-	  					lang_ptr_const										\
-              lang_ptr_fn												\
-              lang_ptr_size											\
-		  				lang_ptr_void											\
-              lang_ptr_lvalue										\
+lang_pointer: lang_ptr_basic                    \
+              lang_ptr_const                    \
+              lang_ptr_fn                       \
+              lang_ptr_size                     \
+              lang_ptr_void                     \
+              lang_ptr_lvalue                   \
               lang_ptr_arith
 
-lang_pointer_test: lang_ptr_basic_test					\
-							     lang_ptr_const_test					\
-                   lang_ptr_fn_test							\
-                   lang_ptr_size_test						\
-                   lang_ptr_void_test						\
-                   lang_ptr_lvalue							\
+lang_pointer_test: lang_ptr_basic_test          \
+                   lang_ptr_const_test          \
+                   lang_ptr_fn_test             \
+                   lang_ptr_size_test           \
+                   lang_ptr_void_test           \
+                   lang_ptr_lvalue              \
                    lang_ptr_arith
 
 lang_ptr_basic: $(lang_ptr_basic_binout)
@@ -580,11 +580,11 @@ lang_signal_basic_binout := $(bin_path)/$(lang_prefix)_signal_basic$(bin_ext)
 lang_signal_list_binout := $(bin_path)/$(lang_prefix)_signal_list$(bin_ext)
 lang_signal_fork_binout := $(bin_path)/$(lang_prefix)_signal_fork$(bin_ext)
 
-lang_signal: lang_signal_basic									\
-				     lang_signal_list										\
-	  				 lang_signal_fork
-lang_signal_test: lang_signal_basic_test				\
-                  lang_signal_list_test					\
+lang_signal: lang_signal_basic                  \
+             lang_signal_list                   \
+             lang_signal_fork
+lang_signal_test: lang_signal_basic_test        \
+                  lang_signal_list_test         \
                   lang_signal_fork_test
 
 lang_signal_basic: $(lang_signal_basic_binout)
@@ -631,12 +631,12 @@ lang_stage_test: lang_stage
 stage_ldflags := -link -FORCE:MULTIPLE
 ifeq ($(NM_VERBOSE),YES)
 stage_ldflags += -VERBOSE:LIB
-endif														# end of NM_VERBOSE
+endif # end of NM_VERBOSE
 else
 lang_stage: $(stage_binout)
 lang_stage_test: lang_stage
 	$(stage_binout)
-endif														# end of CC_NAME
+endif # end of CC_NAME
 
 $(stage_binout): $(stage_objout)
 	$(LINK) $^ $(bin_out)$@ $(stage_ldflags)
@@ -649,7 +649,6 @@ $(stage_asmout): $(stage_cppout)
 
 $(stage_cppout): $(lang_root)/stage/s.c
 	$(CPP) $(CPPFLAGS) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
-
 
 
 # storage
@@ -681,24 +680,24 @@ lang_string_chr_binout := $(bin_path)/$(lang_prefix)_string_chr$(bin_ext)
 lang_string_pbrk_binout := $(bin_path)/$(lang_prefix)_string_pbrk$(bin_ext)
 lang_string_spn_binout := $(bin_path)/$(lang_prefix)_string_spn$(bin_ext)
 
-lang_string: lang_string_basic									\
-             lang_string_n											\
-             lang_string_s											\
-             lang_string_dup										\
-             lang_string_tok										\
-             lang_string_cat										\
-             lang_string_chr										\
-             lang_string_pbrk										\
+lang_string: lang_string_basic                  \
+             lang_string_n                      \
+             lang_string_s                      \
+             lang_string_dup                    \
+             lang_string_tok                    \
+             lang_string_cat                    \
+             lang_string_chr                    \
+             lang_string_pbrk                   \
              lang_string_spn
 
-lang_string_test: lang_string_basic_test				\
-                  lang_string_n_test						\
-                  lang_string_s_test						\
-                  lang_string_dup_test					\
-                  lang_string_tok_test					\
-                  lang_string_cat_test					\
-                  lang_string_chr_test					\
-                  lang_string_pbrk_test					\
+lang_string_test: lang_string_basic_test        \
+                  lang_string_n_test            \
+                  lang_string_s_test            \
+                  lang_string_dup_test          \
+                  lang_string_tok_test          \
+                  lang_string_cat_test          \
+                  lang_string_chr_test          \
+                  lang_string_pbrk_test         \
                   lang_string_spn_test
 
 lang_string_basic: $(lang_string_basic_binout)
@@ -791,11 +790,11 @@ lang_time_basic_binout := $(bin_path)/$(lang_prefix)_time_basic$(bin_ext)
 lang_time_clock_binout := $(bin_path)/$(lang_prefix)_time_clock$(bin_ext)
 lang_time_conv_binout := $(bin_path)/$(lang_prefix)_time_conv$(bin_ext)
 
-lang_time: $(lang_time_basic_binout)						\
-					 $(lang_time_clock_binout)						\
+lang_time: $(lang_time_basic_binout)            \
+           $(lang_time_clock_binout)            \
            $(lang_time_conv_binout)
-lang_time_test: lang_time_basic_test						\
-                lang_time_clock_test						\
+lang_time_test: lang_time_basic_test            \
+                lang_time_clock_test            \
                 lang_time_conv_test
 
 lang_time_basic_test: $(lang_time_basic_binout)
@@ -835,9 +834,9 @@ lang_type_int_cppout := $(tmp_path)/$(lang_prefix)_type_int$(cpp_ext)
 lang_type_c_binout := $(bin_path)/$(lang_prefix)_type_c$(bin_ext)
 lang_type_c_cppout := $(tmp_path)/$(lang_prefix)_type_c$(cpp_ext)
 
-lang_type: $(lang_type_int_binout)						\
+lang_type: $(lang_type_int_binout)              \
            $(lang_type_c_binout)
-lang_type_test: lang_type_int_test						\
+lang_type_test: lang_type_int_test              \
                 lang_type_c_test
 
 lang_type_int_test: $(lang_type_int_binout)
@@ -907,11 +906,11 @@ volatile_basic_binout := $(bin_path)/$(lang_prefix)_volatile_basic$(bin_ext)
 volatile_pointer_binout := $(bin_path)/$(lang_prefix)_volatile_pointer$(bin_ext)
 volatile_struct_binout := $(bin_path)/$(lang_prefix)_volatile_struct$(bin_ext)
 
-lang_volatile: $(volatile_basic_binout)					\
-               $(volatile_pointer_binout)				\
+lang_volatile: $(volatile_basic_binout)         \
+               $(volatile_pointer_binout)       \
                $(volatile_struct_binout)
-lang_volatile_test: lang_volatile_basic_test		\
-                    lang_volatile_pointer_test	\
+lang_volatile_test: lang_volatile_basic_test    \
+                    lang_volatile_pointer_test  \
                     lang_volatile_struct_test
 
 lang_volatile_basic_test: $(volatile_basic_binout)
