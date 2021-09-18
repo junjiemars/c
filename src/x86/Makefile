@@ -3,29 +3,29 @@
 #
 
 
-x86: 	x86_array																	\
-			x86_bone																	\
-			x86_branch																\
-			x86_call																	\
-			x86_convert																\
-			x86_loop																	\
-			x86_pointer																\
-			x86_retval																\
-			x86_structure															\
-			x86_typecast															\
-			x86_var	
+x86: x86_array                                  \
+     x86_bone                                   \
+     x86_branch                                 \
+     x86_call                                   \
+     x86_convert                                \
+     x86_loop                                   \
+     x86_pointer                                \
+     x86_retval                                 \
+     x86_structure                              \
+     x86_typecast                               \
+     x86_var
 
-x86_test: x86_array_test												\
-					x86_bone_test													\
-					x86_branch_test												\
-					x86_call_test													\
-					x86_convert_test											\
-					x86_loop															\
-					x86_pointer_test											\
-					x86_retval_test												\
-					x86_structure_test										\
-					x86_typecast_test											\
-					x86_var_test
+x86_test: x86_array_test                        \
+          x86_bone_test                         \
+          x86_branch_test                       \
+          x86_call_test                         \
+          x86_convert_test                      \
+          x86_loop                              \
+          x86_pointer_test                      \
+          x86_retval_test                       \
+          x86_structure_test                    \
+          x86_typecast_test                     \
+          x86_var_test
 
 x86_prefix = x86
 
@@ -81,7 +81,7 @@ endif
 ifdef NO_POINTER_TO_INT_WARN
 ifeq ($(CC_NAME), msvc)
 #C4311: 'type cast': pointer truncation from 'int *' to 'int'
-CFLAGS += -wd4311 
+CFLAGS += -wd4311
 else
 CFLAGS += -Wno-pointer-to-int-cast
 endif
@@ -141,7 +141,7 @@ $(convert_binout): $(x86_root)/convert/convert.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
-# loop 
+# loop
 loop_binout := $(bin_path)/x86_loop$(bin_ext)
 
 x86_loop: $(loop_binout)
@@ -197,7 +197,7 @@ $(typecast_binout): $(x86_root)/typecast/typecast.c
 var_binout := $(bin_path)/x86_var$(bin_ext)
 
 x86_var: $(var_binout)
-x86_var_test: x86_var 
+x86_var_test: x86_var
 	$(var_binout)
 
 $(var_binout): $(x86_root)/var/var.c

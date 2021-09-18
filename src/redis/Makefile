@@ -1,4 +1,7 @@
+#
 # ./configure --has-redis
+#
+# make clean test
 
 
 redis_out := $(CURDIR)/$(out)/var/redis
@@ -6,10 +9,10 @@ redis_out := $(CURDIR)/$(out)/var/redis
 redis_git_src := 'https://github.com/redis/redis.git'
 redis_home := $(redis_root)/redis_home
 
-redis: redis_core																\
+redis: redis_core                               \
        redis_module_hello
 
-redis_test: redis_core_test											\
+redis_test: redis_core_test                     \
             redis_module_hello_test
 
 
@@ -51,16 +54,16 @@ redis_core_test: redis_core
 endif # end of msvc
 
 
-$(redis_core_binout): $(redis_home)									\
+$(redis_core_binout): $(redis_home)                 \
                       $(redis_core_root)/redis.conf
-	cd $(redis_home)															\
-		&& make PREFIX="$(redis_core_prefix)"				\
-            MALLOC=libc													\
-            OPTIMIZATION=$(nm_optimize_opt)			\
-            CFLAGS="$(redis_cc_opt)"						\
-            LDFLAGS="$(redis_ld_opt)"						\
-    install																			\
-    && cp $(redis_core_root)/redis.conf					\
+	cd $(redis_home)                              \
+    && make PREFIX="$(redis_core_prefix)"       \
+            MALLOC=libc                         \
+            OPTIMIZATION=$(nm_optimize_opt)     \
+            CFLAGS="$(redis_cc_opt)"            \
+            LDFLAGS="$(redis_ld_opt)"           \
+    install                                     \
+    && cp $(redis_core_root)/redis.conf         \
 					$(redis_core_prefix)/redis.conf
 
 
@@ -87,38 +90,38 @@ redis_module_hello_test: redis_module_hello
 	$(redis_module_hello_cli) shutdown
 endif # end of msvc
 
-$(redis_module_hello_binout): $(redis_root)/hello/hello.c	\
+$(redis_module_hello_binout): $(redis_root)/hello/hello.c \
                               $(redis_module_hello_svr)
 	$(CC) $(redis_hello_cflags) $(redis_hello_inc) $< $(bin_out)$@
 
-$(redis_module_hello_svr): $(redis_home)													\
+$(redis_module_hello_svr): $(redis_home)                          \
                            $(redis_hello_module_root)/redis.conf
-	cd $(redis_home)																				\
-		&& make PREFIX="$(redis_module_hello_prefix)"					\
-            MALLOC=libc																		\
-            CFLAGS="$(redis_cc_opt)"											\
-            LDFLAGS="$(redis_ld_opt)"											\
-    install																								\
-    && cp $(redis_hello_module_root)/redis.conf						\
-					$(redis_module_hello_prefix)/redis.conf 				\
-    && echo "loadmodule $(redis_module_hello_binout)" >> 	\
-            $(redis_module_hello_prefix)/redis.conf 
+	cd $(redis_home)                                        \
+    && make PREFIX="$(redis_module_hello_prefix)"         \
+            MALLOC=libc                                   \
+            CFLAGS="$(redis_cc_opt)"                      \
+            LDFLAGS="$(redis_ld_opt)"                     \
+    install                                               \
+    && cp $(redis_hello_module_root)/redis.conf           \
+          $(redis_module_hello_prefix)/redis.conf         \
+    && echo "loadmodule $(redis_module_hello_binout)" >>  \
+            $(redis_module_hello_prefix)/redis.conf
 
 
 # clean
-redis_clean: clean															\
+redis_clean: clean                              \
              clean_redis_home
 
 clean_redis_home:
 	-$(RM) -rf $(redis_home)
 
 clean_redis_out:
-	test ! -f $(CURDIR)/$(redis_home)/Makefile		\
+	test ! -f $(CURDIR)/$(redis_home)/Makefile    \
 		|| make -C $(CURDIR)/$(redis_home) clean
 
 
 
-.PHONY: redis_clean clean_redis_home clean_redis_out	\
+.PHONY: redis_clean clean_redis_home clean_redis_out  \
         redis_module_hello redis_module_hello_test
 
 
