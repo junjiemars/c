@@ -9,9 +9,6 @@ void A(void)
 	short y;
 	_unused_(x);
 	_unused_(y);
-
-	B();
-	C();
 }
 
 void B(void)
@@ -36,4 +33,5 @@ int
 main(void)
 {
 	A();
+  B();
 }

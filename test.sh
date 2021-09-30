@@ -107,7 +107,7 @@ if [ "basic" = "$_TEST_" ]; then
   test_do --has-regexp
   test_do --has-unicode
   test_do --has-uv --with-std=no
-  # test_do --has-webassembly --with-std=no
+  test_do --has-webassembly --with-std=no
   test_do --has-x86
 fi
 
