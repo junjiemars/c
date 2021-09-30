@@ -1666,7 +1666,7 @@ pushq <address-of-after-callq>
 jmp <address-of-$rsp>
 #+END_SRC
 
-*** =cmp inst=
+*** cmp
 
 =cmp dst src= perfomans a substraction but does not store result. Such
 as =sub dst src=.
@@ -1680,7 +1680,7 @@ as =sub dst src=.
 | if MSB of (src-dst) == 1                 |    |    |    |    |  1 |    |
 | sign bit of src != sign bit of (src-dst) |    |    |    |    |    |  1 |
 
-*** =jmp inst=
+*** jmp
 
 | Jump | Description              | signed-ness | Flags              |
 |------+--------------------------+-------------+--------------------|
