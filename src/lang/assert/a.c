@@ -23,10 +23,11 @@ main(int argc, const char **argv)
 {
     int  n;
 
-    if (argc < 2) {
+    if (argc < 2)
+      {
         fprintf(stderr, "usage: one <int>\n");
         return 1;
-    }
+      }
 
     printf("# %s mode\n",
 #if (NDEBUG)

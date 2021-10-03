@@ -2,7 +2,8 @@
 
 
 void
-dereference() {
+dereference()
+{
   int i;
   int *p;
   p = &i;
@@ -10,14 +11,16 @@ dereference() {
 }
 
 void
-average() {
+average()
+{
   int total = 0x1122, count = 0x3344;
   float average;
   average = (float)total/(float)count;
 }
 
 void
-pointer_to_int() {
+pointer_to_int()
+{
   char c;
   int *p;
   p = (int *)&c;
@@ -30,7 +33,8 @@ pointer_to_int() {
 }
 
 void 
-int_to_pointer() {
+int_to_pointer()
+{
   int i;
   i = 0x11223344;
 
@@ -43,10 +47,8 @@ int_to_pointer() {
 
 
 int
-main(int argc, const char *argv[]) {
-  _unused_(argc);
-  _unused_(argv);
-
+main(void)
+{
   dereference();
   average();
   pointer_to_int();
