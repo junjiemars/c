@@ -1666,7 +1666,7 @@ pushq <address-of-after-callq>
 jmp <address-of-$rsp>
 #+END_SRC
 
-*** =cmp inst=
+*** cmp
 
 =cmp dst src= perfomans a substraction but does not store result. Such
 as =sub dst src=.
@@ -1680,7 +1680,7 @@ as =sub dst src=.
 | if MSB of (src-dst) == 1                 |    |    |    |    |  1 |    |
 | sign bit of src != sign bit of (src-dst) |    |    |    |    |    |  1 |
 
-*** =jmp inst=
+*** jmp
 
 | Jump | Description              | signed-ness | Flags              |
 |------+--------------------------+-------------+--------------------|
@@ -2729,13 +2729,16 @@ table in a executable.
 |----------------------------------+------------------------------------------------------|
 | list /breakpoint/                | *(lldb)* =b=                                         |
 |                                  | *(lldb)* =breakpoint list=                           |
+|                                  | *(gdb)*  =info break=                                |
 |                                  | *0:000>* =bl=                                        |
 |                                  |                                                      |
 | breakpoint at /fn/               | *(lldb)* =b main=                                    |
 |                                  | *(lldb)* =b -nmain=                                  |
+|                                  | *(gdb)*  =b main=                                    |
 |                                  | *0:000>* =bu <module>!main=                          |
 |                                  |                                                      |
 | breakpoint at /line/             | *(lldb)* =b -ftest.c -l32=                           |
+|                                  | *(gdb)*  =b test.c:32=                               |
 |                                  |                                                      |
 | breakpoint at /fn/ by regexp     | *(lldb)* =b -rm[a-z]in=                              |
 |                                  |                                                      |
