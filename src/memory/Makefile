@@ -1,28 +1,31 @@
+#
 # ./configure --has-memory --with-std=c99
+#
 
-memory: memory_alloc														\
-				memory_bitfield													\
-				memory_bit															\
-				memory_byte															\
-				memory_copy															\
-				memory_endian														\
-				memory_generic													\
-				memory_layout														\
-				memory_rotate														\
-				memory_shift														\
-				memory_struct
+memory: memory_alloc                            \
+        memory_bitfield                         \
+        memory_bit                              \
+        memory_byte                             \
+        memory_copy                             \
+        memory_endian                           \
+        memory_generic                          \
+        memory_layout                           \
+        memory_rotate                           \
+        memory_shift                            \
+        memory_struct
 
-memory_test: 	memory_alloc_test									\
-							memory_bitfield_test							\
-				      memory_bit_test										\
-				      memory_byte_test									\
-				      memory_copy_test									\
-				      memory_endian_test								\
-				      memory_generic_test								\
-				      memory_layout_test								\
-				      memory_rotate_test								\
-				      memory_shift_test									\
-				      memory_struct_test
+memory_test: memory_alloc_test                  \
+             memory_bitfield_test               \
+             memory_bit_test                    \
+             memory_byte_test                   \
+             memory_copy_test                   \
+             memory_endian_test                 \
+             memory_generic_test                \
+             memory_layout_test                 \
+             memory_rotate_test                 \
+             memory_shift_test                  \
+             memory_struct_test
+
 
 memory_prefix := memory
 
@@ -85,7 +88,7 @@ endif
 ifdef NO_POINTER_TO_INT_WARN
 ifeq ($(CC_NAME), msvc)
 #C4311: 'type cast': pointer truncation from 'int *' to 'int'
-CFLAGS += -wd4311 
+CFLAGS += -wd4311
 else
 CFLAGS += -Wno-pointer-to-int-cast
 endif
@@ -106,21 +109,21 @@ memory_alloc_c_binout := $(bin_path)/$(memory_prefix)_calloc$(bin_ext)
 memory_alloc_re_binout := $(bin_path)/$(memory_prefix)_realloc$(bin_ext)
 memory_alloc_align_binout := $(bin_path)/$(memory_prefix)_align$(bin_ext)
 
-memory_alloc: memory_alloc_std									\
+memory_alloc: memory_alloc_std                  \
               memory_alloc_je
-memory_alloc_test: memory_alloc_std_test				\
+memory_alloc_test: memory_alloc_std_test        \
                    memory_alloc_je_test
 
-memory_alloc_std: $(memory_alloc_a_binout)			\
-		    	 		    $(memory_alloc_m_binout)			\
-                  $(memory_alloc_c_binout)			\
-                  $(memory_alloc_re_binout)			\
-		    	        $(memory_alloc_align_binout)
-memory_alloc_std_test: memory_alloc_a_test			\
-				    	         memory_alloc_m_test			\
-				    		       memory_alloc_c_test			\
-				    		       memory_alloc_re_test			\
-				    		       memory_alloc_align_test
+memory_alloc_std: $(memory_alloc_a_binout)      \
+                    $(memory_alloc_m_binout)    \
+                  $(memory_alloc_c_binout)      \
+                  $(memory_alloc_re_binout)     \
+                  $(memory_alloc_align_binout)
+memory_alloc_std_test: memory_alloc_a_test      \
+                       memory_alloc_m_test      \
+                       memory_alloc_c_test      \
+                       memory_alloc_re_test     \
+                       memory_alloc_align_test
 
 
 memory_alloc_a_test: $(memory_alloc_a_binout)
@@ -257,8 +260,8 @@ memory_rotate_test: memory_rotate
 memory_rotate_valgrind_test: memory_rotate
 	valgrind --leak-check=full --track-origins=yes $(memory_rotate_binout)
 
-$(memory_rotate_binout): $(memory_root)/rotate/rotate.h	\
-			         				   $(memory_root)/rotate/rotate.c	\
+$(memory_rotate_binout): $(memory_root)/rotate/rotate.h   \
+                           $(memory_root)/rotate/rotate.c \
                          $(memory_root)/rotate/r.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@						\
 		$(memory_root)/rotate/rotate.c								\
@@ -287,16 +290,16 @@ $(memory_struct_binout): $(memory_root)/struct/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
-.PHONY: memory_alloc memory_alloc_test					\
-        memory_bit memory_bit_test							\
-        memory_bitfield memory_bitfield_test		\
-        memory_byte memory_byte_test						\
-        memory_copy memory_copy_test						\
-        memory_endian memory_endian_test				\
-        memory_generic memory_generic_test			\
-        memory_layout memory_layout_test				\
-        memory_rotate memory_rotate_test				\
-        memory_shift memory_shift_test					\
+.PHONY: memory_alloc memory_alloc_test          \
+        memory_bit memory_bit_test              \
+        memory_bitfield memory_bitfield_test    \
+        memory_byte memory_byte_test            \
+        memory_copy memory_copy_test            \
+        memory_endian memory_endian_test        \
+        memory_generic memory_generic_test      \
+        memory_layout memory_layout_test        \
+        memory_rotate memory_rotate_test        \
+        memory_shift memory_shift_test          \
         memory_struct memory_struct_test
 
 # eof
