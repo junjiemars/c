@@ -26,4 +26,5 @@ main()
   int *b;
   a = foo();
   b = bar();
+  free(b);
 }
