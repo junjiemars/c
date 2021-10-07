@@ -120,14 +120,26 @@ $(branch_binout): $(x86_root)/branch/branch.c
 
 
 # call
-call_binout := $(bin_path)/$(x86_prefix)_call$(bin_ext)
+x86_call_binout := $(bin_path)/$(x86_prefix)_call$(bin_ext)
+x86_call_cppout := $(tmp_path)/$(x86_prefix)_call$(cpp_ext)
+x86_call_asmout := $(tmp_path)/$(x86_prefix)_call$(asm_ext)
+x86_call_objout := $(tmp_path)/$(x86_prefix)_call$(obj_ext)
 
-x86_call: $(call_binout)
+x86_call: $(x86_call_binout)
 x86_call_test: x86_call
-	$(call_binout) 1 2 3
+	$(call_binout)
 
-$(call_binout): $(x86_root)/call/call.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(x86_call_binout): $(x86_call_objout)
+	$(LINK) $^ $(bin_out)$@
+
+$(x86_call_objout): $(x86_call_asmout)
+	$(CC) $(CFLAGS) $(nm_stage_c) $^ $(obj_out)$@
+
+$(x86_call_asmout): $(x86_call_cppout)
+	$(AS) $(ASFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
+
+$(x86_call_cppout): $(x86_root)/call/call.c
+	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
 # convert
