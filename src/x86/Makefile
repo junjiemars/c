@@ -164,13 +164,25 @@ $(pointer_binout): $(x86_root)/pointer/pointer.c
 
 
 # retval
-retval_binout := $(bin_path)/x86_retval$(bin_ext)
+x86_retval_binout := $(bin_path)/$(x86_prefix)_retval$(bin_ext)
+x86_retval_objout := $(tmp_path)/$(x86_prefix)_retval$(obj_ext)
+x86_retval_asmout := $(tmp_path)/$(x86_prefix)_retval$(asm_ext)
+x86_retval_cppout := $(tmp_path)/$(x86_prefix)_retval$(cpp_ext)
 
-x86_retval: $(retval_binout)
+x86_retval: $(x86_retval_binout)
 x86_retval_test: x86_retval
 
-$(retval_binout): $(x86_root)/retval/retval.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(x86_retval_binout): $(x86_retval_objout)
+	$(LINK) $^ $(bin_out)$@
+
+$(x86_retval_objout): $(x86_retval_asmout)
+	$(CC) $(CFLAGS) $(nm_stage_c) $^ $(obj_out)$@
+
+$(x86_retval_asmout): $(x86_retval_cppout)
+	$(AS) $(ASFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
+
+$(x86_retval_cppout): $(x86_root)/retval/retval.c
+	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
 # structure
