@@ -56,9 +56,7 @@ ptr_caller_pp(void)
 static void
 struct_callee(struct fraction i)
 {
-  struct fraction local;
-  local.denominator = 0x33;
-  i.denominator = 0x44;
+  i.denominator = i.denominator + 1;
 }
 
 static void
