@@ -20,7 +20,7 @@ case "$CC_NAME" in
      nm_feature_test=
      . ${NORE_ROOT}/auto/feature
      if [ yes = $nm_found ]; then
-       flag=cflags_omit_frame_pointer op=":=" value=$nm_feature_flags \
+       flag=omit_frame_pointer op=":=" value=$nm_feature_flags \
          . ${NORE_ROOT}/auto/make_define
      fi
      ;;
@@ -34,7 +34,7 @@ case "$CC_NAME" in
      nm_feature_test=
      . ${NORE_ROOT}/auto/feature
      if [ yes = $nm_found ]; then
-       flag=cflags_omit_frame_pointer op=":=" value=$nm_feature_flags \
+       flag=omit_frame_pointer op=":=" value=$nm_feature_flags \
          . ${NORE_ROOT}/auto/make_define
      fi
      ;;

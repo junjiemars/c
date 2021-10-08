@@ -66,8 +66,9 @@ CFLAGS += -fno-stack-protector
 endif
 endif
 
-#ifdef NO_FRAME_POINTER
-#endif
+ifdef NO_FRAME_POINTER
+ASFLAGS += -fomit-frame-pointer
+endif
 
 ifdef NO_INT_TO_POINTER_WARN
 ifeq ($(CC_NAME), msvc)
@@ -198,13 +199,25 @@ $(x86_retval_cppout): $(x86_root)/retval/retval.c
 
 
 # structure
-structure_binout := $(bin_path)/x86_structure$(bin_ext)
+x86_structure_binout := $(bin_path)/$(x86_prefix)_structure$(bin_ext)
+x86_structure_cppout := $(tmp_path)/$(x86_prefix)_structure$(cpp_ext)
+x86_structure_asmout := $(tmp_path)/$(x86_prefix)_structure$(asm_ext)
+x86_structure_objout := $(tmp_path)/$(x86_prefix)_structure$(obj_ext)
 
-x86_structure: $(structure_binout)
+x86_structure: $(x86_structure_binout)
 x86_structure_test: x86_structure
 
-$(structure_binout): $(x86_root)/structure/structure.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(x86_structure_binout): $(x86_structure_objout)
+	$(LINK) $(LDFLAGS) $^ $(bin_out)$@
+
+$(x86_structure_objout): $(x86_structure_asmout)
+	$(CC) $(CFLAGS) $(nm_stage_c) $^ $(obj_out)$@
+
+$(x86_structure_asmout): $(x86_structure_cppout)
+	$(AS) $(ASFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
+
+$(x86_structure_cppout): $(x86_root)/structure/structure.c
+	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
 # typecast
