@@ -1,8 +1,9 @@
-#include <_x86_.h>
+#include "_x86_.h"
 #include <stdio.h>
 
 void
-dereference() {
+dereference()
+{
   int i;
   int *ptr;
   ptr = &i;
@@ -10,7 +11,8 @@ dereference() {
 }
 
 void
-address() {
+address()
+{
   int i;
   int *s;
   i = 0x11223344;
@@ -18,15 +20,18 @@ address() {
   s++;
 }
 
-void array() {
-  int a[] = { 1,2,3,4,5,6,7,8,9, };
+void array()
+{
+  int a[] =
+{ 1,2,3,4,5,6,7,8,9, };
   *(a + 3) = 0x33;
   a[2] = 0x22;
   *a = 0x00;
   *(a + 8) = 0x88;
 }
 
-void structure() {
+void structure()
+{
   struct binky x;
   struct binky *p;
   struct binky **pp;
@@ -37,12 +42,10 @@ void structure() {
 }
 
 
-int 
-main(int argc, const char *argv[]) {
-  _unused_(argc);
-  _unused_(argv);
-
-	printf("sizeof(int)=%zu, sizeof(int*)=%zu\n", sizeof(int), sizeof(int*));
+int
+main(void)
+{
+  printf("sizeof(int)=%zu, sizeof(int*)=%zu\n", sizeof(int), sizeof(int*));
 
   dereference();
   address();

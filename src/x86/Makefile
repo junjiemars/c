@@ -166,14 +166,26 @@ $(loop_binout): $(x86_root)/loop/loop.c
 
 
 # pointer
-pointer_binout := $(bin_path)/x86_pointer$(bin_ext)
+x86_pointer_binout := $(bin_path)/$(x86_prefix)_pointer$(bin_ext)
+x86_pointer_cppout := $(tmp_path)/$(x86_prefix)_pointer$(cpp_ext)
+x86_pointer_asmout := $(tmp_path)/$(x86_prefix)_pointer$(asm_ext)
+x86_pointer_objout := $(tmp_path)/$(x86_prefix)_pointer$(obj_ext)
 
-x86_pointer: $(pointer_binout)
+x86_pointer: $(x86_pointer_binout)
 x86_pointer_test: x86_pointer
-	$(pointer_binout)
+	$(x86_pointer_binout)
 
-$(pointer_binout): $(x86_root)/pointer/pointer.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(x86_pointer_binout): $(x86_pointer_objout)
+	$(LINK) $(LDFLAGS) $^ $(bin_out)$@
+
+$(x86_pointer_objout): $(x86_pointer_asmout)
+	$(CC) $(CFLAGS) $(nm_stage_c) $^ $(bin_out)$@
+
+$(x86_pointer_asmout): $(x86_pointer_cppout)
+	$(AS) $(ASFLAGS) $(nm_stage_asm) $^ $(bin_out)$@
+
+$(x86_pointer_cppout): $(x86_root)/pointer/pointer.c
+	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(bin_out)$@
 
 
 # retval
@@ -206,6 +218,7 @@ x86_structure_objout := $(tmp_path)/$(x86_prefix)_structure$(obj_ext)
 
 x86_structure: $(x86_structure_binout)
 x86_structure_test: x86_structure
+	$(x86_structure_binout)
 
 $(x86_structure_binout): $(x86_structure_objout)
 	$(LINK) $(LDFLAGS) $^ $(bin_out)$@
