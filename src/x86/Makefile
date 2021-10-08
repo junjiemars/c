@@ -130,10 +130,10 @@ x86_call_test: x86_call
 	$(call_binout)
 
 $(x86_call_binout): $(x86_call_objout)
-	$(LINK) $^ $(bin_out)$@
+	$(LINK) $(CFLAGS) $^ $(bin_out)$@
 
 $(x86_call_objout): $(x86_call_asmout)
-	$(CC) $(CFLAGS) $(nm_stage_c) $^ $(obj_out)$@
+	$(CC) $(nm_stage_c) $^ $(obj_out)$@
 
 $(x86_call_asmout): $(x86_call_cppout)
 	$(AS) $(ASFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
