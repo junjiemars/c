@@ -8,6 +8,8 @@ leptonica_test: leptonica_basic_test
 
 
 # env
+leptonica_prefix := leptonica
+
 leptonica_out := $(CURDIR)/$(out)/var/leptonica
 
 leptonica_git_src := 'https://github.com/DanBloomberg/leptonica.git'
@@ -69,9 +71,8 @@ $(leptonica_home):
 
 
 # basic
-leptonica_basic_binout := $(bin_path)/leptonica_basic$(bin_ext)
-leptonica_basic_in_image := $(tmp_path)/b.png
-leptonica_basic_out_image := $(tmp_path)/b-scaled.png
+leptonica_basic_binout := $(bin_path)/$(leptonica_prefix)_basic$(bin_ext)
+leptonica_basic_in_image := $(tmp_path)/$(leptonica_prefix)_basic_in.png
 
 
 ifeq (YES, $(has_leptonica_required))
@@ -81,11 +82,11 @@ leptonica_basic: $(leptonica_build)             \
 leptonica_basic_test: leptonica_basic
 	LD_LIBRARY_PATH=$(leptonica_lib_dir) $(leptonica_basic_binout)  \
     -i $(CURDIR)/$(leptonica_basic_in_image)                      \
-    -o $(CURDIR)/$(tmp_path)/bs1.png
-	LD_LIBRARY_PATH=$(leptonica_lib_dir) $(leptonica_basic_binout)  \
-    -i $(CURDIR)/$(leptonica_basic_in_image)    \
-    -o $(CURDIR)/$(tmp_path)/bs2.png            \
-    -x 0.50                                     \
+    -o $(CURDIR)/$(tmp_path)/$(leptonica_prefix)_basic_out.png
+	LD_LIBRARY_PATH=$(leptonica_lib_dir) $(leptonica_basic_binout)          \
+    -i $(CURDIR)/$(leptonica_basic_in_image)                              \
+    -o $(CURDIR)/$(tmp_path)/$(leptonica_prefix)_basic_out_half_quad.png  \
+    -x 0.50                                                               \
     -y 0.25
 else
 leptonica_basic:
