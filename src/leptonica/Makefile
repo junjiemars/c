@@ -35,9 +35,9 @@ leptonica_debug_opt :=
 leptonica_cc_opt += $(nm_release_opt)
 leptonica_cc_opt += $(nm_optimize_opt)
 leptonica_cc_opt += $(nm_symbol_opt)
-leptonica_cc_opt += -Wno-unused-variable
-leptonica_cc_opt += -Wno-unused-const-variable
-leptonica_cc_opt += -Wno-unused-function
+# leptonica_cc_opt += -Wno-unused-variable
+# leptonica_cc_opt += -Wno-unused-const-variable
+# leptonica_cc_opt += -Wno-unused-function
 
 
 ifeq (1, $(_MEMORY_))
@@ -114,6 +114,7 @@ clean_leptonica_home:
 clean_leptonica_out:
 	test ! -f $(CURDIR)/$(leptonica_home)/Makefile  \
     || make -C $(CURDIR)/$(leptonica_home) clean
+	test ! -d $(leptonica_out) || rm -rf $(leptonica_out)
 
 clean_leptonica_bin:
 	test ! -f $(leptonica_basic_binout) || rm -r $(leptonica_basic_binout)
