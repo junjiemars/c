@@ -15,17 +15,23 @@ typedef struct
   rubble dino;
 } flintstone;
 
-int
-main(void)
+void
+layout()
 {
   rubble      *simpsons;
   flintstone   jetsons[4];
-  
+
   simpsons = &jetsons[0].dino;
   jetsons[1].wilma[3] = (short *) &simpsons;
   strcpy(simpsons[2].barney, "Bugs Bunny");
   ((flintstone *) (jetsons->fred))->dino.bammbamm = simpsons;
   *(char **) jetsons[4].fred = simpsons->barney + 4;
+}
+
+int
+main(void)
+{
+  layout();
 }
 
 /* eof */
