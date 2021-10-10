@@ -23,8 +23,8 @@ void
 structure()
 {
 	int i;
-	struct binky a[20];
-	i = 19;
+	struct binky a[4];
+	i = 3;
 	a[i].f = i;
 }
 
