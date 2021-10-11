@@ -51,3 +51,59 @@ case "$CC_NAME" in
    msvc)
      ;;
 esac
+
+
+# check math library
+#----------------------------------------
+case $NM_SYSTEM in
+	Darwin)
+	  ;;
+
+	Linux)
+		nm_feature="math lib"
+		nm_feature_name="nm_have_math_lib"
+    nm_feature_indent=yes
+		nm_feature_run=yes
+		nm_feature_h="#include <math.h>"
+		nm_feature_tails="${nm_lib_opt}m"
+		nm_feature_test='int x = round(2.5);
+										 return (2 == x);'
+		. ${NORE_ROOT}/auto/feature
+		if [ yes = $nm_found ]; then
+			flag=stdmath_lib_opt op=':=' value='$(nm_lib_opt)m' \
+          . ${NORE_ROOT}/auto/make_define
+		fi
+	  ;;
+
+	WinNT)
+	  ;;
+
+	*)
+		;;
+esac
+
+
+# check compiler features
+# ----------------------------------------
+case "$CC_NAME" in
+  clang|gcc)
+    nm_feature="$CC_NAME -Wno-unused-*"
+    nm_feature_name=
+    nm_feature_indent=yes
+    nm_feature_run=no
+    nm_feature_h=
+    nm_feature_flags='-Wno-unused-variable -Wno-unused-const-variable -Wno-unused-function'
+    nm_feature_test=
+    . ${NORE_ROOT}/auto/feature
+
+    if [ yes = $nm_found ]; then
+      flag="leptonica_cc_opt" op="+=" value=$nm_feature_flags \
+          . ${NORE_ROOT}/auto/make_define
+    fi
+    ;;
+  msvc)
+    ;;
+esac
+
+
+# eof
