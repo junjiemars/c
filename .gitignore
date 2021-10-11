@@ -107,3 +107,6 @@ src/redis/redis_home
 
 # webassembly
 src/webassembly/emsdk_home
+
+# tesseract
+src/tesseract/tesseract_home
