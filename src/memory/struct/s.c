@@ -1,15 +1,18 @@
 #include <_memory_.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 
-typedef struct {
+typedef struct
+{
 	int numerator;
 	int denominator;
 } fraction_s;
 
 
-typedef struct {
+typedef struct
+{
 	char *name;
 	char suid[8];
 	int units;
@@ -17,28 +20,33 @@ typedef struct {
 
 
 void
-basic_layout() {
-	fraction_s f = { .numerator = 0x1100, .denominator = 0x22 };
-  
-	((fraction_s*)&f.denominator)->numerator = f.numerator;
+basic_layout(void)
+{
+	fraction_s f =
+    {
+      .numerator = 0x1100,
+      .denominator = 0x22
+    };
+  int gap[sizeof(fraction_s)/sizeof(int)];
+
+	((fraction_s*) &f.denominator)->numerator = f.numerator;
 	/* f.numerator == f.denominator) => true */
 
 #if defined (_RISKY_) && (_RISKY_) > 0
-	int gap[sizeof(fraction_s)/sizeof(int)];
-
-
   gap[0] = 0x33;
-	((fraction_s*)&gap[1])->denominator = gap[0];
+	((fraction_s*) &gap[1])->denominator = gap[0];
 	/* gap[0] == f.numerator => true */
 
-  gap[0] = ((fraction_s*)&f.denominator)[0].numerator;
+  gap[0] = ((fraction_s*) &f.denominator)[0].numerator;
   /* gap[0] == f.denominator => true */
-
+#else
+  _unused_(gap);
 #endif
 }
 
 void
-complex_layout() {
+complex_layout(void)
+{
 	student_s friends[4];
 
 	friends[0].name = friends[2].suid + 3;
@@ -50,12 +58,12 @@ complex_layout() {
 
 #if _RISKY_
 #ifdef CLANG
-	memcpy((char*)&friends[0].units,
-         (const char*)&friends[2].units,
-         strlen((const char*)&friends[2].units));
+	memcpy((char*) &friends[0].units,
+         (const char*) &friends[2].units,
+         strlen((const char*) &friends[2].units));
 #else
-	strcpy((char*)&friends[0].units,
-         (const char*)&friends[2].units);
+	strcpy((char*) &friends[0].units,
+         (const char*) &friends[2].units);
 #endif
 
   student_s gap;
@@ -63,20 +71,38 @@ complex_layout() {
 
 	friends[4].units = 21;
 
-	*(char***)&(((fraction_s*)&friends)[3].denominator)
-    = &friends[0].name+1;
+	*(char***) &(((fraction_s*) &friends)[3].denominator) = &friends[0].name+1;
 
 #endif
 }
 
-int 
-main(int argc, char *argv[]) {
+void
+heap_layout(void)
+{
+  fraction_s *f = malloc(sizeof(fraction_s));
+  if (!f)
+    {
+      return;
+    }
+  f->numerator = 0x1100;
+  f->denominator = 0x22;
+
+	((fraction_s*) &f->denominator)->numerator = f->numerator;
+	/* f->numerator == f->denominator) => true */
+
+  free(f);
+}
+
+int
+main(int argc, char *argv[])
+{
 	_unused_(argc);
 	_unused_(argv);
 
 	printf("sizeof(struct fraction_s)=%zu\n", sizeof(fraction_s));
 	printf("sizeof(struct student_s)=%zu\n", sizeof(student_s));
 
-	/* basic_layout(); */
+	basic_layout();
 	complex_layout();
+  heap_layout();
 }
