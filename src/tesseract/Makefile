@@ -42,6 +42,7 @@ export PKG_CONFIG_PATH = $(leptonica_lib_dir)/pkgconfig
 $(tesseract_build):  $(leptonica_build)         \
                      $(tesseract_home)
 	cd $(tesseract_home)                          \
+    && ./autogen.sh                             \
     && ./configure --prefix=$(tesseract_out)    \
     && make -C . -j4 install
 
