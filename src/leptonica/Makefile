@@ -17,7 +17,7 @@ leptonica_home := $(leptonica_root)/leptonica_home
 
 
 leptonica_inc_dir := $(leptonica_out)/include
-leptonica_lib_dir := $(leptonica_out)/lib
+export leptonica_lib_dir := $(leptonica_out)/lib
 leptonica_build := $(leptonica_inc_dir)/leptonica/allheaders.h  \
                    $(leptonica_lib_dir)/libleptonica$(lib_ext)
 leptonica_lib_arout := $(leptonica_lib_dir)/liblept.a
