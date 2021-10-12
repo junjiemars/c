@@ -30,6 +30,7 @@ tesseract_prefix := tesseract
 tesseract_out := $(CURDIR)/$(out)/var/tesseract
 tesseract_git_src := 'https://github.com/tesseract-ocr/tesseract.git'
 tesseract_home := $(tesseract_root)/tesseract_home
+tesseract_lib_dir := $(tesseract_out)/lib
 
 tesseract_build := $(tesseract_out)/include/tesseract/capi.h
 
@@ -37,7 +38,7 @@ INC += $(nm_inc_opt)$(tesseract_root)
 INC += $(shell pkg-config --cflags-only-I tesseract lept)
 LDFLAGS += $(shell pkg-config --libs lept tesseract)
 
-export PKG_CONFIG_PATH = $(leptonica_lib_dir)/pkgconfig
+export PKG_CONFIG_PATH = $(leptonica_lib_dir)/pkgconfig:$(tesseract_lib_dir)/pkgconfig
 
 $(tesseract_build):  $(leptonica_build)         \
                      $(tesseract_home)
