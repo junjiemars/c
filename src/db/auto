@@ -1,0 +1,79 @@
+# -*- mode:sh -*- vim:ft=sh
+
+# check sanitize feature
+#----------------------------------------
+case "$CC_NAME" in
+   gcc|clang)
+     nm_feature="$CC_NAME -fsanitize=address"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-fsanitize=address'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=f_sanitize op="+=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     nm_feature="$CC_NAME -fsanitize=leak"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-fsanitize=leak'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=f_sanitize op="+=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     ;;		 
+   msvc)
+     ;;
+esac
+
+# check pkg-config
+#----------------------------------------
+has_pkg_config=no
+echo $echo_n " + checking for pkg-config ... $echo_c"
+if [ 0 -eq $(pkg-config --version 2>&1 1>/dev/null;echo $?) ]; then
+  echo "yes"
+  has_pkg_config=yes
+  flag=has_pkg_config op=":=" value="$has_pkg_config" \
+      . ${NORE_ROOT}/auto/make_define
+else
+  echo "no"
+fi
+
+
+# check mysqlclient
+#----------------------------------------
+has_mysqlclient=no
+if [ "yes" = "$has_pkg_config" ]; then
+  db_mysql_cflags=$(pkg-config --cflags mysqlclient 2>/dev/null)
+  db_mysql_ldlibs=$(pkg-config --libs mysqlclient 2>/dev/null)
+  if [ -n "$db_mysql_cflags" ]; then
+    nm_feature="mysqlclient"
+    nm_feature_name="nm_have_mysqlclient"
+    nm_feature_indent=yes
+    nm_feature_run=no
+    nm_feature_h='#include <mysql.h>'
+    nm_feature_flags="$db_mysql_cflags"
+    nm_feature_tails="$db_mysql_ldlibs"
+    nm_feature_test='printf("%s\n",LIBMYSQL_VERSION);'
+    . ${NORE_ROOT}/auto/feature
+    if [ yes = $nm_found ]; then
+      flag=db_mysql_cflags op=":=" value="$db_mysql_cflags" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=db_mysql_ldlibs op=":=" value="$db_mysql_ldlibs" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=has_mysqlclient op=":=" value="yes" \
+          . ${NORE_ROOT}/auto/make_define
+    fi
+  fi
+fi
+
+
+
+# eof
