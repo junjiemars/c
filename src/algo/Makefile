@@ -4,7 +4,7 @@
 #
 
 algo_prefix := algo
-INC += -I$(algo_root)
+INC += $(nm_inc_opt)$(algo_root) $(nm_inc_opt)$(root)/posix
 
 ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
 	CFLAGS += $(cflags_sanitize)
@@ -142,10 +142,15 @@ algo_hash: $(algo_hash_kr1_binout)              \
            $(algo_hash_jenkins_binout)
 algo_hash_test: algo_hash
 	$(algo_hash_kr1_binout) "abcABC"
+	$(algo_hash_kr1_binout) "abcaBC"
 	$(algo_hash_kr2_binout) "abcABC"
+	$(algo_hash_kr2_binout) "abcaBC"
 	$(algo_hash_djb2_binout) "abcABC"
+	$(algo_hash_djb2_binout) "abcaBC"
 	$(algo_hash_sdbm_binout) "abcABC"
+	$(algo_hash_sdbm_binout) "abcaBC"
 	$(algo_hash_jenkins_binout) "abcABC"
+	$(algo_hash_jenkins_binout) "abcaBC"
 
 $(algo_hash_kr1_binout): $(algo_root)/hash/kr1.c    \
                          $(algo_root)/hash/_hash_.c
