@@ -142,27 +142,29 @@ algo_hash: $(algo_hash_kr1_binout)              \
            $(algo_hash_jenkins_binout)
 algo_hash_test: algo_hash
 	$(algo_hash_kr1_binout) "abcABC"
-	$(algo_hash_kr1_binout) "ABCabc"
 	$(algo_hash_kr2_binout) "abcABC"
-	$(algo_hash_kr2_binout) "ABCabc"
 	$(algo_hash_djb2_binout) "abcABC"
 	$(algo_hash_sdbm_binout) "abcABC"
-	$(algo_hash_jenkins_binout) "a"
-	$(algo_hash_jenkins_binout) "The quick brown"
+	$(algo_hash_jenkins_binout) "abcABC"
 
-$(algo_hash_kr1_binout): $(algo_root)/hash/kr1.c
+$(algo_hash_kr1_binout): $(algo_root)/hash/kr1.c    \
+                         $(algo_root)/hash/_hash_.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(algo_hash_kr2_binout): $(algo_root)/hash/kr2.c
+$(algo_hash_kr2_binout): $(algo_root)/hash/kr2.c    \
+                         $(algo_root)/hash/_hash_.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(algo_hash_djb2_binout): $(algo_root)/hash/djb2.c
+$(algo_hash_djb2_binout): $(algo_root)/hash/djb2.c    \
+                          $(algo_root)/hash/_hash_.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(algo_hash_sdbm_binout): $(algo_root)/hash/sdbm.c
+$(algo_hash_sdbm_binout): $(algo_root)/hash/sdbm.c    \
+                          $(algo_root)/hash/_hash_.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(algo_hash_jenkins_binout): $(algo_root)/hash/jenkins.c
+$(algo_hash_jenkins_binout): $(algo_root)/hash/jenkins.c  \
+                             $(algo_root)/hash/_hash_.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

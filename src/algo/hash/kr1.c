@@ -1,25 +1,34 @@
-#include <_algo_.h>
+#include "_algo_.h"
 #include <stdio.h>
+#include "_hash_.h"
 
 unsigned long
-hash (const char *str) {
-	unsigned long h = 0;
-	int c;
-	while (0 != (c = *str++)) {
-		h += c;
-	}
+hash (const char *str)
+{
+	int            c;
+	unsigned long  h  =  0;
+  
+	while (0 != (c = *str++))
+    {
+      h += c;
+    }
 	return h;
 }
 
 int
-main(int argc, char **argv) {
-	_unused_(argc);
-	_unused_(argv);
+main(int argc, char **argv)
+{
+  const char     *ss;
+  unsigned long   h;
 
-	if (argc > 1) {
-		unsigned long h = hash(argv[1]);
-		printf("K&R hash1(\"%s\") = %lu\n", argv[1], h);
-	}
+	_unused_(argc);
+
+	if (argc > 1)
+    {
+      ss = argv[1];
+      h = hash(ss);
+      print_hash("K&R hash 1", ss, h);
+    }
 	
 	return 0;
 }
