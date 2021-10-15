@@ -24,12 +24,12 @@ usage(const char *bin)
 
 static struct option long_options[] =
   {
-    {"help",    no_argument,          0, 'h'},
-    {"host",    required_argument,    0, 'H'},
-    {"port",    optional_argument ,   0, 'p'},
-    {"user",    required_argument,    0, 'u'},
-    {"port",    optional_argument,    0, 'p'},
-    {"sqltext", optional_argument,    0, 't'},
+    {"help",      no_argument,          0, 'h'},
+    {"host",      required_argument,    0, 'H'},
+    {"port",      optional_argument ,   0, 'P'},
+    {"user",      required_argument,    0, 'u'},
+    {"password",  optional_argument,    0, 'p'},
+    {"sqltext",   optional_argument,    0, 't'},
     {0,         0,                    0,  0 },
   };
 
