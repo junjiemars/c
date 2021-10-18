@@ -3,18 +3,18 @@
 
 # check libuv
 #----------------------------------------
-has_pkg_config=NO
-has_libuv=NO
+has_pkg_config=no
+has_libuv=no
 echo $echo_n " + checking for pkg-config ... $echo_c"
 if [ 0 -eq $(pkg-config --version 2>&1 1>/dev/null;echo $?) ]; then
   echo "yes"
-  has_pkg_config=YES
+  has_pkg_config=yes
   flag=has_pkg_config op=":=" value="$has_pkg_config" \
       . ${NORE_ROOT}/auto/make_define
 else
   echo "no"
 fi
-if [ "$has_pkg_config" = "YES" ]; then
+if [ "$has_pkg_config" = "yes" ]; then
   uv_ldlibs=$(pkg-config --libs libuv)
   uv_cflags=$(pkg-config --cflags libuv)
   if [ -n "$uv_ldlibs" ]; then
@@ -28,7 +28,7 @@ if [ "$has_pkg_config" = "YES" ]; then
     nm_feature_test='printf("%u", uv_version());'
     . ${NORE_ROOT}/auto/feature
     if [ yes = $nm_found ]; then
-      flag=has_libuv op=":=" value="YES" \
+      flag=has_libuv op=":=" value="yes" \
           . ${NORE_ROOT}/auto/make_define
       flag=uv_ldlibs op=":=" value="$uv_ldlibs" \
           . ${NORE_ROOT}/auto/make_define
