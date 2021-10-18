@@ -55,7 +55,7 @@ $(net_dns_query_binout): $(net_root)/dns/query.c $(getopt_c)
 
 
 # mac
-net_mac_binout := $(bin_path)/$(net_prefix)_net_mac$(bin_ext)
+net_mac_binout := $(bin_path)/$(net_prefix)_mac$(bin_ext)
 
 net_mac: $(net_mac_binout)
 net_mac_test: net_mac
@@ -75,7 +75,7 @@ endif
 http_parser_root := $(net_root)/http-server/http-parser
 http_parser_out := $(http_parser_root)/http_parser.o
 
-libuv_root := $(net_root)http-server/libuv
+libuv_root := $(net_root)/http-server/libuv
 libuv_out := $(libuv_root)/.libs/libuv.a
 
 http_server_inc := $(INC) -I$(http_parser_root) -I$(libuv_root)/include/
@@ -105,7 +105,7 @@ LDLIBS =
 endif
 
 $(net_http_server_binout): $(getopt_c) \
-													 $(net_root)http-server/ws.c \
+													 $(net_root)/http-server/ws.c \
 													 $(http_parser_out) \
 												   $(libuv_out)
 	$(CC) $(CFLAGS) $(http_server_inc) $^ $(bin_out)$@ $(LDLIBS)
