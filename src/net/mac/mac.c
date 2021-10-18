@@ -6,8 +6,9 @@ void print_mac_address(void);
 
 
 
-#if (LINUX) || (DARWIN)
+#if (LINUX)
 
+/* linux */
 #include <ifaddrs.h>
 #include <netpacket/packet.h>
 
@@ -40,6 +41,17 @@ print_mac_address(void)
     }
   freeifaddrs(ifaddr);
 }
+
+#elif (DARWIN)
+
+/* darwin */
+
+void
+print_mac_address(void)
+{
+  /* void */
+}
+
 
 #else
 
