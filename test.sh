@@ -89,8 +89,6 @@ test_do() {
 
 # basic test
 if [ "basic" = "$_TEST_" ]; then
-  echo "which pkg-config"
-  which pkg-config
   # test_do --has-algo
   # test_do --has-cpu
   # test_do --has-ds
@@ -102,13 +100,13 @@ if [ "basic" = "$_TEST_" ]; then
   # test_do --has-leptonica
   # test_do --has-library
   # test_do --has-memory
-  # test_do --has-nginx
+  test_do --has-nginx
   # test_do --has-os
   # test_do --has-parallel
   # test_do --has-redis
   # test_do --has-regexp
   # test_do --has-unicode
-  test_do --has-uv --with-std=no
+  # test_do --has-uv --with-std=no
   # test_do --has-webassembly --with-std=no
   # test_do --has-x86
 fi
