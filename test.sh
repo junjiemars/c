@@ -91,6 +91,7 @@ test_do() {
 if [ "basic" = "$_TEST_" ]; then
   echo "pkg-config --list-all"
   pkg-config --list-all
+  pkg-config --cflags libalpm
   # test_do --has-algo
   # test_do --has-cpu
   # test_do --has-ds
