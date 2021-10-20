@@ -101,6 +101,7 @@ jobs:
           git
           make
           zip
+          libuv
           pkg-config
     - name: Setup Env
       run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
