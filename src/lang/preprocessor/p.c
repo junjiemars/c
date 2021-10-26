@@ -48,11 +48,12 @@ double e_squared = E * E;
 #define log(h, m) fprintf(stderr, "%s: %s\n", (h), (str(m)));
 
 
-enum color {
-	RED,
-	GREEN,
-	BLUE
-};
+enum color
+  {
+    RED,
+    GREEN,
+    BLUE
+  };
 #define COLOR_STR(x) #x
 
 
