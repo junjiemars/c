@@ -13,10 +13,10 @@
 #define incr_v1(a, b)  (a)++; (b)++;
 
 
-#define incr_v2(a, b)                                   \
-  do                                                    \
-    {                                                   \
-      (a)++; (b)++;                                     \
+#define incr_v2(a, b)                           \
+  do                                            \
+    {                                           \
+      (a)++; (b)++;                             \
     } while (0)                 /* no ; at tail */
 
 
