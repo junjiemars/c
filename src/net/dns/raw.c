@@ -33,7 +33,7 @@ typedef struct s_dns_hs
   uint16_t id;
   struct h_flags
   {
-#if (1 == NM_CPU_LITTLE_ENDIAN)
+#if (NM_HAVE_LITTLE_ENDIAN)
     uint8_t rcode  : 4;
     uint8_t z      : 3;
     uint8_t ra     : 1;
@@ -51,7 +51,7 @@ typedef struct s_dns_hs
     uint8_t ra     : 1;
     uint8_t z      : 3;
     uint8_t rcode  : 4;
-#endif  /* NM_CPU_LITTLE_ENDIAN */
+#endif  /* NM_HAVE_LITTLE_ENDIAN */
   } h_flags;
   uint16_t qdcount;
   uint16_t ancount;
@@ -170,7 +170,7 @@ query(void)
   /* make header */
   memset(&header, 0, sizeof(header));
   header.id = htons(getpid());
-  header.h_flags.rd = 1u;
+  header.h_flags.rd = htons(1u);
   header.qdcount = htons(1u);
 
   /* make question */
