@@ -10,7 +10,7 @@
  * 1. https://datatracker.ietf.org/doc/html/rfc1034
  * 2. https://datatracker.ietf.org/doc/html/rfc1035
  *
-*/
+ */
 
 
 #define DNS_TYPE_A     0x0001
@@ -24,7 +24,7 @@
 
 #define DNS_QNAME_MAX_LEN    255
 #define DNS_LABEL_MAX_LEN    63
-#define DNS_UDP_MSG_MAX_LEN  512
+#define DNS_UDP_MAX_LEN  512
 
 
 /* header section */
@@ -33,6 +33,16 @@ typedef struct s_dns_hs
   uint16_t id;
   struct h_flags
   {
+#if (1 == NM_CPU_LITTLE_ENDIAN)
+    uint8_t rcode  : 4;
+    uint8_t z      : 3;
+    uint8_t ra     : 1;
+    uint8_t rd     : 1;
+    uint8_t tc     : 1;
+    uint8_t aa     : 1;
+    uint8_t opcode : 4;
+    uint8_t qr     : 1;
+#else
     uint8_t qr     : 1;
     uint8_t opcode : 4;
     uint8_t aa     : 1;
@@ -41,6 +51,7 @@ typedef struct s_dns_hs
     uint8_t ra     : 1;
     uint8_t z      : 3;
     uint8_t rcode  : 4;
+#endif  /* NM_CPU_LITTLE_ENDIAN */
   } h_flags;
   uint16_t qdcount;
   uint16_t ancount;
@@ -69,7 +80,7 @@ typedef struct s_dns_rr
 } s_dns_rr;
 
 
-static void make_label(uint8_t *dst, uint8_t *name);
+static void make_label(uint8_t *dst, size_t *dst_len, uint8_t *name);
 static void query(void);
 
 
@@ -100,14 +111,15 @@ static char opt_server[DNS_QNAME_MAX_LEN]  =  "127.0.0.53";
 
 
 void
-make_label(uint8_t *dst, uint8_t *name)
+make_label(uint8_t *dst, size_t *dst_len, uint8_t *name)
 {
-  uint8_t  *p, **pre, len;
+  uint8_t  *p, **pre, len, *d;
 
   p = name;
   pre = &name;
+  d = dst;
 
-  while (1)
+  while ((p - name) < DNS_QNAME_MAX_LEN)
     {
       if ('.' == *p || 0 == *p)
         {
@@ -116,7 +128,7 @@ make_label(uint8_t *dst, uint8_t *name)
           memcpy(dst, *pre, len);
           dst += len;
           *pre = p + 1;
-          
+
           if (0 == *p)
             {
               *dst = 0;
@@ -125,24 +137,25 @@ make_label(uint8_t *dst, uint8_t *name)
         }
       p++;
     }
+  *dst_len = dst - d + 1;
 }
 
 void
 query(void)
 {
   int                  rc;
-  s_dns_hs         header;
+  s_dns_hs             header;
   uint8_t              qname[DNS_QNAME_MAX_LEN];
   size_t               qname_len;
-  s_dns_qs       question;
+  s_dns_qs             question;
   sockfd_t             sfd;
   uint8_t             *msg;
   size_t               msg_len;
-  size_t               msg_max_len;
   struct in_addr       host;
   struct sockaddr_in   dst;
   socklen_t            dst_len;
-  ssize_t              n ;
+  ssize_t              n;
+
 
 #ifdef WINNT
   WSADATA wsa;
@@ -157,46 +170,44 @@ query(void)
   /* make header */
   memset(&header, 0, sizeof(header));
   header.id = htons(getpid());
-  header.h_flags.rd = 1;
-  header.qdcount = htons(1);
-
-  make_label(qname, (uint8_t*) opt_name);
+  header.h_flags.rd = 1u;
+  header.qdcount = htons(1u);
 
   /* make question */
   memset(&question, 0, sizeof(question));
+  make_label(qname, &qname_len, (uint8_t*) opt_name);
   question.qtype = htons(DNS_TYPE_A);
   question.qclass = htons(DNS_CLASS_IN);
 
-  msg_max_len = sizeof(s_dns_hs) + DNS_QNAME_MAX_LEN + sizeof(s_dns_qs);
-  msg = malloc(msg_max_len);
+  /* make message */
+  msg_len = sizeof(s_dns_hs) + qname_len + sizeof(s_dns_qs);
+  msg = malloc(DNS_UDP_MAX_LEN);
   if (0 == msg)
     {
       fprintf(stderr, "!malloc: %s\n", strerror(errno));
       goto clean_exit;
     }
-  memset(msg, 0, msg_max_len);
-
-  qname_len = strlen((char*) qname) + 1;
-  msg_len = sizeof(header) + qname_len + sizeof(question);
-
+  memset(msg, 0, DNS_UDP_MAX_LEN);
   memcpy(msg, &header, sizeof(header));
-  memcpy(msg+sizeof(header), qname, qname_len);
-  memcpy(msg+sizeof(header)+qname_len, &question, sizeof(question));
+  memcpy(msg + sizeof(header), qname, qname_len);
+  memcpy(msg + sizeof(header) + qname_len, &question, sizeof(question));
 
+  /* socket */
   sfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-  if (0 > sfd)
+  if (-1 == sfd)
     {
-      fprintf(stderr, "! socket: %s\n", strerror(errno));
+      fprintf(stderr, "!socket: %s\n", strerror(errno));
       goto clean_exit;
     }
 
   rc= inet_pton(AF_INET, opt_server, &host);
-  if (rc <= 0)
+  if (-1 == rc)
     {
       fprintf(stderr, "!inet_pton: %s\n", strerror(errno));
       goto clean_exit;
     }
 
+  /* send */
   dst_len = sizeof(dst);
   memset(&dst, 0, sizeof(dst));
   dst.sin_family = AF_INET;
@@ -207,35 +218,34 @@ query(void)
              msg,
              msg_len,
              0,
-             (const struct sockaddr*)&dst,
+             (const struct sockaddr*) &dst,
              dst_len);
-  if (0 > n)
+  if (-1 == n)
     {
       fprintf(stderr, "!sendto: %s\n", strerror(errno));
       goto clean_exit;
     }
 
-  /* n = recvfrom(sfd, */
-  /*               msg, */
-  /*               sizeof(*msg), */
-  /*               0, */
-  /*               (struct sockaddr*)&dst, */
-  /*               &dst_len); */
-  /* if (0 > n)
-     { */
-  /*    fprintf(stderr, "! recvfrom: %s\n", strerror(errno)); */
-  /*    goto clean_exit; */
-  /* } */
+  /* receive */
+  n = recvfrom(sfd,
+               msg,
+               DNS_UDP_MAX_LEN,
+               0,
+               (struct sockaddr*) &dst,
+               &dst_len);
+
+  if (-1 == n)
+    {
+      fprintf(stderr, "!recvfrom: %s\n", strerror(errno));
+      goto clean_exit;
+    }
 
  clean_exit:
   if (sfd)
     {
       close(sfd);
     }
-  if (msg)
-    {
-      free(msg);
-    }
+  free(msg);
 
 #ifdef WINNT
   WSACleanup();
@@ -273,7 +283,7 @@ main(int argc, char* argv[])
         }
     }
 
-  printf("; <<>> dnsq <<>> -q%s -p%d @%s\n",
+  printf("# -q%s -p%d -s%s\n",
          opt_name,
          opt_port,
          opt_server);
