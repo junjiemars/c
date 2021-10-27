@@ -102,20 +102,20 @@ static char opt_server[DNS_QNAME_MAX_LEN]  =  "127.0.0.53";
 void
 make_label(uint8_t *dst, uint8_t *name)
 {
-  uint8_t  *p, i, len;
+  uint8_t  *p, **pre, len;
 
   p = name;
-  i = 0;
+  pre = &name;
 
   while (1)
     {
       if ('.' == *p || 0 == *p)
         {
-          len = p - &name[i];
+          len = p - *pre;
           *dst++ = len;
-          memcpy(dst, &name[i], len);
+          memcpy(dst, *pre, len);
           dst += len;
-          i = p - name + 1;
+          *pre = p + 1;
           
           if (0 == *p)
             {
