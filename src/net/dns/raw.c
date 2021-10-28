@@ -14,19 +14,33 @@
  */
 
 
-#define DNS_TYPE_A     0x01
-#define DNS_TYPE_NS    0x02
-#define DNS_TYPE_MD    0x03
-#define DNS_TYPE_PTR   0xc0
+/* type */
+#define DNS_TYPE_A      0x01
+#define DNS_TYPE_NS     0x02
+#define DNS_TYPE_MD     0x03
+#define DNS_TYPE_MF     0x04
+#define DNS_TYPE_CNAME  0x05
+#define DNS_TYPE_SOA    0x06
+#define DNS_TYPE_MB     0x07
+#define DNS_TYPE_MG     0x08
+#define DNS_TYPE_MR     0x09
+#define DNS_TYPE_NULL   0x0a
+#define DNS_TYPE_WKS    0x0b
+#define DNS_TYPE_PTR    0x0c
+#define DNS_TYPE_HINFO  0x0d
+#define DNS_TYPE_MX     0x0e
+#define DNS_TYPE_TXT    0x0f
 
-#define DNS_CLASS_IN   0x0001
-#define DNS_CLASS_CS   0x0002
-#define DNS_CLASS_CH   0x0003
-#define DNS_CLASS_HS   0x0004
+/* class */
+#define DNS_CLASS_IN  0x0001
+#define DNS_CLASS_CS  0x0002
+#define DNS_CLASS_CH  0x0003
+#define DNS_CLASS_HS  0x0004
 
-#define DNS_QNAME_MAX_LEN    255
-#define DNS_LABEL_MAX_LEN    64
-#define DNS_UDP_MAX_LEN  512
+/* length */
+#define DNS_QNAME_MAX_LEN  255
+#define DNS_LABEL_MAX_LEN  64
+#define DNS_UDP_MAX_LEN    512
 
 
 /* header section */
@@ -73,17 +87,26 @@ typedef struct s_dns_qs
 /* resource record */
 typedef struct s_dns_rr
 {
-  struct r_name
+  union s_dns_rr_name
   {
-    uint8_t type   : 8;
-    uint8_t offset : 8;
+    struct
+    {
+/* #if (NM_HAVE_LITTLE_ENDIAN) */
+/*       uint8_t offset : 8; */
+/*       uint8_t type   : 8; */
+/* #else */
+      uint8_t type   : 8;
+      uint8_t offset : 8;
+/* #endif  /\* NM_HAVE_LITTLE_ENDIAN *\/ */
+    } u8;
+    uint16_t u16;
   } name;
   uint16_t type;
   uint16_t class;
   uint16_t ttl;
   uint16_t rdlength;
-  uint16_t rdata;
 } s_dns_rr;
+
 
 static void query(void);
 static void make_label(uint8_t *dst, size_t *dst_len, uint8_t *name);
@@ -110,6 +133,12 @@ static struct timeval   opt_timeout        =  { .tv_sec = 3, };
 static char opt_query[DNS_QNAME_MAX_LEN]   =  { 0, };
 static char opt_server[DNS_QNAME_MAX_LEN]  =  "127.0.0.53";
 
+static char *dns_type_str[] = {
+  "A",      "NS",    "MD",   "MF",
+  "CNAME",  "SOA",   "MB",   "MG",
+  "MR",     "NULL",  "WKS",  "PTR",
+  "HINFO",  "MX",    "TXT",   0
+};
 
 static void
 usage(const char *p)
@@ -174,9 +203,10 @@ parse_label(uint8_t *buf, uint8_t *name, size_t *n)
       memcpy(d, p + 1, len);
       d += len;
       *d++ = '.';
-      *n = *n + 1 + len;
+      *n += 1 + len;
       p += 1 + len;
     }
+  *n -= 1;
   *--d = 0;
 }
 
@@ -302,19 +332,20 @@ query(void)
       goto clean_exit;
     }
 
-
   n = ntohs(((s_dns_hs*) msg)->ancount);
   offset = msg + sizeof(s_dns_hs) + qname_len + sizeof(s_dns_qs);
   while (n-- > 0)
     {
       rr = (s_dns_rr *) offset;
-      if (DNS_TYPE_PTR == rr->name.type)
+      rr->name.u16 = ntohs(rr->name.u16);
+      if (DNS_TYPE_PTR == rr->name.u8.type)
         {
-          parse_label(msg + rr->name.offset, qname, &qname_len);
+          parse_label(msg + rr->name.u8.offset, qname, &qname_len);
         }
       fprintf(stdout, "# %s\n", qname);
-
-      offset += sizeof(s_dns_rr);
+      fprintf(stdout, "-> %s\n", dns_type_str[ntohs(rr->type)]);
+      
+      offset += sizeof(*rr) + rr->rdlength;
     }
 
  clean_exit:
