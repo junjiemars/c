@@ -31,6 +31,9 @@
 #define DNS_TYPE_MX     0x0e
 #define DNS_TYPE_TXT    0x0f
 
+#define DNS_PTR_NAME    0xc0
+
+
 /* class */
 #define DNS_CLASS_IN  0x0001
 #define DNS_CLASS_CS  0x0002
@@ -41,6 +44,10 @@
 #define DNS_QNAME_MAX_LEN  255
 #define DNS_LABEL_MAX_LEN  64
 #define DNS_UDP_MAX_LEN    512
+
+
+#define dns_ptr_type(u16)    ((uint8_t)((uint16_t)ntohs(u16) >> 8))
+#define dns_ptr_offset(u16)  ((uint8_t)((uint16_t)ntohs(u16) & 0xff))
 
 
 /* header section */
@@ -87,20 +94,7 @@ typedef struct s_dns_qs
 /* resource record */
 typedef struct s_dns_rr
 {
-  union s_dns_rr_name
-  {
-    struct
-    {
-/* #if (NM_HAVE_LITTLE_ENDIAN) */
-/*       uint8_t offset : 8; */
-/*       uint8_t type   : 8; */
-/* #else */
-      uint8_t type   : 8;
-      uint8_t offset : 8;
-/* #endif  /\* NM_HAVE_LITTLE_ENDIAN *\/ */
-    } u8;
-    uint16_t u16;
-  } name;
+  uint16_t name;
   uint16_t type;
   uint16_t class;
   uint16_t ttl;
@@ -134,10 +128,12 @@ static char opt_query[DNS_QNAME_MAX_LEN]   =  { 0, };
 static char opt_server[DNS_QNAME_MAX_LEN]  =  "127.0.0.53";
 
 static char *dns_type_str[] = {
+  0,
   "A",      "NS",    "MD",   "MF",
   "CNAME",  "SOA",   "MB",   "MG",
   "MR",     "NULL",  "WKS",  "PTR",
-  "HINFO",  "MX",    "TXT",   0
+  "HINFO",  "MX",    "TXT",
+  0
 };
 
 static void
@@ -192,7 +188,7 @@ void
 parse_label(uint8_t *buf, uint8_t *name, size_t *n)
 {
   uint8_t  *p, len, *d;
-  
+
   p = buf;
   d = name;
   *n = 0;
@@ -218,8 +214,8 @@ query(void)
   uint8_t              qname[DNS_QNAME_MAX_LEN];
   size_t               qname_len;
   s_dns_qs             question;
-  sockfd_t             sfd;
-  uint8_t             *msg;
+  sockfd_t             sfd = 0;
+  uint8_t             *msg = 0;
   size_t               msg_len;
   struct in_addr       host;
   struct sockaddr_in   dst;
@@ -241,7 +237,7 @@ query(void)
   /* make header */
   memset(&header, 0, sizeof(header));
   header.id = htons(getpid());
-  header.h_flags.rd = htons(1u);
+  header.h_flags.rd = (uint8_t) htons(1u);
   header.qdcount = htons(1u);
 
   /* make question */
@@ -290,6 +286,14 @@ query(void)
       dump(msg, msg_len, opt_dump_req);
     }
 
+  /* rc = setsockopt(sfd, SOL_SOCKET, SO_SNDTIMEO, &opt_timeout, */
+  /*                 sizeof(opt_timeout)); */
+  /* if (-1 == rc) */
+  /*   { */
+  /*     fprintf(stderr, "!setsockopt: SO_SNDTIMEO %s\n", strerror(errno)); */
+  /*     goto clean_exit; */
+  /*   } */
+
   n = sendto(sfd, msg, msg_len, 0, (const struct sockaddr*) &dst, dst_len);
   if (-1 == n)
     {
@@ -298,13 +302,13 @@ query(void)
     }
 
   /* receive */
-  rc = setsockopt(sfd, SOL_SOCKET, SO_RCVTIMEO, &opt_timeout,
-                  sizeof(opt_timeout));
-  if (-1 == rc)
-    {
-      fprintf(stderr, "!setsockopt: %s\n", strerror(errno));
-      goto clean_exit;
-    }
+  /* rc = setsockopt(sfd, SOL_SOCKET, SO_RCVTIMEO, &opt_timeout, */
+  /*                 sizeof(opt_timeout)); */
+  /* if (-1 == rc) */
+  /*   { */
+  /*     fprintf(stderr, "!setsockopt: SO_RCVTIMEO %s\n", strerror(errno)); */
+  /*     goto clean_exit; */
+  /*   } */
   memset(msg, 0, DNS_UDP_MAX_LEN);
 
   rc = recvfrom(sfd, msg, DNS_UDP_MAX_LEN, 0, (struct sockaddr *) &dst,
@@ -333,18 +337,23 @@ query(void)
     }
 
   n = ntohs(((s_dns_hs*) msg)->ancount);
+  if (0 == n)
+    {
+      fprintf(stderr, "!response: no answer\n");
+      goto clean_exit;
+    }
+
   offset = msg + sizeof(s_dns_hs) + qname_len + sizeof(s_dns_qs);
   while (n-- > 0)
     {
       rr = (s_dns_rr *) offset;
-      rr->name.u16 = ntohs(rr->name.u16);
-      if (DNS_TYPE_PTR == rr->name.u8.type)
+      if (DNS_PTR_NAME == dns_ptr_type(rr->name))
         {
-          parse_label(msg + rr->name.u8.offset, qname, &qname_len);
+          parse_label(msg + dns_ptr_offset(rr->name), qname, &qname_len);
         }
       fprintf(stdout, "# %s\n", qname);
       fprintf(stdout, "-> %s\n", dns_type_str[ntohs(rr->type)]);
-      
+
       offset += sizeof(*rr) + rr->rdlength;
     }
 

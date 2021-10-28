@@ -45,7 +45,7 @@ net_dns_simple_test: $(net_dns_simple_binout)
 	$(net_dns_simple_binout) www.bing.com
 net_dns_raw_test: $(net_dns_raw_binout)
 	$(net_dns_raw_binout)
-	$(net_dns_raw_binout) -p53 -qwww.bing.com -s 8.8.4.4 -t5
+	$(net_dns_raw_binout) -p53 -qwww.bing.com -s 74.82.42.42 -t5
 
 $(net_dns_simple_binout): $(net_root)/dns/simple.c $(getopt_c)
 	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@
