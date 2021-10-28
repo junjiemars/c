@@ -34,8 +34,8 @@ endif
 
 
 # dns
-net_dns_simple_binout := $(bin_path)/$(net_prefix)_net_dns_simple$(bin_ext)
-net_dns_raw_binout := $(bin_path)/$(net_prefix)_net_dns_raw$(bin_ext)
+net_dns_simple_binout := $(bin_path)/$(net_prefix)_dns_simple$(bin_ext)
+net_dns_raw_binout := $(bin_path)/$(net_prefix)_dns_raw$(bin_ext)
 
 net_dns: $(net_dns_simple_binout)               \
          $(net_dns_raw_binout)
@@ -45,7 +45,7 @@ net_dns_simple_test: $(net_dns_simple_binout)
 	$(net_dns_simple_binout) www.bing.com
 net_dns_raw_test: $(net_dns_raw_binout)
 	$(net_dns_raw_binout)
-	$(net_dns_raw_binout) -p53 -qwww.bing.com -s 8.8.4.4
+	$(net_dns_raw_binout) -p53 -qwww.bing.com -s 8.8.4.4 -t5
 
 $(net_dns_simple_binout): $(net_root)/dns/simple.c $(getopt_c)
 	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@

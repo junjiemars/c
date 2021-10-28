@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
+
 /*
  * References:
  * 1. https://datatracker.ietf.org/doc/html/rfc1034
@@ -13,9 +14,10 @@
  */
 
 
-#define DNS_TYPE_A     0x0001
-#define DNS_TYPE_NS    0x0002
-#define DNS_TYPE_MD    0x0003
+#define DNS_TYPE_A     0x01
+#define DNS_TYPE_NS    0x02
+#define DNS_TYPE_MD    0x03
+#define DNS_TYPE_PTR   0xc0
 
 #define DNS_CLASS_IN   0x0001
 #define DNS_CLASS_CS   0x0002
@@ -23,7 +25,7 @@
 #define DNS_CLASS_HS   0x0004
 
 #define DNS_QNAME_MAX_LEN    255
-#define DNS_LABEL_MAX_LEN    63
+#define DNS_LABEL_MAX_LEN    64
 #define DNS_UDP_MAX_LEN  512
 
 
@@ -71,7 +73,11 @@ typedef struct s_dns_qs
 /* resource record */
 typedef struct s_dns_rr
 {
-  char name[64];
+  struct r_name
+  {
+    uint8_t type   : 8;
+    uint8_t offset : 8;
+  } name;
   uint16_t type;
   uint16_t class;
   uint16_t ttl;
@@ -79,9 +85,9 @@ typedef struct s_dns_rr
   uint16_t rdata;
 } s_dns_rr;
 
-
-static void make_label(uint8_t *dst, size_t *dst_len, uint8_t *name);
 static void query(void);
+static void make_label(uint8_t *dst, size_t *dst_len, uint8_t *name);
+static void parse_label(uint8_t *buf, uint8_t *name, size_t *n);
 static void dump(uint8_t *buf, size_t n, const char *where);
 
 
@@ -91,29 +97,35 @@ static struct option longopts[]  =
     { "server",  optional_argument,    0,              's' },
     { "port",    optional_argument,    0,              'p' },
     { "query",   required_argument,    0,              'q' },
+    { "timeout", optional_argument,    0,              't' },
     { "dump",    no_argument,          0,              'd' },
     { 0,         0,                    0,               0  }
   };
+
+static int              opt_dump           =  0;
+static char            *opt_dump_req       =  ".request";
+static char            *opt_dump_res       =  ".response";
+static uint16_t         opt_port           =  53;
+static struct timeval   opt_timeout        =  { .tv_sec = 3, };
+static char opt_query[DNS_QNAME_MAX_LEN]   =  { 0, };
+static char opt_server[DNS_QNAME_MAX_LEN]  =  "127.0.0.53";
+
 
 static void
 usage(const char *p)
 {
   printf("Usage %s [options ...] host\n", p);
-  printf("  -h, --help    this help text\n");
-  printf("  -s  --server  DNS server, default is 127.0.0.53\n");
-  printf("  -p, --port    query a non-standard port, default is 53\n");
-  printf("  -q, --query   the domain name to query\n");
-  printf("  -d, --dump    whether dump network package, default is not\n");
+  printf("  -h, --help     this help text\n");
+  printf("  -s  --server   DNS server, default is %s\n",
+         opt_server);
+  printf("  -p, --port     query a non-standard port, default is %d\n",
+         opt_port);
+  printf("  -q, --query    the domain name to query\n");
+  printf("  -t, --timeout  timeout in seconds, default is %d\n",
+         (int) opt_timeout.tv_sec);
+  printf("  -d, --dump     whether dump network package, default is %s\n",
+         opt_dump ? "true" : "false");
 }
-
-
-/* static char opt_service[INET_ADDRSTRLEN] = "http"; */
-static int        opt_dump                 =  0;
-static char      *opt_dump_req             =  ".request";
-static char      *opt_dump_res             =  ".response";
-static uint16_t   opt_port                 =  53;
-static char opt_name[DNS_QNAME_MAX_LEN]    =  { 0, };
-static char opt_server[DNS_QNAME_MAX_LEN]  =  "127.0.0.53";
 
 
 void
@@ -146,6 +158,28 @@ make_label(uint8_t *dst, size_t *dst_len, uint8_t *name)
   *dst_len = dst - d + 1;
 }
 
+
+void
+parse_label(uint8_t *buf, uint8_t *name, size_t *n)
+{
+  uint8_t  *p, len, *d;
+  
+  p = buf;
+  d = name;
+  *n = 0;
+
+  while ((0 != *p) && (p - buf) < DNS_QNAME_MAX_LEN)
+    {
+      len = *p;
+      memcpy(d, p + 1, len);
+      d += len;
+      *d++ = '.';
+      *n = *n + 1 + len;
+      p += 1 + len;
+    }
+  *--d = 0;
+}
+
 void
 query(void)
 {
@@ -161,7 +195,8 @@ query(void)
   struct sockaddr_in   dst;
   socklen_t            dst_len;
   ssize_t              n;
-  /* uint8_t              *offset; */
+  uint8_t             *offset;
+  s_dns_rr            *rr;
 
 #ifdef WINNT
   WSADATA wsa;
@@ -181,7 +216,7 @@ query(void)
 
   /* make question */
   memset(&question, 0, sizeof(question));
-  make_label(qname, &qname_len, (uint8_t*) opt_name);
+  make_label(qname, &qname_len, (uint8_t*) opt_query);
   question.qtype = htons(DNS_TYPE_A);
   question.qclass = htons(DNS_CLASS_IN);
 
@@ -220,14 +255,12 @@ query(void)
   dst.sin_port = htons(opt_port);
   dst.sin_addr = host;
 
-  dump(msg, msg_len, opt_dump_req);
+  if (opt_dump)
+    {
+      dump(msg, msg_len, opt_dump_req);
+    }
 
-  n = sendto(sfd,
-             msg,
-             msg_len,
-             0,
-             (const struct sockaddr*) &dst,
-             dst_len);
+  n = sendto(sfd, msg, msg_len, 0, (const struct sockaddr*) &dst, dst_len);
   if (-1 == n)
     {
       fprintf(stderr, "!sendto: %s\n", strerror(errno));
@@ -235,36 +268,54 @@ query(void)
     }
 
   /* receive */
+  rc = setsockopt(sfd, SOL_SOCKET, SO_RCVTIMEO, &opt_timeout,
+                  sizeof(opt_timeout));
+  if (-1 == rc)
+    {
+      fprintf(stderr, "!setsockopt: %s\n", strerror(errno));
+      goto clean_exit;
+    }
   memset(msg, 0, DNS_UDP_MAX_LEN);
-  rc = recvfrom(sfd,
-                msg,
-                DNS_UDP_MAX_LEN,
-                0,
-                (struct sockaddr*) &dst,
+
+  rc = recvfrom(sfd, msg, DNS_UDP_MAX_LEN, 0, (struct sockaddr *) &dst,
                 &dst_len);
   if (-1 == rc)
     {
       fprintf(stderr, "!recvfrom: %s\n", strerror(errno));
       goto clean_exit;
     }
-
   msg_len = rc;
-  dump(msg, msg_len, opt_dump_res);
 
-  if (header.id != ((s_dns_hs*) msg)->id)
+  if (opt_dump)
     {
-      fprintf(stderr, "!bad response: %d", ntohs(header.id));
+      dump(msg, msg_len, opt_dump_res);
+    }
+
+  if (header.id != ((s_dns_hs *) msg)->id)
+    {
+      fprintf(stderr, "!response: id is %d unmatched\n", ntohs(header.id));
+      goto clean_exit;
+    }
+  if (1 != ((s_dns_hs *) msg)->h_flags.qr)
+    {
+      fprintf(stderr, "!response: qr is not response\n");
       goto clean_exit;
     }
 
-  n = ((s_dns_hs*) msg)->ancount;
-  /* offset = (msg + sizeof(s_dns_hs)); */
-  while (n > 0)
-    {
-      
-      n--;
-    }
 
+  n = ntohs(((s_dns_hs*) msg)->ancount);
+  offset = msg + sizeof(s_dns_hs) + qname_len + sizeof(s_dns_qs);
+  while (n-- > 0)
+    {
+      rr = (s_dns_rr *) offset;
+      if (DNS_TYPE_PTR == rr->name.type)
+        {
+          parse_label(msg + rr->name.offset, qname, &qname_len);
+        }
+      fprintf(stdout, "# %s\n", qname);
+
+      offset += sizeof(s_dns_rr);
+    }
 
  clean_exit:
   if (sfd)
@@ -321,7 +372,7 @@ main(int argc, char* argv[])
     }
 
 
-  while (-1 != (ch = getopt_long(argc, argv, "hs:p:q:d", longopts, 0)))
+  while (-1 != (ch = getopt_long(argc, argv, "hs:p:q:t:d", longopts, 0)))
     {
       switch (ch)
         {
@@ -332,7 +383,10 @@ main(int argc, char* argv[])
           opt_port = (uint16_t) atoi(optarg);
           break;
         case 'q':
-          strcpy(opt_name, optarg);
+          strcpy(opt_query, optarg);
+          break;
+        case 't':
+          opt_timeout.tv_sec = atoi(optarg);
           break;
         case 'd':
           opt_dump = 1;
@@ -343,10 +397,11 @@ main(int argc, char* argv[])
         }
     }
 
-  printf("# -q%s -p%d -s%s -d%d\n",
-         opt_name,
+  printf("# -q%s -p%d -s%s -t%d -d%d\n",
+         opt_query,
          opt_port,
          opt_server,
+         (int) opt_timeout.tv_sec,
          opt_dump);
 
   query();
