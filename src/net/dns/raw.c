@@ -82,6 +82,7 @@ typedef struct s_dns_rr
 
 static void make_label(uint8_t *dst, size_t *dst_len, uint8_t *name);
 static void query(void);
+static void dump(uint8_t *buf, size_t n, const char *where);
 
 
 static struct option longopts[]  =
@@ -90,6 +91,7 @@ static struct option longopts[]  =
     { "server",  optional_argument,    0,              's' },
     { "port",    optional_argument,    0,              'p' },
     { "query",   required_argument,    0,              'q' },
+    { "dump",    no_argument,          0,              'd' },
     { 0,         0,                    0,               0  }
   };
 
@@ -101,11 +103,15 @@ usage(const char *p)
   printf("  -s  --server  DNS server, default is 127.0.0.53\n");
   printf("  -p, --port    query a non-standard port, default is 53\n");
   printf("  -q, --query   the domain name to query\n");
+  printf("  -d, --dump    whether dump network package, default is not\n");
 }
 
 
 /* static char opt_service[INET_ADDRSTRLEN] = "http"; */
-static uint16_t  opt_port              =  53;
+static int        opt_dump                 =  0;
+static char      *opt_dump_req             =  ".request";
+static char      *opt_dump_res             =  ".response";
+static uint16_t   opt_port                 =  53;
 static char opt_name[DNS_QNAME_MAX_LEN]    =  { 0, };
 static char opt_server[DNS_QNAME_MAX_LEN]  =  "127.0.0.53";
 
@@ -155,7 +161,7 @@ query(void)
   struct sockaddr_in   dst;
   socklen_t            dst_len;
   ssize_t              n;
-
+  /* uint8_t              *offset; */
 
 #ifdef WINNT
   WSADATA wsa;
@@ -200,7 +206,7 @@ query(void)
       goto clean_exit;
     }
 
-  rc= inet_pton(AF_INET, opt_server, &host);
+  rc = inet_pton(AF_INET, opt_server, &host);
   if (-1 == rc)
     {
       fprintf(stderr, "!inet_pton: %s\n", strerror(errno));
@@ -213,6 +219,8 @@ query(void)
   dst.sin_family = AF_INET;
   dst.sin_port = htons(opt_port);
   dst.sin_addr = host;
+
+  dump(msg, msg_len, opt_dump_req);
 
   n = sendto(sfd,
              msg,
@@ -227,18 +235,36 @@ query(void)
     }
 
   /* receive */
-  n = recvfrom(sfd,
-               msg,
-               DNS_UDP_MAX_LEN,
-               0,
-               (struct sockaddr*) &dst,
-               &dst_len);
-
-  if (-1 == n)
+  memset(msg, 0, DNS_UDP_MAX_LEN);
+  rc = recvfrom(sfd,
+                msg,
+                DNS_UDP_MAX_LEN,
+                0,
+                (struct sockaddr*) &dst,
+                &dst_len);
+  if (-1 == rc)
     {
       fprintf(stderr, "!recvfrom: %s\n", strerror(errno));
       goto clean_exit;
     }
+
+  msg_len = rc;
+  dump(msg, msg_len, opt_dump_res);
+
+  if (header.id != ((s_dns_hs*) msg)->id)
+    {
+      fprintf(stderr, "!bad response: %d", ntohs(header.id));
+      goto clean_exit;
+    }
+
+  n = ((s_dns_hs*) msg)->ancount;
+  /* offset = (msg + sizeof(s_dns_hs)); */
+  while (n > 0)
+    {
+      
+      n--;
+    }
+
 
  clean_exit:
   if (sfd)
@@ -250,6 +276,37 @@ query(void)
 #ifdef WINNT
   WSACleanup();
 #endif
+}
+
+
+void
+dump(uint8_t *b, size_t n, const char *w)
+{
+  FILE    *f;
+  size_t   len;
+
+  f = fopen(w, "wb");
+  if (!f)
+    {
+      fprintf(stderr, "!fopen: %s\n", strerror(errno));
+      return;
+    }
+
+  len = fwrite(b, 1, n, f);
+  if (ferror(f))
+    {
+      fprintf(stderr, "!fwrite: %s\n", strerror(errno));
+      clearerr(f);
+      goto clean_exit;
+    }
+  if (len < n)
+    {
+       fprintf(stderr, "!fwrite: %zu/%zu\n", len, n);
+       goto clean_exit;
+    }
+
+ clean_exit:
+  fclose(f);
 }
 
 int
@@ -264,7 +321,7 @@ main(int argc, char* argv[])
     }
 
 
-  while (-1 != (ch = getopt_long(argc, argv, "hs:p:q:", longopts, 0)))
+  while (-1 != (ch = getopt_long(argc, argv, "hs:p:q:d", longopts, 0)))
     {
       switch (ch)
         {
@@ -277,16 +334,20 @@ main(int argc, char* argv[])
         case 'q':
           strcpy(opt_name, optarg);
           break;
+        case 'd':
+          opt_dump = 1;
+          break;
         default:
           usage(argv[0]);
           goto clean_exit;
         }
     }
 
-  printf("# -q%s -p%d -s%s\n",
+  printf("# -q%s -p%d -s%s -d%d\n",
          opt_name,
          opt_port,
-         opt_server);
+         opt_server,
+         opt_dump);
 
   query();
 
