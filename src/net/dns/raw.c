@@ -109,6 +109,7 @@ static void parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name,
                         size_t *name_len);
 static int make_request(uint8_t **req, size_t *req_len, uint16_t *req_id);
 static void parse_response(uint16_t id, uint8_t *res);
+static void parse_rr(uint8_t *res, uint8_t **offset);
 static void dump(uint8_t *buf, size_t n, const char *where);
 
 
@@ -190,6 +191,7 @@ make_label(uint8_t *dst, size_t *dst_len, uint8_t *name)
               break;
             }
         }
+
       p++;
     }
 }
@@ -267,6 +269,48 @@ make_request(uint8_t **req, size_t *req_len, uint16_t *req_id)
 }
 
 void
+parse_rr(uint8_t *res, uint8_t **offset)
+{
+  s_dns_rr  *rr;
+  uint8_t    qname[DNS_QNAME_MAX_LEN];
+  size_t     qname_len  =  0;
+
+  rr = (s_dns_rr *) *offset;
+  if (DNS_PTR_NAME == dns_ptr_type(rr->name))
+    {
+      parse_label(res, res + dns_ptr_offset(rr->name), qname, &qname_len);
+    }
+
+  fprintf(stdout, " -> %s  %s  %s  %d",
+          qname,
+          dns_type_str[ntohs(rr->type)],
+          dns_class_str[ntohs(rr->class)],
+          ntohl(rr->ttl));
+      
+  *offset += sizeof(*rr);
+
+  if (ntohs(rr->rdlength) > 0)
+    {
+      switch (ntohs(rr->type))
+        {
+        case DNS_TYPE_CNAME:
+          parse_label(res, *offset, qname, &qname_len);
+          fprintf(stdout, "  %s", qname);
+          break;
+        case DNS_TYPE_A:
+          fprintf(stdout, "  %d.%d.%d.%d",
+                  (*offset)[0], (*offset)[1], (*offset)[2], (*offset)[3]);
+          break;
+        default:
+          break;
+        }
+    }
+  fprintf(stdout, "\n");
+
+  *offset += ntohs(rr->rdlength);
+}
+
+void
 parse_response(uint16_t id, uint8_t *res)
 {
   s_dns_hs  *hs;
@@ -275,7 +319,6 @@ parse_response(uint16_t id, uint8_t *res)
   uint8_t    qname[DNS_QNAME_MAX_LEN];
   size_t     qname_len;
   uint8_t   *offset;
-  s_dns_rr  *rr;
 
   hs = (s_dns_hs *) res;
 
@@ -311,17 +354,7 @@ parse_response(uint16_t id, uint8_t *res)
   fprintf(stdout, "# answer section: %zu\n", (size_t) n);
   while (n-- > 0)
     {
-      rr = (s_dns_rr *) offset;
-      if (DNS_PTR_NAME == dns_ptr_type(rr->name))
-        {
-          parse_label(res, res + dns_ptr_offset(rr->name), qname, &qname_len);
-        }
-      fprintf(stdout, " -> %s  %s  %s  %d\n",
-              qname,
-              dns_type_str[ntohs(rr->type)],
-              dns_class_str[ntohs(rr->class)],
-              ntohl(rr->ttl));
-      offset += sizeof(*rr) + ntohs(rr->rdlength);
+      parse_rr(res, &offset);
     }
 
   /* n = (ssize_t) ntohs(hs->arcount); */
@@ -524,10 +557,10 @@ main(int argc, char* argv[])
         }
     }
 
-  printf("# -q%s -p%d -s%s -t%d -d%d\n",
+  printf("# command line options:\n -> -q%s -s%s -p%d -t%d -d%d\n",
          opt_query,
-         opt_port,
          opt_server,
+         opt_port,
          (int) opt_timeout.tv_sec,
          opt_dump);
 
