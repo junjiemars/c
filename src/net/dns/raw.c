@@ -277,13 +277,14 @@ parse_response(uint16_t id, uint8_t *res, size_t res_len)
 
   n = (ssize_t) ntohs(hs->qdcount);
   offset = res + sizeof(*hs);
+  fprintf(stdout, "# question section: %zu\n", (size_t) n);
   while (n-- > 0)
     {
       parse_label(offset, qname, &qname_len);
       offset += qname_len;
       qs = (s_dns_qs *) offset;
 
-      fprintf(stdout, "# question section:\n -> %s  %s  %s\n",
+      fprintf(stdout, " -> %s  %s  %s\n",
               qname,
               dns_type_str[ntohs(qs->qtype)],
               dns_class_str[ntohs(qs->qclass)]);
@@ -291,10 +292,10 @@ parse_response(uint16_t id, uint8_t *res, size_t res_len)
     }
 
   n = (ssize_t) ntohs(hs->ancount);
-  if (0 == n)
+  fprintf(stderr, "# answer section: %zu\n", (size_t) n);
+  while (n-- > 0)
     {
-      fprintf(stderr, "!response: no answer\n");
-      goto clean_exit;
+
     }
 
   /* offset = res + sizeof(s_dns_hs) + qname_len + sizeof(s_dns_qs); */
