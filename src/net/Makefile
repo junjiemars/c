@@ -16,7 +16,7 @@ net_prefix := net
 INC += -I$(net_root)
 
 ifeq ($(NM_SYSTEM), WinNT)
-	INC += -I$(root)posix
+	INC += -I$(root)/posix
 	getopt_c := $(root)/posix/getopt.c
 endif
 
@@ -38,21 +38,15 @@ endif # end of _MEMORY_
 
 
 # dns
-net_dns_simple_binout := $(bin_path)/$(net_prefix)_dns_simple$(bin_ext)
 net_dns_raw_binout := $(bin_path)/$(net_prefix)_dns_raw$(bin_ext)
 
-net_dns: $(net_dns_simple_binout)               \
-         $(net_dns_raw_binout)
-net_dns_test: net_dns_simple_test net_dns_raw_test
-net_dns_simple_test: $(net_dns_simple_binout)
-	$(net_dns_simple_binout) www.google.com
-	$(net_dns_simple_binout) www.bing.com
+net_dns_test: net_dns_raw_test
 net_dns_raw_test: $(net_dns_raw_binout)
 	$(net_dns_raw_binout)
-	$(net_dns_raw_binout) -p53 -qwww.bing.com -s8.8.4.4 -t5
+	$(net_dns_raw_binout) -qwww.bing.com -s74.82.42.42
+	$(net_dns_raw_binout) -qgithub.com -s74.82.42.42
+	$(net_dns_raw_binout) -qwww.reddit.com -s74.82.42.42
 
-$(net_dns_simple_binout): $(net_root)/dns/simple.c $(getopt_c)
-	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@
 
 $(net_dns_raw_binout): $(net_root)/dns/raw.c $(getopt_c)
 	$(CC) $(INC) $(CFLAGS) $(no_struct_align) $^ $(bin_out)$@
