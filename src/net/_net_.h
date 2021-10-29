@@ -4,16 +4,18 @@
 
 #include <nore.h>
 
-#if WINNT
-# include <winsock2.h>
-# include <ws2tcpip.h>
-# pragma comment (lib, "Ws2_32.lib")
+#if (WINNT)
+#  include <winsock2.h>
+#  include <ws2tcpip.h>
+#  include <windows.h>
+#  pragma comment (lib, "Ws2_32.lib")
+#  define getpid() _getpid()
 #else
-# include <sys/types.h>
-# include <sys/socket.h>
-# include <netdb.h>
-# include <arpa/inet.h>
-# include <unistd.h>
+#  include <sys/types.h>
+#  include <sys/socket.h>
+#  include <netdb.h>
+#  include <arpa/inet.h>
+#  include <unistd.h>
 #endif
 
 
@@ -46,6 +48,7 @@
 
 #if (MSVC)
 #  pragma warning(disable:4214)
+#  pragma warning(disable:4244)
 #  pragma warning(disable:4996)
 #endif
 
