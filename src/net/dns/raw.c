@@ -118,6 +118,7 @@ static struct option longopts[]  =
     { "server",  optional_argument,    0,              's' },
     { "port",    optional_argument,    0,              'p' },
     { "query",   required_argument,    0,              'q' },
+    { "retry",   optional_argument,    0,              'r' },
     { "timeout", optional_argument,    0,              't' },
     { "out",     no_argument,          0,              'o' },
     { "verbose", optional_argument,    0,              'v' },
@@ -128,6 +129,7 @@ static int              opt_out            =  0;
 static char            *opt_out_req        =  ".request";
 static char            *opt_out_res        =  ".response";
 static uint16_t         opt_port           =  53;
+static uint8_t          opt_retry          =  1;
 static struct timeval   opt_timeout        =  { .tv_sec = 15, 0 };
 static int              opt_verbose        =  1;
 static char opt_query[DNS_QNAME_MAX_LEN]   =  { 0, };
@@ -160,6 +162,8 @@ usage(const char *p)
   printf("  -p, --port     query a non-standard port, default is %d\n",
          opt_port);
   printf("  -q, --query    the domain name to query\n");
+  printf("  -r, --retry    retry times after failed, default is %d\n",
+         opt_retry);
   printf("  -t, --timeout  timeout in seconds, default is %d\n",
          (int) opt_timeout.tv_sec);
   printf("  -o, --out      whether out network package, default is %s\n",
@@ -383,15 +387,16 @@ void
 query(void)
 {
   int                  rc;
-  sockfd_t             sfd  =  0;
-  uint8_t             *req  =  0;
+  sockfd_t             sfd    =  0;
+  uint8_t             *req    =  0;
   size_t               req_len;
   uint16_t             req_id;
-  uint8_t             *res  =  0;
+  uint8_t             *res    =  0;
   struct in_addr       host;
   struct sockaddr_in   dst;
   socklen_t            dst_len;
   ssize_t              n;
+  uint8_t              retry;
 
 #if (WINNT)
   WSADATA wsa;
@@ -444,10 +449,19 @@ query(void)
       fprintf(stderr, "!setsockopt: SO_SNDTIMEO %s\n", strerror(errno));
     }
 
-  n = sendto(sfd, req, req_len, 0, (const struct sockaddr*) &dst, dst_len);
-  if (-1 == n)
+  retry = opt_retry;
+  while (retry-- > 0)
     {
-      fprintf(stderr, "!sendto: %s\n", strerror(errno));
+      n = sendto(sfd, req, req_len, 0, (const struct sockaddr*) &dst, dst_len);
+      if (-1 == n)
+        {
+          fprintf(stderr, "!sendto: %s\n", strerror(errno));
+          continue;
+        }
+      break;
+    }
+  if (-1 == rc)
+    {
       goto clean_exit;
     }
 
@@ -466,11 +480,20 @@ query(void)
       goto clean_exit;
     }
 
-  rc = recvfrom(sfd, res, DNS_UDP_MAX_LEN, 0, (struct sockaddr *) &dst,
-                &dst_len);
+  retry = opt_retry;
+  while (retry-- > 0)
+    {
+      rc = recvfrom(sfd, res, DNS_UDP_MAX_LEN, 0, (struct sockaddr *) &dst,
+                    &dst_len);
+      if (-1 == rc)
+        {
+          fprintf(stderr, "!recvfrom: %s\n", strerror(errno));
+          continue;
+        }
+      break;
+    }
   if (-1 == rc)
     {
-      fprintf(stderr, "!recvfrom: %s\n", strerror(errno));
       goto clean_exit;
     }
 
@@ -536,7 +559,7 @@ main(int argc, char* argv[])
       goto clean_exit;
     }
 
-  while (-1 != (ch = getopt_long(argc, argv, "hs:p:q:t:ov:", longopts, 0)))
+  while (-1 != (ch = getopt_long(argc, argv, "hs:p:q:r:t:ov:", longopts, 0)))
     {
       switch (ch)
         {
@@ -548,6 +571,9 @@ main(int argc, char* argv[])
           break;
         case 'q':
           strcpy(opt_query, optarg);
+          break;
+        case 'r':
+          opt_retry = atoi(optarg);
           break;
         case 't':
           opt_timeout.tv_sec = atoi(optarg);
@@ -566,10 +592,12 @@ main(int argc, char* argv[])
 
   opt_verbose %= 3;
 
-  printf("# command line options:\n -> -q%s -s%s -p%d -t%d -o%d -v%d\n",
+  printf("# command line options:"
+         " -> -q%s -s%s -p%d -r%d -t%d -o%d -v%d\n",
          opt_query,
          opt_server,
          opt_port,
+         (int) opt_retry,
          (int) opt_timeout.tv_sec,
          opt_out,
          opt_verbose);

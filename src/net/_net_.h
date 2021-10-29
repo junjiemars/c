@@ -20,7 +20,7 @@
 #endif
 
 
-#if (NM_HAVE_STDINT_H)
+#if defined(NM_HAVE_STDINT_H)
 #  include <stdint.h>
 #else
 #  include <stddef.h>
