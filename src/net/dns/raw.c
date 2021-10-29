@@ -50,7 +50,6 @@
 #define dns_ptr_type(u16)    ((uint8_t)((uint16_t)ntohs(u16) >> 8))
 #define dns_ptr_offset(u16)  ((uint8_t)((uint16_t)ntohs(u16) & 0xff))
 
-
 /* header section */
 typedef struct s_dns_hs
 {
@@ -110,7 +109,7 @@ static void parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name,
 static int make_request(uint8_t **req, size_t *req_len, uint16_t *req_id);
 static void parse_response(uint16_t id, uint8_t *res);
 static void parse_rr(uint8_t *res, uint8_t **offset);
-static void dump(uint8_t *buf, size_t n, const char *where);
+static void out(uint8_t *buf, size_t n, const char *where);
 
 
 static struct option longopts[]  =
@@ -120,17 +119,20 @@ static struct option longopts[]  =
     { "port",    optional_argument,    0,              'p' },
     { "query",   required_argument,    0,              'q' },
     { "timeout", optional_argument,    0,              't' },
-    { "dump",    no_argument,          0,              'd' },
+    { "out",     no_argument,          0,              'o' },
+    { "verbose", optional_argument,    0,              'v' },
     { 0,         0,                    0,               0  }
   };
 
-static int              opt_dump           =  0;
-static char            *opt_dump_req       =  ".request";
-static char            *opt_dump_res       =  ".response";
+static int              opt_out            =  0;
+static char            *opt_out_req        =  ".request";
+static char            *opt_out_res        =  ".response";
 static uint16_t         opt_port           =  53;
 static struct timeval   opt_timeout        =  { .tv_sec = 15, 0 };
+static int              opt_verbose        =  1;
 static char opt_query[DNS_QNAME_MAX_LEN]   =  { 0, };
 static char opt_server[DNS_QNAME_MAX_LEN]  =  "127.0.0.53";
+
 
 static char *dns_type_str[] = {
   0,
@@ -160,8 +162,9 @@ usage(const char *p)
   printf("  -q, --query    the domain name to query\n");
   printf("  -t, --timeout  timeout in seconds, default is %d\n",
          (int) opt_timeout.tv_sec);
-  printf("  -d, --dump     whether dump network package, default is %s\n",
-         opt_dump ? "true" : "false");
+  printf("  -o, --out      whether out network package, default is %s\n",
+         opt_out ? "true" : "false");
+  printf("  -v, --verbose  verbose output, default is %d\n", opt_verbose);
 }
 
 
@@ -429,9 +432,9 @@ query(void)
   dst.sin_port = htons(opt_port);
   dst.sin_addr = host;
 
-  if (opt_dump)
+  if (opt_out)
     {
-      dump(req, req_len, opt_dump_req);
+      out(req, req_len, opt_out_req);
     }
 
   rc = setsockopt(sfd, SOL_SOCKET, SO_SNDTIMEO, &opt_timeout,
@@ -471,9 +474,9 @@ query(void)
       goto clean_exit;
     }
 
-  if (opt_dump)
+  if (opt_out)
     {
-      dump(req, req_len, opt_dump_res);
+      out(req, req_len, opt_out_res);
     }
 
   parse_response(req_id, res);
@@ -493,7 +496,7 @@ query(void)
 
 
 void
-dump(uint8_t *b, size_t n, const char *w)
+out(uint8_t *b, size_t n, const char *w)
 {
   FILE    *f;
   size_t   len;
@@ -533,7 +536,7 @@ main(int argc, char* argv[])
       goto clean_exit;
     }
 
-  while (-1 != (ch = getopt_long(argc, argv, "hs:p:q:t:d", longopts, 0)))
+  while (-1 != (ch = getopt_long(argc, argv, "hs:p:q:t:ov:", longopts, 0)))
     {
       switch (ch)
         {
@@ -549,8 +552,11 @@ main(int argc, char* argv[])
         case 't':
           opt_timeout.tv_sec = atoi(optarg);
           break;
-        case 'd':
-          opt_dump = 1;
+        case 'o':
+          opt_out = 1;
+          break;
+        case 'v':
+          opt_verbose = atoi(optarg);
           break;
         default:
           usage(argv[0]);
@@ -558,12 +564,15 @@ main(int argc, char* argv[])
         }
     }
 
-  printf("# command line options:\n -> -q%s -s%s -p%d -t%d -d%d\n",
+  opt_verbose %= 3;
+
+  printf("# command line options:\n -> -q%s -s%s -p%d -t%d -o%d -v%d\n",
          opt_query,
          opt_server,
          opt_port,
          (int) opt_timeout.tv_sec,
-         opt_dump);
+         opt_out,
+         opt_verbose);
 
   query();
 

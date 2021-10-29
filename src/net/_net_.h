@@ -8,8 +8,9 @@
 #  include <winsock2.h>
 #  include <ws2tcpip.h>
 #  include <windows.h>
+#  include <process.h>
 #  pragma comment (lib, "Ws2_32.lib")
-#  define getpid() _getpid()
+#  define getpid  _getpid
 #else
 #  include <sys/types.h>
 #  include <sys/socket.h>
