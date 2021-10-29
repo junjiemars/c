@@ -17,7 +17,7 @@ INC += -I$(net_root)
 
 ifeq ($(NM_SYSTEM), WinNT)
 	INC += -I$(root)posix
-	getopt_c := $(root)posix/getopt.c
+	getopt_c := $(root)/posix/getopt.c
 endif
 
 ifeq ($(NM_SYSTEM), Linux)

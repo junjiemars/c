@@ -236,7 +236,7 @@ make_request(uint8_t **req, size_t *req_len, uint16_t *req_id)
   s_dns_qs   qs;
   uint8_t   *msg  =  0;
   uint8_t    qname[DNS_QNAME_MAX_LEN];
-  size_t     qname_len;
+  size_t     qname_len = 0;
 
   /* make header */
   memset(&hs, 0, sizeof(hs));
