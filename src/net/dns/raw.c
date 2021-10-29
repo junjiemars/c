@@ -86,8 +86,8 @@ typedef struct s_dns_hs
 /* question section */
 typedef struct s_dns_qs
 {
-  uint32_t qtype    : 16;
-  uint32_t qclass   : 16;
+  uint32_t type    : 16;
+  uint32_t class   : 16;
 } s_dns_qs;
 
 
@@ -97,16 +97,17 @@ typedef struct s_dns_rr
   uint16_t name;
   uint16_t type;
   uint16_t class;
-  uint16_t ttl;
+  uint32_t ttl;
   uint16_t rdlength;
 } s_dns_rr;
 
 
 static void query(void);
 static void make_label(uint8_t *dst, size_t *dst_len, uint8_t *name);
-static void parse_label(uint8_t *buf, uint8_t *name, size_t *n);
+static void parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name,
+                        size_t *name_len);
 static int make_request(uint8_t **req, size_t *req_len, uint16_t *req_id);
-static void parse_response(uint16_t id, uint8_t *res, size_t res_len);
+static void parse_response(uint16_t id, uint8_t *res);
 static void dump(uint8_t *buf, size_t n, const char *where);
 
 
@@ -194,24 +195,36 @@ make_label(uint8_t *dst, size_t *dst_len, uint8_t *name)
 
 
 void
-parse_label(uint8_t *buf, uint8_t *name, size_t *n)
+parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name, size_t *name_len)
 {
-  uint8_t  *p, len, *d;
+  uint8_t  *p, *d, len;
 
-  p = buf;
+  p = offset;
   d = name;
-  *n = 0;
+  *name_len = 0;
 
-  while ((0 != *p) && (p - buf) < DNS_QNAME_MAX_LEN)
+  while (*name_len < DNS_QNAME_MAX_LEN)
     {
+      if (DNS_PTR_NAME == dns_ptr_type(*(uint16_t *) p))
+        {
+          offset = buf + dns_ptr_offset(*(uint16_t *) p);
+          p = offset;
+          continue;
+        }
+      
+      if (0 == *p)
+        {
+          *--d = 0;
+          *name_len += 1;
+          break;
+        }
       len = *p;
       memcpy(d, p + 1, len);
       d += len;
       *d++ = '.';
+      *name_len += 1 + len;
       p += 1 + len;
     }
-  *--d = 0;
-  *n = d - name + 2;
 }
 
 int
@@ -232,8 +245,8 @@ make_request(uint8_t **req, size_t *req_len, uint16_t *req_id)
   /* make question */
   memset(&qs, 0, sizeof(qs));
   make_label(&qname[0], &qname_len, (uint8_t*) opt_query);
-  qs.qtype = htons(DNS_TYPE_A);
-  qs.qclass = htons(DNS_CLASS_IN);
+  qs.type = htons(DNS_TYPE_A);
+  qs.class = htons(DNS_CLASS_IN);
 
   /* make message */
   *req_len = sizeof(s_dns_hs) + qname_len + sizeof(s_dns_qs);
@@ -252,7 +265,7 @@ make_request(uint8_t **req, size_t *req_len, uint16_t *req_id)
 }
 
 void
-parse_response(uint16_t id, uint8_t *res, size_t res_len)
+parse_response(uint16_t id, uint8_t *res)
 {
   s_dns_hs  *hs;
   s_dns_qs  *qs;
@@ -260,19 +273,20 @@ parse_response(uint16_t id, uint8_t *res, size_t res_len)
   uint8_t    qname[DNS_QNAME_MAX_LEN];
   size_t     qname_len;
   uint8_t   *offset;
+  s_dns_rr  *rr;
 
   hs = (s_dns_hs *) res;
 
   if (id != ntohs(hs->id))
     {
       fprintf(stderr, "!response: id is unmatched\n");
-      goto clean_exit;
+      return;
     }
 
   if (1 != hs->h_flags.qr)
     {
       fprintf(stderr, "!response: qr is not response\n");
-      goto clean_exit;
+      return;
     }
 
   n = (ssize_t) ntohs(hs->qdcount);
@@ -280,42 +294,50 @@ parse_response(uint16_t id, uint8_t *res, size_t res_len)
   fprintf(stdout, "# question section: %zu\n", (size_t) n);
   while (n-- > 0)
     {
-      parse_label(offset, qname, &qname_len);
+      parse_label(res, offset, qname, &qname_len);
       offset += qname_len;
       qs = (s_dns_qs *) offset;
 
       fprintf(stdout, " -> %s  %s  %s\n",
               qname,
-              dns_type_str[ntohs(qs->qtype)],
-              dns_class_str[ntohs(qs->qclass)]);
+              dns_type_str[ntohs(qs->type)],
+              dns_class_str[ntohs(qs->class)]);
       offset += sizeof(*qs);
     }
 
   n = (ssize_t) ntohs(hs->ancount);
-  fprintf(stderr, "# answer section: %zu\n", (size_t) n);
+  fprintf(stdout, "# answer section: %zu\n", (size_t) n);
   while (n-- > 0)
     {
-
+      rr = (s_dns_rr *) offset;
+      if (DNS_PTR_NAME == dns_ptr_type(rr->name))
+        {
+          parse_label(res, res + dns_ptr_offset(rr->name), qname, &qname_len);
+        }
+      fprintf(stdout, " -> %s  %s  %s  %d\n",
+              qname,
+              dns_type_str[ntohs(rr->type)],
+              dns_class_str[ntohs(rr->class)],
+              ntohl(rr->ttl));
+      offset += sizeof(*rr) + ntohs(rr->rdlength);
     }
-
-  /* offset = res + sizeof(s_dns_hs) + qname_len + sizeof(s_dns_qs); */
+  
+  /* n = (ssize_t) ntohs(hs->arcount); */
+  /* fprintf(stdout, "# additional section: %zu\n", (size_t) n); */
   /* while (n-- > 0) */
   /*   { */
   /*     rr = (s_dns_rr *) offset; */
   /*     if (DNS_PTR_NAME == dns_ptr_type(rr->name)) */
   /*       { */
-  /*         parse_label(res + dns_ptr_offset(rr->name), qname, &qname_len); */
+  /*         parse_label(res, res + dns_ptr_offset(rr->name), qname, &qname_len); */
   /*       } */
-  /*     fprintf(stdout, "# %s\n", qname); */
-  /*     fprintf(stdout, "-> %s\n", dns_type_str[ntohs(rr->type)]); */
-
-  /*     offset += sizeof(*rr) + rr->rdlength; */
+  /*     fprintf(stdout, " -> %s  %s  %s  %d\n", */
+  /*             qname, */
+  /*             dns_type_str[ntohs(rr->type)], */
+  /*             dns_class_str[ntohs(rr->class)], */
+  /*             ntohl(rr->ttl)); */
+  /*     offset += sizeof(*rr) + ntohs(rr->rdlength); */
   /*   } */
- clean_exit:
-  _unused_(res_len);
-  _unused_(parse_label);
-  _unused_(dns_type_str);
-  return;
 }
 
 void
@@ -327,7 +349,6 @@ query(void)
   size_t               req_len;
   uint16_t             req_id;
   uint8_t             *res  =  0;
-  size_t               res_len;
   struct in_addr       host;
   struct sockaddr_in   dst;
   socklen_t            dst_len;
@@ -415,14 +436,13 @@ query(void)
       fprintf(stderr, "!recvfrom: %s\n", strerror(errno));
       goto clean_exit;
     }
-  res_len = rc;
 
   if (opt_dump)
     {
       dump(req, req_len, opt_dump_res);
     }
 
-  parse_response(req_id, res, res_len);
+  parse_response(req_id, res);
 
  clean_exit:
   if (sfd)
