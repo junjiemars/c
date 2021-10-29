@@ -40,6 +40,7 @@
 #define DNS_CLASS_CH  0x03
 #define DNS_CLASS_HS  0x04
 
+
 /* length */
 #define DNS_QNAME_MAX_LEN  255
 #define DNS_LABEL_MAX_LEN  64
@@ -141,7 +142,7 @@ static char *dns_type_str[] = {
 
 static char *dns_class_str[] = {
   0,
-  "IN",      "CS",    "CH",   "HS",
+  "IN",     "CS",    "CH",   "HS",
   0
 };
 
@@ -185,12 +186,12 @@ make_label(uint8_t *dst, size_t *dst_len, uint8_t *name)
           if (0 == *p)
             {
               *dst = 0;
+              *dst_len = dst - d + 1;
               break;
             }
         }
       p++;
     }
-  *dst_len = dst - d + 1;
 }
 
 
@@ -211,13 +212,14 @@ parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name, size_t *name_len)
           p = offset;
           continue;
         }
-      
+
       if (0 == *p)
         {
           *--d = 0;
           *name_len += 1;
           break;
         }
+
       len = *p;
       memcpy(d, p + 1, len);
       d += len;
@@ -321,7 +323,7 @@ parse_response(uint16_t id, uint8_t *res)
               ntohl(rr->ttl));
       offset += sizeof(*rr) + ntohs(rr->rdlength);
     }
-  
+
   /* n = (ssize_t) ntohs(hs->arcount); */
   /* fprintf(stdout, "# additional section: %zu\n", (size_t) n); */
   /* while (n-- > 0) */
@@ -403,7 +405,6 @@ query(void)
   if (-1 == rc)
     {
       fprintf(stderr, "!setsockopt: SO_SNDTIMEO %s\n", strerror(errno));
-      goto clean_exit;
     }
 
   n = sendto(sfd, req, req_len, 0, (const struct sockaddr*) &dst, dst_len);
@@ -419,7 +420,6 @@ query(void)
   if (-1 == rc)
     {
       fprintf(stderr, "!setsockopt: SO_RCVTIMEO %s\n", strerror(errno));
-      goto clean_exit;
     }
 
   res = calloc(1, DNS_UDP_MAX_LEN);

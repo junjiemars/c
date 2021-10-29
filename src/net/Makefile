@@ -27,10 +27,16 @@ ifeq ($(NM_SYSTEM), Linux)
 endif
 
 ifeq ($(CC_NAME), msvc)
-  no_struct_align := -Zp1
+  CFLAGS += -Zp1
 else
-	no_struct_align := -fpack-struct=1
+	CFLAGS += -fpack-struct=1
 endif
+
+
+ifeq ($(_MEMORY_), 1)
+	CFLAGS += $(f_sanitize)
+endif # end of _MEMORY_
+
 
 
 # dns
@@ -51,7 +57,7 @@ $(net_dns_simple_binout): $(net_root)/dns/simple.c $(getopt_c)
 	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@
 
 $(net_dns_raw_binout): $(net_root)/dns/raw.c $(getopt_c)
-	$(CC) $(INC) $(CFLAGS) $(no_struct_align) $^ $(bin_out)$@
+	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@
 
 
 # mac
