@@ -37,12 +37,12 @@
 #if (WINNT)
 typedef SOCKET sockfd_t;
 #define close closesocket
-#define __sendto(s, buf, len, flags, dst, dst_len)      \
-  sendto(s, (const char*) buf, (int) len, flags,        \
-         (const struct sockaddr *) dst, (int) dst_len)
-#define __recvfrom(s, buf, len, flags, dst, dst_len)                    \
-  recvfrom(s, (const char *) buf, (int) len, flags, (struct sockaddr *) dst, \
-           (int) dst_len)
+#define __sendto(s, buf, len, flags, dst, dst_len)                      \
+  sendto(s, (const char*) buf, (int) len, flags, (const sockaddr *) dst, \
+         dst_len)
+#define __recvfrom(s, buf, len, flags, dst, dst_len)  \
+  recvfrom(s, (const char *) buf, (int) len, flags, (struct sockaddr *) dst,  \
+           dst_len)
 
 #else
 
