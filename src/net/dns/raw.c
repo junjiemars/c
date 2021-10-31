@@ -57,23 +57,23 @@ typedef struct s_dns_hs
   struct h_flags
   {
 #if (NM_HAVE_LITTLE_ENDIAN)
-    uint8_t rcode  : 4;
-    uint8_t z      : 3;
-    uint8_t ra     : 1;
-    uint8_t rd     : 1;
-    uint8_t tc     : 1;
-    uint8_t aa     : 1;
-    uint8_t opcode : 4;
-    uint8_t qr     : 1;
+    uint16_t rcode  : 4;
+    uint16_t z      : 3;
+    uint16_t ra     : 1;
+    uint16_t rd     : 1;
+    uint16_t tc     : 1;
+    uint16_t aa     : 1;
+    uint16_t opcode : 4;
+    uint16_t qr     : 1;
 #else
-    uint8_t qr     : 1;
-    uint8_t opcode : 4;
-    uint8_t aa     : 1;
-    uint8_t tc     : 1;
-    uint8_t rd     : 1;
-    uint8_t ra     : 1;
-    uint8_t z      : 3;
-    uint8_t rcode  : 4;
+    uint16_t qr     : 1;
+    uint16_t opcode : 4;
+    uint16_t aa     : 1;
+    uint16_t tc     : 1;
+    uint16_t rd     : 1;
+    uint16_t ra     : 1;
+    uint16_t z      : 3;
+    uint16_t rcode  : 4;
 #endif  /* NM_HAVE_LITTLE_ENDIAN */
   } h_flags;
   uint16_t qdcount;
@@ -342,6 +342,27 @@ parse_response(uint16_t id, uint8_t *res)
       return;
     }
 
+  switch (hs->h_flags.rcode)
+    {
+    case 1:
+      fprintf(stderr, "!response: rcode format error\n");
+      return;
+    case 2:
+      fprintf(stderr, "!response: rcode server error\n");
+      return;
+    case 3:
+      fprintf(stderr, "!response: rcode name error\n");
+      return;
+    case 4:
+      fprintf(stderr, "!response: rcode not implemented\n");
+      return;
+    case 5:
+      fprintf(stderr, "!response: rcode refused\n");
+      return;
+    default:
+      break;
+    }
+
   n = (ssize_t) ntohs(hs->qdcount);
   offset = res + sizeof(*hs);
   fprintf(stdout, "# question section: %zu\n", (size_t) n);
@@ -441,12 +462,14 @@ query(void)
       out(req, req_len, opt_out_req);
     }
 
+#if (LINUX)
   rc = setsockopt(sfd, SOL_SOCKET, SO_SNDTIMEO, &opt_timeout,
                   sizeof(opt_timeout));
   if (-1 == rc)
     {
       fprintf(stderr, "!setsockopt: SO_SNDTIMEO %s\n", strerror(errno));
     }
+#endif
 
   retry = opt_retry;
   while (retry-- > 0)
@@ -465,12 +488,14 @@ query(void)
     }
 
   /* receive */
+#if (LINUX)
   rc = setsockopt(sfd, SOL_SOCKET, SO_RCVTIMEO, &opt_timeout,
                   sizeof(opt_timeout));
   if (-1 == rc)
     {
       fprintf(stderr, "!setsockopt: SO_RCVTIMEO %s\n", strerror(errno));
     }
+#endif
 
   res = calloc(1, DNS_UDP_MAX_LEN);
   if (!res)
