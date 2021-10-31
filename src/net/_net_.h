@@ -48,9 +48,17 @@
 /* #endif */
 
 #if (MSVC)
+#  pragma warning(disable:4057)
 #  pragma warning(disable:4214)
 #  pragma warning(disable:4244)
 #  pragma warning(disable:4996)
+#  ifndef ssize_t
+#    ifdef  _WIN64
+       typedef unsigned __int64 ssize_t;
+#    else
+       typedef _W64 unsigned int ssize_t;
+#    endif
+#  endif  /* ssize_t */
 #endif
 
 #define _unused_(x) (void)(x)

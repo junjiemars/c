@@ -28,12 +28,6 @@ ifeq ($(CC_NAME), msvc)
   # no_struct_align := -Zp1
   no_struct_align :=
 endif
-ifeq ($(CC_NAME), gcc)
-	no_struct_align := -fpack-struct=1
-endif
-ifeq ($(CC_NAME), clang)
-	no_struct_align := -fpack-struct=1
-endif
 
 
 ifeq ($(_MEMORY_), 1)
@@ -48,18 +42,20 @@ net_dns_raw_binout := $(bin_path)/$(net_prefix)_dns_raw$(bin_ext)
 net_dns_test: net_dns_raw_test
 net_dns_raw_test: $(net_dns_raw_binout)
 	$(net_dns_raw_binout)
-	# $(net_dns_raw_binout) -qgithub.com -s74.82.42.42
-	# $(net_dns_raw_binout) -qwww.reddit.com -s74.82.42.42
-	# $(net_dns_raw_binout) -qwww.bing.com -s74.82.42.42 -t5
-	# $(net_dns_raw_binout) -qwww.baidu.com -s74.82.42.42 -t5
+	$(net_dns_raw_binout) -qgithub.com -s74.82.42.42
+	$(net_dns_raw_binout) -qwww.reddit.com -s74.82.42.42
+	$(net_dns_raw_binout) -qwww.bing.com -s74.82.42.42
+	$(net_dns_raw_binout) -qwww.baidu.com -s74.82.42.42
+	$(net_dns_raw_binout) -qwww.google.com -s74.82.42.42
+	$(net_dns_raw_binout) -qgithub.com -s8.8.4.4 -t5
+	$(net_dns_raw_binout) -qwww.reddit.com -s8.8.4.4 -t5
 	$(net_dns_raw_binout) -qwww.bing.com -s8.8.4.4 -t5
 	$(net_dns_raw_binout) -qwww.baidu.com -s8.8.4.4 -t5
-	$(net_dns_raw_binout) -qwww.reddit.com -s8.8.4.4 -t5
 	$(net_dns_raw_binout) -qwww.google.com -s8.8.4.4 -t5
 
 
 $(net_dns_raw_binout): $(net_root)/dns/raw.c $(getopt_c)
-	$(CC) $(INC) $(CFLAGS) $(no_struct_align) $^ $(bin_out)$@
+	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@
 
 
 # mac

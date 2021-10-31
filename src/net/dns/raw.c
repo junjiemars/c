@@ -51,7 +51,7 @@
 #define dns_ptr_offset(u16)  ((uint8_t)((uint16_t)ntohs(u16) & 0xff))
 
 /* header section */
-typedef struct s_dns_hs
+typedef struct __attribute__((packed)) s_dns_hs
 {
   uint16_t id;
   struct h_flags
@@ -84,7 +84,7 @@ typedef struct s_dns_hs
 
 
 /* question section */
-typedef struct s_dns_qs
+typedef struct __attribute__((packed)) s_dns_qs
 {
   uint32_t type    : 16;
   uint32_t class   : 16;
@@ -92,7 +92,7 @@ typedef struct s_dns_qs
 
 
 /* resource record */
-typedef struct s_dns_rr
+typedef struct __attribute__((packed)) s_dns_rr
 {
   uint16_t name;
   uint16_t type;
