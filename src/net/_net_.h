@@ -40,8 +40,8 @@ typedef SOCKET sockfd_t;
 #define __sendto(s, buf, len, flags, dst, dst_len)                  \
   sendto(s, (const char*) buf, (int) len, flags, (SOCKADDR *) dst,  \
          dst_len)
-#define __recvfrom(s, buf, len, flags, dst, dst_len)                  \
-  recvfrom(s, (const char *) buf, (int) len, flags, (SOCKADDR *) dst, \
+#define __recvfrom(s, buf, len, flags, dst, dst_len)            \
+  recvfrom(s, (char *) buf, (int) len, flags, (SOCKADDR *) dst, \
            dst_len)
 
 #else
