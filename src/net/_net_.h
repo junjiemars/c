@@ -10,7 +10,7 @@
 #  include <windows.h>
 #  include <process.h>
 #  pragma comment (lib, "Ws2_32.lib")
-#  define getpid  _getpid
+#  define getpid  GetCurrentProcessId
 #else
 #  include <sys/types.h>
 #  include <sys/socket.h>
