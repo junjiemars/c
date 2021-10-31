@@ -55,21 +55,28 @@ typedef int sockfd_t;
 
 
 #if (MSVC)
-/* #  pragma warning(disable:4057) */
-/* #  pragma warning(disable:4214) */
-#  pragma warning(disable:4244)
-/* #  pragma warning(disable:4267) */
-#  pragma warning(disable:4996)
-#  ifndef ssize_t
-#    ifdef  _WIN64
-       typedef unsigned __int64 ssize_t;
-#    else
-       typedef _W64 unsigned int ssize_t;
-#    endif
-#  endif  /* ssize_t */
-#  define __declare_packed_struct __declspec(align(1)) struct
+/* #pragma warning(disable:4057) */
+/* #pragma warning(disable:4214) */
+#pragma warning(disable:4244)
+/* #pragma warning(disable:4267) */
+#pragma warning(disable:4996)
+
+#ifndef ssize_t
+#  ifdef  _WIN64
+     typedef unsigned __int64 ssize_t;
+#  else
+     typedef _W64 unsigned int ssize_t;
+#  endif
+#endif  /* ssize_t */
+
+#define __declare_packed_struct __declspec(align(1)) struct
+#define sock_strerror(x) WSAGetLastError()
+
 #else
-#  define __declare_packed_struct struct __attribute__((packed))
+
+#define __declare_packed_struct struct __attribute__((packed))
+#define sock_strerror(x) strerror(x)
+
 #endif
 
 

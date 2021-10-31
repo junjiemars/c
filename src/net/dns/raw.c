@@ -209,14 +209,14 @@ query(void)
   sfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
   if (-1 == sfd)
     {
-      fprintf(stderr, "!socket: %s\n", strerror(errno));
+      fprintf(stderr, "!socket: %s\n", sock_strerror(errno));
       goto clean_exit;
     }
 
   rc = inet_pton(AF_INET, opt_server, &host);
   if (-1 == rc)
     {
-      fprintf(stderr, "!inet_pton: %s\n", strerror(errno));
+      fprintf(stderr, "!inet_pton: %s\n", sock_strerror(errno));
       goto clean_exit;
     }
 
@@ -247,7 +247,7 @@ query(void)
       rc = __sendto(sfd, req, req_len, 0, &dst, dst_len);
       if (-1 == rc)
         {
-          fprintf(stderr, "!sendto: %s\n", strerror(errno));
+          fprintf(stderr, "!sendto: %s\n", sock_strerror(errno));
           continue;
         }
       break;
@@ -280,7 +280,7 @@ query(void)
       rc = __recvfrom(sfd, res, DNS_UDP_MAX_LEN, 0, &dst, &dst_len);
       if (-1 == rc)
         {
-          fprintf(stderr, "!recvfrom: %s\n", strerror(errno));
+          fprintf(stderr, "!recvfrom: %s\n", sock_strerror(errno));
           continue;
         }
       break;
