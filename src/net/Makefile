@@ -25,9 +25,14 @@ ifeq ($(NM_SYSTEM), Linux)
 endif
 
 ifeq ($(CC_NAME), msvc)
-  no_struct_align := -Zp2
-else
-	no_struct_align := -fpack-struct=2
+  # no_struct_align := -Zp1
+  no_struct_align :=
+endif
+ifeq ($(CC_NAME), gcc)
+	no_struct_align := -fpack-struct=1
+endif
+ifeq ($(CC_NAME), clang)
+	no_struct_align := -fpack-struct=1
 endif
 
 

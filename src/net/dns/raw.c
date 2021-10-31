@@ -173,238 +173,6 @@ usage(const char *p)
 
 
 void
-make_label(uint8_t *dst, size_t *dst_len, uint8_t *name)
-{
-  uint8_t  *p, **pre, len, *d;
-
-  p = name;
-  pre = &name;
-  d = dst;
-
-  while ((p - name) < DNS_QNAME_MAX_LEN)
-    {
-      if ('.' == *p || 0 == *p)
-        {
-          len = p - *pre;
-          *dst++ = len;
-          memcpy(dst, *pre, len);
-          dst += len;
-          *pre = p + 1;
-
-          if (0 == *p)
-            {
-              *dst = 0;
-              *dst_len = dst - d + 1;
-              break;
-            }
-        }
-
-      p++;
-    }
-}
-
-
-void
-parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name, size_t *name_len)
-{
-  uint8_t  *p, *d, len;
-
-  p = offset;
-  d = name;
-  *name_len = 0;
-
-  while (*name_len < DNS_QNAME_MAX_LEN)
-    {
-      if (DNS_PTR_NAME == dns_ptr_type(*(uint16_t *) p))
-        {
-          offset = buf + dns_ptr_offset(*(uint16_t *) p);
-          p = offset;
-          continue;
-        }
-
-      if (0 == *p)
-        {
-          *--d = 0;
-          *name_len += 1;
-          break;
-        }
-
-      len = *p;
-      memcpy(d, p + 1, len);
-      d += len;
-      *d++ = '.';
-      *name_len += 1 + len;
-      p += 1 + len;
-    }
-}
-
-int
-make_request(uint8_t **req, size_t *req_len, uint16_t *req_id)
-{
-  s_dns_hs   hs;
-  s_dns_qs   qs;
-  uint8_t   *msg  =  0;
-  uint8_t    qname[DNS_QNAME_MAX_LEN];
-  size_t     qname_len = 0;
-
-  /* make header */
-  memset(&hs, 0, sizeof(hs));
-  hs.id = htons(*req_id = getpid());
-  hs.h_flags.rd = (uint8_t) htons(1u);
-  hs.qdcount = htons(1u);
-
-  /* make question */
-  memset(&qs, 0, sizeof(qs));
-  make_label(&qname[0], &qname_len, (uint8_t*) opt_query);
-  qs.type = htons(DNS_TYPE_A);
-  qs.class = htons(DNS_CLASS_IN);
-
-  /* make message */
-  *req_len = sizeof(s_dns_hs) + qname_len + sizeof(s_dns_qs);
-  msg = calloc(1, *req_len);
-  if (0 == msg)
-    {
-      fprintf(stderr, "!calloc: %s\n", strerror(errno));
-      return -1;
-    }
-  memcpy(msg, &hs, sizeof(hs));
-  memcpy(msg + sizeof(hs), qname, qname_len);
-  memcpy(msg + sizeof(hs) + qname_len, &qs, sizeof(qs));
-
-  *req = msg;
-  return 0;
-}
-
-void
-parse_rr(uint8_t *res, uint8_t **offset)
-{
-  s_dns_rr  *rr;
-  uint8_t    qname[DNS_QNAME_MAX_LEN];
-  size_t     qname_len  =  0;
-
-  rr = (s_dns_rr *) *offset;
-  if (DNS_PTR_NAME == dns_ptr_type(rr->name))
-    {
-      parse_label(res, res + dns_ptr_offset(rr->name), qname, &qname_len);
-    }
-
-  fprintf(stdout, " -> %s  %s  %s  %d",
-          qname,
-          dns_type_str[ntohs(rr->type)],
-          dns_class_str[ntohs(rr->class)],
-          ntohl(rr->ttl));
-      
-  *offset += sizeof(*rr);
-
-  if (ntohs(rr->rdlength) > 0)
-    {
-      fprintf(stdout, "  ");
-      switch (ntohs(rr->type))
-        {
-        case DNS_TYPE_CNAME:
-          parse_label(res, *offset, qname, &qname_len);
-          fprintf(stdout, "%s", qname);
-          break;
-        case DNS_TYPE_A:
-          fprintf(stdout, "%d.%d.%d.%d", (*offset)[0], (*offset)[1],
-                  (*offset)[2], (*offset)[3]);
-          break;
-        default:
-          break;
-        }
-    }
-  fprintf(stdout, "\n");
-
-  *offset += ntohs(rr->rdlength);
-}
-
-void
-parse_response(uint16_t id, uint8_t *res)
-{
-  s_dns_hs  *hs;
-  s_dns_qs  *qs;
-  ssize_t    n;
-  uint8_t    qname[DNS_QNAME_MAX_LEN];
-  size_t     qname_len;
-  uint8_t   *offset;
-
-  hs = (s_dns_hs *) res;
-
-  if (id != ntohs(hs->id))
-    {
-      fprintf(stderr, "!response: id is unmatched\n");
-      return;
-    }
-
-  if (1 != hs->h_flags.qr)
-    {
-      fprintf(stderr, "!response: qr is not response\n");
-      return;
-    }
-
-  switch (hs->h_flags.rcode)
-    {
-    case 1:
-      fprintf(stderr, "!response: rcode format error\n");
-      return;
-    case 2:
-      fprintf(stderr, "!response: rcode server error\n");
-      return;
-    case 3:
-      fprintf(stderr, "!response: rcode name error\n");
-      return;
-    case 4:
-      fprintf(stderr, "!response: rcode not implemented\n");
-      return;
-    case 5:
-      fprintf(stderr, "!response: rcode refused\n");
-      return;
-    default:
-      break;
-    }
-
-  n = (ssize_t) ntohs(hs->qdcount);
-  offset = res + sizeof(*hs);
-  fprintf(stdout, "# question section: %zu\n", (size_t) n);
-  while (n-- > 0)
-    {
-      parse_label(res, offset, qname, &qname_len);
-      offset += qname_len;
-      qs = (s_dns_qs *) offset;
-
-      fprintf(stdout, " -> %s  %s  %s\n",
-              qname,
-              dns_type_str[ntohs(qs->type)],
-              dns_class_str[ntohs(qs->class)]);
-      offset += sizeof(*qs);
-    }
-
-  n = (ssize_t) ntohs(hs->ancount);
-  fprintf(stdout, "# answer section: %zu\n", (size_t) n);
-  while (n-- > 0)
-    {
-      parse_rr(res, &offset);
-    }
-
-  /* n = (ssize_t) ntohs(hs->arcount); */
-  /* fprintf(stdout, "# additional section: %zu\n", (size_t) n); */
-  /* while (n-- > 0) */
-  /*   { */
-  /*     rr = (s_dns_rr *) offset; */
-  /*     if (DNS_PTR_NAME == dns_ptr_type(rr->name)) */
-  /*       { */
-  /*         parse_label(res, res + dns_ptr_offset(rr->name), qname, &qname_len); */
-  /*       } */
-  /*     fprintf(stdout, " -> %s  %s  %s  %d\n", */
-  /*             qname, */
-  /*             dns_type_str[ntohs(rr->type)], */
-  /*             dns_class_str[ntohs(rr->class)], */
-  /*             ntohl(rr->ttl)); */
-  /*     offset += sizeof(*rr) + ntohs(rr->rdlength); */
-  /*   } */
-}
-
-void
 query(void)
 {
   int                  rc;
@@ -543,6 +311,241 @@ query(void)
 
 
 void
+make_label(uint8_t *dst, size_t *dst_len, uint8_t *name)
+{
+  uint8_t  *p, **pre, len, *d;
+
+  p = name;
+  pre = &name;
+  d = dst;
+
+  while ((p - name) < DNS_QNAME_MAX_LEN)
+    {
+      if ('.' == *p || 0 == *p)
+        {
+          len = p - *pre;
+          *dst++ = len;
+          memcpy(dst, *pre, len);
+          dst += len;
+          *pre = p + 1;
+
+          if (0 == *p)
+            {
+              *dst = 0;
+              *dst_len = dst - d + 1;
+              break;
+            }
+        }
+
+      p++;
+    }
+}
+
+
+void
+parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name, size_t *name_len)
+{
+  uint8_t  *p, *d, len;
+
+  p = offset;
+  d = name;
+  *name_len = 0;
+
+  while (*name_len < DNS_QNAME_MAX_LEN)
+    {
+      if (DNS_PTR_NAME == dns_ptr_type(*(uint16_t *) p))
+        {
+          offset = buf + dns_ptr_offset(*(uint16_t *) p);
+          p = offset;
+          continue;
+        }
+
+      if (0 == *p)
+        {
+          *--d = 0;
+          *name_len += 1;
+          break;
+        }
+
+      len = *p;
+      memcpy(d, p + 1, len);
+      d += len;
+      *d++ = '.';
+      *name_len += 1 + len;
+      p += 1 + len;
+    }
+}
+
+int
+make_request(uint8_t **req, size_t *req_len, uint16_t *req_id)
+{
+  s_dns_hs   hs;
+  s_dns_qs   qs;
+  uint8_t   *msg  =  0;
+  uint8_t    qname[DNS_QNAME_MAX_LEN];
+  size_t     qname_len = 0;
+
+  /* make header */
+  memset(&hs, 0, sizeof(hs));
+  hs.id = htons(*req_id = getpid());
+  hs.h_flags.rd = (uint8_t) htons(1u);
+  hs.qdcount = htons(1u);
+
+  /* make question */
+  memset(&qs, 0, sizeof(qs));
+  make_label(&qname[0], &qname_len, (uint8_t*) opt_query);
+  qs.type = htons(DNS_TYPE_A);
+  qs.class = htons(DNS_CLASS_IN);
+
+  /* make message */
+  *req_len = sizeof(s_dns_hs) + qname_len + sizeof(s_dns_qs);
+  msg = calloc(1, *req_len);
+  if (0 == msg)
+    {
+      fprintf(stderr, "!calloc: %s\n", strerror(errno));
+      return -1;
+    }
+  memcpy(msg, &hs, sizeof(hs));
+  memcpy(msg + sizeof(hs), qname, qname_len);
+  memcpy(msg + sizeof(hs) + qname_len, &qs, sizeof(qs));
+
+  *req = msg;
+  return 0;
+}
+
+
+void
+parse_rr(uint8_t *res, uint8_t **offset)
+{
+  s_dns_rr  *rr;
+  uint8_t    qname[DNS_QNAME_MAX_LEN];
+  size_t     qname_len  =  0;
+
+  rr = (s_dns_rr *) *offset;
+  if (DNS_PTR_NAME == dns_ptr_type(rr->name))
+    {
+      parse_label(res, res + dns_ptr_offset(rr->name), qname, &qname_len);
+    }
+
+  fprintf(stdout, " -> %s  %s  %s  %d",
+          qname,
+          dns_type_str[ntohs(rr->type)],
+          dns_class_str[ntohs(rr->class)],
+          ntohl(rr->ttl));
+      
+  *offset += sizeof(*rr);
+
+  if (ntohs(rr->rdlength) > 0)
+    {
+      fprintf(stdout, "  ");
+      switch (ntohs(rr->type))
+        {
+        case DNS_TYPE_CNAME:
+          parse_label(res, *offset, qname, &qname_len);
+          fprintf(stdout, "%s", qname);
+          break;
+        case DNS_TYPE_A:
+          fprintf(stdout, "%d.%d.%d.%d", (*offset)[0], (*offset)[1],
+                  (*offset)[2], (*offset)[3]);
+          break;
+        default:
+          break;
+        }
+    }
+  fprintf(stdout, "\n");
+
+  *offset += ntohs(rr->rdlength);
+}
+
+
+void
+parse_response(uint16_t id, uint8_t *res)
+{
+  s_dns_hs  *hs;
+  s_dns_qs  *qs;
+  ssize_t    n;
+  uint8_t    qname[DNS_QNAME_MAX_LEN];
+  size_t     qname_len;
+  uint8_t   *offset;
+
+  hs = (s_dns_hs *) res;
+
+  if (id != ntohs(hs->id))
+    {
+      fprintf(stderr, "!response: id is unmatched\n");
+      return;
+    }
+
+  if (1 != hs->h_flags.qr)
+    {
+      fprintf(stderr, "!response: qr is not response\n");
+      return;
+    }
+
+  switch (hs->h_flags.rcode)
+    {
+    case 1:
+      fprintf(stderr, "!response: rcode format error\n");
+      return;
+    case 2:
+      fprintf(stderr, "!response: rcode server error\n");
+      return;
+    case 3:
+      fprintf(stderr, "!response: rcode name error\n");
+      return;
+    case 4:
+      fprintf(stderr, "!response: rcode not implemented\n");
+      return;
+    case 5:
+      fprintf(stderr, "!response: rcode refused\n");
+      return;
+    default:
+      break;
+    }
+
+  n = (ssize_t) ntohs(hs->qdcount);
+  offset = res + sizeof(*hs);
+  fprintf(stdout, "# question section: %zu\n", (size_t) n);
+  while (n-- > 0)
+    {
+      parse_label(res, offset, qname, &qname_len);
+      offset += qname_len;
+      qs = (s_dns_qs *) offset;
+
+      fprintf(stdout, " -> %s  %s  %s\n",
+              qname,
+              dns_type_str[ntohs(qs->type)],
+              dns_class_str[ntohs(qs->class)]);
+      offset += sizeof(*qs);
+    }
+
+  n = (ssize_t) ntohs(hs->ancount);
+  fprintf(stdout, "# answer section: %zu\n", (size_t) n);
+  while (n-- > 0)
+    {
+      parse_rr(res, &offset);
+    }
+
+  /* n = (ssize_t) ntohs(hs->arcount); */
+  /* fprintf(stdout, "# additional section: %zu\n", (size_t) n); */
+  /* while (n-- > 0) */
+  /*   { */
+  /*     rr = (s_dns_rr *) offset; */
+  /*     if (DNS_PTR_NAME == dns_ptr_type(rr->name)) */
+  /*       { */
+  /*         parse_label(res, res + dns_ptr_offset(rr->name), qname, &qname_len); */
+  /*       } */
+  /*     fprintf(stdout, " -> %s  %s  %s  %d\n", */
+  /*             qname, */
+  /*             dns_type_str[ntohs(rr->type)], */
+  /*             dns_class_str[ntohs(rr->class)], */
+  /*             ntohl(rr->ttl)); */
+  /*     offset += sizeof(*rr) + ntohs(rr->rdlength); */
+  /*   } */
+}
+
+
+void
 out(uint8_t *b, size_t n, const char *w)
 {
   FILE    *f;
@@ -571,6 +574,7 @@ out(uint8_t *b, size_t n, const char *w)
  clean_exit:
   fclose(f);
 }
+
 
 int
 main(int argc, char* argv[])
@@ -631,3 +635,6 @@ main(int argc, char* argv[])
  clean_exit:
   return 0;
 }
+
+
+/* eof */
