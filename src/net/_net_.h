@@ -51,6 +51,7 @@
 #  pragma warning(disable:4057)
 #  pragma warning(disable:4214)
 #  pragma warning(disable:4244)
+#  pragma warning(disable:4267)
 #  pragma warning(disable:4996)
 #  ifndef ssize_t
 #    ifdef  _WIN64
