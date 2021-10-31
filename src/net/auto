@@ -65,7 +65,7 @@ case "$CC_NAME" in
      nm_feature="$CC_NAME __attribute__((packed))"
      nm_feature_name=
      nm_feature_indent=yes
-     nm_feature_run=yes
+     nm_feature_run=value
      nm_feature_h='
 #include <stdio.h>
 typedef struct __attribute__((packed)) p {
@@ -77,11 +77,29 @@ typedef struct __attribute__((packed)) p {
      nm_feature_test='p x; printf("%d", (1+sizeof(int))==sizeof(x));'
      . ${NORE_ROOT}/auto/feature
      if [ yes = $nm_found ]; then
-       flag=f_pack_struct op=":=" value=$nm_feature_flags \
+       flag=f_has_struct_packed op=":=" value=$nm_feature_value \
            . ${NORE_ROOT}/auto/make_define
      fi
      ;;		 
    msvc)
+     nm_feature="$CC_NAME __declspec(align(#))"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=value
+     nm_feature_h='
+#include <stdio.h>
+typedef __declspec(align(1)) struct p {
+  char a;
+  int b;
+} p;
+'
+     nm_feature_flags=
+     nm_feature_test='p x; printf("%d", (1+sizeof(int))==sizeof(x));'
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=f_has_struct_packed op=":=" value=$nm_feature_value \
+           . ${NORE_ROOT}/auto/make_define
+     fi
      ;;
 esac
 

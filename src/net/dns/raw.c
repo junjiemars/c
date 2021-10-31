@@ -50,8 +50,15 @@
 #define dns_ptr_type(u16)    ((uint8_t)((uint16_t)ntohs(u16) >> 8))
 #define dns_ptr_offset(u16)  ((uint8_t)((uint16_t)ntohs(u16) & 0xff))
 
+
+#if (MSVC)
+#  define STRUCT_PACKED  __declspec(align(1)) struct
+#else
+#  define STRUCT_PACKED  struct __attribute__((packed))
+#endif
+
 /* header section */
-typedef struct __attribute__((packed)) s_dns_hs
+typedef STRUCT_PACKED s_dns_hs
 {
   uint16_t id;
   struct h_flags
@@ -84,7 +91,7 @@ typedef struct __attribute__((packed)) s_dns_hs
 
 
 /* question section */
-typedef struct __attribute__((packed)) s_dns_qs
+typedef STRUCT_PACKED s_dns_qs
 {
   uint32_t type    : 16;
   uint32_t class   : 16;
@@ -92,7 +99,7 @@ typedef struct __attribute__((packed)) s_dns_qs
 
 
 /* resource record */
-typedef struct __attribute__((packed)) s_dns_rr
+typedef STRUCT_PACKED s_dns_rr
 {
   uint16_t name;
   uint16_t type;

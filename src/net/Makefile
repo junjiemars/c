@@ -24,12 +24,6 @@ ifeq ($(NM_SYSTEM), Linux)
 	CFLAGS += -D_POSIX_SOURCE -D_GNU_SOURCE
 endif
 
-ifeq ($(CC_NAME), msvc)
-  # no_struct_align := -Zp1
-  no_struct_align :=
-endif
-
-
 ifeq ($(_MEMORY_), 1)
 	CFLAGS += $(f_sanitize)
 endif # end of _MEMORY_
