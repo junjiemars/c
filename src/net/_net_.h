@@ -37,9 +37,9 @@
 #if (WINNT)
 typedef SOCKET sockfd_t;
 #define close closesocket
-#define __sendto(s, buf, len, flags, dst, dst_len)                      \
-  sendto(s, (const char*) buf, (int) len, (const struct sockaddr *) dst, \
-         (int) dst_len)
+#define __sendto(s, buf, len, flags, dst, dst_len)      \
+  sendto(s, (const char*) buf, (int) len, flags,        \
+         (const struct sockaddr *) dst, (int) dst_len)
 #define __recvfrom(s, buf, len, flags, dst, dst_len)                    \
   recvfrom(s, (const char *) buf, (int) len, flags, (struct sockaddr *) dst, \
            (int) dst_len)
@@ -57,9 +57,9 @@ typedef int sockfd_t;
 #if (MSVC)
 /* #  pragma warning(disable:4057) */
 /* #  pragma warning(disable:4214) */
-/* #  pragma warning(disable:4244) */
+#  pragma warning(disable:4244)
 /* #  pragma warning(disable:4267) */
-/* #  pragma warning(disable:4996) */
+#  pragma warning(disable:4996)
 #  ifndef ssize_t
 #    ifdef  _WIN64
        typedef unsigned __int64 ssize_t;
@@ -67,7 +67,11 @@ typedef int sockfd_t;
        typedef _W64 unsigned int ssize_t;
 #    endif
 #  endif  /* ssize_t */
+#  define __declare_packed_struct __declspec(align(1)) struct
+#else
+#  define __declare_packed_struct struct __attribute__((packed))
 #endif
+
 
 #define _unused_(x) (void)(x)
 
