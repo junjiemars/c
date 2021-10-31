@@ -249,7 +249,7 @@ query(void)
   retry = opt_retry;
   while (retry-- > 0)
     {
-      rc = sendto(sfd, req, req_len, 0, (const struct sockaddr*) &dst, dst_len);
+      rc = __sendto(sfd, req, req_len, 0, &dst, dst_len);
       if (-1 == rc)
         {
           fprintf(stderr, "!sendto: %s\n", strerror(errno));
@@ -282,8 +282,7 @@ query(void)
   retry = opt_retry;
   while (retry-- > 0)
     {
-      rc = recvfrom(sfd, res, DNS_UDP_MAX_LEN, 0, (struct sockaddr *) &dst,
-                    &dst_len);
+      rc = __recvfrom(sfd, res, DNS_UDP_MAX_LEN, 0, &dst, &dst_len);
       if (-1 == rc)
         {
           fprintf(stderr, "!recvfrom: %s\n", strerror(errno));
