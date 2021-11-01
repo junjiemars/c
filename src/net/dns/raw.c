@@ -488,8 +488,9 @@ parse_rr(uint8_t *res, uint8_t **offset)
           fprintf(stdout, "%s", qname);
           break;
         case DNS_TYPE_A:
-          fprintf(stdout, "%d.%d.%d.%d", (*offset)[0], (*offset)[1],
-                  (*offset)[2], (*offset)[3]);
+          fprintf(stdout, "%d.%d.%d.%d", (char) ((*offset)[0]),
+                  (char) ((*offset)[1]), (char) ((*offset)[2]),
+                  (char) ((*offset)[3]));
           break;
         default:
           break;
