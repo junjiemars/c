@@ -228,13 +228,13 @@ query(void)
 
 #if (WINNT)
   WSADATA wsa;
-  rc= WSAStartup(MAKEWORD(2, 2), &wsa);
+  rc = WSAStartup(MAKEWORD(2, 2), &wsa);
   if (rc)
     {
-      log_sock_err("!WSAStartup: %s");
+      fprintf(stderr, "!WSAStartup: %s\n", strerror(errno));
       goto clean_exit;
     }
-#endif
+#endif  /* WINNT */
 
   rc = make_request(&req, &req_len, &req_id);
   if (-1 == rc)
@@ -345,7 +345,7 @@ query(void)
 
 #if (WINNT)
   WSACleanup();
-#endif
+#endif  /* WINNT */
 }
 
 
