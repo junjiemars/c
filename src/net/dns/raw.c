@@ -48,8 +48,8 @@
 #define DNS_UDP_MAX_LEN    512
 
 
-#define dns_ptr_type(u16)    ((uint8_t)((uint16_t)ntohs(u16) >> 8))
-#define dns_ptr_offset(u16)  ((uint8_t)((uint16_t)ntohs(u16) & 0xff))
+#define dns_ptr_type(u16)    (((uint16_t)ntohs(u16) >> 8) &0xff)
+#define dns_ptr_offset(u16)  (((uint16_t)ntohs(u16)) & 0xff)
 
 #define tr_dns_str(a, i, t, tr)                         \
   (a[((t)(tr(i)+1)) >= (t)countof(a) ? (countof(a)-1) : tr(i)])
@@ -636,13 +636,13 @@ main(int argc, char* argv[])
 
   printf("# command line options:\n"
          " -> --query=%s --server=%s --port=%d"
-         " --retry=%d --timeout=%d %s-v%d\n",
+         " --retry=%d --timeout=%d %s-verbose=%d\n",
          opt_query,
          opt_server,
          opt_port,
          (int) opt_retry,
          (int) opt_timeout.tv_sec,
-         opt_out ? "-o " : "",
+         opt_out ? "--out " : "",
          opt_verbose);
 
   query();

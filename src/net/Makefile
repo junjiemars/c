@@ -24,9 +24,9 @@ ifeq ($(NM_SYSTEM), Linux)
 	CFLAGS += -D_POSIX_SOURCE -D_GNU_SOURCE
 endif
 
-# ifeq ($(_MEMORY_), 1)
+ifeq ($(_MEMORY_), 1)
 	CFLAGS += $(f_sanitize)
-# endif # end of _MEMORY_
+endif # end of _MEMORY_
 
 
 
