@@ -34,7 +34,18 @@
    typedef unsigned __int64 uint64_t;
 #endif
 
-#if (WINNT)
+#if (MSVC)
+#ifndef ssize_t
+#  ifdef  _WIN64
+     typedef unsigned __int64 ssize_t;
+#  else
+     typedef _W64 unsigned int ssize_t;
+#  endif
+#endif  /* ssize_t */
+#endif  /* MSVC */
+
+
+#if (MSVC)
 typedef SOCKET sockfd_t;
 #define close closesocket
 #define __sendto(s, buf, len, flags, dst, dst_len)                  \
@@ -43,6 +54,18 @@ typedef SOCKET sockfd_t;
 #define __recvfrom(s, buf, len, flags, dst, dst_len)            \
   recvfrom(s, (char *) buf, (int) len, flags, (SOCKADDR *) dst, \
            dst_len)
+#define log_sock_err(s)                                                 \
+  do                                                                    \
+    {                                                                   \
+      int e;                                                            \
+      char buf[256];                                                    \
+      DWORD flags;                                                      \
+      flags = FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_IGNORE_INSERTS; \
+      e = WSAGetLastError();                                            \
+      buf[0] = 0;                                                       \
+      FormatMessage(flags, NULL, e, 0, buf, sizeof(msgbuf), NULL);      \
+      fprintf(stderr, (s), buf);                                        \
+    } while (0)
 
 #else
 
@@ -51,7 +74,9 @@ typedef int sockfd_t;
   sendto(s, buf, len, flags, (const struct sockaddr *) dst, dst_len)
 #define __recvfrom(s, buf, len, flags, dst, dst_len) \
   recvfrom(s, buf, len, flags, (struct sockaddr *) dst, dst_len)
-#endif
+#define log_sock_err(s)  fprintf(stderr, (s), strerror(errno))
+
+#endif  /* MSVC */
 
 
 #if (MSVC)
@@ -61,23 +86,13 @@ typedef int sockfd_t;
 /* #pragma warning(disable:4267) */
 #pragma warning(disable:4996)
 
-#ifndef ssize_t
-#  ifdef  _WIN64
-     typedef unsigned __int64 ssize_t;
-#  else
-     typedef _W64 unsigned int ssize_t;
-#  endif
-#endif  /* ssize_t */
-
 #define __declare_packed_struct __declspec(align(1)) struct
-#define sock_strerror(x) WSAGetLastError()
 
 #else
 
 #define __declare_packed_struct struct __attribute__((packed))
-#define sock_strerror(x) strerror(x)
 
-#endif
+#endif  /* MSVC */
 
 
 #ifdef countof

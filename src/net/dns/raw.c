@@ -231,7 +231,7 @@ query(void)
   rc= WSAStartup(MAKEWORD(2, 2), &wsa);
   if (rc)
     {
-      fprintf(stderr, "!WSAStartup failed\n");
+      log_sock_err("!WSAStartup: %s");
       goto clean_exit;
     }
 #endif
@@ -247,14 +247,14 @@ query(void)
   sfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
   if (-1 == sfd)
     {
-      fprintf(stderr, "!socket: %s\n", strerror(errno));
+      log_sock_err("!socket: %s\n");
       goto clean_exit;
     }
 
   rc = inet_pton(AF_INET, opt_server, &host);
   if (-1 == rc)
     {
-      fprintf(stderr, "!inet_pton: %s\n", strerror(errno));
+      log_sock_err("!inet_pton: %s\n");
       goto clean_exit;
     }
 
@@ -275,7 +275,7 @@ query(void)
                   sizeof(opt_timeout));
   if (-1 == rc)
     {
-      fprintf(stderr, "!setsockopt: SO_SNDTIMEO %s\n", strerror(errno));
+      log_sock_err("!setsockopt: SO_SNDTIMEO %s\n");
     }
 #endif
 
@@ -285,7 +285,7 @@ query(void)
       rc = __sendto(sfd, req, req_len, 0, &dst, dst_len);
       if (-1 == rc)
         {
-          fprintf(stderr, "!sendto: %s\n", strerror(errno));
+          log_sock_err("!sendto: %s\n");
           continue;
         }
       break;
@@ -301,7 +301,7 @@ query(void)
                   sizeof(opt_timeout));
   if (-1 == rc)
     {
-      fprintf(stderr, "!setsockopt: SO_RCVTIMEO %s\n", strerror(errno));
+      log_sock_err("!setsockopt: SO_RCVTIMEO %s\n");
     }
 #endif
 
@@ -318,7 +318,7 @@ query(void)
       rc = __recvfrom(sfd, res, DNS_UDP_MAX_LEN, 0, &dst, &dst_len);
       if (-1 == rc)
         {
-          fprintf(stderr, "!recvfrom: %s\n", strerror(errno));
+          log_sock_err("!recvfrom: %s\n");
           continue;
         }
       break;
@@ -469,7 +469,7 @@ parse_rr(uint8_t *res, uint8_t **offset)
   fprintf(stdout, " -> %s  %s  %s  %d", qname,
           tr_dns_str(dns_type_str, rr->type, uint16_t, ntohs),
           tr_dns_str(dns_class_str, rr->class, uint16_t, ntohs),
-          ntohl(rr->ttl));
+          (int32_t) ntohl(rr->ttl));
       
   *offset += sizeof(*rr);
 
