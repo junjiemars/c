@@ -144,28 +144,31 @@ static char *dns_type_str[] = {
   "CNAME",  "SOA",   "MB",   "MG",
   "MR",     "NULL",  "WKS",  "PTR",
   "HINFO",  "MX",    "TXT",
-  0
+  ";; error, TYPE in [1, 16]"
 };
 
 static char *dns_class_str[] = {
   0,
   "IN",     "CS",    "CH",   "HS",
-  0
+  ";; error, CLASS in [1, 4]"
 };
 
 static char *dns_qr_str[] = {
   ";; a query",
-  ";; a response"
+  ";; a response",
+  ";; error, QR in [0, 1]"
 };
 
 static char *dns_aa_str[] = {
   ";; not authoritative answer",
-  ";; authoritative answer"
+  ";; authoritative answer",
+  ";; error, AA in [0, 1]"
 };
 
 static char *dns_tc_str[] = {
   ";; not truncated",
-  ";; trucated"
+  ";; trucated",
+  ";; error, TC in [0, 1]"
 };
 
 static char *dns_opcode_str[] = {
@@ -458,10 +461,13 @@ parse_rr(uint8_t *res, uint8_t **offset)
       parse_label(res, res + dns_ptr_offset(rr->name), qname, &qname_len);
     }
 
-  fprintf(stdout, " -> %s  %s  %s  %d",
-          qname,
-          dns_type_str[ntohs(rr->type)],
-          dns_class_str[ntohs(rr->class)],
+  fprintf(stdout, " -> %s  %s  %s  %d", qname,
+          dns_type_str[ntohs(rr->type)
+                       >= (uint16_t) countof(dns_type_str)
+                       ? countof(dns_type_str)-1 : ntohs(rr->type)],
+          dns_class_str[ntohs(rr->class)
+                        >= (uint16_t) countof(dns_class_str)
+                        ? countof(dns_class_str)-1 : ntohs(rr->class)],
           ntohl(rr->ttl));
       
   *offset += sizeof(*rr);
@@ -504,15 +510,22 @@ parse_response(uint16_t id, uint8_t *res)
   
   fprintf(stdout, " -> ID  %d  <- %d\n", ntohs(hs->id), id);
 
-  fprintf(stdout, " -> QR  %d  %s\n", hs->flags.qr, dns_qr_str[hs->flags.qr]);
+  fprintf(stdout, " -> QR  %d  %s\n", hs->flags.qr,
+          dns_qr_str[hs->flags.qr >= (uint16_t) countof(dns_qr_str)
+                     ? countof(dns_qr_str)-1 : hs->flags.qr]);
 
-  fprintf(stdout, " -> AA  %d  %s\n", hs->flags.aa, dns_aa_str[hs->flags.aa]);
-  fprintf(stdout, " -> TC  %d  %s\n", hs->flags.tc, dns_tc_str[hs->flags.tc]);
+  fprintf(stdout, " -> AA  %d  %s\n", hs->flags.aa,
+          dns_aa_str[hs->flags.aa >= (uint16_t) countof(dns_aa_str)
+                     ? countof(dns_aa_str)-1 : hs->flags.aa]);
+
+  fprintf(stdout, " -> TC  %d  %s\n", hs->flags.tc,
+          dns_tc_str[hs->flags.tc >= (uint16_t) countof(dns_tc_str)
+                     ? countof(dns_tc_str)-1 : hs->flags.tc]);
 
   fprintf(stdout, " -> OPCODE  %d  %s\n", hs->flags.opcode,
-          (size_t) (hs->flags.opcode + 1) >= countof(dns_opcode_str)
-          ? dns_opcode_str[countof(dns_opcode_str)-1]
-          : dns_opcode_str[hs->flags.opcode]);
+          dns_opcode_str[hs->flags.opcode+1
+                         >= (uint16_t) (countof(dns_opcode_str))
+                         ? countof(dns_opcode_str)-1 : hs->flags.opcode]);
 
   fprintf(stdout, " -> RCODE  %d  %s\n", hs->flags.rcode,
           dns_rcode_str[hs->flags.rcode]);
@@ -526,10 +539,13 @@ parse_response(uint16_t id, uint8_t *res)
       offset += qname_len;
       qs = (s_dns_qs *) offset;
 
-      fprintf(stdout, " -> %s  %s  %s\n",
-              qname,
-              dns_type_str[ntohs(qs->type)],
-              dns_class_str[ntohs(qs->class)]);
+      fprintf(stdout, " -> %s  %s  %s\n", qname,
+              dns_type_str[ntohs(qs->type)
+                           >= (uint16_t) countof(dns_type_str)
+                           ? countof(dns_type_str)-1 : ntohs(qs->type)],
+              dns_class_str[ntohs(qs->class)
+                            >= (uint16_t) countof(dns_class_str)
+                            ? countof(dns_class_str)-1 : ntohs(qs->class)]);
       offset += sizeof(*qs);
     }
 
