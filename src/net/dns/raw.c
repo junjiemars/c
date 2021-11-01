@@ -599,7 +599,9 @@ main(int argc, char* argv[])
       goto clean_exit;
     }
 
-  while (-1 != (ch = getopt_long(argc, argv, "hs:p:q:r:t:ov:", longopts, 0)))
+  while (-1 != (ch = getopt_long(argc, argv,
+                                 "hs:p:q:r:t:ov:",
+                                 longopts, 0)))
     {
       switch (ch)
         {
@@ -632,14 +634,15 @@ main(int argc, char* argv[])
 
   opt_verbose %= 3;
 
-  printf("# command line options:"
-         " -> -q%s -s%s -p%d -r%d -t%d -o%d -v%d\n",
+  printf("# command line options:\n"
+         " -> --query=%s --server=%s --port=%d"
+         " --retry=%d --timeout=%d %s-v%d\n",
          opt_query,
          opt_server,
          opt_port,
          (int) opt_retry,
          (int) opt_timeout.tv_sec,
-         opt_out,
+         opt_out ? "-o " : "",
          opt_verbose);
 
   query();
