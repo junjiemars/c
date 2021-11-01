@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 #include <errno.h>
 
 
@@ -98,11 +99,11 @@ typedef __declare_packed_struct s_dns_qs
 /* resource record */
 typedef __declare_packed_struct s_dns_rr
 {
-  uint16_t name;
-  uint16_t type;
-  uint16_t class;
-  uint32_t ttl;
-  uint16_t rdlength;
+  uint16_t  name;
+  uint16_t  type;
+  uint16_t  class;
+  int32_t   ttl;
+  uint16_t  rdlength;
 } s_dns_rr;
 
 
