@@ -54,6 +54,15 @@
 #define tr_dns_str(a, i, t, tr)                         \
   (a[((t)(tr(i)+1)) >= (t)countof(a) ? (countof(a)-1) : tr(i)])
 
+#define out_file(opt, buf, n, path)             \
+do                                              \
+  {                                             \
+    if ((opt))                                  \
+      {                                         \
+        out(buf, n, path);                      \
+      }                                         \
+  } while (0)
+
 
 /* header section */
 typedef __declare_packed_struct s_dns_hs
@@ -216,11 +225,12 @@ void
 query(void)
 {
   int                  rc;
-  sockfd_t             sfd    =  0;
-  uint8_t             *req    =  0;
+  sockfd_t             sfd      =  0;
+  uint8_t             *req      =  0;
   size_t               req_len;
   uint16_t             req_id;
-  uint8_t             *res    =  0;
+  uint8_t             *res      =  0;
+  size_t               res_len  =  0;
   struct in_addr       host;
   struct sockaddr_in   dst;
   socklen_t            dst_len;
@@ -265,10 +275,7 @@ query(void)
   dst.sin_port = htons(opt_port);
   dst.sin_addr = host;
 
-  if (opt_out)
-    {
-      out(req, req_len, opt_out_req);
-    }
+  out_file(opt_out, req, req_len, opt_out_req);
 
 #if (LINUX)
   rc = setsockopt(sfd, SOL_SOCKET, SO_SNDTIMEO, &opt_timeout,
@@ -313,25 +320,23 @@ query(void)
     }
 
   retry = opt_retry;
+  res_len = DNS_UDP_MAX_LEN;
   while (retry-- > 0)
     {
-      rc = __recvfrom(sfd, res, DNS_UDP_MAX_LEN, 0, &dst, &dst_len);
+      rc = __recvfrom(sfd, res, res_len, 0, &dst, &dst_len);
       if (-1 == rc)
         {
           log_sock_err("!recvfrom: %s\n");
           continue;
         }
+      res_len = rc;
       break;
     }
   if (-1 == rc)
     {
       goto clean_exit;
     }
-
-  if (opt_out)
-    {
-      out(req, req_len, opt_out_res);
-    }
+  out_file(opt_out, res, res_len, opt_out_res);
 
   parse_response(req_id, res);
 
