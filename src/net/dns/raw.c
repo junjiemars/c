@@ -159,19 +159,19 @@ static char *dns_class_str[] = {
 static char *dns_qr_str[] = {
   ";; a query",
   ";; a response",
-  ";; error, QR in [0,1]"
+  ";; error, QR should in [0,1]"
 };
 
 static char *dns_aa_str[] = {
   ";; not authoritative answer",
   ";; authoritative answer",
-  ";; error, AA in [0,1]"
+  ";; error, AA should in [0,1]"
 };
 
 static char *dns_tc_str[] = {
   ";; not truncated",
   ";; trucated",
-  ";; error, TC in [0,1]"
+  ";; error, TC should in [0,1]"
 };
 
 static char *dns_opcode_str[] = {
@@ -179,17 +179,17 @@ static char *dns_opcode_str[] = {
   ";; an inverse query",
   ";; a server status request",
   ";; reserved",
-  ";; error, OPCODE in [0,3]"
+  ";; error, OPCODE should in [0,3]"
 };
 
 static char *dns_rcode_str[] = {
-  "no error condition",
-  "format error",
-  "server failure",
-  "name error",
-  "not implemented",
-  "refused",
-  ";; error, RCODE in [0,5]"
+  ";; no error condition",
+  ";; format error",
+  ";; server failure",
+  ";; name error",
+  ";; not implemented",
+  ";; refused",
+  ";; error, RCODE should in [0,5]"
 };
 
 static void

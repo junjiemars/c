@@ -63,7 +63,7 @@ typedef SOCKET sockfd_t;
       flags = FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_IGNORE_INSERTS; \
       e = WSAGetLastError();                                            \
       buf[0] = 0;                                                       \
-      FormatMessage(flags, NULL, e, 0, buf, sizeof(msgbuf), NULL);      \
+      FormatMessage(flags, NULL, e, 0, buf, sizeof(buf), NULL);         \
       fprintf(stderr, (s), buf);                                        \
     } while (0)
 
