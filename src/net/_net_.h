@@ -95,7 +95,7 @@ typedef int sockfd_t;
 #ifdef countof
 #  undef countof
 #endif
-#define countof(a) sizeof((a))/sizeof(*(a))
+#define countof(a) (sizeof(a)/sizeof(*(a)))
 
 
 #define _unused_(x) (void)(x)
