@@ -50,6 +50,8 @@
 #define dns_ptr_type(u16)    ((uint8_t)((uint16_t)ntohs(u16) >> 8))
 #define dns_ptr_offset(u16)  ((uint8_t)((uint16_t)ntohs(u16) & 0xff))
 
+#define tr_dns_str(a, i, t, tr)                         \
+  (a[((t)(tr(i)+1)) >= (t)countof(a) ? (countof(a)-1) : tr(i)])
 
 
 /* header section */
@@ -462,12 +464,8 @@ parse_rr(uint8_t *res, uint8_t **offset)
     }
 
   fprintf(stdout, " -> %s  %s  %s  %d", qname,
-          dns_type_str[ntohs(rr->type)
-                       >= (uint16_t) countof(dns_type_str)
-                       ? countof(dns_type_str)-1 : ntohs(rr->type)],
-          dns_class_str[ntohs(rr->class)
-                        >= (uint16_t) countof(dns_class_str)
-                        ? countof(dns_class_str)-1 : ntohs(rr->class)],
+          tr_dns_str(dns_type_str, rr->type, uint16_t, ntohs),
+          tr_dns_str(dns_class_str, rr->class, uint16_t, ntohs),
           ntohl(rr->ttl));
       
   *offset += sizeof(*rr);
@@ -511,24 +509,19 @@ parse_response(uint16_t id, uint8_t *res)
   fprintf(stdout, " -> ID  %d  <- %d\n", ntohs(hs->id), id);
 
   fprintf(stdout, " -> QR  %d  %s\n", hs->flags.qr,
-          dns_qr_str[hs->flags.qr >= (uint16_t) countof(dns_qr_str)
-                     ? countof(dns_qr_str)-1 : hs->flags.qr]);
+          tr_dns_str(dns_qr_str, hs->flags.qr, uint16_t, (uint16_t)));
 
   fprintf(stdout, " -> AA  %d  %s\n", hs->flags.aa,
-          dns_aa_str[hs->flags.aa >= (uint16_t) countof(dns_aa_str)
-                     ? countof(dns_aa_str)-1 : hs->flags.aa]);
+          tr_dns_str(dns_aa_str, hs->flags.aa, uint16_t, (uint16_t)));
 
   fprintf(stdout, " -> TC  %d  %s\n", hs->flags.tc,
-          dns_tc_str[hs->flags.tc >= (uint16_t) countof(dns_tc_str)
-                     ? countof(dns_tc_str)-1 : hs->flags.tc]);
+          tr_dns_str(dns_tc_str, hs->flags.tc, uint16_t, (uint16_t)));
 
   fprintf(stdout, " -> OPCODE  %d  %s\n", hs->flags.opcode,
-          dns_opcode_str[hs->flags.opcode+1
-                         >= (uint16_t) (countof(dns_opcode_str))
-                         ? countof(dns_opcode_str)-1 : hs->flags.opcode]);
+          tr_dns_str(dns_opcode_str, hs->flags.opcode, uint16_t, (uint16_t)));
 
   fprintf(stdout, " -> RCODE  %d  %s\n", hs->flags.rcode,
-          dns_rcode_str[hs->flags.rcode]);
+          tr_dns_str(dns_rcode_str, hs->flags.rcode, uint16_t, (uint16_t)));
 
   n = (ssize_t) ntohs(hs->qdcount);
   offset = res + sizeof(*hs);
@@ -540,12 +533,9 @@ parse_response(uint16_t id, uint8_t *res)
       qs = (s_dns_qs *) offset;
 
       fprintf(stdout, " -> %s  %s  %s\n", qname,
-              dns_type_str[ntohs(qs->type)
-                           >= (uint16_t) countof(dns_type_str)
-                           ? countof(dns_type_str)-1 : ntohs(qs->type)],
-              dns_class_str[ntohs(qs->class)
-                            >= (uint16_t) countof(dns_class_str)
-                            ? countof(dns_class_str)-1 : ntohs(qs->class)]);
+              tr_dns_str(dns_type_str, qs->type, uint16_t, ntohs),
+              tr_dns_str(dns_class_str, qs->class, uint16_t, ntohs));
+
       offset += sizeof(*qs);
     }
 
