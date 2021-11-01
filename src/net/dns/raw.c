@@ -56,7 +56,7 @@
 typedef __declare_packed_struct s_dns_hs
 {
   uint16_t id;
-  struct h_flags
+  struct flags
   {
 #if (NM_HAVE_LITTLE_ENDIAN)
     uint16_t rcode  : 4;
@@ -77,7 +77,7 @@ typedef __declare_packed_struct s_dns_hs
     uint16_t z      : 3;
     uint16_t rcode  : 4;
 #endif  /* NM_HAVE_LITTLE_ENDIAN */
-  } h_flags;
+  } flags;
   uint16_t qdcount;
   uint16_t ancount;
   uint16_t nscount;
@@ -153,6 +153,36 @@ static char *dns_class_str[] = {
   0
 };
 
+static char *dns_qr_str[] = {
+  ";; a query",
+  ";; a response"
+};
+
+static char *dns_aa_str[] = {
+  ";; not authoritative answer",
+  ";; authoritative answer"
+};
+
+static char *dns_tc_str[] = {
+  ";; not truncated",
+  ";; trucated"
+};
+
+static char *dns_opcode_str[] = {
+  ";; a standard query",
+  ";; an inverse query",
+  ";; a server status request",
+  ";; reserved"
+};
+
+static char *dns_rcode_str[] = {
+  "no error condition",
+  "format error",
+  "server failure",
+  "name error",
+  "not implemented",
+  "refused"
+};
 
 static void
 usage(const char *p)
@@ -389,7 +419,7 @@ make_request(uint8_t **req, size_t *req_len, uint16_t *req_id)
   /* make header */
   memset(&hs, 0, sizeof(hs));
   hs.id = htons(*req_id = getpid());
-  hs.h_flags.rd = (uint8_t) htons(1u);
+  hs.flags.rd = (uint8_t) htons(1u);
   hs.qdcount = htons(1u);
 
   /* make question */
@@ -470,39 +500,22 @@ parse_response(uint16_t id, uint8_t *res)
   uint8_t   *offset;
 
   hs = (s_dns_hs *) res;
+  fprintf(stdout, "# header section:\n");
+  
+  fprintf(stdout, " -> ID  %d  <- %d\n", ntohs(hs->id), id);
 
-  if (id != ntohs(hs->id))
-    {
-      fprintf(stderr, "!response: id is unmatched\n");
-      return;
-    }
+  fprintf(stdout, " -> QR  %d  %s\n", hs->flags.qr, dns_qr_str[hs->flags.qr]);
 
-  if (1 != hs->h_flags.qr)
-    {
-      fprintf(stderr, "!response: qr is not response\n");
-      return;
-    }
+  fprintf(stdout, " -> AA  %d  %s\n", hs->flags.aa, dns_aa_str[hs->flags.aa]);
+  fprintf(stdout, " -> TC  %d  %s\n", hs->flags.tc, dns_tc_str[hs->flags.tc]);
 
-  switch (hs->h_flags.rcode)
-    {
-    case 1:
-      fprintf(stderr, "!response: rcode format error\n");
-      return;
-    case 2:
-      fprintf(stderr, "!response: rcode server error\n");
-      return;
-    case 3:
-      fprintf(stderr, "!response: rcode name error\n");
-      return;
-    case 4:
-      fprintf(stderr, "!response: rcode not implemented\n");
-      return;
-    case 5:
-      fprintf(stderr, "!response: rcode refused\n");
-      return;
-    default:
-      break;
-    }
+  fprintf(stdout, " -> OPCODE  %d  %s\n", hs->flags.opcode,
+          (size_t) (hs->flags.opcode + 1) >= countof(dns_opcode_str)
+          ? dns_opcode_str[countof(dns_opcode_str)-1]
+          : dns_opcode_str[hs->flags.opcode]);
+
+  fprintf(stdout, " -> RCODE  %d  %s\n", hs->flags.rcode,
+          dns_rcode_str[hs->flags.rcode]);
 
   n = (ssize_t) ntohs(hs->qdcount);
   offset = res + sizeof(*hs);
@@ -526,23 +539,6 @@ parse_response(uint16_t id, uint8_t *res)
     {
       parse_rr(res, &offset);
     }
-
-  /* n = (ssize_t) ntohs(hs->arcount); */
-  /* fprintf(stdout, "# additional section: %zu\n", (size_t) n); */
-  /* while (n-- > 0) */
-  /*   { */
-  /*     rr = (s_dns_rr *) offset; */
-  /*     if (DNS_PTR_NAME == dns_ptr_type(rr->name)) */
-  /*       { */
-  /*         parse_label(res, res + dns_ptr_offset(rr->name), qname, &qname_len); */
-  /*       } */
-  /*     fprintf(stdout, " -> %s  %s  %s  %d\n", */
-  /*             qname, */
-  /*             dns_type_str[ntohs(rr->type)], */
-  /*             dns_class_str[ntohs(rr->class)], */
-  /*             ntohl(rr->ttl)); */
-  /*     offset += sizeof(*rr) + ntohs(rr->rdlength); */
-  /*   } */
 }
 
 
