@@ -37,12 +37,12 @@ net_dns_test: net_dns_raw_test
 net_dns_raw_test: $(net_dns_raw_binout)
 	$(net_dns_raw_binout)
 	$(net_dns_raw_binout) -qgithub.com -s74.82.42.42
-	$(net_dns_raw_binout) -qwww.reddit.com -s74.82.42.42
+	# $(net_dns_raw_binout) -qwww.reddit.com -s74.82.42.42
 	$(net_dns_raw_binout) -qwww.bing.com -s74.82.42.42
 	$(net_dns_raw_binout) -qwww.baidu.com -s74.82.42.42
 	$(net_dns_raw_binout) -qwww.google.com -s74.82.42.42
 	$(net_dns_raw_binout) -qgithub.com -s8.8.4.4 -t5
-	$(net_dns_raw_binout) -qwww.reddit.com -s8.8.4.4 -t5
+	# $(net_dns_raw_binout) -qwww.reddit.com -s8.8.4.4 -t5
 	$(net_dns_raw_binout) -qwww.bing.com -s8.8.4.4 -t5
 	$(net_dns_raw_binout) -qwww.baidu.com -s8.8.4.4 -t5
 	$(net_dns_raw_binout) -qwww.google.com -s8.8.4.4 -t5
