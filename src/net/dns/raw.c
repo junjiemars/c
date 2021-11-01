@@ -146,38 +146,39 @@ static char *dns_type_str[] = {
   "CNAME",  "SOA",   "MB",   "MG",
   "MR",     "NULL",  "WKS",  "PTR",
   "HINFO",  "MX",    "TXT",
-  ";; error, TYPE in [1, 16]"
+  ";; error, TYPE in [1,15]"
 };
 
 static char *dns_class_str[] = {
   0,
   "IN",     "CS",    "CH",   "HS",
-  ";; error, CLASS in [1, 4]"
+  ";; error, CLASS in [1,4]"
 };
 
 static char *dns_qr_str[] = {
   ";; a query",
   ";; a response",
-  ";; error, QR in [0, 1]"
+  ";; error, QR in [0,1]"
 };
 
 static char *dns_aa_str[] = {
   ";; not authoritative answer",
   ";; authoritative answer",
-  ";; error, AA in [0, 1]"
+  ";; error, AA in [0,1]"
 };
 
 static char *dns_tc_str[] = {
   ";; not truncated",
   ";; trucated",
-  ";; error, TC in [0, 1]"
+  ";; error, TC in [0,1]"
 };
 
 static char *dns_opcode_str[] = {
   ";; a standard query",
   ";; an inverse query",
   ";; a server status request",
-  ";; reserved"
+  ";; reserved",
+  ";; error, OPCODE in [0,3]"
 };
 
 static char *dns_rcode_str[] = {
@@ -186,7 +187,8 @@ static char *dns_rcode_str[] = {
   "server failure",
   "name error",
   "not implemented",
-  "refused"
+  "refused",
+  ";; error, RCODE in [0,5]"
 };
 
 static void
