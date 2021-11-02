@@ -51,8 +51,8 @@
 #define DNS_UDP_MAX_LEN    512
 
 
-#define dns_ptr_type(u16)    (((uint16_t)ntohs(u16) >> 8) &0xff)
-#define dns_ptr_offset(u16)  (((uint16_t)ntohs(u16)) & 0xff)
+#define dns_ptr_type(u16)    ((__ntohs(u16) >> 8) & 0xff)
+#define dns_ptr_offset(u16)  ((__ntohs(u16)) & 0xff)
 
 #define tr_dns_str(a, i, t, tr)                         \
   (a[((t)(tr(i)+1)) >= (t)countof(a) ? (countof(a)-1) : tr(i)])
@@ -480,8 +480,8 @@ parse_rr(uint8_t *res, uint8_t **offset)
   rdlength = __ntohs(rr->rdlength);
 
   fprintf(stdout, " -> %s  %s  %s  %u  %u", qname,
-          tr_dns_str(dns_type_str, rr->type, uint16_t, ntohs),
-          tr_dns_str(dns_class_str, rr->class, uint16_t, ntohs),
+          tr_dns_str(dns_type_str, rr->type, uint16_t, __ntohs),
+          tr_dns_str(dns_class_str, rr->class, uint16_t, __ntohs),
           __ntohl(rr->ttl), rdlength);
       
   *offset += sizeof(*rr);
@@ -492,7 +492,7 @@ parse_rr(uint8_t *res, uint8_t **offset)
     }
 
   fprintf(stdout, "  ");
-  switch (ntohs(rr->type))
+  switch (__ntohs(rr->type))
     {
     case DNS_TYPE_CNAME:
       qname_len = 0;
@@ -529,24 +529,24 @@ parse_response(uint16_t id, uint8_t *res)
   hs = (s_dns_hs *) res;
   fprintf(stdout, "# header section:\n");
   
-  fprintf(stdout, " -> ID  %d  <- %d\n", ntohs(hs->id), id);
+  fprintf(stdout, " -> ID  %u  <- %u\n", __ntohs(hs->id), id);
 
-  fprintf(stdout, " -> QR  %d  %s\n", hs->flags.qr,
+  fprintf(stdout, " -> QR  %u  %s\n", hs->flags.qr,
           tr_dns_str(dns_qr_str, hs->flags.qr, uint16_t, (uint16_t)));
 
-  fprintf(stdout, " -> AA  %d  %s\n", hs->flags.aa,
+  fprintf(stdout, " -> AA  %u  %s\n", hs->flags.aa,
           tr_dns_str(dns_aa_str, hs->flags.aa, uint16_t, (uint16_t)));
 
-  fprintf(stdout, " -> TC  %d  %s\n", hs->flags.tc,
+  fprintf(stdout, " -> TC  %u  %s\n", hs->flags.tc,
           tr_dns_str(dns_tc_str, hs->flags.tc, uint16_t, (uint16_t)));
 
-  fprintf(stdout, " -> OPCODE  %d  %s\n", hs->flags.opcode,
+  fprintf(stdout, " -> OPCODE  %u  %s\n", hs->flags.opcode,
           tr_dns_str(dns_opcode_str, hs->flags.opcode, uint16_t, (uint16_t)));
 
-  fprintf(stdout, " -> RCODE  %d  %s\n", hs->flags.rcode,
+  fprintf(stdout, " -> RCODE  %u  %s\n", hs->flags.rcode,
           tr_dns_str(dns_rcode_str, hs->flags.rcode, uint16_t, (uint16_t)));
 
-  n = (ssize_t) ntohs(hs->qdcount);
+  n = (ssize_t) __ntohs(hs->qdcount);
   offset = res + sizeof(*hs);
   fprintf(stdout, "# question section: %zu\n", (size_t) n);
   while (n-- > 0)
@@ -556,13 +556,13 @@ parse_response(uint16_t id, uint8_t *res)
       qs = (s_dns_qs *) offset;
 
       fprintf(stdout, " -> %s  %s  %s\n", qname,
-              tr_dns_str(dns_type_str, qs->type, uint16_t, ntohs),
-              tr_dns_str(dns_class_str, qs->class, uint16_t, ntohs));
+              tr_dns_str(dns_type_str, qs->type, uint16_t, __ntohs),
+              tr_dns_str(dns_class_str, qs->class, uint16_t, __ntohs));
 
       offset += sizeof(*qs);
     }
 
-  n = (ssize_t) ntohs(hs->ancount);
+  n = (ssize_t) __ntohs(hs->ancount);
   fprintf(stdout, "# answer section: %zu\n", (size_t) n);
   while (n-- > 0)
     {
