@@ -470,46 +470,49 @@ parse_rr(uint8_t *res, uint8_t **offset)
   s_dns_rr  *rr;
   uint8_t    qname[DNS_QNAME_MAX_LEN];
   size_t     qname_len  =  0;
+  uint16_t   rdlength = 0;
 
   rr = (s_dns_rr *) *offset;
   if (DNS_PTR_NAME == dns_ptr_type(rr->name))
     {
       parse_label(res, res + dns_ptr_offset(rr->name), qname, &qname_len);
     }
+  rdlength = ntohs(rr->rdlength);
 
-  fprintf(stdout, " -> %s  %s  %s  %d", qname,
+  fprintf(stdout, " -> %s  %s  %s  %zu  %zu", qname,
           tr_dns_str(dns_type_str, rr->type, uint16_t, ntohs),
           tr_dns_str(dns_class_str, rr->class, uint16_t, ntohs),
-          (int32_t) ntohl(rr->ttl));
+          (size_t) ntohl(rr->ttl), (size_t) rdlength);
       
   *offset += sizeof(*rr);
-
-  if (ntohs(rr->rdlength) > 0)
+  if (0 == rdlength)
     {
-      fprintf(stdout, "  ");
-      switch (ntohs(rr->type))
+      return;
+    }
+
+  fprintf(stdout, "  ");
+  switch (ntohs(rr->type))
+    {
+    case DNS_TYPE_CNAME:
+      qname_len = 0;
+      parse_label(res, *offset, qname, &qname_len);
+      if (qname_len == 0)
         {
-        case DNS_TYPE_CNAME:
-          qname_len = 0;
-          parse_label(res, *offset, qname, &qname_len);
-          if (qname_len == 0)
-            {
-              qname[0] = 0;
-            }
-          fprintf(stdout, "%s", (const char *) qname);
-          break;
-        case DNS_TYPE_A:
-          fprintf(stdout, "%d.%d.%d.%d", (int) ((*offset)[0] & 0xff),
-                  (int) ((*offset)[1] & 0xff), (int) ((*offset)[2] & 0xff),
-                  (int) ((*offset)[3] & 0xff));
-          break;
-        default:
-          break;
+          qname[0] = 0;
         }
+      fprintf(stdout, "%s", (const char *) qname);
+      break;
+    case DNS_TYPE_A:
+      fprintf(stdout, "%d.%d.%d.%d", (int) ((*offset)[0] & 0xff),
+              (int) ((*offset)[1] & 0xff), (int) ((*offset)[2] & 0xff),
+              (int) ((*offset)[3] & 0xff));
+      break;
+    default:
+      break;
     }
   fprintf(stdout, "\n");
 
-  *offset += ntohs(rr->rdlength);
+  *offset += rdlength;
 }
 
 
