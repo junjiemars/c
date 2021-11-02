@@ -636,6 +636,7 @@ void
 in(const char *w)
 {
   FILE     *f;
+  size_t    n;
   uint8_t   b[DNS_UDP_MAX_LEN];
 
   f = fopen(w, "rb");
@@ -645,11 +646,15 @@ in(const char *w)
       return;
     }
 
-  (void) fread(b, 1, DNS_UDP_MAX_LEN, f);
+  n = fread(b, 1, DNS_UDP_MAX_LEN, f);
   if (ferror(f))
     {
       fprintf(stderr, "! fread: %s\n", strerror(errno));
       clearerr(f);
+      goto clean_exit;
+    }
+  if (n == 0)
+    {
       goto clean_exit;
     }
 
