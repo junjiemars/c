@@ -49,7 +49,7 @@ net_dns_client_test: $(net_dns_client_binout)
 
 
 $(net_dns_client_binout): $(net_root)/dns/c.c $(getopt_c)
-	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@
+	$(CC) $(INC) $(CPPFLAGS) $(CFLAGS) $^ $(bin_out)$@
 
 
 # mac
