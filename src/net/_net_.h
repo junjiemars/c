@@ -77,11 +77,12 @@ typedef int sockfd_t;
 #pragma warning(disable:4244)
 #pragma warning(disable:4996)
 
-#define __declare_packed_struct __declspec(align(1)) struct
+#define __declare_packed_struct(name)                     \
+  __pragma(pack(push, 1)) struct name __pragma(pack(pop))
 
 #else
 
-#define __declare_packed_struct struct __attribute__((packed))
+#define __declare_packed_struct(name) struct __attribute__((packed)) name
 
 #endif  /* MSVC */
 

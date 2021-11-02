@@ -59,7 +59,7 @@
 
 
 /* header section */
-typedef __declare_packed_struct s_dns_hs
+typedef __declare_packed_struct(s_dns_hs)
 {
   uint16_t id;
   struct flags
@@ -92,7 +92,7 @@ typedef __declare_packed_struct s_dns_hs
 
 
 /* question section */
-typedef __declare_packed_struct s_dns_qs
+typedef __declare_packed_struct(s_dns_qs)
 {
   uint32_t type    : 16;
   uint32_t class   : 16;
@@ -100,7 +100,7 @@ typedef __declare_packed_struct s_dns_qs
 
 
 /* resource record */
-typedef __declare_packed_struct s_dns_rr
+typedef __declare_packed_struct(s_dns_rr)
 {
   uint16_t  name;
   uint16_t  type;
