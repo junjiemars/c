@@ -390,12 +390,13 @@ parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name, size_t *name_len)
 {
   uint8_t   *p, *d, len;
   uint16_t   ptr;
+  size_t     n;
 
   p = offset;
   d = name;
-  *name_len = 0;
+  n = 0;
 
-  while (*name_len < DNS_QNAME_MAX_LEN)
+  while (n < DNS_QNAME_MAX_LEN)
     {
       ptr = *(uint16_t *) p;
       if (DNS_PTR_NAME == dns_ptr_type(ptr))
@@ -407,17 +408,19 @@ parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name, size_t *name_len)
       if (0 == *p)
         {
           *--d = 0;
-          *name_len += 1;
+          ++n;
           break;
         }
 
       len = *p++;
-      memcpy(d, p, len);
+      memcpy(&d[0], &p[0], len);
       d += len;
       *d++ = (uint8_t) '.';
-      *name_len += 1 + len;
+      n += 1 + len;
       p += len;
     }
+
+  *name_len = n;
 }
 
 int
@@ -473,10 +476,10 @@ parse_rr(uint8_t *res, uint8_t **offset)
     }
   rdlength = ntohs(rr->rdlength);
 
-  fprintf(stdout, " -> %s  %s  %s  %u  %u", qname,
+  fprintf(stdout, " -> %s  %s  %s  %u  %zu/%u", qname,
           tr_dns_str(dns_type_str, rr->type, uint16_t, ntohs),
           tr_dns_str(dns_class_str, rr->class, uint16_t, ntohs),
-          ntohl(rr->ttl), rdlength);
+          ntohl(rr->ttl), qname_len, rdlength);
 
   *offset += sizeof(*rr);
   if (0 == rdlength)
