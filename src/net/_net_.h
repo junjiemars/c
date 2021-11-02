@@ -49,7 +49,7 @@ typedef SOCKET sockfd_t;
   recvfrom(s, (char *) buf, (int) len, flags, (SOCKADDR *) dst, \
            dst_len)
 #define __ntohl(ul)  ((uint32_t)ntohl((uint32_t)(ul)))
-#define __ntohs(us)  ((uint16_t)ntohs((uint16_t)(ul)))
+#define __ntohs(us)  ((uint16_t)ntohs((uint16_t)(us)))
 #define log_sock_err(s)                                                 \
   do                                                                    \
     {                                                                   \
