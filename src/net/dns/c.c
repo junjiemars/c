@@ -3,8 +3,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 #include <errno.h>
+#include <signal.h>
 
 
 /*
@@ -116,6 +116,9 @@ typedef __declare_packed_struct s_dns_rr
 } s_dns_rr;
 
 
+typedef void (*on_signal)(int);
+
+
 static void query(void);
 static void make_label(uint8_t *dst, size_t *dst_len, uint8_t *name);
 static void parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name,
@@ -124,6 +127,7 @@ static int make_request(uint8_t **req, size_t *req_len, uint16_t *req_id);
 static void parse_response(uint16_t id, uint8_t *res);
 static void parse_rr(uint8_t *res, uint8_t **offset);
 static void out(uint8_t *buf, size_t n, const char *where);
+static void on_signal_segv(int sig);
 
 
 static struct option longopts[]  =
@@ -585,17 +589,36 @@ out(uint8_t *b, size_t n, const char *w)
   fclose(f);
 }
 
+void
+on_signal_segv(int sig)
+{
+  fprintf(stderr, "!%s: %d\n", __FUNCTION__, sig);
+  exit(EXIT_FAILURE);
+}
+
 
 int
 main(int argc, char* argv[])
 {
-  int ch;
+  int        ch;
+  on_signal  on_segv;
+  char *ss = "abc";
 
   if (1 == argc)
     {
       usage(argv[0]);
       goto clean_exit;
     }
+
+  on_segv = signal(SIGSEGV, on_signal_segv);
+  if (SIG_ERR == on_segv)
+    {
+      fprintf(stderr, "!signal: %s\n", strerror(errno));
+      goto clean_exit;
+    }
+
+  *(&ss[0]) = 'x';
+
 
   while (-1 != (ch = getopt_long(argc, argv,
                                  "hs:p:q:r:t:ov:",
