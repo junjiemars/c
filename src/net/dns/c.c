@@ -574,6 +574,26 @@ parse_response(uint16_t id, uint8_t *res)
           continue;
         }
     }
+
+  n = (ssize_t) ntohs(hs->nscount);
+  fprintf(stdout, "# authority section: %zu\n", (size_t) n);
+  while (n-- > 0)
+    {
+      if (0 == parse_rr(res, &offset))
+        {
+          continue;
+        }
+    }
+
+  n = (ssize_t) ntohs(hs->arcount);
+  fprintf(stdout, "# additional section: %zu\n", (size_t) n);
+  while (n-- > 0)
+    {
+      if (0 == parse_rr(res, &offset))
+        {
+          continue;
+        }
+    }
 }
 
 
