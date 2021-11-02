@@ -145,10 +145,11 @@ static uint16_t        opt_port            =  53;
 static uint8_t         opt_retry           =  1;
 static struct timeval  opt_timeout         =  { .tv_sec = 15, 0 };
 static int             opt_verbose         =  1;
+static int             opt_out             =  0;
+static int             opt_in              =  0;
+static char opt_file[DNS_QNAME_MAX_LEN]    =  ".response";
 static char opt_query[DNS_QNAME_MAX_LEN]   =  { 0, };
 static char opt_server[DNS_QNAME_MAX_LEN]  =  "127.0.0.53";
-static char opt_out[DNS_QNAME_MAX_LEN]     =  ".response";
-static int             opt_in              =  0;
 
 static char *dns_type_str[] = {
   0,
@@ -215,8 +216,10 @@ usage(const char *p)
          opt_retry);
   printf("  -t, --timeout  timeout in seconds, default is %d\n",
          (int) opt_timeout.tv_sec);
-  printf("  -o, --out      out response to file, default is %s\n", opt_out);
-  printf("  -i, --in       parse response from file, default is %s\n", opt_out);
+  printf("  -o, --out      out response to [%s|file], default is %d\n",
+         opt_file, opt_out);
+  printf("  -i, --in       parse response from [%s|file], default is %d\n",
+         opt_file, opt_in);
   printf("  -v, --verbose  verbose output, default is %d\n", opt_verbose);
 }
 
@@ -334,7 +337,7 @@ query(void)
     {
       goto close_exit;
     }
-  out(res, res_len, opt_out);
+  out(res, res_len, opt_file);
 
   parse_response(req_id, res);
 
@@ -397,8 +400,7 @@ parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name, size_t *name_len)
       ptr = *(uint16_t *) p;
       if (DNS_PTR_NAME == dns_ptr_type(ptr))
         {
-          offset = buf + dns_ptr_offset(ptr);
-          p = offset;
+          p = buf + dns_ptr_offset(ptr);
           continue;
         }
 
@@ -409,12 +411,12 @@ parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name, size_t *name_len)
           break;
         }
 
-      len = *p;
-      memcpy(d, p + 1, len);
+      len = *p++;
+      memcpy(d, p, len);
       d += len;
       *d++ = (uint8_t) '.';
       *name_len += 1 + len;
-      p += 1 + len;
+      p += len;
     }
 }
 
@@ -573,6 +575,11 @@ out(uint8_t *b, size_t n, const char *w)
   FILE    *f;
   size_t   len;
 
+  if (!opt_out)
+    {
+      return;
+    }
+
   f = fopen(w, "wb");
   if (!f)
     {
@@ -677,14 +684,15 @@ main(int argc, char* argv[])
           opt_timeout.tv_sec = atoi(optarg);
           break;
         case 'o':
+          opt_out = 1;
           if (optarg)
             {
-              strcpy(opt_out, optarg);
+              strcpy(opt_file, optarg);
             }
           break;
         case 'i':
           opt_in = 1;
-          strcpy(opt_out, optarg);
+          strcpy(opt_file, optarg);
           break;
         case 'v':
           opt_verbose = atoi(optarg);
@@ -701,9 +709,9 @@ main(int argc, char* argv[])
     {
       printf("# command line options:\n"
              " -> --in=%s -verbose=%d\n",
-             opt_out,
+             opt_file,
              opt_verbose);
-      in(opt_out);
+      in(opt_file);
     }
   else
     {
@@ -715,7 +723,7 @@ main(int argc, char* argv[])
              opt_port,
              (int) opt_retry,
              (int) opt_timeout.tv_sec,
-             opt_out,
+             opt_out ? opt_file : "",
              opt_verbose);
       query();
     }
