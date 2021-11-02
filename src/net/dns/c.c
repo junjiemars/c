@@ -57,15 +57,6 @@
 #define tr_dns_str(a, i, t, tr)                         \
   (a[((t)(tr(i)+1)) >= (t)countof(a) ? (countof(a)-1) : tr(i)])
 
-#define out_file(opt, buf, n, path)             \
-do                                              \
-  {                                             \
-    if ((opt))                                  \
-      {                                         \
-        out(buf, n, path);                      \
-      }                                         \
-  } while (0)
-
 
 /* header section */
 typedef __declare_packed_struct s_dns_hs
@@ -132,6 +123,7 @@ static int make_request(uint8_t **req, size_t *req_len, uint16_t *req_id);
 static void parse_response(uint16_t id, uint8_t *res);
 static int parse_rr(uint8_t *res, uint8_t **offset);
 static void out(uint8_t *buf, size_t n, const char *where);
+static void in(const char *where);
 
 
 static struct option longopts[]  =
@@ -142,21 +134,21 @@ static struct option longopts[]  =
     { "query",   required_argument,    0,              'q' },
     { "retry",   optional_argument,    0,              'r' },
     { "timeout", optional_argument,    0,              't' },
-    { "out",     no_argument,          0,              'o' },
+    { "out",     optional_argument,    0,              'o' },
+    { "in",      optional_argument,    0,              'i' },
     { "verbose", optional_argument,    0,              'v' },
     { 0,         0,                    0,               0  }
   };
 
-static int              opt_out            =  0;
-static char            *opt_out_req        =  ".request";
-static char            *opt_out_res        =  ".response";
-static uint16_t         opt_port           =  53;
-static uint8_t          opt_retry          =  1;
-static struct timeval   opt_timeout        =  { .tv_sec = 15, 0 };
-static int              opt_verbose        =  1;
+
+static uint16_t        opt_port            =  53;
+static uint8_t         opt_retry           =  1;
+static struct timeval  opt_timeout         =  { .tv_sec = 15, 0 };
+static int             opt_verbose         =  1;
 static char opt_query[DNS_QNAME_MAX_LEN]   =  { 0, };
 static char opt_server[DNS_QNAME_MAX_LEN]  =  "127.0.0.53";
-
+static char opt_out[DNS_QNAME_MAX_LEN]     =  ".response";
+static int             opt_in              =  0;
 
 static char *dns_type_str[] = {
   0,
@@ -223,8 +215,8 @@ usage(const char *p)
          opt_retry);
   printf("  -t, --timeout  timeout in seconds, default is %d\n",
          (int) opt_timeout.tv_sec);
-  printf("  -o, --out      whether out network package, default is %s\n",
-         opt_out ? "true" : "false");
+  printf("  -o, --out      out response to file, default is %s\n", opt_out);
+  printf("  -i, --in       parse response from file, default is %s\n", opt_out);
   printf("  -v, --verbose  verbose output, default is %d\n", opt_verbose);
 }
 
@@ -249,7 +241,7 @@ query(void)
   rc = WSAStartup(MAKEWORD(2, 2), &wsa);
   if (rc)
     {
-      fprintf(stderr, "!WSAStartup: %s\n", strerror(errno));
+      fprintf(stderr, "! WSAStartup: %s\n", strerror(errno));
       goto clean_exit;
     }
 #endif  /* WINNT */
@@ -257,7 +249,7 @@ query(void)
   rc = make_request(&req, &req_len, &req_id);
   if (-1 == rc)
     {
-      fprintf(stderr, "!make_request: failed\n");
+      fprintf(stderr, "! make_request: failed\n");
       goto clean_exit;
     }
 
@@ -265,14 +257,14 @@ query(void)
   sfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
   if (-1 == sfd)
     {
-      log_sock_err("!socket: %s\n");
+      log_sock_err("! socket: %s\n");
       goto clean_exit;
     }
 
   rc = inet_pton(AF_INET, opt_server, &host);
   if (-1 == rc)
     {
-      log_sock_err("!inet_pton: %s\n");
+      log_sock_err("! inet_pton: %s\n");
       goto close_exit;
     }
 
@@ -283,14 +275,12 @@ query(void)
   dst.sin_port = htons(opt_port);
   dst.sin_addr = host;
 
-  out_file(opt_out, req, req_len, opt_out_req);
-
 #if (LINUX)
   rc = setsockopt(sfd, SOL_SOCKET, SO_SNDTIMEO, &opt_timeout,
                   sizeof(opt_timeout));
   if (-1 == rc)
     {
-      log_sock_err("!setsockopt: SO_SNDTIMEO %s\n");
+      log_sock_err("! setsockopt: SO_SNDTIMEO %s\n");
     }
 #endif
 
@@ -300,7 +290,7 @@ query(void)
       rc = __sendto(sfd, req, req_len, 0, &dst, dst_len);
       if (-1 == rc)
         {
-          log_sock_err("!sendto: %s\n");
+          log_sock_err("! sendto: %s\n");
           continue;
         }
       break;
@@ -316,14 +306,14 @@ query(void)
                   sizeof(opt_timeout));
   if (-1 == rc)
     {
-      log_sock_err("!setsockopt: SO_RCVTIMEO %s\n");
+      log_sock_err("! setsockopt: SO_RCVTIMEO %s\n");
     }
 #endif
 
   res = calloc(1, DNS_UDP_MAX_LEN);
   if (!res)
     {
-      fprintf(stderr, "!calloc: %s\n", strerror(errno));
+      fprintf(stderr, "! calloc: %s\n", strerror(errno));
       goto close_exit;
     }
 
@@ -334,7 +324,7 @@ query(void)
       rc = __recvfrom(sfd, res, res_len, 0, &dst, &dst_len);
       if (-1 == rc)
         {
-          log_sock_err("!recvfrom: %s\n");
+          log_sock_err("! recvfrom: %s\n");
           continue;
         }
       res_len = rc;
@@ -344,7 +334,7 @@ query(void)
     {
       goto close_exit;
     }
-  out_file(opt_out, res, res_len, opt_out_res);
+  out(res, res_len, opt_out);
 
   parse_response(req_id, res);
 
@@ -454,7 +444,7 @@ make_request(uint8_t **req, size_t *req_len, uint16_t *req_id)
   msg = calloc(1, *req_len);
   if (0 == msg)
     {
-      fprintf(stderr, "!calloc: %s\n", strerror(errno));
+      fprintf(stderr, "! calloc: %s\n", strerror(errno));
       return -1;
     }
   memcpy(msg, &hs, sizeof(hs));
@@ -485,7 +475,7 @@ parse_rr(uint8_t *res, uint8_t **offset)
           tr_dns_str(dns_type_str, rr->type, uint16_t, ntohs),
           tr_dns_str(dns_class_str, rr->class, uint16_t, ntohs),
           ntohl(rr->ttl), rdlength);
-      
+
   *offset += sizeof(*rr);
   if (0 == rdlength)
     {
@@ -531,7 +521,7 @@ parse_response(uint16_t id, uint8_t *res)
 
   hs = (s_dns_hs *) res;
   fprintf(stdout, "# header section:\n");
-  
+
   fprintf(stdout, " -> ID  %u  <- %u\n", ntohs(hs->id), id);
 
   fprintf(stdout, " -> QR  %u  %s\n", hs->flags.qr,
@@ -586,22 +576,49 @@ out(uint8_t *b, size_t n, const char *w)
   f = fopen(w, "wb");
   if (!f)
     {
-      fprintf(stderr, "!fopen: %s\n", strerror(errno));
+      fprintf(stderr, "! fopen: %s\n", strerror(errno));
       return;
     }
 
   len = fwrite(b, 1, n, f);
   if (ferror(f))
     {
-      fprintf(stderr, "!fwrite: %s\n", strerror(errno));
+      fprintf(stderr, "! fwrite: %s\n", strerror(errno));
       clearerr(f);
       goto clean_exit;
     }
   if (len < n)
     {
-      fprintf(stderr, "!fwrite: %zu/%zu\n", len, n);
+      fprintf(stderr, "! fwrite: %zu/%zu\n", len, n);
       goto clean_exit;
     }
+
+ clean_exit:
+  fclose(f);
+}
+
+void
+in(const char *w)
+{
+  FILE     *f;
+  uint8_t   b[DNS_UDP_MAX_LEN];
+
+  f = fopen(w, "rb");
+  if (!f)
+    {
+      fprintf(stderr, "! fopen: %s\n", strerror(errno));
+      return;
+    }
+
+  (void) fread(b, 1, DNS_UDP_MAX_LEN, f);
+  if (ferror(f))
+    {
+      fprintf(stderr, "! fread: %s\n", strerror(errno));
+      clearerr(f);
+      goto clean_exit;
+    }
+
+  parse_response((uint16_t) 0, &b[0]);
 
  clean_exit:
   fclose(f);
@@ -633,13 +650,13 @@ main(int argc, char* argv[])
   on_segv = signal(SIGSEGV, on_signal_segv);
   if (SIG_ERR == on_segv)
     {
-      fprintf(stderr, "!signal: %s\n", strerror(errno));
+      fprintf(stderr, "! signal: %s\n", strerror(errno));
       goto clean_exit;
     }
 #endif  /* NDEBUG */
 
   while (-1 != (ch = getopt_long(argc, argv,
-                                 "hs:p:q:r:t:ov:",
+                                 "hs:p:q:r:t:oiv:",
                                  longopts, 0)))
     {
       switch (ch)
@@ -660,7 +677,17 @@ main(int argc, char* argv[])
           opt_timeout.tv_sec = atoi(optarg);
           break;
         case 'o':
-          opt_out = 1;
+          if (optarg)
+            {
+              strcpy(opt_out, optarg);
+            }
+          break;
+        case 'i':
+          opt_in = 1;
+          if (optarg)
+            {
+              strcpy(opt_out, optarg);
+            }
           break;
         case 'v':
           opt_verbose = atoi(optarg);
@@ -673,18 +700,28 @@ main(int argc, char* argv[])
 
   opt_verbose %= 3;
 
-  printf("# command line options:\n"
-         " -> --query=%s --server=%s --port=%d"
-         " --retry=%d --timeout=%d %s-verbose=%d\n",
-         opt_query,
-         opt_server,
-         opt_port,
-         (int) opt_retry,
-         (int) opt_timeout.tv_sec,
-         opt_out ? "--out " : "",
-         opt_verbose);
-
-  query();
+  if (opt_in)
+    {
+      printf("# command line options:\n"
+             " -> --in=%s -verbose=%d\n",
+             opt_out,
+             opt_verbose);
+      in(opt_out);
+    }
+  else
+    {
+      printf("# command line options:\n"
+             " -> --query=%s --server=%s --port=%d"
+             " --retry=%d --timeout=%d --out=%s -verbose=%d\n",
+             opt_query,
+             opt_server,
+             opt_port,
+             (int) opt_retry,
+             (int) opt_timeout.tv_sec,
+             opt_out,
+             opt_verbose);
+      query();
+    }
 
  clean_exit:
   return 0;

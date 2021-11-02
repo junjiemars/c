@@ -36,16 +36,16 @@ net_dns_client_binout := $(bin_path)/$(net_prefix)_dns_client$(bin_ext)
 net_dns_test: net_dns_client_test
 net_dns_client_test: $(net_dns_client_binout)
 	$(net_dns_client_binout)
-	$(net_dns_client_binout) -qgithub.com -s74.82.42.42
-	$(net_dns_client_binout) -qwww.reddit.com -s74.82.42.42
-	$(net_dns_client_binout) -qwww.bing.com -s74.82.42.42
-	$(net_dns_client_binout) -qwww.baidu.com -s74.82.42.42
-	$(net_dns_client_binout) -qwww.google.com -s74.82.42.42
-	$(net_dns_client_binout) -qgithub.com -s8.8.4.4 -t5
-	$(net_dns_client_binout) -qwww.reddit.com -s8.8.4.4 -t5
-	$(net_dns_client_binout) -qwww.bing.com -s8.8.4.4 -t5
-	$(net_dns_client_binout) -qwww.baidu.com -s8.8.4.4 -t5
-	$(net_dns_client_binout) -qwww.google.com -s8.8.4.4 -t5
+	# $(net_dns_client_binout) -qgithub.com -s74.82.42.42
+	# $(net_dns_client_binout) -qwww.reddit.com -s74.82.42.42
+	# $(net_dns_client_binout) -qwww.bing.com -s74.82.42.42
+	# $(net_dns_client_binout) -qwww.baidu.com -s74.82.42.42
+	# $(net_dns_client_binout) -qwww.google.com -s74.82.42.42
+	$(net_dns_client_binout) -qgithub.com -s8.8.4.4 -t5 --out=$(CURDIR)/$(bin_path)/github.bin
+	$(net_dns_client_binout) -qwww.reddit.com -s8.8.4.4 -t5 --out=$(bin_path)/reddit.bin
+	$(net_dns_client_binout) -qwww.bing.com -s8.8.4.4 -t5 --out=$(CURDIR)/$(bin_path)/bing.bin
+	$(net_dns_client_binout) -qwww.baidu.com -s8.8.4.4 -t5 --out=$(CURDIR)/$(bin_path)/baidu.bin
+	$(net_dns_client_binout) -qwww.google.com -s8.8.4.4 -t5  --out=$(CURDIR)/$(bin_path)/google.bin
 
 
 $(net_dns_client_binout): $(net_root)/dns/c.c $(getopt_c)
