@@ -487,6 +487,7 @@ parse_rr(uint8_t *res, uint8_t **offset)
   *offset += sizeof(*rr);
   if (0 == rdlength)
     {
+      fprintf(stdout, "\n");
       return;
     }
 
