@@ -135,7 +135,7 @@ static struct option longopts[]  =
     { "retry",   optional_argument,    0,              'r' },
     { "timeout", optional_argument,    0,              't' },
     { "out",     optional_argument,    0,              'o' },
-    { "in",      optional_argument,    0,              'i' },
+    { "in",      required_argument,    0,              'i' },
     { "verbose", optional_argument,    0,              'v' },
     { 0,         0,                    0,               0  }
   };
@@ -656,7 +656,7 @@ main(int argc, char* argv[])
 #endif  /* NDEBUG */
 
   while (-1 != (ch = getopt_long(argc, argv,
-                                 "hs:p:q:r:t:oiv:",
+                                 "hs:p:q:r:t:oi:v:",
                                  longopts, 0)))
     {
       switch (ch)
@@ -684,10 +684,7 @@ main(int argc, char* argv[])
           break;
         case 'i':
           opt_in = 1;
-          if (optarg)
-            {
-              strcpy(opt_out, optarg);
-            }
+          strcpy(opt_out, optarg);
           break;
         case 'v':
           opt_verbose = atoi(optarg);
