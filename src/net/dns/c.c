@@ -464,7 +464,7 @@ make_request(uint8_t **req, size_t *req_len, uint16_t *req_id)
 int
 parse_rr(uint8_t *res, uint8_t **offset)
 {
-  s_dns_rr  *rr;
+  s_dns_rr  *rr                        =  0;
   uint16_t   rdlength                  =  0;
   size_t     qname_len                 =  0;
   uint8_t    qname[DNS_QNAME_MAX_LEN]  =  {0};
