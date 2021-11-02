@@ -34,7 +34,7 @@
    typedef __int64 int64_t;
    typedef unsigned __int64 uint64_t;
    typedef SSIZE_T  ssize_t;
-#elif defined(NM_HAVE_STDINT_H)
+#else
 #  include <stdint.h>
 #endif
 
