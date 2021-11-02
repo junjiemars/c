@@ -78,7 +78,7 @@ typedef int sockfd_t;
 #pragma warning(disable:4996)
 
 #define __declare_packed_struct(name)                     \
-  __pragma(pack(push, 0)) struct name __pragma(pack(pop))
+  __pragma(pack(push, 2)) struct name __pragma(pack(pop))
 
 #else
 
