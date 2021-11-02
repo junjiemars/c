@@ -476,12 +476,12 @@ parse_rr(uint8_t *res, uint8_t **offset)
     }
   rdlength = ntohs(rr->rdlength);
 
-  fprintf(stdout, " -> %s  %s  %s  %u  %zu/%u", qname,
+  fprintf(stdout, " -> %s  %s  %s  %u  %u/%zu", qname,
           tr_dns_str(dns_type_str, rr->type, uint16_t, ntohs),
           tr_dns_str(dns_class_str, rr->class, uint16_t, ntohs),
-          ntohl(rr->ttl), qname_len, rdlength);
+          ntohl(rr->ttl), rdlength, qname_len);
 
-  *offset += sizeof(*rr);
+  *offset += sizeof(s_dns_rr);
   if (0 == rdlength)
     {
       fprintf(stdout, "\n");
@@ -549,7 +549,12 @@ parse_response(uint16_t id, uint8_t *res)
   fprintf(stdout, "# question section: %zu\n", (size_t) n);
   while (n-- > 0)
     {
+      qname_len = 0;
       parse_label(res, offset, qname, &qname_len);
+      if (qname_len == 0)
+        {
+          qname[0] = 0;
+        }
       offset += qname_len;
       qs = (s_dns_qs *) offset;
 
