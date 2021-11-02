@@ -475,6 +475,7 @@ parse_rr(uint8_t *res, uint8_t **offset)
       parse_label(res, res + dns_ptr_offset(rr->name), qname, &qname_len);
     }
   rdlength = ntohs(rr->rdlength);
+  *offset += sizeof(*rr);
 
   fprintf(stdout, " -> %s  %s  %s  %u  %u", qname,
           tr_dns_str(dns_type_str, rr->type, uint16_t, ntohs),
@@ -487,7 +488,6 @@ parse_rr(uint8_t *res, uint8_t **offset)
       return 0;
     }
 
-  *offset += sizeof(*rr);
   fprintf(stdout, "  ");
   switch (ntohs(rr->type))
     {
