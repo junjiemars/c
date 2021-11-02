@@ -493,7 +493,8 @@ parse_rr(uint8_t *res, uint8_t **offset)
   switch (ntohs(rr->type))
     {
     case DNS_TYPE_CNAME:
-      qname[0] = qname_len = 0;
+      qname_len = 0;
+      qname[0] = 0;
       parse_label(res, (uint8_t *) &rr->name, qname, &qname_len);
       if (qname_len == 0)
         {
