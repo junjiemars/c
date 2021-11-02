@@ -22,10 +22,9 @@
 #endif
 
 
-#if defined(NM_HAVE_STDINT_H)
-#  include <stdint.h>
-#else
-#  include <stddef.h>
+#include <stddef.h>
+#if (MSVC)
+#  include <BaseTsd.h>
    typedef __int8 int8_t;
    typedef unsigned __int8 uint8_t;
    typedef __int16 int16_t;
@@ -34,14 +33,10 @@
    typedef unsigned __int32 uint32_t;
    typedef __int64 int64_t;
    typedef unsigned __int64 uint64_t;
+   typedef SSIZE_T  ssize_t;
+#elif defined(NM_HAVE_STDINT_H)
+#  include <stdint.h>
 #endif
-
-#if (MSVC)
-#ifndef ssize_t
-#include <BaseTsd.h>
-typedef SSIZE_T  ssize_t;
-#endif  /* ssize_t */
-#endif  /* MSVC */
 
 
 #if (MSVC)
