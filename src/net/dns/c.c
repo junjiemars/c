@@ -265,7 +265,7 @@ query(void)
   if (-1 == rc)
     {
       log_sock_err("!inet_pton: %s\n");
-      goto clean_exit;
+      goto close_exit;
     }
 
   /* send */
@@ -299,7 +299,7 @@ query(void)
     }
   if (-1 == rc)
     {
-      goto clean_exit;
+      goto close_exit;
     }
 
   /* receive */
@@ -316,7 +316,7 @@ query(void)
   if (!res)
     {
       fprintf(stderr, "!calloc: %s\n", strerror(errno));
-      goto clean_exit;
+      goto close_exit;
     }
 
   retry = opt_retry;
@@ -334,17 +334,15 @@ query(void)
     }
   if (-1 == rc)
     {
-      goto clean_exit;
+      goto close_exit;
     }
   out_file(opt_out, res, res_len, opt_out_res);
 
   parse_response(req_id, res);
 
+ close_exit:
+  close(sfd);
  clean_exit:
-  if (sfd)
-    {
-      close(sfd);
-    }
   free(res);
   free(req);
 

@@ -10,6 +10,8 @@
 #  include <windows.h>
 #  include <process.h>
 #  pragma comment (lib, "Ws2_32.lib")
+#  pragma comment (lib, "Mswsock.lib")
+#  pragma comment (lib, "AdvApi32.lib")
 #  define getpid  GetCurrentProcessId
 #else
 #  include <sys/types.h>
@@ -77,10 +79,7 @@ typedef int sockfd_t;
 
 
 #if (MSVC)
-/* #pragma warning(disable:4057) */
-/* #pragma warning(disable:4214) */
 #pragma warning(disable:4244)
-/* #pragma warning(disable:4267) */
 #pragma warning(disable:4996)
 
 #define __declare_packed_struct __declspec(align(1)) struct
