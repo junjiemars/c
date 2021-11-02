@@ -477,12 +477,12 @@ parse_rr(uint8_t *res, uint8_t **offset)
     {
       parse_label(res, res + dns_ptr_offset(rr->name), qname, &qname_len);
     }
-  rdlength = ntohs(rr->rdlength);
+  rdlength = __ntohs(rr->rdlength);
 
-  fprintf(stdout, " -> %s  %s  %s  %zu  %zu", qname,
+  fprintf(stdout, " -> %s  %s  %s  %u  %u", qname,
           tr_dns_str(dns_type_str, rr->type, uint16_t, ntohs),
           tr_dns_str(dns_class_str, rr->class, uint16_t, ntohs),
-          (size_t) ntohl(rr->ttl), (size_t) rdlength);
+          __ntohl(rr->ttl), rdlength);
       
   *offset += sizeof(*rr);
   if (0 == rdlength)

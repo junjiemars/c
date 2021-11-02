@@ -48,6 +48,8 @@ typedef SOCKET sockfd_t;
 #define __recvfrom(s, buf, len, flags, dst, dst_len)            \
   recvfrom(s, (char *) buf, (int) len, flags, (SOCKADDR *) dst, \
            dst_len)
+#define __ntohl(ul)  ((uint32_t)ntohl((uint32_t)(ul)))
+#define __ntohs(us)  ((uint16_t)ntohs((uint16_t)(ul)))
 #define log_sock_err(s)                                                 \
   do                                                                    \
     {                                                                   \
@@ -68,6 +70,8 @@ typedef int sockfd_t;
   sendto(s, buf, len, flags, (const struct sockaddr *) dst, dst_len)
 #define __recvfrom(s, buf, len, flags, dst, dst_len) \
   recvfrom(s, buf, len, flags, (struct sockaddr *) dst, dst_len)
+#define __ntohl  ntohl
+#define __ntohs  ntohs
 #define log_sock_err(s)  fprintf(stderr, (s), strerror(errno))
 
 #endif  /* MSVC */
