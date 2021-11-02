@@ -114,7 +114,7 @@ typedef __declare_packed_struct s_dns_rr
   uint16_t  name;
   uint16_t  type;
   uint16_t  class;
-  int32_t   ttl;
+  uint32_t   ttl;
   uint16_t  rdlength;
 } s_dns_rr;
 
@@ -130,7 +130,7 @@ static void parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name,
                         size_t *name_len);
 static int make_request(uint8_t **req, size_t *req_len, uint16_t *req_id);
 static void parse_response(uint16_t id, uint8_t *res);
-static void parse_rr(uint8_t *res, uint8_t **offset);
+static int parse_rr(uint8_t *res, uint8_t **offset);
 static void out(uint8_t *buf, size_t n, const char *where);
 
 
@@ -464,7 +464,7 @@ make_request(uint8_t **req, size_t *req_len, uint16_t *req_id)
 }
 
 
-void
+int
 parse_rr(uint8_t *res, uint8_t **offset)
 {
   s_dns_rr  *rr;
@@ -488,7 +488,7 @@ parse_rr(uint8_t *res, uint8_t **offset)
   if (0 == rdlength)
     {
       fprintf(stdout, "\n");
-      return;
+      return 0;
     }
 
   fprintf(stdout, "  ");
@@ -513,6 +513,7 @@ parse_rr(uint8_t *res, uint8_t **offset)
   fprintf(stdout, "\n");
 
   *offset += rdlength;
+  return (int) rdlength;
 }
 
 
@@ -566,7 +567,10 @@ parse_response(uint16_t id, uint8_t *res)
   fprintf(stdout, "# answer section: %zu\n", (size_t) n);
   while (n-- > 0)
     {
-      parse_rr(res, &offset);
+      if (0 == parse_rr(res, &offset))
+        {
+          continue;
+        }
     }
 }
 
