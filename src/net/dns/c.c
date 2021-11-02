@@ -420,7 +420,7 @@ parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name, size_t *name_len)
       len = *p;
       memcpy(d, p + 1, len);
       d += len;
-      *d++ = 0x2e;       /* . */
+      *d++ = (uint8_t) '.';
       *name_len += 1 + len;
       p += 1 + len;
     }
@@ -490,7 +490,12 @@ parse_rr(uint8_t *res, uint8_t **offset)
       switch (ntohs(rr->type))
         {
         case DNS_TYPE_CNAME:
+          qname_len = 0;
           parse_label(res, *offset, qname, &qname_len);
+          if (qname_len == 0)
+            {
+              qname[0] = 0;
+            }
           fprintf(stdout, "%s", (const char *) qname);
           break;
         case DNS_TYPE_A:
