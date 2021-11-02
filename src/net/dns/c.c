@@ -487,6 +487,7 @@ parse_rr(uint8_t *res, uint8_t **offset)
       return 0;
     }
 
+  *offset += sizeof(*rr);
   fprintf(stdout, "  ");
   switch (ntohs(rr->type))
     {
@@ -508,7 +509,7 @@ parse_rr(uint8_t *res, uint8_t **offset)
     }
   fprintf(stdout, "\n");
 
-  *offset += sizeof(*rr) + rdlength;
+  *offset += rdlength;
   return (int) rdlength;
 }
 
