@@ -59,7 +59,10 @@
 
 
 /* header section */
-__declare_packed_struct s_dns_hs
+/* #if (MSVC) */
+#pragma pack(push, 1)
+/* #endif */
+typedef __declare_packed_struct s_dns_hs
 {
   uint16_t id;
   struct flags
@@ -88,24 +91,30 @@ __declare_packed_struct s_dns_hs
   uint16_t ancount;
   uint16_t nscount;
   uint16_t arcount;
-};
-typedef struct s_dns_hs s_dns_hs;
-
+} s_dns_hs;
+/* #if (MSVC) */
+#pragma pack(pop)
+/* #endif */
 
 /* question section */
-__declare_packed_struct s_dns_qs
+/* #if (MSVC) */
+#pragma pack(push, 1)
+/* #endif */
+typedef __declare_packed_struct s_dns_qs
 {
   uint32_t type    : 16;
   uint32_t class   : 16;
-};
-typedef struct s_dns_qs s_dns_qs;
+} s_dns_qs;
+/* #if (MSVC) */
+#pragma pack(pop)
+/* #endif */
 
 
 /* resource record */
-#if (MSVC)
+/* #if (MSVC) */
 #pragma pack(push, 1)
-#endif
-__declare_packed_struct s_dns_rr
+/* #endif */
+typedef __declare_packed_struct s_dns_rr
 {
   uint16_t  name;
   uint16_t  type;
@@ -113,11 +122,10 @@ __declare_packed_struct s_dns_rr
   uint16_t  class;
   int32_t   ttl;
   uint16_t  rdlength;
-};
-#if (MSVC)
+} s_dns_rr;
+/* #if (MSVC) */
 #pragma pack(pop)
-#endif
-typedef struct s_dns_rr s_dns_rr;
+/* #endif */
 
 
 #if !(NDEBUG)
