@@ -522,11 +522,14 @@ parse_rr(uint8_t *res, uint8_t **offset)
       log(stdout, "%s", (const char *) qname);
       break;
     case DNS_TYPE_A:
-      if (opt_quiet && !log_once)
+      if (!log_once)
         {
           fprintf(stdout, "%u.%u.%u.%u", (*offset)[0], (*offset)[1],
                   (*offset)[2], (*offset)[3]);
-          log_once = !log_once;
+          if (opt_quiet)
+            {
+              log_once = !log_once;
+            }
         }
       break;
     default:
