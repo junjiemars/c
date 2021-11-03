@@ -477,9 +477,6 @@ parse_rr(uint8_t *res, uint8_t **offset)
   uint8_t    qname[DNS_QNAME_MAX_LEN]  =  {0};
 
   rr = (s_dns_rr *) *offset;
-  fprintf(stderr, "sizeof(s_dns_rr) = %zu, %zu, L:%zu, L1:%zu, C:%zu\n",
-          sizeof(s_dns_rr), sizeof(*rr), sizeof(rr->ttl), sizeof(ntohl(rr->ttl)),
-          (size_t) ntohl(rr->ttl));
   if (DNS_PTR_NAME == dns_ptr_type(rr->name))
     {
       parse_label(res, res + dns_ptr_offset(rr->name), qname, &qname_len);
@@ -487,10 +484,10 @@ parse_rr(uint8_t *res, uint8_t **offset)
   rdlength = ntohs(rr->rdlength);
   *offset += sizeof(*rr);
 
-  fprintf(stdout, " -> %s  %s  %s  %u  %u", qname,
+  fprintf(stdout, " -> %s  %s  %s  %i  %u", qname,
           tr_dns_str(dns_type_str, rr->type, uint16_t, ntohs),
           tr_dns_str(dns_class_str, rr->class, uint16_t, ntohs),
-          ntohl(rr->ttl), rdlength);
+          (int) ntohl(rr->ttl), rdlength);
 
   if (0 == rdlength)
     {
