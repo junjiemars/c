@@ -141,9 +141,9 @@ static void in(const char *where);
 static struct option longopts[]  =
   {
     { "help",    no_argument,          0,              'h' },
+    { "query",   required_argument,    0,              'q' },
     { "server",  optional_argument,    0,              's' },
     { "port",    optional_argument,    0,              'p' },
-    { "query",   required_argument,    0,              'q' },
     { "type",    optional_argument,    0,              't' },
     { "retry",   optional_argument,    0,              'r' },
     { "timeout", optional_argument,    0,              'T' },
@@ -221,24 +221,22 @@ static char *dns_rcode_str[] = {
 static void
 usage(const char *p)
 {
-  printf("Usage %s [options ...] host\n", p);
+  printf("Usage %s [options ...]\n", p);
   printf("  -h, --help     this help text\n");
+  printf("  -q, --query    the domain name to query\n");
+  printf("  -t, --type     query type, default is %s\n",
+         dns_type_str[opt_type]);
   printf("  -s  --server   DNS server, default is %s\n",
          opt_server);
   printf("  -p, --port     query a non-standard port, default is %d\n",
          opt_port);
-  printf("  -q, --query    the domain name to query\n");
-  printf("  -t, --type     query type, default is %s\n",
-         dns_type_str[opt_type]);
   printf("  -r, --retry    retry times after failed, default is %d\n",
          opt_retry);
   printf("  -T, --timeout  timeout in seconds, default is %d\n",
          (int) opt_timeout.tv_sec);
-  printf("  -o, --out      out response to [%s|file], default is %d\n",
-         opt_file, opt_out);
-  printf("  -i, --in       parse response from [%s|file], default is %d\n",
-         opt_file, opt_in);
-  printf("  -Q, --quiet   quiet or silent mode, default is %d\n", opt_quiet);
+  printf("  -o, --out      out response to [%s|<file>]\n", opt_file);
+  printf("  -i, --in       parse response from [%s|<file>]\n", opt_file);
+  printf("  -Q, --quiet    quiet or silent mode\n");
 }
 
 
@@ -483,7 +481,6 @@ make_request(uint8_t **req, size_t *req_len, uint16_t *req_id)
 int
 parse_rr(uint8_t *res, uint8_t **offset)
 {
-  static int   log_once                  =  0;
   s_dns_rr    *rr                        =  0;
   uint16_t     rdlength                  =  0;
   size_t       qname_len                 =  0;
@@ -519,18 +516,11 @@ parse_rr(uint8_t *res, uint8_t **offset)
         {
           qname[0] = 0;
         }
-      log(stdout, "%s", (const char *) qname);
+      fprintf(stdout, "%s%c", (const char *) qname, opt_quiet ? '\n' : 0);
       break;
     case DNS_TYPE_A:
-      if (!log_once)
-        {
-          fprintf(stdout, "%u.%u.%u.%u", (*offset)[0], (*offset)[1],
-                  (*offset)[2], (*offset)[3]);
-          if (opt_quiet)
-            {
-              log_once = !log_once;
-            }
-        }
+      fprintf(stdout, "%u.%u.%u.%u%c", (*offset)[0], (*offset)[1],
+              (*offset)[2], (*offset)[3], opt_quiet ? '\n' : 0);
       break;
     default:
       break;
@@ -742,7 +732,6 @@ main(int argc, char* argv[])
           opt_retry = atoi(optarg);
           break;
         case 't':
-          log(stderr, "optarg=%s\n", optarg);
           for (i = 1; i < (int) (countof(dns_type_str)-1); i++)
             {
               if (0 == strcmp(dns_type_str[i], optarg))
@@ -751,6 +740,12 @@ main(int argc, char* argv[])
                   strcpy(opt_type_str, optarg);
                   break;
                 }
+            }
+          if (i == (int) (countof(dns_type_str)-1))
+            {
+              fprintf(stderr, "! invalid argument: --type=%s\n", optarg);
+              usage(argv[0]);
+              goto clean_exit;
             }
           break;
         case 'T':
