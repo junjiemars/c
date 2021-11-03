@@ -77,7 +77,7 @@ typedef int sockfd_t;
 #pragma warning(disable:4244)
 #pragma warning(disable:4996)
 
-#define __declare_packed_struct __declspec(align(1)) struct
+#define __declare_packed_struct struct
 
 #else
 

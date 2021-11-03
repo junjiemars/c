@@ -102,14 +102,21 @@ typedef struct s_dns_qs s_dns_qs;
 
 
 /* resource record */
+#if (MSVC)
+#pragma pack(push, 1)
+#endif
 __declare_packed_struct s_dns_rr
 {
   uint16_t  name;
   uint16_t  type;
+#pragma pack(push, 1)
   uint16_t  class;
   int32_t   ttl;
   uint16_t  rdlength;
 };
+#if (MSVC)
+#pragma pack(pop)
+#endif
 typedef struct s_dns_rr s_dns_rr;
 
 
