@@ -54,8 +54,14 @@
 #define dns_ptr_type(u16)    ((ntohs((uint16_t)u16) >> 8) & 0xff)
 #define dns_ptr_offset(u16)  ((ntohs((uint16_t)u16)) & 0xff)
 
-#define tr_dns_str(a, i, t, tr)                         \
+#define tr_dns_str(a, i, t, tr)                                 \
   (a[((t)(tr(i)+1)) >= (t)countof(a) ? (countof(a)-1) : tr(i)])
+
+#define log(x, ...)                             \
+  if (0 == opt_quiet)                           \
+    {                                           \
+      fprintf(x, __VA_ARGS__);                  \
+    }
 
 
 /* header section */
@@ -143,7 +149,7 @@ static struct option longopts[]  =
     { "timeout", optional_argument,    0,              'T' },
     { "out",     optional_argument,    0,              'o' },
     { "in",      required_argument,    0,              'i' },
-    { "verbose", optional_argument,    0,              'v' },
+    { "quiet",   no_argument,          0,              'Q' },
     { 0,         0,                    0,               0  }
   };
 
@@ -153,7 +159,7 @@ static uint16_t        opt_type            =  DNS_TYPE_A;
 static char            opt_type_str[8]     =  { 0, };
 static uint8_t         opt_retry           =  1;
 static struct timeval  opt_timeout         =  { .tv_sec = 15, 0 };
-static int             opt_verbose         =  1;
+static int             opt_quiet           =  0;
 static int             opt_out             =  0;
 static int             opt_in              =  0;
 static char opt_file[DNS_QNAME_MAX_LEN]    =  ".response";
@@ -232,7 +238,7 @@ usage(const char *p)
          opt_file, opt_out);
   printf("  -i, --in       parse response from [%s|file], default is %d\n",
          opt_file, opt_in);
-  printf("  -v, --verbose  verbose output, default is %d\n", opt_verbose);
+  printf("  -Q, --quiet   quiet or silent mode, default is %d\n", opt_quiet);
 }
 
 
@@ -256,7 +262,7 @@ query(void)
   rc = WSAStartup(MAKEWORD(2, 2), &wsa);
   if (rc)
     {
-      fprintf(stderr, "! WSAStartup: %s\n", strerror(errno));
+      log(stderr, "! WSAStartup: %s\n", strerror(errno));
       goto clean_exit;
     }
 #endif  /* WINNT */
@@ -264,7 +270,7 @@ query(void)
   rc = make_request(&req, &req_len, &req_id);
   if (-1 == rc)
     {
-      fprintf(stderr, "! make_request: failed\n");
+      log(stderr, "! make_request: failed\n");
       goto clean_exit;
     }
 
@@ -328,7 +334,7 @@ query(void)
   res = calloc(1, DNS_UDP_MAX_LEN);
   if (!res)
     {
-      fprintf(stderr, "! calloc: %s\n", strerror(errno));
+      log(stderr, "! calloc: %s\n", strerror(errno));
       goto close_exit;
     }
 
@@ -350,7 +356,7 @@ query(void)
       goto close_exit;
     }
   out(res, res_len, opt_file);
-  fprintf(stdout, "# received message size: %zu bytes\n", res_len);
+  log(stdout, "# message size: %zu bytes\n", res_len);
 
   parse_response(req_id, res);
 
@@ -462,7 +468,7 @@ make_request(uint8_t **req, size_t *req_len, uint16_t *req_id)
   msg = calloc(1, *req_len);
   if (0 == msg)
     {
-      fprintf(stderr, "! calloc: %s\n", strerror(errno));
+      log(stderr, "! calloc: %s\n", strerror(errno));
       return -1;
     }
   memcpy(msg, &hs, sizeof(hs));
@@ -477,10 +483,11 @@ make_request(uint8_t **req, size_t *req_len, uint16_t *req_id)
 int
 parse_rr(uint8_t *res, uint8_t **offset)
 {
-  s_dns_rr  *rr                        =  0;
-  uint16_t   rdlength                  =  0;
-  size_t     qname_len                 =  0;
-  uint8_t    qname[DNS_QNAME_MAX_LEN]  =  {0};
+  static int   log_once                  =  0;
+  s_dns_rr    *rr                        =  0;
+  uint16_t     rdlength                  =  0;
+  size_t       qname_len                 =  0;
+  uint8_t      qname[DNS_QNAME_MAX_LEN]  =  {0};
 
   rr = (s_dns_rr *) *offset;
   if (DNS_PTR_NAME == dns_ptr_type(rr->name))
@@ -490,18 +497,18 @@ parse_rr(uint8_t *res, uint8_t **offset)
   rdlength = ntohs(rr->rdlength);
   *offset += sizeof(*rr);
 
-  fprintf(stdout, " -> %s  %s  %s  %i  %u", qname,
-          tr_dns_str(dns_type_str, rr->type, uint16_t, ntohs),
-          tr_dns_str(dns_class_str, rr->class, uint16_t, ntohs),
-          (int) ntohl(rr->ttl), rdlength);
+  log(stdout, " -> %s  %s  %s  %i  %u", qname,
+      tr_dns_str(dns_type_str, rr->type, uint16_t, ntohs),
+      tr_dns_str(dns_class_str, rr->class, uint16_t, ntohs),
+      (int) ntohl(rr->ttl), rdlength);
 
   if (0 == rdlength)
     {
-      fprintf(stdout, "\n");
+      log(stdout, "\n");
       return 0;
     }
 
-  fprintf(stdout, "  ");
+  log(stdout, "  ");
   switch (ntohs(rr->type))
     {
     case DNS_TYPE_CNAME:
@@ -512,16 +519,20 @@ parse_rr(uint8_t *res, uint8_t **offset)
         {
           qname[0] = 0;
         }
-      fprintf(stdout, "%s", (const char *) qname);
+      log(stdout, "%s", (const char *) qname);
       break;
     case DNS_TYPE_A:
-      fprintf(stdout, "%u.%u.%u.%u", (*offset)[0], (*offset)[1], (*offset)[2],
-              (*offset)[3]);
+      if (opt_quiet && !log_once)
+        {
+          fprintf(stdout, "%u.%u.%u.%u", (*offset)[0], (*offset)[1],
+                  (*offset)[2], (*offset)[3]);
+          log_once = !log_once;
+        }
       break;
     default:
       break;
     }
-  fprintf(stdout, "\n");
+  log(stdout, "\n");
 
   *offset += rdlength;
   return (int) rdlength;
@@ -539,28 +550,28 @@ parse_response(uint16_t id, uint8_t *res)
   uint8_t   *offset;
 
   hs = (s_dns_hs *) res;
-  fprintf(stdout, "# header section:\n");
+  log(stdout, "# header section:\n");
 
-  fprintf(stdout, " -> ID  %u  <- %u\n", ntohs(hs->id), id);
+  log(stdout, " -> ID  %u  <- %u\n", ntohs(hs->id), id);
 
-  fprintf(stdout, " -> QR  %u  %s\n", hs->flags.qr,
-          tr_dns_str(dns_qr_str, hs->flags.qr, uint16_t, (uint16_t)));
+  log(stdout, " -> QR  %u  %s\n", hs->flags.qr,
+      tr_dns_str(dns_qr_str, hs->flags.qr, uint16_t, (uint16_t)));
 
-  fprintf(stdout, " -> AA  %u  %s\n", hs->flags.aa,
-          tr_dns_str(dns_aa_str, hs->flags.aa, uint16_t, (uint16_t)));
+  log(stdout, " -> AA  %u  %s\n", hs->flags.aa,
+      tr_dns_str(dns_aa_str, hs->flags.aa, uint16_t, (uint16_t)));
 
-  fprintf(stdout, " -> TC  %u  %s\n", hs->flags.tc,
-          tr_dns_str(dns_tc_str, hs->flags.tc, uint16_t, (uint16_t)));
+  log(stdout, " -> TC  %u  %s\n", hs->flags.tc,
+      tr_dns_str(dns_tc_str, hs->flags.tc, uint16_t, (uint16_t)));
 
-  fprintf(stdout, " -> OPCODE  %u  %s\n", hs->flags.opcode,
-          tr_dns_str(dns_opcode_str, hs->flags.opcode, uint16_t, (uint16_t)));
+  log(stdout, " -> OPCODE  %u  %s\n", hs->flags.opcode,
+      tr_dns_str(dns_opcode_str, hs->flags.opcode, uint16_t, (uint16_t)));
 
-  fprintf(stdout, " -> RCODE  %u  %s\n", hs->flags.rcode,
-          tr_dns_str(dns_rcode_str, hs->flags.rcode, uint16_t, (uint16_t)));
+  log(stdout, " -> RCODE  %u  %s\n", hs->flags.rcode,
+      tr_dns_str(dns_rcode_str, hs->flags.rcode, uint16_t, (uint16_t)));
 
   n = (ssize_t) ntohs(hs->qdcount);
   offset = res + sizeof(*hs);
-  fprintf(stdout, "# question section: %zu\n", (size_t) n);
+  log(stdout, "# question section: %zu\n", (size_t) n);
   while (n-- > 0)
     {
       qname_len = 0;
@@ -572,15 +583,15 @@ parse_response(uint16_t id, uint8_t *res)
       offset += qname_len;
       qs = (s_dns_qs *) offset;
 
-      fprintf(stdout, " -> %s  %s  %s\n", qname,
-              tr_dns_str(dns_type_str, qs->type, uint16_t, ntohs),
-              tr_dns_str(dns_class_str, qs->class, uint16_t, ntohs));
+      log(stdout, " -> %s  %s  %s\n", qname,
+          tr_dns_str(dns_type_str, qs->type, uint16_t, ntohs),
+          tr_dns_str(dns_class_str, qs->class, uint16_t, ntohs));
 
       offset += sizeof(*qs);
     }
 
   n = (ssize_t) ntohs(hs->ancount);
-  fprintf(stdout, "# answer section: %zu\n", (size_t) n);
+  log(stdout, "# answer section: %zu\n", (size_t) n);
   while (n-- > 0)
     {
       if (0 == parse_rr(res, &offset))
@@ -590,7 +601,7 @@ parse_response(uint16_t id, uint8_t *res)
     }
 
   n = (ssize_t) ntohs(hs->nscount);
-  fprintf(stdout, "# authority section: %zu\n", (size_t) n);
+  log(stdout, "# authority section: %zu\n", (size_t) n);
   while (n-- > 0)
     {
       if (0 == parse_rr(res, &offset))
@@ -600,7 +611,7 @@ parse_response(uint16_t id, uint8_t *res)
     }
 
   n = (ssize_t) ntohs(hs->arcount);
-  fprintf(stdout, "# additional section: %zu\n", (size_t) n);
+  log(stdout, "# additional section: %zu\n", (size_t) n);
   while (n-- > 0)
     {
       if (0 == parse_rr(res, &offset))
@@ -625,20 +636,20 @@ out(uint8_t *b, size_t n, const char *w)
   f = fopen(w, "wb");
   if (!f)
     {
-      fprintf(stderr, "! fopen: %s\n", strerror(errno));
+      log(stderr, "! fopen: %s\n", strerror(errno));
       return;
     }
 
   len = fwrite(b, 1, n, f);
   if (ferror(f))
     {
-      fprintf(stderr, "! fwrite: %s\n", strerror(errno));
+      log(stderr, "! fwrite: %s\n", strerror(errno));
       clearerr(f);
       goto clean_exit;
     }
   if (len < n)
     {
-      fprintf(stderr, "! fwrite: %zu/%zu\n", len, n);
+      log(stderr, "! fwrite: %zu/%zu\n", len, n);
       goto clean_exit;
     }
 
@@ -656,14 +667,14 @@ in(const char *w)
   f = fopen(w, "rb");
   if (!f)
     {
-      fprintf(stderr, "! fopen: %s\n", strerror(errno));
+      log(stderr, "! fopen: %s\n", strerror(errno));
       return;
     }
 
   n = fread(b, 1, DNS_UDP_MAX_LEN, f);
   if (ferror(f))
     {
-      fprintf(stderr, "! fread: %s\n", strerror(errno));
+      log(stderr, "! fread: %s\n", strerror(errno));
       clearerr(f);
       goto clean_exit;
     }
@@ -682,7 +693,7 @@ in(const char *w)
 void
 on_signal_segv(int sig)
 {
-  fprintf(stderr, "!%s: %d\n", __FUNCTION__, sig);
+  log(stderr, "!%s: %d\n", __FUNCTION__, sig);
   exit(EXIT_FAILURE);
 }
 #endif  /* NDEBUG */
@@ -704,13 +715,13 @@ main(int argc, char* argv[])
   on_segv = signal(SIGSEGV, on_signal_segv);
   if (SIG_ERR == on_segv)
     {
-      fprintf(stderr, "! signal: %s\n", strerror(errno));
+      log(stderr, "! signal: %s\n", strerror(errno));
       goto clean_exit;
     }
 #endif  /* NDEBUG */
 
   while (-1 != (ch = getopt_long(argc, argv,
-                                 "hs:p:q:t:r:T:oi:v:",
+                                 "hs:p:q:t:r:T:oi:Q",
                                  longopts, 0)))
     {
       switch (ch)
@@ -728,7 +739,7 @@ main(int argc, char* argv[])
           opt_retry = atoi(optarg);
           break;
         case 't':
-          fprintf(stderr, "optarg=%s\n", optarg);
+          log(stderr, "optarg=%s\n", optarg);
           for (i = 1; i < (int) (countof(dns_type_str)-1); i++)
             {
               if (0 == strcmp(dns_type_str[i], optarg))
@@ -753,8 +764,8 @@ main(int argc, char* argv[])
           opt_in = 1;
           strcpy(opt_file, optarg);
           break;
-        case 'v':
-          opt_verbose = atoi(optarg);
+        case 'Q':
+          opt_quiet = 1;
           break;
         default:
           usage(argv[0]);
@@ -762,29 +773,29 @@ main(int argc, char* argv[])
         }
     }
 
-  opt_verbose %= 3;
+  opt_quiet %= 3;
 
   if (opt_in)
     {
-      printf("# command line options:\n"
-             " -> --in=%s -verbose=%d\n",
-             opt_file,
-             opt_verbose);
+      log(stdout, "# command line options:\n"
+          " -> --in=%s --quiet=%d\n",
+          opt_file,
+          opt_quiet);
       in(opt_file);
     }
   else
     {
-      printf("# command line options:\n"
-             " -> --query=%s --server=%s --port=%d --type=%s\n"
-             " -> --retry=%d --timeout=%d --out=%s -verbose=%d\n",
-             opt_query,
-             opt_server,
-             opt_port,
-             opt_type_str,
-             (int) opt_retry,
-             (int) opt_timeout.tv_sec,
-             opt_out ? opt_file : "",
-             opt_verbose);
+      log(stdout, "# command line options:\n"
+          " -> --query=%s --server=%s --port=%d --type=%s\n"
+          " -> --retry=%d --timeout=%d --out=%s --quiet=%d\n",
+          opt_query,
+          opt_server,
+          opt_port,
+          opt_type_str[0] == 0 ? dns_type_str[opt_type] : opt_type_str,
+          (int) opt_retry,
+          (int) opt_timeout.tv_sec,
+          opt_out ? opt_file : "",
+          opt_quiet);
       query();
     }
 
