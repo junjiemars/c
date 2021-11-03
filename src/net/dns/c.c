@@ -138,8 +138,9 @@ static struct option longopts[]  =
     { "server",  optional_argument,    0,              's' },
     { "port",    optional_argument,    0,              'p' },
     { "query",   required_argument,    0,              'q' },
+    { "type",    optional_argument,    0,              't' },
     { "retry",   optional_argument,    0,              'r' },
-    { "timeout", optional_argument,    0,              't' },
+    { "timeout", optional_argument,    0,              'T' },
     { "out",     optional_argument,    0,              'o' },
     { "in",      required_argument,    0,              'i' },
     { "verbose", optional_argument,    0,              'v' },
@@ -148,6 +149,8 @@ static struct option longopts[]  =
 
 
 static uint16_t        opt_port            =  53;
+static uint16_t        opt_type            =  DNS_TYPE_A;
+static char            opt_type_str[8]     =  { 0, };
 static uint8_t         opt_retry           =  1;
 static struct timeval  opt_timeout         =  { .tv_sec = 15, 0 };
 static int             opt_verbose         =  1;
@@ -156,6 +159,7 @@ static int             opt_in              =  0;
 static char opt_file[DNS_QNAME_MAX_LEN]    =  ".response";
 static char opt_query[DNS_QNAME_MAX_LEN]   =  { 0, };
 static char opt_server[DNS_QNAME_MAX_LEN]  =  "127.0.0.53";
+
 
 static char *dns_type_str[] = {
   0,
@@ -218,9 +222,11 @@ usage(const char *p)
   printf("  -p, --port     query a non-standard port, default is %d\n",
          opt_port);
   printf("  -q, --query    the domain name to query\n");
+  printf("  -t, --type     query type, default is %s\n",
+         dns_type_str[opt_type]);
   printf("  -r, --retry    retry times after failed, default is %d\n",
          opt_retry);
-  printf("  -t, --timeout  timeout in seconds, default is %d\n",
+  printf("  -T, --timeout  timeout in seconds, default is %d\n",
          (int) opt_timeout.tv_sec);
   printf("  -o, --out      out response to [%s|file], default is %d\n",
          opt_file, opt_out);
@@ -448,7 +454,7 @@ make_request(uint8_t **req, size_t *req_len, uint16_t *req_id)
   /* make question */
   memset(&qs, 0, sizeof(qs));
   make_label(&qname[0], &qname_len, (uint8_t*) opt_query);
-  qs.type = htons(DNS_TYPE_A);
+  qs.type = htons(opt_type);
   qs.class = htons(DNS_CLASS_IN);
 
   /* make message */
@@ -685,7 +691,7 @@ on_signal_segv(int sig)
 int
 main(int argc, char* argv[])
 {
-  int  ch;
+  int  ch, i;
 
   if (1 == argc)
     {
@@ -704,7 +710,7 @@ main(int argc, char* argv[])
 #endif  /* NDEBUG */
 
   while (-1 != (ch = getopt_long(argc, argv,
-                                 "hs:p:q:r:t:oi:v:",
+                                 "hs:p:q:t:r:T:oi:v:",
                                  longopts, 0)))
     {
       switch (ch)
@@ -722,6 +728,18 @@ main(int argc, char* argv[])
           opt_retry = atoi(optarg);
           break;
         case 't':
+          fprintf(stderr, "optarg=%s\n", optarg);
+          for (i = 1; i < (int) (countof(dns_type_str)-1); i++)
+            {
+              if (0 == strcmp(dns_type_str[i], optarg))
+                {
+                  opt_type = (uint16_t) i;
+                  strcpy(opt_type_str, optarg);
+                  break;
+                }
+            }
+          break;
+        case 'T':
           opt_timeout.tv_sec = atoi(optarg);
           break;
         case 'o':
@@ -757,11 +775,12 @@ main(int argc, char* argv[])
   else
     {
       printf("# command line options:\n"
-             " -> --query=%s --server=%s --port=%d"
-             " --retry=%d --timeout=%d --out=%s -verbose=%d\n",
+             " -> --query=%s --server=%s --port=%d --type=%s\n"
+             " -> --retry=%d --timeout=%d --out=%s -verbose=%d\n",
              opt_query,
              opt_server,
              opt_port,
+             opt_type_str,
              (int) opt_retry,
              (int) opt_timeout.tv_sec,
              opt_out ? opt_file : "",
