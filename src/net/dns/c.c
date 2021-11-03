@@ -109,7 +109,6 @@ typedef struct s_dns_rr
 {
   uint16_t  name;
   uint16_t  type;
-#pragma pack(push, 1)
   uint16_t  class;
   int32_t   ttl;
   uint16_t  rdlength;
