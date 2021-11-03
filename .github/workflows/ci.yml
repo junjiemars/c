@@ -108,7 +108,7 @@ jobs:
       run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
     - name: Build and Test
       env:
-        _CFG_OPT_: --with-release=no --with-optimize=yes --with-symbol=no
+        _CFG_OPT_: --with-release=yes --with-optimize=yes --with-symbol=no
       run: |
          ./test.sh
     - name: Zip Build Artifact
