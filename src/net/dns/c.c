@@ -344,6 +344,7 @@ query(void)
       goto close_exit;
     }
   out(res, res_len, opt_file);
+  fprintf(stdout, "# received message size: %zu bytes\n", res_len);
 
   parse_response(req_id, res);
 
