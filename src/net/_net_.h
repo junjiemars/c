@@ -76,13 +76,7 @@ typedef int sockfd_t;
 #if (MSVC)
 #pragma warning(disable:4244)
 #pragma warning(disable:4996)
-
-#define __declare_packed_struct struct
-
 #else
-
-#define __declare_packed_struct struct __attribute__((packed))
-
 #endif  /* MSVC */
 
 
