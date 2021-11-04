@@ -50,7 +50,6 @@ typedef SOCKET sockfd_t;
 #define log_sockerr(r, s)                                               \
   do                                                                    \
     {                                                                   \
-      int e;                                                            \
       char buf[256];                                                    \
       DWORD flags;                                                      \
       flags = FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_IGNORE_INSERTS; \
