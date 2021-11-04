@@ -511,10 +511,11 @@ make_request(uint8_t **req, size_t *req_len, uint16_t *req_id)
 int
 parse_rr(uint8_t *res, uint8_t **offset)
 {
-  s_dns_rr    *rr                        =  0;
-  uint16_t     rdlength                  =  0;
-  size_t       qname_len                 =  0;
-  uint8_t      qname[DNS_QNAME_MAX_LEN]  =  {0};
+  s_dns_rr  *rr                        =  0;
+  uint16_t   type;
+  uint16_t   rdlength                  =  0;
+  size_t     qname_len                 =  0;
+  uint8_t    qname[DNS_QNAME_MAX_LEN]  =  {0};
 
   rr = (s_dns_rr *) *offset;
   if (DNS_PTR_NAME == dns_ptr_type(rr->name))
@@ -536,28 +537,35 @@ parse_rr(uint8_t *res, uint8_t **offset)
     }
 
   log(stdout, "  ");
-  switch (ntohs(rr->type))
+  type = (uint16_t) ntohs(rr->type);
+  switch (type)
     {
     case DNS_TYPE_CNAME:
-      qname_len = 0;
-      qname[0] = 0;
-      parse_label(res, (uint8_t *) &rr->name, qname, &qname_len);
-      if (qname_len == 0)
+      if (!opt_quiet || opt_type == (int) type)
         {
+          qname_len = 0;
           qname[0] = 0;
+          parse_label(res, (uint8_t *) &rr->name, qname, &qname_len);
+          if (qname_len == 0)
+            {
+              qname[0] = 0;
+            }
+          fprintf(stdout, "%s", (const char *) qname);
+          if (opt_quiet)
+            {
+              fprintf(stdout, "%c", opt_quiet);
+            };
         }
-      fprintf(stdout, "%s", (const char *) qname);
-      if (opt_quiet)
-        {
-          fprintf(stdout, "%c", opt_quiet);
-        };
       break;
     case DNS_TYPE_A:
-      fprintf(stdout, "%u.%u.%u.%u", (*offset)[0], (*offset)[1],
-              (*offset)[2], (*offset)[3]);
-      if (opt_quiet)
+      if (!opt_quiet || opt_type == (int) type)
         {
-          fprintf(stdout, "%c", opt_quiet);
+          fprintf(stdout, "%u.%u.%u.%u", (*offset)[0], (*offset)[1],
+                  (*offset)[2], (*offset)[3]);
+          if (opt_quiet)
+            {
+              fprintf(stdout, "%c", opt_quiet);
+            }
         }
       break;
     default:
