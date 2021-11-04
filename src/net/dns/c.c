@@ -182,16 +182,14 @@ static struct option longopts[]  =
 
 static uint16_t        opt_port            =  53;
 static int             opt_type            =  DNS_TYPE_A;
-static char            opt_type_str[8]     =  { 0, };
-static uint8_t         opt_retry           =  1;
-static struct timeval  opt_timeout         =  { .tv_sec = 15, 0 };
+static int             opt_retry           =  1;
 static int             opt_quiet           =  0;
 static int             opt_out             =  0;
 static int             opt_in              =  0;
 static char opt_file[DNS_QNAME_MAX_LEN]    =  ".response";
 static char opt_query[DNS_QNAME_MAX_LEN]   =  { 0, };
 static char opt_server[DNS_QNAME_MAX_LEN]  =  "127.0.0.53";
-
+static struct timeval  opt_timeout         =  { .tv_sec = 15, 0 };
 
 static char *dns_type_str[] = {
 #define XX(n, s) #s,
@@ -755,7 +753,6 @@ main(int argc, char* argv[])
               if (0 == strcmp(dns_type_str[i], optarg))
                 {
                   opt_type = (uint16_t) (i + 1);
-                  strcpy(opt_type_str, optarg);
                   break;
                 }
             }
@@ -789,8 +786,6 @@ main(int argc, char* argv[])
         }
     }
 
-  opt_quiet %= 3;
-
   if (opt_in)
     {
       log(stdout, "# command line options:\n"
@@ -808,7 +803,7 @@ main(int argc, char* argv[])
           opt_server,
           opt_port,
           tr_dns_type_str(opt_type),
-          (int) opt_retry,
+          opt_retry,
           (int) opt_timeout.tv_sec,
           opt_out ? opt_file : "",
           opt_quiet);
