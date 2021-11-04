@@ -79,8 +79,8 @@ enum dns_class
    ? dns_class_str[(size_t)(n-1)] : dns_class_str[0])
 
 
-#define tr_dns_flags_str(a, n)                                        \
-  ((size_t)(n) < (countof(a)-1) ? a[(size_t)(n)] : a[(countof(a)-1)])
+#define tr_dns_flags_str(a, n)                                \
+  ((size_t)(n) < countof(a) ? a[(size_t)(n)] : ";; invalid")
 
 
 #define log(x, ...)                             \
@@ -208,19 +208,16 @@ static char *dns_class_str[] = {
 static char *dns_qr_str[] = {
   ";; a query",
   ";; a response",
-  ";; error, QR should in [0,1]"
 };
 
 static char *dns_aa_str[] = {
   ";; not authoritative answer",
   ";; authoritative answer",
-  ";; error, AA should in [0,1]"
 };
 
 static char *dns_tc_str[] = {
   ";; not truncated",
   ";; trucated",
-  ";; error, TC should in [0,1]"
 };
 
 static char *dns_opcode_str[] = {
@@ -228,7 +225,6 @@ static char *dns_opcode_str[] = {
   ";; an inverse query",
   ";; a server status request",
   ";; reserved",
-  ";; error, OPCODE should in [0,3]"
 };
 
 static char *dns_rcode_str[] = {
@@ -238,7 +234,6 @@ static char *dns_rcode_str[] = {
   ";; name error",
   ";; not implemented",
   ";; refused",
-  ";; error, RCODE should in [0,5]"
 };
 
 static void
