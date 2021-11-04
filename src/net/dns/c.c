@@ -154,7 +154,7 @@ typedef void (*on_signal)(int);
 static void on_signal_segv(int sig);
 #endif  /* NDEBUG */
 
-static void query(void);
+static int query(void);
 static void make_label(uint8_t *dst, size_t *dst_len, uint8_t *name);
 static void parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name,
                         size_t *name_len);
@@ -162,7 +162,7 @@ static int make_request(uint8_t **req, size_t *req_len, uint16_t *req_id);
 static void parse_response(uint16_t id, uint8_t *res);
 static int parse_rr(uint8_t *res, uint8_t **offset);
 static void out(uint8_t *buf, size_t n, const char *where);
-static void in(const char *where);
+static int in(const char *where);
 
 
 static struct option longopts[]  =
@@ -258,16 +258,16 @@ usage(const char *p)
 }
 
 
-void
+int
 query(void)
 {
-  int                  rc;
-  sockfd_t             sfd        =  0;
-  uint8_t             *req        =  0;
+  int                  rc       =  0;
+  sockfd_t             sfd      =  0;
+  uint8_t             *req      =  0;
   size_t               req_len;
   uint16_t             req_id;
-  uint8_t             *res        =  0;
-  size_t               res_len    =  0;
+  uint8_t             *res      =  0;
+  size_t               res_len  =  0;
   struct in_addr       host;
   struct sockaddr_in   dst;
   socklen_t            dst_len;
@@ -280,7 +280,8 @@ query(void)
   rc = WSAStartup(MAKEWORD(2, 2), &wsa);
   if (rc)
     {
-      log(stderr, "! WSAStartup: %s\n", strerror(errno));
+      rc = errno;
+      log(stderr, "! WSAStartup: %s\n", strerror(rc));
       goto clean_exit;
     }
 #endif  /* WINNT */
@@ -296,14 +297,14 @@ query(void)
   sfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
   if (-1 == sfd)
     {
-      log_sockerr("! socket: %s\n");
+      log_sockerr(rc, "! socket: %s\n");
       goto clean_exit;
     }
 
   rc = inet_pton(AF_INET, opt_server, &host);
   if (-1 == rc)
     {
-      log_sockerr("! inet_pton: %s\n");
+      log_sockerr(rc, "! inet_pton: %s\n");
       goto close_exit;
     }
 
@@ -314,17 +315,18 @@ query(void)
   dst.sin_port = htons(opt_port);
   dst.sin_addr = host;
 
-  rc = setsockopt(sfd, SOL_SOCKET, SO_SNDTIMEO, &opt_timeout,
+  rc = setsockopt(sfd, SOL_SOCKET, SO_SNDTIMEO, (const char *) &opt_timeout,
                   sizeof(opt_timeout));
   if (-1 == rc)
     {
-      log_sockerr("! setsockopt: SO_SNDTIMEO %s\n");
+      log_sockerr(rc, "! setsockopt: SO_SNDTIMEO %s\n");
     }
 
   epoch = clock();
-  if ((clock_t) -1 == epoch)
+  if ((clock_t) (-1) == epoch)
     {
-      log(stderr, "! clock: %s\n", strerror(errno));
+      rc = errno;
+      log(stderr, "! clock: %s\n", strerror(rc));
     }
   retry = opt_retry;
   while (retry-- > 0)
@@ -332,7 +334,7 @@ query(void)
       rc = __sendto(sfd, req, req_len, 0, &dst, dst_len);
       if (-1 == rc)
         {
-          log_sockerr("! sendto: %s\n");
+          log_sockerr(rc, "! sendto: %s\n");
           continue;
         }
       break;
@@ -343,17 +345,18 @@ query(void)
     }
 
   /* receive */
-  rc = setsockopt(sfd, SOL_SOCKET, SO_RCVTIMEO, &opt_timeout,
+  rc = setsockopt(sfd, SOL_SOCKET, SO_RCVTIMEO, (const char *) &opt_timeout,
                   sizeof(opt_timeout));
   if (-1 == rc)
     {
-      log_sockerr("! setsockopt: SO_RCVTIMEO %s\n");
+      log_sockerr(rc, "! setsockopt: SO_RCVTIMEO %s\n");
     }
 
   res = calloc(1, DNS_UDP_MAX_LEN);
   if (!res)
     {
-      log(stderr, "! calloc: %s\n", strerror(errno));
+      rc = errno;
+      log(stderr, "! calloc: %s\n", strerror(rc));
       goto close_exit;
     }
 
@@ -364,7 +367,7 @@ query(void)
       rc = __recvfrom(sfd, res, res_len, 0, &dst, &dst_len);
       if (-1 == rc)
         {
-          log_sockerr("! recvfrom: %s\n");
+          log_sockerr(rc, "! recvfrom: %s\n");
           continue;
         }
       res_len = rc;
@@ -377,10 +380,11 @@ query(void)
   elapsed = (double) (clock() - epoch) / CLOCKS_PER_SEC;
   out(res, res_len, opt_file);
 
-  log(stdout, "# message size: %zu bytes, elapsed %lf msec\n", res_len,
+  log(stdout, "# message size: %zu bytes, elapsed %f msec\n", res_len,
       elapsed * 1000);
 
   parse_response(req_id, res);
+  rc = 0;
 
  close_exit:
   close(sfd);
@@ -391,6 +395,8 @@ query(void)
 #if (WINNT)
   WSACleanup();
 #endif  /* WINNT */
+
+  return rc;
 }
 
 
@@ -674,9 +680,10 @@ out(uint8_t *b, size_t n, const char *w)
   fclose(f);
 }
 
-void
+int
 in(const char *w)
 {
+  int       rc  =  0;
   FILE     *f;
   size_t    n;
   uint8_t   b[DNS_UDP_MAX_LEN];
@@ -684,14 +691,16 @@ in(const char *w)
   f = fopen(w, "rb");
   if (!f)
     {
-      log(stderr, "! fopen: %s\n", strerror(errno));
-      return;
+      rc = errno;
+      log(stderr, "! fopen: %s\n", strerror(rc));
+      return rc;
     }
 
   n = fread(b, 1, DNS_UDP_MAX_LEN, f);
   if (ferror(f))
     {
-      log(stderr, "! fread: %s\n", strerror(errno));
+      rc = errno;
+      log(stderr, "! fread: %s\n", strerror(rc));
       clearerr(f);
       goto clean_exit;
     }
@@ -704,6 +713,7 @@ in(const char *w)
 
  clean_exit:
   fclose(f);
+  return rc;
 }
 
 #if !(NDEBUG)
@@ -806,7 +816,7 @@ main(int argc, char* argv[])
           opt_file,
           opt_quiet);
 #endif  /* NDEBUG */
-      in(opt_file);
+      rc = in(opt_file);
     }
   else
     {
@@ -823,7 +833,7 @@ main(int argc, char* argv[])
           opt_out ? opt_file : "",
           opt_quiet);
 #endif  /* NDEBUG */
-      query();
+      rc = query();
     }
 
  clean_exit:

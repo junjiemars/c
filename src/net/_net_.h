@@ -47,16 +47,16 @@ typedef SOCKET sockfd_t;
 #define __recvfrom(s, buf, len, flags, dst, dst_len)            \
   recvfrom(s, (char *) buf, (int) len, flags, (SOCKADDR *) dst, \
            dst_len)
-#define log_sockerr(s)                                                  \
+#define log_sockerr(r, s)                                               \
   do                                                                    \
     {                                                                   \
       int e;                                                            \
       char buf[256];                                                    \
       DWORD flags;                                                      \
       flags = FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_IGNORE_INSERTS; \
-      e = WSAGetLastError();                                            \
+      r = WSAGetLastError();                                            \
       buf[0] = 0;                                                       \
-      FormatMessage(flags, NULL, e, 0, buf, sizeof(buf), NULL);         \
+      FormatMessage(flags, NULL, r, 0, buf, sizeof(buf), NULL);         \
       fprintf(stderr, (s), buf);                                        \
     } while (0)
 
@@ -67,7 +67,12 @@ typedef int sockfd_t;
   sendto(s, buf, len, flags, (const struct sockaddr *) dst, dst_len)
 #define __recvfrom(s, buf, len, flags, dst, dst_len) \
   recvfrom(s, buf, len, flags, (struct sockaddr *) dst, dst_len)
-#define log_sockerr(s)  fprintf(stderr, (s), strerror(errno))
+#define log_sockerr(r, s)                       \
+  do                                            \
+    {                                           \
+      r = errno;                                \
+      fprintf(stderr, (s), strerror(r));        \
+    } while (0)
 
 #endif  /* MSVC */
 
