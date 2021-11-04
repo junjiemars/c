@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <time.h>
 
 #if !(NDEBUG)
 #include <signal.h>
@@ -188,8 +189,9 @@ static int             opt_out             =  0;
 static int             opt_in              =  0;
 static char opt_file[DNS_QNAME_MAX_LEN]    =  ".response";
 static char opt_query[DNS_QNAME_MAX_LEN]   =  { 0, };
-static char opt_server[DNS_QNAME_MAX_LEN]  =  "127.0.0.53";
+static char opt_server[DNS_LABEL_MAX_LEN]  =  "127.0.0.53";
 static struct timeval  opt_timeout         =  { .tv_sec = 15, 0 };
+
 
 static char *dns_type_str[] = {
 #define XX(n, s) #s,
@@ -260,16 +262,18 @@ void
 query(void)
 {
   int                  rc;
-  sockfd_t             sfd      =  0;
-  uint8_t             *req      =  0;
+  sockfd_t             sfd        =  0;
+  uint8_t             *req        =  0;
   size_t               req_len;
   uint16_t             req_id;
-  uint8_t             *res      =  0;
-  size_t               res_len  =  0;
+  uint8_t             *res        =  0;
+  size_t               res_len    =  0;
   struct in_addr       host;
   struct sockaddr_in   dst;
   socklen_t            dst_len;
   uint8_t              retry;
+  clock_t              epoch;
+  double               elapsed;
 
 #if (WINNT)
   WSADATA wsa;
@@ -319,6 +323,11 @@ query(void)
     }
 #endif
 
+  epoch = clock();
+  if ((clock_t) -1 == epoch)
+    {
+      perror(0);
+    }
   retry = opt_retry;
   while (retry-- > 0)
     {
@@ -369,8 +378,11 @@ query(void)
     {
       goto close_exit;
     }
+  elapsed = (double) (clock() - epoch) / CLOCKS_PER_SEC;
   out(res, res_len, opt_file);
-  log(stdout, "# message size: %zu bytes\n", res_len);
+
+  log(stdout, "# message size: %zu bytes, elapsed %lf msec\n", res_len,
+      elapsed * 1000);
 
   parse_response(req_id, res);
 
@@ -711,7 +723,7 @@ on_signal_segv(int sig)
 int
 main(int argc, char* argv[])
 {
-  int  ch, i;
+  int     ch, i;
 
   if (1 == argc)
     {
@@ -752,7 +764,7 @@ main(int argc, char* argv[])
             {
               if (0 == strcmp(dns_type_str[i], optarg))
                 {
-                  opt_type = (uint16_t) (i + 1);
+                  opt_type = (i + 1);
                   break;
                 }
             }
