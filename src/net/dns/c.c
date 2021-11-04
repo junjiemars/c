@@ -719,7 +719,8 @@ on_signal_segv(int sig)
 int
 main(int argc, char* argv[])
 {
-  int     ch, i;
+  int  ch, i;
+  int  rc  =  0;
 
   if (1 == argc)
     {
@@ -733,6 +734,7 @@ main(int argc, char* argv[])
   if (SIG_ERR == on_segv)
     {
       log(stderr, "! signal: %s\n", strerror(errno));
+      rc = 1;
       goto clean_exit;
     }
 #endif  /* NDEBUG */
@@ -768,6 +770,7 @@ main(int argc, char* argv[])
             {
               fprintf(stderr, "! invalid argument: --type=%s\n", optarg);
               usage(argv[0]);
+              rc = 1;
               goto clean_exit;
             }
           break;
@@ -790,6 +793,7 @@ main(int argc, char* argv[])
           break;
         default:
           usage(argv[0]);
+          rc = 1;
           goto clean_exit;
         }
     }
@@ -823,7 +827,7 @@ main(int argc, char* argv[])
     }
 
  clean_exit:
-  return 0;
+  return rc;
 }
 
 

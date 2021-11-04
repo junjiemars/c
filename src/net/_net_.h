@@ -1,4 +1,3 @@
-
 #ifndef _NET_H_
 #define _NET_H_
 
@@ -83,10 +82,10 @@ typedef int sockfd_t;
 #ifdef countof
 #  undef countof
 #endif
-#define countof(a) (sizeof(a)/sizeof(*(a)))
+#define countof(a)  (sizeof(a)/sizeof(*(a)))
 
 
-#define _unused_(x) (void)(x)
+#define _unused_(x)  (void)(x)
 
 
 #endif /* end of _NET_H_ */
