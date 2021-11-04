@@ -546,11 +546,19 @@ parse_rr(uint8_t *res, uint8_t **offset)
         {
           qname[0] = 0;
         }
-      fprintf(stdout, "%s%c", (const char *) qname, opt_quiet ? '\n' : 0);
+      fprintf(stdout, "%s", (const char *) qname);
+      if (opt_quiet)
+        {
+          fprintf(stdout, "%c", opt_quiet);
+        };
       break;
     case DNS_TYPE_A:
-      fprintf(stdout, "%u.%u.%u.%u%c", (*offset)[0], (*offset)[1],
-              (*offset)[2], (*offset)[3], opt_quiet ? '\n' : 0);
+      fprintf(stdout, "%u.%u.%u.%u", (*offset)[0], (*offset)[1],
+              (*offset)[2], (*offset)[3]);
+      if (opt_quiet)
+        {
+          fprintf(stdout, "%c", opt_quiet);
+        }
       break;
     default:
       break;
@@ -799,7 +807,7 @@ main(int argc, char* argv[])
           strcpy(opt_file, optarg);
           break;
         case 'Q':
-          opt_quiet = 1;
+          opt_quiet = '\n';
           break;
         default:
           usage(argv[0]);
