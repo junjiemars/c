@@ -538,11 +538,11 @@ parse_rr(uint8_t *res, uint8_t **offset)
 
   log(stdout, "  ");
   type = (uint16_t) ntohs(rr->type);
-  switch (type)
+  if (!opt_quiet || opt_type == (int) type)
     {
-    case DNS_TYPE_CNAME:
-      if (!opt_quiet || opt_type == (int) type)
+      switch (type)
         {
+        case DNS_TYPE_CNAME:
           qname_len = 0;
           qname[0] = 0;
           parse_label(res, (uint8_t *) &rr->name, qname, &qname_len);
@@ -555,21 +555,18 @@ parse_rr(uint8_t *res, uint8_t **offset)
             {
               fprintf(stdout, "%c", opt_quiet);
             };
-        }
-      break;
-    case DNS_TYPE_A:
-      if (!opt_quiet || opt_type == (int) type)
-        {
+          break;
+        case DNS_TYPE_A:
           fprintf(stdout, "%u.%u.%u.%u", (*offset)[0], (*offset)[1],
                   (*offset)[2], (*offset)[3]);
           if (opt_quiet)
             {
               fprintf(stdout, "%c", opt_quiet);
             }
+          break;
+        default:
+          break;
         }
-      break;
-    default:
-      break;
     }
   log(stdout, "\n");
 
