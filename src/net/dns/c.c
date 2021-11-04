@@ -431,7 +431,7 @@ parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name, size_t *name_len)
   d = name;
   n = 0;
 
-  while (n < DNS_QNAME_MAX_LEN)
+  while (n < DNS_LABEL_MAX_LEN)
     {
       ptr = *(uint16_t *) p;
       if (DNS_PTR_NAME == dns_ptr_type(ptr))
