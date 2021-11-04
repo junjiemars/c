@@ -70,8 +70,8 @@ enum dns_class
 #define dns_ptr_type(u16)    ((ntohs((uint16_t)u16) >> 8) & 0xff)
 #define dns_ptr_offset(u16)  ((ntohs((uint16_t)u16)) & 0xff)
 
-#define tr_dns_type_str(n)                            \
-  ((size_t)(n-1) < countof(dns_type_str)              \
+#define tr_dns_type_str(n)                          \
+  ((size_t)(n-1) < countof(dns_type_str)            \
    ? dns_type_str[(size_t)(n-1)] : dns_type_str[0])
 
 
@@ -296,14 +296,14 @@ query(void)
   sfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
   if (-1 == sfd)
     {
-      log_sock_err("! socket: %s\n");
+      log_sockerr("! socket: %s\n");
       goto clean_exit;
     }
 
   rc = inet_pton(AF_INET, opt_server, &host);
   if (-1 == rc)
     {
-      log_sock_err("! inet_pton: %s\n");
+      log_sockerr("! inet_pton: %s\n");
       goto close_exit;
     }
 
@@ -314,14 +314,12 @@ query(void)
   dst.sin_port = htons(opt_port);
   dst.sin_addr = host;
 
-#if (LINUX)
   rc = setsockopt(sfd, SOL_SOCKET, SO_SNDTIMEO, &opt_timeout,
                   sizeof(opt_timeout));
   if (-1 == rc)
     {
-      log_sock_err("! setsockopt: SO_SNDTIMEO %s\n");
+      log_sockerr("! setsockopt: SO_SNDTIMEO %s\n");
     }
-#endif
 
   epoch = clock();
   if ((clock_t) -1 == epoch)
@@ -334,7 +332,7 @@ query(void)
       rc = __sendto(sfd, req, req_len, 0, &dst, dst_len);
       if (-1 == rc)
         {
-          log_sock_err("! sendto: %s\n");
+          log_sockerr("! sendto: %s\n");
           continue;
         }
       break;
@@ -345,14 +343,12 @@ query(void)
     }
 
   /* receive */
-#if (LINUX)
   rc = setsockopt(sfd, SOL_SOCKET, SO_RCVTIMEO, &opt_timeout,
                   sizeof(opt_timeout));
   if (-1 == rc)
     {
-      log_sock_err("! setsockopt: SO_RCVTIMEO %s\n");
+      log_sockerr("! setsockopt: SO_RCVTIMEO %s\n");
     }
-#endif
 
   res = calloc(1, DNS_UDP_MAX_LEN);
   if (!res)
@@ -368,7 +364,7 @@ query(void)
       rc = __recvfrom(sfd, res, res_len, 0, &dst, &dst_len);
       if (-1 == rc)
         {
-          log_sock_err("! recvfrom: %s\n");
+          log_sockerr("! recvfrom: %s\n");
           continue;
         }
       res_len = rc;

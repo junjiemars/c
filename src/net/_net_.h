@@ -48,7 +48,7 @@ typedef SOCKET sockfd_t;
 #define __recvfrom(s, buf, len, flags, dst, dst_len)            \
   recvfrom(s, (char *) buf, (int) len, flags, (SOCKADDR *) dst, \
            dst_len)
-#define log_sock_err(s)                                                 \
+#define log_sockerr(s)                                                  \
   do                                                                    \
     {                                                                   \
       int e;                                                            \
@@ -68,7 +68,7 @@ typedef int sockfd_t;
   sendto(s, buf, len, flags, (const struct sockaddr *) dst, dst_len)
 #define __recvfrom(s, buf, len, flags, dst, dst_len) \
   recvfrom(s, buf, len, flags, (struct sockaddr *) dst, dst_len)
-#define log_sock_err(s)  fprintf(stderr, (s), strerror(errno))
+#define log_sockerr(s)  fprintf(stderr, (s), strerror(errno))
 
 #endif  /* MSVC */
 
