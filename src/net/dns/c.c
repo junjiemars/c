@@ -326,7 +326,7 @@ query(void)
   epoch = clock();
   if ((clock_t) -1 == epoch)
     {
-      perror(0);
+      log(stderr, "! clock: %s\n", strerror(errno));
     }
   retry = opt_retry;
   while (retry-- > 0)
@@ -800,14 +800,17 @@ main(int argc, char* argv[])
 
   if (opt_in)
     {
+#if !(NDEBUG)
       log(stdout, "# command line options:\n"
           " -> --in=%s --quiet=%d\n",
           opt_file,
           opt_quiet);
+#endif  /* NDEBUG */
       in(opt_file);
     }
   else
     {
+#if !(NDEBUG)
       log(stdout, "# command line options:\n"
           " -> --query=%s --server=%s --port=%d --type=%s\n"
           " -> --retry=%d --timeout=%d --out=%s --quiet=%d\n",
@@ -819,6 +822,7 @@ main(int argc, char* argv[])
           (int) opt_timeout.tv_sec,
           opt_out ? opt_file : "",
           opt_quiet);
+#endif  /* NDEBUG */
       query();
     }
 
