@@ -19,31 +19,46 @@
 
 
 /* type */
-#define DNS_TYPE_A      0x01
-#define DNS_TYPE_NS     0x02
-#define DNS_TYPE_MD     0x03
-#define DNS_TYPE_MF     0x04
-#define DNS_TYPE_CNAME  0x05
-#define DNS_TYPE_SOA    0x06
-#define DNS_TYPE_MB     0x07
-#define DNS_TYPE_MG     0x08
-#define DNS_TYPE_MR     0x09
-#define DNS_TYPE_NULL   0x0a
-#define DNS_TYPE_WKS    0x0b
-#define DNS_TYPE_PTR    0x0c
-#define DNS_TYPE_HINFO  0x0d
-#define DNS_TYPE_MX     0x0e
-#define DNS_TYPE_TXT    0x0f
-
-#define DNS_PTR_NAME    0xc0
+#define DNS_TYPE_MAP(XX)                        \
+  XX(0x01, A)                                   \
+  XX(0x02, NS)                                  \
+  XX(0x03, MD)                                  \
+  XX(0x04, MF)                                  \
+  XX(0x05, CNAME)                               \
+  XX(0x06, SOA)                                 \
+  XX(0x07, MB)                                  \
+  XX(0x08, MG)                                  \
+  XX(0x09, MR)                                  \
+  XX(0x0a, NULL)                                \
+  XX(0x0b, WKS)                                 \
+  XX(0x0c, PTR)                                 \
+  XX(0x0d, HINFO)                               \
+  XX(0x0e, MX)                                  \
+  XX(0x0f, TXT)                                 \
+  
+enum dns_type
+  {
+#define XX(n, s) DNS_TYPE_##s = n,
+    DNS_TYPE_MAP(XX)
+#undef XX
+  };
 
 
 /* class */
-#define DNS_CLASS_IN  0x01
-#define DNS_CLASS_CS  0x02
-#define DNS_CLASS_CH  0x03
-#define DNS_CLASS_HS  0x04
+#define DNS_CLASS_MAP(XX)                       \
+  XX(1, IN)                                     \
+  XX(2, CS)                                     \
+  XX(3, CH)                                     \
+  XX(4, HS)                                     \
 
+enum dns_class
+  {
+#define XX(n, s) DNS_CLASS_##s = n,
+    DNS_CLASS_MAP(XX)
+#undef XX
+  };
+
+#define DNS_PTR_NAME    0xc0
 
 /* length */
 #define DNS_QNAME_MAX_LEN  255
@@ -54,8 +69,19 @@
 #define dns_ptr_type(u16)    ((ntohs((uint16_t)u16) >> 8) & 0xff)
 #define dns_ptr_offset(u16)  ((ntohs((uint16_t)u16)) & 0xff)
 
-#define tr_dns_str(a, i, t, tr)                                 \
-  (a[((t)(tr(i)+1)) >= (t)countof(a) ? (countof(a)-1) : tr(i)])
+#define tr_dns_type_str(n)                            \
+  ((size_t)(n-1) < countof(dns_type_str)              \
+   ? dns_type_str[(size_t)(n-1)] : dns_type_str[0])
+
+
+#define tr_dns_class_str(n)                           \
+  ((size_t)(n-1) < countof(dns_class_str)             \
+   ? dns_class_str[(size_t)(n-1)] : dns_class_str[0])
+
+
+#define tr_dns_flags_str(a, n)                                        \
+  ((size_t)(n) < (countof(a)-1) ? a[(size_t)(n)] : a[(countof(a)-1)])
+
 
 #define log(x, ...)                             \
   if (0 == opt_quiet)                           \
@@ -155,7 +181,7 @@ static struct option longopts[]  =
 
 
 static uint16_t        opt_port            =  53;
-static uint16_t        opt_type            =  DNS_TYPE_A;
+static int             opt_type            =  DNS_TYPE_A;
 static char            opt_type_str[8]     =  { 0, };
 static uint8_t         opt_retry           =  1;
 static struct timeval  opt_timeout         =  { .tv_sec = 15, 0 };
@@ -168,18 +194,15 @@ static char opt_server[DNS_QNAME_MAX_LEN]  =  "127.0.0.53";
 
 
 static char *dns_type_str[] = {
-  0,
-  "A",      "NS",    "MD",   "MF",
-  "CNAME",  "SOA",   "MB",   "MG",
-  "MR",     "NULL",  "WKS",  "PTR",
-  "HINFO",  "MX",    "TXT",
-  ";; error, TYPE in [1,15]"
+#define XX(n, s) #s,
+  DNS_TYPE_MAP(XX)
+#undef XX
 };
 
 static char *dns_class_str[] = {
-  0,
-  "IN",     "CS",    "CH",   "HS",
-  ";; error, CLASS in [1,4]"
+#define XX(n, s) #s,
+  DNS_CLASS_MAP(XX)
+#undef XX
 };
 
 static char *dns_qr_str[] = {
@@ -225,7 +248,7 @@ usage(const char *p)
   printf("  -h, --help     this help text\n");
   printf("  -q, --query    the domain name to query\n");
   printf("  -t, --type     query type, default is %s\n",
-         dns_type_str[opt_type]);
+         tr_dns_type_str(opt_type));
   printf("  -s  --server   DNS server, default is %s\n",
          opt_server);
   printf("  -p, --port     query a non-standard port, default is %d\n",
@@ -495,8 +518,8 @@ parse_rr(uint8_t *res, uint8_t **offset)
   *offset += sizeof(*rr);
 
   log(stdout, " -> %s  %s  %s  %i  %u", qname,
-      tr_dns_str(dns_type_str, rr->type, uint16_t, ntohs),
-      tr_dns_str(dns_class_str, rr->class, uint16_t, ntohs),
+      tr_dns_type_str(ntohs(rr->type)),
+      tr_dns_class_str(ntohs(rr->class)),
       (int) ntohl(rr->ttl), rdlength);
 
   if (0 == rdlength)
@@ -548,19 +571,19 @@ parse_response(uint16_t id, uint8_t *res)
   log(stdout, " -> ID  %u  <- %u\n", ntohs(hs->id), id);
 
   log(stdout, " -> QR  %u  %s\n", hs->flags.qr,
-      tr_dns_str(dns_qr_str, hs->flags.qr, uint16_t, (uint16_t)));
+      tr_dns_flags_str(dns_qr_str, hs->flags.qr));
 
   log(stdout, " -> AA  %u  %s\n", hs->flags.aa,
-      tr_dns_str(dns_aa_str, hs->flags.aa, uint16_t, (uint16_t)));
+      tr_dns_flags_str(dns_aa_str, hs->flags.aa));
 
   log(stdout, " -> TC  %u  %s\n", hs->flags.tc,
-      tr_dns_str(dns_tc_str, hs->flags.tc, uint16_t, (uint16_t)));
+      tr_dns_flags_str(dns_tc_str, hs->flags.tc));
 
   log(stdout, " -> OPCODE  %u  %s\n", hs->flags.opcode,
-      tr_dns_str(dns_opcode_str, hs->flags.opcode, uint16_t, (uint16_t)));
+      tr_dns_flags_str(dns_opcode_str, hs->flags.opcode));
 
   log(stdout, " -> RCODE  %u  %s\n", hs->flags.rcode,
-      tr_dns_str(dns_rcode_str, hs->flags.rcode, uint16_t, (uint16_t)));
+      tr_dns_flags_str(dns_rcode_str, hs->flags.rcode));
 
   n = (ssize_t) ntohs(hs->qdcount);
   offset = res + sizeof(*hs);
@@ -577,8 +600,8 @@ parse_response(uint16_t id, uint8_t *res)
       qs = (s_dns_qs *) offset;
 
       log(stdout, " -> %s  %s  %s\n", qname,
-          tr_dns_str(dns_type_str, qs->type, uint16_t, ntohs),
-          tr_dns_str(dns_class_str, qs->class, uint16_t, ntohs));
+          tr_dns_type_str(ntohs(qs->type)),
+          tr_dns_class_str(ntohs(qs->class)));
 
       offset += sizeof(*qs);
     }
@@ -732,16 +755,16 @@ main(int argc, char* argv[])
           opt_retry = atoi(optarg);
           break;
         case 't':
-          for (i = 1; i < (int) (countof(dns_type_str)-1); i++)
+          for (i = 0; i < (int) countof(dns_type_str); i++)
             {
               if (0 == strcmp(dns_type_str[i], optarg))
                 {
-                  opt_type = (uint16_t) i;
+                  opt_type = (uint16_t) (i + 1);
                   strcpy(opt_type_str, optarg);
                   break;
                 }
             }
-          if (i == (int) (countof(dns_type_str)-1))
+          if (i == countof(dns_type_str))
             {
               fprintf(stderr, "! invalid argument: --type=%s\n", optarg);
               usage(argv[0]);
@@ -789,7 +812,7 @@ main(int argc, char* argv[])
           opt_query,
           opt_server,
           opt_port,
-          opt_type_str[0] == 0 ? dns_type_str[opt_type] : opt_type_str,
+          tr_dns_type_str(opt_type),
           (int) opt_retry,
           (int) opt_timeout.tv_sec,
           opt_out ? opt_file : "",
