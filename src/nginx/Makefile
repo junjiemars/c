@@ -7,12 +7,12 @@ nginx_git_src := 'https://github.com/nginx/nginx.git'
 nginx_home := $(nginx_root)/nginx_home
 
 
-nginx: nginx_core																\
-       nginx_module_hello												\
+nginx: nginx_core                               \
+       nginx_module_hello                       \
        nginx_module_njs
 
-nginx_test: nginx_core_test											\
-            nginx_module_hello_test							\
+nginx_test: nginx_core_test                     \
+            nginx_module_hello_test             \
             nginx_module_njs_test
 
 
@@ -58,26 +58,26 @@ nginx_core_test: nginx_core
 endif # end of msvc
 
 
-$(nginx_core_binout): $(nginx_home)									\
-                      $(nginx_core_root)/nginx.conf	\
+$(nginx_core_binout): $(nginx_home)                 \
+                      $(nginx_core_root)/nginx.conf \
                       $(nginx_core_root)/inc.conf
-	cd $(nginx_home)																			\
-		&& auto/configure --prefix=$(nginx_core_prefix)			\
-                      --without-http_fastcgi_module			\
-                      --without-http_uwsgi_module				\
-                      --without-http_scgi_module				\
-                      --without-http_memcached_module		\
-                      --without-http_rewrite_module			\
-                      --without-http-cache							\
-                      --without-http_proxy_module				\
-                      --without-pcre										\
-                      --with-cc-opt="$(nginx_cc_opt)"		\
-                      --with-ld-opt="$(nginx_ld_opt)"		\
-                      $(nginx_debug_opt)								\
-    && make -j4 install																	\
-    && cp $(nginx_core_root)/inc$(ngixn_conf_d).conf		\
-          $(nginx_core_prefix)/conf/inc.conf						\
-    && cp $(nginx_core_root)/nginx$(nginx_conf_d).conf	\
+	cd $(nginx_home)                                      \
+    && auto/configure --prefix=$(nginx_core_prefix)     \
+                      --without-http_fastcgi_module     \
+                      --without-http_uwsgi_module       \
+                      --without-http_scgi_module        \
+                      --without-http_memcached_module   \
+                      --without-http_rewrite_module     \
+                      --without-http-cache              \
+                      --without-http_proxy_module       \
+                      --without-pcre                    \
+                      --with-cc-opt="$(nginx_cc_opt)"   \
+                      --with-ld-opt="$(nginx_ld_opt)"   \
+                      $(nginx_debug_opt)                \
+    && make -j4 install                                 \
+    && cp $(nginx_core_root)/inc$(ngixn_conf_d).conf    \
+          $(nginx_core_prefix)/conf/inc.conf            \
+    && cp $(nginx_core_root)/nginx$(nginx_conf_d).conf  \
 					$(nginx_core_prefix)/conf/nginx.conf
 
 
@@ -98,24 +98,24 @@ nginx_module_hello_test: nginx_module_hello
 endif # end of msvc
 
 
-$(nginx_module_hello_binout): $(nginx_home)													\
+$(nginx_module_hello_binout): $(nginx_home)                         \
                               $(nginx_hello_module_root)/nginx.conf
-	cd $(nginx_home)																						\
-		&& auto/configure --prefix=$(nginx_module_hello_prefix)		\
-                      --without-http_fastcgi_module						\
-                      --without-http_uwsgi_module							\
-                      --without-http_scgi_module							\
-                      --without-http_memcached_module					\
-                      --without-http_rewrite_module						\
-                      --without-http-cache										\
-                      --without-http_proxy_module							\
-                      --without-pcre													\
-                      --add-module=$(nginx_hello_module_root)	\
-                      --with-cc-opt="$(nginx_cc_opt)"					\
-                      --with-ld-opt="$(nginx_ld_opt)"					\
-                      $(nginx_debug_opt)											\
-    && make -j4 install																				\
-    && cp $(nginx_hello_module_root)/nginx.conf								\
+	cd $(nginx_home)                                            \
+    && auto/configure --prefix=$(nginx_module_hello_prefix)   \
+                      --without-http_fastcgi_module           \
+                      --without-http_uwsgi_module             \
+                      --without-http_scgi_module              \
+                      --without-http_memcached_module         \
+                      --without-http_rewrite_module           \
+                      --without-http-cache                    \
+                      --without-http_proxy_module             \
+                      --without-pcre                          \
+                      --add-module=$(nginx_hello_module_root) \
+                      --with-cc-opt="$(nginx_cc_opt)"         \
+                      --with-ld-opt="$(nginx_ld_opt)"         \
+                      $(nginx_debug_opt)                      \
+    && make -j4 install                                       \
+    && cp $(nginx_hello_module_root)/nginx.conf               \
 					$(nginx_module_hello_prefix)/conf/nginx.conf
 
 
@@ -142,40 +142,40 @@ nginx_module_njs_test: nginx_module_njs
 endif # end of msvc
 
 
-$(nginx_module_njs_binout): $(nginx_njs_module_src)							\
-                            $(nginx_njs_module_root)/nginx.conf	\
+$(nginx_module_njs_binout): $(nginx_njs_module_src)             \
+                            $(nginx_njs_module_root)/nginx.conf \
                             $(nginx_njs_module_root)/http.js
-	cd $(nginx_home)																										\
-		&& auto/configure --prefix=$(nginx_module_njs_prefix)							\
-                      --without-http_memcached_module									\
-                      --without-http-cache														\
-                      --without-http_proxy_module											\
-                      --add-module=$(nginx_njs_module_src)/nginx	    \
-                      --with-cc-opt="$(nginx_cc_opt)"									\
-                      --with-ld-opt="$(nginx_ld_opt)"									\
-                      $(nginx_debug_opt)															\
-    && make -j4 install																								\
-    && cp $(nginx_njs_module_root)/nginx.conf													\
-					$(nginx_module_njs_prefix)/conf/nginx.conf									\
-    && cp $(nginx_njs_module_root)/http.js														\
+	cd $(nginx_home)                                                \
+    && auto/configure --prefix=$(nginx_module_njs_prefix)         \
+                      --without-http_memcached_module             \
+                      --without-http-cache                        \
+                      --without-http_proxy_module                 \
+                      --add-module=$(nginx_njs_module_src)/nginx  \
+                      --with-cc-opt="$(nginx_cc_opt)"             \
+                      --with-ld-opt="$(nginx_ld_opt)"             \
+                      $(nginx_debug_opt)                          \
+    && make -j4 install                                           \
+    && cp $(nginx_njs_module_root)/nginx.conf                     \
+          $(nginx_module_njs_prefix)/conf/nginx.conf              \
+    && cp $(nginx_njs_module_root)/http.js                        \
           $(nginx_module_njs_prefix)/conf/http.js
 
 
 # clean
-nginx_clean: clean															\
+nginx_clean: clean                              \
              clean_nginx_home
 
 clean_nginx_home:
 	-$(RM) -rf $(nginx_home)
 
 clean_nginx_out:
-	test ! -f $(CURDIR)/$(nginx_home)/Makefile		\
+	test ! -f $(CURDIR)/$(nginx_home)/Makefile    \
 		|| make -C $(CURDIR)/$(nginx_home) clean
 
 
 
-.PHONY: nginx_clean clean_nginx_home clean_nginx_out	\
-        nginx_module_hello nginx_module_hello_test		\
+.PHONY: nginx_clean clean_nginx_home clean_nginx_out  \
+        nginx_module_hello nginx_module_hello_test    \
         nginx_module_njs nginx_module_njs_test
 
 # eof
