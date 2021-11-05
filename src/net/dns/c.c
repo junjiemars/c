@@ -542,7 +542,10 @@ parse_rr(uint8_t *res, uint8_t **offset)
     {
       switch (type)
         {
+        case DNS_TYPE_NS:
         case DNS_TYPE_CNAME:
+        case DNS_TYPE_SOA:
+        case DNS_TYPE_PTR:
           qname_len = 0;
           qname[0] = 0;
           parse_label(res, (uint8_t *) &rr->name, qname, &qname_len);
