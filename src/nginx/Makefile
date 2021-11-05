@@ -170,7 +170,7 @@ clean_nginx_home:
 
 clean_nginx_out:
 	test ! -f $(CURDIR)/$(nginx_home)/Makefile    \
-		|| make -C $(CURDIR)/$(nginx_home) clean
+    || make -C $(CURDIR)/$(nginx_home) clean
 
 
 
