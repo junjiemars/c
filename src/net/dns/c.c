@@ -67,8 +67,8 @@ enum dns_class
 #define DNS_UDP_MAX_LEN    512
 
 
-#define dns_ptr_type(u16)    ((ntohs((uint16_t)u16) >> 8) & 0xff)
-#define dns_ptr_offset(u16)  ((ntohs((uint16_t)u16)) & 0xff)
+#define dns_ptr_type(u)    ((ntohs((uint16_t)(u)) >> 8) & 0xff)
+#define dns_ptr_offset(u)  ((ntohs((uint16_t)(u))) & 0xff)
 
 #define tr_dns_type_str(n)                          \
   ((size_t)(n-1) < countof(dns_type_str)            \
@@ -156,12 +156,12 @@ static void on_signal_segv(int sig);
 
 static int query(void);
 static void make_label(uint8_t *dst, size_t *dst_len, uint8_t *name);
-static void parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name,
-                        size_t *name_len);
+static void parse_label(const uint8_t *buf, uint8_t const *offset,
+                        uint8_t *name, size_t *name_len);
 static int make_request(uint8_t **req, size_t *req_len, uint16_t *req_id);
 static void parse_response(uint16_t id, uint8_t *res);
-static int parse_rr(uint8_t *res, uint8_t **offset);
-static void out(uint8_t *buf, size_t n, const char *where);
+static int parse_rr(const uint8_t *res, uint8_t **offset);
+static void out(const uint8_t *buf, size_t n, const char *where);
 static int in(const char *where);
 
 
@@ -433,11 +433,13 @@ make_label(uint8_t *dst, size_t *dst_len, uint8_t *name)
 
 
 void
-parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name, size_t *name_len)
+parse_label(const uint8_t *buf, const uint8_t *offset,
+            uint8_t *name, size_t *name_len)
 {
-  uint8_t   *p, *d, len;
-  uint16_t   ptr;
-  size_t     n;
+  const uint8_t  *p;
+  uint8_t        *d, len;
+  uint16_t        ptr;
+  size_t          n;
 
   p = offset;
   d = name;
@@ -445,7 +447,7 @@ parse_label(uint8_t *buf, uint8_t *offset, uint8_t *name, size_t *name_len)
 
   while (n < DNS_LABEL_MAX_LEN)
     {
-      ptr = *(uint16_t *) p;
+      ptr = *(const uint16_t *) p;
       if (DNS_PTR_NAME == dns_ptr_type(ptr))
         {
           p = buf + dns_ptr_offset(ptr);
@@ -509,7 +511,7 @@ make_request(uint8_t **req, size_t *req_len, uint16_t *req_id)
 
 
 int
-parse_rr(uint8_t *res, uint8_t **offset)
+parse_rr(const uint8_t *res, uint8_t **offset)
 {
   s_dns_rr  *rr                        =  0;
   uint16_t   type;
@@ -662,10 +664,11 @@ parse_response(uint16_t id, uint8_t *res)
 
 
 void
-out(uint8_t *b, size_t n, const char *w)
+out(const uint8_t *b, size_t n, const char *w)
 {
   FILE    *f;
   size_t   len;
+  int      rc;
 
   if (!opt_out)
     {
@@ -675,14 +678,16 @@ out(uint8_t *b, size_t n, const char *w)
   f = fopen(w, "wb");
   if (!f)
     {
-      log(stderr, "! fopen: %s\n", strerror(errno));
+      rc = errno;
+      log(stderr, "! fopen: %s\n", strerror(rc));
       return;
     }
 
   len = fwrite(b, 1, n, f);
   if (ferror(f))
     {
-      log(stderr, "! fwrite: %s\n", strerror(errno));
+      rc = errno;
+      log(stderr, "! fwrite: %s\n", strerror(rc));
       clearerr(f);
       goto clean_exit;
     }
@@ -699,9 +704,9 @@ out(uint8_t *b, size_t n, const char *w)
 int
 in(const char *w)
 {
-  int       rc  =  0;
   FILE     *f;
   size_t    n;
+  int       rc  =  0;
   uint8_t   b[DNS_UDP_MAX_LEN];
 
   f = fopen(w, "rb");
