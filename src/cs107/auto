@@ -1,0 +1,34 @@
+# -*- mode:sh -*- vim:ft=sh
+#
+
+# check features based on OS
+#----------------------------------------
+case $NM_SYSTEM in
+	Darwin)
+	  ;;
+
+	Linux)
+		nm_feature="math lib"
+		nm_feature_name="nm_have_math_lib"
+    nm_feature_indent=yes
+		nm_feature_run=yes
+		nm_feature_h="#include <math.h>"
+		nm_feature_tails="${nm_lib_opt}m"
+		nm_feature_test='int x = round(2.5);
+										 return (2 == x);'
+		. ${NORE_ROOT}/auto/feature
+		if [ yes = $nm_found ]; then
+			flag=stdmath_lib_opt op='+=' value='$(nm_lib_opt)m' \
+          . ${NORE_ROOT}/auto/make_define
+		fi
+	  ;;
+
+	WinNT)
+	  ;;
+
+	*)
+		;;
+esac
+
+
+# eof
