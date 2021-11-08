@@ -1,32 +1,29 @@
 # ./configure --has-ctl
 
 
+ctl: ctl_vec                                    \
+     ctl_prefix                                 \
+     ctl_eg_astar                               \
+     ctl_eg_json
+
+ctl_test: ctl_vec_test                          \
+          ctl_prefix_test                       \
+          ctl_eg_astar_test                     \
+          ctl_eg_json_test
+
+
+# env
 ctl_prefix := ctl
 
 ctl_git_src := 'https://github.com/glouw/ctl.git'
 ctl_home := $(ctl_root)/ctl_home
 
-
-ctl: ctl_vec																		\
-     ctl_prefix																	\
-     ctl_eg_astar																\
-     ctl_eg_json
-
-ctl_test: ctl_vec_test													\
-          ctl_prefix_test												\
-          ctl_eg_astar_test											\
-          ctl_eg_json_test
-
-
 INC += -I$(root) -I$(ctl_root) -I$(ctl_home)/ctl
 
 
-# _MEMORY_
-ifeq (1, $(_MEMORY_))
-ifeq (YES, $(has_sanitize))
-CFLAGS += $(cflags_sanitize)
-endif # end of has_sanitize
-endif # end of _MEMORY_
+ifeq ($(_MEMORY_), 1)
+	CFLAGS += $(f_sanitize)
+endif
 
 
 $(ctl_home):
@@ -86,7 +83,7 @@ clean_ctl_home:
 	-$(RM) -rf $(ctl_home)
 
 
-.PHONY: ctl_clean_home
+.PHONY: clean_ctl_home
 
 
 # eof

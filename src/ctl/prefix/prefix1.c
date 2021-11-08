@@ -1,14 +1,18 @@
-//
-// -- An infix to postfix converter --
-//
+/** 
+ *   -- An infix to postfix converter -- 
+ *
+*/
+
 
 #include <stdio.h>
 
 #include <str.h>
 
-// Template signatures can be renamed, such that long form
-// lst_str_push_back(lst_str*, ...) can be replaced with
-// the a convenient ls_push_back(ls*, ...).
+/*
+ * Template signatures can be renamed, such that long form
+ * lst_str_push_back(lst_str*, ...) can be replaced with
+ * the a convenient ls_push_back(ls*, ...).
+ */
 
 #define lst_str ls
 #define T str

@@ -1,4 +1,4 @@
-#include <_ctl_.h>
+#include "_ctl_.h"
 #include <stdio.h>
 
 #define P
@@ -65,7 +65,8 @@ test_vec_int(void)
 }
 
 void
-test_vec_double(void) {
+test_vec_double(void)
+{
   vec_double a = vec_double_init();
 
   vec_double_push_back(&a, 9);
@@ -89,11 +90,11 @@ test_vec_str(void)
 {
   vec_str a = vec_str_init();
 
-  vec_str_push_back(&a, str_init("9"));
-  vec_str_push_back(&a, str_init("1"));
-  vec_str_push_back(&a, str_init("8"));
-  vec_str_push_back(&a, str_init("3"));
-  vec_str_push_back(&a, str_init("4"));
+  vec_str_push_back(&a, str_init("9aaa"));
+  vec_str_push_back(&a, str_init("1aaa"));
+  vec_str_push_back(&a, str_init("8aaa"));
+  vec_str_push_back(&a, str_init("3aaa"));
+  vec_str_push_back(&a, str_init("4aaa"));
 
   vec_str_sort(&a, compare_str);
 
