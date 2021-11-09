@@ -11,11 +11,6 @@
 #endif
 
 
-#if (MSVC)
-#pragma warning(disable:4127)
-#pragma warning(disable:4267)
-#endif
-
 #define _unused_(x) ((void)(x))
 
 #endif /* _CTL_H_ */

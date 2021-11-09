@@ -25,6 +25,9 @@ ifeq ($(_MEMORY_), 1)
 	CFLAGS += $(f_sanitize)
 endif
 
+ifeq ($(MSVC), 1)
+	CFLAGS += -wd4127 -wd4267
+endif
 
 $(ctl_home):
 	git clone --depth=1 --branch=master $(ctl_git_src) $@
