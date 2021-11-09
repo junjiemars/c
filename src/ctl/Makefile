@@ -25,7 +25,7 @@ ifeq ($(_MEMORY_), 1)
 	CFLAGS += $(f_sanitize)
 endif
 
-ifeq ($(MSVC), 1)
+ifeq ($(CC_NAME), msvc)
 	CFLAGS += -wd4127 -wd4267
 endif
 
