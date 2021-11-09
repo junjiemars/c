@@ -10,6 +10,7 @@
 #include <vec.h>
 
 
+#define P
 #include <str.h>
 #define T str
 #include <vec.h>
