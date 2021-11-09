@@ -15,7 +15,7 @@ ctl_test: ctl_vec_test                          \
 # env
 ctl_prefix := ctl
 
-ctl_git_src := 'https://github.com/glouw/ctl.git'
+ctl_git_src := 'https://github.com/junjiemars/ctl.git'
 ctl_home := $(ctl_root)/ctl_home
 
 INC += -I$(root) -I$(ctl_root) -I$(ctl_home)/ctl
