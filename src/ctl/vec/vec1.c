@@ -31,6 +31,7 @@ image image_copy(image*);
 static int compare_int(int *a, int *b);
 static int compare_double(double *a, double *b);
 static int compare_str(str *a, str *b);
+static int compare_image(image *a, image *b);
 
 static image image_init(size_t);
 static image image_read(void);
@@ -56,9 +57,14 @@ compare_double(double *a, double *b)
 int
 compare_str(str *a, str *b)
 {
-  return strcmp(str_c_str(a), str_c_str(b));
+  return strcmp(str_c_str(a), str_c_str(b)) > 0;
 }
 
+int
+compare_image(image *a, image *b)
+{
+  return (*a->data > *b->data) && (a->size > b->size);
+}
 
 image
 image_init(size_t size)
@@ -174,6 +180,8 @@ test_vec_image(void)
     {
       vec_image_push_back(&a, image_read());
     }
+  vec_image_sort(&a, compare_image);
+
   printf("vec<image>\n------------\n");
   foreach(vec_image, &a, it)
     {
