@@ -12,7 +12,7 @@
 
 
 #if (MSVC)
-#pragma warning(disabled:4127)
+#pragma warning(disable:4127)
 #endif
 
 #define _unused_(x) ((void)(x))
