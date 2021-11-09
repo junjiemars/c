@@ -26,7 +26,7 @@ ifeq ($(_MEMORY_), 1)
 endif
 
 ifeq ($(CC_NAME), msvc)
-	CFLAGS += -wd4127 -wd4267
+	CFLAGS += -wd4127 -wd4267 -wd4244
 endif
 
 $(ctl_home):
