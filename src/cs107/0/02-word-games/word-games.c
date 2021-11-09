@@ -69,16 +69,19 @@ play_word_games(const vec_str *words)
     {
       printf("Please enter a string of characters: ");
       response = str_init("");
-      
-      while ('\n' != (n = fgetc(stdin)))
-        {
-          str_append(&response, (const char *) &n);
-        }
 
-      if (0 == response.value)
+      if (0 == (n = fgetc(stdin)))
         {
+          printf("<exit>");
           break;
         }
+
+      while (n != '\n')
+        {
+          str_append(&response, (const char *) &n);
+          n = fgetc(stdin);
+        }
+      printf("<%s>\n", response.value);
       
       if (is_legitimate_response(&response))
         {

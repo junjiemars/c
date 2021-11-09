@@ -36,6 +36,7 @@ $(ctl_home):
 # 0
 cs107_0_ruth_aaron_binout := $(bin_path)/$(cs107_prefix)_0_ruth_aaron$(bin_ext)
 cs107_0_word_games_binout := $(bin_path)/$(cs107_prefix)_0_word_games$(bin_ext)
+cs107_0_words_file := $(CURDIR)/$(cs107_root)/0/02-word-games/words
 
 cs107_0: cs107_0_ruth_aaron)                    \
          cs107_0_word_games
@@ -43,12 +44,12 @@ cs107_0_test: $(cs107_0_ruth_aaron_test)        \
               $(cs107_0_word_games_test)
 
 cs107_0_ruth_aaron: $(cs107_0_ruth_aaron_binout)
-cs107_0_word_games: $(cs107_0_word_games_binout)
+cs107_0_word_games: $(ctl_home) $(cs107_0_word_games_binout)
 
-cs107_0_ruth_aaron_test: $(cs107_0_ruth_aaron_binout)
+cs107_0_ruth_aaron_test: cs107_0_ruth_aaron
 	$(cs107_0_ruth_aaron_binout) 2
-cs107_0_word_games_test: $(cs107_0_word_games_binout)
-	$(cs107_0_word_games_binout) $(CURDIR)/$(cs107_root)/0/02-word-games/words
+cs107_0_word_games_test: cs107_0_word_games
+	echo "aria\n\0" | $(cs107_0_word_games_binout) $(cs107_0_words_file)
 
 $(cs107_0_ruth_aaron_binout): $(cs107_root)/0/01-ruth-aaron/ruth-aaron-numbers.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(stdmath_lib_opt)
