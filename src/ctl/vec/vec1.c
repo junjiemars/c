@@ -16,14 +16,30 @@
 #include <vec.h>
 
 
+typedef struct
+{
+  uint8_t* data;
+  size_t size;
+} image;
+
+void image_free(image*);
+image image_copy(image*);
+#define T image
+#include <vec.h>
+
+
 static int compare_int(int *a, int *b);
 static int compare_double(double *a, double *b);
 static int compare_str(str *a, str *b);
 
+static image image_init(size_t);
+static image image_read(void);
+
+
 static void test_vec_int(void);
 static void test_vec_double(void);
 static void test_vec_str(void);
-
+static void test_vec_image(void);
 
 int
 compare_int(int* a, int* b)
@@ -44,6 +60,46 @@ compare_str(str *a, str *b)
 }
 
 
+image
+image_init(size_t size)
+{
+  image self =
+    {
+      .data = malloc(sizeof(*self.data) * size),
+      .size = size
+    };
+  return self;
+}
+
+image
+image_read(void)
+{
+  image im = image_init(rand() % 65536);
+  for(size_t i = 0; i < im.size; i++)
+    {
+      im.data[i] = rand() % UINT8_MAX;
+    }
+  return im;
+}
+
+void image_free(image* self)
+{
+  free(self->data);
+  self->data = NULL;
+  self->size = 0;
+}
+
+image image_copy(image* self)
+{
+  image copy = image_init(self->size);
+  for(size_t i = 0; i < copy.size; i++)
+    {
+      copy.data[i] = self->data[i];
+    }
+  return copy;
+}
+
+
 void
 test_vec_int(void)
 {
@@ -57,6 +113,7 @@ test_vec_int(void)
 
   vec_int_sort(&a, compare_int);
 
+  printf("vec<int>\n------------\n");
   foreach(vec_int, &a, it)
     {
       printf("%d\n", *it.ref);
@@ -78,6 +135,7 @@ test_vec_double(void)
 
   vec_double_sort(&a, compare_double);
 
+  printf("vec<double>\n------------\n");
   foreach(vec_double, &a, it)
     {
       printf("%lf\n", *it.ref);
@@ -99,6 +157,7 @@ test_vec_str(void)
 
   vec_str_sort(&a, compare_str);
 
+  printf("vec<str>\n------------\n");
   foreach(vec_str, &a, it)
     {
       printf("\"%s\"\n", str_c_str(it.ref));
@@ -107,9 +166,31 @@ test_vec_str(void)
   vec_str_free(&a);
 }
 
-int main(void)
+void
+test_vec_image(void)
+{
+  vec_image a = vec_image_init();
+  for(size_t i = 0; i < 5; i++)
+    {
+      vec_image_push_back(&a, image_read());
+    }
+  printf("vec<image>\n------------\n");
+  foreach(vec_image, &a, it)
+    {
+      printf("\"{ %d, %zu }\"\n", *it.ref->data, it.ref->size);
+    }
+  
+  vec_image b = vec_image_copy(&a);
+  vec_image_free(&a);
+  vec_image_free(&b);
+}
+
+
+int
+main(void)
 {
   test_vec_int();
   test_vec_double();
   test_vec_str();
+  test_vec_image();
 }
