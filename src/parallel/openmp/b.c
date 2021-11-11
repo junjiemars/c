@@ -11,7 +11,7 @@ main(int argc, char **argv)
 	_unused_(argc);
 	_unused_(argv);
 
-#ifdef NM_HAVE_OMP_GET_NUM_PROCS_FN
+#ifdef NM_HAVE_OMP_GET_NUM_PROCS
 	printf("procs[%i]\n----------\n", omp_get_num_procs());
 #endif
 

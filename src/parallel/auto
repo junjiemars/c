@@ -74,7 +74,7 @@ if [ yes = $nm_found ]; then
 	flag=cflags_openmp op="+=" value=$nm_feature_flags \
       . ${NORE_ROOT}/auto/make_define
 	nm_feature="omp_get_num_procs"
-	nm_feature_name="nm_have_omp_get_num_procs_fn"
+	nm_feature_name="nm_have_omp_get_num_procs"
 	nm_feature_run=no
 	nm_feature_h='#include <omp.h>'
 	nm_feature_flags="$nm_openmp_opt"
