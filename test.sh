@@ -105,6 +105,7 @@ if [ "basic" = "$_TEST_" ]; then
   test_do --has-net
   test_do --has-os
   test_do --has-parallel
+  test_do --has-posix
   test_do --has-redis
   test_do --has-regexp
   test_do --has-unicode
