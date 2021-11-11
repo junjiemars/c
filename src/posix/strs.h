@@ -1,6 +1,7 @@
 #ifndef _STRS_H_
 #define _STRS_H_
 
+
 #if (LINUX)
 #  if !defined(__USE_POSIX)
 #     define __USE_POSIX
@@ -14,6 +15,7 @@
 #endif
 
 #include <string.h>
+
 
 #endif /* end of _STRS_H_ */
 
