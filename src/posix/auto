@@ -41,7 +41,7 @@ nm_feature_h="#include <assert.h>"
 nm_feature_flags=
 nm_feature_flags=
 nm_feature_test="enum {N=5}; static_assert(N==5, \"N is not equal 5\");"
-. ${NORE_ROOT}/auto/feature
+. ${NORE_ROOT}/auto/feature     # end of static_assert
 
 
 # check open function

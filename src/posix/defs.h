@@ -10,6 +10,7 @@
 #endif  /* NM_HAVE_RESTRICT */
 
 
+#include <assert.h>
 #if !(NM_HAVE_STATIC_ASSERT)
 #  ifdef static_assert
 #    undef static_assert
