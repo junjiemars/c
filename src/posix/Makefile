@@ -3,10 +3,12 @@
 #
 
 posix: posix_bits                               \
-       posix_defs
+       posix_defs                               \
+       posix_ints
 
 posix_test: posix_bits_test                     \
-            posix_defs_test
+            posix_defs_test                     \
+            posix_ints_test
 
 
 # env
@@ -45,6 +47,16 @@ posix_defs_test: posix_defs
 	$(posix_defs_binout)
 
 $(posix_defs_binout): $(posix_root)/defs_test.c
+	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
+
+# ints
+posix_ints_binout := $(bin_path)/$(posix_prefix)_ints$(bin_ext)
+
+posix_ints: $(posix_ints_binout)
+posix_ints_test: posix_ints
+	$(posix_ints_binout)
+
+$(posix_ints_binout): $(posix_root)/ints_test.c
 	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
 
 

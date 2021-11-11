@@ -18,21 +18,15 @@
 #endif  /* NM_HAVE_STATIC_ASSERT */
 
 
-#include <stddef.h>
-#if (MSVC)
-#  include <BaseTsd.h>
-   typedef __int8            int8_t;
-   typedef unsigned __int8   uint8_t;
-   typedef __int16           int16_t;
-   typedef unsigned __int16  uint16_t;
-   typedef __int32           int32_t;
-   typedef unsigned __int32  uint32_t;
-   typedef __int64           int64_t;
-   typedef unsigned __int64  uint64_t;
-   typedef SSIZE_T           ssize_t;
+#if (NDEBUG)
+#  define ASSERT(x) ((void)(x))
 #else
-#  include <stdint.h>
+#  define ASSERT assert
 #endif
 
+
+#if !defined(_unused_)
+#  define _unused_(x) ((void)(x))
+#endif
 
 #endif /* end of _DEFS_H_ */

@@ -1,22 +1,9 @@
 #include "defs.h"
+#include "ints.h"
 #include <inttypes.h>
-#include <assert.h>
 #include <stdio.h>
 
-
-#if !defined(_unused_)
-#define _unused_(x)  ((void)(x))
-#endif
-
-static void test_restrict(const char *restrict);
 static void test_int(void);
-
-void
-test_restrict(const char *restrict ss)
-{
-  _unused_(ss);
-  printf("%s\n------------\n", __FUNCTION__);
-}
 
 void
 test_int(void)
@@ -53,8 +40,8 @@ int
 main(int argc, char **argv)
 {
   _unused_(argc);
+  _unused_(argv);
 
-  test_restrict((const char *restrict) argv[0]);
   test_int();
 
   return 0;
