@@ -9,6 +9,10 @@
 #include <inttypes.h>
 #include <assert.h>
 
+#if (MSVC)
+#pragma warning(disable:4996)
+#endif
+
 #define _unused_(x) ((void)(x))
 
 #define swap(a, b, w)                           \
