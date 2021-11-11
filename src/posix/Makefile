@@ -4,13 +4,13 @@
 
 posix: posix_bits                               \
        posix_mmap                               \
-       posix_keywords                           \
+       posix_kws                                \
        posix_sysconf                            \
        posix_tmp
 
 posix_test: posix_bits_test                     \
             posix_mmap_test                     \
-            posix_keywords_test                 \
+            posix_kws_test                      \
             posix_sysconf_test                  \
             posix_tmp_test
 
