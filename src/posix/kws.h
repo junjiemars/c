@@ -1,8 +1,8 @@
 #ifndef _KWS_H_
 #define _KWS_H_
 
-#if !(NM_HAVE_RESTRICT_KW)
-#  if (NM_HAVE___RESTRICT_KD)
+#if !(NM_HAVE_RESTRICT)
+#  if (NM_HAVE___RESTRICT)
 #    define restrict __restrict
 #  else
 #    define restrict

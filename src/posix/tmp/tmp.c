@@ -5,32 +5,37 @@
 #include <errno.h>
 
 void
-test_consts(void) {
+test_consts(void) 
+{
 	printf("P_tmpdir=%s\n", P_tmpdir);
 	printf("L_tmpnam=%i\n", L_tmpnam);
 	printf("TMP_MAX=0x%08x\n", TMP_MAX);
 }
 
 void
-test_tmpfile(void) {
-#if NM_HAVE_TMPFILE_FN
+test_tmpfile(void) 
+{
+#if NM_HAVE_TMPFILE
   FILE *out = tmpfile();
-  if (!out) {
-    perror("!panic");
-    return;
-  }
+  if (!out) 
+    {
+      perror("!panic");
+      return;
+    }
   fprintf(stdout, ">> fd:%i ...\n", fileno(out));
   fprintf(out, "test_tmpfile fn\n");
-  if (ferror(out)) {
-    perror("!panic");
-  }
+  if (ferror(out)) 
+    {
+      perror("!panic");
+    }
   fclose(out);
 #endif
 }
 
 void
-test_tmpnam(void) {
-#if !NM_HAVE_MKSTEMP_FN
+test_tmpnam(void) 
+{
+#if !NM_HAVE_MKSTEMP
 	char b1[L_tmpnam];
 	strcpy(b1, tmpnam(0)); /* may be overwriten by next call */
 	printf("tmpnam(0) = %s\n", b1);
@@ -41,34 +46,40 @@ test_tmpnam(void) {
 }
 
 void
-test_mkstemp(void) {
-#if NM_HAVE_MKSTEMP_FN
-	char t[L_tmpnam] = {};
+test_mkstemp(void) 
+{
+#if NM_HAVE_MKSTEMP
+	char t[L_tmpnam] = 
+    {};
   strcat(t, P_tmpdir);
   strcat(t, "/abcXXXXXX");
   
 	int fd = mkstemp(t);
-  if (-1 == fd) {
-    perror("!panic");
-    return;
-  }
+  if (-1 == fd) 
+    {
+      perror("!panic");
+      return;
+    }
   
   FILE *out = fdopen(fd, "w");
-  if (!out) {
-    perror("!panic");
-    return;
-  }
+  if (!out) 
+    {
+      perror("!panic");
+      return;
+    }
   fprintf(stdout, ">> %s ...\n", t);
   fprintf(out, "test_mkstemp\n");
-  if (ferror(out)) {
-    perror("!panic");
-  }
+  if (ferror(out)) 
+    {
+      perror("!panic");
+    }
   fclose(out);
 #endif
 }
 
 int
-main(int argc, char **argv) {
+main(int argc, char **argv) 
+{
 	_unused_(argc);
 	_unused_(argv);
 

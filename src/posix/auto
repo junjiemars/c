@@ -6,12 +6,16 @@
 ## check posix features
 ####
 
+# check header file existing
+#----------------------------------------
 include="stdint.h" . ${NORE_ROOT}/auto/include
 include="inttypes.h" . ${NORE_ROOT}/auto/include
 
-# restrict
+
+# check restrict keyword
+#----------------------------------------
 nm_feature="restrict keyword"
-nm_feature_name="nm_have_restrict_kw"
+nm_feature_name="nm_have_restrict"
 nm_feature_run=
 nm_feature_h=
 nm_feature_flags=
@@ -19,19 +23,20 @@ nm_feature_test='int x = 0x11; int *restrict p = &x;'
 . ${NORE_ROOT}/auto/feature
 if [ "yes" != $nm_found ]; then
 	nm_feature="__restrict keyword"
-	nm_feature_name="nm_have___restrict_kw"
+	nm_feature_name="nm_have___restrict"
 	nm_feature_run=
 	nm_feature_h=
 	nm_feature_flags=
 	nm_feature_test='int x = 0x11; int *__restrict p = &x;'
 	. ${NORE_ROOT}/auto/feature
-fi
+fi                              # end of restrict
 
-# open
+# check open function
+#----------------------------------------
 case $NM_SYSTEM in
   Darwin|Linux)
-    nm_feature="open fn"
-    nm_feature_name="nm_have_open_fn"
+    nm_feature="open"
+    nm_feature_name="nm_have_open"
     nm_feature_run=no
     nm_feature_h='#include <fcntl.h>'
     nm_feature_flags=
@@ -42,13 +47,14 @@ case $NM_SYSTEM in
     ;;
   *)
     ;;
-esac # end of open
+esac                            # end of open
 
 # mmap
+#----------------------------------------
 case $NM_SYSTEM in
   Darwin|Linux)
-    nm_feature="mmap fn"
-    nm_feature_name="nm_have_mmap_fn"
+    nm_feature="mmap"
+    nm_feature_name="nm_have_mmap"
     nm_feature_run=no
     nm_feature_h='#include <sys/mman.h>'
     nm_feature_flags=
@@ -59,13 +65,14 @@ case $NM_SYSTEM in
     ;;
   *)
     ;;
-esac # end of mmap
+esac                            # end of mmap
 
 # sysconf
+#----------------------------------------
 case $NM_SYSTEM in
   Darwin|Linux)
-    nm_feature="sysconf fn"
-    nm_feature_name="nm_have_sysconf_fn"
+    nm_feature="sysconf"
+    nm_feature_name="nm_have_sysconf"
     nm_feature_run=no
     nm_feature_h='#include <unistd.h>'
     nm_feature_flags=
@@ -76,11 +83,13 @@ case $NM_SYSTEM in
     ;;
   *)
     ;;
-esac # end of sysconf
+esac                            # end of sysconf
+
 
 # tmpfile
-nm_feature="tmpfile fn"
-nm_feature_name="nm_have_tmpfile_fn"
+#----------------------------------------
+nm_feature="tmpfile"
+nm_feature_name="nm_have_tmpfile"
 nm_feature_run=
 nm_feature_h='#include <stdio.h>'
 nm_feature_flags=
@@ -88,11 +97,15 @@ nm_feature_test='(void)tmpfile();'
 . ${NORE_ROOT}/auto/feature
 
 # mkstemp
-nm_feature="mkstemp fn"
-nm_feature_name="nm_have_mkstemp_fn"
+#----------------------------------------
+nm_feature="mkstemp"
+nm_feature_name="nm_have_mkstemp"
 nm_feature_run=
 nm_feature_h='#include <stdlib.h>'
 nm_feature_flags=
 nm_feature_test='mkstemp("abc");'
 . ${NORE_ROOT}/auto/feature
 
+
+
+# eof
