@@ -19,14 +19,16 @@
 
 
 #if (NDEBUG)
-#  define ASSERT(x) ((void)(x))
-#else
-#  define ASSERT assert
-#endif
+#  if defined(assert)
+#    undef assert
+#  endif
+#  define assert(x) ((void)(x))
+#endif  /* assert */
 
 
 #if !defined(_unused_)
 #  define _unused_(x) ((void)(x))
-#endif
+#endif  /* _unused_ */
+
 
 #endif /* end of _DEFS_H_ */
