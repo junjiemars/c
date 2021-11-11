@@ -3,16 +3,10 @@
 #
 
 posix: posix_bits                               \
-       posix_mmap                               \
-       posix_kws                                \
-       posix_sysconf                            \
-       posix_tmp
+       posix_defs
 
 posix_test: posix_bits_test                     \
-            posix_mmap_test                     \
-            posix_kws_test                      \
-            posix_sysconf_test                  \
-            posix_tmp_test
+            posix_defs_test
 
 
 # env
@@ -43,14 +37,14 @@ $(posix_root)/getopt.c:
 endif # end of msvc
 
 
-# keywords
-posix_kws_binout := $(bin_path)/$(posix_prefix)_kws$(bin_ext)
+# defines
+posix_defs_binout := $(bin_path)/$(posix_prefix)_defs$(bin_ext)
 
-posix_kws: $(posix_kws_binout)
-posix_kws_test: posix_kws
-	$(posix_kws_binout)
+posix_defs: $(posix_defs_binout)
+posix_defs_test: posix_defs
+	$(posix_defs_binout)
 
-$(posix_kws_binout): $(posix_root)/kws_test.c
+$(posix_defs_binout): $(posix_root)/defs_test.c
 	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
 
 
