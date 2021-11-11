@@ -102,7 +102,7 @@ if [ "basic" = "$_TEST_" ]; then
   test_do --has-library
   test_do --has-memory
   test_do --has-nginx
-  test_do --has-net --with-optimize=-Os
+  test_do --has-net
   test_do --has-os
   test_do --has-parallel
   test_do --has-redis
