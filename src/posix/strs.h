@@ -8,11 +8,14 @@
 #  endif
 #endif
 
-#if (WINNT) && (MSVC)
-#  define strerror_r(errno, buf, len) strerror_s(buf, len, errno)
-#  define strtok_r                    strtok_s
-#  define strdup                      _strdup
-#endif
+#if (MSVC)
+#  pragma warning(disable:4996)
+#endif  /* _CRT_SECURE_NO_WARNINGS */
+
+
+#if (MSVC)
+#  define strdup _strdup
+#endif  /* strdup */
 
 #include <string.h>
 

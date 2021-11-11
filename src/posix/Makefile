@@ -4,11 +4,13 @@
 
 posix: posix_bits                               \
        posix_defs                               \
-       posix_ints
+       posix_ints                               \
+       posix_strs
 
 posix_test: posix_bits_test                     \
             posix_defs_test                     \
-            posix_ints_test
+            posix_ints_test                     \
+            posix_strs_test
 
 
 # env
@@ -39,7 +41,7 @@ $(posix_root)/getopt.c:
 endif # end of msvc
 
 
-# defines
+# defs
 posix_defs_binout := $(bin_path)/$(posix_prefix)_defs$(bin_ext)
 
 posix_defs: $(posix_defs_binout)
@@ -57,6 +59,17 @@ posix_ints_test: posix_ints
 	$(posix_ints_binout)
 
 $(posix_ints_binout): $(posix_root)/ints_test.c
+	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
+
+
+# strs
+posix_strs_binout := $(bin_path)/$(posix_prefix)_strs$(bin_ext)
+
+posix_strs: $(posix_strs_binout)
+posix_strs_test: posix_strs
+	$(posix_strs_binout)
+
+$(posix_strs_binout): $(posix_root)/strs_test.c
 	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
 
 
