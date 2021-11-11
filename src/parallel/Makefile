@@ -2,12 +2,13 @@
 # ./configure --without-debug --has-parallel
 #
 
-parallel: parallel_omp													\
-					parallel_pthread_basic
+parallel: parallel_omp                          \
+          parallel_pthread
 
-parallel_test: parallel_omp_test								\
-							 parallel_pthread_test
+parallel_test: parallel_omp_test                \
+               parallel_pthread_test
 
+# env
 parallel_prefix := parallel
 INC += -I$(parallel_root)
 
@@ -69,23 +70,23 @@ parallel_pthread_wait_binout := $(bin_path)/$(parallel_prefix)_pthread_wait$(bin
 parallel_pthread_once_binout := $(bin_path)/$(parallel_prefix)_pthread_once$(bin_ext)
 
 ifeq (YES, $(has_pthread))
-parallel_pthread: parallel_pthread_basic				\
-                  parallel_pthread_deadlock			\
-                  parallel_pthread_detach				\
-                  parallel_pthread_exit					\
-                  parallel_pthread_mutex				\
-                  parallel_pthread_private			\
-                  parallel_pthread_stacksize		\
-                  parallel_pthread_wait					\
+parallel_pthread: parallel_pthread_basic        \
+                  parallel_pthread_deadlock     \
+                  parallel_pthread_detach       \
+                  parallel_pthread_exit         \
+                  parallel_pthread_mutex        \
+                  parallel_pthread_private      \
+                  parallel_pthread_stacksize    \
+                  parallel_pthread_wait         \
                   parallel_pthread_once
-parallel_pthread_test: parallel_pthread_basic_test			\
-                       parallel_pthread_deadlock_test		\
-                       parallel_pthread_detach_test			\
-                       parallel_pthread_exit_test				\
-                       parallel_pthread_mutex_test			\
-                       parallel_pthread_private_test		\
-                       parallel_pthread_stacksize_test	\
-                       parallel_pthread_wait_test				\
+parallel_pthread_test: parallel_pthread_basic_test      \
+                       parallel_pthread_deadlock_test   \
+                       parallel_pthread_detach_test     \
+                       parallel_pthread_exit_test       \
+                       parallel_pthread_mutex_test      \
+                       parallel_pthread_private_test    \
+                       parallel_pthread_stacksize_test  \
+                       parallel_pthread_wait_test       \
                        parallel_pthread_once_test
 else
 parallel_pthread:

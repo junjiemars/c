@@ -1,4 +1,4 @@
-#include <_parallel_.h>
+#include "_parallel_.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -44,15 +44,20 @@ calc_pi(long n)
 int
 main(int argc, char **argv)
 {
-	long n = 100L;
-	if (argc < 2 || 1 != sscanf(argv[1], "%li", &n))
+	long    n  =  100L;
+  double  pi;
+
+	if (argc > 1)
     {
-      perror(0);
-      return 1;
+      if (1 != sscanf(argv[1], "%li", &n))
+        {
+          perror(0);
+          return 1;
+        }
     }
 
-	double pi = calc_pi(n);
+	pi = calc_pi(n);
 	printf("pi=%3.10lf via %li times calc\n", pi, n);
-	
+
 	return 0;
 }
