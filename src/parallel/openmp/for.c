@@ -15,9 +15,9 @@ double calc_pi(long n);
 double
 calc_pi(long n)
 {
-	double pi, sum = 0.0, step;
-	double x;
-	long i;
+	double  pi, sum  =  0.0, step;
+	double  x;
+	long    i;
 
 	step = 1.0 / (double)n;
 
@@ -35,7 +35,6 @@ calc_pi(long n)
       sum = sum + 4.0 / (1.0 + x*x);
     }
 
-	_unused_(x);
 	pi = step * sum;
 	return pi;
 }
