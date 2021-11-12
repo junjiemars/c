@@ -79,42 +79,42 @@ esac                            # end of strdup
 
 
 
-# check getline
+# check getdelim
 #----------------------------------------
 case $NM_SYSTEM in
   Darwin)
-    nm_feature="getline"
-    nm_feature_name="nm_have_getline"
+    nm_feature="getdelim"
+    nm_feature_name="nm_have_getdelim"
     nm_feature_run=no
     nm_feature_h='#include <stdio.h>'
     nm_feature_flags=
     nm_feature_test='char *line = 0; size_t n = 0;
-                     getline(&line, &n, stdout);'
+                     getdelim(&line, &n, 0x0a, stdout);'
     . ${NORE_ROOT}/auto/feature
     ;;
   Linux)
-    nm_feature="getline"
-    nm_feature_name="nm_have_getline"
+    nm_feature="getdelim"
+    nm_feature_name="nm_have_getdelim"
     nm_feature_run=no
-    nm_feature_h='#include <stdio1.h>'
+    nm_feature_h='#include <stdio.h>'
     nm_feature_flags="-D__USE_XOPEN2K8"
     nm_feature_test='char *line = 0; size_t n = 0;
-                     getline(&line, &n, stdout);'
+                     getdelim(&line, &n, 0x0a, stdout);'
     . ${NORE_ROOT}/auto/feature
     ;;
   WinNT)
-    nm_feature="getline"
-    nm_feature_name="nm_have_getline"
+    nm_feature="getdelim"
+    nm_feature_name="nm_have_getdelim"
     nm_feature_run=no
     nm_feature_h='#include <stdio.h>'
     nm_feature_flags=
     nm_feature_test='char *line = 0; size_t n = 0;
-                     getline(&line, &n, stdout);'
+                     getdelim(&line, &n, 0x0a, stdout);'
     . ${NORE_ROOT}/auto/feature
     ;;
   *)
     ;;
-esac                            # end of getline
+esac                            # end of getdelim
 
 
 # check fileno

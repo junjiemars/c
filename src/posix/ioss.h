@@ -28,16 +28,17 @@
 
 
 
-#if !(NM_HAVE_GETLINE)
-#  ifndef GETLINE_LINE_MAX
-#    define GETLINE_LINE_MAX  512
+#if !(NM_HAVE_GETDELIM)
+#  ifndef GETDELIM_LEN_MAX
+#    define GETDELIM_LEN_MAX  512
 #  endif
 #  include <defs.h>
 #  include <ints.h>
 #  include <stdlib.h>
 
 ssize_t
-getline(char ** restrict lineptr, size_t * restrict n, FILE * restrict stream)
+getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
+         FILE * restrict stream)
 {
 	int       c;
 	ssize_t   len;
@@ -47,9 +48,9 @@ getline(char ** restrict lineptr, size_t * restrict n, FILE * restrict stream)
     {
       return EOF;
     }
-	if (0 == *lineptr && 0 == *n)
+	if (0 == *lineptr)
     {
-      *n = GETLINE_LINE_MAX;
+      *n = GETDELIM_LEN_MAX;
       *lineptr = malloc(*n);
       if (0 == *lineptr)
         {
@@ -75,7 +76,7 @@ getline(char ** restrict lineptr, size_t * restrict n, FILE * restrict stream)
       *p++ = (char) c;
       len++;
 
-      if ('\n' == c)
+      if (c == delimiter)
         {
           break;
         }
@@ -84,7 +85,7 @@ getline(char ** restrict lineptr, size_t * restrict n, FILE * restrict stream)
   *++p = 0;
 	return len;
 }
-#endif  /* end of getline */
+#endif  /* end of getdelim */
 
 
 #endif /* end of _IOSS_H_ */

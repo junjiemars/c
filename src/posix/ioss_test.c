@@ -23,7 +23,7 @@ test_getline(const char *where)
   
   buf = 0;
   n = 0;
-  rc = getline(&buf, &n, f);
+  rc = getdelim(&buf, &n, '\n', f);
   if (rc == EOF)
     {
       perror(0);
