@@ -1,8 +1,8 @@
 /**
- * Darwin, Linux, Windows
- * #include <nore.h>
+ * Windows
  */
 
+#include "strs.h"
 
 #if (MSVC)
 
