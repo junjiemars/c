@@ -13,10 +13,9 @@ net_test: net_dns_test                          \
 # env
 net_prefix := net
 
-INC += $(nm_inc_opt)$(net_root)
+INC += $(nm_inc_opt)$(net_root) $(nm_inc_opt)$(root)/posix
 
 ifeq ($(NM_SYSTEM), WinNT)
-	INC += $(nm_inc_opt)$(root)/posix
 	getopt_c := $(root)/posix/getopt.c
 endif
 

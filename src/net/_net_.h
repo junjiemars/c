@@ -2,6 +2,8 @@
 #define _NET_H_
 
 #include <nore.h>
+#include <defs.h>
+
 
 #if (WINNT)
 #  include <winsock2.h>
@@ -18,23 +20,6 @@
 #  include <netdb.h>
 #  include <arpa/inet.h>
 #  include <unistd.h>
-#endif
-
-
-#include <stddef.h>
-#if (MSVC)
-#  include <BaseTsd.h>
-   typedef __int8            int8_t;
-   typedef unsigned __int8   uint8_t;
-   typedef __int16           int16_t;
-   typedef unsigned __int16  uint16_t;
-   typedef __int32           int32_t;
-   typedef unsigned __int32  uint32_t;
-   typedef __int64           int64_t;
-   typedef unsigned __int64  uint64_t;
-   typedef SSIZE_T           ssize_t;
-#else
-#  include <stdint.h>
 #endif
 
 
@@ -88,8 +73,6 @@ typedef int sockfd_t;
 #endif
 #define countof(a)  (sizeof(a)/sizeof(*(a)))
 
-
-#define _unused_(x)  (void)(x)
 
 
 #endif /* end of _NET_H_ */

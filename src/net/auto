@@ -4,10 +4,14 @@
 #
 
 
+# check posix features
+#----------------------------------------
+. src/posix/auto
+
+
 # check header file existing
 #----------------------------------------
 #echo " + checking C99 header files ..."
-include="stdint.h" . ${NORE_ROOT}/auto/include
 
 
 # check machine features
