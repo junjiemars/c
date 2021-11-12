@@ -18,7 +18,7 @@
 
 
 #if (LINUX)
-#  if !defined(_GNU_SOURCE)
+#  if !defined(__USE_XOPEN2K8)
 #    define __USE_XOPEN2K8
 #  endif
 #endif  /* getline */
@@ -77,11 +77,11 @@ getline(char ** restrict lineptr, size_t * restrict n, FILE * restrict stream)
 
       if ('\n' == c)
         {
-          *p = 0;
-          return len;
+          break;
         }
     }
 
+  *++p = 0;
 	return len;
 }
 #endif  /* end of getline */

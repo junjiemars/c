@@ -91,9 +91,9 @@ posix_ioss_test: posix_ioss
 	$(posix_ioss_binout) $(CURDIR)/$(posix_root)/ioss_test.c
 
 $(posix_ioss_binout): $(posix_ioss_cppout)
-	$(CC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
 $(posix_ioss_cppout): $(posix_root)/ioss_test.c
-	$(CC) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
 # strs

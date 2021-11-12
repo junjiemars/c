@@ -1,5 +1,7 @@
 #include "defs.h"
 #include "ioss.h"
+#include "defs.h"
+#include "strs.h"
 #include <stdlib.h>
 
 static void test_getline(const char *where);
@@ -27,6 +29,7 @@ test_getline(const char *where)
       perror(0);
       goto clean_exit;
     }
+  assert(strlen(buf) == (size_t) rc);
   printf("getline: %s\n", buf);
     
  clean_exit:
