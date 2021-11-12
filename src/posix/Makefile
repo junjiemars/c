@@ -81,7 +81,7 @@ posix_ioss_binout := $(bin_path)/$(posix_prefix)_ioss$(bin_ext)
 
 posix_ioss: $(posix_ioss_binout)
 posix_ioss_test: posix_ioss
-	$(posix_ioss_binout)
+	$(posix_ioss_binout) $(CURDIR)/$(posix_root)/ioss_test.c
 
 $(posix_ioss_binout): $(posix_root)/ioss_test.c
 	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@

@@ -18,6 +18,7 @@
    typedef SSIZE_T           ssize_t;
 #else
 #  include <stdint.h>
+#  include <sys/types.h>
 #endif
 
 

@@ -100,7 +100,45 @@ case $NM_SYSTEM in
     ;;
   *)
     ;;
-esac                            # end of mmap
+esac                            # end of strdup
+
+
+# check getline
+#----------------------------------------
+case $NM_SYSTEM in
+  Darwin)
+    nm_feature="getline"
+    nm_feature_name="nm_have_getline"
+    nm_feature_run=no
+    nm_feature_h='#include <stdio.h>'
+    nm_feature_flags=
+    nm_feature_test='char *line = 0; size_t n = 0;
+                     getline(&line, &n, stdout);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  Linux)
+    nm_feature="getline"
+    nm_feature_name="nm_have_getline"
+    nm_feature_run=no
+    nm_feature_h='#include <stdio.h>'
+    nm_feature_flags='-D_GNU_SOURCE'
+    nm_feature_test='char *line = 0; size_t n = 0;
+                     getline(&line, &n, stdout);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  WinNT)
+    nm_feature="getline"
+    nm_feature_name="nm_have_getline"
+    nm_feature_run=no
+    nm_feature_h='#include <stdio.h>'
+    nm_feature_flags=
+    nm_feature_test='char *line = 0; size_t n = 0;
+                     getline(&line, &n, stdout);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  *)
+    ;;
+esac                            # end of getline
 
 
 # check fileno
@@ -129,13 +167,13 @@ case $NM_SYSTEM in
     nm_feature_name="nm_have_fileno"
     nm_feature_run=no
     nm_feature_h='#include <stdio.h>'
-    nm_feature_flags=
-    nm_feature_test='_fileno;'
+    nm_feature_flags='-D_CRT_SECURE_NO_WARNINGS'
+    nm_feature_test='fileno;'
     . ${NORE_ROOT}/auto/feature
     ;;
   *)
     ;;
-esac                            # end of mmap
+esac                            # end of fileno
 
 
 # mmap
