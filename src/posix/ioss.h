@@ -72,7 +72,7 @@ getline(char ** restrict lineptr, size_t * restrict n, FILE * restrict stream)
           *lineptr = p1;
           p = p1 + len;
         }
-      *p++ = c;
+      *p++ = (char) c;
       len++;
 
       if ('\n' == c)
