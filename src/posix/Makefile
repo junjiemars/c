@@ -7,14 +7,16 @@ posix: posix_bits                               \
        posix_getopt                             \
        posix_ints                               \
        posix_ioss                               \
-       posix_strs
+       posix_strs                               \
+       posix_ncstd
 
 posix_test: posix_bits_test                     \
             posix_defs_test                     \
             posix_getopt_test                   \
             posix_ints_test                     \
             posix_ioss_test                     \
-            posix_strs_test
+            posix_strs_test                     \
+            posix_ncstd_test
 
 
 # env
@@ -152,6 +154,17 @@ posix_tmp_test: posix_tmp
 	$(posix_tmp_binout)
 
 $(posix_tmp_binout): $(posix_root)/tmp/tmp.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# ncstd
+posix_ncstd_binout := $(bin_path)/$(posix_prefix)_ncstd$(bin_ext)
+
+posix_ncstd: $(posix_ncstd_binout)
+posix_ncstd_test: posix_ncstd
+	$(posix_ncstd_binout)
+
+$(posix_ncstd_binout): $(posix_root)/ncstd_test.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
