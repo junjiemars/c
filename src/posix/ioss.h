@@ -40,7 +40,7 @@ ssize_t
 getline(char ** restrict lineptr, size_t * restrict n, FILE * restrict stream)
 {
 	int       c;
-	ssize_t   line_len;
+	ssize_t   len;
 	char     *p, *p1;
 
   if (0 == lineptr)
@@ -57,10 +57,11 @@ getline(char ** restrict lineptr, size_t * restrict n, FILE * restrict stream)
         }
     }
   p = *lineptr;
+  len = 0;
 
 	while (EOF != (c = fgetc(stream)))
     {
-      if ((size_t) line_len == (*n - 1))
+      if ((size_t) len == (*n - 1))
         {
           *n <<= 1;
           p1 = realloc(*lineptr, *n);
@@ -69,19 +70,19 @@ getline(char ** restrict lineptr, size_t * restrict n, FILE * restrict stream)
               return EOF;
             }
           *lineptr = p1;
-          p = p1 + line_len;
+          p = p1 + len;
         }
       *p++ = c;
-      line_len++;
+      len++;
 
       if ('\n' == c)
         {
           *p = 0;
-          return line_len;
+          return len;
         }
     }
 
-	return line_len;
+	return len;
 }
 #endif  /* end of getline */
 
