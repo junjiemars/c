@@ -43,25 +43,6 @@ nm_feature_test="enum {N=5}; static_assert(N==5, \"N is not equal 5\");"
 . ${NORE_ROOT}/auto/feature     # end of static_assert
 
 
-# check open function
-#----------------------------------------
-case $NM_SYSTEM in
-  Darwin|Linux)
-    nm_feature="open"
-    nm_feature_name="nm_have_open"
-    nm_feature_run=no
-    nm_feature_h='#include <fcntl.h>'
-    nm_feature_flags=
-    nm_feature_test='int fd = open("/dev/zero", 0);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  WinNT)
-    ;;
-  *)
-    ;;
-esac                            # end of open
-
-
 # check strdup
 #----------------------------------------
 case $NM_SYSTEM in
@@ -69,38 +50,33 @@ case $NM_SYSTEM in
     nm_feature="strdup"
     nm_feature_name="nm_have_strdup"
     nm_feature_run=no
-    nm_feature_h='
-#include <string.h>
-#include <stdlib.h>'
+    nm_feature_h='#include <string.h>'
     nm_feature_flags=
-    nm_feature_test='char *s = strdup("abc"); free(s);'
+    nm_feature_test='char *s = strdup("abc");'
     . ${NORE_ROOT}/auto/feature
     ;;
   Linux)
     nm_feature="strdup"
     nm_feature_name="nm_have_strdup"
     nm_feature_run=no
-    nm_feature_h='
-#include <string.h>
-#include <stdlib.h>'
+    nm_feature_h='#include <string.h>'
     nm_feature_flags='-D__USE_XOPEN_EXTENDED'
-    nm_feature_test='char *s = strdup("abc"); free(s);'
+    nm_feature_test='char *s = strdup("abc");'
     . ${NORE_ROOT}/auto/feature
     ;;
   WinNT)
     nm_feature="strdup"
     nm_feature_name="nm_have_strdup"
     nm_feature_run=no
-    nm_feature_h='
-#include <string.h>
-#include <stdlib.h>'
+    nm_feature_h='#include <string.h>'
     nm_feature_flags=
-    nm_feature_test='char *s = _strdup("abc"); free(s);'
+    nm_feature_test='char *s = _strdup("abc");'
     . ${NORE_ROOT}/auto/feature
     ;;
   *)
     ;;
 esac                            # end of strdup
+
 
 
 # check getline
@@ -121,7 +97,7 @@ case $NM_SYSTEM in
     nm_feature_name="nm_have_getline"
     nm_feature_run=no
     nm_feature_h='#include <stdio.h>'
-    nm_feature_flags='-D_GNU_SOURCE'
+    nm_feature_flags="-D__USE_XOPEN2K8"
     nm_feature_test='char *line = 0; size_t n = 0;
                      getline(&line, &n, stdout);'
     . ${NORE_ROOT}/auto/feature
@@ -174,6 +150,25 @@ case $NM_SYSTEM in
   *)
     ;;
 esac                            # end of fileno
+
+
+# check open function
+#----------------------------------------
+case $NM_SYSTEM in
+  Darwin|Linux)
+    nm_feature="open"
+    nm_feature_name="nm_have_open"
+    nm_feature_run=no
+    nm_feature_h='#include <fcntl.h>'
+    nm_feature_flags=
+    nm_feature_test='int fd = open("/dev/zero", 0);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  WinNT)
+    ;;
+  *)
+    ;;
+esac                            # end of open
 
 
 # mmap
@@ -233,6 +228,39 @@ nm_feature_flags=
 nm_feature_test='mkstemp("abc");'
 . ${NORE_ROOT}/auto/feature
 
+
+# check sanitize feature
+#----------------------------------------
+case "$CC_NAME" in
+   gcc|clang)
+     nm_feature="-fsanitize=address"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-fsanitize=address'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=f_sanitize op="+=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     nm_feature="-fsanitize=leak"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-fsanitize=leak'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=f_sanitize op="+=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     ;;
+   msvc)
+     ;;
+esac
 
 
 # eof

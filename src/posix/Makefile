@@ -19,7 +19,12 @@ posix_test: posix_bits_test                     \
 
 # env
 posix_prefix := posix
+
 INC += -I$(posix_root)
+
+ifeq ($(_MEMORY_), 1)
+	CFLAGS += $(f_sanitize)
+endif # end of _MEMORY_
 
 
 # bits
@@ -76,15 +81,19 @@ posix_ints_test: posix_ints
 $(posix_ints_binout): $(posix_root)/ints_test.c
 	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
 
+
 # ioss
 posix_ioss_binout := $(bin_path)/$(posix_prefix)_ioss$(bin_ext)
+posix_ioss_cppout := $(tmp_path)/$(posix_prefix)_ioss$(cpp_ext)
 
 posix_ioss: $(posix_ioss_binout)
 posix_ioss_test: posix_ioss
 	$(posix_ioss_binout) $(CURDIR)/$(posix_root)/ioss_test.c
 
-$(posix_ioss_binout): $(posix_root)/ioss_test.c
-	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
+$(posix_ioss_binout): $(posix_ioss_cppout)
+	$(CC) $^ $(bin_out)$@
+$(posix_ioss_cppout): $(posix_root)/ioss_test.c
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
 # strs

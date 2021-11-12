@@ -17,10 +17,18 @@
 #endif  /* fileno */
 
 
+#if (LINUX)
+#  if !defined(_GNU_SOURCE)
+#    define __USE_XOPEN2K8
+#  endif
+#endif  /* getline */
+
+
 #include <stdio.h>
 
 
-#if !defined(NM_HAVE_GETLINE)
+
+#if !(NM_HAVE_GETLINE)
 #  ifndef GETLINE_LINE_MAX
 #    define GETLINE_LINE_MAX  512
 #  endif

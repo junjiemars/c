@@ -1,5 +1,6 @@
 #include "defs.h"
 #include "ioss.h"
+#include <stdlib.h>
 
 static void test_getline(const char *where);
 
