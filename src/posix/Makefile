@@ -70,7 +70,7 @@ posix_strs_test: posix_strs
 	$(posix_strs_binout)
 
 $(posix_strs_binout): $(posix_root)/strs_test.c
-	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # mmap

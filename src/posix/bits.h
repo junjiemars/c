@@ -1,6 +1,7 @@
 #ifndef _BITS_H_
 #define _BITS_H_
 
+
 #if !defined(BIT8_PRE)
 #  define BIT8_PRE  ""
 #endif

@@ -1,6 +1,8 @@
 #ifndef _INTS_H_
 #define _INTS_H_
 
+#include <nore.h>
+
 
 #include <stddef.h>
 #if (MSVC)

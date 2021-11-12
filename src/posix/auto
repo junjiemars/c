@@ -36,10 +36,9 @@ fi                              # end of restrict
 #----------------------------------------
 nm_feature="static_assert"
 nm_feature_name="nm_have_static_assert"
-nm_feature_run=no
+nm_feature_run=yes
 nm_feature_h="#include <assert.h>"
-nm_feature_flags=
-nm_feature_flags=
+nm_feature_flags='$nm_std_opt'
 nm_feature_test="enum {N=5}; static_assert(N==5, \"N is not equal 5\");"
 . ${NORE_ROOT}/auto/feature     # end of static_assert
 
@@ -61,6 +60,41 @@ case $NM_SYSTEM in
   *)
     ;;
 esac                            # end of open
+
+
+# check strdup
+#----------------------------------------
+case $NM_SYSTEM in
+  Darwin)
+    nm_feature="strdup"
+    nm_feature_name="nm_have_strdup"
+    nm_feature_run=no
+    nm_feature_h='#include <string.h>'
+    nm_feature_flags=
+    nm_feature_test='char *s = strdup("abc"); free(s);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  Linux)
+    nm_feature="strdup"
+    nm_feature_name="nm_have_strdup"
+    nm_feature_run=no
+    nm_feature_h='#include <string.h>'
+    nm_feature_flags='-D__USE_XOPEN_EXTENDED'
+    nm_feature_test='char *s = strdup("abc"); free(s);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  WinNT)
+    nm_feature="strdup"
+    nm_feature_name="nm_have_strdup"
+    nm_feature_run=no
+    nm_feature_h='#include <string.h>'
+    nm_feature_flags=
+    nm_feature_test='char *s = _strdup("abc"); free(s);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  *)
+    ;;
+esac                            # end of mmap
 
 
 # mmap
