@@ -9,10 +9,10 @@ static void test_getline(const char *where);
 void
 test_getline(const char *where)
 {
-  char    *buf;
-  size_t   n;
-  FILE    *f;
-  int      rc;
+  char     *buf;
+  size_t    n;
+  FILE     *f;
+  ssize_t   rc;
 
   f = fopen(where, "r");
   if (!f)
@@ -23,7 +23,7 @@ test_getline(const char *where)
   
   buf = 0;
   n = 0;
-  rc = getdelim(&buf, &n, '\n', f);
+  rc = getline(&buf, &n, f);
   if (rc == EOF)
     {
       perror(0);

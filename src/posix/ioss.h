@@ -85,6 +85,12 @@ getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
   *++p = 0;
 	return len;
 }
+
+#  if defined(getline)
+#    undef getline
+#  endif
+#  define getline(lp, n, f)  getdelim((lp), (n), 0x0a, (f))
+
 #endif  /* end of getdelim */
 
 
