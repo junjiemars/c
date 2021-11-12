@@ -3,6 +3,7 @@
 
 #include <nore.h>
 #include <defs.h>
+#include <ints.h>
 
 
 #if (WINNT)
