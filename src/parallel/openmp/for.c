@@ -21,7 +21,7 @@ calc_pi(long n)
 
 	step = 1.0 / (double)n;
 
-#ifdef NM_HAVE_OPENMP
+#if defined(NM_HAVE_OPENMP)
   /* msvc error C3015: initialization in OpenMP 'for' statement has
      improper form.
      openmp does not know c99's for loop.
@@ -35,6 +35,10 @@ calc_pi(long n)
       sum = sum + 4.0 / (1.0 + x*x);
     }
 
+#if (MSVC)
+  _unused_(x);
+#endif
+  
 	pi = step * sum;
 	return pi;
 }
