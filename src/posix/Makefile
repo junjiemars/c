@@ -4,11 +4,13 @@
 
 posix: posix_bits                               \
        posix_defs                               \
+       posix_getopt                             \
        posix_ints                               \
        posix_strs
 
 posix_test: posix_bits_test                     \
             posix_defs_test                     \
+            posix_getopt_test                   \
             posix_ints_test                     \
             posix_strs_test
 
@@ -28,17 +30,27 @@ posix_bits_test: posix_bits
 $(posix_bits_binout): $(posix_root)/bits_test.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-# msvc on Windows
+# getopt
+posix_getopt_binout := $(bin_path)/$(posix_prefix)_getopt$(bin_ext)
+
+posix_getopt: $(posix_getopt_binout)
+posix_getopt_test: posix_getopt
+	$(posix_getopt_binout) -rabc -o123 -n	-N
+
+posix_getopt_c :=
 ifeq ($(CC_NAME), msvc)
-posix: posix_getopt
-posix_getopt: $(posix_root)/getopt.h $(posix_root)/getopt.c
+posix_getopt_h := $(posix_root)/getopt.h
+posix_getopt_c := $(posix_root)/getopt.c
 posix_getopt_repo = https://raw.githubusercontent.com/alex85k/wingetopt/master/src/
 
-$(posix_root)/getopt.h:
+$(posix_getopt_h):
 	curl -sLo $@ $(posix_getopt_repo)getopt.h
-$(posix_root)/getopt.c:
+$(posix_getopt_c):
 	curl -sLo $@ $(posix_getopt_repo)getopt.c
 endif # end of msvc
+
+$(posix_getopt_binout): $(posix_root)/getopt_test.c $(posix_getopt_c)
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # defs
