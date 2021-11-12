@@ -1,4 +1,5 @@
-#include <_io_.h>
+#include "_io_.h"
+#include <ints.h>
 
 #if (LINUX)
 #  ifndef __USE_GNU
@@ -14,7 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <posix/ssize_t.h>
+
 
 /* #include <unistd.h> */
 
