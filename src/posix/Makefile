@@ -8,7 +8,8 @@ posix: posix_bits                               \
        posix_ints                               \
        posix_ioss                               \
        posix_strs                               \
-       posix_ncstd
+       posix_ncstd                              \
+       posix_nustd
 
 posix_test: posix_bits_test                     \
             posix_defs_test                     \
@@ -16,8 +17,8 @@ posix_test: posix_bits_test                     \
             posix_ints_test                     \
             posix_ioss_test                     \
             posix_strs_test                     \
-            posix_ncstd_test
-
+            posix_ncstd_test                    \
+            posix_nustd_test
 
 # env
 posix_prefix := posix
@@ -165,6 +166,17 @@ posix_ncstd_test: posix_ncstd
 	$(posix_ncstd_binout)
 
 $(posix_ncstd_binout): $(posix_root)/ncstd_test.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# nustd
+posix_nustd_binout := $(bin_path)/$(posix_prefix)_nustd$(bin_ext)
+
+posix_nustd: $(posix_nustd_binout)
+posix_nustd_test: posix_nustd
+	$(posix_nustd_binout)
+
+$(posix_nustd_binout): $(posix_root)/nustd_test.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
