@@ -1,5 +1,5 @@
-#ifndef _IOS_H_
-#define _IOS_H_
+#ifndef _IOSS_H_
+#define _IOSS_H_
 
 
 #include <nore.h>
@@ -20,4 +20,4 @@
 #include <stdio.h>
 
 
-#endif /* end of _IOS_H_ */
+#endif /* end of _IOSS_H_ */

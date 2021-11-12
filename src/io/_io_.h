@@ -3,7 +3,7 @@
 
 #include <nore.h>
 #include <defs.h>
-#include <ios.h>
+#include <ioss.h>
 
 
 void hex_out(const char *ss);
