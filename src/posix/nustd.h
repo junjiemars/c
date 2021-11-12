@@ -17,13 +17,14 @@
 #endif
 
 
-#if (WINNT)
+#if (WINNT) && (NM_HAVE_SLEEP)
 #  if !defined(sleep)
 #    define sleep(x) Sleep((x) * 1000)
 #  endif
 #endif  /* sleep */
 
-#if (WINNT)
+
+#if (WINNT) && (NM_HAVE_GETPID)
 #  if !defined(getpid)
 #    define getpid() _getpid()
 #  endif
