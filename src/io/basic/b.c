@@ -1,13 +1,14 @@
 #include "_io_.h"
-#include <stdio.h>
+
 
 int
 main(int argc, char *argv[])
 {
+  int  ch;
+
 	_unused_(argc);
 	_unused_(argv);
 
-	int ch;
 	while (EOF != (ch = fgetc(stdin)))
     {
       fputc(ch, stdout);

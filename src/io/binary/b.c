@@ -1,7 +1,7 @@
-#include <_io_.h>
-#include <stdio.h>
-#include <string.h>
+#include "_io_.h"
+#include <strs.h>
 #include <stdlib.h>
+
 
 #ifdef MSVC
 #  include <windows.h>

@@ -68,9 +68,9 @@ $(io_basic_binout): $(io_root)/basic/b.c
 io_binary_basic_binout := $(bin_path)/$(io_prefix)_binary_basic$(bin_ext)
 io_binary_array_binout := $(bin_path)/$(io_prefix)_binary_array$(bin_ext)
 
-io_binary: io_binary_basic											\
+io_binary: io_binary_basic                      \
            io_binary_array
-io_binary_test: io_binary_basic_test						\
+io_binary_test: io_binary_basic_test            \
                 io_binary_array_test
 
 io_binary_basic: $(io_binary_basic_binout)
