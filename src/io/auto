@@ -4,11 +4,6 @@
 . src/posix/auto
 
 
-# check header file existing
-#----------------------------------------
-#include="stdint.h" . ${NORE_ROOT}/auto/include
-
-
 #check popen fn
 #----------------------------------------
 nm_feature="popen"
@@ -20,6 +15,7 @@ nm_feature_inc=
 nm_feature_ldlibs=
 nm_feature_test='FILE* f=popen("dir","r"); if (f) pclose(f);'
 . ${NORE_ROOT}/auto/feature
+
 
 case $CC_NAME in
   clang|cc)

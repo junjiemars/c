@@ -2,8 +2,46 @@
 # ./configure --has-io
 #
 
+
+io: io_basic                                    \
+    io_binary                                   \
+    io_diff                                     \
+    io_error                                    \
+    io_fileno                                   \
+    io_flight                                   \
+    io_flush                                    \
+    io_format                                   \
+    io_line                                     \
+    io_process                                  \
+    io_reopen                                   \
+    io_scan                                     \
+    io_seek                                     \
+    io_variadic                                 \
+    io_wc                                       \
+    io_wchar
+
+io_test: io_basic_test                          \
+         io_binary_test                         \
+         io_diff_test                           \
+         io_error_test                          \
+         io_fileno_test                         \
+         io_flight_test                         \
+         io_flush_test                          \
+         io_format_test                         \
+         io_line_test                           \
+         io_process_test                        \
+         io_reopen_test                         \
+         io_scan_test                           \
+         io_seek_test                           \
+         io_variadic_test                       \
+         io_wc_test                             \
+         io_wchar_test
+
+
+# env
 io_prefix := io
-INC += -I$(io_root) -I$(root)
+INC += $(nm_inc_opt)$(io_root) $(nm_inc_opt)$(root)/posix
+
 
 ifeq ($(CC_NAME),msvc)
 getopt_c := $(root)/posix/getopt.c
@@ -13,40 +51,6 @@ _MEMORY_ ?= 0
 ifeq ($(shell test $(_MEMORY_) -gt 0; echo $$?),0)
 CFLAGS += $(cflags_sanitize)
 endif
-
-io: io_basic																		\
-    io_binary																		\
-    io_diff																			\
-		io_error																		\
-		io_fileno																		\
-    io_flight																		\
-    io_flush																		\
-		io_format																		\
-		io_line																			\
-		io_process																	\
-		io_reopen																		\
-		io_scan																			\
-    io_seek																			\
-		io_variadic																	\
-		io_wc																				\
-		io_wchar
-
-io_test: io_basic_test													\
-         io_binary_test													\
-         io_diff_test														\
-         io_error_test													\
-         io_fileno_test													\
-         io_flight_test													\
-         io_flush_test													\
-         io_format_test													\
-         io_line_test														\
-         io_process_test												\
-         io_reopen_test													\
-         io_scan_test														\
-         io_seek_test														\
-         io_variadic_test												\
-         io_wc_test															\
-         io_wchar_test
 
 
 # basic I/O

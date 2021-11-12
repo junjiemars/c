@@ -1,10 +1,10 @@
 #include <_io_.h>
 #include <stdio.h>
 #include <errno.h>
-#include <string.h>
+#include <strs.h>
 #include <ctype.h>
 #include <stdlib.h>
-#include <posix/getopt.h>
+#include <getopt.h>
 
 
 typedef struct count_test_s {

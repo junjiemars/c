@@ -6,12 +6,14 @@ posix: posix_bits                               \
        posix_defs                               \
        posix_getopt                             \
        posix_ints                               \
+       posix_ios                                \
        posix_strs
 
 posix_test: posix_bits_test                     \
             posix_defs_test                     \
             posix_getopt_test                   \
             posix_ints_test                     \
+            posix_ios_test                      \
             posix_strs_test
 
 
@@ -63,6 +65,7 @@ posix_defs_test: posix_defs
 $(posix_defs_binout): $(posix_root)/defs_test.c
 	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
 
+
 # ints
 posix_ints_binout := $(bin_path)/$(posix_prefix)_ints$(bin_ext)
 
@@ -71,6 +74,16 @@ posix_ints_test: posix_ints
 	$(posix_ints_binout)
 
 $(posix_ints_binout): $(posix_root)/ints_test.c
+	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
+
+# ios
+posix_ios_binout := $(bin_path)/$(posix_prefix)_ios$(bin_ext)
+
+posix_ios: $(posix_ios_binout)
+posix_ios_test: posix_ios
+	$(posix_ios_binout)
+
+$(posix_ios_binout): $(posix_root)/ios_test.c
 	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
 
 

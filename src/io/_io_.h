@@ -2,15 +2,11 @@
 #define _IO_H_
 
 #include <nore.h>
-#include <posix/kws.h>
+#include <defs.h>
+#include <ios.h>
 
-#if (MSVC)
-#  pragma warning(disable: 4996)
-#  pragma warning(disable: 4244)
-#endif
-
-#define _unused_(x) ((void)(x))
 
 void hex_out(const char *ss);
+
 
 #endif /* end of _IO_H_ */

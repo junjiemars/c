@@ -103,6 +103,41 @@ case $NM_SYSTEM in
 esac                            # end of mmap
 
 
+# check fileno
+#----------------------------------------
+case $NM_SYSTEM in
+  Darwin)
+    nm_feature="fileno"
+    nm_feature_name="nm_have_fileno"
+    nm_feature_run=no
+    nm_feature_h='#include <stdio.h>'
+    nm_feature_flags=
+    nm_feature_test='fileno(stdout);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  Linux)
+    nm_feature="fileno"
+    nm_feature_name="nm_have_fileno"
+    nm_feature_run=no
+    nm_feature_h='#include <stdio.h>'
+    nm_feature_flags='-D__USE_POSIX'
+    nm_feature_test='fileno(stdout);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  WinNT)
+    nm_feature="fileno"
+    nm_feature_name="nm_have_fileno"
+    nm_feature_run=no
+    nm_feature_h='#include <stdio.h>'
+    nm_feature_flags=
+    nm_feature_test='_fileno;'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  *)
+    ;;
+esac                            # end of mmap
+
+
 # mmap
 #----------------------------------------
 case $NM_SYSTEM in
