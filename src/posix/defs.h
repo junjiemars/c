@@ -36,4 +36,9 @@
 #endif  /* _unused_ */
 
 
+#if !defined(_isut_)
+#  define _isut_(t) (((t)~1) > 0)
+#endif  /* _isut_ */
+
+
 #endif /* end of _DEFS_H_ */
