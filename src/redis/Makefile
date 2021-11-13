@@ -3,10 +3,6 @@
 #
 
 
-redis_out := $(CURDIR)/$(out)/var/redis
-
-redis_git_src := 'https://github.com/redis/redis.git'
-redis_home := $(redis_root)/redis_home
 
 redis: redis_core                               \
        redis_module_hello
@@ -16,6 +12,11 @@ redis_test: redis_core_test                     \
 
 
 # env
+redis_out := $(CURDIR)/$(out)/var/redis
+
+redis_git_src := 'https://github.com/redis/redis.git'
+redis_home := $(redis_root)/redis_home
+
 redis_cc_opt :=
 redis_ld_opt :=
 
