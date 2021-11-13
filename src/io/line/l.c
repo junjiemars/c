@@ -49,10 +49,10 @@ test_getline(const char *where)
 void
 test_fgets(const char *where) 
 {
-	FILE    *file;
-	char    *line  =  0;
-	size_t   n;
-	char    *s     =  0;
+	FILE  *file;
+	char  *line  =  0;
+	int    n;
+	char  *s     =  0;
   
   file = fopen(where, "r");
 	if (!file) 
