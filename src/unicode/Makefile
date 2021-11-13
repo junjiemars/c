@@ -9,8 +9,9 @@ unicode: unicode_mb \
 unicode_test: unicode_mb_test \
 							unicode_utf8_test
 
+# env
 unicode_prefix := unicode
-INC += -I$(unicode_root)
+INC += $(nm_inc_opt)$(unicode_root) $(nm_inc_opt)$(root)/posix
 
 ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
 	CFLAGS += $(cflags_sanitize)
