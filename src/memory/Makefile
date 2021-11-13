@@ -26,10 +26,10 @@ memory_test: memory_alloc_test                  \
              memory_shift_test                  \
              memory_struct_test
 
-
+# env
 memory_prefix := memory
 
-INC += -I$(memory_root) -I$(root)/posix
+INC += $(nm_inc_opt)$(memory_root) $(nm_inc_opt)$(root)/posix
 
 ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
 	CFLAGS += $(cflags_sanitize)
