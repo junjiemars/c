@@ -3,6 +3,12 @@
 #include <assert.h>
 
 
+/* C4456: declaration of 'i' hides previous local declaration */
+#if (MSVC)
+#  pragma warning(disable:4456)
+#endif
+
+
 static int f_int;
 
 void automatic_storage_class(void);
