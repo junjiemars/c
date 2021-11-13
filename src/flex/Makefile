@@ -3,15 +3,18 @@
 # make --keep-going --no-builtin-rules --debug=b clean test
 #
 
-flex_prefix := flex
-INC += -I$(flex_root)
-
 
 flex: flex_basic																\
       flex_c
 
 flex_test: flex_basic_test											\
            flex_c_test
+
+# env
+flex_prefix := flex
+
+INC += $(nm_inc_opt)$(flex_root) $(nm_inc_opt)$(root)/posix
+
 
 ifeq (Linux, $(NM_SYSTEM))
 CFLAGS += -D_POSIX_C_SOURCE=200809L
