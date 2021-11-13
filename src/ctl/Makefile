@@ -18,7 +18,8 @@ ctl_prefix := ctl
 ctl_git_src := 'https://github.com/glouw/ctl.git'
 ctl_home := $(ctl_root)/ctl_home
 
-INC += -I$(root) -I$(ctl_root) -I$(ctl_home)/ctl
+INC += $(nm_inc_opt)$(root) $(nm_inc_opt)$(root)/posix
+INC += $(nm_inc_opt)$(ctl_root) $(nm_inc_opt)$(ctl_home)/ctl
 
 
 ifeq ($(_MEMORY_), 1)

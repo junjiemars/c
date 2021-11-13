@@ -48,11 +48,11 @@ test_queue_new_free_int(void)
   int      **ints;
   int        ints_len;
 
-  ASSERT(NULL == queue_new(NULL, 4, sizeof(int), NULL));
+  assert(NULL == queue_new(NULL, 4, sizeof(int), NULL));
 
   ints_len = 3;
   ints = malloc(sizeof(int*) * ints_len);
-  ASSERT(ints);
+  assert(ints);
   
   queue_new(&q, 4, sizeof(int*), free_int_ptr);
 

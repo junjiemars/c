@@ -2,15 +2,6 @@
 #define _CTL_H_
 
 #include <nore.h>
-
-
-#if (NDEBUG)
-#  define ASSERT(x) ((void)(x))
-#else
-#  define ASSERT assert
-#endif
-
-
-#define _unused_(x) ((void)(x))
+#include <ndef.h>
 
 #endif /* _CTL_H_ */

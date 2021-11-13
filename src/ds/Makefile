@@ -3,15 +3,6 @@
 # make clean test
 #
 
-ds_prefix := ds
-INC += -I$(ds_root)
-
-ifeq (1, $(_MEMORY_))
-ifeq (YES, $(has_sanitize))
-CFLAGS += $(cflags_sanitize)
-endif
-endif
-
 
 ds: double_linked_list                          \
     single_linked_list                          \
@@ -30,6 +21,18 @@ ds_test: double_linked_list_test                \
          ds_tree_test                           \
          ds_calc_test                           \
          ds_d2b_test
+
+# env
+ds_prefix := ds
+
+INC += $(nm_inc_opt)$(ds_root) $(nm_inc_opt)$(root)/posix
+
+ifeq (1, $(_MEMORY_))
+ifeq (YES, $(has_sanitize))
+CFLAGS += $(cflags_sanitize)
+endif
+endif
+
 
 # list
 

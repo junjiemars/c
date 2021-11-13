@@ -21,7 +21,7 @@ free_alloc_node(node_s *node) {
 node_s*
 new_node(void *val) {
 	node_s *n = calloc(1, sizeof(*n));
-	ASSERT(n && strerror(errno));
+	assert(n && strerror(errno));
 	
 	n->val = val;
 	return n;
@@ -56,7 +56,7 @@ iter_str_node(const node_s *node) {
 void
 test_static_str_list() {
   node_s *head = list_append(0, "Apple", new_node);
-  ASSERT((0 != head) && (0 == strcmp(head->val, "Apple")));
+  assert((0 != head) && (0 == strcmp(head->val, "Apple")));
 
 	list_append(head, "Bee", new_node);
   list_append(head, "Candy", new_node);
@@ -64,24 +64,24 @@ test_static_str_list() {
 
   node_s *nil = list_find(0, "Bee", cmp_str_node);
   _unused_(nil);
-  ASSERT(0 == nil);
+  assert(0 == nil);
 
   node_s *tail = list_find(head, 0, cmp_str_node);
   _unused_(tail);
-  ASSERT(0 == tail);
+  assert(0 == tail);
   
   node_s *bee = list_find(head, "Bee", cmp_str_node);
   _unused_(bee);
-  ASSERT(0 == strcmp(bee->val, "Bee"));
+  assert(0 == strcmp(bee->val, "Bee"));
   list_iterate(head, iter_str_node);
 
   list_delete(&head, "Bee", cmp_str_node, free_node);
-  ASSERT(0 == list_find(head, "Bee", cmp_str_node));
-  ASSERT(0 != list_find(head, "Apple", cmp_str_node));
+  assert(0 == list_find(head, "Bee", cmp_str_node));
+  assert(0 != list_find(head, "Apple", cmp_str_node));
   list_iterate(head, iter_str_node);
 
   list_delete(&head, "Apple", cmp_str_node, free_node);
-  ASSERT(0 == strcmp("Candy", head->val));
+  assert(0 == strcmp("Candy", head->val));
   list_iterate(head, iter_str_node);
   
   list_free(head, free_node);
@@ -91,7 +91,7 @@ void
 test_dynamic_str_list() {
   char *apple = malloc(32);
   node_s *head = list_append(0, strcpy(apple, "Apple"), new_node);
-  ASSERT((0 != head) && (0 == strcmp(apple, head->val)));
+  assert((0 != head) && (0 == strcmp(apple, head->val)));
 
   char *bee = malloc(32);
   list_append(head, strcpy(bee, "Bee"), new_node);
@@ -104,22 +104,22 @@ test_dynamic_str_list() {
 
   node_s *nil = list_find(0, bee, cmp_str_node);
   _unused_(nil);
-  ASSERT(0 == nil);
+  assert(0 == nil);
 
   node_s *tail = list_find(head, 0, cmp_str_node);
   _unused_(tail);
-  ASSERT(0 == tail);
+  assert(0 == tail);
   
   node_s *bee_node = list_find(head, bee, cmp_str_node);
   _unused_(bee_node);
-  ASSERT(0 == strcmp(bee_node->val, bee));
+  assert(0 == strcmp(bee_node->val, bee));
 
   list_delete(&head, bee, cmp_str_node, free_alloc_node);
-  ASSERT(0 == list_find(head, "Bee", cmp_str_node));
-  ASSERT(0 != list_find(head, apple, cmp_str_node));
+  assert(0 == list_find(head, "Bee", cmp_str_node));
+  assert(0 != list_find(head, apple, cmp_str_node));
 
   list_delete(&head, apple, cmp_str_node, free_alloc_node);
-  ASSERT(0 == strcmp(candy, head->val));
+  assert(0 == strcmp(candy, head->val));
 
   list_free(head, free_alloc_node);
 }
@@ -129,24 +129,24 @@ test_int_list() {
   int *one = malloc(sizeof(int));
   *one = 1;
   node_s *head = list_append(0, one, new_node);
-  ASSERT((0 != head) && (1 == *(int*)(head->val)));
+  assert((0 != head) && (1 == *(int*)(head->val)));
 
   int *two = malloc(sizeof(int));
   *two = 2;
   node_s *n = list_append(head, two, new_node);
   _unused_(n);
-	ASSERT((0 != n) && (2 == *(int*)(n->val)));
+	assert((0 != n) && (2 == *(int*)(n->val)));
 	
   int *three = malloc(sizeof(int));
   *three = 3;
   n = list_append(head, three, new_node);
-	ASSERT((0 != n) && (3 == *(int*)(n->val)));
+	assert((0 != n) && (3 == *(int*)(n->val)));
 
   n = list_find(head, two, cmp_int_node);
-  ASSERT((0 != n) && (2 == *(int*)(n->val)));
+  assert((0 != n) && (2 == *(int*)(n->val)));
 
   list_delete(&head, one, cmp_int_node, free_alloc_node);
-  ASSERT(2 == *(int*)(head->val));
+  assert(2 == *(int*)(head->val));
 
   list_free(head, free_alloc_node);
 }
