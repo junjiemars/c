@@ -1,6 +1,6 @@
 #include <_os_.h>
 #include <stdio.h>
-#include <posix/getopt.h>
+#include <getopt.h>
 
 extern char *optarg;
 

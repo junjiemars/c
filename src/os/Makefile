@@ -15,8 +15,9 @@ os_test: os_brk_test														\
 
 # env
 os_prefix := os
-INC += $(nm_inc_opt)$(os_root) $(nm_inc_opt)$(root)
+INC += $(nm_inc_opt)$(os_root) $(nm_inc_opt)$(root)/posix
 
+getopt_c :=
 ifeq (msvc, $(CC_NAME))
 	getopt_c := $(root)/posix/getopt.c
 endif # msvc
