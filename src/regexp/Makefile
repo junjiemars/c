@@ -7,8 +7,10 @@ regexp: regexp_pcre															\
 regexp_test: regexp_pcre_test										\
              regexp_os_test
 
+# env
 regexp_prefix := regexp
-INC += -I$(regexp_root)/ -I$(root)
+
+INC += $(nm_inc_opt)$(regexp_root)/ $(nm_inc_opt)$(root) $(nm_inc_opt)$(root)/posix
 
 ifeq ($(CC_NAME),msvc)
 getopt_c := $(root)/posix/getopt.c
