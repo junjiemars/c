@@ -2,8 +2,8 @@
 #define _NET_H_
 
 #include <nore.h>
-#include <defs.h>
-#include <ints.h>
+#include <ndef.h>
+#include <nint.h>
 
 
 #if (WINNT)

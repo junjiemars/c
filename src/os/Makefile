@@ -13,9 +13,9 @@ os_test: os_brk_test														\
          os_msq_test														\
          os_tcpwrapper_test
 
-
+# env
 os_prefix := os
-INC += -I$(os_root) -I$(root)
+INC += $(nm_inc_opt)$(os_root) $(nm_inc_opt)$(root)
 
 ifeq (msvc, $(CC_NAME))
 	getopt_c := $(root)/posix/getopt.c
