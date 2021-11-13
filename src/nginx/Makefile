@@ -1,22 +1,22 @@
 # ./configure --has-nginx
 
+nginx_out := $(CURDIR)/$(out)/var/nginx
+nginx_git_src := 'https://github.com/nginx/nginx.git'
+nginx_home := $(nginx_root)/nginx_home
 
-nginx: nginx_core                               \
+
+nginx: $(nginx_home)                            \
+       nginx_core                               \
        nginx_module_hello                       \
        nginx_module_njs
 
-nginx_test: nginx_core_test                     \
+nginx_test: $(nginx_home)                       \
+            nginx_core_test                     \
             nginx_module_hello_test             \
             nginx_module_njs_test
 
 
 # env
-nginx_out := $(CURDIR)/$(out)/var/nginx
-
-nginx_git_src := 'https://github.com/nginx/nginx.git'
-nginx_home := $(nginx_root)/nginx_home
-
-
 nginx_cc_opt += $(nm_release_opt)
 nginx_cc_opt += $(nm_optimize_opt)
 nginx_cc_opt += $(nm_symbol_opt)
