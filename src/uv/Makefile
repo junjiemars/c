@@ -16,11 +16,10 @@ uv_test: uv_dns_test                            \
 # env
 uv_prefix := uv
 
-INC += -I$(uv_root)
+INC += $(nm_inc_opt)$(uv_root) $(nm_inc_opt)$(root)/posix
 
 
 ifeq (msvc, $(CC_NAME))
-INC += -I$(root)posix
 getopt_c := $(root)posix/getopt.c
 endif
 
