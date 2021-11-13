@@ -1,10 +1,12 @@
 #include "_lang_.h"
-#include <nbits.h>
 #include <float.h>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+
+#define BIT8_SUF "\n"
+#include <nbits.h>
 
 #if (MSVC)
 #  pragma warning(disable: 4293)

@@ -1,14 +1,17 @@
+#include "ndef.h"
 #include <stdio.h>
 
 #define BIT8_SEP  ","
 #define BIT16_SEP "|"
+#define BIT32_SEP "\n                         "
 #define BIT8_PRE  "0b: "
+#define BIT8_SUF  "\n"
 
 #include "nbits.h"
-#include "ndef.h"
 
 int
-main(int argc, char **argv) {
+main(int argc, char **argv) 
+{
   _unused_(argc);
   _unused_(argv);
 

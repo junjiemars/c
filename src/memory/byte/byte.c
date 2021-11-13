@@ -1,9 +1,12 @@
 #include "_memory_.h"
 #include <stdio.h>
 #include <float.h>
-#include <nbits.h>
 #include <inttypes.h>
 #include <stdint.h>
+
+#define BIT8_SUF  "\n"
+#include <nbits.h>
+
 
 typedef union {
 	float f;

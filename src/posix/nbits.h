@@ -2,6 +2,7 @@
 #define _NBITS_H_
 
 
+/* prefix */
 #if !defined(BIT8_PRE)
 #  define BIT8_PRE  ""
 #endif
@@ -15,6 +16,21 @@
 #  define BIT64_PRE BIT32_PRE
 #endif
 
+/* suffix */
+#if !defined(BIT8_SUF)
+#  define BIT8_SUF  ""
+#endif
+#if !defined(BIT16_SUF)
+#  define BIT16_SUF BIT8_SUF
+#endif
+#if !defined(BIT32_SUF)
+#  define BIT32_SUF BIT16_SUF
+#endif
+#if !defined(BIT64_SUF)
+#  define BIT64_SUF BIT32_SUF
+#endif
+
+/* seperator */
 #if !defined(BIT8_SEP)
 #  define BIT8_SEP  " "
 #endif
@@ -24,6 +40,7 @@
 #if !defined(BIT32_SEP)
 #  define BIT32_SEP BIT16_SEP
 #endif
+
 
 #define BIT8_FMT  "%s%s"
 #define BIT16_FMT BIT8_FMT  BIT8_SEP  BIT8_FMT
@@ -42,10 +59,10 @@ const char *BIT4[] = {
 #define BIT32(n) BIT16((n) >> 16), BIT16((n) & 0xffff)
 #define BIT64(n) BIT32((n) >> 32), BIT32((n) & 0xffffffff)
 
-#define BPRI8(x)  BIT8_PRE  BIT8_FMT  "\n", BIT8(x)
-#define BPRI16(x) BIT16_PRE BIT16_FMT "\n", BIT16(x)
-#define BPRI32(x) BIT32_PRE BIT32_FMT "\n", BIT32(x)
-#define BPRI64(x) BIT64_PRE BIT64_FMT "\n", BIT64(x)
+#define BPRI8(x)  BIT8_PRE  BIT8_FMT  BIT8_SUF,  BIT8(x)
+#define BPRI16(x) BIT16_PRE BIT16_FMT BIT16_SUF, BIT16(x)
+#define BPRI32(x) BIT32_PRE BIT32_FMT BIT32_SUF, BIT32(x)
+#define BPRI64(x) BIT64_PRE BIT64_FMT BIT64_SUF, BIT64(x)
 
 
 #endif /* end of _NBITS_H_ */

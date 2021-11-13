@@ -1,8 +1,10 @@
 #include <_memory_.h>
 #include <inttypes.h>
-#include <nbits.h>
 #include <stdint.h>
 #include <stdio.h>
+
+#define BIT8_SUF  "\n"
+#include <nbits.h>
 
 #define LOG8_1()    printf("%44s = ", "uint8_t")
 #define LOG8_2(...) printf("%25s(%8"PRIu8",%8u) = ", __VA_ARGS__)

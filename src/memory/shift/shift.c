@@ -1,8 +1,12 @@
 #include <_memory_.h>
 #include <stdint.h>
-#include <nbits.h>
 #include <stdio.h>
 #include <inttypes.h>
+
+
+#define BIT8_SUF  "\n"
+#include <nbits.h>
+
 
 void unsigned_left_shift() {
   uint16_t x2 = 0x1122;
