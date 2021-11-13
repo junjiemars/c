@@ -2,8 +2,8 @@
 #define _IO_H_
 
 #include <nore.h>
-#include <defs.h>
-#include <ioss.h>
+#include <ndef.h>
+#include <nio.h>
 
 
 void hex_out(const char *ss);

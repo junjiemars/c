@@ -1,5 +1,5 @@
 #include "_io_.h"
-#include <strs.h>
+#include <nstr.h>
 #include <stdlib.h>
 
 

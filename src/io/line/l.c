@@ -1,5 +1,5 @@
 #include "_io_.h"
-#include <ints.h>
+#include <nint.h>
 
 #if (LINUX)
 #  ifndef __USE_GNU

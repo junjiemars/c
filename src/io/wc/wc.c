@@ -1,7 +1,7 @@
 #include <_io_.h>
 #include <stdio.h>
 #include <errno.h>
-#include <strs.h>
+#include <nstr.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <getopt.h>
