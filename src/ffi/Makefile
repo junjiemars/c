@@ -2,16 +2,18 @@
 # ./configure --has-ffi
 #
 
-ffi_prefix := ffi
 
-INC += -I$(ffi_root)
-
-
-ffi: ffi_jni																		\
+ffi: ffi_jni                                    \
      ffi_nodejs
 
-ffi_test: ffi_jni_test													\
+ffi_test: ffi_jni_test                          \
           ffi_nodejs_test
+
+
+# env
+ffi_prefix := ffi
+
+INC += $(nm_inc_opt)$(ffi_root) $(nm_inc_opt)$(root)/posix
 
 
 # jni
