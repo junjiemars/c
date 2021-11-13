@@ -10,8 +10,7 @@ nginx: $(nginx_home)                            \
        nginx_module_hello                       \
        nginx_module_njs
 
-nginx_test: $(nginx_home)                       \
-            nginx_core_test                     \
+nginx_test: nginx_core_test                     \
             nginx_module_hello_test             \
             nginx_module_njs_test
 
