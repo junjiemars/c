@@ -4,34 +4,40 @@
 #include <math.h>
 
 
-static int is_ruth_aaron_number(int n);
+typedef enum
+  {
+    false = 0, true
+  } bool;
+
+
+static bool is_ruth_aaron_number(int n);
 static int sum_of_prime_factors(int n);
-static int is_prime(int n);
+static bool is_prime(int n);
 
 
-int
+bool
 is_prime(int n)
 {
   int  divisor;
 
   if (n <= 1)
     {
-      return 0;
+      return false;
     }
 
   if (n == 2)
     {
-      return 1;
+      return true;
     }
 
   for (divisor = 2; divisor <= sqrt(n); divisor++) {
     if ((n % divisor) == 0)
       {
-        return 0;
+        return false;
       }
   }
 
-  return 1;
+  return true;
 }
 
 int
@@ -41,7 +47,7 @@ sum_of_prime_factors(int n)
   int  divisor  =  2;
 
   while (n > 1) {
-    if (is_prime(divisor) && ((n & divisor) == 0))
+    if (is_prime(divisor) && ((n % divisor) == 0))
       {
         sum += divisor;
         n /= divisor;
@@ -55,7 +61,7 @@ sum_of_prime_factors(int n)
   return sum;
 }
 
-int
+bool
 is_ruth_aaron_number(int n)
 {
   return sum_of_prime_factors(n) == sum_of_prime_factors(n + 1);

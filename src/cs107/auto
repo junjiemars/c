@@ -6,7 +6,6 @@
 case $NM_SYSTEM in
 	Darwin)
 	  ;;
-
 	Linux)
 		nm_feature="math lib"
 		nm_feature_name="nm_have_math_lib"
@@ -25,7 +24,6 @@ case $NM_SYSTEM in
 
 	WinNT)
 	  ;;
-
 	*)
 		;;
 esac

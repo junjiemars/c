@@ -11,6 +11,7 @@ static void test_restrict(const char *restrict);
 static void test_assert(int, int);
 static void test_static_assert(void);
 static void test_isut(void);
+static void test_nof(void);
 
 
 void
@@ -42,6 +43,13 @@ test_isut(void)
          _isut_(char), _isut_(unsigned char));
 }
 
+void
+test_nof(void)
+{
+  int a[] = { 1, 2, 3, };
+  assert(_nof_(a) == 3);
+}
+
 int
 main(int argc, char **argv)
 {
@@ -49,6 +57,7 @@ main(int argc, char **argv)
   test_assert(argc, argc);
   test_static_assert();
   test_isut();
+  test_nof();
 
   return 0;
 }

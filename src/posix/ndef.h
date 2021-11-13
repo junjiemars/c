@@ -41,4 +41,10 @@
 #endif  /* _isut_ */
 
 
+#if !defined(_nof_)
+#  define _nof_(a) (sizeof(a)/sizeof(*(a)))
+#endif  /* _nof_ */
+
+
+
 #endif /* end of _NDEF_H_ */
