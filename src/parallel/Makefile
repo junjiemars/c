@@ -10,7 +10,8 @@ parallel_test: parallel_omp_test                \
 
 # env
 parallel_prefix := parallel
-INC += -I$(parallel_root)
+
+INC += $(nm_inc_opt)$(parallel_root) $(nm_inc_opt)$(root)/posix
 
 
 ifeq (msvc, $(CC_NAME))
