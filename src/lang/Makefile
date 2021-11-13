@@ -2,19 +2,6 @@
 # ./configure --has-lang
 #
 
-lang_prefix := lang
-
-INC += -I$(root) -I$(lang_root) -I$(root)/posix
-
-_ERROR_ ?= 0
-
-
-ifeq (1, $(_MEMORY_))
-ifeq (YES, $(has_sanitize))
-CFLAGS += $(cflags_sanitize)
-endif # end of has_sanitize
-endif # end of _MEMORY_
-
 
 lang: lang_array                                \
       lang_assert                               \
@@ -90,6 +77,20 @@ lang_test:  lang_array_test                     \
             lang_union_test                     \
             lang_variadic_test                  \
             lang_volatile_test
+
+# env
+lang_prefix := lang
+
+INC += $(nm_inc_opt)$(root) $(nm_inc_opt)$(lang_root) $(nm_inc_opt)$(root)/posix
+
+_ERROR_ ?= 0
+
+
+ifeq (1, $(_MEMORY_))
+ifeq (YES, $(has_sanitize))
+CFLAGS += $(cflags_sanitize)
+endif # end of has_sanitize
+endif # end of _MEMORY_
 
 
 # array
