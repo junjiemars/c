@@ -3,16 +3,6 @@
 # make clean test
 #
 
-algo_prefix := algo
-INC += $(nm_inc_opt)$(algo_root) $(nm_inc_opt)$(root)/posix
-
-ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
-	CFLAGS += $(cflags_sanitize)
-endif
-
-ifeq ($(NM_SYSTEM), Linux)
-  LDLIBS += -lm
-endif
 
 algo: _algo_                                    \
       algo_compress                             \
@@ -55,6 +45,19 @@ algo_test: _algo_test                           \
            algo_sort_test                       \
            algo_strlen_utf8_test                \
            algo_strscpy_test
+
+# env
+algo_prefix := algo
+
+INC += $(nm_inc_opt)$(algo_root) $(nm_inc_opt)$(root)/posix
+
+ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
+	CFLAGS += $(cflags_sanitize)
+endif
+
+ifeq ($(NM_SYSTEM), Linux)
+  LDLIBS += -lm
+endif
 
 
 # _algo

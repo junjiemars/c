@@ -1,16 +1,11 @@
-#include "nore.h"
 #include <stdio.h>
 
 #define BIT8_SEP  ","
 #define BIT16_SEP "|"
 #define BIT8_PRE  "0b: "
-#include "bits.h"
 
-#ifndef _unused_
-#  define _unused_(x) ((void)(x))
-#endif
-
-#include "bits.h"
+#include "nbits.h"
+#include "ndef.h"
 
 int
 main(int argc, char **argv) {

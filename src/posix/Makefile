@@ -2,7 +2,7 @@
 # ./configure --has-posix
 #
 
-posix: posix_bits                               \
+posix: posix_nbits                               \
        posix_ndef                               \
        posix_getopt                             \
        posix_nint                               \
@@ -11,7 +11,7 @@ posix: posix_bits                               \
        posix_ncstd                              \
        posix_nustd
 
-posix_test: posix_bits_test                     \
+posix_test: posix_nbits_test                     \
             posix_ndef_test                     \
             posix_getopt_test                   \
             posix_nint_test                     \
@@ -30,14 +30,14 @@ ifeq ($(_MEMORY_), 1)
 endif # end of _MEMORY_
 
 
-# bits
-posix_bits_binout := $(bin_path)/$(posix_prefix)_bits$(bin_ext)
+# nbits
+posix_nbits_binout := $(bin_path)/$(posix_prefix)_nbits$(bin_ext)
 
-posix_bits: $(posix_bits_binout)
-posix_bits_test: posix_bits
-	$(posix_bits_binout)
+posix_nbits: $(posix_nbits_binout)
+posix_nbits_test: posix_nbits
+	$(posix_nbits_binout)
 
-$(posix_bits_binout): $(posix_root)/bits_test.c
+$(posix_nbits_binout): $(posix_root)/nbits_test.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # getopt

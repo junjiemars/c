@@ -1,6 +1,6 @@
 #include "_hash_.h"
-#include <stdio.h>
 #include <bits.h>
+#include <stdio.h>
 
 
 void 

@@ -1,5 +1,5 @@
-#ifndef _BITS_H_
-#define _BITS_H_
+#ifndef _NBITS_H_
+#define _NBITS_H_
 
 
 #if !defined(BIT8_PRE)
@@ -48,4 +48,4 @@ const char *BIT4[] = {
 #define BPRI64(x) BIT64_PRE BIT64_FMT "\n", BIT64(x)
 
 
-#endif /* end of _BITS_H_ */
+#endif /* end of _NBITS_H_ */
