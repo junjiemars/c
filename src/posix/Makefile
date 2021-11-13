@@ -3,20 +3,20 @@
 #
 
 posix: posix_bits                               \
-       posix_defs                               \
+       posix_ndef                               \
        posix_getopt                             \
-       posix_ints                               \
-       posix_ioss                               \
-       posix_strs                               \
+       posix_nint                               \
+       posix_nio                                \
+       posix_nstr                               \
        posix_ncstd                              \
        posix_nustd
 
 posix_test: posix_bits_test                     \
-            posix_defs_test                     \
+            posix_ndef_test                     \
             posix_getopt_test                   \
-            posix_ints_test                     \
-            posix_ioss_test                     \
-            posix_strs_test                     \
+            posix_nint_test                     \
+            posix_nio_test                      \
+            posix_nstr_test                     \
             posix_ncstd_test                    \
             posix_nustd_test
 
@@ -63,50 +63,50 @@ $(posix_getopt_binout): $(posix_root)/getopt_test.c $(posix_getopt_c)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
-# defs
-posix_defs_binout := $(bin_path)/$(posix_prefix)_defs$(bin_ext)
+# ndef
+posix_ndef_binout := $(bin_path)/$(posix_prefix)_ndef$(bin_ext)
 
-posix_defs: $(posix_defs_binout)
-posix_defs_test: posix_defs
-	$(posix_defs_binout)
+posix_ndef: $(posix_ndef_binout)
+posix_ndef_test: posix_ndef
+	$(posix_ndef_binout)
 
-$(posix_defs_binout): $(posix_root)/defs_test.c
+$(posix_ndef_binout): $(posix_root)/ndef_test.c
 	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
 
 
-# ints
-posix_ints_binout := $(bin_path)/$(posix_prefix)_ints$(bin_ext)
+# nint
+posix_nint_binout := $(bin_path)/$(posix_prefix)_nint$(bin_ext)
 
-posix_ints: $(posix_ints_binout)
-posix_ints_test: posix_ints
-	$(posix_ints_binout)
+posix_nint: $(posix_nint_binout)
+posix_nint_test: posix_nint
+	$(posix_nint_binout)
 
-$(posix_ints_binout): $(posix_root)/ints_test.c
+$(posix_nint_binout): $(posix_root)/nint_test.c
 	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
 
 
-# ioss
-posix_ioss_binout := $(bin_path)/$(posix_prefix)_ioss$(bin_ext)
-posix_ioss_cppout := $(tmp_path)/$(posix_prefix)_ioss$(cpp_ext)
+# nio
+posix_nio_binout := $(bin_path)/$(posix_prefix)_nio$(bin_ext)
+posix_nio_cppout := $(tmp_path)/$(posix_prefix)_nio$(cpp_ext)
 
-posix_ioss: $(posix_ioss_binout)
-posix_ioss_test: posix_ioss
-	$(posix_ioss_binout) $(CURDIR)/$(posix_root)/ioss_test.c
+posix_nio: $(posix_nio_binout)
+posix_nio_test: posix_nio
+	$(posix_nio_binout) $(CURDIR)/$(posix_root)/nio_test.c
 
-$(posix_ioss_binout): $(posix_ioss_cppout)
+$(posix_nio_binout): $(posix_nio_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
-$(posix_ioss_cppout): $(posix_root)/ioss_test.c
+$(posix_nio_cppout): $(posix_root)/nio_test.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
-# strs
-posix_strs_binout := $(bin_path)/$(posix_prefix)_strs$(bin_ext)
+# nstr
+posix_nstr_binout := $(bin_path)/$(posix_prefix)_nstr$(bin_ext)
 
-posix_strs: $(posix_strs_binout)
-posix_strs_test: posix_strs
-	$(posix_strs_binout)
+posix_nstr: $(posix_nstr_binout)
+posix_nstr_test: posix_nstr
+	$(posix_nstr_binout)
 
-$(posix_strs_binout): $(posix_root)/strs_test.c
+$(posix_nstr_binout): $(posix_root)/nstr_test.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

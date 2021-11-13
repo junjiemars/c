@@ -2,7 +2,7 @@
  * Windows
  */
 
-#include "strs.h"
+#include "nstr.h"
 
 #if (MSVC)
 

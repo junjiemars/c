@@ -1,5 +1,5 @@
-#ifndef _DEFS_H_
-#define _DEFS_H_
+#ifndef _NDEF_H_
+#define _NDEF_H_
 
 
 #include <nore.h>
@@ -41,4 +41,4 @@
 #endif  /* _isut_ */
 
 
-#endif /* end of _DEFS_H_ */
+#endif /* end of _NDEF_H_ */

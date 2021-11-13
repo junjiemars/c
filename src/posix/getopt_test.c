@@ -1,4 +1,4 @@
-#include "defs.h"
+#include "ndef.h"
 #include <getopt.h>
 #include <string.h>
 #include <stdlib.h>

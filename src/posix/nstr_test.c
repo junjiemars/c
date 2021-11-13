@@ -1,5 +1,5 @@
-#include "defs.h"
-#include "strs.h"
+#include "ndef.h"
+#include "nstr.h"
 #include <stdio.h>
 #include <stdlib.h>
 

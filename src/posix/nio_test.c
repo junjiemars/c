@@ -1,7 +1,7 @@
-#include "defs.h"
-#include "ioss.h"
-#include "defs.h"
-#include "strs.h"
+#include "ndef.h"
+#include "nio.h"
+#include "ndef.h"
+#include "nstr.h"
 #include <stdlib.h>
 
 static void test_getline(const char *where);
@@ -20,7 +20,7 @@ test_getline(const char *where)
       perror(0);
       return;
     }
-  
+
   buf = 0;
   n = 0;
   rc = getline(&buf, &n, f);
@@ -31,7 +31,7 @@ test_getline(const char *where)
     }
   assert(strlen(buf) == (size_t) rc);
   printf("getline: %s\n", buf);
-    
+
  clean_exit:
   free(buf);
   fclose(f);

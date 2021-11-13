@@ -8,10 +8,10 @@
 
 #include <nore.h>
 
-#include <defs.h>
-#include <ints.h>
-#include <strs.h>
-#include <ioss.h>
+#include <ndef.h>
+#include <nint.h>
+#include <nstr.h>
+#include <nio.h>
 
 
 

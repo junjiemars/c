@@ -1,5 +1,5 @@
-#ifndef _STRS_H_
-#define _STRS_H_
+#ifndef _NSTR_H_
+#define _NSTR_H_
 
 
 #include <nore.h>
@@ -27,5 +27,5 @@
 
 
 
-#endif /* end of _STRS_H_ */
+#endif /* end of _NSTR_H_ */
 

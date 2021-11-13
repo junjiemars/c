@@ -1,5 +1,5 @@
-#include "defs.h"
-#include "ints.h"
+#include "ndef.h"
+#include "nint.h"
 #include <inttypes.h>
 #include <stdio.h>
 

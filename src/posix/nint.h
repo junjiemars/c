@@ -1,5 +1,5 @@
-#ifndef _INTS_H_
-#define _INTS_H_
+#ifndef _NINT_H_
+#define _NINT_H_
 
 #include <nore.h>
 
@@ -22,4 +22,4 @@
 #endif
 
 
-#endif /* end of _INTS_H_ */
+#endif /* end of _NINT_H_ */

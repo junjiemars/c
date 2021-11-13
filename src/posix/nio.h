@@ -1,5 +1,5 @@
-#ifndef _IOSS_H_
-#define _IOSS_H_
+#ifndef _NIO_H_
+#define _NIO_H_
 
 
 #include <nore.h>
@@ -32,8 +32,8 @@
 #  ifndef GETDELIM_LEN_MAX
 #    define GETDELIM_LEN_MAX  512
 #  endif
-#  include <defs.h>
-#  include <ints.h>
+#  include <ndef.h>
+#  include <nint.h>
 #  include <stdlib.h>
 
 ssize_t
@@ -94,4 +94,4 @@ getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
 #endif  /* end of getdelim */
 
 
-#endif /* end of _IOSS_H_ */
+#endif /* end of _NIO_H_ */
