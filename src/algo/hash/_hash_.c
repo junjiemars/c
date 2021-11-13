@@ -1,5 +1,5 @@
 #include "_hash_.h"
-#include <bits.h>
+#include <nbits.h>
 #include <stdio.h>
 
 
