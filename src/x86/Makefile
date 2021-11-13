@@ -27,9 +27,10 @@ x86_test: x86_array_test                        \
           x86_typecast_test                     \
           x86_var_test
 
+# env
 x86_prefix = x86
 
-INC += -I$(x86_root)
+INC += $(nm_inc_opt)$(x86_root) $(nm_inc_opt)$(root)/posix
 
 
 ifdef RISKY
