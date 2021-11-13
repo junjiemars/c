@@ -10,13 +10,6 @@
 #include <vec.h>
 
 
-typedef enum
-  {
-    false = 0,
-    true = 1
-  } bool;
-
-
 static void load_words(vec_str *words, const char *where);
 static void play_word_games(const vec_str *words);
 static bool is_legitimate_response(const str *response);

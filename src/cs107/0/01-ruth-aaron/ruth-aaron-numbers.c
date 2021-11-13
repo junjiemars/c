@@ -4,12 +4,6 @@
 #include <math.h>
 
 
-typedef enum
-  {
-    false = 0, true
-  } bool;
-
-
 static bool is_ruth_aaron_number(int n);
 static int sum_of_prime_factors(int n);
 static bool is_prime(int n);

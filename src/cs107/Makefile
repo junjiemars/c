@@ -1,7 +1,12 @@
 #
 # ./configure --has-cs107
 #
-# https://see.stanford.edu/Course/CS107
+# website: https://see.stanford.edu/Course/CS107
+#
+# 
+# 1. numbering on Lecture number
+# 2. handouts and assignments associate to Lecture number
+# 2. common typedef in _cs107_.h
 #
 
 ctl_git_src := 'https://github.com/glouw/ctl.git'
