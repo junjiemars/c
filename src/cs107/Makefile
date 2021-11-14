@@ -76,11 +76,17 @@ cs107_1:
 cs107_1_test:
 
 # 2
-cs207_2_rsg_binout := $(bin_path)/$(cs207_prefix)_rsg$(bin_ext)
+cs107_2_assn_binout := $(bin_path)/$(cs107_prefix)_assn$(bin_ext)
+cs107_2_assn_root := $(CURDIR)/$(cs107_root)/2/assn/1/data
 
-cs207_2: cs207_2_rsg
-cs207_2_test: cs207_2_rsg_test
+cs107_2: cs107_2_assn
+cs107_2_test: cs107_2_assn_test
 
+cs107_2_assn: $(ctl_home) $(cs107_2_assn_binout)
+cs107_2_assn_test: cs107_2_assn
+	$(cs107_2_assn_binout) $(cs107_2_assn_root)/bionic.g
 
+$(cs107_2_assn_binout): $(cs107_root)/2/assn/1/rsg.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # eof

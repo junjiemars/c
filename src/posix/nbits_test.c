@@ -1,4 +1,5 @@
 #include "ndef.h"
+#include <inttypes.h>
 #include <stdio.h>
 
 #include "nbits.h"
@@ -35,17 +36,17 @@ main(int argc, char **argv)
   _unused_(argc);
   _unused_(argv);
 
-  printf("%#18x = ", 0x12);
+  printf("%#18" PRIx8 " = ", (uint8_t) 0x12);
   printf(BPRI8(0x12));
 
-  printf("%#18x = ", 0x1234);
+  printf("%#18" PRIx16 " = ", (uint16_t) 0x1234);
   printf(BPRI16(0x1234));
 
-  printf("%#18x = ", 0x12345678);
+  printf("%#18" PRIx32 " = ", (uint32_t) 0x12345678);
   printf(BPRI32(0x12345678));
 
 #if (NM_CPU_CACHE_LINE == 64)
-  printf("0x%16lx = ", 0x1234567890abcdef);
+  printf("0x%16" PRIx64 " = ", (uint64_t) 0x1234567890abcdef);
   printf(BPRI64(0x1234567890abcdef));
 #endif
   
