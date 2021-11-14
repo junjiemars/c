@@ -11,37 +11,37 @@
 void unsigned_left_shift() {
   uint16_t x2 = 0x1122;
   printf("uint16_t: %"PRIu16"      =  ", x2);
-  printf(BPRI16(x2));
+  printf(BPRI16, BIT16(x2));
 
   printf("uint16_t: %"PRIu16" << 2 =  ", x2);
-  printf(BPRI16(x2 << 2));
+  printf(BPRI16, BIT16(x2 << 2));
 }
 
 void unsigned_right_shift() {
   uint16_t x2 = 0x1122;
   printf("uint16_t: %"PRIu16"      =  ", x2);
-  printf(BPRI16(x2));
+  printf(BPRI16, BIT16(x2));
   
   printf("uint16_t: %"PRIu16" >> 2 =  ", x2);
-  printf(BPRI16(x2 >> 2));
+  printf(BPRI16, BIT16(x2 >> 2));
 }
 
 void signed_left_shift() {
   int16_t x2s = -0x0002;
   printf("int16_t: %"PRIi16"      =  ", x2s);
-  printf(BPRI16((uint16_t)x2s));
+  printf(BPRI16, BIT16((uint16_t)x2s));
 
   printf("int16_t: %"PRIi16" << 2 =  ", x2s);
-  printf(BPRI16((uint16_t)(x2s << 2)));
+  printf(BPRI16, BIT16((uint16_t)(x2s << 2)));
 }
 
 void signed_right_shift() {
   int16_t x2s = -0x0002;
   printf("int16_t: %"PRIi16"      =  ", x2s);
-  printf(BPRI16((uint16_t)x2s));
+  printf(BPRI16, BIT16((uint16_t)x2s));
 
   printf("int16_t: %"PRIi16" >> 2 =  ", x2s);
-  printf(BPRI16((uint16_t)(x2s >> 2)));
+  printf(BPRI16, BIT16((uint16_t)(x2s >> 2)));
 } 
 
 void math() {

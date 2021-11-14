@@ -37,38 +37,38 @@ main(void) {
 
 	printf("----------\n");
   LOG8_1();
-  printf(BPRI8(x));
+  printf(BPRI8, BIT8(x));
 
 	x = clear_a_bit(x, 1u);
   LOG8_2("clear_a_bit", x, 1u);
-  printf(BPRI8(x));
+  printf(BPRI8, BIT8(x));
 
 	x = clear_a_bit(x, 2u);
   LOG8_2("clear_a_bit", x, 2u);
-  printf(BPRI8(x));
+  printf(BPRI8, BIT8(x));
 
 	x = set_a_bit(x, 2u);
   LOG8_2("set_a_bit", x, 2u);
-  printf(BPRI8(x));
+  printf(BPRI8, BIT8(x));
 
 	x = set_a_bit(x, 1u);
   LOG8_2("set_a_bit", x, 1u);
-  printf(BPRI8(x));
+  printf(BPRI8, BIT8(x));
 
 	x = toggle_a_bit(x, 1u);
 	LOG8_2("toggle_a_bit", x, 1u);
-  printf(BPRI8(x));
+  printf(BPRI8, BIT8(x));
 
 	x = toggle_a_bit(x, 1u);
 	LOG8_2("toggle_a_bit", x, 1u);
-  printf(BPRI8(x));
+  printf(BPRI8, BIT8(x));
 
 	z = change_a_bit(x, 2u, 3u);
 	LOG8_3("change_a_bit", x, 2u, 3u);
-  printf(BPRI8(z));
+  printf(BPRI8, BIT8(z));
 
 	z = change_a_bit(x, 2u, 0u);
 	LOG8_3("change_a_bit", x, 2u, 0u);
-  printf(BPRI8(z));
+  printf(BPRI8, BIT8(z));
 }
 

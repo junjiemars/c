@@ -65,10 +65,10 @@ test_cmp_float(void)
   printf("%16f = 0x%X\n", d1+d2, u12);
   printf("%16f = 0x%X\n", d3, u3);
 
-  printf(BPRI32(u1));
-  printf(BPRI32(u2));
-  printf(BPRI32(u12));
-  printf(BPRI32(u3));
+  printf(BPRI32, BIT32(u1));
+  printf(BPRI32, BIT32(u2));
+  printf(BPRI32, BIT32(u12));
+  printf(BPRI32, BIT32(u3));
 
   ASSERT(u3 == u12);
   ASSERT(d3 == d1 + d2);
@@ -114,10 +114,10 @@ test_cmp_double(void)
   printf("%16lf = 0x%lX\n", d1+d2, to_ul(d1+d2));
   printf("%16lf = 0x%lX\n", d3, to_ul(d3));
 
-  printf(BPRI64(u1));
-  printf(BPRI64(u2));
-  printf(BPRI64(u12));
-  printf(BPRI64(u3));
+  printf(BPRI64, BIT64(u1));
+  printf(BPRI64, BIT64(u2));
+  printf(BPRI64, BIT64(u12));
+  printf(BPRI64, BIT64(u3));
 
   ASSERT(u3 != u12);
   ASSERT(d3 != d1 + d2);

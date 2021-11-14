@@ -6,6 +6,6 @@
 void 
 print_hash(const char *name, const char *ss, unsigned long hash)
 {
-  printf("%s\n------------\n%s -> %16lu\n", name, ss, hash);
-  printf(BPRI64((uint64_t)hash));
+  printf("%s\n------------\n%s -> %16lu\n" BPRI64 "\n", name, ss, hash,
+         BIT64(hash));
 }
