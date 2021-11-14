@@ -36,18 +36,15 @@ main(int argc, char **argv)
   _unused_(argc);
   _unused_(argv);
 
-  printf("%#18" PRIx8 " = ", (uint8_t) 0x12);
-  printf(BPRI8(0x12));
+  printf("%#18" PRIx8 " = " BPRI8, (uint8_t) 0x12, BIT8(0x12));
 
-  printf("%#18" PRIx16 " = ", (uint16_t) 0x1234);
-  printf(BPRI16(0x1234));
+  printf("%#18" PRIx16 " = " BPRI16, (uint16_t) 0x1234, BIT16(0x1234));
 
-  printf("%#18" PRIx32 " = ", (uint32_t) 0x12345678);
-  printf(BPRI32(0x12345678));
+  printf("%#18" PRIx32 " = " BPRI32, (uint32_t) 0x12345678, BIT32(0x12345678));
 
 #if (NM_CPU_CACHE_LINE == 64)
-  printf("0x%16" PRIx64 " = ", (uint64_t) 0x1234567890abcdef);
-  printf(BPRI64(0x1234567890abcdef));
+  printf("0x%16" PRIx64 " = " BPRI64, (uint64_t) 0x1234567890abcdef,
+         BIT64(0x1234567890abcdef));
 #endif
   
   return 0;

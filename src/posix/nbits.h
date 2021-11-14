@@ -59,10 +59,10 @@ const char *BIT4[] = {
 #define BIT32(n) BIT16((n) >> 16), BIT16((n) & 0xffff)
 #define BIT64(n) BIT32((n) >> 32), BIT32((n) & 0xffffffff)
 
-#define BPRI8(x)  BIT8_PRE  BIT8_FMT  BIT8_SUF,  BIT8(x)
-#define BPRI16(x) BIT16_PRE BIT16_FMT BIT16_SUF, BIT16(x)
-#define BPRI32(x) BIT32_PRE BIT32_FMT BIT32_SUF, BIT32(x)
-#define BPRI64(x) BIT64_PRE BIT64_FMT BIT64_SUF, BIT64(x)
+#define BPRI8  BIT8_PRE  BIT8_FMT  BIT8_SUF
+#define BPRI16 BIT16_PRE BIT16_FMT BIT16_SUF
+#define BPRI32 BIT32_PRE BIT32_FMT BIT32_SUF
+#define BPRI64 BIT64_PRE BIT64_FMT BIT64_SUF
 
 
 #endif /* end of _NBITS_H_ */
