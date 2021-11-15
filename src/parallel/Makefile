@@ -21,9 +21,9 @@ endif # end of msvc checking
 
 
 ifeq (1, $(_MEMORY_))
-ifeq (YES, $(has_sanitize)))
-CFLAGS += $(cflags_sanitize)
-endif # end of has_sanitize
+  ifeq (YES, $(has_sanitize))
+    CFLAGS += $(cflags_sanitize)
+  endif # end of has_sanitize
 endif # end of _MEMORY_
 
 
