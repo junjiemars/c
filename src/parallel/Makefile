@@ -2,10 +2,10 @@
 # ./configure --without-debug --has-parallel
 #
 
-parallel: parallel_omp                          \
+parallel: parallel_openmp                       \
           parallel_pthread
 
-parallel_test: parallel_omp_test                \
+parallel_test: parallel_openmp_test             \
                parallel_pthread_test
 
 # env
@@ -28,36 +28,35 @@ endif # end of _MEMORY_
 
 
 # openmp
-parallel_omp_basic_binout := $(bin_path)/$(parallel_prefix)_omp_basic$(bin_ext)
-parallel_omp_for_binout := $(bin_path)/$(parallel_prefix)_omp_for$(bin_ext)
+parallel_openmp_basic_binout := $(bin_path)/$(parallel_prefix)_openmp_basic$(bin_ext)
+parallel_openmp_for_binout := $(bin_path)/$(parallel_prefix)_openmp_for$(bin_ext)
 
 ifeq (YES, $(has_openmp))
-parallel_omp: parallel_omp_basic								\
-              parallel_omp_for
-parallel_omp_test: parallel_omp_basic_test			\
-                   parallel_omp_for_test
-CFLAGS += $(cflags_openmp)
+parallel_openmp: parallel_openmp_basic								\
+              parallel_openmp_for
+parallel_openmp_test: parallel_openmp_basic_test			\
+                   parallel_openmp_for_test
 else
-parallel_omp:
-	@echo "#skip parallel_omp_test"
-parallel_omp_test: parallel_omp
+parallel_openmp:
+	@echo "#skip parallel_openmp_test"
+parallel_openmp_test: parallel_openmp
 endif # end of has_openmp
 
-parallel_omp_basic: $(parallel_omp_basic_binout)
-parallel_omp_basic_test: parallel_omp_basic
-	$(parallel_omp_basic_binout)
+parallel_openmp_basic: $(parallel_openmp_basic_binout)
+parallel_openmp_basic_test: parallel_openmp_basic
+	$(parallel_openmp_basic_binout)
 
-$(parallel_omp_basic_binout): $(parallel_root)/openmp/b.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(parallel_openmp_basic_binout): $(parallel_root)/openmp/b.c
+	$(CC) $(CFLAGS) $(INC) $(nm_openmp_opt) $^ $(bin_out)$@
 
-parallel_omp_for: $(parallel_omp_for_binout)
-parallel_omp_for_test: parallel_omp_for
-	$(parallel_omp_for_binout) 100
-	$(parallel_omp_for_binout) 10000
-	$(parallel_omp_for_binout) 1000000
+parallel_openmp_for: $(parallel_openmp_for_binout)
+parallel_openmp_for_test: parallel_openmp_for
+	$(parallel_openmp_for_binout) 100
+	$(parallel_openmp_for_binout) 10000
+	$(parallel_openmp_for_binout) 1000000
 
-$(parallel_omp_for_binout): $(parallel_root)/openmp/for.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(parallel_openmp_for_binout): $(parallel_root)/openmp/for.c
+	$(CC) $(CFLAGS) $(INC) $(nm_openmp_opt) $^ $(bin_out)$@
 
 # pthread
 parallel_pthread_basic_binout := $(bin_path)/$(parallel_prefix)_pthread_basic$(bin_ext)
@@ -134,30 +133,30 @@ parallel_pthread_once_test: parallel_pthread_once
 	$(parallel_pthread_once_binout)
 
 $(parallel_pthread_basic_binout): $(parallel_root)/pthread/basic.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
 
 $(parallel_pthread_deadlock_binout): $(parallel_root)/pthread/deadlock.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
 
 $(parallel_pthread_detach_binout): $(parallel_root)/pthread/detach.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
 
 $(parallel_pthread_exit_binout): $(parallel_root)/pthread/exit.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
 
 $(parallel_pthread_mutex_binout): $(parallel_root)/pthread/mutex.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
 
 $(parallel_pthread_stacksize_binout): $(parallel_root)/pthread/stacksize.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
 
 $(parallel_pthread_private_binout): $(parallel_root)/pthread/private.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
 
 $(parallel_pthread_wait_binout): $(parallel_root)/pthread/wait.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
 
 $(parallel_pthread_once_binout): $(parallel_root)/pthread/once.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
 
 # EOF
