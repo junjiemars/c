@@ -14,16 +14,29 @@ static void read_grammar(FILE *infile, set_str *grammar);
 void
 read_grammar(FILE *infile, set_str *grammar)
 {
+  char    *useless_text;
+  size_t   len;
+
   _unused_(infile);
   _unused_(grammar);
-  /* while (true) { */
-  /*   string uselessText; */
-  /*   getline(infile, uselessText, '{'); */
-  /*   if (infile.eof()) return;  // true? we encountered EOF before we saw a '{': no more productions! */
-  /*   infile.putback('{'); */
-  /*   Definition def(infile); */
-  /*   grammar[def.getNonterminal()] = def; */
-  /* } */
+
+  useless_text = NULL;
+  len = 0;
+  while (true)
+    {
+      getdelim(&useless_text, &len, '{', infile);
+      if (feof(infile))
+        {
+          return;
+        }
+      fputs("{", infile);
+      /* getline(infile, uselessText, '{'); */
+      /* if (infile.eof()) return;  // true? we encountered EOF before we saw a '{': no more productions! */
+      /* infile.putback('{'); */
+      /* Definition def(infile); */
+      /* grammar[def.getNonterminal()] = def; */
+    }
+  free(useless_text);
 }
 
 
@@ -48,7 +61,7 @@ main(int argc, char **argv)
       return 2;
     }
 
-  _unused_(read_grammar);
+  read_grammar(grammar_file, NULL);
 
   /* grammar = set_str_init(); */
   /* read_grammar(grammar_file, &grammar); */
