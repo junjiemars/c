@@ -9,8 +9,8 @@ static void test_getline(const char *where);
 void
 test_getline(const char *where)
 {
-  char     *buf;
-  size_t    n;
+  char     *line;
+  size_t    line_len;
   FILE     *f;
   ssize_t   rc;
 
@@ -21,19 +21,19 @@ test_getline(const char *where)
       return;
     }
 
-  buf = 0;
-  n = 0;
-  rc = getline(&buf, &n, f);
-  if (rc == EOF)
+  line = NULL;
+  line_len = 0;
+  while ((rc = getline(&line, &line_len, f)) > 0)
+    {
+      fprintf(stdout, "%s", line);
+    }
+
+  if (ferror(f))
     {
       perror(0);
-      goto clean_exit;
     }
-  assert(strlen(buf) == (size_t) rc);
-  printf("getline: %s\n", buf);
 
- clean_exit:
-  free(buf);
+  free(line);
   fclose(f);
 }
 
