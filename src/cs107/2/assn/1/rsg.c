@@ -1,18 +1,47 @@
 #include "_cs107_.h"
 #include <nio.h>
 
-#define P
-#include <str.h>
-#define T str
-#include <set.h>
 
 /* #include "definition.h" */
 /* #include "production.h" */
 
-static void read_grammar(FILE *infile, set_str *grammar);
+/* typedef struct */
+/* { */
+
+/* } production; */
+/* void production_free(production*); */
+/* production production_copy(production*); */
+
+/* #define P */
+/* #include <str.h> */
+/* #define T production */
+/* #include <vec.h> */
+
+/* typedef struct */
+/* { */
+/*   (void *)(FILE *) def; */
+/*   str nonterminal; */
+/*   vec_production possible_expansions; */
+
+/* } definition; */
+
+
+#define P
+#include <str.h>
+#define T str
+#include <vec.h>
+
+static void read_grammar(FILE *infile, vec_str *grammar);
+static void def(FILE *infile);
+
+/* static void get_random_production(void); */
+
+
+/* static vec_str phrases; */
+
 
 void
-read_grammar(FILE *infile, set_str *grammar)
+read_grammar(FILE *infile, vec_str *grammar)
 {
   char    *useless_text;
   size_t   len;
@@ -27,17 +56,54 @@ read_grammar(FILE *infile, set_str *grammar)
       getdelim(&useless_text, &len, '{', infile);
       if (feof(infile))
         {
-          return;
+          goto clean_exit;
         }
-      fputs("{", infile);
+      /* fputc('{', infile); */
+
+      def(infile);
       /* getline(infile, uselessText, '{'); */
       /* if (infile.eof()) return;  // true? we encountered EOF before we saw a '{': no more productions! */
       /* infile.putback('{'); */
       /* Definition def(infile); */
       /* grammar[def.getNonterminal()] = def; */
     }
+
+ clean_exit:
   free(useless_text);
 }
+
+void
+def(FILE *infile)
+{
+  char    *useless_text;
+  size_t   len;
+
+  useless_text = NULL;
+  len = 0;
+  while (true)
+    {
+      getline(&useless_text, &len, infile);
+      if (strcmp(useless_text, "}") != 0)
+        {
+          fprintf(stdout, "%s", useless_text);
+        }
+      else
+        {
+          break;
+        }
+      if (feof(infile))
+        {
+          break;
+        }
+    }
+
+  free(useless_text);
+}
+
+/* void */
+/* get_random_production(void) */
+/* { */
+/* } */
 
 
 int
@@ -62,6 +128,9 @@ main(int argc, char **argv)
     }
 
   read_grammar(grammar_file, NULL);
+  /* _unused_(definition); */
+  /* _unused_(get_random_production); */
+  /* _unused_(phrases); */
 
   /* grammar = set_str_init(); */
   /* read_grammar(grammar_file, &grammar); */
