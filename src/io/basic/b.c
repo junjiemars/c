@@ -1,19 +1,20 @@
 #include "_io_.h"
 
+/* debugging: C-d */
 
 int
 main(int argc, char *argv[])
 {
   int  ch;
 
-	_unused_(argc);
-	_unused_(argv);
+  _unused_(argc);
+  _unused_(argv);
 
-	while (EOF != (ch = fgetc(stdin)))
+  while (EOF != (ch = fgetc(stdin)))
     {
       fputc(ch, stdout);
     }
-	if (ferror(stdin))
+  if (ferror(stdin))
     {
       perror("!panic");
       return 1;
@@ -23,5 +24,5 @@ main(int argc, char *argv[])
       fprintf(stdout, "#%s\n", "end of file");
     }
 
-	return 0;
+  return 0;
 }

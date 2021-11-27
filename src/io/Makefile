@@ -150,23 +150,23 @@ ifeq ($(NM_SYSTEM),$(filter $(NM_SYSTEM),Linux Darwin))
 io_flight: io_flight_select
 io_flight_test:
 
-io_flight_select: $(io_flight_select_s_binout)	\
+io_flight_select: $(io_flight_select_s_binout)  \
                   $(io_flight_select_c_binout)
 
 # io_flight_select_test: io_flight_select
-# 	$(io_flight_select_s_binout)
-# 	$(io_flight_select_c_binout)
+#   $(io_flight_select_s_binout)
+#   $(io_flight_select_c_binout)
 
 else
 io_flight:
 io_flight_test:
 endif
 
-$(io_flight_select_s_binout): $(io_root)/flight/select/server.c	\
+$(io_flight_select_s_binout): $(io_root)/flight/select/server.c \
                               $(io_root)/flight/flight.h
 	$(CC) $(INC) $(inc_flight) $(CFLAGS) $< $(bin_out)$@
 
-$(io_flight_select_c_binout): $(io_root)/flight/select/client.c	\
+$(io_flight_select_c_binout): $(io_root)/flight/select/client.c \
                               $(io_root)/flight/flight.h
 	$(CC) $(INC) $(inc_flight) $(CFLAGS) $< $(bin_out)$@
 
@@ -175,7 +175,7 @@ io_line_basic_binout := $(bin_path)/$(io_prefix)_line_basic$(bin_ext)
 io_line_gets_binout := $(bin_path)/$(io_prefix)_line_gets$(bin_ext)
 
 io_line: $(io_line_basic_binout) $(io_line_gets_binout)
-io_line_test: io_line_basic_test								\
+io_line_test: io_line_basic_test                \
               io_line_gets_test
 io_line_basic_test: $(io_line_basic_binout)
 	$(io_line_basic_binout) $(CURDIR)/src/io/line/zigzag
@@ -215,11 +215,11 @@ io_scan_stdin_binout := $(bin_path)/$(io_prefix)_scan$(bin_ext)
 io_scan_csv_binout := $(bin_path)/$(io_prefix)_scan_csv$(bin_ext)
 io_scan_free_binout := $(bin_path)/$(io_prefix)_scan_free$(bin_ext)
 
-io_scan: io_scan_stdin													\
-         io_scan_csv														\
+io_scan: io_scan_stdin                          \
+         io_scan_csv                            \
          io_scan_free
-io_scan_test: io_scan_stdin_test								\
-              io_scan_csv_test									\
+io_scan_test: io_scan_stdin_test                \
+              io_scan_csv_test                  \
               io_scan_free_test
 
 io_scan_stdin: $(io_scan_stdin_binout)
@@ -248,14 +248,14 @@ io_seek_basic_binout := $(bin_path)/$(io_prefix)_seek_basic$(bin_ext)
 io_seek: $(io_seek_basic_binout)
 io_seek_test: io_seek
 	cp $(CURDIR)/$(io_root)/seek/records.txt $(CURDIR)/$(tmp_path)/records.txt
-	$(io_seek_basic_binout) 64																\
-                          $(CURDIR)/$(tmp_path)/records.txt	\
-                          $(CURDIR)/$(tmp_path)/records.bin	\
+	$(io_seek_basic_binout) 64                                \
+                          $(CURDIR)/$(tmp_path)/records.txt \
+                          $(CURDIR)/$(tmp_path)/records.bin \
                           $(CURDIR)/$(tmp_path)/records.idx
 	cp $(CURDIR)/$(io_root)/seek/merge.txt $(CURDIR)/$(tmp_path)//records.txt
-	$(io_seek_basic_binout) 64																\
-                          $(CURDIR)/$(tmp_path)/records.txt	\
-                          $(CURDIR)/$(tmp_path)/records.bin	\
+	$(io_seek_basic_binout) 64                                \
+                          $(CURDIR)/$(tmp_path)/records.txt \
+                          $(CURDIR)/$(tmp_path)/records.bin \
                           $(CURDIR)/$(tmp_path)/records.idx
 
 $(io_seek_basic_binout): $(io_root)/seek/s1.c
