@@ -1,0 +1,5 @@
+ngx_module_type=STREAM
+ngx_addon_name=s5
+ngx_module_name=ngx_stream_s5_module
+ngx_module_srcs="$ngx_addon_dir/ngx_stream_s5_module.c"
+. auto/module

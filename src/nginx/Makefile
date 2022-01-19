@@ -160,6 +160,44 @@ $(nginx_module_njs_binout): $(nginx_njs_module_src)             \
     && cp $(nginx_njs_module_root)/http.js                        \
           $(nginx_module_njs_prefix)/conf/http.js
 
+# s5
+nginx_s5_module_root := $(CURDIR)/$(nginx_root)/s5
+nginx_module_s5_prefix := $(nginx_out)/s5
+nginx_module_s5_binout := $(nginx_module_s5_prefix)/sbin/nginx
+
+
+ifeq (msvc, $(CC_NAME))
+nginx_module_s5:
+	@echo "#skip nginx_module_s5_test ..."
+nginx_module_s5_test: nginx_module_s5
+else
+nginx_module_s5: $(nginx_module_s5_binout)
+nginx_module_s5_test: nginx_module_s5
+	$(nginx_module_s5_binout) -T
+endif # end of msvc
+
+
+$(nginx_module_s5_binout): $(nginx_home)                          \
+                              $(nginx_s5_module_root)/nginx.conf
+	cd $(nginx_home)                                          \
+    && auto/configure --prefix=$(nginx_module_s5_prefix)    \
+                      --without-http_fastcgi_module         \
+                      --without-http_uwsgi_module           \
+                      --without-http_scgi_module            \
+                      --without-http_memcached_module       \
+                      --without-http_rewrite_module         \
+                      --without-http-cache                  \
+                      --without-http_proxy_module           \
+                      --without-pcre                        \
+                      --with-stream                         \
+                      --add-module=$(nginx_s5_module_root)  \
+                      --with-cc-opt="$(nginx_cc_opt)"       \
+                      --with-ld-opt="$(nginx_ld_opt)"       \
+                      $(nginx_debug_opt)                    \
+    && make -j4 install                                     \
+    && cp $(nginx_s5_module_root)/nginx.conf                \
+					$(nginx_module_s5_prefix)/conf/nginx.conf
+
 
 # clean
 nginx_clean: clean                              \
