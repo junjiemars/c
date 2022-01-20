@@ -64,9 +64,9 @@ ngx_module_t  ngx_stream_s5_module = {
 static void
 ngx_stream_s5_handler(ngx_stream_session_t *s)
 {
-    ngx_str_t                      text;
-    ngx_buf_t                     *b;
-    ngx_connection_t              *c;
+    ngx_str_t                  text;
+    ngx_buf_t                 *b;
+    ngx_connection_t          *c;
     ngx_stream_s5_ctx_t       *ctx;
     ngx_stream_s5_srv_conf_t  *rscf;
 
@@ -126,9 +126,9 @@ ngx_stream_s5_handler(ngx_stream_session_t *s)
 static void
 ngx_stream_s5_write_handler(ngx_event_t *ev)
 {
-    ngx_connection_t         *c;
-    ngx_stream_session_t     *s;
-    ngx_stream_s5_ctx_t  *ctx;
+    ngx_connection_t      *c;
+    ngx_stream_s5_ctx_t   *ctx;
+    ngx_stream_session_t  *s;
 
     c = ev->data;
     s = c->data;
