@@ -2,34 +2,53 @@
 #include <ngx_core.h>
 #include <ngx_stream.h>
 
-
 typedef struct {
-    ngx_stream_complex_value_t   text;
+    size_t                      preread_buffer_size;
+    ngx_msec_t                  preread_timeout;
+    ngx_stream_complex_value_t  text;
 } ngx_stream_s5_srv_conf_t;
 
 
 typedef struct {
-    ngx_chain_t                 *out;
+    u_char  ver;
+    u_char  n_methods;
+    u_char  methods;
+} ngx_stream_s5_method_req_t;
+
+
+typedef struct {
+    size_t        left;
+    size_t        size;
+    size_t        ext;
+    u_char       *pos;
+    u_char       *dst;
+    u_char        buf[4];
+    u_char        version[2];
+    ngx_str_t     host;
+    ngx_str_t     alpn;
+    ngx_log_t    *log;
+    ngx_pool_t   *pool;
+    ngx_uint_t    state;
+    ngx_chain_t  *out;
 } ngx_stream_s5_ctx_t;
 
 
 static void ngx_stream_s5_handler(ngx_stream_session_t *s);
-static void ngx_stream_s5_write_handler(ngx_event_t *ev);
+/* static void ngx_stream_s5_write_handler(ngx_event_t *ev); */
 
 static void *ngx_stream_s5_create_srv_conf(ngx_conf_t *cf);
 static char *ngx_stream_s5(ngx_conf_t *cf, ngx_command_t *cmd, void *conf);
 
 
 static ngx_command_t  ngx_stream_s5_commands[] = {
-
-    { ngx_string("return"),
+    { ngx_string("s5"),
       NGX_STREAM_SRV_CONF|NGX_CONF_TAKE1,
       ngx_stream_s5,
       NGX_STREAM_SRV_CONF_OFFSET,
       0,
       NULL },
 
-      ngx_null_command
+    ngx_null_command
 };
 
 
@@ -64,104 +83,62 @@ ngx_module_t  ngx_stream_s5_module = {
 static void
 ngx_stream_s5_handler(ngx_stream_session_t *s)
 {
-    ngx_str_t                  text;
-    ngx_buf_t                 *b;
+    /* u_char                    *last; */
+    /* u_char                    *p; */
+    /* size_t                     size; */
+    /* ssize_t                    n; */
+    /* ngx_int_t                  rc; */
     ngx_connection_t          *c;
-    ngx_stream_s5_ctx_t       *ctx;
-    ngx_stream_s5_srv_conf_t  *rscf;
+    /* ngx_stream_s5_ctx_t       *ctx; */
+    /* ngx_stream_s5_srv_conf_t  *sscf; */
 
     c = s->connection;
 
-    c->log->action = "returning text";
+    ngx_log_debug0(NGX_LOG_DEBUG_STREAM, c->log, 0, "s5 preread handler");
 
-    rscf = ngx_stream_get_module_srv_conf(s, ngx_stream_s5_module);
-
-    if (ngx_stream_complex_value(s, &rscf->text, &text) != NGX_OK) {
-        ngx_stream_finalize_session(s, NGX_STREAM_INTERNAL_SERVER_ERROR);
-        return;
-    }
-
-    ngx_log_debug1(NGX_LOG_DEBUG_STREAM, c->log, 0,
-                   "stream return text: \"%V\"", &text);
-
-    if (text.len == 0) {
-        ngx_stream_finalize_session(s, NGX_STREAM_OK);
-        return;
-    }
-
-    ctx = ngx_pcalloc(c->pool, sizeof(ngx_stream_s5_ctx_t));
-    if (ctx == NULL) {
-        ngx_stream_finalize_session(s, NGX_STREAM_INTERNAL_SERVER_ERROR);
-        return;
-    }
-
-    ngx_stream_set_ctx(s, ctx, ngx_stream_s5_module);
-
-    b = ngx_calloc_buf(c->pool);
-    if (b == NULL) {
-        ngx_stream_finalize_session(s, NGX_STREAM_INTERNAL_SERVER_ERROR);
-        return;
-    }
-
-    b->memory = 1;
-    b->pos = text.data;
-    b->last = text.data + text.len;
-    b->last_buf = 1;
-
-    ctx->out = ngx_alloc_chain_link(c->pool);
-    if (ctx->out == NULL) {
-        ngx_stream_finalize_session(s, NGX_STREAM_INTERNAL_SERVER_ERROR);
-        return;
-    }
-
-    ctx->out->buf = b;
-    ctx->out->next = NULL;
-
-    c->write->handler = ngx_stream_s5_write_handler;
-
-    ngx_stream_s5_write_handler(c->write);
+    (void) c;
 }
 
 
-static void
-ngx_stream_s5_write_handler(ngx_event_t *ev)
-{
-    ngx_connection_t      *c;
-    ngx_stream_s5_ctx_t   *ctx;
-    ngx_stream_session_t  *s;
+/* static void */
+/* ngx_stream_s5_write_handler(ngx_event_t *ev) */
+/* { */
+/*     ngx_connection_t      *c; */
+/*     ngx_stream_s5_ctx_t   *ctx; */
+/*     ngx_stream_session_t  *s; */
 
-    c = ev->data;
-    s = c->data;
+/*     c = ev->data; */
+/*     s = c->data; */
 
-    if (ev->timedout) {
-        ngx_connection_error(c, NGX_ETIMEDOUT, "connection timed out");
-        ngx_stream_finalize_session(s, NGX_STREAM_OK);
-        return;
-    }
+/*     if (ev->timedout) { */
+/*         ngx_connection_error(c, NGX_ETIMEDOUT, "connection timed out"); */
+/*         ngx_stream_finalize_session(s, NGX_STREAM_OK); */
+/*         return; */
+/*     } */
 
-    ctx = ngx_stream_get_module_ctx(s, ngx_stream_s5_module);
+/*     ctx = ngx_stream_get_module_ctx(s, ngx_stream_s5_module); */
 
-    if (ngx_stream_top_filter(s, ctx->out, 1) == NGX_ERROR) {
-        ngx_stream_finalize_session(s, NGX_STREAM_INTERNAL_SERVER_ERROR);
-        return;
-    }
+/*     if (ngx_stream_top_filter(s, ctx->out, 1) == NGX_ERROR) { */
+/*         ngx_stream_finalize_session(s, NGX_STREAM_INTERNAL_SERVER_ERROR); */
+/*         return; */
+/*     } */
 
-    ctx->out = NULL;
+/*     ctx->out = NULL; */
 
-    if (!c->buffered) {
-        ngx_log_debug0(NGX_LOG_DEBUG_STREAM, c->log, 0,
-                       "stream return done sending");
-        ngx_stream_finalize_session(s, NGX_STREAM_OK);
-        return;
-    }
+/*     if (!c->buffered) { */
+/*         ngx_log_debug0(NGX_LOG_DEBUG_STREAM, c->log, 0, */
+/*                        "stream return done sending"); */
+/*         ngx_stream_finalize_session(s, NGX_STREAM_OK); */
+/*         return; */
+/*     } */
 
-    if (ngx_handle_write_event(ev, 0) != NGX_OK) {
-        ngx_stream_finalize_session(s, NGX_STREAM_INTERNAL_SERVER_ERROR);
-        return;
-    }
+/*     if (ngx_handle_write_event(ev, 0) != NGX_OK) { */
+/*         ngx_stream_finalize_session(s, NGX_STREAM_INTERNAL_SERVER_ERROR); */
+/*         return; */
+/*     } */
 
-    ngx_add_timer(ev, 5000);
-}
+/*     ngx_add_timer(ev, 5000); */
+/* } */
 
 
 static void *
@@ -181,9 +158,8 @@ ngx_stream_s5_create_srv_conf(ngx_conf_t *cf)
 static char *
 ngx_stream_s5(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 {
-    ngx_stream_s5_srv_conf_t *rscf = conf;
-
     ngx_str_t                           *value;
+    ngx_stream_s5_srv_conf_t            *rscf  =  conf;
     ngx_stream_core_srv_conf_t          *cscf;
     ngx_stream_compile_complex_value_t   ccv;
 
@@ -209,3 +185,6 @@ ngx_stream_s5(ngx_conf_t *cf, ngx_command_t *cmd, void *conf)
 
     return NGX_CONF_OK;
 }
+
+
+/* eof */

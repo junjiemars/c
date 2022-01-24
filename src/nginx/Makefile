@@ -180,8 +180,8 @@ nginx_module_s5_test: nginx_module_s5
 endif # end of msvc
 
 
-$(nginx_module_s5_binout): $(nginx_home)                          \
-                              $(nginx_s5_module_root)/nginx.conf
+$(nginx_module_s5_binout): $(nginx_home)                      \
+                           $(nginx_s5_module_root)/nginx.conf
 	cd $(nginx_home)                                          \
     && auto/configure --prefix=$(nginx_module_s5_prefix)    \
                       --without-http_fastcgi_module         \
@@ -193,6 +193,8 @@ $(nginx_module_s5_binout): $(nginx_home)                          \
                       --without-http_proxy_module           \
                       --without-pcre                        \
                       --with-stream                         \
+                      --without-stream_geo_module           \
+                      --without-stream_map_module           \
                       --add-module=$(nginx_s5_module_root)  \
                       --with-cc-opt="$(nginx_cc_opt)"       \
                       --with-ld-opt="$(nginx_ld_opt)"       \
