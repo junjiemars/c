@@ -4,10 +4,12 @@
 
 
 net: net_dns                                    \
-     net_mac
+     net_mac                                    \
+     net_s5
 
 net_test: net_dns_test                          \
-          net_mac_test
+          net_mac_test                          \
+          net_s5_test
 
 
 # env
@@ -61,6 +63,17 @@ net_mac_test: net_mac
 	$(net_mac_binout)
 
 $(net_mac_binout): $(net_root)/mac/mac.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# s5
+net_s5_binout := $(bin_path)/$(net_prefix)_s5$(bin_ext)
+
+net_s5: $(net_s5_binout)
+net_s5_test: net_s5
+	$(net_s5_binout) -h
+
+$(net_s5_binout): $(net_root)/s5/s5.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
