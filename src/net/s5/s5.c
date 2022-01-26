@@ -18,6 +18,58 @@
  *
  */
 
+#define S5_VER  0x5
+
+#define BUF_MAX   512
+#define ADDR_MAX  256
+
+
+#define S5_CMD_MAP(XX)                          \
+  XX(0x01, CONNECT)                             \
+  XX(0x02, BIND)                                \
+  XX(0x03, UDP)                                 \
+
+enum s5_cmd
+  {
+#define XX(n, s) S5_CMD_##s = n,
+    S5_CMD_MAP(XX)
+#undef XX
+  };
+
+
+#define S5_ATYP_MAP(XX)                         \
+  XX(0x01, IPv4)                                \
+  XX(0x03, DOMAINNAME)                          \
+  XX(0x04, IPv6)                                \
+
+enum s5_atyp
+  {
+#define XX(n, s) S5_ATYP_##s = n,
+    S5_ATYP_MAP(XX)
+#undef XX
+  };
+
+
+#define S5_REP_MAP(XX)                          \
+  XX(0x00, SUCCEEDED)                           \
+  XX(0x01, SERVER_FAILURE)                      \
+  XX(0x02, CONNECT_NOT_ALLOWED)                 \
+  XX(0x03, NETWORK_UNREACHABLE)                 \
+  XX(0x04, HOST_UNREACHABLE)                    \
+  XX(0x05, CONNECT_REFUSED)                     \
+  XX(0x06, TTL_EXPIRED)                         \
+  XX(0x07, CMD_NOT_SUPPORTED)                   \
+  XX(0x08, ATYP_NOT_SUPPORTED)                  \
+  XX(0x09, UNASSIGNED)                          \
+
+enum s5_rep
+  {
+#define XX(n, s) S5_REP_##s = n,
+    S5_REP_MAP(XX)
+#undef XX
+  };
+
+
 
 #define log(x, ...)                             \
   if (0 == opt_quiet)                           \
@@ -26,18 +78,41 @@
     }
 
 
-typedef struct s5_auth_req_s {
+typedef struct s5_select_req_s
+{
   uint8_t  ver;
-  uint8_t  n;
+  uint8_t  n_methods;
   uint8_t  methods;
-} s5_auth_req_t;
 
-typedef struct s5_req_s {
+} s5_select_req_t;
+
+typedef struct s5_select_res_s
+{
+  uint8_t ver;
+  uint8_t method;
+
+} s5_select_res_t;
+
+typedef struct s5_cmd_req_s
+{
   uint8_t ver;
   uint8_t cmd;
   uint8_t rsv;
   uint8_t atyp;
-} s5_req_t;
+  uint8_t dst_addr_len;
+  uint8_t dst_buf[ADDR_MAX];
+
+} s5_cmd_req_t;
+
+typedef struct s5_cmd_res_s
+{
+  uint8_t ver;
+  uint8_t rep;
+  uint8_t rsv;
+  uint8_t atyp;
+  uint8_t bnd_buf[ADDR_MAX];
+
+} s5_cmd_res_t;
 
 
 #if !(NDEBUG)
@@ -45,6 +120,9 @@ typedef void (*on_signal)(int);
 static void on_signal_segv(int sig);
 #endif  /* NDEBUG */
 
+
+static int s5_process(int cfd);
+static int s5_listen(void);
 
 static struct option longopts[]  =
   {
@@ -83,6 +161,155 @@ on_signal_segv(int sig)
 }
 #endif  /* NDEBUG */
 
+static int
+s5_process(int cfd)
+{
+  int               rc          =  0;
+	char              buf[BUF_MAX];
+  ssize_t           n;
+  s5_cmd_req_t     *req_cmd     =  0;
+  s5_cmd_res_t      res_cmd;
+  s5_select_req_t  *req_select  =  0;
+  s5_select_res_t   res_select;
+
+	for (;;)
+    {
+      memset(buf, 0, sizeof(buf));
+      n = read(cfd, buf, sizeof(buf));
+
+      if ((size_t) n == sizeof(s5_select_req_t))
+        {
+          req_select = (s5_select_req_t *) &buf;
+          if (req_select->ver != S5_VER)
+            {
+              log(stderr, "!s5: unsupport socks version: %d\n", req_cmd->ver);
+              goto clean_exit;
+            }
+
+          memset(&res_select, 0, sizeof(res_select));
+          res_select.ver = S5_VER;
+          res_select.method = 0;
+
+          rc = write(cfd, &res_select, sizeof(res_select));
+          if (-1 == rc)
+            {
+              log(stderr, "!s5: %s\n", strerror(rc));
+              goto clean_exit;
+            }
+        }
+      else if (n > 0)
+        {
+          req_cmd = (s5_cmd_req_t *) &buf;
+          if (req_cmd->ver != S5_VER)
+            {
+              log(stderr, "!s5: unsupport socks version: %d\n", req_cmd->ver);
+              goto clean_exit;
+            }
+
+          if (req_cmd->cmd == S5_CMD_CONNECT)
+            {
+              memset(&res_cmd, 0, sizeof(res_cmd));
+              res_cmd.ver = S5_VER;
+              res_cmd.rep = S5_REP_SUCCEEDED;
+
+              rc = write(cfd, &res_cmd, sizeof(res_cmd));
+              if (-1 == rc)
+                {
+                  log(stderr, "!s5: %s\n", strerror(rc));
+                  goto clean_exit;
+                }
+
+
+            }
+        }
+      else
+        {
+          log(stderr, "!s5: %s\n", strerror(n));
+          goto clean_exit;
+        }
+
+    }
+
+
+ clean_exit:
+  return rc;
+}
+
+
+static int
+s5_listen(void)
+{
+  int                 rc  =  0;
+  int                 sfd, cfd;
+  socklen_t           size;
+  struct sockaddr_in  srv, clt;
+
+#if (WINNT)
+  WSADATA wsa;
+  rc = WSAStartup(MAKEWORD(2, 2), &wsa);
+  if (rc)
+    {
+      rc = errno;
+      log(stderr, "! WSAStartup: %s\n", strerror(rc));
+      goto clean_exit;
+    }
+#endif  /* WINNT */
+
+  sfd = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
+  if (-1 == sfd)
+    {
+      log_sockerr(rc, "!socket: %s\n");
+      goto clean_exit;
+    }
+
+  memset(&srv, 0, sizeof(srv));
+
+	srv.sin_family = AF_INET;
+	srv.sin_addr.s_addr = htonl(INADDR_ANY);
+	srv.sin_port = htons(opt_port);
+
+  rc = bind(sfd, (const struct sockaddr*) &srv, sizeof(srv));
+	if (rc)
+    {
+      log_sockerr(rc, "!socket: %s\n");
+      goto close_sfd_exit;
+    }
+
+  rc = listen(sfd, 5);
+	if (rc)
+    {
+      log_sockerr(rc, "!socket: %s\n");
+      goto close_sfd_exit;
+    }
+
+	size = sizeof(clt);
+	cfd = accept(sfd, (struct sockaddr*) &clt, &size);
+	if (-1 == cfd)
+    {
+      log_sockerr(rc, "!socket: %s\n");
+      goto close_sfd_exit;
+    }
+
+  s5_process(cfd);
+
+  goto close_cfd_exit;
+
+  _unused_(size);
+
+ close_cfd_exit:
+  close(cfd);
+ close_sfd_exit:
+  close(sfd);
+ clean_exit:
+  /* free(res); */
+
+#if (WINNT)
+  WSACleanup();
+#endif  /* WINNT */
+
+  return rc;
+}
+
 
 int
 main(int argc, char* argv[])
@@ -118,9 +345,9 @@ main(int argc, char* argv[])
           break;
         case 'h':
           usage(argv[0]);
-          rc = 1;
           goto clean_exit;
         default:
+          rc = 1;
           break;
         }
     }
@@ -135,7 +362,7 @@ main(int argc, char* argv[])
 #endif  /* NDEBUG */
 
   /* !TODO: */
-  rc = 0;
+  rc = s5_listen();
 
  clean_exit:
   return rc;

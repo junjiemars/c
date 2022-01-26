@@ -70,8 +70,13 @@ $(net_mac_binout): $(net_root)/mac/mac.c
 net_s5_binout := $(bin_path)/$(net_prefix)_s5$(bin_ext)
 
 net_s5: $(net_s5_binout)
+
+ifeq ($(NM_SYSTEM), Linux)
 net_s5_test: net_s5
 	$(net_s5_binout) -h
+else
+net_s5_test: net_s5
+endif
 
 $(net_s5_binout): $(net_root)/s5/s5.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
