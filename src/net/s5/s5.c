@@ -121,7 +121,7 @@ static void on_signal_segv(int sig);
 #endif  /* NDEBUG */
 
 
-static int s5_process(int cfd);
+static void s5_cmd_process(int cfd);
 static int s5_listen(void);
 
 static struct option longopts[]  =
@@ -144,8 +144,7 @@ usage(const char *p)
 {
   printf("Usage %s [options ...]\n", p);
   printf("  -h, --help     this help text\n");
-  printf("  -p, --port     listen port, default is %d\n",
-         opt_port);
+  printf("  -p, --port     listen port, default is %d\n", opt_port);
   printf("  -T, --timeout  timeout in seconds, default is %d\n",
          (int) opt_timeout.tv_sec);
   printf("  -Q, --quiet    quiet or silent mode\n");
@@ -161,8 +160,8 @@ on_signal_segv(int sig)
 }
 #endif  /* NDEBUG */
 
-static int
-s5_process(int cfd)
+static void
+s5_cmd_process(int cfd)
 {
   int               rc          =  0;
 	char              buf[BUF_MAX];
@@ -172,10 +171,17 @@ s5_process(int cfd)
   s5_select_req_t  *req_select  =  0;
   s5_select_res_t   res_select;
 
-	for (;;)
+  log(stdout, "#s5: pid=%d\n", getpid());
+
+  for (;;)
     {
       memset(buf, 0, sizeof(buf));
       n = read(cfd, buf, sizeof(buf));
+      if (-1 == n)
+        {
+          log(stderr, "!s5: %s\n", strerror(errno));
+          goto clean_exit;
+        }
 
       if ((size_t) n == sizeof(s5_select_req_t))
         {
@@ -193,7 +199,7 @@ s5_process(int cfd)
           rc = write(cfd, &res_select, sizeof(res_select));
           if (-1 == rc)
             {
-              log(stderr, "!s5: %s\n", strerror(rc));
+              log(stderr, "!s5: YYY %s\n", strerror(rc));
               goto clean_exit;
             }
         }
@@ -215,24 +221,17 @@ s5_process(int cfd)
               rc = write(cfd, &res_cmd, sizeof(res_cmd));
               if (-1 == rc)
                 {
-                  log(stderr, "!s5: %s\n", strerror(rc));
+                  log(stderr, "!s5: XXX %s\n", strerror(rc));
                   goto clean_exit;
                 }
 
-
             }
         }
-      else
-        {
-          log(stderr, "!s5: %s\n", strerror(n));
-          goto clean_exit;
-        }
-
     }
 
-
  clean_exit:
-  return rc;
+  close(cfd);
+  /* _exit(rc); */
 }
 
 
@@ -241,6 +240,7 @@ s5_listen(void)
 {
   int                 rc  =  0;
   int                 sfd, cfd;
+  pid_t               pid;
   socklen_t           size;
   struct sockaddr_in  srv, clt;
 
@@ -272,37 +272,52 @@ s5_listen(void)
 	if (rc)
     {
       log_sockerr(rc, "!socket: %s\n");
-      goto close_sfd_exit;
+      goto close_exit;
     }
 
   rc = listen(sfd, 5);
 	if (rc)
     {
       log_sockerr(rc, "!socket: %s\n");
-      goto close_sfd_exit;
+      goto close_exit;
     }
 
-	size = sizeof(clt);
-	cfd = accept(sfd, (struct sockaddr*) &clt, &size);
-	if (-1 == cfd)
+  for (;;)
     {
-      log_sockerr(rc, "!socket: %s\n");
-      goto close_sfd_exit;
+      size = sizeof(clt);
+      cfd = accept(sfd, (struct sockaddr*) &clt, &size);
+      if (-1 == cfd)
+        {
+          log_sockerr(rc, "!socket: %s\n");
+          goto close_exit;
+        }
+
+#if (!NDEBUG)
+      pid = fork();
+      if (-1 == pid)
+        {
+          log(stderr, "!s5: %s\n", strerror(errno));
+        }
+
+      if (0 == pid)
+        {
+          _unused_(pid);
+          s5_cmd_process(cfd);
+        }
+
+#else
+      _unused_(pid);
+      s5_cmd_process(cfd);
+
+#endif
+
     }
 
-  s5_process(cfd);
 
-  goto close_cfd_exit;
-
-  _unused_(size);
-
- close_cfd_exit:
-  close(cfd);
- close_sfd_exit:
+ close_exit:
   close(sfd);
- clean_exit:
-  /* free(res); */
 
+ clean_exit:
 #if (WINNT)
   WSACleanup();
 #endif  /* WINNT */
