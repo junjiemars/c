@@ -77,6 +77,23 @@ enum s5_rep
     }
 
 
+
+typedef struct s5_addr_s
+{
+  uint32_t  ip;
+  uint16_t  port;
+
+} s5_addr_t;
+
+
+typedef struct s5_socks_addr_s
+{
+  uint8_t  addr_len;
+  uint8_t  addr_buf[ADDR_MAX];
+
+} s5_socks_addr_t;
+
+
 typedef struct s5_select_req_s
 {
   uint8_t  ver;
@@ -85,6 +102,7 @@ typedef struct s5_select_req_s
 
 } s5_select_req_t;
 
+
 typedef struct s5_select_res_s
 {
   uint8_t ver;
@@ -92,16 +110,17 @@ typedef struct s5_select_res_s
 
 } s5_select_res_t;
 
+
 typedef struct s5_cmd_req_s
 {
   uint8_t ver;
   uint8_t cmd;
   uint8_t rsv;
   uint8_t atyp;
-  uint8_t dst_addr_len;
-  uint8_t dst_buf[ADDR_MAX];
+  s5_socks_addr_t dst_addr;
 
 } s5_cmd_req_t;
+
 
 typedef struct s5_cmd_res_s
 {
@@ -125,36 +144,40 @@ static void on_signal_segv(int sig);
 static int s5_listen(int *sfd, int *port);
 static int s5_socks(int port);
 static void s5_socks_cmd(int cfd);
-static int s5_proxy(int port);
+static int s5_proxy(int port, s5_addr_t *addr);
 static void s5_proxy_cmd(int cfd);
 
 static struct option longopts[]  =
   {
-    { "help",    no_argument,          0,              'h' },
-    { "port",    optional_argument,    0,              'p' },
-    { "proxy",   optional_argument,    0,              'P' },
-    { "timeout", optional_argument,    0,              'T' },
-    { "quiet",   no_argument,          0,              'Q' },
-    { 0,         0,                    0,               0  }
+    { "help",         no_argument,          0,              'h' },
+    { "listen-port",  optional_argument,    0,              'l' },
+    { "proxy",        optional_argument,    0,              'P' },
+    { "proxy-port",   optional_argument,    0,              'p' },
+    { "timeout",      optional_argument,    0,              'T' },
+    { "quiet",        no_argument,          0,              'Q' },
+    { 0,              0,                    0,               0  }
   };
 
 
-static uint16_t        opt_port     =  9192;
-static int             opt_proxy    =  0;
-static int             opt_quiet    =  0;
-static struct timeval  opt_timeout  =  { .tv_sec = 15, 0 };
+static uint16_t        opt_port        =  9192;
+static char            opt_proxy[64]   =  {0};
+static uint16_t        opt_proxy_port  =  9192;
+static int             opt_quiet       =  0;
+static struct timeval  opt_timeout     =  { .tv_sec = 15, 0 };
 
 
 static void
 usage(const char *p)
 {
   printf("Usage %s [options ...]\n", p);
-  printf("  -h, --help     this help text\n");
-  printf("  -p, --port     listen port, default is %d\n", opt_port);
-  printf("  -P, --proxy    serving as proxy\n");
-  printf("  -T, --timeout  timeout in seconds, default is %d\n",
+  printf("  -h, --help         this help text\n");
+  printf("  -l, --listen-port  listen port, default is %d\n", opt_port);
+  printf("  -P, --proxy        serving as proxy\n");
+  printf("  -p, --proxy-port   proxy port, default is %d\n",
+         opt_proxy_port);
+  printf("  -T, --timeout      timeout in seconds, default is %d\n",
          (int) opt_timeout.tv_sec);
-  printf("  -Q, --quiet    quiet or silent mode\n");
+  printf("  -Q, --quiet        quiet or silent mode\n");
 }
 
 
@@ -229,7 +252,6 @@ static void
 s5_socks_cmd(int cfd)
 {
   int               rc          =  0;
-  int               sfd         =  0;
   int               port        =  0;
 	char              buf[BUF_MAX];
   pid_t             pid;
@@ -285,7 +307,26 @@ s5_socks_cmd(int cfd)
             case S5_CMD_CONNECT:
               log(stdout, "#s5: receive connect command\n");
 
-              s5_listen(&sfd, &port);
+
+#if (!NDEBUG)
+              _unused_(pid);
+
+              /* s5_proxy(port); */
+
+#else
+              pid = fork();
+              if (-1 == pid)
+                {
+                  log(stderr, "!s5: fork failed: %s\n", strerror(errno));
+                  goto clean_exit;
+                }
+
+              if (0 == pid)
+                {
+                  /* s5_proxy(port); */
+                }
+
+#endif
 
               memset(&res_cmd, 0, sizeof(res_cmd));
               res_cmd.ver = S5_VER;
@@ -301,19 +342,6 @@ s5_socks_cmd(int cfd)
                   log(stderr, "!s5: %s\n", strerror(rc));
                   goto clean_exit;
                 }
-
-              pid = fork();
-              if (-1 == pid)
-                {
-                  log(stderr, "!s5: fork failed: %s\n", strerror(errno));
-                  goto clean_exit;
-                }
-
-              if (0 == pid)
-                {
-                  s5_proxy(port);
-                }
-              goto clean_exit;
               break;
 
             default:
@@ -339,8 +367,8 @@ s5_proxy_cmd(int cfd)
 
   _unused_(rc);
 
-  for (;;)
-    {
+  /* for (;;) */
+  /*   { */
       memset(buf, 0, sizeof(buf));
       n = read(cfd, buf, sizeof(buf));
       if (-1 == n)
@@ -348,8 +376,7 @@ s5_proxy_cmd(int cfd)
           log(stderr, "!s5: %s\n", strerror(errno));
           goto clean_exit;
         }
-
-    }
+    /* } */
 
 
  clean_exit:
@@ -358,7 +385,7 @@ s5_proxy_cmd(int cfd)
 
 
 static int
-s5_proxy(int port)
+s5_proxy(int port, s5_addr_t *addr)
 {
   int                 rc  =  0;
   int                 sfd, cfd;
@@ -371,6 +398,8 @@ s5_proxy(int port)
     {
       goto clean_exit;
     }
+
+  _unused_(addr);
 
   for (;;)
     {
@@ -469,8 +498,9 @@ s5_socks(int port)
 int
 main(int argc, char* argv[])
 {
-  int  ch;
-  int  rc  =  0;
+  int        ch;
+  int        rc  =  0;
+  s5_addr_t  addr;
 
 #if !(NDEBUG)
   on_signal  on_segv;
@@ -484,16 +514,22 @@ main(int argc, char* argv[])
 #endif  /* NDEBUG */
 
   while (-1 != (ch = getopt_long(argc, argv,
-                                 "hp:PT:Q",
+                                 "hl:p:P:T:Q",
                                  longopts, 0)))
     {
       switch (ch)
         {
-        case 'p':
+        case 'l':
           opt_port = (uint16_t) atoi(optarg);
           break;
+        case 'p':
+          opt_proxy_port = atoi(optarg);
+          break;
         case 'P':
-          opt_proxy = 1;
+          if (optarg)
+            {
+              strcpy(opt_proxy, optarg);
+            }
           break;
         case 'T':
           opt_timeout.tv_sec = atoi(optarg);
@@ -513,21 +549,31 @@ main(int argc, char* argv[])
 
 #if !(NDEBUG)
   log(stdout, "# command line options:\n"
-      " -> --port=%d --proxy=%d --timeout=%d --quiet=%d\n",
+      " -> --listen-port=%d --proxy=%s --proxy-port=%d, --timeout=%d --quiet=%d\n",
       opt_port,
       opt_proxy,
+      opt_proxy_port,
       (int) opt_timeout.tv_sec,
       opt_quiet);
 #endif  /* NDEBUG */
 
 
-  if (opt_proxy)
+  if (*opt_proxy == 0)
     {
-      s5_proxy(opt_port);
+      rc = s5_socks(opt_port);
+
     }
   else
     {
-      rc = s5_socks(opt_port);
+      rc = inet_pton(AF_INET, opt_proxy, &(addr.ip));
+      if (-1 == rc)
+        {
+          log(stderr, "!s5: %s\n", strerror(errno));
+          goto clean_exit;
+        }
+
+      addr.port = opt_proxy_port;
+      rc = s5_proxy(opt_port, &addr);
     }
 
  clean_exit:
