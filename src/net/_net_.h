@@ -4,6 +4,7 @@
 #include <nore.h>
 #include <ndef.h>
 #include <nint.h>
+#include <nstr.h>
 
 
 #if (WINNT)

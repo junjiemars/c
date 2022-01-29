@@ -1,6 +1,5 @@
 #include "_net_.h"
 #include <getopt.h>
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -110,7 +109,9 @@ typedef struct s5_cmd_res_s
   uint8_t rep;
   uint8_t rsv;
   uint8_t atyp;
-  uint8_t bnd_buf[ADDR_MAX];
+  uint8_t bnd_addr_len;
+  uint32_t bnd_addr;
+  uint16_t bnd_port;
 
 } s5_cmd_res_t;
 
@@ -121,10 +122,10 @@ static void on_signal_segv(int sig);
 #endif  /* NDEBUG */
 
 
-static int s5_main_loop(int port);
-static void s5_cmd_process(int cfd);
-static void s5_proxy(int cfd);
 static int s5_listen(int *sfd, int *port);
+static int s5_socks(int port);
+static void s5_socks_cmd(int cfd);
+static int s5_proxy(int port);
 
 static struct option longopts[]  =
   {
@@ -166,12 +167,13 @@ on_signal_segv(int sig)
 #endif  /* NDEBUG */
 
 static void
-s5_cmd_process(int cfd)
+s5_socks_cmd(int cfd)
 {
   int               rc          =  0;
   int               sfd         =  0;
   int               port        =  0;
 	char              buf[BUF_MAX];
+  pid_t             pid;
   ssize_t           n;
   s5_cmd_req_t     *req_cmd     =  0;
   s5_cmd_res_t      res_cmd;
@@ -229,6 +231,10 @@ s5_cmd_process(int cfd)
               memset(&res_cmd, 0, sizeof(res_cmd));
               res_cmd.ver = S5_VER;
               res_cmd.rep = S5_REP_SUCCEEDED;
+              res_cmd.atyp = S5_ATYP_IPv4;
+              res_cmd.bnd_addr = htonl(INADDR_ANY);
+              res_cmd.bnd_addr_len = sizeof(res_cmd.bnd_addr);
+              res_cmd.bnd_port = port;
 
               rc = write(cfd, &res_cmd, sizeof(res_cmd));
               if (-1 == rc)
@@ -236,6 +242,19 @@ s5_cmd_process(int cfd)
                   log(stderr, "!s5: %s\n", strerror(rc));
                   goto clean_exit;
                 }
+
+              pid = fork();
+              if (-1 == pid)
+                {
+                  log(stderr, "!s5: fork failed: %s\n", strerror(errno));
+                  goto clean_exit;
+                }
+
+              if (0 == pid)
+                {
+                  s5_proxy(port);
+                }
+              goto clean_exit;
               break;
 
             default:
@@ -244,16 +263,9 @@ s5_cmd_process(int cfd)
         }
     }
 
+
  clean_exit:
   close(cfd);
-  /* _exit(rc); */
-}
-
-static void
-s5_proxy(int cfd)
-{
-  _unused_(cfd);
-  log(stdout, "#s5: proxy\n");
 }
 
 static int
@@ -311,8 +323,9 @@ s5_listen(int *sfd, int *port)
   return rc;
 }
 
+
 static int
-s5_main_loop(int port)
+s5_proxy(int port)
 {
   int                 rc  =  0;
   int                 sfd, cfd;
@@ -339,14 +352,7 @@ s5_main_loop(int port)
 #if (!NDEBUG)
       _unused_(pid);
 
-      if (opt_proxy)
-        {
-          s5_proxy(cfd);
-        }
-      else
-        {
-          s5_cmd_process(cfd);
-        }
+      s5_socks_cmd(cfd);
 
 #else
       pid = fork();
@@ -358,14 +364,62 @@ s5_main_loop(int port)
       if (0 == pid)
         {
           _unused_(pid);
-          if (opt_proxy)
-            {
-              s5_proxy(cfd);
-            }
-          else
-            {
-              s5_cmd_process(cfd);
-            }
+          s5_socks_cmd(cfd);
+        }
+
+#endif
+
+    }
+
+
+ close_exit:
+  close(sfd);
+
+ clean_exit:
+  return rc;
+}
+
+static int
+s5_socks(int port)
+{
+  int                 rc  =  0;
+  int                 sfd, cfd;
+  pid_t               pid;
+  socklen_t           slen;
+  struct sockaddr_in  clt;
+
+  rc = s5_listen(&sfd, &port);
+  if (-1 == rc)
+    {
+      goto clean_exit;
+    }
+
+  for (;;)
+    {
+      slen = sizeof(clt);
+      cfd = accept(sfd, (struct sockaddr*) &clt, &slen);
+      if (-1 == cfd)
+        {
+          log_sockerr(rc, "!socket: %s\n");
+          goto close_exit;
+        }
+
+#if (!NDEBUG)
+      _unused_(pid);
+
+      s5_socks_cmd(cfd);
+
+#else
+      pid = fork();
+      if (-1 == pid)
+        {
+          log(stderr, "!s5: %s\n", strerror(errno));
+        }
+
+      if (0 == pid)
+        {
+          _unused_(pid);
+          s5_socks_cmd(cfd);
         }
 
 #endif
@@ -428,14 +482,22 @@ main(int argc, char* argv[])
 
 #if !(NDEBUG)
   log(stdout, "# command line options:\n"
-      " -> --port=%d --timeout=%d --quiet=%d\n",
+      " -> --port=%d --proxy=%d --timeout=%d --quiet=%d\n",
       opt_port,
+      opt_proxy,
       (int) opt_timeout.tv_sec,
       opt_quiet);
 #endif  /* NDEBUG */
 
-  /* !TODO: */
-  rc = s5_main_loop(opt_port);
+
+  if (opt_proxy)
+    {
+      s5_proxy(opt_port);
+    }
+  else
+    {
+      rc = s5_socks(opt_port);
+    }
 
  clean_exit:
   return rc;
