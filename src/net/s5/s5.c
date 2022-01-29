@@ -80,16 +80,29 @@ enum s5_rep
 
 typedef struct s5_addr_s
 {
-  char      *s;
-  uint16_t   port;
+  uint16_t    port;
+  in_addr_t   r;
 
 } s5_addr_t;
 
 
-typedef struct s5_socks_addr_s
+typedef union s5_socks_addr_u
 {
-  uint8_t  addr_len;
-  uint8_t  addr_buf[ADDR_MAX];
+  struct
+  {
+    uint32_t ip4;
+  } ip4;
+
+  struct
+  {
+    uint64_t ip6[2];
+  } ip6;
+
+  struct
+  {
+    uint8_t  addr_len;
+    uint8_t  addr_buf[ADDR_MAX - sizeof(uint8_t)];
+  } domain;
 
 } s5_socks_addr_t;
 
@@ -147,23 +160,26 @@ static void s5_socks_cmd(int cfd);
 static int s5_proxy(int port, s5_addr_t *addr);
 static void s5_proxy_cmd(int cfd, s5_addr_t *addr);
 
+
 static struct option longopts[]  =
   {
     { "help",         no_argument,          0,              'h' },
     { "listen-port",  optional_argument,    0,              'l' },
     { "proxy",        optional_argument,    0,              'P' },
     { "proxy-port",   optional_argument,    0,              'p' },
+    { "proxy-only",   optional_argument,    0,              'O' },
     { "timeout",      optional_argument,    0,              'T' },
     { "quiet",        no_argument,          0,              'Q' },
     { 0,              0,                    0,               0  }
   };
 
 
-static uint16_t        opt_port        =  9192;
-static char            opt_proxy[16]   =  {0};
-static uint16_t        opt_proxy_port  =  9192;
-static int             opt_quiet       =  0;
-static struct timeval  opt_timeout     =  { .tv_sec = 15, 0 };
+static uint16_t        opt_port             =  0; /* 9192; */
+static char            opt_proxy[ADDR_MAX]  =  {0};
+static uint16_t        opt_proxy_port       =  9394;
+static int             opt_proxy_only       =  0;
+static int             opt_quiet            =  0;
+static struct timeval  opt_timeout          =  { .tv_sec = 15, 0 };
 
 
 static void
@@ -175,6 +191,7 @@ usage(const char *p)
   printf("  -P, --proxy        serving as proxy\n");
   printf("  -p, --proxy-port   proxy port, default is %d\n",
          opt_proxy_port);
+  printf("  -O, --proxy-only   proxy only, default is %d\n", opt_proxy_only);
   printf("  -T, --timeout      timeout in seconds, default is %d\n",
          (int) opt_timeout.tv_sec);
   printf("  -Q, --quiet        quiet or silent mode\n");
@@ -189,6 +206,7 @@ on_signal_segv(int sig)
   exit(EXIT_FAILURE);
 }
 #endif  /* NDEBUG */
+
 
 
 static int
@@ -229,7 +247,7 @@ s5_listen(int *sfd, int *port)
       *port = gsn.sin_port;
     }
 
-  rc = listen(*sfd, 5);
+  rc = listen(*sfd, 5 /* backlog */);
 	if (rc)
     {
       log_sockerr(rc, "!socket: %s\n");
@@ -261,15 +279,13 @@ s5_socks_cmd(int cfd)
   s5_select_req_t  *req_select  =  0;
   s5_select_res_t   res_select;
 
-  log(stdout, "#s5: socks, pid=%d\n", getpid());
-
   for (;;)
     {
       memset(buf, 0, sizeof(buf));
       n = read(cfd, buf, sizeof(buf));
       if (-1 == n)
         {
-          log(stderr, "!s5: %s\n", strerror(errno));
+          log(stderr, "!read: %s\n", strerror(errno));
           goto clean_exit;
         }
 
@@ -278,7 +294,7 @@ s5_socks_cmd(int cfd)
           req_select = (s5_select_req_t *) &buf;
           if (req_select->ver != S5_VER)
             {
-              log(stderr, "!s5: socks version: %d not support\n", req_cmd->ver);
+              log(stderr, "!socks: version: %d not support\n", req_cmd->ver);
               goto clean_exit;
             }
 
@@ -298,15 +314,13 @@ s5_socks_cmd(int cfd)
           req_cmd = (s5_cmd_req_t *) &buf;
           if (req_cmd->ver != S5_VER)
             {
-              log(stderr, "!s5: socks version: %d not support\n", req_cmd->ver);
+              log(stderr, "!socks: version: %d not support\n", req_cmd->ver);
               goto clean_exit;
             }
 
           switch (req_cmd->cmd)
             {
             case S5_CMD_CONNECT:
-              log(stdout, "#s5: receive connect command\n");
-
 
 #if (!NDEBUG)
               _unused_(pid);
@@ -317,7 +331,7 @@ s5_socks_cmd(int cfd)
               pid = fork();
               if (-1 == pid)
                 {
-                  log(stderr, "!s5: fork failed: %s\n", strerror(errno));
+                  log(stderr, "!fork: %s\n", strerror(errno));
                   goto clean_exit;
                 }
 
@@ -339,7 +353,7 @@ s5_socks_cmd(int cfd)
               rc = write(cfd, &res_cmd, sizeof(res_cmd));
               if (-1 == rc)
                 {
-                  log(stderr, "!s5: %s\n", strerror(rc));
+                  log(stderr, "!write: %s\n", strerror(rc));
                   goto clean_exit;
                 }
               break;
@@ -374,8 +388,8 @@ s5_proxy_cmd(int cfd, s5_addr_t *addr)
 
   memset(&remote, 0, sizeof(remote));
   remote.sin_family = AF_INET;
-  remote.sin_addr.s_addr = inet_addr(addr->s);
-  remote.sin_port = addr->port;
+  remote.sin_addr.s_addr = addr->r;
+  remote.sin_port = htons(addr->port);
 
   rc = connect(sfd, (struct sockaddr *) &remote, sizeof(remote));
   if (-1 == rc)
@@ -400,7 +414,7 @@ s5_proxy_cmd(int cfd, s5_addr_t *addr)
           goto clean_exit;
         }
 
-    } while (r == 0);
+    } while (r > 0);
 
  clean_exit:
   close(sfd);
@@ -538,7 +552,7 @@ main(int argc, char* argv[])
 #endif  /* NDEBUG */
 
   while (-1 != (ch = getopt_long(argc, argv,
-                                 "hl:p:P:T:Q",
+                                 "hl:p:P:OT:Q",
                                  longopts, 0)))
     {
       switch (ch)
@@ -554,6 +568,9 @@ main(int argc, char* argv[])
             {
               strcpy(opt_proxy, optarg);
             }
+          break;
+        case 'O':
+          opt_proxy_only = 1;
           break;
         case 'T':
           opt_timeout.tv_sec = atoi(optarg);
@@ -582,16 +599,15 @@ main(int argc, char* argv[])
 #endif  /* NDEBUG */
 
 
-  if (*opt_proxy == 0)
+  if (opt_proxy_only)
     {
-      rc = s5_socks(opt_port);
-
+      addr.r = inet_addr(opt_proxy);
+      addr.port = opt_proxy_port;
+      rc = s5_proxy(opt_port, &addr);
     }
   else
     {
-      addr.s = opt_proxy;
-      addr.port = opt_proxy_port;
-      rc = s5_proxy(opt_port, &addr);
+      rc = s5_socks(opt_port);
     }
 
  clean_exit:
