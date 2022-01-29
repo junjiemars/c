@@ -126,6 +126,7 @@ static int s5_listen(int *sfd, int *port);
 static int s5_socks(int port);
 static void s5_socks_cmd(int cfd);
 static int s5_proxy(int port);
+static void s5_proxy_cmd(int cfd);
 
 static struct option longopts[]  =
   {
@@ -166,6 +167,64 @@ on_signal_segv(int sig)
 }
 #endif  /* NDEBUG */
 
+
+static int
+s5_listen(int *sfd, int *port)
+{
+  int                 rc  =  0;
+  socklen_t           gsn_size;
+  struct sockaddr_in  srv;
+  struct sockaddr_in  gsn;
+
+  *sfd = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
+  if (-1 == *sfd)
+    {
+      log_sockerr(rc, "!socket: %s\n");
+      goto clean_exit;
+    }
+
+  memset(&srv, 0, sizeof(srv));
+
+	srv.sin_family = AF_INET;
+	srv.sin_addr.s_addr = htonl(INADDR_ANY);
+	srv.sin_port = htons(*port);
+
+  rc = bind(*sfd, (const struct sockaddr *) &srv, sizeof(srv));
+	if (rc)
+    {
+      log_sockerr(rc, "!socket: %s\n");
+      goto close_exit;
+    }
+  if (*port == 0)
+    {
+      gsn_size = sizeof(gsn);
+      rc = getsockname(*sfd, (struct sockaddr *) &gsn, &gsn_size);
+      if (-1 == rc)
+        {
+          log_sockerr(rc, "!socket: %s\n");
+        }
+      *port = gsn.sin_port;
+    }
+
+  rc = listen(*sfd, 5);
+	if (rc)
+    {
+      log_sockerr(rc, "!socket: %s\n");
+      goto close_exit;
+    }
+
+  goto clean_exit;
+
+ close_exit:
+  close(*sfd);
+
+ clean_exit:
+
+  return rc;
+}
+
+
+
 static void
 s5_socks_cmd(int cfd)
 {
@@ -180,7 +239,7 @@ s5_socks_cmd(int cfd)
   s5_select_req_t  *req_select  =  0;
   s5_select_res_t   res_select;
 
-  log(stdout, "#s5: pid=%d\n", getpid());
+  log(stdout, "#s5: socks, pid=%d\n", getpid());
 
   for (;;)
     {
@@ -268,59 +327,33 @@ s5_socks_cmd(int cfd)
   close(cfd);
 }
 
-static int
-s5_listen(int *sfd, int *port)
+
+static void
+s5_proxy_cmd(int cfd)
 {
-  int                 rc  =  0;
-  socklen_t           gsn_size;
-  struct sockaddr_in  srv;
-  struct sockaddr_in  gsn;
+  int               rc          =  0;
+	char              buf[BUF_MAX];
+  ssize_t           n;
 
-  *sfd = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
-  if (-1 == *sfd)
+  log(stdout, "#s5: proxy, pid=%d\n", getpid());
+
+  _unused_(rc);
+
+  for (;;)
     {
-      log_sockerr(rc, "!socket: %s\n");
-      goto clean_exit;
-    }
-
-  memset(&srv, 0, sizeof(srv));
-
-	srv.sin_family = AF_INET;
-	srv.sin_addr.s_addr = htonl(INADDR_ANY);
-	srv.sin_port = htons(*port);
-
-  rc = bind(*sfd, (const struct sockaddr *) &srv, sizeof(srv));
-	if (rc)
-    {
-      log_sockerr(rc, "!socket: %s\n");
-      goto close_exit;
-    }
-  if (*port == 0)
-    {
-      gsn_size = sizeof(gsn);
-      rc = getsockname(*sfd, (struct sockaddr *) &gsn, &gsn_size);
-      if (-1 == rc)
+      memset(buf, 0, sizeof(buf));
+      n = read(cfd, buf, sizeof(buf));
+      if (-1 == n)
         {
-          log_sockerr(rc, "!socket: %s\n");
+          log(stderr, "!s5: %s\n", strerror(errno));
+          goto clean_exit;
         }
-      *port = gsn.sin_port;
+
     }
 
-  rc = listen(*sfd, 5);
-	if (rc)
-    {
-      log_sockerr(rc, "!socket: %s\n");
-      goto close_exit;
-    }
-
-  goto clean_exit;
-
- close_exit:
-  close(*sfd);
 
  clean_exit:
-
-  return rc;
+  close(cfd);
 }
 
 
@@ -352,7 +385,7 @@ s5_proxy(int port)
 #if (!NDEBUG)
       _unused_(pid);
 
-      s5_socks_cmd(cfd);
+      s5_proxy_cmd(cfd);
 
 #else
       pid = fork();
@@ -363,8 +396,7 @@ s5_proxy(int port)
 
       if (0 == pid)
         {
-          _unused_(pid);
-          s5_socks_cmd(cfd);
+          s5_proxy_cmd(cfd);
         }
 
 #endif
@@ -418,7 +450,6 @@ s5_socks(int port)
 
       if (0 == pid)
         {
-          _unused_(pid);
           s5_socks_cmd(cfd);
         }
 
