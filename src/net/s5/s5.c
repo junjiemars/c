@@ -121,13 +121,16 @@ static void on_signal_segv(int sig);
 #endif  /* NDEBUG */
 
 
+static int s5_main_loop(int port);
 static void s5_cmd_process(int cfd);
-static int s5_listen(void);
+static void s5_proxy(int cfd);
+static int s5_listen(int *sfd, int *port);
 
 static struct option longopts[]  =
   {
     { "help",    no_argument,          0,              'h' },
     { "port",    optional_argument,    0,              'p' },
+    { "proxy",   optional_argument,    0,              'P' },
     { "timeout", optional_argument,    0,              'T' },
     { "quiet",   no_argument,          0,              'Q' },
     { 0,         0,                    0,               0  }
@@ -135,6 +138,7 @@ static struct option longopts[]  =
 
 
 static uint16_t        opt_port     =  9192;
+static int             opt_proxy    =  0;
 static int             opt_quiet    =  0;
 static struct timeval  opt_timeout  =  { .tv_sec = 15, 0 };
 
@@ -145,6 +149,7 @@ usage(const char *p)
   printf("Usage %s [options ...]\n", p);
   printf("  -h, --help     this help text\n");
   printf("  -p, --port     listen port, default is %d\n", opt_port);
+  printf("  -P, --proxy    serving as proxy\n");
   printf("  -T, --timeout  timeout in seconds, default is %d\n",
          (int) opt_timeout.tv_sec);
   printf("  -Q, --quiet    quiet or silent mode\n");
@@ -164,6 +169,8 @@ static void
 s5_cmd_process(int cfd)
 {
   int               rc          =  0;
+  int               sfd         =  0;
+  int               port        =  0;
 	char              buf[BUF_MAX];
   ssize_t           n;
   s5_cmd_req_t     *req_cmd     =  0;
@@ -188,7 +195,7 @@ s5_cmd_process(int cfd)
           req_select = (s5_select_req_t *) &buf;
           if (req_select->ver != S5_VER)
             {
-              log(stderr, "!s5: unsupport socks version: %d\n", req_cmd->ver);
+              log(stderr, "!s5: socks version: %d not support\n", req_cmd->ver);
               goto clean_exit;
             }
 
@@ -199,7 +206,7 @@ s5_cmd_process(int cfd)
           rc = write(cfd, &res_select, sizeof(res_select));
           if (-1 == rc)
             {
-              log(stderr, "!s5: YYY %s\n", strerror(rc));
+              log(stderr, "!s5: %s\n", strerror(rc));
               goto clean_exit;
             }
         }
@@ -208,12 +215,17 @@ s5_cmd_process(int cfd)
           req_cmd = (s5_cmd_req_t *) &buf;
           if (req_cmd->ver != S5_VER)
             {
-              log(stderr, "!s5: unsupport socks version: %d\n", req_cmd->ver);
+              log(stderr, "!s5: socks version: %d not support\n", req_cmd->ver);
               goto clean_exit;
             }
 
-          if (req_cmd->cmd == S5_CMD_CONNECT)
+          switch (req_cmd->cmd)
             {
+            case S5_CMD_CONNECT:
+              log(stdout, "#s5: receive connect command\n");
+
+              s5_listen(&sfd, &port);
+
               memset(&res_cmd, 0, sizeof(res_cmd));
               res_cmd.ver = S5_VER;
               res_cmd.rep = S5_REP_SUCCEEDED;
@@ -221,10 +233,13 @@ s5_cmd_process(int cfd)
               rc = write(cfd, &res_cmd, sizeof(res_cmd));
               if (-1 == rc)
                 {
-                  log(stderr, "!s5: XXX %s\n", strerror(rc));
+                  log(stderr, "!s5: %s\n", strerror(rc));
                   goto clean_exit;
                 }
+              break;
 
+            default:
+              break;
             }
         }
     }
@@ -234,29 +249,23 @@ s5_cmd_process(int cfd)
   /* _exit(rc); */
 }
 
+static void
+s5_proxy(int cfd)
+{
+  _unused_(cfd);
+  log(stdout, "#s5: proxy\n");
+}
 
 static int
-s5_listen(void)
+s5_listen(int *sfd, int *port)
 {
   int                 rc  =  0;
-  int                 sfd, cfd;
-  pid_t               pid;
-  socklen_t           size;
-  struct sockaddr_in  srv, clt;
+  socklen_t           gsn_size;
+  struct sockaddr_in  srv;
+  struct sockaddr_in  gsn;
 
-#if (WINNT)
-  WSADATA wsa;
-  rc = WSAStartup(MAKEWORD(2, 2), &wsa);
-  if (rc)
-    {
-      rc = errno;
-      log(stderr, "! WSAStartup: %s\n", strerror(rc));
-      goto clean_exit;
-    }
-#endif  /* WINNT */
-
-  sfd = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
-  if (-1 == sfd)
+  *sfd = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
+  if (-1 == *sfd)
     {
       log_sockerr(rc, "!socket: %s\n");
       goto clean_exit;
@@ -266,26 +275,61 @@ s5_listen(void)
 
 	srv.sin_family = AF_INET;
 	srv.sin_addr.s_addr = htonl(INADDR_ANY);
-	srv.sin_port = htons(opt_port);
+	srv.sin_port = htons(*port);
 
-  rc = bind(sfd, (const struct sockaddr*) &srv, sizeof(srv));
+  rc = bind(*sfd, (const struct sockaddr *) &srv, sizeof(srv));
+	if (rc)
+    {
+      log_sockerr(rc, "!socket: %s\n");
+      goto close_exit;
+    }
+  if (*port == 0)
+    {
+      gsn_size = sizeof(gsn);
+      rc = getsockname(*sfd, (struct sockaddr *) &gsn, &gsn_size);
+      if (-1 == rc)
+        {
+          log_sockerr(rc, "!socket: %s\n");
+        }
+      *port = gsn.sin_port;
+    }
+
+  rc = listen(*sfd, 5);
 	if (rc)
     {
       log_sockerr(rc, "!socket: %s\n");
       goto close_exit;
     }
 
-  rc = listen(sfd, 5);
-	if (rc)
+  goto clean_exit;
+
+ close_exit:
+  close(*sfd);
+
+ clean_exit:
+
+  return rc;
+}
+
+static int
+s5_main_loop(int port)
+{
+  int                 rc  =  0;
+  int                 sfd, cfd;
+  pid_t               pid;
+  socklen_t           slen;
+  struct sockaddr_in  clt;
+
+  rc = s5_listen(&sfd, &port);
+  if (-1 == rc)
     {
-      log_sockerr(rc, "!socket: %s\n");
-      goto close_exit;
+      goto clean_exit;
     }
 
   for (;;)
     {
-      size = sizeof(clt);
-      cfd = accept(sfd, (struct sockaddr*) &clt, &size);
+      slen = sizeof(clt);
+      cfd = accept(sfd, (struct sockaddr*) &clt, &slen);
       if (-1 == cfd)
         {
           log_sockerr(rc, "!socket: %s\n");
@@ -293,6 +337,18 @@ s5_listen(void)
         }
 
 #if (!NDEBUG)
+      _unused_(pid);
+
+      if (opt_proxy)
+        {
+          s5_proxy(cfd);
+        }
+      else
+        {
+          s5_cmd_process(cfd);
+        }
+
+#else
       pid = fork();
       if (-1 == pid)
         {
@@ -302,12 +358,15 @@ s5_listen(void)
       if (0 == pid)
         {
           _unused_(pid);
-          s5_cmd_process(cfd);
+          if (opt_proxy)
+            {
+              s5_proxy(cfd);
+            }
+          else
+            {
+              s5_cmd_process(cfd);
+            }
         }
-
-#else
-      _unused_(pid);
-      s5_cmd_process(cfd);
 
 #endif
 
@@ -318,10 +377,6 @@ s5_listen(void)
   close(sfd);
 
  clean_exit:
-#if (WINNT)
-  WSACleanup();
-#endif  /* WINNT */
-
   return rc;
 }
 
@@ -344,13 +399,16 @@ main(int argc, char* argv[])
 #endif  /* NDEBUG */
 
   while (-1 != (ch = getopt_long(argc, argv,
-                                 "hp:T:Q",
+                                 "hp:PT:Q",
                                  longopts, 0)))
     {
       switch (ch)
         {
         case 'p':
           opt_port = (uint16_t) atoi(optarg);
+          break;
+        case 'P':
+          opt_proxy = 1;
           break;
         case 'T':
           opt_timeout.tv_sec = atoi(optarg);
@@ -377,7 +435,7 @@ main(int argc, char* argv[])
 #endif  /* NDEBUG */
 
   /* !TODO: */
-  rc = s5_listen();
+  rc = s5_main_loop(opt_port);
 
  clean_exit:
   return rc;
