@@ -15,6 +15,7 @@ net_test: net_dns_test                          \
 # env
 net_prefix := net
 
+
 INC += $(nm_inc_opt)$(net_root) $(nm_inc_opt)$(root)/posix
 
 ifeq ($(NM_SYSTEM), WinNT)
@@ -28,7 +29,6 @@ endif
 ifeq ($(_MEMORY_), 1)
 	CFLAGS += $(f_sanitize)
 endif # end of _MEMORY_
-
 
 
 # dns
@@ -79,7 +79,7 @@ net_s5_test: net_s5
 endif
 
 $(net_s5_binout): $(net_root)/s5/s5.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) -DNDEBUG=$(NDEBUG) $^ $(bin_out)$@
 
 
 # eof

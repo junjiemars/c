@@ -151,11 +151,7 @@ typedef struct s5_cmd_res_s
 
 typedef void (*on_signal)(int);
 
-
-#if !(NDEBUG)
-static void on_signal_segv(int sig);
-
-#endif  /* NDEBUG */
+static void on_signal_chld(int signo);
 
 
 static int s5_listen(int *sfd, struct sockaddr_in *laddr);
@@ -206,14 +202,25 @@ usage(const char *p)
 }
 
 
-#if !(NDEBUG)
 void
-on_signal_segv(int sig)
+on_signal_chld(int signo)
 {
-  log(stderr, "!%s: %d\n", __FUNCTION__, sig);
-  exit(EXIT_FAILURE);
+  int    stat;
+  pid_t  pid;
+
+  switch (signo)
+    {
+    case SIGCHLD:
+      pid = wait(&stat);
+      if (-1 == pid)
+        {
+          log(stderr, "!signal: %s\n", strerror(errno));
+        }
+      break;
+    default:
+      break;
+    }
 }
-#endif  /* NDEBUG */
 
 
 
@@ -420,7 +427,7 @@ s5_proxy_cmd(int cfd, struct sockaddr_in *addr)
           goto clean_exit;
         }
 
-            r2 = read(sfd, b2, sizeof(b2));
+      r2 = read(sfd, b2, sizeof(b2));
       if (-1 == r2)
         {
           log(stderr, "!read: %s\n", strerror(errno));
@@ -439,6 +446,11 @@ s5_proxy_cmd(int cfd, struct sockaddr_in *addr)
  clean_exit:
   close(sfd);
   close(cfd);
+
+#if (NDEBUG)
+  exit(0);
+
+#endif
 }
 
 
@@ -558,21 +570,8 @@ main(int argc, char* argv[])
 {
   int                 ch;
   int                 rc  =  0;
+  on_signal           on_chld;
   struct sockaddr_in  laddr, paddr;
-
-
-#if !(NDEBUG)
-
-  on_signal  on_segv;
-  on_segv = signal(SIGSEGV, on_signal_segv);
-  if (SIG_ERR == on_segv)
-    {
-      log(stderr, "!signal: %s\n", strerror(errno));
-      rc = 1;
-      goto clean_exit;
-    }
-
-#endif  /* NDEBUG */
 
 
   while (-1 != (ch = getopt_long(argc, argv,
@@ -611,6 +610,7 @@ main(int argc, char* argv[])
         case 'h':
           usage(argv[0]);
           goto clean_exit;
+
         default:
           rc = 1;
           break;
@@ -641,6 +641,16 @@ main(int argc, char* argv[])
   paddr.sin_family = AF_INET;
   paddr.sin_port = htons(opt_proxy_port);
   paddr.sin_addr.s_addr = inet_addr(opt_proxy);
+
+
+  on_chld = signal(SIGCHLD, on_signal_chld);
+  if (SIG_ERR == on_chld)
+    {
+      log(stderr, "!signal: %s\n", strerror(errno));
+      rc = -1;
+      goto clean_exit;
+    }
+
 
   if (opt_proxy_only)
     {
