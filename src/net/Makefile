@@ -71,11 +71,11 @@ net_s5_binout := $(bin_path)/$(net_prefix)_s5$(bin_ext)
 
 net_s5: $(net_s5_binout)
 
-ifeq ($(NM_SYSTEM), Linux)
+ifeq ($(NM_SYSTEM), WinNT)
 net_s5_test: net_s5
-	$(net_s5_binout) -h
 else
 net_s5_test: net_s5
+	$(net_s5_binout) -h
 endif
 
 $(net_s5_binout): $(net_root)/s5/s5.c

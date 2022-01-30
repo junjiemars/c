@@ -21,6 +21,7 @@
 
 #define BUF_MAX   512
 #define ADDR_MAX  256
+#define BACKLOG   4
 
 
 #define S5_CMD_MAP(XX)                          \
@@ -148,17 +149,21 @@ typedef struct s5_cmd_res_s
 } s5_cmd_res_t;
 
 
-#if !(NDEBUG)
 typedef void (*on_signal)(int);
+
+
+#if !(NDEBUG)
 static void on_signal_segv(int sig);
+
 #endif  /* NDEBUG */
 
 
-static int s5_listen(int *sfd, int *port);
-static int s5_socks(int port);
-static void s5_socks_cmd(int cfd);
-static int s5_proxy(int port, s5_addr_t *addr);
-static void s5_proxy_cmd(int cfd, s5_addr_t *addr);
+static int s5_listen(int *sfd, struct sockaddr_in *laddr);
+static int s5_socks(struct sockaddr_in *laddr, struct sockaddr_in *paddr);
+static void s5_socks_cmd(int cfd, struct sockaddr_in *paddr);
+
+static int s5_proxy(struct sockaddr_in *laddr, struct sockaddr_in *paddr);
+static void s5_proxy_cmd(int cfd, struct sockaddr_in *addr);
 
 
 static struct option longopts[]  =
@@ -174,12 +179,13 @@ static struct option longopts[]  =
   };
 
 
-static uint16_t        opt_port             =  0; /* 9192; */
-static char            opt_proxy[ADDR_MAX]  =  {0};
-static uint16_t        opt_proxy_port       =  9394;
-static int             opt_proxy_only       =  0;
-static int             opt_quiet            =  0;
-static struct timeval  opt_timeout          =  { .tv_sec = 15, 0 };
+static char            opt_listen[ADDR_MAX]  =  "127.0.0.1";
+static uint16_t        opt_listen_port       =  9192;
+static char            opt_proxy[ADDR_MAX]   =  "127.0.0.1";
+static uint16_t        opt_proxy_port        =  9394;
+static int             opt_proxy_only        =  0;
+static int             opt_quiet             =  0;
+static struct timeval  opt_timeout           =  { .tv_sec = 15, 0 };
 
 
 static void
@@ -187,7 +193,9 @@ usage(const char *p)
 {
   printf("Usage %s [options ...]\n", p);
   printf("  -h, --help         this help text\n");
-  printf("  -l, --listen-port  listen port, default is %d\n", opt_port);
+  printf("  -L, --listen       listen address, default is %s\n", opt_listen);
+  printf("  -l, --listen-port  listen port, default is %d\n",
+         opt_listen_port);
   printf("  -P, --proxy        serving as proxy\n");
   printf("  -p, --proxy-port   proxy port, default is %d\n",
          opt_proxy_port);
@@ -210,12 +218,9 @@ on_signal_segv(int sig)
 
 
 static int
-s5_listen(int *sfd, int *port)
+s5_listen(int *sfd, struct sockaddr_in *laddr)
 {
-  int                 rc  =  0;
-  socklen_t           gsn_size;
-  struct sockaddr_in  srv;
-  struct sockaddr_in  gsn;
+  int  rc  =  0;
 
   *sfd = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
   if (-1 == *sfd)
@@ -224,30 +229,35 @@ s5_listen(int *sfd, int *port)
       goto clean_exit;
     }
 
-  memset(&srv, 0, sizeof(srv));
+  rc = setsockopt(*sfd, SOL_SOCKET, SO_REUSEADDR, &(int){1}, sizeof(int));
+  if (-1 == rc)
+    {
+      log_sockerr(rc, "!socket: %s\n");
+      goto clean_exit;
+    }
 
-	srv.sin_family = AF_INET;
-	srv.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-	srv.sin_port = htons(*port);
 
-  rc = bind(*sfd, (const struct sockaddr *) &srv, sizeof(srv));
+  rc = bind(*sfd, (const struct sockaddr *) laddr, sizeof(*laddr));
 	if (rc)
     {
       log_sockerr(rc, "!socket: %s\n");
       goto close_exit;
     }
-  if (*port == 0)
-    {
-      gsn_size = sizeof(gsn);
-      rc = getsockname(*sfd, (struct sockaddr *) &gsn, &gsn_size);
-      if (-1 == rc)
-        {
-          log_sockerr(rc, "!socket: %s\n");
-        }
-      *port = gsn.sin_port;
-    }
 
-  rc = listen(*sfd, 5 /* backlog */);
+
+  /* if (*port == 0) */
+  /*   { */
+  /*     slen = sizeof(gsn); */
+  /*     rc = getsockname(*sfd, (struct sockaddr *) &gsn, &slen); */
+  /*     if (-1 == rc) */
+  /*       { */
+  /*         log_sockerr(rc, "!socket: %s\n"); */
+  /*       } */
+  /*     *port = gsn.sin_port; */
+  /*   } */
+
+
+  rc = listen(*sfd, BACKLOG);
 	if (rc)
     {
       log_sockerr(rc, "!socket: %s\n");
@@ -267,7 +277,7 @@ s5_listen(int *sfd, int *port)
 
 
 static void
-s5_socks_cmd(int cfd)
+s5_socks_cmd(int cfd, struct sockaddr_in *paddr)
 {
   int               rc          =  0;
   int               port        =  0;
@@ -278,6 +288,8 @@ s5_socks_cmd(int cfd)
   s5_cmd_res_t      res_cmd;
   s5_select_req_t  *req_select  =  0;
   s5_select_res_t   res_select;
+
+  _unused_(paddr);
 
   for (;;)
     {
@@ -371,13 +383,12 @@ s5_socks_cmd(int cfd)
 
 
 static void
-s5_proxy_cmd(int cfd, s5_addr_t *addr)
+s5_proxy_cmd(int cfd, struct sockaddr_in *addr)
 {
   int                 rc  =  0;
   int                 sfd;
-	char                buf[BUF_MAX];
-  ssize_t             r, w;
-  struct sockaddr_in  remote;
+	char                b1[BUF_MAX], b2[BUF_MAX];
+  ssize_t             r1, w1, r2, w2;
 
   sfd = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
   if (-1 == sfd)
@@ -386,12 +397,7 @@ s5_proxy_cmd(int cfd, s5_addr_t *addr)
       goto clean_exit;
     }
 
-  memset(&remote, 0, sizeof(remote));
-  remote.sin_family = AF_INET;
-  remote.sin_addr.s_addr = addr->r;
-  remote.sin_port = htons(addr->port);
-
-  rc = connect(sfd, (struct sockaddr *) &remote, sizeof(remote));
+  rc = connect(sfd, (const struct sockaddr *) addr, sizeof(*addr));
   if (-1 == rc)
     {
       log_sockerr(rc, "!connect: %s\n");
@@ -400,21 +406,35 @@ s5_proxy_cmd(int cfd, s5_addr_t *addr)
 
   do
     {
-      r = read(cfd, buf, sizeof(buf));
-      if (-1 == r)
+      r1 = read(cfd, b1, sizeof(b1));
+      if (-1 == r1)
         {
           log(stderr, "!read: %s\n", strerror(errno));
           goto clean_exit;
         }
 
-      w = write(sfd, buf, r);
-      if (-1 == w)
+      w1 = write(sfd, b1, r1);
+      if (-1 == w1)
         {
           log(stderr, "!write: %s\n", strerror(errno));
           goto clean_exit;
         }
 
-    } while (r > 0);
+            r2 = read(sfd, b2, sizeof(b2));
+      if (-1 == r2)
+        {
+          log(stderr, "!read: %s\n", strerror(errno));
+          goto clean_exit;
+        }
+
+      w2 = write(cfd, b2, r2);
+      if (-1 == w2)
+        {
+          log(stderr, "!write: %s\n", strerror(errno));
+          goto clean_exit;
+        }
+
+    } while (r1 > 0);
 
  clean_exit:
   close(sfd);
@@ -423,7 +443,7 @@ s5_proxy_cmd(int cfd, s5_addr_t *addr)
 
 
 static int
-s5_proxy(int port, s5_addr_t *addr)
+s5_proxy(struct sockaddr_in *laddr, struct sockaddr_in *paddr)
 {
   int                 rc  =  0;
   int                 sfd, cfd;
@@ -431,13 +451,13 @@ s5_proxy(int port, s5_addr_t *addr)
   socklen_t           slen;
   struct sockaddr_in  clt;
 
-  rc = s5_listen(&sfd, &port);
+  sfd = 0;
+
+  rc = s5_listen(&sfd, laddr);
   if (-1 == rc)
     {
       goto clean_exit;
     }
-
-  _unused_(addr);
 
   for (;;)
     {
@@ -452,7 +472,7 @@ s5_proxy(int port, s5_addr_t *addr)
 #if (!NDEBUG)
       _unused_(pid);
 
-      s5_proxy_cmd(cfd, addr);
+      s5_proxy_cmd(cfd, paddr);
 
 #else
       pid = fork();
@@ -463,7 +483,7 @@ s5_proxy(int port, s5_addr_t *addr)
 
       if (0 == pid)
         {
-          s5_proxy_cmd(cfd, addr);
+          s5_proxy_cmd(cfd, paddr);
         }
 
 #endif
@@ -479,7 +499,7 @@ s5_proxy(int port, s5_addr_t *addr)
 }
 
 static int
-s5_socks(int port)
+s5_socks(struct sockaddr_in *laddr, struct sockaddr_in *paddr)
 {
   int                 rc  =  0;
   int                 sfd, cfd;
@@ -487,7 +507,7 @@ s5_socks(int port)
   socklen_t           slen;
   struct sockaddr_in  clt;
 
-  rc = s5_listen(&sfd, &port);
+  rc = s5_listen(&sfd, laddr);
   if (-1 == rc)
     {
       goto clean_exit;
@@ -506,7 +526,7 @@ s5_socks(int port)
 #if (!NDEBUG)
       _unused_(pid);
 
-      s5_socks_cmd(cfd);
+      s5_socks_cmd(cfd, paddr);
 
 #else
       pid = fork();
@@ -517,7 +537,7 @@ s5_socks(int port)
 
       if (0 == pid)
         {
-          s5_socks_cmd(cfd);
+          s5_socks_cmd(cfd, paddr);
         }
 
 #endif
@@ -536,29 +556,39 @@ s5_socks(int port)
 int
 main(int argc, char* argv[])
 {
-  int        ch;
-  int        rc  =  0;
-  s5_addr_t  addr;
+  int                 ch;
+  int                 rc  =  0;
+  struct sockaddr_in  laddr, paddr;
+
 
 #if !(NDEBUG)
+
   on_signal  on_segv;
   on_segv = signal(SIGSEGV, on_signal_segv);
   if (SIG_ERR == on_segv)
     {
-      log(stderr, "! signal: %s\n", strerror(errno));
+      log(stderr, "!signal: %s\n", strerror(errno));
       rc = 1;
       goto clean_exit;
     }
+
 #endif  /* NDEBUG */
 
+
   while (-1 != (ch = getopt_long(argc, argv,
-                                 "hl:p:P:OT:Q",
+                                 "hl:L:p:P:OT:Q",
                                  longopts, 0)))
     {
       switch (ch)
         {
         case 'l':
-          opt_port = (uint16_t) atoi(optarg);
+          opt_listen_port = (uint16_t) atoi(optarg);
+          break;
+        case 'L':
+          if (optarg)
+            {
+              strcpy(opt_listen, optarg);
+            }
           break;
         case 'p':
           opt_proxy_port = atoi(optarg);
@@ -590,25 +620,37 @@ main(int argc, char* argv[])
 
 #if !(NDEBUG)
   log(stdout, "# command line options:\n"
-      " -> --listen-port=%d --proxy=%s --proxy-port=%d, --timeout=%d --quiet=%d\n",
-      opt_port,
+      " -> --listen=%s --listen-port=%d --proxy=%s --proxy-port=%d, "
+      "--timeout=%d --quiet=%d\n",
+      opt_listen,
+      opt_listen_port,
       opt_proxy,
       opt_proxy_port,
       (int) opt_timeout.tv_sec,
       opt_quiet);
+
 #endif  /* NDEBUG */
 
+  memset(&laddr, 0, sizeof(laddr));
+  memset(&paddr, 0, sizeof(paddr));
+
+  laddr.sin_family = AF_INET;
+  laddr.sin_port = htons(opt_listen_port);
+  laddr.sin_addr.s_addr = inet_addr(opt_listen);
+
+  paddr.sin_family = AF_INET;
+  paddr.sin_port = htons(opt_proxy_port);
+  paddr.sin_addr.s_addr = inet_addr(opt_proxy);
 
   if (opt_proxy_only)
     {
-      addr.r = inet_addr(opt_proxy);
-      addr.port = opt_proxy_port;
-      rc = s5_proxy(opt_port, &addr);
+      rc = s5_proxy(&laddr, &paddr);
     }
   else
     {
-      rc = s5_socks(opt_port);
+      rc = s5_socks(&laddr, &paddr);
     }
+
 
  clean_exit:
   return rc;
