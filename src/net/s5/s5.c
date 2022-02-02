@@ -152,11 +152,16 @@ static void on_signal_chld(int signo);
 
 static int s5_connect(const struct sockaddr_in *addr);
 static int s5_listen(int *sfd, const struct sockaddr_in *laddr);
-static int s5_socks(struct sockaddr_in *laddr, struct sockaddr_in *paddr);
-static void s5_socks_cmd(int cfd, struct sockaddr_in *paddr);
+
+static int s5_socks(const struct sockaddr_in *laddr,
+                    const struct sockaddr_in *paddr);
+
+static void s5_socks_cmd(int cfd, const struct sockaddr_in *caddr,
+                         const struct sockaddr_in *paddr);
 
 static int s5_proxy(const struct sockaddr_in *laddr,
                     const struct sockaddr_in *paddr);
+
 static void s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
                              const struct sockaddr_in *addr);
 
@@ -184,7 +189,11 @@ static char            opt_proxy[ADDR_MAX]   =  "127.0.0.1";
 static uint16_t        opt_proxy_port        =  9394;
 static int             opt_proxy_only        =  0;
 static int             opt_quiet             =  0;
-static struct timeval  opt_timeout           =  { .tv_sec = 15, 0 };
+static struct timeval  opt_timeout           =
+  {
+    .tv_sec = 15,
+    .tv_usec = 0
+  };
 
 static struct sockaddr_in opt_listen_addr;
 static struct sockaddr_in opt_proxy_addr;
@@ -255,6 +264,7 @@ s5_connect(const struct sockaddr_in *addr)
  clean_exit:
   close(fd);
   return 0;
+
 }
 
 
@@ -273,7 +283,7 @@ s5_listen(int *sfd, const struct sockaddr_in *laddr)
   rc = setsockopt(*sfd, SOL_SOCKET, SO_REUSEADDR, &(int){1}, sizeof(int));
   if (-1 == rc)
     {
-      log_sockerr(rc, "!socket: %s\n");
+      log_sockerr(rc, "!setsocketopt: %s\n");
       goto clean_exit;
     }
 
@@ -281,27 +291,14 @@ s5_listen(int *sfd, const struct sockaddr_in *laddr)
   rc = bind(*sfd, (const struct sockaddr *) laddr, sizeof(*laddr));
 	if (rc)
     {
-      log_sockerr(rc, "!socket: %s\n");
+      log_sockerr(rc, "!bind: %s\n");
       goto close_exit;
     }
-
-
-  /* if (*port == 0) */
-  /*   { */
-  /*     slen = sizeof(gsn); */
-  /*     rc = getsockname(*sfd, (struct sockaddr *) &gsn, &slen); */
-  /*     if (-1 == rc) */
-  /*       { */
-  /*         log_sockerr(rc, "!socket: %s\n"); */
-  /*       } */
-  /*     *port = gsn.sin_port; */
-  /*   } */
-
 
   rc = listen(*sfd, BACKLOG);
 	if (rc)
     {
-      log_sockerr(rc, "!socket: %s\n");
+      log_sockerr(rc, "!listen: %s\n");
       goto close_exit;
     }
 
@@ -318,7 +315,8 @@ s5_listen(int *sfd, const struct sockaddr_in *laddr)
 
 
 static void
-s5_socks_cmd(int cfd, struct sockaddr_in *paddr)
+s5_socks_cmd(int cfd, const struct sockaddr_in *caddr,
+             const struct sockaddr_in *paddr)
 {
   int               rc          =  0;
   int               port        =  0;
@@ -330,7 +328,12 @@ s5_socks_cmd(int cfd, struct sockaddr_in *paddr)
   s5_select_req_t  *req_select  =  0;
   s5_select_res_t   res_select;
 
-  _unused_(paddr);
+  log(stdout, "!socks[cmd@%d]: from %s:%d, to %s:%d\n",
+      getpid(),
+      inet_ntoa(caddr->sin_addr),
+      ntohs(caddr->sin_port),
+      inet_ntoa(paddr->sin_addr),
+      ntohs(paddr->sin_port));
 
   for (;;)
     {
@@ -435,9 +438,12 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
   fd_set          rfds, wfds;
   struct timeval  timeout;
 
-  _unused_(caddr);
-
-  log(stdout, "!proxy[froward:%d]: \n", getpid());
+  log(stdout, "!proxy[froward@%d]: from %s:%d, to %s:%d\n",
+      getpid(),
+      inet_ntoa(caddr->sin_addr),
+      ntohs(caddr->sin_port),
+      inet_ntoa(paddr->sin_addr),
+      ntohs(paddr->sin_port));
 
   sfd = s5_connect(paddr);
   if (!sfd)
@@ -448,9 +454,10 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
   n = 0;
   for (;;)
     {
+      memset(&rfds, 0, sizeof(rfds));
+      memset(&wfds, 0, sizeof(wfds));
       FD_ZERO(&rfds);
       FD_ZERO(&wfds);
-
       s5_fd_set(cfd, &rfds, &nfds);
       s5_fd_set(sfd, &wfds, &nfds);
 
@@ -579,7 +586,7 @@ s5_proxy(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
   int                 sfd, cfd;
   pid_t               pid;
   socklen_t           slen;
-  struct sockaddr_in  clt;
+  struct sockaddr_in  caddr;
 
   sfd = 0;
 
@@ -591,8 +598,8 @@ s5_proxy(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
 
   for (;;)
     {
-      slen = sizeof(clt);
-      cfd = accept(sfd, (struct sockaddr*) &clt, &slen);
+      slen = sizeof(caddr);
+      cfd = accept(sfd, (struct sockaddr*) &caddr, &slen);
       if (-1 == cfd)
         {
           log_sockerr(rc, "!accept: %s\n");
@@ -606,7 +613,7 @@ s5_proxy(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
         }
       else if (0 == pid)
         {
-          s5_proxy_forward(cfd, &clt, paddr);
+          s5_proxy_forward(cfd, &caddr, paddr);
         }
       else
         {
@@ -624,13 +631,13 @@ s5_proxy(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
 }
 
 static int
-s5_socks(struct sockaddr_in *laddr, struct sockaddr_in *paddr)
+s5_socks(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
 {
   int                 rc  =  0;
   int                 sfd, cfd;
   pid_t               pid;
   socklen_t           slen;
-  struct sockaddr_in  clt;
+  struct sockaddr_in  caddr;
 
   rc = s5_listen(&sfd, laddr);
   if (-1 == rc)
@@ -640,32 +647,24 @@ s5_socks(struct sockaddr_in *laddr, struct sockaddr_in *paddr)
 
   for (;;)
     {
-      slen = sizeof(clt);
-      cfd = accept(sfd, (struct sockaddr*) &clt, &slen);
+      slen = sizeof(caddr);
+      cfd = accept(sfd, (struct sockaddr*) &caddr, &slen);
       if (-1 == cfd)
         {
-          log_sockerr(rc, "!socket: %s\n");
+          log_sockerr(rc, "!accept: %s\n");
           goto close_exit;
         }
 
-#if (!NDEBUG)
-      _unused_(pid);
-
-      s5_socks_cmd(cfd, paddr);
-
-#else
       pid = fork();
       if (-1 == pid)
         {
-          log(stderr, "!s5: %s\n", strerror(errno));
+          log(stderr, "!fork: %s\n", strerror(errno));
         }
 
       if (0 == pid)
         {
-          s5_socks_cmd(cfd, paddr);
+          s5_socks_cmd(cfd, &caddr, paddr);
         }
-
-#endif
 
     }
 
