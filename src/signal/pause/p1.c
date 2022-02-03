@@ -13,6 +13,7 @@ on_sig_usr1(int signo)
     }
   else
     {
+      /* never reach here */
       printf("#received: %d\n", signo);
     }
 }
