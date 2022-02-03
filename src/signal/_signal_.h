@@ -5,5 +5,6 @@
 #include <nore.h>
 #include <unistd.h>
 #include <signal.h>
+#include <errno.h>
 
 #endif /* end of _SIGNAL_H_ */
