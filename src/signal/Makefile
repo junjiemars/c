@@ -5,11 +5,13 @@
 
 signal: signal_pause                            \
         signal_reentrant                        \
-        signal_wait
+        signal_wait                             \
+        signal_sleep
 
 signal_test: signal_pause_test                  \
              signal_reentrant_test              \
-             signal_wait_test
+             signal_wait_test                   \
+             signal_sleep_test
 
 
 # env
@@ -55,6 +57,17 @@ signal_wait_test: signal_wait
 	@echo "#skip ..."
 
 $(signal_wait1_binout): $(signal_root)/wait/w1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# sleep
+signal_sleep1_binout := $(bin_path)/$(signal_prefix)_sleep1$(bin_ext)
+
+signal_sleep: $(signal_sleep1_binout)
+signal_sleep_test: signal_sleep
+	@echo "#skip ..."
+
+$(signal_sleep1_binout): $(signal_root)/sleep/s1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
