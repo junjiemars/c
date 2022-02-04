@@ -6,12 +6,14 @@
 signal: signal_pause                            \
         signal_reentrant                        \
         signal_wait                             \
-        signal_sleep
+        signal_sleep                            \
+        signal_timeout
 
 signal_test: signal_pause_test                  \
              signal_reentrant_test              \
              signal_wait_test                   \
-             signal_sleep_test
+             signal_sleep_test                  \
+             signal_timeout_test
 
 
 # env
@@ -68,6 +70,17 @@ signal_sleep_test: signal_sleep
 	@echo "#skip ..."
 
 $(signal_sleep1_binout): $(signal_root)/sleep/s1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# timeout
+signal_timeout1_binout := $(bin_path)/$(signal_prefix)_timeout1$(bin_ext)
+
+signal_timeout: $(signal_timeout1_binout)
+signal_timeout_test: signal_timeout
+	@echo "#skip ..."
+
+$(signal_timeout1_binout): $(signal_root)/timeout/t1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
