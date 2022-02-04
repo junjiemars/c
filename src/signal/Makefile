@@ -7,13 +7,15 @@ signal: signal_pause                            \
         signal_reentrant                        \
         signal_wait                             \
         signal_sleep                            \
-        signal_timeout
+        signal_timeout                          \
+        signal_set
 
 signal_test: signal_pause_test                  \
              signal_reentrant_test              \
              signal_wait_test                   \
              signal_sleep_test                  \
-             signal_timeout_test
+             signal_timeout_test                \
+             signal_set_test
 
 
 # env
@@ -81,6 +83,17 @@ signal_timeout_test: signal_timeout
 	@echo "#skip ..."
 
 $(signal_timeout1_binout): $(signal_root)/timeout/t1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# set
+signal_set1_binout := $(bin_path)/$(signal_prefix)_set1$(bin_ext)
+
+signal_set: $(signal_set1_binout)
+signal_set_test: signal_set
+	@echo "#skip ..."
+
+$(signal_set1_binout): $(signal_root)/set/s1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

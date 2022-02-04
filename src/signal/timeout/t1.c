@@ -36,7 +36,7 @@ main(void)
 
     default:
       break;
-    }
+     }
 
   alarm(10);
   rc = read(STDIN_FILENO, buf, sizeof(buf));
