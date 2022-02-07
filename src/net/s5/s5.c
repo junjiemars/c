@@ -180,10 +180,11 @@ static void s5_proxy_backward(int cfd, int sfd);
 static struct option longopts[]  =
   {
     { "help",         no_argument,          0,              'h' },
-    { "listen-port",  optional_argument,    0,              'l' },
+    { "listen",       optional_argument,    0,              'L' },
+    { "listen-port",  no_argument,          0,              'K' },
     { "proxy",        optional_argument,    0,              'P' },
     { "proxy-port",   optional_argument,    0,              'p' },
-    { "proxy-only",   optional_argument,    0,              'O' },
+    { "proxy-only",   no_argument,          0,              'O' },
     { "timeout",      optional_argument,    0,              'T' },
     { "quiet",        no_argument,          0,              'Q' },
     { 0,              0,                    0,               0  }
@@ -192,6 +193,7 @@ static struct option longopts[]  =
 
 static char            opt_listen[ADDR_MAX]  =  "127.0.0.1";
 static uint16_t        opt_listen_port       =  9192;
+static int             opt_listen_only       =  0;
 static char            opt_proxy[ADDR_MAX]   =  "127.0.0.1";
 static uint16_t        opt_proxy_port        =  9394;
 static int             opt_proxy_only        =  0;
@@ -214,6 +216,8 @@ usage(const char *p)
   printf("  -L, --listen       listen address, default is %s\n", opt_listen);
   printf("  -l, --listen-port  listen port, default is %d\n",
          opt_listen_port);
+  printf("  -K, --listen-only  listen only, default is %d\n",
+         opt_listen_only);
   printf("  -P, --proxy        serving as proxy\n");
   printf("  -p, --proxy-port   proxy port, default is %d\n",
          opt_proxy_port);
@@ -545,21 +549,29 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
       inet_ntoa(paddr->sin_addr),
       ntohs(paddr->sin_port));
 
-  sfd = s5_connect(paddr);
-  if (!sfd)
-    {
-      goto clean_exit;
-    }
+  log(stdout, "!proxy[%d]: connecting ...\n", getpid());
 
-  pid = fork();
-  if (-1 == pid)
+  if (!opt_listen_only)
     {
-      log(stderr, "!fork: %s\n", strerror(errno));
-    }
-  else if (0 == pid)
-    {
-      s5_proxy_backward(cfd, sfd);
-    }
+      sfd = s5_connect(paddr);
+      if (!sfd)
+        {
+          goto clean_exit;
+        }
+
+      log(stdout, "!proxy[%d]: connected ...\n", getpid());
+
+      pid = fork();
+      if (-1 == pid)
+        {
+          log(stderr, "!fork: %s\n", strerror(errno));
+        }
+      else if (0 == pid)
+        {
+          s5_proxy_backward(cfd, sfd);
+        }
+
+    } /* !opt_listen_only */
 
   n = 0;
   FD_ZERO(&wfds);
@@ -570,6 +582,8 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
 
       FD_ZERO(&rfds);
       s5_fd_set(cfd, &rfds, &nfds);
+
+      log(stdout, "!select[%d]: selecting %d ...\n", getpid(), cfd);
 
       rc = select(nfds, &rfds, NULL, NULL, &timeout);
       if (-1 == rc)
@@ -583,6 +597,8 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
         {
           goto clean_exit;
         }
+
+      log(stdout, "!select[%d]: selected %d\n", getpid(), cfd);
 
       if (FD_ISSET(cfd, &rfds))
         {
@@ -600,8 +616,12 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
               goto clean_exit;
             }
 
-          n = rc;
+          if (opt_listen_only)
+            {
+              log(stdout, "!read[%d]: %s\n", getpid(), buf);
+            }
 
+          n = rc;
           FD_SET(sfd, &wfds);
         }
 
@@ -609,20 +629,23 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
         {
           FD_CLR(sfd, &wfds);
 
-          rc = write(sfd, buf, n);
-          if (-1 == rc)
+          if (!opt_listen_only)
             {
-              log(stderr, "!write[%d]: %s\n", getpid(), strerror(errno));
-              goto clean_exit;
-            }
+              rc = write(sfd, buf, n);
+              if (-1 == rc)
+                {
+                  log(stderr, "!write[%d]: %s\n", getpid(), strerror(errno));
+                  goto clean_exit;
+                }
 
-          if (n != rc)
-            {
-              goto clean_exit;
+              if (n != rc)
+                {
+                  goto clean_exit;
+                }
             }
-
-          n = 0;
         }
+
+      n = 0;
     }
 
  clean_exit:
@@ -671,7 +694,7 @@ s5_proxy_backward(int cfd, int sfd)
           goto clean_exit;
         }
 
-      log(stdout, "!proxy[backward:%d]: [selected:%d] [R:%d|%d], [W:%d]\n",
+      log(stdout, "!proxy[backward:%d]: [selected:%d] [r:%d|%d], [w:%d]\n",
           getpid(), rc, sfd, FD_ISSET(sfd, &rfds), cfd);
 
       if (FD_ISSET(sfd, &rfds))
@@ -833,7 +856,7 @@ main(int argc, char* argv[])
 
 
   while (-1 != (ch = getopt_long(argc, argv,
-                                 "hl:L:p:P:OT:Q",
+                                 "hl:L:Kp:P:OT:Q",
                                  longopts, 0)))
     {
       switch (ch)
@@ -846,6 +869,9 @@ main(int argc, char* argv[])
             {
               strcpy(opt_listen, optarg);
             }
+          break;
+        case 'K':
+          opt_listen_only = 1;
           break;
         case 'p':
           opt_proxy_port = atoi(optarg);
@@ -878,13 +904,16 @@ main(int argc, char* argv[])
 
 #if !(NDEBUG)
   log(stdout, "# command line options @%d:\n"
-      " -> --listen=%s --listen-port=%d --proxy=%s --proxy-port=%d, "
-      "--timeout=%d --quiet=%d\n",
+      " -> --listen=%s --listen-port=%d --listen-only=%d\n"
+      " -> --proxy=%s --proxy-port=%d --proxy-only=%d\n"
+      " -> --timeout=%d --quiet=%d\n",
       getpid(),
       opt_listen,
       opt_listen_port,
+      opt_listen_only,
       opt_proxy,
       opt_proxy_port,
+      opt_proxy_only,
       (int) opt_timeout.tv_sec,
       opt_quiet);
 
