@@ -23,7 +23,7 @@
 #endif  /* NM_HAVE_STATIC_ASSERT */
 
 
-#if (NDEBUG)
+#if defined(NDEBUG) && (NDEBUG)
 #  if defined(assert)
 #    undef assert
 #  endif

@@ -5,6 +5,7 @@
 #include <errno.h>
 #include <time.h>
 #include <signal.h>
+#include <sys/wait.h>
 
 
 /*
@@ -93,7 +94,7 @@ typedef union s5_socks_addr_u
 
   struct
   {
-    uint64_t ip6[2];
+    uint32_t ip6[4];
   } ip6;
 
   struct
@@ -149,6 +150,9 @@ typedef struct s5_cmd_res_s
 typedef void (*on_signal)(int);
 
 static void on_signal_chld(int signo);
+static void on_signal_from_parent(int signo);
+static void on_signal_from_child(int signo);
+
 
 static int s5_connect(const struct sockaddr_in *addr);
 static int s5_listen(int *sfd, const struct sockaddr_in *laddr);
@@ -159,6 +163,9 @@ static int s5_socks(const struct sockaddr_in *laddr,
 static void s5_socks_cmd(int cfd, const struct sockaddr_in *caddr,
                          const struct sockaddr_in *paddr);
 
+static void s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req,
+                               const char *buf, ssize_t nbuf);
+
 static int s5_proxy(const struct sockaddr_in *laddr,
                     const struct sockaddr_in *paddr);
 
@@ -167,7 +174,7 @@ static void s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
 
 static void s5_fd_set(int fd, fd_set *fds, int *nfds);
 
-/* static void s5_proxy_backward(int cfd, int sfd); */
+static void s5_proxy_backward(int cfd, int sfd);
 
 
 static struct option longopts[]  =
@@ -234,6 +241,25 @@ on_signal_chld(int signo)
       break;
     default:
       break;
+    }
+}
+
+static void
+on_signal_from_parent(int signo)
+{
+  if (SIGUSR1 == signo)
+    {
+      log(stdout, "!on_signal_parent(%d)\n", signo);
+      exit(0);
+    }
+}
+
+static void
+on_signal_from_child(int signo)
+{
+  if (SIGUSR2 == signo)
+    {
+      log(stdout, "!on_signal_parent(%d)\n", signo);
     }
 }
 
@@ -319,12 +345,16 @@ s5_socks_cmd(int cfd, const struct sockaddr_in *caddr,
              const struct sockaddr_in *paddr)
 {
   int               rc          =  0;
+  int               e;
   int               port        =  0;
+  int               nfds        =  0;
 	char              buf[BUF_MAX];
   pid_t             pid;
   ssize_t           n;
+  fd_set            rfds, wfds;
   s5_cmd_req_t     *req_cmd     =  0;
   s5_cmd_res_t      res_cmd;
+  struct timeval    timeout;
   s5_select_req_t  *req_select  =  0;
   s5_select_res_t   res_select;
 
@@ -337,94 +367,165 @@ s5_socks_cmd(int cfd, const struct sockaddr_in *caddr,
 
   for (;;)
     {
-      memset(buf, 0, sizeof(buf));
-      n = read(cfd, buf, sizeof(buf));
-      if (-1 == n)
+      memcpy(&timeout, &opt_timeout, sizeof(timeout));
+
+      memset(&rfds, 0, sizeof(rfds));
+      memset(&wfds, 0, sizeof(wfds));
+      FD_ZERO(&rfds);
+      FD_ZERO(&wfds);
+      s5_fd_set(cfd, &rfds, &nfds);
+      s5_fd_set(cfd, &wfds, &nfds);
+
+      rc = select(cfd, &rfds, &wfds, NULL, &timeout);
+      if (-1 == rc)
         {
-          log(stderr, "!read: %s\n", strerror(errno));
+          e = errno;
+          log(stderr, "!select: %s\n", strerror(e));
+          if (e == EINTR)
+            {
+              continue;
+            }
+          else
+            {
+              goto clean_exit;
+            }
+        }
+
+      if (0 == rc)
+        {
           goto clean_exit;
         }
 
-      if ((size_t) n == sizeof(s5_select_req_t))
+      if (FD_ISSET(cfd, &rfds) && n == 0)
         {
-          req_select = (s5_select_req_t *) &buf;
-          if (req_select->ver != S5_VER)
-            {
-              log(stderr, "!socks: version: %d not support\n", req_cmd->ver);
-              goto clean_exit;
-            }
-
-          memset(&res_select, 0, sizeof(res_select));
-          res_select.ver = S5_VER;
-          res_select.method = 0;
-
-          rc = write(cfd, &res_select, sizeof(res_select));
+          memset(buf, 0, sizeof(buf));
+          rc = read(cfd, buf, sizeof(buf));
           if (-1 == rc)
             {
-              log(stderr, "!s5: %s\n", strerror(rc));
+              log(stderr, "!read: %s\n", strerror(errno));
               goto clean_exit;
             }
+
+          if (0 == rc)
+            {
+              goto clean_exit;
+            }
+
+          n = rc;
         }
-      else if (n > 0)
+
+      if (FD_ISSET(cfd, &wfds) && n > 0)
         {
-          req_cmd = (s5_cmd_req_t *) &buf;
-          if (req_cmd->ver != S5_VER)
+          if ((size_t) n == sizeof(s5_select_req_t))
             {
-              log(stderr, "!socks: version: %d not support\n", req_cmd->ver);
-              goto clean_exit;
-            }
+              req_select = (s5_select_req_t *) &buf;
+              if (req_select->ver != S5_VER)
+                {
+                  log(stderr, "!socks: version: %d not support\n",
+                      req_cmd->ver);
+                  goto clean_exit;
+                }
 
-          switch (req_cmd->cmd)
+              memset(&res_select, 0, sizeof(res_select));
+              res_select.ver = S5_VER;
+              res_select.method = 0;
+
+              rc = write(cfd, &res_select, sizeof(res_select));
+              if (-1 == rc)
+                {
+                  log(stderr, "!s5: %s\n", strerror(rc));
+                  goto clean_exit;
+                }
+
+              n = 0;
+            } /* select */
+          else
             {
-            case S5_CMD_CONNECT:
+              req_cmd = (s5_cmd_req_t *) &buf;
+              if (req_cmd->ver != S5_VER)
+                {
+                  log(stderr, "!socks: version: %d not support\n",
+                      req_cmd->ver);
+                  goto clean_exit;
+                }
 
-#if (!NDEBUG)
-              _unused_(pid);
-
-              /* s5_proxy(port); */
-
-#else
               pid = fork();
               if (-1 == pid)
                 {
                   log(stderr, "!fork: %s\n", strerror(errno));
-                  goto clean_exit;
                 }
-
-              if (0 == pid)
+              else if (0 == pid)
                 {
-                  /* s5_proxy(port); */
+                  s5_socks_cmd_reply(cfd, req_cmd, buf, n);
                 }
-
-#endif
-
-              memset(&res_cmd, 0, sizeof(res_cmd));
-              res_cmd.ver = S5_VER;
-              res_cmd.rep = S5_REP_SUCCEEDED;
-              res_cmd.atyp = S5_ATYP_IPv4;
-              res_cmd.bnd_addr = htonl(INADDR_ANY);
-              res_cmd.bnd_addr_len = sizeof(res_cmd.bnd_addr);
-              res_cmd.bnd_port = port;
-
-              rc = write(cfd, &res_cmd, sizeof(res_cmd));
-              if (-1 == rc)
+              else
                 {
-                  log(stderr, "!write: %s\n", strerror(rc));
-                  goto clean_exit;
+                  /* void */
                 }
-              break;
 
-            default:
-              break;
-            }
-        }
+              switch (req_cmd->cmd)
+                {
+                case S5_CMD_CONNECT:
+
+                  memset(&res_cmd, 0, sizeof(res_cmd));
+                  res_cmd.ver = S5_VER;
+                  res_cmd.rep = S5_REP_SUCCEEDED;
+                  res_cmd.atyp = S5_ATYP_IPv4;
+                  res_cmd.bnd_addr = htonl(INADDR_ANY);
+                  res_cmd.bnd_addr_len = sizeof(res_cmd.bnd_addr);
+                  res_cmd.bnd_port = port;
+
+                  rc = write(cfd, &res_cmd, sizeof(res_cmd));
+                  if (-1 == rc)
+                    {
+                      log(stderr, "!write: %s\n", strerror(rc));
+                      goto clean_exit;
+                    }
+                  break;
+
+                default:
+                  break;
+                }
+            } /* cmd */
+        } /* write */
+
+
     }
 
 
  clean_exit:
   close(cfd);
+  exit(rc);
 }
 
+
+static void
+s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req, const char *buf,
+                   ssize_t nbuf)
+{
+  int                 rc  =  0;
+  pid_t               pid;
+  struct sockaddr_in  pladdr;
+  struct sockaddr_in  ppaddr;
+
+  _unused_(rc);
+  _unused_(pid);
+  _unused_(cfd);
+  _unused_(buf);
+  _unused_(nbuf);
+
+  switch (req->cmd)
+    {
+    case S5_CMD_CONNECT:
+      _unused_(pladdr);
+      _unused_(ppaddr);
+      break;
+
+      default:
+        break;
+    }
+
+}
 
 static void
 s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
@@ -435,6 +536,7 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
   int             n, e;
   int             nfds  =  0;
   char            buf[BUF_MAX];
+  pid_t           pid   =  0;
   fd_set          rfds, wfds;
   struct timeval  timeout;
 
@@ -451,18 +553,27 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
       goto clean_exit;
     }
 
+  pid = fork();
+  if (-1 == pid)
+    {
+      log(stderr, "!fork: %s\n", strerror(errno));
+    }
+  else if (0 == pid)
+    {
+      s5_proxy_backward(cfd, sfd);
+    }
+
   n = 0;
   for (;;)
     {
+      memcpy(&timeout, &opt_timeout, sizeof(timeout));
+
       memset(&rfds, 0, sizeof(rfds));
       memset(&wfds, 0, sizeof(wfds));
       FD_ZERO(&rfds);
       FD_ZERO(&wfds);
       s5_fd_set(cfd, &rfds, &nfds);
       s5_fd_set(sfd, &wfds, &nfds);
-
-      memset(&timeout, 0, sizeof(timeout));
-      timeout.tv_sec = 5;
 
       rc = select(nfds, &rfds, &wfds, NULL, &timeout);
       if (-1 == rc)
@@ -517,57 +628,101 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
     }
 
  clean_exit:
+  if (pid > 0)
+    {
+      kill(pid, SIGUSR1);
+    }
   close(sfd);
   close(cfd);
   exit(0);
 
 }
 
-/* static void */
-/* s5_proxy_backward(int cfd, int sfd) */
-/* { */
-/*   int   rc  =  0; */
-/*   int   n; */
-/*   char  buf[BUF_MAX]; */
+static void
+s5_proxy_backward(int cfd, int sfd)
+{
+  int             rc  =  0;
+  int             n, e;
+  int             nfds;
+  char            buf[BUF_MAX];
+  fd_set          rfds, wfds;
+  struct timeval  timeout;
 
-/*   log(stdout, "!proxy [backward:%d]: \n", getpid()); */
+  log(stdout, "!proxy [backward:%d]: \n", getpid());
 
-/*   for (;;) */
-/*     { */
-/*       memset(buf, 0, sizeof(buf)); */
-/*       rc = read(sfd, buf, sizeof(buf)); */
-/*       if (-1 == rc) */
-/*         { */
-/*           log(stderr, "!read: %s\n", strerror(errno)); */
-/*           goto clean_exit; */
-/*         } */
+  n = 0;
+  for (;;)
+    {
+      memcpy(&timeout, &opt_timeout, sizeof(timeout));
 
-/*       if (0 == rc) */
-/*         { */
-/*           goto clean_exit; */
-/*         } */
+      memset(&rfds, 0, sizeof(rfds));
+      memset(&wfds, 0, sizeof(wfds));
+      FD_ZERO(&rfds);
+      FD_ZERO(&wfds);
+      s5_fd_set(sfd, &rfds, &nfds);
+      s5_fd_set(cfd, &wfds, &nfds);
 
-/*       n = rc; */
-/*       rc = write(cfd, buf, n); */
-/*       if (-1 == rc) */
-/*         { */
-/*           log(stderr, "!write: %s\n", strerror(errno)); */
-/*           goto clean_exit; */
-/*         } */
+      rc = select(nfds, &rfds, &wfds, NULL, &timeout);
+      if (-1 == rc)
+        {
+          e = errno;
+          log(stderr, "!select: %s\n", strerror(e));
+          if (e == EINTR)
+            {
+              continue;
+            }
+          else
+            {
+              goto clean_exit;
+            }
+        }
 
-/*       if (rc != n) */
-/*         { */
-/*           goto clean_exit; */
-/*         } */
+      if (0 == rc)
+        {
+          goto clean_exit;
+        }
 
-/*     } */
+      if (FD_ISSET(sfd, &rfds) && n == 0)
+        {
+          memset(buf, 0, sizeof(buf));
+          rc = read(sfd, buf, sizeof(buf));
+          if (-1 == rc)
+            {
+              log(stderr, "!read: %s\n", strerror(errno));
+              goto clean_exit;
+            }
 
-/*  clean_exit: */
-/*   close(sfd); */
-/*   close(cfd); */
-/*   exit(0); */
+          if (0 == rc)
+            {
+              goto clean_exit;
+            }
 
-/* } */
+          n = rc;
+        }
+
+      if (FD_ISSET(cfd, &wfds) && n > 0)
+        {
+          rc = write(cfd, buf, n);
+          if (-1 == rc)
+            {
+              log(stderr, "!write: %s\n", strerror(errno));
+              goto clean_exit;
+            }
+
+          if (rc != n)
+            {
+              goto clean_exit;
+            }
+
+          n = 0;
+        }
+
+    }
+
+ clean_exit:
+  exit(0);
+}
+
 
 static void
 s5_fd_set(int fd, fd_set *fds, int *nfds)
@@ -682,7 +837,6 @@ main(int argc, char* argv[])
 {
   int                 ch;
   int                 rc  =  0;
-  on_signal           on_chld;
 
 
   while (-1 != (ch = getopt_long(argc, argv,
@@ -755,13 +909,9 @@ main(int argc, char* argv[])
   opt_proxy_addr.sin_addr.s_addr = inet_addr(opt_proxy);
 
 
-  on_chld = signal(SIGCHLD, on_signal_chld);
-  if (SIG_ERR == on_chld)
-    {
-      log(stderr, "!signal: %s\n", strerror(errno));
-      rc = -1;
-      goto clean_exit;
-    }
+  signal(SIGCHLD, on_signal_chld);
+  signal(SIGUSR1, on_signal_from_parent);
+  signal(SIGUSR2, on_signal_from_child);
 
 
   if (opt_proxy_only)
