@@ -19,6 +19,7 @@
 
 #define BUF_MAX   512
 #define ADDR_MAX  256
+#define PATH_MAX  256
 #define BACKLOG   4
 
 
@@ -160,8 +161,7 @@ static int s5_listen(int *sfd, const struct sockaddr_in *laddr);
 static int s5_socks(const struct sockaddr_in *laddr,
                     const struct sockaddr_in *paddr);
 
-static void s5_socks_cmd(int cfd, const struct sockaddr_in *caddr,
-                         const struct sockaddr_in *paddr);
+static void s5_socks_cmd(int cfd, const struct sockaddr_in *paddr);
 
 static void s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req,
                                const char *buf, ssize_t nbuf);
@@ -172,9 +172,11 @@ static int s5_proxy(const struct sockaddr_in *laddr,
 static void s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
                              const struct sockaddr_in *addr);
 
-static void s5_fd_set(int fd, fd_set *fds, int *nfds);
-
 static void s5_proxy_backward(int cfd, int sfd);
+
+
+static void s5_fd_set(int fd, fd_set *fds, int *nfds);
+static void s5_output(const char *buf, size_t nbuf);
 
 
 static struct option longopts[]  =
@@ -187,6 +189,7 @@ static struct option longopts[]  =
     { "proxy-only",   no_argument,          0,              'O' },
     { "timeout",      optional_argument,    0,              'T' },
     { "quiet",        no_argument,          0,              'Q' },
+    { "output",       no_argument,          0,              'o' },
     { 0,              0,                    0,               0  }
   };
 
@@ -203,6 +206,8 @@ static struct timeval  opt_timeout           =
     .tv_sec = 15,
     .tv_usec = 0
   };
+static int             opt_output            =  0;
+
 
 static struct sockaddr_in opt_listen_addr;
 static struct sockaddr_in opt_proxy_addr;
@@ -362,8 +367,7 @@ s5_listen(int *sfd, const struct sockaddr_in *laddr)
 
 
 static void
-s5_socks_cmd(int cfd, const struct sockaddr_in *caddr,
-             const struct sockaddr_in *paddr)
+s5_socks_cmd(int cfd, const struct sockaddr_in *paddr)
 {
   int               rc          =  0;
   int               e;
@@ -379,25 +383,21 @@ s5_socks_cmd(int cfd, const struct sockaddr_in *caddr,
   s5_select_req_t  *req_select  =  0;
   s5_select_res_t   res_select;
 
-  log(stdout, "!socks[cmd@%d]: from %s:%d, to %s:%d\n",
+  log(stdout, "!socks[cmd@%d]: to %s:%d\n",
       getpid(),
-      inet_ntoa(caddr->sin_addr),
-      ntohs(caddr->sin_port),
       inet_ntoa(paddr->sin_addr),
       ntohs(paddr->sin_port));
+
+  _unused_(pid);
 
   for (;;)
     {
       memcpy(&timeout, &opt_timeout, sizeof(timeout));
-
-      memset(&rfds, 0, sizeof(rfds));
-      memset(&wfds, 0, sizeof(wfds));
       FD_ZERO(&rfds);
       FD_ZERO(&wfds);
       s5_fd_set(cfd, &rfds, &nfds);
-      s5_fd_set(cfd, &wfds, &nfds);
 
-      rc = select(cfd, &rfds, &wfds, NULL, &timeout);
+      rc = select(nfds, &rfds, NULL, NULL, &timeout);
       if (-1 == rc)
         {
           e = errno;
@@ -417,7 +417,7 @@ s5_socks_cmd(int cfd, const struct sockaddr_in *caddr,
           goto clean_exit;
         }
 
-      if (FD_ISSET(cfd, &rfds) && n == 0)
+      if (FD_ISSET(cfd, &rfds))
         {
           memset(buf, 0, sizeof(buf));
           rc = read(cfd, buf, sizeof(buf));
@@ -432,11 +432,17 @@ s5_socks_cmd(int cfd, const struct sockaddr_in *caddr,
               goto clean_exit;
             }
 
+          log(stdout, "!read: xxx\n");
+          s5_output(buf, rc);
+
           n = rc;
+          FD_SET(cfd, &wfds);
         }
 
-      if (FD_ISSET(cfd, &wfds) && n > 0)
+      if (FD_ISSET(cfd, &wfds))
         {
+          FD_CLR(cfd, &wfds);
+
           if ((size_t) n == sizeof(s5_select_req_t))
             {
               req_select = (s5_select_req_t *) &buf;
@@ -459,6 +465,7 @@ s5_socks_cmd(int cfd, const struct sockaddr_in *caddr,
                 }
 
               n = 0;
+
             } /* select */
           else
             {
@@ -470,19 +477,7 @@ s5_socks_cmd(int cfd, const struct sockaddr_in *caddr,
                   goto clean_exit;
                 }
 
-              pid = fork();
-              if (-1 == pid)
-                {
-                  log(stderr, "!fork: %s\n", strerror(errno));
-                }
-              else if (0 == pid)
-                {
-                  s5_socks_cmd_reply(cfd, req_cmd, buf, n);
-                }
-              else
-                {
-                  /* void */
-                }
+              s5_socks_cmd_reply(cfd, req_cmd, buf, n);
 
               switch (req_cmd->cmd)
                 {
@@ -507,7 +502,7 @@ s5_socks_cmd(int cfd, const struct sockaddr_in *caddr,
                 default:
                   break;
                 }
-            } /* cmd */
+            } /* command */
         } /* write */
 
 
@@ -771,6 +766,43 @@ s5_fd_set(int fd, fd_set *fds, int *nfds)
     }
 }
 
+static void
+s5_output(const char *buf, size_t nbuf)
+{
+  FILE    *f  =  0;
+  char     path[PATH_MAX];
+  size_t   len;
+
+  if (0 == getcwd(path, sizeof(path)))
+    {
+      perror(NULL);
+      return;
+    }
+
+  len = strlen(path);
+  sprintf(path + len, "/%d.out", getpid());
+
+  f = fopen(path, "w");
+  if (!f)
+    {
+      perror(NULL);
+      return;
+    }
+
+  fwrite(buf, 1, nbuf, f);
+
+  if (ferror(f))
+    {
+      perror(NULL);
+      clearerr(f);
+      goto clean_exit;
+    }
+
+ clean_exit:
+  log(stdout, "!s5_output: %s\n", path);
+  fclose(f);
+}
+
 static int
 s5_proxy(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
 {
@@ -853,7 +885,7 @@ s5_socks(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
 
       if (0 == pid)
         {
-          s5_socks_cmd(cfd, &caddr, paddr);
+          s5_socks_cmd(cfd, paddr);
         }
 
     }
@@ -875,7 +907,7 @@ main(int argc, char* argv[])
 
 
   while (-1 != (ch = getopt_long(argc, argv,
-                                 "hl:L:Kp:P:OT:Q",
+                                 "hl:L:Kp:P:OT:Qo",
                                  longopts, 0)))
     {
       switch (ch)
@@ -910,6 +942,9 @@ main(int argc, char* argv[])
         case 'Q':
           opt_quiet = '\n';
           break;
+        case 'o':
+          opt_output = 1;
+          break;
         case 'h':
           usage(argv[0]);
           goto clean_exit;
@@ -925,7 +960,8 @@ main(int argc, char* argv[])
   log(stdout, "# command line options @%d:\n"
       " -> --listen=%s --listen-port=%d --listen-only=%d\n"
       " -> --proxy=%s --proxy-port=%d --proxy-only=%d\n"
-      " -> --timeout=%d --quiet=%d\n",
+      " -> --timeout=%d --quiet=%d\n"
+      " -> --output=%d\n",
       getpid(),
       opt_listen,
       opt_listen_port,
@@ -934,7 +970,9 @@ main(int argc, char* argv[])
       opt_proxy_port,
       opt_proxy_only,
       (int) opt_timeout.tv_sec,
-      opt_quiet);
+      opt_quiet,
+      opt_output);
+
 
 #endif  /* NDEBUG */
 
