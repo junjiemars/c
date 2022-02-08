@@ -269,29 +269,48 @@ on_signal_from_child(int signo)
 static int
 s5_connect(const struct sockaddr_in *addr)
 {
-  int  rc;
-  int  fd;
+  int             rc;
+  int             fd;
+  int             nfds;
+  fd_set          fds;
+  struct timeval  timeout;
 
   rc = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
   if (-1 == rc)
     {
       log_sockerr(rc, "!socket: %s\n");
-      return 0;
+      return -1;
     }
   fd = rc;
 
-  rc = connect(fd, (const struct sockaddr *) addr, sizeof(*addr));
-  if (-1 == rc)
+  for (;;)
     {
-      log_sockerr(rc, "!connect: %s\n");
-      goto clean_exit;
-    }
+      memset(&timeout, 0, sizeof(timeout));
+      FD_ZERO(&fds);
+      s5_fd_set(fd, &fds, &nfds);
 
-  return fd;
+      rc = select(nfds, &fds, NULL, NULL, &timeout);
+      if (-1 == rc)
+        {
+          log(stderr, "!select: %s\n", strerror(errno));
+          goto clean_exit;
+        }
+
+      if (FD_ISSET(fd, &fds))
+        {
+          rc = connect(fd, (const struct sockaddr *) addr, sizeof(*addr));
+          if (-1 == rc)
+            {
+              log_sockerr(rc, "!connect: %s\n");
+              goto clean_exit;
+            }
+          return fd;
+        }
+    }
 
  clean_exit:
   close(fd);
-  return 0;
+  return -1;
 
 }
 
@@ -554,7 +573,7 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
   if (!opt_listen_only)
     {
       sfd = s5_connect(paddr);
-      if (!sfd)
+      if (-1 == sfd)
         {
           goto clean_exit;
         }
@@ -618,7 +637,7 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
 
           if (opt_listen_only)
             {
-              log(stdout, "!read[%d]: %s\n", getpid(), buf);
+              log(stdout, "!read[%d]: %s", getpid(), buf);
             }
 
           n = rc;
@@ -634,7 +653,7 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
               rc = write(sfd, buf, n);
               if (-1 == rc)
                 {
-                  log(stderr, "!write[%d]: %s\n", getpid(), strerror(errno));
+                  log(stderr, "!write[%d]: %s", getpid(), strerror(errno));
                   goto clean_exit;
                 }
 
@@ -704,7 +723,7 @@ s5_proxy_backward(int cfd, int sfd)
           rc = read(sfd, buf, sizeof(buf));
           if (-1 == rc)
             {
-              log(stderr, "!read[%d]: %s\n", getpid(), strerror(errno));
+              log(stderr, "!read[%d]: %s", getpid(), strerror(errno));
               goto clean_exit;
             }
 
@@ -725,7 +744,7 @@ s5_proxy_backward(int cfd, int sfd)
           rc = write(cfd, buf, n);
           if (-1 == rc)
             {
-              log(stderr, "!write[%d]: %s\n", getpid(), strerror(errno));
+              log(stderr, "!write[%d]: %s", getpid(), strerror(errno));
               goto clean_exit;
             }
 
