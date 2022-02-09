@@ -97,40 +97,44 @@ typedef union s5_socks_addr_u
 {
   struct
   {
-    uint32_t ip4;
+    uint32_t addr4;
+    uint16_t port;
   } ip4;
 
   struct
   {
-    uint32_t ip6[4];
+    uint32_t addr6[4];
+    uint16_t port;
   } ip6;
 
   struct
   {
     uint8_t  addr_len;
     uint8_t  addr_buf[ADDR_MAX - sizeof(uint8_t)];
+    uint16_t port;
   } domain;
 
 } s5_socks_addr_t;
 
 
-typedef struct s5_select_req_s
+typedef struct s5_sel_req_s
 {
   uint8_t  ver;
   uint8_t  n_methods;
   uint8_t  methods;
 
-} s5_select_req_t;
+} s5_sel_req_t;
 
 
-typedef struct s5_select_res_s
+typedef struct s5_sel_res_s
 {
   uint8_t ver;
   uint8_t method;
 
-} s5_select_res_t;
+} s5_sel_res_t;
 
 
+#pragma pack(push, 1)
 typedef struct s5_cmd_req_s
 {
   uint8_t ver;
@@ -140,6 +144,7 @@ typedef struct s5_cmd_req_s
   s5_socks_addr_t dst_addr;
 
 } s5_cmd_req_t;
+#pragma pack(pop)
 
 
 typedef struct s5_cmd_res_s
@@ -148,7 +153,6 @@ typedef struct s5_cmd_res_s
   uint8_t rep;
   uint8_t rsv;
   uint8_t atyp;
-  uint8_t bnd_addr_len;
   uint32_t bnd_addr;
   uint16_t bnd_port;
 
@@ -168,10 +172,10 @@ static int s5_listen(int *sfd, const struct sockaddr_in *laddr);
 static int s5_socks(const struct sockaddr_in *laddr,
                     const struct sockaddr_in *paddr);
 
-static void s5_socks_cmd(int cfd, const struct sockaddr_in *paddr);
+static void s5_socks_req(int cfd, const struct sockaddr_in *paddr);
 
-static void s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req,
-                               const char *buf, ssize_t nbuf);
+static int s5_socks_sel_reply(int cfd, const s5_sel_req_t *req);
+static int s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req);
 
 static int s5_proxy(const struct sockaddr_in *laddr,
                     const struct sockaddr_in *paddr);
@@ -181,9 +185,9 @@ static void s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
 
 static void s5_proxy_backward(int cfd, int sfd);
 
-
+static int s5_socks_addr_get(struct sockaddr_in *addr, const s5_cmd_req_t * cmd);
 static void s5_fd_set(int fd, fd_set *fds, int *nfds);
-static void s5_output(const char *buf, size_t nbuf);
+static void s5_output(const char *name, const uint8_t *buf, size_t n);
 
 
 static struct option longopts[]  =
@@ -375,28 +379,24 @@ s5_listen(int *sfd, const struct sockaddr_in *laddr)
 
 
 static void
-s5_socks_cmd(int cfd, const struct sockaddr_in *paddr)
+s5_socks_req(int cfd, const struct sockaddr_in *paddr)
 {
-  int               rc          =  0;
-  int               e;
-  int               port        =  0;
-  int               nfds        =  0;
-	char              buf[BUF_MAX];
-  pid_t             pid;
-  ssize_t           n;
-  fd_set            rfds, wfds;
-  s5_cmd_req_t     *req_cmd     =  0;
-  s5_cmd_res_t      res_cmd;
-  struct timeval    timeout;
-  s5_select_req_t  *req_select  =  0;
-  s5_select_res_t   res_select;
+  int             rc    =  0;
+  int             e;
+  int             nfds  =  0;
+	uint8_t         buf[BUF_MAX];
+  pid_t           pid;
+  ssize_t         n;
+  fd_set          rfds, wfds;
+  struct timeval  timeout;
+
+  pid = getpid();
 
   log("!socks[cmd@%d]: to %s:%d\n",
-      getpid(),
+      pid,
       inet_ntoa(paddr->sin_addr),
       ntohs(paddr->sin_port));
 
-  _unused_(pid);
 
   for (;;)
     {
@@ -440,8 +440,7 @@ s5_socks_cmd(int cfd, const struct sockaddr_in *paddr)
               goto clean_exit;
             }
 
-          log("!read: xxx\n");
-          s5_output(buf, rc);
+          s5_output("r", buf, rc);
 
           n = rc;
           FD_SET(cfd, &wfds);
@@ -451,68 +450,25 @@ s5_socks_cmd(int cfd, const struct sockaddr_in *paddr)
         {
           FD_CLR(cfd, &wfds);
 
-          if ((size_t) n == sizeof(s5_select_req_t))
+          if ((size_t) n == sizeof(s5_sel_req_t))
             {
-              req_select = (s5_select_req_t *) &buf;
-              if (req_select->ver != S5_VER)
-                {
-                  log_err("!socks: version: %d not support\n",
-                      req_cmd->ver);
-                  goto clean_exit;
-                }
-
-              memset(&res_select, 0, sizeof(res_select));
-              res_select.ver = S5_VER;
-              res_select.method = 0;
-
-              rc = write(cfd, &res_select, sizeof(res_select));
+              rc = s5_socks_sel_reply(cfd, (const s5_sel_req_t *) &buf);
               if (-1 == rc)
                 {
-                  log_err("!s5: %s\n", strerror(rc));
                   goto clean_exit;
                 }
-
-              n = 0;
-
-            } /* select */
+            }
           else
             {
-              req_cmd = (s5_cmd_req_t *) &buf;
-              if (req_cmd->ver != S5_VER)
+              rc = s5_socks_cmd_reply(cfd, (const s5_cmd_req_t *) buf);
+              if (-1 == rc)
                 {
-                  log_err("!socks: version: %d not support\n",
-                      req_cmd->ver);
                   goto clean_exit;
                 }
 
-              s5_socks_cmd_reply(cfd, req_cmd, buf, n);
+            }
 
-              switch (req_cmd->cmd)
-                {
-                case S5_CMD_CONNECT:
-
-                  memset(&res_cmd, 0, sizeof(res_cmd));
-                  res_cmd.ver = S5_VER;
-                  res_cmd.rep = S5_REP_SUCCEEDED;
-                  res_cmd.atyp = S5_ATYP_IPv4;
-                  res_cmd.bnd_addr = htonl(INADDR_ANY);
-                  res_cmd.bnd_addr_len = sizeof(res_cmd.bnd_addr);
-                  res_cmd.bnd_port = port;
-
-                  rc = write(cfd, &res_cmd, sizeof(res_cmd));
-                  if (-1 == rc)
-                    {
-                      log_err("!write: %s\n", strerror(rc));
-                      goto clean_exit;
-                    }
-                  break;
-
-                default:
-                  break;
-                }
-            } /* command */
         } /* write */
-
 
     }
 
@@ -522,33 +478,87 @@ s5_socks_cmd(int cfd, const struct sockaddr_in *paddr)
   exit(rc);
 }
 
+static int
+s5_socks_sel_reply(int cfd, const s5_sel_req_t *req)
+{
+  int           rc  =  0;
+  s5_sel_res_t  res;
 
-static void
-s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req, const char *buf,
-                   ssize_t nbuf)
+  if (req->ver != S5_VER)
+    {
+      log("!socks: version: %d not support\n", req->ver);
+      rc = -1;
+      goto clean_exit;
+    }
+
+  memset(&res, 0, sizeof(res));
+  res.ver = S5_VER;
+  res.method = 0;
+
+  rc = write(cfd, &res, sizeof(res));
+  if (-1 == rc)
+    {
+      log_err("!s5: %s\n", strerror(rc));
+      goto clean_exit;
+    }
+
+ clean_exit:
+  return rc;
+}
+
+static int
+s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req)
 {
   int                 rc  =  0;
   pid_t               pid;
+  in_addr_t           paddr;
+  s5_cmd_res_t        res;
   struct sockaddr_in  pladdr;
   struct sockaddr_in  ppaddr;
 
   _unused_(rc);
   _unused_(pid);
   _unused_(cfd);
-  _unused_(buf);
-  _unused_(nbuf);
+  _unused_(pladdr);
+  _unused_(ppaddr);
+
+  if (req->ver != S5_VER)
+    {
+      log_err("!socks: version: %d not support\n", req->ver);
+      rc = -1;
+      goto clean_exit;
+    }
 
   switch (req->cmd)
     {
     case S5_CMD_CONNECT:
-      _unused_(pladdr);
-      _unused_(ppaddr);
+      memset(&res, 0, sizeof(res));
+
+      res.ver = S5_VER;
+      res.rep = S5_REP_SUCCEEDED;
+      res.atyp = S5_ATYP_IPv4;
+      res.bnd_port = htons(opt_proxy_port);
+      paddr = inet_addr(opt_proxy);
+      memcpy(&res.bnd_addr, &paddr, sizeof(uint32_t));
+
+      rc = write(cfd, &res, sizeof(res));
+      if (-1 == rc)
+        {
+          log_err("!write: %s\n", strerror(rc));
+          goto clean_exit;
+        }
+
+      s5_output("-cmd-reply", (const uint8_t *) &res, sizeof(res));
+
       break;
 
-      default:
-        break;
+    default:
+      rc = -1;
+      break;
     }
 
+ clean_exit:
+  return rc;
 }
 
 static void
@@ -764,6 +774,21 @@ s5_proxy_backward(int cfd, int sfd)
 }
 
 
+static int
+s5_socks_addr_get(struct sockaddr_in *addr, const s5_cmd_req_t * cmd)
+{
+  switch (cmd->atyp)
+    {
+    case S5_ATYP_IPv4:
+      addr->sin_addr.s_addr = htonl(cmd->dst_addr.ip4.addr4);
+      addr->sin_port = htons(cmd->dst_addr.ip4.port);
+      return 0;
+
+    default:
+      return 1;
+    }
+}
+
 static void
 s5_fd_set(int fd, fd_set *fds, int *nfds)
 {
@@ -775,8 +800,9 @@ s5_fd_set(int fd, fd_set *fds, int *nfds)
 }
 
 static void
-s5_output(const char *buf, size_t nbuf)
+s5_output(const char *name, const uint8_t *buf, size_t nbuf)
 {
+  int      rc;
   FILE    *f  =  0;
   char     path[PATH_MAX];
   size_t   len;
@@ -788,26 +814,30 @@ s5_output(const char *buf, size_t nbuf)
     }
 
   len = strlen(path);
-  sprintf(path + len, "/%d.out", getpid());
+  rc = sprintf(path + len, "/%d%s.out", getpid(), name);
+  if (rc <= 0)
+    {
+      goto clean_exit;
+    }
 
   f = fopen(path, "w");
   if (!f)
     {
-      perror(NULL);
+      log_err("!s5_output: %s\n", strerror(errno));
       return;
     }
 
   fwrite(buf, 1, nbuf, f);
 
+  log("!s5_output: %s\n", path);
+
   if (ferror(f))
     {
-      perror(NULL);
       clearerr(f);
       goto clean_exit;
     }
 
  clean_exit:
-  log("!s5_output: %s\n", path);
   fclose(f);
 }
 
@@ -893,7 +923,7 @@ s5_socks(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
 
       if (0 == pid)
         {
-          s5_socks_cmd(cfd, paddr);
+          s5_socks_req(cfd, paddr);
         }
 
     }
@@ -1010,6 +1040,8 @@ main(int argc, char* argv[])
       rc = s5_socks(&opt_listen_addr, &opt_proxy_addr);
     }
 
+
+  _unused_(s5_socks_addr_get);
 
  clean_exit:
   return rc;
