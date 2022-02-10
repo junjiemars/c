@@ -126,6 +126,7 @@ typedef struct s5_sel_req_s
 } s5_sel_req_t;
 
 
+
 typedef struct s5_sel_res_s
 {
   uint8_t ver;
@@ -147,6 +148,7 @@ typedef struct s5_cmd_req_s
 #pragma pack(pop)
 
 
+#pragma pack(push, 1)
 typedef struct s5_cmd_res_s
 {
   uint8_t ver;
@@ -157,7 +159,7 @@ typedef struct s5_cmd_res_s
   uint16_t bnd_port;
 
 } s5_cmd_res_t;
-
+#pragma pack(pop)
 
 typedef void (*on_signal)(int);
 
@@ -440,7 +442,7 @@ s5_socks_req(int cfd, const struct sockaddr_in *paddr)
               goto clean_exit;
             }
 
-          s5_output("r", buf, rc);
+          s5_output("R", buf, rc);
 
           n = rc;
           FD_SET(cfd, &wfds);
@@ -452,7 +454,7 @@ s5_socks_req(int cfd, const struct sockaddr_in *paddr)
 
           if ((size_t) n == sizeof(s5_sel_req_t))
             {
-              rc = s5_socks_sel_reply(cfd, (const s5_sel_req_t *) &buf);
+              rc = s5_socks_sel_reply(cfd, (const s5_sel_req_t *) buf);
               if (-1 == rc)
                 {
                   goto clean_exit;
@@ -461,11 +463,7 @@ s5_socks_req(int cfd, const struct sockaddr_in *paddr)
           else
             {
               rc = s5_socks_cmd_reply(cfd, (const s5_cmd_req_t *) buf);
-              if (-1 == rc)
-                {
-                  goto clean_exit;
-                }
-
+              goto clean_exit;
             }
 
         } /* write */
@@ -502,6 +500,8 @@ s5_socks_sel_reply(int cfd, const s5_sel_req_t *req)
       goto clean_exit;
     }
 
+  s5_output("SR", (const uint8_t *) &res, rc);
+
  clean_exit:
   return rc;
 }
@@ -532,8 +532,8 @@ s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req)
   switch (req->cmd)
     {
     case S5_CMD_CONNECT:
-      memset(&res, 0, sizeof(res));
 
+      memset(&res, 0, sizeof(res));
       res.ver = S5_VER;
       res.rep = S5_REP_SUCCEEDED;
       res.atyp = S5_ATYP_IPv4;
@@ -548,7 +548,7 @@ s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req)
           goto clean_exit;
         }
 
-      s5_output("-cmd-reply", (const uint8_t *) &res, sizeof(res));
+      s5_output("CR", (const uint8_t *) &res, rc);
 
       break;
 
@@ -802,10 +802,11 @@ s5_fd_set(int fd, fd_set *fds, int *nfds)
 static void
 s5_output(const char *name, const uint8_t *buf, size_t nbuf)
 {
-  int      rc;
-  FILE    *f  =  0;
-  char     path[PATH_MAX];
-  size_t   len;
+  int          rc;
+  FILE        *f   =  0;
+  char         path[PATH_MAX];
+  size_t       len;
+  static int   sn  =  0;
 
   if (0 == getcwd(path, sizeof(path)))
     {
@@ -814,13 +815,13 @@ s5_output(const char *name, const uint8_t *buf, size_t nbuf)
     }
 
   len = strlen(path);
-  rc = sprintf(path + len, "/%d%s.out", getpid(), name);
+  rc = sprintf(path + len, "/%d-%d-%s.out", getpid(), sn++, name);
   if (rc <= 0)
     {
       goto clean_exit;
     }
 
-  f = fopen(path, "w");
+  f = fopen(path, "wb");
   if (!f)
     {
       log_err("!s5_output: %s\n", strerror(errno));
@@ -1039,7 +1040,6 @@ main(int argc, char* argv[])
     {
       rc = s5_socks(&opt_listen_addr, &opt_proxy_addr);
     }
-
 
   _unused_(s5_socks_addr_get);
 
