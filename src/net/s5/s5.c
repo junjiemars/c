@@ -318,12 +318,9 @@ on_signal_from_child(int signo)
 static int
 s5_connect(const struct sockaddr_in *addr)
 {
-  int             rc;
-  int             fd;
-  int             nfds;
-  pid_t           pid;
-  fd_set          fds;
-  struct timeval  timeout;
+  int    rc;
+  int    fd  =  0;
+  pid_t  pid;
 
   pid = getpid();
 
@@ -335,43 +332,27 @@ s5_connect(const struct sockaddr_in *addr)
   if (-1 == rc)
     {
       log_sockerr(rc, "!s5_connect[socks]: %s\n");
-      return -1;
+      goto clean_exit;
     }
   fd = rc;
 
-  for (;;)
+  rc = connect(fd, (const struct sockaddr *) addr, sizeof(*addr));
+  if (-1 == rc)
     {
-      memset(&timeout, 0, sizeof(timeout));
-      FD_ZERO(&fds);
-      s5_fd_set(fd, &fds, &nfds);
-
-      rc = select(nfds, &fds, NULL, NULL, &timeout);
-      if (-1 == rc)
-        {
-          log_err("!s5_connect[select:%d|%d]: %s\n", pid, fd,
-                  strerror(errno));
-          goto clean_exit;
-        }
-
-      if (FD_ISSET(fd, &fds))
-        {
-          rc = connect(fd, (const struct sockaddr *) addr, sizeof(*addr));
-          if (-1 == rc)
-            {
-              log_sockerr(rc, "!s5_connect[connect]: %s\n");
-              goto clean_exit;
-            }
-
-          log("#s5_connect[%d]: connected\n", pid);
-
-          return fd;
-        }
+      log_sockerr(rc, "!s5_connect[connect]: %s\n");
+      goto clean_exit;
     }
 
- clean_exit:
-  close(fd);
-  return -1;
+  log("#s5_connect[%d]: connected\n", pid);
 
+  return fd;
+
+ clean_exit:
+  if (fd)
+    {
+      close(fd);
+    }
+  return rc;
 }
 
 
@@ -601,7 +582,6 @@ s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req, struct sockaddr_in *addr)
       rc = s5_socks_addr_get(addr, req);
       if (-1 == rc)
         {
-          log("#xxx %d\n", S5_REP_ATYP_NOT_SUPPORTED);
           res.rep = S5_REP_ATYP_NOT_SUPPORTED;
         }
       else
@@ -879,6 +859,10 @@ s5_socks_addr_get(struct sockaddr_in *addr, const s5_cmd_req_t * cmd)
       addr->sin_addr.s_addr = cmd->dst_addr.ip4.addr4;
       addr->sin_port = cmd->dst_addr.ip4.port;
       return 0;
+
+    case S5_ATYP_IPv6:
+      log("#s5_socks_addr_get: disable IPv6\n");
+      return -1;
 
     default:
       log("#s5_socks_addr_get: unsupport adddress type %d\n", cmd->atyp);
