@@ -441,13 +441,9 @@ s5_socks_req(int cfd, const struct sockaddr_in *caddr,
 
   pid = getpid();
 
-  log("#s5_socks_req[%d]: %s:%d to %s:%d\n",
-      pid,
-      inet_ntoa(caddr->sin_addr),
-      ntohs(caddr->sin_port),
-      inet_ntoa(paddr->sin_addr),
-      ntohs(paddr->sin_port));
-
+  log("#s5_socks_req[%d]: %s:%d to %s:%d\n", pid,
+      inet_ntoa(caddr->sin_addr), ntohs(caddr->sin_port),
+      inet_ntoa(paddr->sin_addr), ntohs(paddr->sin_port));
 
   for (;;)
     {
@@ -639,7 +635,8 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *laddr,
   int             n, e;
   int             nfds  =  0;
   uint8_t         buf[BUF_MAX];
-  pid_t           pid, ppid;
+  pid_t           pid   =  0;
+  pid_t           ppid;
   fd_set          rfds, wfds;
   struct timeval  timeout;
 
