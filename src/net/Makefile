@@ -79,7 +79,7 @@ net_s5_test: net_s5
 endif
 
 $(net_s5_binout): $(net_root)/s5/s5.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # eof

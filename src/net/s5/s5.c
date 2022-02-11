@@ -93,6 +93,20 @@ enum s5_seq_e
     }
 
 
+#if (NDEBUG)
+#define log_buf(name, buf, n)                   \
+  {                                             \
+    _unused_(n);                                \
+  }
+#else
+
+#define log_buf(name, buf, n)                   \
+  if (opt_output && (opt_quiet < 1))            \
+    {                                           \
+      s5_output((name), (buf), (n));            \
+    }
+#endif
+
 
 typedef struct s5_addr_s
 {
@@ -183,7 +197,8 @@ static int s5_listen(int *sfd, const struct sockaddr_in *laddr);
 static int s5_socks(const struct sockaddr_in *laddr,
                     const struct sockaddr_in *paddr);
 
-static void s5_socks_req(int cfd, const struct sockaddr_in *paddr);
+static void s5_socks_req(int cfd, const struct sockaddr_in *caddr,
+                         const struct sockaddr_in *paddr);
 
 static int s5_socks_sel_reply(int cfd, const s5_sel_req_t *req);
 static int s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req,
@@ -198,7 +213,10 @@ static void s5_proxy_backward(int cfd, int sfd);
 
 static int s5_socks_addr_get(struct sockaddr_in *addr, const s5_cmd_req_t * cmd);
 static void s5_fd_set(int fd, fd_set *fds, int *nfds);
+
+#if !(NDEBUG)
 static void s5_output(const char *name, const uint8_t *buf, size_t n);
+#endif
 
 
 static struct option longopts[]  =
@@ -210,7 +228,7 @@ static struct option longopts[]  =
     { "proxy-port",   optional_argument,    0,              'p' },
     { "proxy-only",   no_argument,          0,              'O' },
     { "timeout",      optional_argument,    0,              'T' },
-    { "quiet",        no_argument,          0,              'Q' },
+    { "quiet",        optional_argument,    0,              'Q' },
     { "output",       no_argument,          0,              'o' },
     { 0,              0,                    0,               0  }
   };
@@ -390,7 +408,8 @@ s5_listen(int *sfd, const struct sockaddr_in *laddr)
 
 
 static void
-s5_socks_req(int cfd, const struct sockaddr_in *paddr)
+s5_socks_req(int cfd, const struct sockaddr_in *caddr,
+             const struct sockaddr_in *paddr)
 {
   int                 rc    =  0;
   int                 n, e;
@@ -404,8 +423,10 @@ s5_socks_req(int cfd, const struct sockaddr_in *paddr)
 
   pid = getpid();
 
-  log("!socks[cmd@%d]: to %s:%d\n",
+  log("#s5_socks_req[pid:%d]: %s:%d to %s:%d\n",
       pid,
+      inet_ntoa(caddr->sin_addr),
+      ntohs(caddr->sin_port),
       inet_ntoa(paddr->sin_addr),
       ntohs(paddr->sin_port));
 
@@ -454,7 +475,7 @@ s5_socks_req(int cfd, const struct sockaddr_in *paddr)
 
           n = rc;
 
-          s5_output("rr", buf, n);
+          log_buf("rr", buf, n);
 
           FD_SET(cfd, &wfds);
         }
@@ -519,7 +540,7 @@ s5_socks_sel_reply(int cfd, const s5_sel_req_t *req)
       goto clean_exit;
     }
 
-  s5_output("sw", (const uint8_t *) &res, rc);
+  log_buf("sw", (const uint8_t *) &res, rc);
 
  clean_exit:
   return rc;
@@ -562,7 +583,7 @@ s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req, struct sockaddr_in *addr)
           goto clean_exit;
         }
 
-      s5_output("cw", (const uint8_t *) &res, rc);
+      log_buf("cw", (const uint8_t *) &res, rc);
       break;
 
     default:
@@ -810,6 +831,7 @@ s5_fd_set(int fd, fd_set *fds, int *nfds)
     }
 }
 
+#if !(NDEBUG)
 static void
 s5_output(const char *name, const uint8_t *buf, size_t nbuf)
 {
@@ -841,7 +863,7 @@ s5_output(const char *name, const uint8_t *buf, size_t nbuf)
 
   fwrite(buf, 1, nbuf, f);
 
-  log("!s5_output: %s\n", path);
+  log("#s5_output: %s\n", path);
 
   if (ferror(f))
     {
@@ -852,6 +874,7 @@ s5_output(const char *name, const uint8_t *buf, size_t nbuf)
  clean_exit:
   fclose(f);
 }
+#endif  /* NDEBUG: s5_output */
 
 static int
 s5_proxy(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
@@ -936,7 +959,7 @@ s5_socks(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
 
       if (0 == pid)
         {
-          s5_socks_req(cfd, paddr);
+          s5_socks_req(cfd, (const struct sockaddr_in *) &caddr, paddr);
         }
 
     }
@@ -957,7 +980,7 @@ main(int argc, char* argv[])
   int                 rc  =  0;
 
   while (-1 != (ch = getopt_long(argc, argv,
-                                 "hl:L:Kp:P:OT:Qo",
+                                 "hl:L:Kp:P:OT:Q:o",
                                  longopts, 0)))
     {
       switch (ch)
@@ -990,7 +1013,10 @@ main(int argc, char* argv[])
           opt_timeout.tv_sec = atoi(optarg);
           break;
         case 'Q':
-          opt_quiet = '\n';
+          if (optarg)
+            {
+              opt_quiet = atoi(optarg);
+            }
           break;
         case 'o':
           opt_output = 1;
@@ -1049,6 +1075,7 @@ main(int argc, char* argv[])
     }
   else
     {
+      opt_proxy_only = !opt_proxy_only;
       rc = s5_socks(&opt_listen_addr, &opt_proxy_addr);
     }
 
