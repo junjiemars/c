@@ -212,7 +212,9 @@ static void s5_proxy_forward(int cfd, const struct sockaddr_in *laddr,
 
 static void s5_proxy_backward(int cfd, int sfd);
 
-static int s5_socks_addr_get(struct sockaddr_in *addr, const s5_cmd_req_t * cmd);
+static int s5_socks_addr_get(struct sockaddr_in *addr,
+                             const s5_cmd_req_t * cmd);
+
 static void s5_fd_set(int fd, fd_set *fds, int *nfds);
 
 #if !(NDEBUG)
@@ -592,12 +594,20 @@ s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req, struct sockaddr_in *addr)
     {
     case S5_CMD_CONNECT:
 
-      memset(addr, 0, sizeof(*addr));
-      s5_socks_addr_get(addr, req);
-
       memset(&res, 0, sizeof(res));
       res.ver = S5_VER;
-      res.rep = S5_REP_SUCCEEDED;
+
+      memset(addr, 0, sizeof(*addr));
+      rc = s5_socks_addr_get(addr, req);
+      if (rc == S5_REP_ATYP_NOT_SUPPORTED)
+        {
+          res.rep = S5_REP_ATYP_NOT_SUPPORTED;
+        }
+      else
+        {
+          res.rep = S5_REP_SUCCEEDED;
+        }
+
       res.atyp = S5_ATYP_IPv4;
       res.bnd_port = opt_proxy_addr.sin_port;
       ip4 = ntohl(opt_proxy_addr.sin_addr.s_addr);
@@ -871,7 +881,7 @@ s5_socks_addr_get(struct sockaddr_in *addr, const s5_cmd_req_t * cmd)
 
     default:
       log("#s5_socks_addr_get: unsupport adddress type %d\n", cmd->atyp);
-      return 1;
+      return -1;
     }
 }
 
