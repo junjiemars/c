@@ -207,7 +207,8 @@ static int s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req,
 static int s5_proxy(const struct sockaddr_in *laddr,
                     const struct sockaddr_in *paddr);
 
-static void s5_proxy_forward(int cfd, const struct sockaddr_in *addr);
+static void s5_proxy_forward(int cfd, const struct sockaddr_in *laddr,
+                             const struct sockaddr_in *raddr);
 
 static void s5_proxy_backward(int cfd, int sfd);
 
@@ -318,13 +319,20 @@ s5_connect(const struct sockaddr_in *addr)
   int             rc;
   int             fd;
   int             nfds;
+  pid_t           pid;
   fd_set          fds;
   struct timeval  timeout;
+
+  pid = getpid();
+
+  log("#s5_connect[%d]: %s:%d\n", pid, inet_ntoa(addr->sin_addr),
+      ntohs(addr->sin_port));
+
 
   rc = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
   if (-1 == rc)
     {
-      log_sockerr(rc, "!socket: %s\n");
+      log_sockerr(rc, "!s5_connect[socks]: %s\n");
       return -1;
     }
   fd = rc;
@@ -338,7 +346,8 @@ s5_connect(const struct sockaddr_in *addr)
       rc = select(nfds, &fds, NULL, NULL, &timeout);
       if (-1 == rc)
         {
-          log_err("!select: %s\n", strerror(errno));
+          log_err("!s5_connect[select:%d|%d]: %s\n", pid, fd,
+                  strerror(errno));
           goto clean_exit;
         }
 
@@ -347,9 +356,12 @@ s5_connect(const struct sockaddr_in *addr)
           rc = connect(fd, (const struct sockaddr *) addr, sizeof(*addr));
           if (-1 == rc)
             {
-              log_sockerr(rc, "!connect: %s\n");
+              log_sockerr(rc, "!s5_connect[connect]: %s\n");
               goto clean_exit;
             }
+
+          log("#s5_connect[%d]: connected\n", pid);
+
           return fd;
         }
     }
@@ -364,19 +376,25 @@ s5_connect(const struct sockaddr_in *addr)
 static int
 s5_listen(int *sfd, const struct sockaddr_in *laddr)
 {
-  int  rc  =  0;
+  int    rc  =  0;
+  pid_t  pid;
+
+  pid = getpid();
+
+  log("#s5_listen[%d]: listen on %s:%d\n", pid, inet_ntoa(laddr->sin_addr),
+      ntohs(laddr->sin_port));
 
   *sfd = socket(AF_INET, SOCK_STREAM, IPPROTO_IP);
   if (-1 == *sfd)
     {
-      log_sockerr(rc, "!socket: %s\n");
+      log_sockerr(rc, "!s5_listen[socket]: %s\n");
       goto clean_exit;
     }
 
   rc = setsockopt(*sfd, SOL_SOCKET, SO_REUSEADDR, &(int){1}, sizeof(int));
   if (-1 == rc)
     {
-      log_sockerr(rc, "!setsocketopt: %s\n");
+      log_sockerr(rc, "!s5_listen[setsocketopt]: %s\n");
       goto clean_exit;
     }
 
@@ -384,14 +402,14 @@ s5_listen(int *sfd, const struct sockaddr_in *laddr)
   rc = bind(*sfd, (const struct sockaddr *) laddr, sizeof(*laddr));
 	if (rc)
     {
-      log_sockerr(rc, "!bind: %s\n");
+      log_sockerr(rc, "!s5_listen[bind]: %s\n");
       goto close_exit;
     }
 
   rc = listen(*sfd, BACKLOG);
 	if (rc)
     {
-      log_sockerr(rc, "!listen: %s\n");
+      log_sockerr(rc, "!s5_listen[listen]: %s\n");
       goto close_exit;
     }
 
@@ -423,7 +441,7 @@ s5_socks_req(int cfd, const struct sockaddr_in *caddr,
 
   pid = getpid();
 
-  log("#s5_socks_req[pid:%d]: %s:%d to %s:%d\n",
+  log("#s5_socks_req[%d]: %s:%d to %s:%d\n",
       pid,
       inet_ntoa(caddr->sin_addr),
       ntohs(caddr->sin_port),
@@ -442,7 +460,7 @@ s5_socks_req(int cfd, const struct sockaddr_in *caddr,
       if (-1 == rc)
         {
           e = errno;
-          log_err("!select: %s\n", strerror(e));
+          log_err("!s5_socks_req[select:%d|%d]: %s\n", pid, cfd, strerror(e));
           if (e == EINTR)
             {
               continue;
@@ -455,6 +473,7 @@ s5_socks_req(int cfd, const struct sockaddr_in *caddr,
 
       if (0 == rc)
         {
+          log_err("!s5_socks_req[select:%d|%d]: timeout\n", pid, cfd);
           goto clean_exit;
         }
 
@@ -464,18 +483,20 @@ s5_socks_req(int cfd, const struct sockaddr_in *caddr,
           rc = read(cfd, buf, sizeof(buf));
           if (-1 == rc)
             {
-              log_err("!read: %s\n", strerror(errno));
+              log_err("!s5_socks_req[read:%d|%d]: %s\n", pid, cfd,
+                      strerror(errno));
               goto clean_exit;
             }
 
           if (0 == rc)
             {
+              log_err("!s5_socks_req[read:%d|%d]: zero\n", pid, cfd);
               goto clean_exit;
             }
 
           n = rc;
 
-          log_buf("rr", buf, n);
+          log_buf("srr", buf, n);
 
           FD_SET(cfd, &wfds);
         }
@@ -487,8 +508,7 @@ s5_socks_req(int cfd, const struct sockaddr_in *caddr,
           switch (seq)
             {
             case S5_SEQ_RELAY:
-              log("# xxx, %s, %d\n", inet_ntoa(addr.sin_addr), ntohs(addr.sin_port));
-              s5_proxy_forward(cfd, &addr);
+              s5_proxy_forward(cfd, caddr, &addr);
               break;
 
             case S5_SEQ_SELECT:
@@ -502,13 +522,13 @@ s5_socks_req(int cfd, const struct sockaddr_in *caddr,
               break;
 
             default:
+              log_err("!s5_socks_req[%d]: unsupport seq %d\n", pid, seq);
               goto clean_exit;
             }
 
         }
 
     }
-
 
  clean_exit:
   close(cfd);
@@ -520,11 +540,15 @@ static int
 s5_socks_sel_reply(int cfd, const s5_sel_req_t *req)
 {
   int           rc  =  0;
+  pid_t         pid;
   s5_sel_res_t  res;
+
+  pid = getpid();
 
   if (req->ver != S5_VER)
     {
-      log("!socks: version: %d not support\n", req->ver);
+      log("!s5_socks_sel_reply[socks:%d]: version: %d not support\n", pid,
+          req->ver);
       rc = -1;
       goto clean_exit;
     }
@@ -536,11 +560,12 @@ s5_socks_sel_reply(int cfd, const s5_sel_req_t *req)
   rc = write(cfd, &res, sizeof(res));
   if (-1 == rc)
     {
-      log_err("!s5: %s\n", strerror(rc));
+      log_err("!s5_socks_sel_reply[write:%d|%d]: %s\n", pid, cfd,
+              strerror(rc));
       goto clean_exit;
     }
 
-  log_buf("sw", (const uint8_t *) &res, rc);
+  log_buf("ssw", (const uint8_t *) &res, rc);
 
  clean_exit:
   return rc;
@@ -550,13 +575,19 @@ static int
 s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req, struct sockaddr_in *addr)
 {
   int           rc  =  0;
+  pid_t         pid;
   uint32_t      ip4;
   s5_cmd_res_t  res;
+
+  pid = getpid();
+
+  log("#s5_socks_cmd_reply[%d]\n", pid);
 
 
   if (req->ver != S5_VER)
     {
-      log_err("!socks: version: %d not support\n", req->ver);
+      log_err("!s5_socks_cmd_reply[socks:%d]: version: %d not support\n", pid,
+              req->ver);
       rc = -1;
       goto clean_exit;
     }
@@ -565,7 +596,7 @@ s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req, struct sockaddr_in *addr)
     {
     case S5_CMD_CONNECT:
 
-      memset(addr, 0, sizeof(in_addr_t));
+      memset(addr, 0, sizeof(*addr));
       s5_socks_addr_get(addr, req);
 
       memset(&res, 0, sizeof(res));
@@ -579,14 +610,17 @@ s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req, struct sockaddr_in *addr)
       rc = write(cfd, &res, sizeof(res));
       if (-1 == rc)
         {
-          log_err("!write: %s\n", strerror(rc));
+          log_err("!s5_socks_cmd_reply[write:%d|%d]: %s\n", pid, cfd,
+                  strerror(rc));
           goto clean_exit;
         }
 
-      log_buf("cw", (const uint8_t *) &res, rc);
+      log_buf("scw", (const uint8_t *) &res, rc);
       break;
 
     default:
+      log_err("!s5_socks_cmd_reply[%d]: unsupport command %d\n", pid,
+              req->cmd);
       rc = -1;
       break;
     }
@@ -597,45 +631,43 @@ s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req, struct sockaddr_in *addr)
 
 
 static void
-s5_proxy_forward(int cfd, const struct sockaddr_in *paddr)
+s5_proxy_forward(int cfd, const struct sockaddr_in *laddr,
+                 const struct sockaddr_in *raddr)
 {
   int             rc    =  0;
   int             sfd;
   int             n, e;
   int             nfds  =  0;
-  char            buf[BUF_MAX];
-  pid_t           pid   =  0;
+  uint8_t         buf[BUF_MAX];
+  pid_t           pid, ppid;
   fd_set          rfds, wfds;
   struct timeval  timeout;
 
-  log("!proxy[froward@%d]: to %s:%d\n",
-      getpid(),
-      inet_ntoa(paddr->sin_addr),
-      ntohs(paddr->sin_port));
+  ppid = getpid();
 
-  log("!proxy[%d]: connecting ...\n", getpid());
+  log("#s5_proxy_forward[%d|%d]: %s:%d to %s:%d\n", ppid, cfd,
+      inet_ntoa(laddr->sin_addr), ntohs(laddr->sin_port),
+      inet_ntoa(raddr->sin_addr), ntohs(raddr->sin_port));
 
-  /* if (!opt_listen_only) */
-  /*   { */
-      sfd = s5_connect(paddr);
+  if (!opt_listen_only)
+    {
+      sfd = s5_connect(raddr);
       if (-1 == sfd)
         {
           goto clean_exit;
         }
 
-      log("!proxy[%d]: connected ...\n", getpid());
-
       pid = fork();
       if (-1 == pid)
         {
-          log_err("!fork: %s\n", strerror(errno));
+          log_err("!s5_proxy_forward[fork:%d] %s\n", pid, strerror(errno));
         }
       else if (0 == pid)
         {
           s5_proxy_backward(cfd, sfd);
         }
 
-    /* } /\* !opt_listen_only *\/ */
+    }
 
   n = 0;
   FD_ZERO(&wfds);
@@ -647,22 +679,23 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *paddr)
       FD_ZERO(&rfds);
       s5_fd_set(cfd, &rfds, &nfds);
 
-      log("!select[%d]: selecting %d ...\n", getpid(), cfd);
-
       rc = select(nfds, &rfds, NULL, NULL, &timeout);
       if (-1 == rc)
         {
           e = errno;
-          log_err("!select[%d]: %s\n", getpid(), strerror(e));
+          log_err("!s5_proxy_forward[select:%d|%d]: %s\n", ppid, cfd,
+                  strerror(e));
           goto clean_exit;
         }
 
       if (0 == rc)
         {
+          log("!s5_proxy_forward[select:%d|%d]: timeout\n", ppid, cfd);
           goto clean_exit;
         }
 
-      log("!select[%d]: selected %d\n", getpid(), cfd);
+      log("#s5_proxy_forward[select:%d|%d]: selected\n", ppid, cfd);
+
 
       if (FD_ISSET(cfd, &rfds))
         {
@@ -671,22 +704,26 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *paddr)
           rc = read(cfd, buf, sizeof(buf));
           if (-1 == rc)
             {
-              log_err("!read[%d]: %s\n", getpid(), strerror(errno));
+              log_err("!s5_proxy_forward[read:%d|%d]: %s\n", ppid, cfd,
+                      strerror(errno));
               goto clean_exit;
             }
 
           if (0 == rc)
             {
+              log_err("!s5_proxy_forward[read:%d|%d]: zero\n", ppid, cfd);
               goto clean_exit;
-            }
-
-          if (opt_listen_only)
-            {
-              log("!read[%d]: %s\n", getpid(), buf);
             }
 
           n = rc;
           FD_SET(sfd, &wfds);
+
+          log_buf("pfr", buf, n);
+
+          if (opt_listen_only)
+            {
+              /* void */
+            }
         }
 
       if (FD_ISSET(sfd, &wfds))
@@ -698,12 +735,17 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *paddr)
               rc = write(sfd, buf, n);
               if (-1 == rc)
                 {
-                  log_err("!write[%d]: %s", getpid(), strerror(errno));
+                  log_err("!s5_proxy_forward[write:%d|%d]: %s", ppid, sfd,
+                          strerror(errno));
                   goto clean_exit;
                 }
 
+              log_buf("pfw", buf, rc);
+
               if (n != rc)
                 {
+                  log_err("!s5_proxy_forward[write:%d|%d]: %d/%d", ppid, sfd,
+                          rc, n);
                   goto clean_exit;
                 }
             }
@@ -729,11 +771,15 @@ s5_proxy_backward(int cfd, int sfd)
   int             rc  =  0;
   int             n, e;
   int             nfds;
-  char            buf[BUF_MAX];
+  uint8_t         buf[BUF_MAX];
+  pid_t           pid;
   fd_set          rfds, wfds;
   struct timeval  timeout;
 
-  log("!proxy [backward:%d]: \n", getpid());
+  pid = getpid();
+
+  log("#s5_proxy_backword[%d]: %d~%d\n", pid, cfd, sfd);
+
 
   n = 0;
   FD_ZERO(&wfds);
@@ -749,17 +795,19 @@ s5_proxy_backward(int cfd, int sfd)
       if (-1 == rc)
         {
           e = errno;
-          log_err("!select[%d]: %s\n", getpid(), strerror(e));
+          log_err("!s5_proxy_backword[select:%d|%d]: %s\n", pid, sfd,
+                  strerror(e));
           goto clean_exit;
         }
 
       if (0 == rc)
         {
+          log_err("!s5_proxy_backword[select:%d|%d]: timeout\n", pid, sfd);
           goto clean_exit;
         }
 
-      log("!proxy[backward:%d]: [selected:%d] [r:%d|%d], [w:%d]\n",
-          getpid(), rc, sfd, FD_ISSET(sfd, &rfds), cfd);
+      log("#s5_proxy_backward[select:%d|%d]: selected\n", pid, sfd);
+
 
       if (FD_ISSET(sfd, &rfds))
         {
@@ -768,18 +816,21 @@ s5_proxy_backward(int cfd, int sfd)
           rc = read(sfd, buf, sizeof(buf));
           if (-1 == rc)
             {
-              log_err("!read[%d]: %s\n", getpid(), strerror(errno));
+              log_err("!s5_proxy_backward[read:%d|%d]: %s\n", pid, sfd,
+                      strerror(errno));
               goto clean_exit;
             }
 
           if (0 == rc)
             {
+              log("!s5_proxy_backward[read:%d|%d]: zero\n", pid, sfd);
               goto clean_exit;
             }
 
           n = rc;
-
           FD_SET(cfd, &wfds);
+
+          log_buf("pbr", buf, n);
         }
 
       if (FD_ISSET(cfd, &wfds))
@@ -789,12 +840,17 @@ s5_proxy_backward(int cfd, int sfd)
           rc = write(cfd, buf, n);
           if (-1 == rc)
             {
-              log_err("!write[%d]: %s", getpid(), strerror(errno));
+              log_err("!s5_proxy_backward[write:%d|%d]: %s", pid, cfd,
+                      strerror(errno));
               goto clean_exit;
             }
 
+          log_buf("pbw", buf, rc);
+
           if (rc != n)
             {
+              log_err("!s5_proxy_backward[write:%d|%d]: %d/%d", pid, cfd,
+                      rc, n);
               goto clean_exit;
             }
         }
@@ -812,11 +868,12 @@ s5_socks_addr_get(struct sockaddr_in *addr, const s5_cmd_req_t * cmd)
   switch (cmd->atyp)
     {
     case S5_ATYP_IPv4:
-      addr->sin_addr.s_addr = ntohl(cmd->dst_addr.ip4.addr4);
+      addr->sin_addr.s_addr = cmd->dst_addr.ip4.addr4;
       addr->sin_port = cmd->dst_addr.ip4.port;
       return 0;
 
     default:
+      log("#s5_socks_addr_get: unsupport adddress type %d\n", cmd->atyp);
       return 1;
     }
 }
@@ -910,7 +967,7 @@ s5_proxy(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
         }
       else if (0 == pid)
         {
-          s5_proxy_forward(cfd, paddr);
+          s5_proxy_forward(cfd, &caddr, paddr);
         }
       else
         {
@@ -947,14 +1004,14 @@ s5_socks(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
       cfd = accept(sfd, (struct sockaddr*) &caddr, &slen);
       if (-1 == cfd)
         {
-          log_sockerr(rc, "!accept: %s\n");
+          log_sockerr(rc, "!s5_socks[accept]: %s\n");
           goto close_exit;
         }
 
       pid = fork();
       if (-1 == pid)
         {
-          log_err("!fork: %s\n", strerror(errno));
+          log_err("!s5_socks[fork]: %s\n", strerror(errno));
         }
 
       if (0 == pid)
