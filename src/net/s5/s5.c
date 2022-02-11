@@ -69,6 +69,15 @@ enum s5_rep
   };
 
 
+enum s5_seq_e
+  {
+    S5_SEQ_SELECT   =  0x00,
+    S5_SEQ_CONNECT  =  0x01,
+    S5_SEQ_RELAY    =  0x02
+
+  };
+
+
 
 #define log(...)                                \
   if (opt_quiet < 1)                            \
@@ -177,13 +186,13 @@ static int s5_socks(const struct sockaddr_in *laddr,
 static void s5_socks_req(int cfd, const struct sockaddr_in *paddr);
 
 static int s5_socks_sel_reply(int cfd, const s5_sel_req_t *req);
-static int s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req);
+static int s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req,
+                              struct sockaddr_in *addr);
 
 static int s5_proxy(const struct sockaddr_in *laddr,
                     const struct sockaddr_in *paddr);
 
-static void s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
-                             const struct sockaddr_in *addr);
+static void s5_proxy_forward(int cfd, const struct sockaddr_in *addr);
 
 static void s5_proxy_backward(int cfd, int sfd);
 
@@ -383,14 +392,15 @@ s5_listen(int *sfd, const struct sockaddr_in *laddr)
 static void
 s5_socks_req(int cfd, const struct sockaddr_in *paddr)
 {
-  int             rc    =  0;
-  int             e;
-  int             nfds  =  0;
-	uint8_t         buf[BUF_MAX];
-  pid_t           pid;
-  ssize_t         n;
-  fd_set          rfds, wfds;
-  struct timeval  timeout;
+  int                 rc    =  0;
+  int                 n, e;
+  int                 nfds  =  0;
+  int                 seq   =  S5_SEQ_SELECT;
+	uint8_t             buf[BUF_MAX];
+  pid_t               pid;
+  fd_set              rfds, wfds;
+  struct timeval      timeout;
+  struct sockaddr_in  addr;
 
   pid = getpid();
 
@@ -442,9 +452,10 @@ s5_socks_req(int cfd, const struct sockaddr_in *paddr)
               goto clean_exit;
             }
 
-          s5_output("R", buf, rc);
-
           n = rc;
+
+          s5_output("rr", buf, n);
+
           FD_SET(cfd, &wfds);
         }
 
@@ -452,21 +463,28 @@ s5_socks_req(int cfd, const struct sockaddr_in *paddr)
         {
           FD_CLR(cfd, &wfds);
 
-          if ((size_t) n == sizeof(s5_sel_req_t))
+          switch (seq)
             {
-              rc = s5_socks_sel_reply(cfd, (const s5_sel_req_t *) buf);
-              if (-1 == rc)
-                {
-                  goto clean_exit;
-                }
-            }
-          else
-            {
-              rc = s5_socks_cmd_reply(cfd, (const s5_cmd_req_t *) buf);
+            case S5_SEQ_RELAY:
+              log("# xxx, %s, %d\n", inet_ntoa(addr.sin_addr), ntohs(addr.sin_port));
+              s5_proxy_forward(cfd, &addr);
+              break;
+
+            case S5_SEQ_SELECT:
+              s5_socks_sel_reply(cfd, (const s5_sel_req_t *) buf);
+              seq = S5_SEQ_CONNECT;
+              break;
+
+            case S5_SEQ_CONNECT:
+              s5_socks_cmd_reply(cfd, (const s5_cmd_req_t *) buf, &addr);
+              seq = S5_SEQ_RELAY;
+              break;
+
+            default:
               goto clean_exit;
             }
 
-        } /* write */
+        }
 
     }
 
@@ -475,6 +493,7 @@ s5_socks_req(int cfd, const struct sockaddr_in *paddr)
   close(cfd);
   exit(rc);
 }
+
 
 static int
 s5_socks_sel_reply(int cfd, const s5_sel_req_t *req)
@@ -500,27 +519,19 @@ s5_socks_sel_reply(int cfd, const s5_sel_req_t *req)
       goto clean_exit;
     }
 
-  s5_output("SR", (const uint8_t *) &res, rc);
+  s5_output("sw", (const uint8_t *) &res, rc);
 
  clean_exit:
   return rc;
 }
 
 static int
-s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req)
+s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req, struct sockaddr_in *addr)
 {
-  int                 rc  =  0;
-  pid_t               pid;
-  in_addr_t           paddr;
-  s5_cmd_res_t        res;
-  struct sockaddr_in  pladdr;
-  struct sockaddr_in  ppaddr;
+  int           rc  =  0;
+  uint32_t      ip4;
+  s5_cmd_res_t  res;
 
-  _unused_(rc);
-  _unused_(pid);
-  _unused_(cfd);
-  _unused_(pladdr);
-  _unused_(ppaddr);
 
   if (req->ver != S5_VER)
     {
@@ -533,13 +544,16 @@ s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req)
     {
     case S5_CMD_CONNECT:
 
+      memset(addr, 0, sizeof(in_addr_t));
+      s5_socks_addr_get(addr, req);
+
       memset(&res, 0, sizeof(res));
       res.ver = S5_VER;
       res.rep = S5_REP_SUCCEEDED;
       res.atyp = S5_ATYP_IPv4;
-      res.bnd_port = htons(opt_proxy_port);
-      paddr = inet_addr(opt_proxy);
-      memcpy(&res.bnd_addr, &paddr, sizeof(uint32_t));
+      res.bnd_port = opt_proxy_addr.sin_port;
+      ip4 = ntohl(opt_proxy_addr.sin_addr.s_addr);
+      memcpy(&res.bnd_addr, &ip4, sizeof(ip4));
 
       rc = write(cfd, &res, sizeof(res));
       if (-1 == rc)
@@ -548,8 +562,7 @@ s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req)
           goto clean_exit;
         }
 
-      s5_output("CR", (const uint8_t *) &res, rc);
-
+      s5_output("cw", (const uint8_t *) &res, rc);
       break;
 
     default:
@@ -561,9 +574,9 @@ s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req)
   return rc;
 }
 
+
 static void
-s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
-                 const struct sockaddr_in *paddr)
+s5_proxy_forward(int cfd, const struct sockaddr_in *paddr)
 {
   int             rc    =  0;
   int             sfd;
@@ -574,17 +587,15 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
   fd_set          rfds, wfds;
   struct timeval  timeout;
 
-  log("!proxy[froward@%d]: from %s:%d, to %s:%d\n",
+  log("!proxy[froward@%d]: to %s:%d\n",
       getpid(),
-      inet_ntoa(caddr->sin_addr),
-      ntohs(caddr->sin_port),
       inet_ntoa(paddr->sin_addr),
       ntohs(paddr->sin_port));
 
   log("!proxy[%d]: connecting ...\n", getpid());
 
-  if (!opt_listen_only)
-    {
+  /* if (!opt_listen_only) */
+  /*   { */
       sfd = s5_connect(paddr);
       if (-1 == sfd)
         {
@@ -603,7 +614,7 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
           s5_proxy_backward(cfd, sfd);
         }
 
-    } /* !opt_listen_only */
+    /* } /\* !opt_listen_only *\/ */
 
   n = 0;
   FD_ZERO(&wfds);
@@ -650,7 +661,7 @@ s5_proxy_forward(int cfd, const struct sockaddr_in *caddr,
 
           if (opt_listen_only)
             {
-              log("!read[%d]: %s", getpid(), buf);
+              log("!read[%d]: %s\n", getpid(), buf);
             }
 
           n = rc;
@@ -736,7 +747,7 @@ s5_proxy_backward(int cfd, int sfd)
           rc = read(sfd, buf, sizeof(buf));
           if (-1 == rc)
             {
-              log_err("!read[%d]: %s", getpid(), strerror(errno));
+              log_err("!read[%d]: %s\n", getpid(), strerror(errno));
               goto clean_exit;
             }
 
@@ -780,8 +791,8 @@ s5_socks_addr_get(struct sockaddr_in *addr, const s5_cmd_req_t * cmd)
   switch (cmd->atyp)
     {
     case S5_ATYP_IPv4:
-      addr->sin_addr.s_addr = htonl(cmd->dst_addr.ip4.addr4);
-      addr->sin_port = htons(cmd->dst_addr.ip4.port);
+      addr->sin_addr.s_addr = ntohl(cmd->dst_addr.ip4.addr4);
+      addr->sin_port = cmd->dst_addr.ip4.port;
       return 0;
 
     default:
@@ -876,7 +887,7 @@ s5_proxy(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
         }
       else if (0 == pid)
         {
-          s5_proxy_forward(cfd, &caddr, paddr);
+          s5_proxy_forward(cfd, paddr);
         }
       else
         {
@@ -894,10 +905,11 @@ s5_proxy(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
 static int
 s5_socks(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
 {
-  int                 rc  =  0;
-  int                 sfd, cfd;
-  pid_t               pid;
-  socklen_t           slen;
+  int        rc  =  0;
+  int        sfd, cfd;
+  pid_t      pid;
+  socklen_t  slen;
+
   struct sockaddr_in  caddr;
 
   rc = s5_listen(&sfd, laddr);
@@ -943,7 +955,6 @@ main(int argc, char* argv[])
 {
   int                 ch;
   int                 rc  =  0;
-
 
   while (-1 != (ch = getopt_long(argc, argv,
                                  "hl:L:Kp:P:OT:Qo",
