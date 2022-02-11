@@ -599,8 +599,9 @@ s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req, struct sockaddr_in *addr)
 
       memset(addr, 0, sizeof(*addr));
       rc = s5_socks_addr_get(addr, req);
-      if (rc == S5_REP_ATYP_NOT_SUPPORTED)
+      if (-1 == rc)
         {
+          log("#xxx %d\n", S5_REP_ATYP_NOT_SUPPORTED);
           res.rep = S5_REP_ATYP_NOT_SUPPORTED;
         }
       else
