@@ -23,49 +23,32 @@
 #define BACKLOG   4
 
 
-#define S5_CMD_MAP(XX)                          \
-  XX(0x01, CONNECT)                             \
-  XX(0x02, BIND)                                \
-  XX(0x03, UDP)                                 \
-
 enum s5_cmd
   {
-#define XX(n, s) S5_CMD_##s = n,
-    S5_CMD_MAP(XX)
-#undef XX
+    S5_CMD_CONNECT  =  0x01,
+    S5_CMD_BIND     =  0x02,
+    S5_CMD_UDP      =  0x03
   };
-
-
-#define S5_ATYP_MAP(XX)                         \
-  XX(0x01, IPv4)                                \
-  XX(0x03, DOMAINNAME)                          \
-  XX(0x04, IPv6)                                \
 
 enum s5_atyp
   {
-#define XX(n, s) S5_ATYP_##s = n,
-    S5_ATYP_MAP(XX)
-#undef XX
+    S5_ATYP_IPv4        =  0x01,
+    S5_ATYP_DOMAINNAME  =  0x02,
+    S5_ATYP_IPv6        =  0x04
   };
-
-
-#define S5_REP_MAP(XX)                          \
-  XX(0x00, SUCCEEDED)                           \
-  XX(0x01, SERVER_FAILURE)                      \
-  XX(0x02, CONNECT_NOT_ALLOWED)                 \
-  XX(0x03, NETWORK_UNREACHABLE)                 \
-  XX(0x04, HOST_UNREACHABLE)                    \
-  XX(0x05, CONNECT_REFUSED)                     \
-  XX(0x06, TTL_EXPIRED)                         \
-  XX(0x07, CMD_NOT_SUPPORTED)                   \
-  XX(0x08, ATYP_NOT_SUPPORTED)                  \
-  XX(0x09, UNASSIGNED)                          \
 
 enum s5_rep
   {
-#define XX(n, s) S5_REP_##s = n,
-    S5_REP_MAP(XX)
-#undef XX
+    S5_REP_SUCCEEDED            =  0x00,
+    S5_REP_SERVER_FAILURE       =  0x01,
+    S5_REP_CONNECT_NOT_ALLOWED  =  0x02,
+    S5_REP_NETWORK_UNREACHABLE  =  0x03,
+    S5_REP_HOST_UNREACHABLE     =  0x04,
+    S5_REP_CONNECT_REFUSED      =  0x05,
+    S5_REP_TTL_EXPIRED          =  0x06,
+    S5_REP_CMD_NOT_SUPPORTED    =  0x07,
+    S5_REP_ATYP_NOT_SUPPORTED   =  0x08,
+    S5_REP_UNASSIGNED           =  0x09,
   };
 
 
@@ -74,7 +57,6 @@ enum s5_seq_e
     S5_SEQ_SELECT   =  0x00,
     S5_SEQ_CONNECT  =  0x01,
     S5_SEQ_RELAY    =  0x02
-
   };
 
 
@@ -418,6 +400,7 @@ s5_socks_req(int cfd, const struct sockaddr_in *caddr,
   int                 seq   =  S5_SEQ_SELECT;
 	uint8_t             buf[BUF_MAX];
   pid_t               pid;
+  int                 stat;
   fd_set              rfds, wfds;
   struct timeval      timeout;
   struct sockaddr_in  addr;
@@ -474,10 +457,9 @@ s5_socks_req(int cfd, const struct sockaddr_in *caddr,
             }
 
           n = rc;
+          FD_SET(cfd, &wfds);
 
           log_buf("srr", buf, n);
-
-          FD_SET(cfd, &wfds);
         }
 
       if (FD_ISSET(cfd, &wfds))
@@ -486,10 +468,6 @@ s5_socks_req(int cfd, const struct sockaddr_in *caddr,
 
           switch (seq)
             {
-            case S5_SEQ_RELAY:
-              s5_proxy_forward(cfd, caddr, &addr);
-              break;
-
             case S5_SEQ_SELECT:
               s5_socks_sel_reply(cfd, (const s5_sel_req_t *) buf);
               seq = S5_SEQ_CONNECT;
@@ -497,7 +475,25 @@ s5_socks_req(int cfd, const struct sockaddr_in *caddr,
 
             case S5_SEQ_CONNECT:
               s5_socks_cmd_reply(cfd, (const s5_cmd_req_t *) buf, &addr);
+
+              pid = fork();
+              if (-1 == pid)
+                {
+                  log_err("!s5_socks_req[fork]: %s\n", strerror(errno));
+                  goto clean_exit;
+                }
+              else if (0 == pid)
+                {
+                  s5_proxy_forward(cfd, caddr, &addr);
+                  exit(0);
+                }
               seq = S5_SEQ_RELAY;
+
+              rc = waitpid(pid, &stat, 0);
+              if (-1 == rc)
+                {
+                  goto clean_exit;
+                }
               break;
 
             default:
