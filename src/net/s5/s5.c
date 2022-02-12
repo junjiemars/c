@@ -486,11 +486,7 @@ s5_socks_req(int cfd, const struct sockaddr_in *caddr)
               seq = S5_SEQ_RELAY;
 
               rc = waitpid(pid, &stat, 0);
-              if (-1 == rc)
-                {
-                  goto clean_exit;
-                }
-              break;
+              goto clean_exit;
 
             default:
               log_err("!s5_socks_req[%d]: unsupport seq %d\n", pid, seq);
@@ -777,6 +773,10 @@ s5_proxy_backward(int cfd, int sfd)
           e = errno;
           log_err("!s5_proxy_backword[select:%d|%d]: %s\n", pid, sfd,
                   strerror(e));
+          if (e == EINTR)
+            {
+              continue;
+            }
           goto clean_exit;
         }
 
