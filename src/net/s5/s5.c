@@ -796,8 +796,9 @@ s5_proxy_backward(int cfd, int sfd)
           rc = read(sfd, buf, sizeof(buf));
           if (-1 == rc)
             {
-              log_err("!s5_proxy_backward[read:%d|%d]: %s\n", pid, sfd,
-                      strerror(errno));
+              e = errno;
+              log_err("!s5_proxy_backward[read:%d|%d]: %d:%s\n", pid, sfd, e,
+                      strerror(e));
               goto clean_exit;
             }
 
