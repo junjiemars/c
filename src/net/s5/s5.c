@@ -176,11 +176,9 @@ static void on_signal_from_child(int signo);
 static int s5_connect(const struct sockaddr_in *addr);
 static int s5_listen(int *sfd, const struct sockaddr_in *laddr);
 
-static int s5_socks(const struct sockaddr_in *laddr,
-                    const struct sockaddr_in *paddr);
+static int s5_socks(const struct sockaddr_in *laddr);
 
-static void s5_socks_req(int cfd, const struct sockaddr_in *caddr,
-                         const struct sockaddr_in *paddr);
+static void s5_socks_req(int cfd, const struct sockaddr_in *caddr);
 
 static int s5_socks_sel_reply(int cfd, const s5_sel_req_t *req);
 static int s5_socks_cmd_reply(int cfd, const s5_cmd_req_t *req,
@@ -391,8 +389,7 @@ s5_listen(int *sfd, const struct sockaddr_in *laddr)
 
 
 static void
-s5_socks_req(int cfd, const struct sockaddr_in *caddr,
-             const struct sockaddr_in *paddr)
+s5_socks_req(int cfd, const struct sockaddr_in *caddr)
 {
   int                 rc    =  0;
   int                 n, e;
@@ -403,13 +400,12 @@ s5_socks_req(int cfd, const struct sockaddr_in *caddr,
   int                 stat;
   fd_set              rfds, wfds;
   struct timeval      timeout;
-  struct sockaddr_in  addr;
+  struct sockaddr_in  raddr;
 
   pid = getpid();
 
-  log("#s5_socks_req[%d]: %s:%d to %s:%d\n", pid,
-      inet_ntoa(caddr->sin_addr), ntohs(caddr->sin_port),
-      inet_ntoa(paddr->sin_addr), ntohs(paddr->sin_port));
+  log("#s5_socks_req[%d]: from %s:%d\n", pid,
+      inet_ntoa(caddr->sin_addr), ntohs(caddr->sin_port));
 
   for (;;)
     {
@@ -474,7 +470,7 @@ s5_socks_req(int cfd, const struct sockaddr_in *caddr,
               break;
 
             case S5_SEQ_CONNECT:
-              s5_socks_cmd_reply(cfd, (const s5_cmd_req_t *) buf, &addr);
+              s5_socks_cmd_reply(cfd, (const s5_cmd_req_t *) buf, &raddr);
 
               pid = fork();
               if (-1 == pid)
@@ -484,7 +480,7 @@ s5_socks_req(int cfd, const struct sockaddr_in *caddr,
                 }
               else if (0 == pid)
                 {
-                  s5_proxy_forward(cfd, caddr, &addr);
+                  s5_proxy_forward(cfd, caddr, &raddr);
                   exit(0);
                 }
               seq = S5_SEQ_RELAY;
@@ -926,11 +922,16 @@ s5_proxy(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
 {
   int                 rc  =  0;
   int                 sfd, cfd;
-  pid_t               pid;
+  pid_t               pid, ppid;
   socklen_t           slen;
   struct sockaddr_in  caddr;
 
   sfd = 0;
+  ppid = getpid();
+
+  log("#s5_proxy[%d]: %s:%d to %s:%d\n", ppid,
+      inet_ntoa(laddr->sin_addr), ntohs(laddr->sin_port),
+      inet_ntoa(paddr->sin_addr), ntohs(paddr->sin_port));
 
   rc = s5_listen(&sfd, laddr);
   if (-1 == rc)
@@ -951,7 +952,7 @@ s5_proxy(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
       pid = fork();
       if (-1 == pid)
         {
-          log_err("!fork: %s\n", strerror(errno));
+          log_err("!s5_proxy[fork:%d]: %s\n", ppid, strerror(errno));
         }
       else if (0 == pid)
         {
@@ -971,13 +972,12 @@ s5_proxy(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
 }
 
 static int
-s5_socks(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
+s5_socks(const struct sockaddr_in *laddr)
 {
-  int        rc  =  0;
-  int        sfd, cfd;
-  pid_t      pid;
-  socklen_t  slen;
-
+  int                 rc  =  0;
+  int                 sfd, cfd;
+  pid_t               pid;
+  socklen_t           slen;
   struct sockaddr_in  caddr;
 
   rc = s5_listen(&sfd, laddr);
@@ -1004,11 +1004,10 @@ s5_socks(const struct sockaddr_in *laddr, const struct sockaddr_in *paddr)
 
       if (0 == pid)
         {
-          s5_socks_req(cfd, (const struct sockaddr_in *) &caddr, paddr);
+          s5_socks_req(cfd, (const struct sockaddr_in *) &caddr);
         }
 
     }
-
 
  close_exit:
   close(sfd);
@@ -1108,7 +1107,6 @@ main(int argc, char* argv[])
   opt_proxy_addr.sin_port = htons(opt_proxy_port);
   opt_proxy_addr.sin_addr.s_addr = inet_addr(opt_proxy);
 
-
   signal(SIGCHLD, on_signal_chld);
   signal(SIGUSR1, on_signal_from_parent);
   signal(SIGUSR2, on_signal_from_child);
@@ -1121,10 +1119,8 @@ main(int argc, char* argv[])
   else
     {
       opt_proxy_only = !opt_proxy_only;
-      rc = s5_socks(&opt_listen_addr, &opt_proxy_addr);
+      rc = s5_socks(&opt_listen_addr);
     }
-
-  _unused_(s5_socks_addr_get);
 
  clean_exit:
   return rc;
