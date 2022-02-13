@@ -56,14 +56,23 @@ $(process_argv_binout): $(process_root)/argv/clargv.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # env
-process_env_binout := $(bin_path)/$(process_prefix)_env$(bin_ext)
+process_env_raw_binout := $(bin_path)/$(process_prefix)_env$(bin_ext)
+process_env_mem_binout := $(bin_path)/$(process_prefix)_mem$(bin_ext)
 
-process_env: $(process_env_binout)
+process_env: $(process_env_raw_binout)          \
+             $(process_env_mem_binout)
 process_env_test: process_env
-	$(process_env_binout)
+	$(process_env_raw_binout)
+	$(process_env_mem_binout)
 
-$(process_env_binout): $(process_root)/env/e1.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+process_env_mem_test: $(process_env_mem_binout)
+	$(process_env_mem_binout)
+
+$(process_env_raw_binout): $(process_root)/env/raw.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(process_env_mem_binout): $(process_root)/env/mem.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # layout
