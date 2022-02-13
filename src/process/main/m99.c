@@ -8,12 +8,12 @@
 /*
  * 1. c99: `main' must return int
  * 2. default exit status is 0
- * 3. exit(main(...));
- *
+ * 3. start-up routine: exit(main(...));
+ * 4. low-order 8 bits as status
  */
 
 
-#if defined(_RETURN_INT_)
+#if (_RETURN_INT_)
 int
 #else
 void
@@ -23,12 +23,15 @@ main(void)
 {
   printf("boring\n");
 
-#if defined(_WITH_RETURN_)
-  return 0;
+
+#if (_WITH_RETURN_)
+  return 0x1122;
+
 #endif /* _WITH_RETURN_ */
 
-#if defined(_WITH_EXIT_)
-  exit(0);
+
+#if (_WITH_EXIT_)
+  exit(0x3344);
 
 #endif /* _WITH_EXIT_ */
 
