@@ -9,9 +9,11 @@ process_test: process
 	@echo "#skip ..."
 else
 
-process: process_pause
+process: process_main                           \
+         process_argv
 
-process_test: process_pause_test
+process_test: process_main_test                 \
+              process_argv_test
 
 endif
 
@@ -38,5 +40,15 @@ $(process_main_binout): $(process_root)/main/m99.c
     $^ $(bin_out)$@
 
 
+# argv
+process_argv_binout := $(bin_path)/$(process_prefix)_argv$(bin_ext)
+
+process_argv: $(process_argv_binout)
+process_argv_test: process_argv
+	$(process_argv_binout)
+	$(process_argv_binout) a b c
+
+$(process_argv_binout): $(process_root)/argv/clargv.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # eof
