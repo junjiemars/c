@@ -10,9 +10,11 @@ process_test: process
 else
 
 process: process_main                           \
-         process_argv
+         process_argv                           \
+         process_env
 
 process_test: process_main_test                 \
+              process_argv_test                 \
               process_argv_test
 
 endif
@@ -49,6 +51,16 @@ process_argv_test: process_argv
 	$(process_argv_binout) a b c
 
 $(process_argv_binout): $(process_root)/argv/clargv.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# env
+process_env_binout := $(bin_path)/$(process_prefix)_env$(bin_ext)
+
+process_env: $(process_env_binout)
+process_env_test: process_env
+	$(process_env_binout)
+
+$(process_env_binout): $(process_root)/env/e1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # eof
