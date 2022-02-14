@@ -2,26 +2,12 @@
 #define _NIO_H_
 
 
-#include <nore.h>
+#include <npstd.h>
 
 
 #if (MSVC)
 #  pragma warning(disable:4996)
 #endif  /* _CRT_SECURE_NO_WARNINGS */
-
-
-#if (LINUX)
-#  if !defined(__USE_POSIX)
-#    define __USE_POSIX
-#  endif
-#endif  /* fileno */
-
-
-#if (LINUX)
-#  if !defined(__USE_XOPEN2K8)
-#    define __USE_XOPEN2K8
-#  endif
-#endif  /* getline */
 
 
 #include <stdio.h>

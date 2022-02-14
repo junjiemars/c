@@ -5,7 +5,9 @@
 #ifndef _NUSTD_H_
 #define _NUSTD_H_
 
+
 #include <nore.h>
+#include <npstd.h>
 #include <ncstd.h>
 
 

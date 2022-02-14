@@ -75,7 +75,7 @@ process_env_child_test: $(process_env_child_binout)
 	$(process_env_child_binout)
 
 $(process_env_raw_binout): $(process_root)/env/raw.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $^ $(bin_out)$@
 
 $(process_env_mem_binout): $(process_root)/env/mem.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

@@ -3,13 +3,7 @@
 #include <stdio.h>
 
 
-#if !defined(_unused_)
-#define _unused_(x)  ((void)(x))
-#endif
-
 static void test_restrict(const char *restrict);
-static void test_assert(int, int);
-static void test_static_assert(void);
 static void test_isut(void);
 static void test_nof(void);
 
@@ -23,20 +17,6 @@ test_restrict(const char *restrict ss)
 
 
 void
-test_assert(int a, int b)
-{
-  assert(a == b);
-  printf("%s\n------------\n", __FUNCTION__);
-}
-
-void
-test_static_assert(void)
-{
-  static_assert(sizeof(char) == 1, "sizeof(char) is not 1 byte");
-  printf("%s\n------------\n", __FUNCTION__);
-}
-
-void
 test_isut(void)
 {
   printf("_isut_(char) = %d\n_isut_(unsigned char) = %d\n",
@@ -47,15 +27,15 @@ void
 test_nof(void)
 {
   int a[] = { 1, 2, 3, };
-  assert(_nof_(a) == 3);
+  printf("_nof_(a) = %zu\n", _nof_(a));
 }
 
 int
 main(int argc, char **argv)
 {
+  _unused_(argc);
+
   test_restrict((const char *restrict) argv[0]);
-  test_assert(argc, argc);
-  test_static_assert();
   test_isut();
   test_nof();
 

@@ -31,7 +31,7 @@
 
 
 int
-main(int argc, char **argv) 
+main(int argc, char **argv)
 {
   _unused_(argc);
   _unused_(argv);
@@ -46,6 +46,6 @@ main(int argc, char **argv)
   printf("0x%16" PRIx64 " = " BPRI64, (uint64_t) 0x1234567890abcdef,
          BIT64(0x1234567890abcdef));
 #endif
-  
+
   return 0;
 }

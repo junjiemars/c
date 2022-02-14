@@ -1,7 +1,6 @@
 #ifndef _IO_H_
 #define _IO_H_
 
-#include <nore.h>
 #include <ndef.h>
 #include <nio.h>
 

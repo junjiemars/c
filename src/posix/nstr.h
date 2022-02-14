@@ -2,14 +2,8 @@
 #define _NSTR_H_
 
 
-#include <nore.h>
+#include <npstd.h>
 
-
-#if (LINUX)
-#  if !defined(__USE_XOPEN_EXTENDED)
-#    define __USE_XOPEN_EXTENDED
-#  endif  /* __USE_XOPEN_EXTENDED */
-#endif  /* LINUX */
 
 
 #if (MSVC)
@@ -28,4 +22,3 @@
 
 
 #endif /* end of _NSTR_H_ */
-
