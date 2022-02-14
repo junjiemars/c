@@ -3,6 +3,7 @@
  */
 
 #include <nore.h>
+#include <nstr.h>
 
 #if (MSVC)
 
