@@ -23,6 +23,8 @@ leptonica_build := $(leptonica_inc_dir)/leptonica/allheaders.h  \
 leptonica_lib_arout := $(leptonica_lib_dir)/liblept.a
 
 
+INC += $(nm_inc_opt)$(root)
+INC += $(nm_inc_opt)$(root)/posix
 INC += $(nm_inc_opt)$(leptonica_root) $(nm_inc_opt)$(root)
 INC += $(nm_inc_opt)$(leptonica_inc_dir)
 LDFLAGS += $(nm_libdir_opt)$(leptonica_lib_dir)

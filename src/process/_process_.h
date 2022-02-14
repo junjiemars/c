@@ -6,7 +6,6 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <unistd.h>
 
 
 #endif /* end of _PROCESS_H_ */
