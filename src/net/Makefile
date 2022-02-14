@@ -72,7 +72,8 @@ net_s5_binout := $(bin_path)/$(net_prefix)_s5$(bin_ext)
 net_s5: $(net_s5_binout)
 
 ifeq ($(NM_SYSTEM), WinNT)
-net_s5_test: net_s5
+net_s5_test:
+	@echo "#skip ..."
 else
 net_s5_test: net_s5
 	$(net_s5_binout) -h

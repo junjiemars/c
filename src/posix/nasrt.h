@@ -2,9 +2,6 @@
 #define _NASRT_H_
 
 
-#include <ndef.h>
-
-
 #include <assert.h>
 
 

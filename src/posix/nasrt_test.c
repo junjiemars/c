@@ -1,3 +1,4 @@
+#include "ndef.h"
 #include "nasrt.h"
 #include <stdio.h>
 
@@ -8,6 +9,9 @@ static void test_static_assert(void);
 void
 test_assert(int a, int b)
 {
+  _unused_(a);
+  _unused_(b);
+
   assert(a == b);
   printf("%s\n------------\n", __FUNCTION__);
 }
