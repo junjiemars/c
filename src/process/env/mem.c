@@ -36,11 +36,13 @@ print_environ(void)
 int
 main(void)
 {
+  int  overwrite  =  1;
+
   /* before change */
   print_environ();
 
-  putenv("X1=x");
-  setenv("X2", "xx", 0);
+  setenv("X1", "x", overwrite);
+  setenv("X2", "xx", overwrite);
 
   /* after change */
   print_environ();
