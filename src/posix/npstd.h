@@ -1,5 +1,8 @@
 /**
  * Nore POSIX standard
+ *
+ * https://pubs.opengroup.org/onlinepubs/9699919799/
+ *
  */
 
 #ifndef _NPSTD_H_

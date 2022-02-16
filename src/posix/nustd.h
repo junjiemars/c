@@ -8,6 +8,7 @@
 
 #include <nore.h>
 #include <npstd.h>
+#include <nxstd.h>
 #include <ncstd.h>
 
 
