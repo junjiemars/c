@@ -12,12 +12,14 @@ else
 process: process_main                           \
          process_argv                           \
          process_env                            \
-         process_layout
+         process_layout                         \
+         process_rlimit
 
 process_test: process_main_test                 \
               process_argv_test                 \
               process_env_test                  \
-              process_layout_test
+              process_layout_test               \
+              process_rlimit_test
 
 endif
 
@@ -103,5 +105,16 @@ $(process_layout_asmout): $(process_root)/layout/mem.c
 
 $(process_layout_static_binout): $(process_root)/layout/mem.c
 	$(CC) $(CFLAGS) $(INC) -static $^ $(bin_out)$@
+
+
+# rlimit
+process_rlimit_binout := $(bin_path)/$(process_prefix)_rlimit$(bin_ext)
+
+process_rlimit: $(process_rlimit_binout)
+process_rlimit_test: process_rlimit
+	$(process_rlimit_binout)
+
+$(process_rlimit_binout): $(process_root)/rlimit/def.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # eof
