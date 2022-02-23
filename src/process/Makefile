@@ -60,9 +60,9 @@ $(process_argv_binout): $(process_root)/argv/clargv.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # env
-process_env_raw_binout := $(bin_path)/$(process_prefix)_env$(bin_ext)
-process_env_mem_binout := $(bin_path)/$(process_prefix)_mem$(bin_ext)
-process_env_child_binout := $(bin_path)/$(process_prefix)_child$(bin_ext)
+process_env_raw_binout := $(bin_path)/$(process_prefix)_env_raw$(bin_ext)
+process_env_mem_binout := $(bin_path)/$(process_prefix)_env_mem$(bin_ext)
+process_env_child_binout := $(bin_path)/$(process_prefix)_env_child$(bin_ext)
 
 process_env: $(process_env_raw_binout)          \
              $(process_env_mem_binout)          \
