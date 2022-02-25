@@ -52,6 +52,11 @@ main(void)
 
 #if (_WAIT_)
   pid = waitpid(pid, &stat, 0);
+  if (pid == -1)
+    {
+      perror("!panic:");
+      exit(1);
+    }
 
 #endif
 
