@@ -37,5 +37,10 @@
 #endif  /* _nof_ */
 
 
+#if !defined(_str_)
+#  define _str_(s) #s
+#endif  /* _str_ */
+
+
 
 #endif /* end of _NDEF_H_ */

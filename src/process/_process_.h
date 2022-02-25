@@ -2,6 +2,7 @@
 #define _PROCESS_H_
 
 #include <nustd.h>
+#include <nstr.h>
 
 #include <errno.h>
 #include <sys/types.h>
