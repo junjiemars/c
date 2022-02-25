@@ -94,11 +94,14 @@ $(process_env_child_binout): $(process_root)/env/child.c
 process_exec_echo_binout := $(bin_path)/$(process_prefix)_exec_echo$(bin_ext)
 process_exec_vary_binout := $(bin_path)/$(process_prefix)_exec_vary$(bin_ext)
 process_exec_vary_cppout := $(tmp_path)/$(process_prefix)_exec_vary$(cpp_ext)
+process_exec_child_binout := $(bin_path)/$(process_prefix)_exec_child$(bin_ext)
 
 process_exec: $(process_exec_echo_binout)       \
-              $(process_exec_vary_binout)
+              $(process_exec_vary_binout)       \
+              $(process_exec_child_binout)
 process_exec_test: process_exec                 \
-                   process_exec_vary_test
+                   process_exec_vary_test       \
+                   process_exec_child_test
 	$(process_exec_echo_binout)
 
 process_exec_vary_test: $(process_exec_echo_binout) \
@@ -108,6 +111,10 @@ process_exec_vary_test: $(process_exec_echo_binout) \
 	$(process_exec_vary_binout) execv
 	PATH="$(PATH):$(CURDIR)/$(bin_path)" $(process_exec_vary_binout) execlp
 	PATH="$(PATH):$(CURDIR)/$(bin_path)" $(process_exec_vary_binout) execvp
+
+process_exec_child_test: $(process_exec_echo_binout)  \
+                         $(process_exec_child_binout)
+	PATH="$(PATH):$(CURDIR)/$(bin_path)" $(process_exec_child_binout)
 
 $(process_exec_echo_binout): $(process_root)/exec/echoa.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -120,6 +127,13 @@ $(process_exec_vary_cppout): $(process_root)/exec/vary.c
     -D_PATH_NAME_=\"$(CURDIR)/$(process_exec_echo_binout)\" \
     -D_FILE_NAME_=\"$(process_prefix)_exec_echo$(bin_ext)\" \
     $(nm_stage_pre) $^ $(cpp_out)$@
+
+$(process_exec_child_binout): $(process_root)/exec/child.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC)                        \
+    -D_PATH_NAME_=\"$(CURDIR)/$(process_exec_echo_binout)\" \
+    -D_FILE_NAME_=\"$(process_prefix)_exec_echo$(bin_ext)\" \
+    -D_WAIT_=0                                              \
+    $^ $(bin_out)$@
 
 
 # layout
