@@ -14,6 +14,7 @@ process: process_main                           \
          process_env                            \
          process_exec                           \
          process_layout                         \
+         process_io                             \
          process_rlimit                         \
          process_zombie
 
@@ -22,6 +23,7 @@ process_test: process_main_test                 \
               process_env_test                  \
               process_exec_test                 \
               process_layout_test               \
+              process_io_test                   \
               process_rlimit_test               \
               process_zombie
 
@@ -147,14 +149,17 @@ process_layout_test: process_layout
 	size $(process_layout_binout)
 	nm $(process_layout_binout)
 
-$(process_layout_binout): $(process_layout_asmout)
-	$(LINK) $^ $(bin_out)$@
+# io
+process_io_buf_binout := $(bin_path)/$(process_prefix)_io_buf$(bin_ext)
 
-$(process_layout_asmout): $(process_root)/layout/mem.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_asm) $^ $(asm_out)$@
+process_io: $(process_io_buf_binout)
+process_io_test: process_io
+	$(process_io_buf_binout)
+	$(process_io_buf_binout) > /tmp/$(process_prefix)_io_buf.txt
+	cat /tmp/$(process_prefix)_io_buf.txt
 
-$(process_layout_static_binout): $(process_root)/layout/mem.c
-	$(CC) $(CFLAGS) $(INC) -static $^ $(bin_out)$@
+$(process_io_buf_binout): $(process_root)/io/b.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # rlimit
