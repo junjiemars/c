@@ -144,10 +144,21 @@ process_layout_asmout := $(tmp_path)/$(process_prefix)_layout$(asm_ext)
 process_layout_static_binout := \
   $(bin_path)/$(process_prefix)_layout_static$(bin_ext)
 
-process_layout: $(process_layout_binout)
+process_layout: $(process_layout_binout)        \
+                $(process_layout_static_binout)
 process_layout_test: process_layout
 	size $(process_layout_binout)
 	nm $(process_layout_binout)
+	size $(process_layout_static_binout)
+
+$(process_layout_binout): $(process_layout_asmout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(process_layout_asmout): $(process_root)/layout/mem.c
+	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_asm) $^ $(asm_out)$@
+
+$(process_layout_static_binout): $(process_root)/layout/mem.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -static $^ $(bin_out)$@
 
 # io
 process_io_buf_binout := $(bin_path)/$(process_prefix)_io_buf$(bin_ext)
