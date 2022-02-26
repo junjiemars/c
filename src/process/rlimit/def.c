@@ -15,7 +15,8 @@ print_rlimit(const char *name, int resource)
 
   getrlimit(resource, &r);
 
-  printf("%-18s cur=0x%016zx, max=0x%016zx\n", name, r.rlim_cur, r.rlim_max);
+  printf("%-18s cur=0x%016zx, max=0x%016zx\n", name, (size_t) r.rlim_cur,
+         (size_t) r.rlim_max);
 }
 
 
