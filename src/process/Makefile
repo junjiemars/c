@@ -162,14 +162,26 @@ $(process_layout_static_binout): $(process_root)/layout/mem.c
 
 # io
 process_io_buf_binout := $(bin_path)/$(process_prefix)_io_buf$(bin_ext)
+process_io_one_binout := $(bin_path)/$(process_prefix)_io_one$(bin_ext)
 
-process_io: $(process_io_buf_binout)
-process_io_test: process_io
+process_io: $(process_io_buf_binout)            \
+            $(process_io_one_binout)
+process_io_test: process_io_buf_test            \
+                 process_io_one_test
+
+process_io_buf_test: $(process_io_buf_binout)
 	$(process_io_buf_binout)
 	$(process_io_buf_binout) > /tmp/$(process_prefix)_io_buf.txt
 	cat /tmp/$(process_prefix)_io_buf.txt
 
+process_io_one_test: $(process_io_one_binout)
+	$(process_io_one_binout)
+	$(process_io_one_binout)
+
 $(process_io_buf_binout): $(process_root)/io/b.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(process_io_one_binout): $(process_root)/io/c.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
