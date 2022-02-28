@@ -13,7 +13,7 @@ main(void)
 
   printf("parent[%d]\n", getpid());
 
-  for (i = 0; i < 10; i++)
+  for (i = 0; i < 4; i++)
     {
       pid = fork();
       if (0 == pid)
@@ -24,7 +24,8 @@ main(void)
 
       sleep(2);
 
-      if (0 == (i & 2))
+      /* only wait odd ones, the even ones should be zombies */
+      if (1 == (i & 1))
         {
           waitpid(pid, &stat, 0);
           printf("child[%d] exit(%d)\n", pid, stat);
