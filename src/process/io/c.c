@@ -30,7 +30,7 @@ main(void)
 static void
 char_attime(const char *ss)
 {
-  int    c;
+  int          c;
   const char  *s;
 
   setbuf(stdout, NULL);
