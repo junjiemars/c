@@ -28,8 +28,6 @@ main(void)
           exit(0);
         }
 
-      sleep(2);
-
       /* only wait odd ones, the even ones should be zombies */
       if (1 == (i & 1))
         {
