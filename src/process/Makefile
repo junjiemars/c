@@ -25,7 +25,7 @@ process_test: process_main_test                 \
               process_layout_test               \
               process_io_test                   \
               process_rlimit_test               \
-              process_zombie
+              process_zombie_test
 
 endif
 

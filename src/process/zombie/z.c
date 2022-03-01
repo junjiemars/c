@@ -36,4 +36,6 @@ main(void)
           system(cmd);
         }
     }
+
+  return 0;
 }

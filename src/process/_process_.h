@@ -6,6 +6,7 @@
 
 #include <errno.h>
 #include <sys/types.h>
+#include <signal.h>
 #include <sys/wait.h>
 
 
