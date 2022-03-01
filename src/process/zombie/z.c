@@ -16,6 +16,12 @@ main(void)
   for (i = 0; i < 5; i++)
     {
       pid = fork();
+      if (pid == -1)
+        {
+          perror(0);
+          exit(errno);
+        }
+
       if (0 == pid)
         {
           printf("child[%d]\n", getpid());
@@ -32,7 +38,7 @@ main(void)
         }
       else
         {
-          sprintf(cmd, "ps -p %d", pid);
+          sprintf(cmd, "ps -l -p %d", pid);
           system(cmd);
         }
     }
