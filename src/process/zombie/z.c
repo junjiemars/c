@@ -13,7 +13,7 @@ main(void)
 
   printf("parent[%d]\n", getpid());
 
-  for (i = 0; i < 4; i++)
+  for (i = 0; i < 5; i++)
     {
       pid = fork();
       if (0 == pid)
@@ -32,7 +32,7 @@ main(void)
         }
       else
         {
-          sprintf(cmd, "ps aux|grep %d", pid);
+          sprintf(cmd, "ps -p %d", pid);
           system(cmd);
         }
     }
