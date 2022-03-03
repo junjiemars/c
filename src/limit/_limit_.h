@@ -4,8 +4,13 @@
 #include <nustd.h>
 
 
-#define  pr_limit(s, v)  printf("%-32s: %8ld\n", s, (long) v)
-#define  pr_limit_no(s)  printf("%-32s: %8ld\n", s)
+#define FMT_S_L32(t)  "%-32s"t
+#define FMT_S_R20     ": %20s\n"
+#define FMT_I_RD      ": %20d\n"
+#define FMT_I_RLD     ": %20ld\n"
+
+#define S_NOSYM  "(no symbol)"
+
 
 
 #endif /* end of _LIMIT_H_ */
