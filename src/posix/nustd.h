@@ -16,6 +16,7 @@
 #  include <windows.h>
 #  include <process.h>
 #else
+#  include <sys/types.h>
 #  include <unistd.h>
 #endif
 
