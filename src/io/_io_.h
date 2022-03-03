@@ -1,8 +1,7 @@
 #ifndef _IO_H_
 #define _IO_H_
 
-#include <ndef.h>
-#include <nio.h>
+#include <nustd.h>
 
 
 void hex_out(const char *ss);

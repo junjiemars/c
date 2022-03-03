@@ -244,9 +244,13 @@ $(io_scan_free_binout): $(io_root)/scan/free.c
 
 # seek
 io_seek_basic_binout := $(bin_path)/$(io_prefix)_seek_basic$(bin_ext)
+io_seek_seekable_binout := $(bin_path)/$(io_prefix)_seek_seekable$(bin_ext)
 
-io_seek: $(io_seek_basic_binout)
+io_seek: $(io_seek_basic_binout)                \
+         $(io_seek_seekable_binout)
 io_seek_test: io_seek
+
+io_seek_basic_test: $(io_seek_basic_binout)
 	cp $(CURDIR)/$(io_root)/seek/records.txt $(CURDIR)/$(tmp_path)/records.txt
 	$(io_seek_basic_binout) 64                                \
                           $(CURDIR)/$(tmp_path)/records.txt \
@@ -258,7 +262,13 @@ io_seek_test: io_seek
                           $(CURDIR)/$(tmp_path)/records.bin \
                           $(CURDIR)/$(tmp_path)/records.idx
 
+io_seek_seekable_test: $(io_seek_seekable_binout)
+	$(io_seek_seekable_binout)
+
 $(io_seek_basic_binout): $(io_root)/seek/s1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_seek_seekable_binout): $(io_root)/seek/s2.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # variadic
