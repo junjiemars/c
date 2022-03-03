@@ -248,7 +248,9 @@ io_seek_seekable_binout := $(bin_path)/$(io_prefix)_seek_seekable$(bin_ext)
 
 io_seek: $(io_seek_basic_binout)                \
          $(io_seek_seekable_binout)
-io_seek_test: io_seek
+io_seek_test: io_seek_basic_test                \
+              io_seek_seekable_test
+
 
 io_seek_basic_test: $(io_seek_basic_binout)
 	cp $(CURDIR)/$(io_root)/seek/records.txt $(CURDIR)/$(tmp_path)/records.txt
