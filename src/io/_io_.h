@@ -2,6 +2,7 @@
 #define _IO_H_
 
 #include <nustd.h>
+#include <nio.h>
 
 
 void hex_out(const char *ss);
