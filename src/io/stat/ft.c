@@ -1,6 +1,7 @@
 #include "_io_.h"
 #include <sys/stat.h>
 #include <stdlib.h>
+#include <libgen.h>
 
 
 int
@@ -12,7 +13,8 @@ main(int argc, char *argv[])
 
   if (argc < 2)
     {
-      fprintf(stderr, "usage: <pathname> [pathname...]\n");
+      fprintf(stderr, "usage: %s <pathname> [pathname...]\n",
+              basename(argv[0]));
       exit(EXIT_FAILURE);
     }
 

@@ -3,6 +3,9 @@
 
 #include <nustd.h>
 #include <nio.h>
+#include <limits.h>
+#include <stdlib.h>
+
 
 
 void hex_out(const char *ss);
