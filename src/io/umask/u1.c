@@ -10,8 +10,8 @@
  *    in the file's mode.
  * 3. The symbolic format of umask command specifies which permission
  *    are to be turn on.
- * 4. File permissions: 666 & ~(umask)
- * 5. Directory permissions: 777 & ~(umask)
+ * 4. New file permissions: 666 & ~(umask)
+ * 5. New directory permissions: 777 & ~(umask)
  */
 
 #define RWRWRW (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)
