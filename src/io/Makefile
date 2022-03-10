@@ -10,10 +10,12 @@ io_test: io_stat_test
 	@echo "#skip ..."
 else
 
-io: io_stat                                     \
+io: io_access                                   \
+    io_stat                                     \
     io_umask
 
-io_test: io_stat_test                           \
+io_test: io_access_test                         \
+         io_stat_test                           \
          io_umask_test
 
 endif
@@ -32,6 +34,23 @@ _MEMORY_ ?= 0
 ifeq ($(shell test $(_MEMORY_) -gt 0; echo $$?),0)
 CFLAGS += $(cflags_sanitize)
 endif
+
+
+# access
+io_access_binout := $(bin_path)/$(io_prefix)_access$(bin_ext)
+io_access_nuid := $(tmp_path)/$(io_prefix)_access_nuid
+
+io_access: $(io_access_binout) $(io_access_nuid)
+io_access_test: io_access
+	$(io_access_binout) $(io_access_binout) $(io_access_nuid)
+
+
+$(io_access_nuid):
+	touch $@
+	chmod 400 $@
+
+$(io_access_binout): $(io_root)/access/a.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # stat
