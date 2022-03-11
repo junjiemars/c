@@ -4,15 +4,19 @@
 #
 
 ifeq ($(CC_NAME), msvc)
-io: data_id
+io: data_id                                     \
+    data_time
 	@echo "#skip ..."
-data_test: data_id_test
+data_test: data_id_test                         \
+           data_time_test
 	@echo "#skip ..."
 else
 
-data: data_id
+data: data_id                                   \
+      data_time
 
-data_test: data_id_test
+data_test: data_id_test                         \
+           data_time_test
 
 endif
 
@@ -51,6 +55,20 @@ $(data_id_un_binout): $(data_root)/id/un.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(data_id_hn_binout): $(data_root)/id/hn.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# time
+data_time_conv_binout := $(bin_path)/$(data_prefix)_time_conv_un$(bin_ext)
+data_time_conv_hn_binout := $(bin_path)/$(data_prefix)_time_conv_hn$(bin_ext)
+
+data_time_conv: $(data_time_conv_binout)
+data_time_conv_test: data_time_conv_test
+
+data_time_conv_test: $(data_time_conv_binout)
+	$(data_time_conv_binout)
+
+$(data_time_conv_binout): $(data_root)/time/conv.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
