@@ -33,15 +33,25 @@ endif
 
 
 # id
-data_id_binout := $(bin_path)/$(data_prefix)_id$(bin_ext)
+data_id_un_binout := $(bin_path)/$(data_prefix)_id_un$(bin_ext)
+data_id_hn_binout := $(bin_path)/$(data_prefix)_id_hn$(bin_ext)
 
-data_id: $(data_id_binout)
-data_id_test: data_id
-	$(data_id_binout)
+data_id: $(data_id_un_binout)                   \
+         $(data_id_hn_binout)
+data_id_test: data_id_un_test                   \
+              data_id_hn_test
 
-$(data_id_binout): $(data_root)/id/un.c
+data_id_un_test: $(data_id_un_binout)
+	$(data_id_un_binout)
+
+data_id_hn_test: $(data_id_hn_binout)
+	$(data_id_hn_binout)
+
+$(data_id_un_binout): $(data_root)/id/un.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+$(data_id_hn_binout): $(data_root)/id/hn.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 
