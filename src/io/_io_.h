@@ -5,7 +5,9 @@
 #include <nio.h>
 #include <limits.h>
 #include <stdlib.h>
-
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 
 void hex_out(const char *ss);
