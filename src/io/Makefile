@@ -42,12 +42,17 @@ io_access_nuid := $(tmp_path)/$(io_prefix)_access_nuid
 
 io_access: $(io_access_binout) $(io_access_nuid)
 io_access_test: io_access
-	$(io_access_binout) $(io_access_binout) $(io_access_nuid)
-
+	$(io_access_binout) $(io_access_binout)
+	$(io_access_binout) $(io_access_nuid)
+	# stat $(io_access_nuid)
+	# sudo chown root $(io_access_binout)
+	# sudo chmod u+s $(io_access_binout)
+	# stat $(io_access_binout)
 
 $(io_access_nuid):
 	touch $@
-	chmod 400 $@
+	chmod 600 $@
+	# sudo chown root $@
 
 $(io_access_binout): $(io_root)/access/a.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
