@@ -11,11 +11,13 @@ io_test: io_stat_test
 else
 
 io: io_access                                   \
+    io_copy                                     \
     io_redirect                                 \
     io_stat                                     \
     io_umask
 
 io_test: io_access_test                         \
+         io_copy_test                           \
          io_redirect_test                       \
          io_stat_test                           \
          io_umask_test
@@ -50,6 +52,18 @@ io_access_test: io_access
 	# sudo chown root $(io_access_binout)
 	# sudo chmod u+s $(io_access_binout)
 	# stat $(io_access_binout)
+
+# copy
+io_copy_std_binout := $(bin_path)/$(io_prefix)_copy_std$(bin_ext)
+
+io_copy: $(io_copy_std_binout)
+io_copy_test: io_copy_std_test
+
+io_copy_std_test: $(io_copy_std_binout)
+	echo "abc" | $(io_copy_std_binout)
+
+$(io_copy_std_binout): $(io_root)/copy/c1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_access_nuid):
 	touch $@
