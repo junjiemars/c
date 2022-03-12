@@ -1,6 +1,13 @@
 #include "_io_.h"
 #include <errno.h>
 
+
+/*
+ * https://pubs.opengroup.org/onlinepubs/9699919799/functions/access.html
+ *
+ */
+
+
 int
 main(int argc, char **argv)
 {
