@@ -60,7 +60,7 @@ io_copy: $(io_copy_std_binout)
 io_copy_test: io_copy_std_test
 
 io_copy_std_test: $(io_copy_std_binout)
-	echo "abc" | $(io_copy_std_binout)
+	echo "abc\ndef" | $(io_copy_std_binout)
 
 $(io_copy_std_binout): $(io_root)/copy/c1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

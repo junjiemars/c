@@ -6,7 +6,7 @@ main(void)
   int   n;
   char  buf[64];
 
-  while ((n = read(STDIN_FILENO, buf, sizeof(buf) - 1)) > 0)
+  while ((n = read(STDIN_FILENO, buf, sizeof(buf))) > 0)
     {
       if (write(STDOUT_FILENO, buf, n) != n)
         {
