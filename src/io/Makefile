@@ -12,12 +12,14 @@ else
 
 io: io_access                                   \
     io_copy                                     \
+    io_hole                                     \
     io_redirect                                 \
     io_stat                                     \
     io_umask
 
 io_test: io_access_test                         \
          io_copy_test                           \
+         io_hole_test                           \
          io_redirect_test                       \
          io_stat_test                           \
          io_umask_test
@@ -70,7 +72,19 @@ $(io_access_nuid):
 	chmod 600 $@
 	# sudo chown root $@
 
-$(io_access_binout): $(io_root)/access/a.c
+# hole
+io_hole_binout := $(bin_path)/$(io_prefix)_hole$(bin_ext)
+io_hole_yes := $(tmp_path)/$(io_prefix)_hole.yes$(bin_ext)
+io_hole_no := $(tmp_path)/$(io_prefix)_hole.no$(bin_ext)
+
+io_hole: $(io_hole_binout)
+io_hole_test: io_hole
+	$(io_hole_binout) $(io_hole_yes)
+	$(io_hole_binout) $(io_hole_no) no
+	ls -ls $(tmp_path)/$(io_prefix)_hole*
+	od -c $(io_hole_yes)
+
+$(io_hole_binout): $(io_root)/hole/h1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # redirect
