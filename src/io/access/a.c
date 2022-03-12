@@ -11,7 +11,13 @@
 int
 main(int argc, char **argv)
 {
-  int  rc;
+  int    rc;
+  uid_t  uid, euid;
+
+  uid = getuid();
+  euid = geteuid();
+
+  printf("uid: %i, euid: %i\n------------\n", uid, euid);
 
   for (int i = 1; i < argc; i++)
     {

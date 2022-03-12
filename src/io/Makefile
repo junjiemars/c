@@ -11,10 +11,12 @@ io_test: io_stat_test
 else
 
 io: io_access                                   \
+    io_redirect                                 \
     io_stat                                     \
     io_umask
 
 io_test: io_access_test                         \
+         io_redirect_test                       \
          io_stat_test                           \
          io_umask_test
 
@@ -55,6 +57,19 @@ $(io_access_nuid):
 	# sudo chown root $@
 
 $(io_access_binout): $(io_root)/access/a.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# redirect
+io_redirect_binout := $(bin_path)/$(io_prefix)_redirect$(bin_ext)
+io_redirect_out1 := $(tmp_path)/$(io_prefix)_redirect.out1
+io_redirect_out2 := $(tmp_path)/$(io_prefix)_redirect.out2
+
+io_redirect: $(io_redirect_binout)
+io_redirect_test: io_redirect
+	$(io_redirect_binout) > $(io_redirect_out1) 2>&1
+	$(io_redirect_binout) 2>&1 >$(io_redirect_out2)
+
+$(io_redirect_binout): $(io_root)/redirect/r.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
