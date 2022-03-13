@@ -16,6 +16,7 @@ io: io_access                                   \
     io_redirect                                 \
     io_share                                    \
     io_stat                                     \
+    io_struct                                   \
     io_umask
 
 io_test: io_access_test                         \
@@ -24,6 +25,7 @@ io_test: io_access_test                         \
          io_redirect_test                       \
          io_share_test                          \
          io_stat_test                           \
+         io_struct_test                         \
          io_umask_test
 
 endif
@@ -170,6 +172,18 @@ io_umask_test: io_umask
 	mkdir $(tmp_path)/y
 
 $(io_umask_binout): $(io_root)/umask/u1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# struct
+io_struct_binout := $(bin_path)/$(io_prefix)_struct$(bin_ext)
+io_struct_open := $(tmp_path)/$(io_prefix)_struct.open
+
+io_struct: $(io_struct_binout)
+io_struct_test: io_struct
+	-$(io_struct_binout) $(io_struct_open)
+
+$(io_struct_binout): $(io_root)/struct/s1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

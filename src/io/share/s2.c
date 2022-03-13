@@ -4,7 +4,7 @@
  * Parent process and child process:
  * 1. share the same v-node table.
  * 2. but does not share file table.
- * 3. automatic O_APPEND is not same as lseek then write.
+ * 3. atomic O_APPEND is not same as lseek then write.
  * 4. pwrite should ignore offset when O_APPEND had been specified.
  * 5. pwrite same as write open with O_APPEND on Linux.
  *
