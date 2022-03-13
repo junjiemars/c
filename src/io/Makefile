@@ -14,6 +14,7 @@ io: io_access                                   \
     io_copy                                     \
     io_hole                                     \
     io_redirect                                 \
+    io_share                                    \
     io_stat                                     \
     io_umask
 
@@ -21,6 +22,7 @@ io_test: io_access_test                         \
          io_copy_test                           \
          io_hole_test                           \
          io_redirect_test                       \
+         io_share_test                          \
          io_stat_test                           \
          io_umask_test
 
@@ -100,6 +102,44 @@ io_redirect_test: io_redirect
 $(io_redirect_binout): $(io_root)/redirect/r.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+# share
+io_share1_binout := $(bin_path)/$(io_prefix)_share1$(bin_ext)
+io_share2_binout := $(bin_path)/$(io_prefix)_share2$(bin_ext)
+io_share3_binout := $(bin_path)/$(io_prefix)_share3$(bin_ext)
+io_share1_out := $(tmp_path)/$(io_prefix)_share1_out
+io_share2_out := $(tmp_path)/$(io_prefix)_share2_out
+io_share3_out := $(tmp_path)/$(io_prefix)_share3_out
+
+io_share: $(io_share1_binout)                   \
+          $(io_share2_binout)                   \
+          $(io_share3_binout)
+io_share_test: io_share1_test                   \
+               io_share2_test                   \
+               io_share3_test
+
+io_share1_test: $(io_share1_binout)
+	$(io_share1_binout) $(io_share1_out)
+	sleep 1
+	wc -c $(io_share1_out)
+
+io_share2_test: $(io_share2_binout)
+	$(io_share2_binout) $(io_share2_out)
+	sleep 1
+	wc -c $(io_share2_out)
+
+io_share3_test: $(io_share3_binout)
+	$(io_share3_binout) $(io_share3_out)
+	sleep 1
+	wc -c $(io_share3_out)
+
+$(io_share1_binout): $(io_root)/share/s1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -DN=1000 $^ $(bin_out)$@
+
+$(io_share2_binout): $(io_root)/share/s2.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -DN=1000 $^ $(bin_out)$@
+
+$(io_share3_binout): $(io_root)/share/s2.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -DN=1000 -D_PWRITE_ $^ $(bin_out)$@
 
 # stat
 io_stat_ft_binout := $(bin_path)/$(io_prefix)_stat_ft$(bin_ext)

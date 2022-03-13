@@ -8,9 +8,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <libgen.h>
 
-
-void hex_out(const char *ss);
 
 
 #endif /* end of _IO_H_ */
