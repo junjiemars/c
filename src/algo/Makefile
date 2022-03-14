@@ -83,22 +83,26 @@ $(algo_compress_binout): $(algo_root)/compress/c1.c
 
 # duff device
 algo_duff_device_binout := $(bin_path)/$(algo_prefix)_duff_device$(bin_ext)
+algo_duff_device_asmout := $(tmp_path)/$(algo_prefix)_duff_device$(asm_ext)
 
 algo_duff_device: $(algo_duff_device_binout)
 algo_duff_device_test: algo_duff_device
 	$(algo_duff_device_binout)
-	$(algo_duff_device_binout) a
-	$(algo_duff_device_binout) a b
-	$(algo_duff_device_binout) a b c
-	$(algo_duff_device_binout) a b c d
-	$(algo_duff_device_binout) a b c d e
-	$(algo_duff_device_binout) a b c d e f
-	$(algo_duff_device_binout) a b c d e f g
-	$(algo_duff_device_binout) a b c d e f g h
-	$(algo_duff_device_binout) a b c d e f g h i
+	$(algo_duff_device_binout) 1
+	$(algo_duff_device_binout) 2 
+	$(algo_duff_device_binout) 3
+	$(algo_duff_device_binout) 4
+	$(algo_duff_device_binout) 5
+	$(algo_duff_device_binout) 6
+	$(algo_duff_device_binout) 7
+	$(algo_duff_device_binout) 8
+	$(algo_duff_device_binout) 9
 
-$(algo_duff_device_binout): $(algo_root)/duff_device/duff.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(algo_duff_device_binout): $(algo_duff_device_asmout)
+	$(CC) $^ $(bin_out)$@
+
+$(algo_duff_device_asmout): $(algo_root)/duff_device/duff.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_asm) $^ $(asm_out)$@
 
 # dynamic array
 algo_dynamic_array_binout := $(bin_path)/$(algo_prefix)_dynamic_array$(bin_ext)

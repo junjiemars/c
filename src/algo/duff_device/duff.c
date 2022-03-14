@@ -2,11 +2,61 @@
 #include <stdio.h>
 #include <string.h>
 
-#if GCC
-#  if NM_HAVE_W_IMPLICIT_FALLTHROUGH
+
+/*
+ * let N = count, M = device's width.
+ * 1. loop cycles = floor(N/M) + mod(N, M)
+ * 2.
+ *
+ * References:
+ * 1. https://www.lysator.liu.se/c/duffs-device.html
+ */
+
+
+#if (GCC)
+#  if (NM_HAVE_W_IMPLICIT_FALLTHROUGH)
 #    pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #  endif
 #endif
+
+
+void raw_send(char *to, char *from, int count);
+void send(char *to, char *from, int count);
+void send2(char *to, char *from, int count);
+static void show(char *p);
+
+int
+main(int argc, char *argv[]) {
+  int    n       =  1;
+	char   to[32]  =  {0};
+	char  *from    =  "abcdefghijklmnopqrstuvwxyz";
+
+  if (argc > 1) {
+    n = atoi(argv[1]);
+  }
+
+	raw_send(to, from, n);
+	show(to);
+	fflush(stdout);
+	memset(to, 0, count(to));
+
+	send(to, from, n);
+	show(to);
+	fflush(stdout);
+	memset(to, 0, count(to));
+
+	send2(to, from, n);
+	show(to);
+	fflush(stdout);
+	memset(to, 0, count(to));
+
+	memcpy(to, from, n);
+	show(to);
+	fflush(stdout);
+
+	return 0;
+}
+
 
 void
 raw_send(char *to, char *from, int count) {
@@ -60,34 +110,4 @@ void show(char *p) {
 		printf("%c, ", *p++);
 	}
 	printf("\n");
-}
-
-int
-main(int argc, char *argv[]) {
-	_unused_(argc);
-	_unused_(argv);
-
-	char *from = "abcdefghijklmnopqrstuvwxyz";
-	char to[32] = {0};
-
-	raw_send(to, from, argc);
-	show(to);
-	fflush(stdout);
-	memset(to, 0, sizeof(to)/sizeof(to[0]));
-
-	send(to, from, argc);
-	show(to);
-	fflush(stdout);
-	memset(to, 0, sizeof(to)/sizeof(to[0]));
-
-	send2(to, from, argc);
-	show(to);
-	fflush(stdout);
-	memset(to, 0, sizeof(to)/sizeof(to[0]));
-
-	memcpy(to, from, argc);
-	show(to);
-	fflush(stdout);
-
-	return 0;
 }
