@@ -49,38 +49,48 @@ endif
 # access
 io_access_open_binout := $(bin_path)/$(io_prefix)_access_open$(bin_ext)
 io_access_mode_binout := $(bin_path)/$(io_prefix)_access_mode$(bin_ext)
-io_access_nuid := $(tmp_path)/$(io_prefix)_access_nuid
+io_access_cntlfl_binout := $(bin_path)/$(io_prefix)_access_cntlfl$(bin_ext)
+io_access_open_file := $(tmp_path)/$(io_prefix)_access_open_file
+io_access_mode_file := $(tmp_path)/$(io_prefix)_access_mode_file
+io_access_cntlfl_file := $(tmp_path)/$(io_prefix)_access_cntlfl_file
 
 io_access: $(io_access_open_binout)             \
-           $(io_access_nuid)                    \
-           (io_access_mode)
+           $(io_access_mode_binout)             \
+           $(io_access_cntlfl_binout)
 io_access_test: io_access_open_test             \
-                io_access_mode_test
+                io_access_mode_test             \
+                io_access_cntlfl_test
 
 io_access_open_test: $(io_access_open_binout)   \
-                     $(io_access_nuid)
+                     $(io_access_open_file)
 	$(io_access_binout) $(io_access_binout)
-	$(io_access_binout) $(io_access_nuid)
-	# stat $(io_access_nuid)
+	$(io_access_binout) $(io_access_open_file)
+	# stat $(io_access_open_file)
 	# sudo chown root $(io_access_binout)
 	# sudo chmod u+s $(io_access_binout)
 	# stat $(io_access_binout)
 
-$(io_access_nuid):
+$(io_access_open_file):
 	touch $@
 	chmod 600 $@
 
 io_access_mode_test: $(io_access_mode_binout)
 	$(io_access_mode_binout) 0 < /dev/tty
-	$(io_access_mode_binout) 1 > $(io_access_nuid)
-	cat $(io_access_nuid)
-	$(io_access_mode_binout) 2 2>> $(io_access_nuid)
-	$(io_access_mode_binout) 5 5<>$(io_access_nuid)
+	$(io_access_mode_binout) 1 > $(io_access_mode_file)
+	cat $(io_access_mode_file)
+	$(io_access_mode_binout) 2 2>> $(io_access_mode_file)
+	$(io_access_mode_binout) 5 5<>$(io_access_mode_file)
+
+io_access_cntlfl_test: $(io_access_cntlfl_binout)
+	$(io_access_cntlfl_binout) $(io_access_cntlfl_file)
 
 $(io_access_mode_binout): $(io_root)/access/m.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_access_open_binout): $(io_root)/access/a.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_access_cntlfl_binout): $(io_root)/access/c.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
