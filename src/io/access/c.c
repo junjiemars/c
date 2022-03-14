@@ -19,22 +19,22 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  fd = open(argv[1], O_RDONLY | O_CREAT, S_IRUSR | S_IWUSR);
+  fd = open(argv[1], O_RDONLY | O_CREAT | O_NONBLOCK, S_IRUSR | S_IWUSR);
   if (fd == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
 
-  if (cntl_fl(fd, O_RDONLY, OFF) == -1)
+  if (cntl_fl(fd, O_NONBLOCK, OFF) == -1)
   {
-    fprintf(stderr, "!panic: turn O_RDONLY off failed\n");
+    fprintf(stderr, "!panic: turn O_NONBLOCK off failed\n");
     exit(EXIT_FAILURE);
   }
 
-  if (cntl_fl(fd, O_RDWR, ON) == -1)
+  if (cntl_fl(fd, O_APPEND, ON) == -1)
     {
-      fprintf(stderr, "!panic: turn O_RDWR on failed\n");
+      fprintf(stderr, "!panic: turn O_APPEND on failed\n");
       exit(EXIT_FAILURE);
     }
 
@@ -45,7 +45,8 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  assert((rc & O_ACCMODE) == O_RDWR);
+  assert((rc & O_NONBLOCK) != O_NONBLOCK);
+  assert((rc & O_APPEND) == O_APPEND);
 
   exit(EXIT_SUCCESS);
 
