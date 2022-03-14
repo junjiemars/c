@@ -1,9 +1,9 @@
 #include "_io_.h"
 
 /*
- * 1. file descriptor always independent.
- * 2. file table entry can be sharing after dup.
- *
+ * 1. file descriptor always independent each other in process table.
+ * 2. file table entry can be shared after dup.
+ * 3. the same file share the same file table entry.
  */
 
 int
@@ -11,7 +11,7 @@ main(int argc, char **argv)
 {
   int  rc;
   int  ofds, nfds;
-  int  ofls, nfls;
+  int  ofls, nfls, ofls3;
   int  fd1, fd2, fd3;
 
   if (argc < 2)
@@ -55,19 +55,32 @@ main(int argc, char **argv)
     }
   assert(ofds != nfds);
 
+  /* get file status flags for fd1 */
   ofls = fcntl(fd1, F_GETFL);
-  nfls = (ofls & O_APPEND) ? (ofls & ~O_APPEND) : (ofls | O_APPEND);
-  if (nfls == -1)
+  if (ofls == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
+
+  /* get file status flags for fd3 */
+  ofls3 = fcntl(fd3, F_GETFL);
+  if (ofls3 == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
+
+  /* set file status flags for fd2 */
+  nfls = (ofls & O_APPEND) ? (ofls & ~O_APPEND) : (ofls | O_APPEND);
   rc = fcntl(fd2, F_SETFL, nfls);
   if (rc == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
+
+  /* get file status flags for fd1 */
   ofls = fcntl(fd1, F_GETFL);
   if (ofls == -1)
     {
@@ -75,6 +88,15 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
   assert(ofls == nfls);
+
+  /* get file status flags for fd3 */
+  ofls = fcntl(fd3, F_GETFL);
+  if (ofls == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
+  assert(ofls3 == ofls);
 
 
   exit(EXIT_SUCCESS);

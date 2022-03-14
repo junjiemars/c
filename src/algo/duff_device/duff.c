@@ -19,7 +19,7 @@ void
 send(char *to, char *from, int count) {
 	int n = (count + 7) / 8;  /* count > 0 assumed */
 	switch (count % 8) {
-	case 0:    do { *to++ = *from++; 
+	case 0:    do { *to++ = *from++;
 	case 7:         *to++ = *from++;
 	case 6:         *to++ = *from++;
 	case 5:         *to++ = *from++;
@@ -35,7 +35,7 @@ void
 send2(char *to, char *from, int count) {
 	int n = (count + 7) / 8; /* count > 0 assumed */
 	switch (count % 8) {
-	case 0: *to++ = *from++; 
+	case 0: *to++ = *from++;
 	case 7: *to++ = *from++;
 	case 6: *to++ = *from++;
 	case 5: *to++ = *from++;
@@ -44,7 +44,7 @@ send2(char *to, char *from, int count) {
 	case 2: *to++ = *from++;
 	case 1: *to++ = *from++;
 	} while (--n > 0) {
-      *to++ = *from++; 
+      *to++ = *from++;
       *to++ = *from++;
       *to++ = *from++;
       *to++ = *from++;
@@ -74,7 +74,7 @@ main(int argc, char *argv[]) {
 	show(to);
 	fflush(stdout);
 	memset(to, 0, sizeof(to)/sizeof(to[0]));
-	
+
 	send(to, from, argc);
 	show(to);
 	fflush(stdout);
@@ -88,6 +88,6 @@ main(int argc, char *argv[]) {
 	memcpy(to, from, argc);
 	show(to);
 	fflush(stdout);
-	
+
 	return 0;
 }
