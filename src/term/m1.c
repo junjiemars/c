@@ -12,7 +12,7 @@ main(void)
 {
   int             rc;
   long            vdisable;
-  struct termios  term;
+  struct termios  oterm, nterm;
 
   rc = isatty(STDIN_FILENO);
   if (rc == 0)
@@ -28,22 +28,30 @@ main(void)
       exit(EXIT_FAILURE);
     }
 
-  rc = tcgetattr(STDIN_FILENO, &term);
+  rc = tcgetattr(STDIN_FILENO, &oterm);
   if (rc == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
 
-  term.c_cc[VINTR] = vdisable;
-  term.c_cc[VEOF] = '';         /* 2 */
+  oterm.c_cc[VINTR] = vdisable;
+  oterm.c_cc[VEOF] = '';         /* 2 */
 
-  rc = tcsetattr(STDIN_FILENO, TCSANOW, (const struct termios *) &term);
+  rc = tcsetattr(STDIN_FILENO, TCSANOW, (const struct termios *) &oterm);
   if (rc == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
+
+  rc = tcgetattr(STDIN_FILENO, &nterm);
+  if (rc == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
+  assert(memcpy(&oterm, &nterm, sizeof(struct termios)));
 
   exit(EXIT_SUCCESS);
 
