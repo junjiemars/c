@@ -12,6 +12,7 @@ else
 
 io: io_access                                   \
     io_copy                                     \
+    io_dup                                      \
     io_hole                                     \
     io_redirect                                 \
     io_share                                    \
@@ -22,6 +23,7 @@ io: io_access                                   \
 
 io_test: io_access_test                         \
          io_copy_test                           \
+         io_dup_test                            \
          io_hole_test                           \
          io_redirect_test                       \
          io_share_test                          \
@@ -109,6 +111,21 @@ $(io_copy_std_binout): $(io_root)/copy/c1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 	# sudo chown root $@
+
+# dup
+io_dup_close_binout := $(bin_path)/$(io_prefix)_dup_close$(bin_ext)
+io_dup_close_file := $(tmp_path)/$(io_prefix)_dup_close.file
+
+io_dup: $(io_dup_close_binout)
+io_dup_test: io_dup_close_test
+
+io_dup_close_test: $(io_dup_close_binout)
+	$(io_dup_close_binout) 1
+	$(io_dup_close_binout) 3 $(io_dup_close_file)
+	-rm 3
+
+$(io_dup_close_binout): $(io_root)/dup/d1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # hole
 io_hole_binout := $(bin_path)/$(io_prefix)_hole$(bin_ext)
