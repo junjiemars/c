@@ -15,6 +15,7 @@ io: io_access                                   \
     io_hole                                     \
     io_redirect                                 \
     io_share                                    \
+    io_seek                                     \
     io_stat                                     \
     io_struct                                   \
     io_umask
@@ -24,6 +25,7 @@ io_test: io_access_test                         \
          io_hole_test                           \
          io_redirect_test                       \
          io_share_test                          \
+         io_seek_test                           \
          io_stat_test                           \
          io_struct_test                         \
          io_umask_test
@@ -174,6 +176,20 @@ $(io_share2_binout): $(io_root)/share/s2.c
 
 $(io_share3_binout): $(io_root)/share/s2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -DN=1000 -D_PWRITE_ $^ $(bin_out)$@
+
+# seek
+io_seek_append_binout := $(bin_path)/$(io_prefix)_append$(bin_ext)
+io_seek_append_file := $(tmp_path)/$(io_prefix)_append.file
+
+io_seek: $(io_seek_append_binout)
+io_seek_test: io_seek_append_test
+
+io_seek_append_test: $(io_seek_append_binout)
+	$(io_seek_append_binout) $(io_seek_append_file)
+	cat $(io_seek_append_file)
+
+$(io_seek_append_binout): $(io_root)/seek/a.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # stat
 io_stat_ft_binout := $(bin_path)/$(io_prefix)_stat_ft$(bin_ext)
