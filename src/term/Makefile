@@ -10,9 +10,11 @@ term_test: term_map_test
 	@echo "#skip ..."
 else
 
-term: term_map
+term: term_map                                  \
+      term_csize
 
-term_test: term_map_test
+term_test: term_map_test                        \
+           term_csize_test
 
 endif
 
@@ -41,6 +43,17 @@ term_map_test: term_map
 
 $(term_map_binout): $(term_root)/m1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# csize
+term_csize_binout := $(bin_path)/$(term_prefix)_csize$(bin_ext)
+
+term_csize: $(term_csize_binout)
+term_csize_test: term_csize
+	$(term_csize_binout)
+
+$(term_csize_binout): $(term_root)/csize.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 
 

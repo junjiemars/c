@@ -1,8 +1,7 @@
 #include "_term_.h"
 
 /*
- * 1. disable INTR.
- * 2. map EOF to Ctrl-B.
+ * set character-size to 8 bits/byte.
  *
  */
 
@@ -10,22 +9,7 @@ int
 main(void)
 {
   int             rc;
-  long            vdisable;
   struct termios  oterm, nterm;
-
-  rc = isatty(STDIN_FILENO);
-  if (rc == 0)
-    {
-      perror(NULL);
-      exit(EXIT_FAILURE);
-    }
-
-  vdisable = fpathconf(STDIN_FILENO, _PC_VDISABLE);
-  if (vdisable == -1)
-    {
-      perror(NULL);
-      exit(EXIT_FAILURE);
-    }
 
   rc = tcgetattr(STDIN_FILENO, &oterm);
   if (rc == -1)
@@ -34,8 +18,27 @@ main(void)
       exit(EXIT_FAILURE);
     }
 
-  oterm.c_cc[VINTR] = vdisable;
-  oterm.c_cc[VEOF] = '';         /* 2 */
+  switch (oterm.c_cflag & CSIZE)
+    {
+    case CS5:
+      printf("5 bits/byte\n");
+      break;
+    case CS6:
+      printf("6 bits/byte\n");
+      break;
+    case CS7:
+      printf("7 bits/byte\n");
+      break;
+    case CS8:
+      printf("8 bits/byte\n");
+      break;
+    default:
+      printf("(unknown bits/byte)\n");
+      break;
+    }
+
+  oterm.c_cflag &= ~CSIZE;
+  oterm.c_cflag |= CS8;
 
   rc = tcsetattr(STDIN_FILENO, TCSANOW, (const struct termios *) &oterm);
   if (rc == -1)
