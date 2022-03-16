@@ -133,7 +133,9 @@ io_redirect_out2 := $(tmp_path)/$(io_prefix)_redirect.out2
 io_redirect: $(io_redirect_binout)
 io_redirect_test: io_redirect
 	$(io_redirect_binout) > $(io_redirect_out1) 2>&1
+	cat $(io_redirect_out1)
 	$(io_redirect_binout) 2>&1 >$(io_redirect_out2)
+	cat $(io_redirect_out2)
 
 $(io_redirect_binout): $(io_root)/redirect/r.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
