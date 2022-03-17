@@ -14,6 +14,7 @@ io: io_access                                   \
     io_copy                                     \
     io_dup                                      \
     io_hole                                     \
+    io_ls                                       \
     io_redirect                                 \
     io_share                                    \
     io_seek                                     \
@@ -25,6 +26,7 @@ io_test: io_access_test                         \
          io_copy_test                           \
          io_dup_test                            \
          io_hole_test                           \
+         io_ls_test                             \
          io_redirect_test                       \
          io_share_test                          \
          io_seek_test                           \
@@ -140,6 +142,19 @@ io_hole_test: io_hole
 	od -c $(io_hole_yes)
 
 $(io_hole_binout): $(io_root)/hole/h1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# ls
+io_ls_raw_binout := $(bin_path)/$(io_prefix)_ls_raw$(bin_ext)
+
+io_ls: $(io_ls_raw_binout)
+io_ls_test: io_ls_raw_test
+
+io_ls_raw_test: $(io_ls_raw_binout)
+	$(io_ls_raw_binout) $(CURDIR)
+	-$(io_ls_raw_binout) /dev/console
+
+$(io_ls_raw_binout): $(io_root)/ls/l1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # redirect
