@@ -11,10 +11,12 @@ term_test: term_map_test
 else
 
 term: term_map                                  \
-      term_csize
+      term_csize                                \
+      term_wsize
 
 term_test: term_map_test                        \
-           term_csize_test
+           term_csize_test                      \
+           term_wsize_test
 
 endif
 
@@ -54,6 +56,20 @@ term_csize_test: term_csize
 $(term_csize_binout): $(term_root)/csize.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+# wsize
+term_wsize_binout := $(bin_path)/$(term_prefix)_wsize$(bin_ext)
+term_wsize_cppout := $(tmp_path)/$(term_prefix)_wsize$(cpp_ext)
+
+term_wsize: $(term_wsize_binout)
+term_wsize_test: term_wsize
+	$(term_wsize_binout)
+
+$(term_wsize_binout): $(term_wsize_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(term_wsize_cppout): $(term_root)/wsize.c
+	$(CC) $(CPPFLAGS) $(INC) $^ $(nm_stage_pre) $(cpp_out)$@
 
 
 
