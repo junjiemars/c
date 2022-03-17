@@ -6,11 +6,13 @@
  *
  */
 
-/* #if (DARWIN) */
-/* #  if !defined(SIGWINCH) */
-/* #    define SIGWINCH  28 */
-/* #  endif */
-/* #endif  /\* DARWIN *\/ */
+
+/* just pass compilation */
+#if (DARWIN)
+#  if !defined(SIGWINCH)
+#    define SIGWINCH  28
+#  endif
+#endif  /* DARWIN */
 
 #include <signal.h>
 
