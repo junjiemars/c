@@ -4,6 +4,8 @@
 /*
  * Watching SIGWINCH signal.
  *
+ * History: termcap -> terminfo -> curses -> ncurses
+ *
  */
 
 
