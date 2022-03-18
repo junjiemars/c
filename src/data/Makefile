@@ -67,6 +67,8 @@ data_time_test: data_time_conv_test             \
 
 data_time_conv_test: $(data_time_conv_binout)
 	$(data_time_conv_binout)
+	TZ='' $(data_time_conv_binout)
+	TZ='GMT' $(data_time_conv_binout)
 
 data_time_high_test: $(data_time_high_binout)
 	$(data_time_high_binout)

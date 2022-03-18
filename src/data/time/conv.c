@@ -47,13 +47,14 @@ main(void)
   pr_str("asctime (gmt)", s);
 
   /* format */
-  if (strftime(buf, sizeof(buf), "%c", bt_loc) > 0)
-    {
-      pr_str("strftime", buf);
-    }
+  strftime(buf, sizeof(buf), "%c", bt_loc);
+  pr_str("strftime", buf);
+
 
   /* time zone */
   /* tzset(); */
+
+  putchar('\n');
 
   exit(EXIT_SUCCESS);
 }
