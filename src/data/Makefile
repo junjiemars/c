@@ -57,18 +57,25 @@ $(data_id_hn_binout): $(data_root)/id/hn.c
 
 
 # time
-data_time_conv_binout := $(bin_path)/$(data_prefix)_time_conv_un$(bin_ext)
-data_time_conv_hn_binout := $(bin_path)/$(data_prefix)_time_conv_hn$(bin_ext)
+data_time_conv_binout := $(bin_path)/$(data_prefix)_time_conv$(bin_ext)
+data_time_high_binout := $(bin_path)/$(data_prefix)_time_high$(bin_ext)
 
-data_time: $(data_time_conv_binout)
-data_time_test: data_time_conv_test
+data_time: $(data_time_conv_binout)             \
+           $(data_time_high_binout)
+data_time_test: data_time_conv_test             \
+                data_time_high_test
 
 data_time_conv_test: $(data_time_conv_binout)
 	$(data_time_conv_binout)
 
+data_time_high_test: $(data_time_high_binout)
+	$(data_time_high_binout)
+
 $(data_time_conv_binout): $(data_root)/time/conv.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+$(data_time_high_binout): $(data_root)/time/high.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # eof
