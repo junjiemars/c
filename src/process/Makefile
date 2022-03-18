@@ -35,6 +35,9 @@ endif
 process_prefix := process
 INC += $(nm_inc_opt)$(process_root) $(nm_inc_opt)$(root)/posix
 
+ifeq ($(NM_SYSTEM), Linux)
+	cflags_static_opt := -static
+endif
 
 # main
 process_main_binout := $(bin_path)/$(process_prefix)_main$(bin_ext)
@@ -77,6 +80,9 @@ process_env_test: process_env
 	$(process_env_raw_binout)
 	$(process_env_mem_binout)
 	$(process_env_child_binout)
+
+process_env_raw_test: $(process_env_raw_binout)
+	$(process_env_raw_binout)
 
 process_env_mem_test: $(process_env_mem_binout)
 	$(process_env_mem_binout)
@@ -141,13 +147,18 @@ $(process_exec_child_binout): $(process_root)/exec/child.c
 
 # id
 process_id_binout := $(bin_path)/$(process_prefix)_id$(bin_ext)
+process_id_asmout := $(tmp_path)/$(process_prefix)_id$(asm_ext)
 
 process_id: $(process_id_binout)
 process_id_test: process_id
 	$(process_id_binout)
 
-$(process_id_binout): $(process_root)/id/id1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(process_id_binout): $(process_id_asmout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(process_id_asmout): $(process_root)/id/id1.c
+	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_asm) $^ $(asm_out)$@
+
 
 
 # io
@@ -197,6 +208,9 @@ process_layout_test: process_layout
 	nm $(process_layout_binout)
 	size $(process_layout_static_binout)
 
+process_layout_static_test: $(process_layout_static_binout)
+	$(process_layout_static_binout)
+
 $(process_layout_binout): $(process_layout_asmout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
@@ -204,7 +218,7 @@ $(process_layout_asmout): $(process_root)/layout/mem.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_asm) $^ $(asm_out)$@
 
 $(process_layout_static_binout): $(process_root)/layout/mem.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -static $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(cflags_static_opt) $^ $(bin_out)$@
 
 
 # rlimit
