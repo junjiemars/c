@@ -1,12 +1,14 @@
 #include "_io_.h"
 
+#define BUFSIZE  64
+
 int
 main(void)
 {
   int   n;
-  char  buf[64];
+  char  buf[BUFSIZE];
 
-  while ((n = read(STDIN_FILENO, buf, sizeof(buf))) > 0)
+  while ((n = read(STDIN_FILENO, buf, BUFSIZE)) > 0)
     {
       if (write(STDOUT_FILENO, buf, n) != n)
         {
