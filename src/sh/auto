@@ -1,0 +1,7 @@
+# -*- mode:sh -*- vim:ft=sh
+
+# check posix features
+. src/posix/auto
+
+
+# eof
