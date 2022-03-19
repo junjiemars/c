@@ -210,7 +210,7 @@ case $CC_NAME in
     nm_feature_run=no
     nm_feature_h='#include <BaseTsd.h>'
     nm_feature_flags=
-    nm_feature_test='ssize_t ss = -1;'
+    nm_feature_test='SSIZE_T ss = -1;'
     . ${NORE_ROOT}/auto/feature
     ;;
   *)
@@ -218,7 +218,7 @@ case $CC_NAME in
 esac                            # ssize_t
 
 
-echo "checking for <nio.h> .."
+echo "checking for <nio.h> ..."
 # check getdelim
 #----------------------------------------
 case $NM_SYSTEM in

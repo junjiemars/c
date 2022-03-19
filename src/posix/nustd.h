@@ -22,6 +22,7 @@
 
 #if !(NM_HAVE_SLEEP)
 #  error "sleep no found"
+#else
 #  if (WINNT)
 #    define sleep(x)  Sleep((x) * 1000)
 #  endif
@@ -30,8 +31,9 @@
 
 #if !(NM_HAVE_GETPID)
 #  error "getpid no found"
+#else
 #  if (WINNT)
-#    define getpid()  _getpid()
+#    define getpid  _getpid
 #  endif
 #endif  /* getpid */
 
