@@ -195,13 +195,17 @@ $(posix_tmp_binout): $(posix_root)/tmp/tmp.c
 
 # ncstd
 posix_ncstd_binout := $(bin_path)/$(posix_prefix)_ncstd$(bin_ext)
+posix_ncstd_cppout := $(tmp_path)/$(posix_prefix)_ncstd$(cpp_ext)
 
 posix_ncstd: $(posix_ncstd_binout)
 posix_ncstd_test: posix_ncstd
 	$(posix_ncstd_binout)
 
-$(posix_ncstd_binout): $(posix_root)/ncstd_test.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(posix_ncstd_binout): $(posix_ncstd_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(posix_ncstd_cppout): $(posix_root)/ncstd_test.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
 # nustd

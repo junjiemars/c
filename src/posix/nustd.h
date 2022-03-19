@@ -20,16 +20,18 @@
 #endif
 
 
-#if (WINNT) && (NM_HAVE_SLEEP)
-#  if !defined(sleep)
-#    define sleep(x) Sleep((x) * 1000)
+#if !(NM_HAVE_SLEEP)
+#  error "sleep no found"
+#  if (WINNT)
+#    define sleep(x)  Sleep((x) * 1000)
 #  endif
 #endif  /* sleep */
 
 
-#if (WINNT) && (NM_HAVE_GETPID)
-#  if !defined(getpid)
-#    define getpid() _getpid()
+#if !(NM_HAVE_GETPID)
+#  error "getpid no found"
+#  if (WINNT)
+#    define getpid()  _getpid()
 #  endif
 #endif  /* getpid */
 

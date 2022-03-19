@@ -5,6 +5,9 @@
 #include <npstd.h>
 
 
+#define NM_MAXLINE  4096
+
+
 #if (MSVC)
 #  pragma warning(disable:4996)
 #endif  /* _CRT_SECURE_NO_WARNINGS */
@@ -15,9 +18,6 @@
 
 
 #if !(NM_HAVE_GETDELIM)
-#  ifndef GETDELIM_LEN_MAX
-#    define GETDELIM_LEN_MAX  512
-#  endif
 #  include <ndef.h>
 #  include <nint.h>
 #  include <stdlib.h>
@@ -36,7 +36,7 @@ getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
     }
 	if (0 == *lineptr)
     {
-      *n = GETDELIM_LEN_MAX;
+      *n = NM_MAXLINE;
       *lineptr = malloc(*n);
       if (0 == *lineptr)
         {
@@ -78,6 +78,15 @@ getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
 #  define getline(lp, n, f)  getdelim((lp), (n), 0x0a, (f))
 
 #endif  /* end of getdelim */
+
+
+#if !(NM_HAVE_FILENO)
+#  error "fileno no found"
+#else
+#  if (MSVC)
+#    define fileno  _fileno
+#  endif
+#endif  /* !NM_HAVE_FILENO */
 
 
 #endif /* end of _NIO_H_ */
