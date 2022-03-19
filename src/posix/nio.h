@@ -18,6 +18,7 @@
 
 
 #if !(NM_HAVE_GETDELIM)
+#  include <nint.h>
 ssize_t getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
                  FILE * restrict stream);
 #  if defined(getline)
