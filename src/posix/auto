@@ -381,42 +381,42 @@ case $NM_SYSTEM in
 esac                            # end of getpid
 
 
-# check open function
-#----------------------------------------
-case $NM_SYSTEM in
-  Darwin|Linux)
-    nm_feature="open"
-    nm_feature_name="nm_have_open"
-    nm_feature_run=no
-    nm_feature_h='#include <fcntl.h>'
-    nm_feature_flags=
-    nm_feature_test='int fd = open("/dev/zero", 0);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  WinNT)
-    ;;
-  *)
-    ;;
-esac                            # end of open
+# # check open function
+# #----------------------------------------
+# case $NM_SYSTEM in
+#   Darwin|Linux)
+#     nm_feature="open"
+#     nm_feature_name="nm_have_open"
+#     nm_feature_run=no
+#     nm_feature_h='#include <fcntl.h>'
+#     nm_feature_flags=
+#     nm_feature_test='int fd = open("/dev/zero", 0);'
+#     . ${NORE_ROOT}/auto/feature
+#     ;;
+#   WinNT)
+#     ;;
+#   *)
+#     ;;
+# esac                            # end of open
 
 
-# mmap
-#----------------------------------------
-case $NM_SYSTEM in
-  Darwin|Linux)
-    nm_feature="mmap"
-    nm_feature_name="nm_have_mmap"
-    nm_feature_run=no
-    nm_feature_h='#include <sys/mman.h>'
-    nm_feature_flags=
-    nm_feature_test='mmap(0, 16, 1, 0, 3, 0);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  WinNT)
-    ;;
-  *)
-    ;;
-esac                            # end of mmap
+# # mmap
+# #----------------------------------------
+# case $NM_SYSTEM in
+#   Darwin|Linux)
+#     nm_feature="mmap"
+#     nm_feature_name="nm_have_mmap"
+#     nm_feature_run=no
+#     nm_feature_h='#include <sys/mman.h>'
+#     nm_feature_flags=
+#     nm_feature_test='mmap(0, 16, 1, 0, 3, 0);'
+#     . ${NORE_ROOT}/auto/feature
+#     ;;
+#   WinNT)
+#     ;;
+#   *)
+#     ;;
+# esac                            # end of mmap
 
 # sysconf
 #----------------------------------------
@@ -456,8 +456,6 @@ nm_feature_h='#include <stdlib.h>'
 nm_feature_flags=
 nm_feature_test='mkstemp("abc");'
 . ${NORE_ROOT}/auto/feature
-
-
 
 
 
