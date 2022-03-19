@@ -165,6 +165,9 @@ algo_hash_test: algo_hash
 	$(algo_hash_jenkins_binout) "abcABC"
 	$(algo_hash_jenkins_binout) "abcaBC"
 
+algo_hash_kr1_test: $(algo_hash_kr1_binout)
+	$(algo_hash_kr1_binout) "abcABC"
+
 $(algo_hash_kr1_binout): $(algo_root)/hash/kr1.c    \
                          $(algo_root)/hash/_hash_.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

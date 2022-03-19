@@ -1,5 +1,3 @@
-#include <_algo_.h>
-#include <stdio.h>
 #include "_hash_.h"
 
 

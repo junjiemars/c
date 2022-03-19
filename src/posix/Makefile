@@ -107,10 +107,9 @@ posix_nio: $(posix_nio_binout)
 posix_nio_test: posix_nio
 	$(posix_nio_binout) $(CURDIR)/$(posix_root)/nio_test.c
 
-$(posix_nio_binout): $(posix_nio_cppout)
-	$(CC) $(CFLAGS) $^ $(bin_out)$@
-$(posix_nio_cppout): $(posix_root)/nio_test.c
-	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+$(posix_nio_binout): $(posix_root)/nio.c        \
+                     $(posix_root)/nio_test.c
+	$(CC) $(CPPFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # nstr

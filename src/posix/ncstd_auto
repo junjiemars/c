@@ -11,10 +11,6 @@
 . src/posix/_POSIX_C_SOURCE
 
 
-# checking for CC's features
-. src/posix/ncc_auto
-
-
 # check for <ndef.h>
 . src/posix/ndef_auto
 
