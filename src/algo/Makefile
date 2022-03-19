@@ -89,7 +89,7 @@ algo_duff_device: $(algo_duff_device_binout)
 algo_duff_device_test: algo_duff_device
 	$(algo_duff_device_binout)
 	$(algo_duff_device_binout) 1
-	$(algo_duff_device_binout) 2 
+	$(algo_duff_device_binout) 2
 	$(algo_duff_device_binout) 3
 	$(algo_duff_device_binout) 4
 	$(algo_duff_device_binout) 5
@@ -98,11 +98,17 @@ algo_duff_device_test: algo_duff_device
 	$(algo_duff_device_binout) 8
 	$(algo_duff_device_binout) 9
 
+ifeq ($(CC_NAME), msvc)
+$(algo_duff_device_binout): $(algo_root)/duff_device/duff.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+else
 $(algo_duff_device_binout): $(algo_duff_device_asmout)
 	$(CC) $^ $(bin_out)$@
 
 $(algo_duff_device_asmout): $(algo_root)/duff_device/duff.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_asm) $^ $(asm_out)$@
+endif
 
 # dynamic array
 algo_dynamic_array_binout := $(bin_path)/$(algo_prefix)_dynamic_array$(bin_ext)
