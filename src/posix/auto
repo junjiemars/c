@@ -310,7 +310,7 @@ case $NM_SYSTEM in
     nm_feature_name="nm_have_strdup"
     nm_feature_run=no
     nm_feature_h='#include <string.h>'
-    nm_feature_flags='-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}'
+    nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
     nm_feature_test='char *s = strdup("abc");'
     . ${NORE_ROOT}/auto/feature
     ;;
