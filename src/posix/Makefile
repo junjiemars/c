@@ -109,7 +109,7 @@ posix_nio_test: posix_nio
 
 $(posix_nio_binout): $(posix_root)/nio.c        \
                      $(posix_root)/nio_test.c
-	$(CC) $(CPPFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # nstr
