@@ -2,20 +2,18 @@
 #define _ALGO_H_
 
 #include <nore.h>
-#include <ndef.h>
-#include <nint.h>
-#include <nstr.h>
-#include <nasrt.h>
+#include <npstd.h>
+#include <ncstd.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 
 
 #if (MSVC)
 #pragma warning(disable:4996)
 #endif
 
-/* #define _unused_(x) ((void)(x)) */
 
 #define swap(a, b, w)                           \
 do                                              \

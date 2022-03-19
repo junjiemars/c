@@ -1,0 +1,35 @@
+#### -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## check posix features
+####
+
+
+# set _POSIX_C_SOURCE
+. src/posix/_POSIX_C_SOURCE
+
+
+# checking for CC's features
+. src/posix/ncc_auto
+
+
+# check for <ndef.h>
+. src/posix/ndef_auto
+
+
+# checking for <nint.h>
+. src/posix/nint_auto
+
+
+# checking for <nio.h>
+. src/posix/nio_auto
+
+
+# checking for <nstr.h>
+. src/posix/nstr_auto
+
+
+
+# eof

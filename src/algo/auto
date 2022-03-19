@@ -8,9 +8,7 @@
 
 
 # check posix features
-. src/posix/ndef_auto
-. src/posix/nint_auto
-. src/posix/nstr_auto
+. src/posix/ncstd_auto
 
 
 echo "checking for {algo} ..."

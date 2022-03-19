@@ -15,20 +15,8 @@
 . src/posix/ncc_auto
 
 
-# check for <ndef.h>
-. src/posix/ndef_auto
-
-
-# checking for <nint.h>
-. src/posix/nint_auto
-
-
-# checking for <nio.h>
-. src/posix/nio_auto
-
-
-# checking for <nstr.h>
-. src/posix/nstr_auto
+# check for <ncstd.h>
+. src/posix/ncstd_auto
 
 
 # checking for <nustd.h>
