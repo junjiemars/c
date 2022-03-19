@@ -1,0 +1,91 @@
+#### -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## posix/nio_auto
+####
+
+
+# set _POSIX_C_SOURCE
+. src/posix/_POSIX_C_SOURCE
+
+
+echo "checking for <nio.h> ..."
+
+
+# check getdelim
+#----------------------------------------
+case $NM_SYSTEM in
+  Darwin)
+    nm_feature="getdelim"
+    nm_feature_name="nm_have_getdelim"
+    nm_feature_run=no
+    nm_feature_h='#include <stdio.h>'
+    nm_feature_flags=
+    nm_feature_test='char *line = 0; size_t n = 0;
+                     getdelim(&line, &n, 0x0a, stdout);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  Linux)
+    nm_feature="getdelim"
+    nm_feature_name="nm_have_getdelim"
+    nm_feature_run=no
+    nm_feature_h='#include <stdio.h>'
+    nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
+    nm_feature_test='char *line = 0; size_t n = 0;
+                     getdelim(&line, &n, 0x0a, stdout);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  WinNT)
+    nm_feature="getdelim"
+    nm_feature_name="nm_have_getdelim"
+    nm_feature_run=no
+    nm_feature_h='#include <stdio.h>'
+    nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
+    nm_feature_test='char *line = 0; size_t n = 0;
+                     getdelim(&line, &n, 0x0a, stdout);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  *)
+    ;;
+esac                            # end of getdelim
+
+
+# check fileno
+#----------------------------------------
+case $NM_SYSTEM in
+  Darwin)
+    nm_feature="fileno"
+    nm_feature_name="nm_have_fileno"
+    nm_feature_run=no
+    nm_feature_h='#include <stdio.h>'
+    nm_feature_flags=
+    nm_feature_test='fileno(stdout);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  Linux)
+    nm_feature="fileno"
+    nm_feature_name="nm_have_fileno"
+    nm_feature_run=no
+    nm_feature_h='#include <stdio.h>'
+    nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
+    nm_feature_test='fileno(stdout);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  WinNT)
+    nm_feature="fileno"
+    nm_feature_name="nm_have_fileno"
+    nm_feature_run=no
+    nm_feature_h='#include <stdio.h>'
+    nm_feature_flags='-D_CRT_SECURE_NO_WARNINGS'
+    nm_feature_test='_fileno(stdout);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  *)
+    ;;
+esac                            # end of fileno
+
+
+
+# eof

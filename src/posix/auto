@@ -7,378 +7,32 @@
 ####
 
 
-_POSIX_C_SOURCE="200809L"
+# set _POSIX_C_SOURCE
+. src/posix/_POSIX_C_SOURCE
 
 
-echo "checking for CC's features ..."
-# check sanitize feature
-#----------------------------------------
-case "$CC_NAME" in
-   gcc|clang)
-     nm_feature="-fsanitize=address"
-     nm_feature_name=
-     nm_feature_indent=yes
-     nm_feature_run=no
-     nm_feature_h=
-     nm_feature_flags='-fsanitize=address'
-     nm_feature_test=
-     . ${NORE_ROOT}/auto/feature
-     if [ yes = $nm_found ]; then
-       flag=f_sanitize op="+=" value=$nm_feature_flags \
-           . ${NORE_ROOT}/auto/make_define
-     fi
-     nm_feature="-fsanitize=leak"
-     nm_feature_name=
-     nm_feature_indent=yes
-     nm_feature_run=no
-     nm_feature_h=
-     nm_feature_flags='-fsanitize=leak'
-     nm_feature_test=
-     . ${NORE_ROOT}/auto/feature
-     if [ yes = $nm_found ]; then
-       flag=f_sanitize op="+=" value=$nm_feature_flags \
-           . ${NORE_ROOT}/auto/make_define
-     fi
-     ;;
-   msvc)
-     ;;
-esac
+# checking for CC's features
+. src/posix/ncc_auto
 
 
-echo "checking for machine's features ..."
-# check machine features
-# ----------------------------------------
-case "$NM_SYSTEM" in
- Darwin)
-   nm_feature="cache line size"
-   nm_feature_name='nm_cpu_cache_line'
-   nm_feature_indent=yes
-   nm_feature_run=value
-   nm_feature_h='
-#include <stdio.h>
-#include<sys/sysctl.h>'
-   nm_feature_flags=
-   nm_feature_value=
-   nm_feature_test='
-size_t line = 0;
-size_t size = sizeof(line);
-if (!sysctlbyname("hw.cachelinesize", &line, &size, 0, 0)) {
-   printf("%d\n", (int)line);
-   return 0;
-}
-return 1;'
-   . ${NORE_ROOT}/auto/feature
-   if [ "yes" = "$nm_found" ]; then
-     NM_CPU_CACHE_LINE=$nm_feature_value
-   fi
-   ;;
- Linux)
-   nm_feature="cache line size"
-   nm_feature_name='nm_cpu_cache_line'
-   nm_feature_indent=yes
-   nm_feature_run=value
-   nm_feature_h='#include <stdio.h>'
-   nm_feature_flags=
-   nm_feature_value=
-   nm_feature_test='
-FILE * p = fopen("/sys/devices/system/cpu/cpu0/cache/index0/"
-                 "coherency_line_size", "r");
-if (p) {
-    int i = 0;
-    fscanf(p, "%d", &i);
-    fclose(p);
-    printf("%d\n", i);
-    return 0;
-}
-return 1;'
-   . ${NORE_ROOT}/auto/feature
-   if [ "yes" = "$nm_found" ]; then
-     NM_CPU_CACHE_LINE=$nm_feature_value
-   fi
-   ;;
- WinNT)
-   nm_feature="cache line size"
-   nm_feature_name='nm_cpu_cache_line'
-   nm_feature_indent=yes
-   nm_feature_run=value
-   nm_feature_h='
-#include <stdlib.h>
-#include <stdio.h>
-#include <windows.h>'
-   nm_feature_flags=
-   nm_feature_value=
-   nm_feature_test='
-size_t line = 0;
-DWORD size = 0;
-SYSTEM_LOGICAL_PROCESSOR_INFORMATION *buf = 0;
-GetLogicalProcessorInformation(0, &size);
-if (!size) {
-  return 1;
-}
-buf = (SYSTEM_LOGICAL_PROCESSOR_INFORMATION*)malloc(size);
-if (!buf) {
-  return 1;
-}
-if (GetLogicalProcessorInformation(&buf[0], &size)) {
-  for (DWORD i=0; i!=size/sizeof(SYSTEM_LOGICAL_PROCESSOR_INFORMATION);i++) {
-    if (buf[i].Relationship == RelationCache && 1 == buf[i].Cache.Level) {
-      line = buf[i].Cache.LineSize;
-      break;
-    }
-  }
-}
-free(buf);
-if (line) {
-  printf("%d\n", (int)line);
-  return 0;
-}
-return 1;'
-   . ${NORE_ROOT}/auto/feature
-   if [ "yes" = "$nm_found" ]; then
-     NM_CPU_CACHE_LINE=$nm_feature_value
-   fi
-   ;;
- *)
-   nm_found=no
-   ;;
-esac
-if [ "yes" = "$nm_found" ]; then
- NM_CPU_CACHE_LINE=$nm_feature_value
-else
- case "$NM_MACHINE" in
-   x86_64|amd64|ia64) NM_CPU_CACHE_LINE=64 ;;
-   i386|i686|i86pc|*) NM_CPU_CACHE_LINE=32 ;;
- esac
- have=NM_CPU_CACHE_LINE value=$NM_CPU_CACHE_LINE . ${NORE_ROOT}/auto/define
-fi # end of check cache line size
+# check for <ndef.h>
+. src/posix/ndef_auto
 
 
-echo "checking for C's keywords ..."
-# check restrict keyword
-#----------------------------------------
-nm_feature="restrict"
-nm_feature_name="nm_have_restrict"
-nm_feature_run=
-nm_feature_h=
-nm_feature_flags=
-nm_feature_test='int x = 0x11; int *restrict p = &x;'
-. ${NORE_ROOT}/auto/feature
-if [ "yes" != $nm_found ]; then
-	nm_feature="__restrict keyword"
-	nm_feature_name="nm_have___restrict"
-	nm_feature_run=
-	nm_feature_h=
-	nm_feature_flags=
-	nm_feature_test='int x = 0x11; int *__restrict p = &x;'
-	. ${NORE_ROOT}/auto/feature
-fi                              # end of restrict
+# checking for <nint.h>
+. src/posix/nint_auto
 
 
-echo "checking for <nasrt.h> ..."
-# check static_assert
-#----------------------------------------
-nm_feature="static_assert"
-nm_feature_name="nm_have_static_assert"
-nm_feature_run=yes
-nm_feature_h="#include <assert.h>"
-nm_feature_flags="$nm_std_opt"
-nm_feature_test="enum {N=5}; static_assert(N==5, \"N is not equal 5\");"
-. ${NORE_ROOT}/auto/feature     # end of static_assert
+# checking for <nio.h>
+. src/posix/nio_auto
 
 
-echo "checking for <nint.h> ..."
-# check header file existing
-#----------------------------------------
-include="stdint.h" . ${NORE_ROOT}/auto/include
-include="inttypes.h" . ${NORE_ROOT}/auto/include
-
-# check ssize_t
-#----------------------------------------
-case $CC_NAME in
-  gcc|clang)
-    nm_feature="ssize_t"
-    nm_feature_name="nm_have_ssize_t"
-    nm_feature_run=no
-    nm_feature_h='#include <sys/types.h>'
-    nm_feature_flags=
-    nm_feature_test='ssize_t ss = -1;'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  msvc)
-    nm_feature="ssize_t"
-    nm_feature_name="nm_have_ssize_t"
-    nm_feature_run=no
-    nm_feature_h='#include <BaseTsd.h>'
-    nm_feature_flags=
-    nm_feature_test='SSIZE_T ss = -1;'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  *)
-    ;;
-esac                            # ssize_t
+# checking for <nstr.h>
+. src/posix/nstr_auto
 
 
-echo "checking for <nio.h> ..."
-# check getdelim
-#----------------------------------------
-case $NM_SYSTEM in
-  Darwin)
-    nm_feature="getdelim"
-    nm_feature_name="nm_have_getdelim"
-    nm_feature_run=no
-    nm_feature_h='#include <stdio.h>'
-    nm_feature_flags=
-    nm_feature_test='char *line = 0; size_t n = 0;
-                     getdelim(&line, &n, 0x0a, stdout);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  Linux)
-    nm_feature="getdelim"
-    nm_feature_name="nm_have_getdelim"
-    nm_feature_run=no
-    nm_feature_h='#include <stdio.h>'
-    nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
-    nm_feature_test='char *line = 0; size_t n = 0;
-                     getdelim(&line, &n, 0x0a, stdout);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  WinNT)
-    nm_feature="getdelim"
-    nm_feature_name="nm_have_getdelim"
-    nm_feature_run=no
-    nm_feature_h='#include <stdio.h>'
-    nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
-    nm_feature_test='char *line = 0; size_t n = 0;
-                     getdelim(&line, &n, 0x0a, stdout);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  *)
-    ;;
-esac                            # end of getdelim
-
-
-# check fileno
-#----------------------------------------
-case $NM_SYSTEM in
-  Darwin)
-    nm_feature="fileno"
-    nm_feature_name="nm_have_fileno"
-    nm_feature_run=no
-    nm_feature_h='#include <stdio.h>'
-    nm_feature_flags=
-    nm_feature_test='fileno(stdout);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  Linux)
-    nm_feature="fileno"
-    nm_feature_name="nm_have_fileno"
-    nm_feature_run=no
-    nm_feature_h='#include <stdio.h>'
-    nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
-    nm_feature_test='fileno(stdout);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  WinNT)
-    nm_feature="fileno"
-    nm_feature_name="nm_have_fileno"
-    nm_feature_run=no
-    nm_feature_h='#include <stdio.h>'
-    nm_feature_flags='-D_CRT_SECURE_NO_WARNINGS'
-    nm_feature_test='_fileno(stdout);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  *)
-    ;;
-esac                            # end of fileno
-
-
-echo "checking for <nstr.h> ..."
-# check strdup
-#----------------------------------------
-case $NM_SYSTEM in
-  Darwin)
-    nm_feature="strdup"
-    nm_feature_name="nm_have_strdup"
-    nm_feature_run=no
-    nm_feature_h='#include <string.h>'
-    nm_feature_flags=
-    nm_feature_test='char *s = strdup("abc");'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  Linux)
-    nm_feature="strdup"
-    nm_feature_name="nm_have_strdup"
-    nm_feature_run=no
-    nm_feature_h='#include <string.h>'
-    nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
-    nm_feature_test='char *s = strdup("abc");'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  WinNT)
-    nm_feature="strdup"
-    nm_feature_name="nm_have_strdup"
-    nm_feature_run=no
-    nm_feature_h='#include <string.h>'
-    nm_feature_flags=
-    nm_feature_test='char *s = _strdup("abc");'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  *)
-    ;;
-esac                            # end of strdup
-
-
-echo "checking for <nustd.h> ..."
-# check sleep
-#----------------------------------------
-case $NM_SYSTEM in
-  Darwin|Linux)
-    nm_feature="sleep"
-    nm_feature_name="nm_have_sleep"
-    nm_feature_run=no
-    nm_feature_h='#include <unistd.h>'
-    nm_feature_flags=
-    nm_feature_test='sleep(1);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  WinNT)
-    nm_feature="sleep"
-    nm_feature_name="nm_have_sleep"
-    nm_feature_run=no
-    nm_feature_h='#include <windows.h>'
-    nm_feature_flags=
-    nm_feature_test='Sleep(1);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  *)
-    ;;
-esac                            # end of sleep
-
-
-# check getpid
-#----------------------------------------
-case $NM_SYSTEM in
-  Darwin|Linux)
-    nm_feature="getpid"
-    nm_feature_name="nm_have_getpid"
-    nm_feature_run=no
-    nm_feature_h='#include <unistd.h>'
-    nm_feature_flags=
-    nm_feature_test='getpid();'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  WinNT)
-    nm_feature="getpid"
-    nm_feature_name="nm_have_getpid"
-    nm_feature_run=no
-    nm_feature_h='#include <process.h>'
-    nm_feature_flags=
-    nm_feature_test='_getpid();'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  *)
-    ;;
-esac                            # end of getpid
+# checking for <nustd.h>
+. src/posix/nustd_auto
 
 
 # # check open function
@@ -418,44 +72,44 @@ esac                            # end of getpid
 #     ;;
 # esac                            # end of mmap
 
-# sysconf
-#----------------------------------------
-case $NM_SYSTEM in
-  Darwin|Linux)
-    nm_feature="sysconf"
-    nm_feature_name="nm_have_sysconf"
-    nm_feature_run=no
-    nm_feature_h='#include <unistd.h>'
-    nm_feature_flags=
-    nm_feature_test='sysconf(_SC_PAGESIZE);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  WinNT)
-    ;;
-  *)
-    ;;
-esac                            # end of sysconf
+# # sysconf
+# #----------------------------------------
+# case $NM_SYSTEM in
+#   Darwin|Linux)
+#     nm_feature="sysconf"
+#     nm_feature_name="nm_have_sysconf"
+#     nm_feature_run=no
+#     nm_feature_h='#include <unistd.h>'
+#     nm_feature_flags=
+#     nm_feature_test='sysconf(_SC_PAGESIZE);'
+#     . ${NORE_ROOT}/auto/feature
+#     ;;
+#   WinNT)
+#     ;;
+#   *)
+#     ;;
+# esac                            # end of sysconf
 
 
-# tmpfile
-#----------------------------------------
-nm_feature="tmpfile"
-nm_feature_name="nm_have_tmpfile"
-nm_feature_run=
-nm_feature_h='#include <stdio.h>'
-nm_feature_flags=
-nm_feature_test='(void)tmpfile();'
-. ${NORE_ROOT}/auto/feature
+# # tmpfile
+# #----------------------------------------
+# nm_feature="tmpfile"
+# nm_feature_name="nm_have_tmpfile"
+# nm_feature_run=
+# nm_feature_h='#include <stdio.h>'
+# nm_feature_flags=
+# nm_feature_test='(void)tmpfile();'
+# . ${NORE_ROOT}/auto/feature
 
-# mkstemp
-#----------------------------------------
-nm_feature="mkstemp"
-nm_feature_name="nm_have_mkstemp"
-nm_feature_run=
-nm_feature_h='#include <stdlib.h>'
-nm_feature_flags=
-nm_feature_test='mkstemp("abc");'
-. ${NORE_ROOT}/auto/feature
+# # mkstemp
+# #----------------------------------------
+# nm_feature="mkstemp"
+# nm_feature_name="nm_have_mkstemp"
+# nm_feature_run=
+# nm_feature_h='#include <stdlib.h>'
+# nm_feature_flags=
+# nm_feature_test='mkstemp("abc");'
+# . ${NORE_ROOT}/auto/feature
 
 
 

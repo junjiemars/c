@@ -14,12 +14,15 @@
 #endif  /* NM_HAVE_RESTRICT */
 
 
-#if defined(NDEBUG) && (NDEBUG)
-#  if defined(assert)
-#    undef assert
-#  endif
-#  define assert(x) ((void)(x))
-#endif  /* assert */
+#ifdef static_assert
+#  undef static_assert
+#endif
+
+#if !(NM_HAVE_STATIC_ASSERT)
+#  define static_assert(e, m) enum {static_assert = 1/!!((e) && (m))}
+#else
+#  define static_assert _Static_assert
+#endif  /* NM_HAVE_STATIC_ASSERT */
 
 
 #if !defined(_unused_)

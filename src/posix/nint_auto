@@ -1,0 +1,48 @@
+#### -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## posix/nint_auto
+####
+
+
+# set _POSIX_C_SOURCE
+. src/posix/_POSIX_C_SOURCE
+
+
+echo "checking for <nint.h> ..."
+
+# check header file existing
+#----------------------------------------
+include="stdint.h" . ${NORE_ROOT}/auto/include
+include="inttypes.h" . ${NORE_ROOT}/auto/include
+
+# check ssize_t
+#----------------------------------------
+case $CC_NAME in
+  gcc|clang)
+    nm_feature="ssize_t"
+    nm_feature_name="nm_have_ssize_t"
+    nm_feature_run=no
+    nm_feature_h='#include <sys/types.h>'
+    nm_feature_flags=
+    nm_feature_test='ssize_t ss = -1;'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  msvc)
+    nm_feature="ssize_t"
+    nm_feature_name="nm_have_ssize_t"
+    nm_feature_run=no
+    nm_feature_h='#include <BaseTsd.h>'
+    nm_feature_flags=
+    nm_feature_test='SSIZE_T ss = -1;'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  *)
+    ;;
+esac                            # ssize_t
+
+
+
+# eof

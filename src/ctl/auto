@@ -1,29 +1,15 @@
-# -*- mode:sh -*- vim:ft=sh
+#### -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## ctl/auto
+####
 
-# check sanitize feature
-#----------------------------------------
-case "$CC_NAME" in
-  gcc|clang)
-    nm_feature="$CC_NAME -fsanitize=address"
-    nm_feature_name=
-    nm_feature_indent=yes
-    nm_feature_run=no
-    nm_feature_h=
-    nm_feature_flags='-fsanitize=address'
-    nm_feature_test=
-    . ${NORE_ROOT}/auto/feature
-    if [ yes = $nm_found ]; then
-      flag=has_sanitize op=":=" value="YES" \
-          . ${NORE_ROOT}/auto/make_define
-      flag=has_sanitize_address op=":=" value="YES" \
-          . ${NORE_ROOT}/auto/make_define
-      flag=cflags_sanitize op="+=" value=$nm_feature_flags \
-          . ${NORE_ROOT}/auto/make_define
-    fi
-    ;;
-  msvc)
-    ;;
-esac
 
+# check posix features
+. src/posix/auto
+
+echo "checking for {ctl} ..."
 
 # eof

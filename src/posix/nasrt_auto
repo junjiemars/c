@@ -1,0 +1,29 @@
+#### -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## check posix features
+####
+
+
+# set _POSIX_C_SOURCE
+. src/posix/_POSIX_C_SOURCE
+
+
+echo "checking for <nasrt.h> ..."
+
+
+# check static_assert
+#----------------------------------------
+nm_feature="_Static_assert"
+nm_feature_name="nm_have_static_assert"
+nm_feature_run=yes
+nm_feature_h=
+nm_feature_flags="$nm_std_opt"
+nm_feature_test="enum {N=5}; _Static_assert(N==5, \"N is not equal 5\");"
+. ${NORE_ROOT}/auto/feature     # end of static_assert
+
+
+
+# eof

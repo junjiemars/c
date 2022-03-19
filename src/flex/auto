@@ -1,5 +1,17 @@
-# -*- mode:sh -*- vim:ft=sh
-#
+#### -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## flex/auto
+####
+
+
+# check posix features
+. src/posix/auto
+
+
+echo "checking for {flex} ..."
 
 # check flex
 #----------------------------------------
@@ -35,3 +47,6 @@ case "$CC_NAME" in
   msvc)
     ;;
 esac
+
+
+# eof

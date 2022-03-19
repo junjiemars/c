@@ -3,9 +3,9 @@
 #include <string.h>
 #include <assert.h>
 
-#if !defined(__USE_MISC)
-#define __USE_MISC
-#endif
+/* #if !defined(__USE_MISC) */
+/* #define __USE_MISC */
+/* #endif */
 
 #if (MSVC)
 #define timegm  _mkgmtime

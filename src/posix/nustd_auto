@@ -1,0 +1,70 @@
+#### -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## posix/nustd_auto
+####
+
+
+# set _POSIX_C_SOURCE
+. src/posix/_POSIX_C_SOURCE
+
+
+echo "checking for <nustd.h> ..."
+
+
+# check sleep
+#----------------------------------------
+case $NM_SYSTEM in
+  Darwin|Linux)
+    nm_feature="sleep"
+    nm_feature_name="nm_have_sleep"
+    nm_feature_run=no
+    nm_feature_h='#include <unistd.h>'
+    nm_feature_flags=
+    nm_feature_test='sleep(1);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  WinNT)
+    nm_feature="sleep"
+    nm_feature_name="nm_have_sleep"
+    nm_feature_run=no
+    nm_feature_h='#include <windows.h>'
+    nm_feature_flags=
+    nm_feature_test='Sleep(1);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  *)
+    ;;
+esac                            # end of sleep
+
+
+# check getpid
+#----------------------------------------
+case $NM_SYSTEM in
+  Darwin|Linux)
+    nm_feature="getpid"
+    nm_feature_name="nm_have_getpid"
+    nm_feature_run=no
+    nm_feature_h='#include <unistd.h>'
+    nm_feature_flags=
+    nm_feature_test='getpid();'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  WinNT)
+    nm_feature="getpid"
+    nm_feature_name="nm_have_getpid"
+    nm_feature_run=no
+    nm_feature_h='#include <process.h>'
+    nm_feature_flags=
+    nm_feature_test='_getpid();'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  *)
+    ;;
+esac                            # end of getpid
+
+
+
+# eof

@@ -1,0 +1,174 @@
+#### -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## posix/ncc_auto
+####
+
+
+# set _POSIX_C_SOURCE
+. src/posix/_POSIX_C_SOURCE
+
+
+echo "checking for CC's features ..."
+
+# check sanitize feature
+#----------------------------------------
+case "$CC_NAME" in
+   gcc|clang)
+     nm_feature="-fsanitize=address"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-fsanitize=address'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=f_sanitize op="+=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     nm_feature="-fsanitize=leak"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-fsanitize=leak'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=f_sanitize op="+=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     ;;
+   msvc)
+     ;;
+esac
+
+
+# check machine features
+# ----------------------------------------
+case "$NM_SYSTEM" in
+ Darwin)
+   nm_feature="cache line size"
+   nm_feature_name='nm_cpu_cache_line'
+   nm_feature_indent=yes
+   nm_feature_run=value
+   nm_feature_h='
+#include <stdio.h>
+#include<sys/sysctl.h>'
+   nm_feature_flags=
+   nm_feature_value=
+   nm_feature_test='
+size_t line = 0;
+size_t size = sizeof(line);
+if (!sysctlbyname("hw.cachelinesize", &line, &size, 0, 0)) {
+   printf("%d\n", (int)line);
+   return 0;
+}
+return 1;'
+   . ${NORE_ROOT}/auto/feature
+   if [ "yes" = "$nm_found" ]; then
+     NM_CPU_CACHE_LINE=$nm_feature_value
+   fi
+   ;;
+ Linux)
+   nm_feature="cache line size"
+   nm_feature_name='nm_cpu_cache_line'
+   nm_feature_indent=yes
+   nm_feature_run=value
+   nm_feature_h='#include <stdio.h>'
+   nm_feature_flags=
+   nm_feature_value=
+   nm_feature_test='
+FILE * p = fopen("/sys/devices/system/cpu/cpu0/cache/index0/"
+                 "coherency_line_size", "r");
+if (p) {
+    int i = 0;
+    fscanf(p, "%d", &i);
+    fclose(p);
+    printf("%d\n", i);
+    return 0;
+}
+return 1;'
+   . ${NORE_ROOT}/auto/feature
+   if [ "yes" = "$nm_found" ]; then
+     NM_CPU_CACHE_LINE=$nm_feature_value
+   fi
+   ;;
+ WinNT)
+   nm_feature="cache line size"
+   nm_feature_name='nm_cpu_cache_line'
+   nm_feature_indent=yes
+   nm_feature_run=value
+   nm_feature_h='
+#include <stdlib.h>
+#include <stdio.h>
+#include <windows.h>'
+   nm_feature_flags=
+   nm_feature_value=
+   nm_feature_test='
+size_t line = 0;
+DWORD size = 0;
+SYSTEM_LOGICAL_PROCESSOR_INFORMATION *buf = 0;
+GetLogicalProcessorInformation(0, &size);
+if (!size) {
+  return 1;
+}
+buf = (SYSTEM_LOGICAL_PROCESSOR_INFORMATION*)malloc(size);
+if (!buf) {
+  return 1;
+}
+if (GetLogicalProcessorInformation(&buf[0], &size)) {
+  for (DWORD i=0; i!=size/sizeof(SYSTEM_LOGICAL_PROCESSOR_INFORMATION);i++) {
+    if (buf[i].Relationship == RelationCache && 1 == buf[i].Cache.Level) {
+      line = buf[i].Cache.LineSize;
+      break;
+    }
+  }
+}
+free(buf);
+if (line) {
+  printf("%d\n", (int)line);
+  return 0;
+}
+return 1;'
+   . ${NORE_ROOT}/auto/feature
+   if [ "yes" = "$nm_found" ]; then
+     NM_CPU_CACHE_LINE=$nm_feature_value
+   fi
+   ;;
+ *)
+   nm_found=no
+   ;;
+esac
+if [ "yes" = "$nm_found" ]; then
+ NM_CPU_CACHE_LINE=$nm_feature_value
+else
+ case "$NM_MACHINE" in
+   x86_64|amd64|ia64) NM_CPU_CACHE_LINE=64 ;;
+   i386|i686|i86pc|*) NM_CPU_CACHE_LINE=32 ;;
+ esac
+ have=NM_CPU_CACHE_LINE value=$NM_CPU_CACHE_LINE . ${NORE_ROOT}/auto/define
+fi # end of check cache line size
+
+
+# check machine features
+#----------------------------------------
+nm_feature="cpu endian"
+nm_feature_name="nm_cpu_little_endian"
+nm_feature_indent=yes
+nm_feature_run=value
+nm_feature_h="#include <stdio.h>"
+nm_feature_flags=
+nm_feature_test='int i=0x11223344;
+                 char *p = (char*)&i;
+                 int le = (0x44 == *p);
+                 printf("%d", le);'
+. ${NORE_ROOT}/auto/feature
+
+
+
+
+# eof

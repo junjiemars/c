@@ -1,0 +1,73 @@
+#### -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## posix/ndef_auto
+####
+
+
+# set _POSIX_C_SOURCE
+. src/posix/_POSIX_C_SOURCE
+
+
+echo "checking for <ndef.h> ..."
+
+
+# check restrict keyword
+#----------------------------------------
+nm_feature="restrict keyword"
+nm_feature_name="nm_have_restrict"
+nm_feature_run=
+nm_feature_h=
+nm_feature_flags=
+nm_feature_test='int x = 0x11; int *restrict p = &x;'
+. ${NORE_ROOT}/auto/feature
+if [ "yes" != $nm_found ]; then
+	nm_feature="__restrict keyword"
+	nm_feature_name="nm_have___restrict"
+	nm_feature_run=
+	nm_feature_h=
+	nm_feature_flags=
+	nm_feature_test='int x = 0x11; int *__restrict p = &x;'
+	. ${NORE_ROOT}/auto/feature
+fi                              # end of restrict
+
+
+# check typeof keyword
+#----------------------------------------
+case "$CC_NAME" in
+  gcc|clang)
+    nm_feature="typeof keyword"
+    nm_feature_name='NM_HAVE_TYPEOF'
+    nm_feature_run=no
+    nm_feature_h=
+    nm_feature_flags=
+    nm_feature_test='int x = 0x1122; typeof(x) y = 0x3344'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  msvc)
+    nm_feature="typeof keyword"
+    nm_feature_name='NM_HAVE_TYPEOF'
+    nm_feature_run=no
+    nm_feature_h=
+    nm_feature_flags=
+    nm_feature_test='int x = 0x1122; decltype(x) y = 0x3344'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+esac
+
+
+# check static_assert
+#----------------------------------------
+nm_feature="static_assert"
+nm_feature_name="nm_have_static_assert"
+nm_feature_run=yes
+nm_feature_h="#include <assert.h>"
+nm_feature_flags="$nm_std_opt"
+nm_feature_test="enum {N=5}; _Static_assert(N==5, \"N is not equal 5\");"
+. ${NORE_ROOT}/auto/feature     # end of static_assert
+
+
+
+# eof

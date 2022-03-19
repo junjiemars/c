@@ -1,0 +1,54 @@
+#### -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## posix/nstr_auto
+####
+
+
+# set _POSIX_C_SOURCE
+. src/posix/_POSIX_C_SOURCE
+
+
+echo "checking for <nstr.h> ..."
+
+
+# check strdup
+#----------------------------------------
+case $NM_SYSTEM in
+  Darwin)
+    nm_feature="strdup"
+    nm_feature_name="nm_have_strdup"
+    nm_feature_run=no
+    nm_feature_h='#include <string.h>'
+    nm_feature_flags=
+    nm_feature_test='char *s = strdup("abc");'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  Linux)
+    nm_feature="strdup"
+    nm_feature_name="nm_have_strdup"
+    nm_feature_run=no
+    nm_feature_h='#include <string.h>'
+    nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
+    nm_feature_test='char *s = strdup("abc");'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  WinNT)
+    nm_feature="strdup"
+    nm_feature_name="nm_have_strdup"
+    nm_feature_run=no
+    nm_feature_h='#include <string.h>'
+    nm_feature_flags=
+    nm_feature_test='char *s = _strdup("abc");'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  *)
+    ;;
+esac                            # end of strdup
+
+
+
+
+# eof
