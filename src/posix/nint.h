@@ -16,7 +16,9 @@
 #  if (MSVC)
 #    include <BaseTsd.h>
 typedef SSIZE_T ssize_t
-#  endif  /* MSVC */
+#  else
+#    include <sys/types.h>
+#  endif
 #else
 typedef long ssize_t
 #endif
