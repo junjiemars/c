@@ -6,6 +6,20 @@
 ## check posix features
 ####
 
+
+echo "checking for <nasrt.h> ..."
+# check static_assert
+#----------------------------------------
+nm_feature="static_assert"
+nm_feature_name="nm_have_static_assert"
+nm_feature_run=yes
+nm_feature_h="#include <assert.h>"
+nm_feature_flags="$nm_std_opt"
+nm_feature_test="enum {N=5}; static_assert(N==5, \"N is not equal 5\");"
+. ${NORE_ROOT}/auto/feature     # end of static_assert
+
+
+echo "checking for <nint.h> ..."
 # check header file existing
 #----------------------------------------
 include="stdint.h" . ${NORE_ROOT}/auto/include
@@ -31,16 +45,6 @@ if [ "yes" != $nm_found ]; then
 	. ${NORE_ROOT}/auto/feature
 fi                              # end of restrict
 
-
-# check static_assert
-#----------------------------------------
-nm_feature="static_assert"
-nm_feature_name="nm_have_static_assert"
-nm_feature_run=yes
-nm_feature_h="#include <assert.h>"
-nm_feature_flags="$nm_std_opt"
-nm_feature_test="enum {N=5}; static_assert(N==5, \"N is not equal 5\");"
-. ${NORE_ROOT}/auto/feature     # end of static_assert
 
 
 # check strdup

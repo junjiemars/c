@@ -103,13 +103,17 @@ $(posix_ndef_cppout): $(posix_root)/ndef_test.c
 
 # nint
 posix_nint_binout := $(bin_path)/$(posix_prefix)_nint$(bin_ext)
+posix_nint_cppout := $(tmp_path)/$(posix_prefix)_nint$(cpp_ext)
 
 posix_nint: $(posix_nint_binout)
 posix_nint_test: posix_nint
 	$(posix_nint_binout)
 
-$(posix_nint_binout): $(posix_root)/nint_test.c
-	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
+$(posix_nint_binout): $(posix_nint_cppout)
+	$(CC) $(CFLAGS) $< $(bin_out)$@
+
+$(posix_nint_cppout): $(posix_root)/nint_test.c
+	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $< $(cpp_out)$@
 
 
 # nio
