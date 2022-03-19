@@ -5,6 +5,7 @@
 
 #if !defined(NM_HAVE_STDINT_H)
 #  if (MSVC)
+#    include <stddef.h>
 #    include <BaseTsd.h>
 typedef __int8            int8_t;
 typedef unsigned __int8   uint8_t;
