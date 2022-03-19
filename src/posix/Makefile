@@ -82,8 +82,6 @@ $(posix_ndef_binout): $(posix_ndef_cppout)
 
 $(posix_ndef_cppout): $(posix_root)/ndef_test.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $< $(cpp_out)$@
-	cat $@
-
 
 
 # nint

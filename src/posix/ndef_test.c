@@ -4,7 +4,7 @@
 
 
 static void test_restrict(const char *restrict);
-static void test_static_assert(void);
+/* static void test_static_assert(void); */
 
 static void test_isut(void);
 static void test_nof(void);
@@ -15,7 +15,7 @@ main(int argc, char **argv)
 {
   _unused_(argc);
 
-  test_static_assert();
+  /* test_static_assert(); */
   test_restrict((const char *restrict) argv[0]);
 
   test_isut();
@@ -33,12 +33,12 @@ test_restrict(const char *restrict ss)
 }
 
 
-void
-test_static_assert(void)
-{
-  static_assert(sizeof(char) == 1, "sizeof(char) is not 1 byte");
-  printf("%s\n------------\n", __FUNCTION__);
-}
+/* void */
+/* test_static_assert(void) */
+/* { */
+/*   static_assert(sizeof(char) == 1, "sizeof(char) is not 1 byte"); */
+/*   printf("%s\n------------\n", __FUNCTION__); */
+/* } */
 
 
 void
