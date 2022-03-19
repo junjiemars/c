@@ -97,13 +97,13 @@ test_verify(void)
 	char *ss[] = { "abc", "12345" };
   size_t s1 = strlen(ss[0]);
   size_t s2 = strlen(ss[1]);
-  assert(0 == verify(&ss[0], &ss[0], min(s1, s1)));
-  assert(0 != verify(&ss[0], &ss[1], min(s1, s2)));
+  assert(0 == verify(&ss[0], &ss[0], _min_(s1, s1)));
+  assert(0 != verify(&ss[0], &ss[1], _min_(s1, s2)));
 
   int ii[] = { 1234, 12345 };
   assert(0 == verify(&ii[0], &ii[0], sizeof(*ii)));
   assert(0 != verify(&ii[0], &ii[1], sizeof(*ii)));
-  
+
   printf("test verify fn ... ok\n");
 }
 
@@ -136,7 +136,7 @@ main(int argc, char **argv)
 	test_cmp_str();
   test_verify();
 	test_swap();
-	
+
 	return 0;
 }
 #endif /* end of _ALGO_TEST_ */

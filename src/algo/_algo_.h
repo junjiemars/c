@@ -29,23 +29,6 @@ do                                              \
   } while (0)
 
 
-#ifndef max
-#  define max(a,b)            (((a) > (b)) ? (a) : (b))
-#endif
-
-#ifndef min
-#  define min(a,b)            (((a) < (b)) ? (a) : (b))
-#endif
-
-#ifdef count
-#  undef count
-#endif
-#define count(a) sizeof(a)/sizeof(*a)
-
-#ifdef offset
-#  undef offset
-#endif
-#define offset(l, r, w) (((char*) (r) - (char*) (l)) / (w))
 
 struct score_s
 {

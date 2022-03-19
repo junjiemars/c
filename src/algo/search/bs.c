@@ -102,7 +102,7 @@ test_bs_int(const void *key, const void *base,
   list_array(base, n, width, print_int);
   found = bs(key, base, n, width, cmp_int);
   printf("found: [%ld]\n",
-         (NULL == found ? -1L : (long) offset(base, found, sizeof(*found))));
+         (NULL == found ? -1L : (long) _diff_(base, found, sizeof(*found))));
 }
 
 void
@@ -117,7 +117,7 @@ test_bs_str(const void *key, const void *base,
   list_array(base, n, width, print_str);
   found = bs(key, base, n, width, cmp_str);
   printf("found: [%ld]\n",
-         (NULL == found ? -1L : (long) offset(base, found, width)));
+         (NULL == found ? -1L : (long) _diff_(base, found, width)));
 }
 
 void
@@ -130,7 +130,7 @@ test_bs_iter_int(const void *key, const void *base,
   list_array(base, n, width, print_int);
   found = bs_iter(key, base, n, width, cmp_int);
   printf("found: [%ld]\n",
-         (NULL == found ? -1L : (long) offset(base, found, sizeof(*found))));
+         (NULL == found ? -1L : (long) _diff_(base, found, sizeof(*found))));
 }
 
 void
@@ -138,12 +138,12 @@ test_bs_iter_str(const void *key, const void *base,
                  size_t n, size_t width)
 {
   char **found;
-  
+
   printf("binary search iter for %s\n----------\n", *(char**) key);
   list_array(base, n, width, print_str);
   found = bs_iter(key, base, n, width, cmp_str);
   printf("found: [%ld]\n",
-         (0 == found ? -1L : (long) offset(base, found, width)));
+         (0 == found ? -1L : (long) _diff_(base, found, width)));
 }
 
 void
@@ -151,12 +151,12 @@ test_bsearch_int(const void *key, const void *base,
                  size_t n, size_t width)
 {
   int *found;
-  
+
   printf("bsearch for %i\n----------\n", *(int*) key);
   list_array(base, n, width, print_int);
   found = bsearch(key, base, n, width, cmp_int);
   printf("found: [%ld]\n",
-         (NULL == found ? -1L : (long) offset(base, found, width)));
+         (NULL == found ? -1L : (long) _diff_(base, found, width)));
 }
 
 void
@@ -169,7 +169,7 @@ test_bsearch_str(const void *key, const void *base,
   list_array(base, n, width, print_str);
   found = bs(key, base, n, width, cmp_str);
   printf("found: [%ld]\n",
-         (NULL == found ? -1L : (long) offset(base, found, width)));
+         (NULL == found ? -1L : (long) _diff_(base, found, width)));
 }
 
 int
@@ -184,45 +184,45 @@ main(int argc, char **argv)
   char *str_keys[] = { "dddd", "ffffff", "ccc" };
 
   /* bs */
-  for (size_t i = 0; i < count(int_keys); i++) {
+  for (size_t i = 0; i < _nof_(int_keys); i++) {
     test_bs_int(&int_keys[i],
                 int_base,
-                count(int_base),
+                _nof_(int_base),
                 sizeof(*int_base));
   }
-  for (size_t i = 0; i < count(str_keys); i++) {
+  for (size_t i = 0; i < _nof_(str_keys); i++) {
     test_bs_str(&str_keys[i],
                 str_base,
-                count(str_base),
+                _nof_(str_base),
                 sizeof(*str_base));
   }
 
 
   /* bs_iter */
-  for (size_t i = 0; i < count(int_keys); i++) {
+  for (size_t i = 0; i < _nof_(int_keys); i++) {
     test_bs_iter_int(&int_keys[i],
                      int_base,
-                     count(int_base),
+                     _nof_(int_base),
                      sizeof(*int_base));
   }
-  for (size_t i = 0; i < count(str_keys); i++) {
+  for (size_t i = 0; i < _nof_(str_keys); i++) {
     test_bs_iter_str(&str_keys[i],
                      str_base,
-                     count(str_base),
+                     _nof_(str_base),
                      sizeof(*str_base));
   }
 
   /* bsearch */
-  for (size_t i = 0; i < count(int_keys); i++) {
+  for (size_t i = 0; i < _nof_(int_keys); i++) {
     test_bsearch_int(&int_keys[i],
                      int_base,
-                     count(int_base),
+                     _nof_(int_base),
                      sizeof(*int_base));
   }
-  for (size_t i = 0; i < count(str_keys); i++) {
+  for (size_t i = 0; i < _nof_(str_keys); i++) {
     test_bsearch_str(&str_keys[i],
                      str_base,
-                     count(str_base),
+                     _nof_(str_base),
                      sizeof(*str_base));
   }
   return 0;

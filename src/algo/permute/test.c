@@ -16,28 +16,28 @@ main(int argc, char **argv)
     {
       3, 2, 2, 3, 4, 5
     };
-  
+
   printf("permutation:\n----------\n");
-	list_array(p1, count(p1), sizeof(*p1), print_size_t);
+	list_array(p1, _nof_(p1), sizeof(*p1), print_size_t);
 	printf("permute+:\n----------\n");
-	list_array(a1, count(a1), sizeof(*a1), print_int);
+	list_array(a1, _nof_(a1), sizeof(*a1), print_int);
 	printf("permute-:\n----------\n");
-	permute(a1, count(a1), sizeof(*a1), p1, cmp_int);
-	list_array(a1, count(a1), sizeof(*a1), print_int);
+	permute(a1, _nof_(a1), sizeof(*a1), p1, cmp_int);
+	list_array(a1, _nof_(a1), sizeof(*a1), print_int);
 
 	char *s1[] =
     {
       "block", "array", "floor", "digit", "cell", "error"
     };
   printf("permutation:\n----------\n");
-	list_array(p1, count(p1), sizeof(*p1), print_size_t);
+	list_array(p1, _nof_(p1), sizeof(*p1), print_size_t);
 	printf("permute+:\n----------\n");
-	list_array(s1, count(s1), sizeof(*s1), print_str);
+	list_array(s1, _nof_(s1), sizeof(*s1), print_str);
 	printf("permute-:\n----------\n");
-	permute(s1, count(s1), sizeof(*s1), p1, cmp_str);
-	list_array(s1, count(s1), sizeof(*s1), print_str);
+	permute(s1, _nof_(s1), sizeof(*s1), p1, cmp_str);
+	list_array(s1, _nof_(s1), sizeof(*s1), print_str);
 
-  const int ss_len = count(p1);
+  const int ss_len = _nof_(p1);
   struct score_s *ss = malloc(sizeof(struct score_s) * ss_len);
   if (!ss)
     {
@@ -50,7 +50,7 @@ main(int argc, char **argv)
       ss[i].score = 10 + i * 10;
     }
   printf("permutation:\n----------\n");
-	list_array(p1, count(p1), sizeof(*p1), print_size_t);
+	list_array(p1, _nof_(p1), sizeof(*p1), print_size_t);
 	printf("permute+:\n----------\n");
 	list_array(ss, ss_len, sizeof(*ss), print_score_s);
 	printf("permute-:\n----------\n");

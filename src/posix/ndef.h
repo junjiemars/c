@@ -26,22 +26,37 @@
 
 
 #if !defined(_unused_)
-#  define _unused_(x) ((void)(x))
+#  define _unused_(x)  ((void)(x))
 #endif  /* _unused_ */
 
 
 #if !defined(_isut_)
-#  define _isut_(t) (((t)~1) > 0)
+#  define _isut_(t)  (((t)~1) > 0)
 #endif  /* _isut_ */
 
 
 #if !defined(_nof_)
-#  define _nof_(a) (sizeof(a)/sizeof(*(a)))
+#  define _nof_(a)  (sizeof(a)/sizeof(*(a)))
 #endif  /* _nof_ */
 
 
+#if !defined(_diff_)
+#  define _diff_(l, r, w)  (((char*)(r)-(char*)(l))/(w))
+#endif  /* _diff_ */
+
+
+#if !defined(_max_)
+#  define _max_(a, b)  (((a) > (b)) ? (a) : (b))
+#endif  /* _max_ */
+
+
+#if !defined(_min_)
+#  define _min_(a, b)  (((a) < (b)) ? (a) : (b))
+#endif  /* _min_ */
+
+
 #if !defined(_str_)
-#  define _str_(s) #s
+#  define _str_(s)  #s
 #endif  /* _str_ */
 
 

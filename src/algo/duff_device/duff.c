@@ -38,17 +38,17 @@ main(int argc, char *argv[]) {
 	raw_send(to, from, n);
 	show(to);
 	fflush(stdout);
-	memset(to, 0, count(to));
+	memset(to, 0, _nof_(to));
 
 	send(to, from, n);
 	show(to);
 	fflush(stdout);
-	memset(to, 0, count(to));
+	memset(to, 0, _nof_(to));
 
 	send2(to, from, n);
 	show(to);
 	fflush(stdout);
-	memset(to, 0, count(to));
+	memset(to, 0, _nof_(to));
 
 	memcpy(to, from, n);
 	show(to);
