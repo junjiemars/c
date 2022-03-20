@@ -14,9 +14,7 @@
 
 
 #if (GCC)
-#  if (NM_HAVE_W_IMPLICIT_FALLTHROUGH)
-#    pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
-#  endif
+#  pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #endif
 
 
