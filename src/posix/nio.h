@@ -4,10 +4,6 @@
 
 #include <npstd.h>
 
-
-#define NM_MAXLINE  4096
-
-
 #if (MSVC)
 #  pragma warning(disable:4996)
 #endif  /* _CRT_SECURE_NO_WARNINGS */

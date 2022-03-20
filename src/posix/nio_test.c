@@ -10,9 +10,9 @@ void
 test_getline(const char *where)
 {
   char     *line;
-  size_t    line_len;
+  size_t    linecap;
+  ssize_t   linelen;
   FILE     *f;
-  ssize_t   rc;
 
   f = fopen(where, "r");
   if (!f)
@@ -22,8 +22,8 @@ test_getline(const char *where)
     }
 
   line = NULL;
-  line_len = 0;
-  while ((rc = getline(&line, &line_len, f)) > 0)
+  linecap = 0;
+  while ((linelen = getline(&line, &linecap, f)) > 0)
     {
       fprintf(stdout, "%s", line);
     }
