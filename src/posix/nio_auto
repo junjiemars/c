@@ -61,7 +61,7 @@ long line_max = 2048;
     ;;
   *)
     ;;
-esac                            # end of getdelim
+esac                            # end of LINE_MAX
 
 
 # check getdelim
