@@ -30,13 +30,15 @@ case $NM_SYSTEM in
     nm_feature_flags=
     nm_feature_test='
 long line_max = 2048;
-#if (LINE_MAX)
-  line_max = LINE_MAX;
-#else
-  long sc = sysconf(_SC_LINE_MAX);
-  if (sc > 0) {
-     line_max = sc;
-  }
+#if defined(LINE_MAX)
+    if (LINE_MAX > 0) {
+       line_max = LINE_MAX;
+    } else if (LINE_MAX == 0) {
+      long sc = sysconf(_SC_LINE_MAX);
+      if (sc > 0) {
+         line_max = sc;
+      }
+    }
 #endif
   printf("%ld\n", line_max);
   return 0;
@@ -55,11 +57,13 @@ long line_max = 2048;
 '
     nm_feature_flags=
     nm_feature_test='
-#if (LINE_MAX)
-  printf("%ld\n", LINE_MAX);
-#else
-  printf("%d\n", 2048);
+long line_max = 2048;
+#if defined(LINE_MAX)
+    if (LINE_MAX > 0) {
+       line_max = LINE_MAX;
+    }
 #endif
+  printf("%d\n", line_max);
   return 0;
 '
     . ${NORE_ROOT}/auto/feature
