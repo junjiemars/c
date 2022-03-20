@@ -42,22 +42,27 @@ long line_max = 2048;
   return 0;
 '
     . ${NORE_ROOT}/auto/feature
-    if [ "yes" == "$nm_found" ]; then
-      NM_LINE_MAX=$nm_feature_value
-    fi
     ;;
   WinNT)
     nm_feature="LINE_MAX"
     nm_feature_name="nm_line_max"
-    nm_feature_run=no
+    nm_feature_run=value
     nm_feature_value=
-    nm_feature_h=
+    nm_feature_h='
+#include <stdio.h>
+#include <limits.h>
+#include <windows.h>
+'
     nm_feature_flags=
-    nm_feature_test=
+    nm_feature_test='
+#if (LINE_MAX)
+  printf("%ld\n", LINE_MAX);
+#else
+  printf("%d\n", 2048);
+#endif
+  return 0;
+'
     . ${NORE_ROOT}/auto/feature
-    if [ "yes" == "$nm_found" ]; then
-      NM_LINE_MAX=$nm_feature_value
-    fi
     ;;
   *)
     ;;
