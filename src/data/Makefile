@@ -4,9 +4,9 @@
 #
 
 ifeq ($(CC_NAME), msvc)
-io: data_id
+io:
 	@echo "#skip ..."
-data_test: data_id_test
+data_test:
 	@echo "#skip ..."
 else
 
