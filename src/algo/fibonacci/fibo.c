@@ -1,6 +1,27 @@
 #include <_algo_.h>
-#include <stdio.h>
-#include <stdlib.h>
+
+static int fibo1(int);
+static int fibo2(int, int, int);
+static int fibo3(int, int, int);
+static int fibo4(int);
+
+
+int
+main(int argc, char **argv) {
+	if (argc < 2) {
+		printf("fibonacci(n)\n");
+		return 1;
+	}
+
+	int n = atoi(argv[1]);
+
+	printf("fibo1(%i) = %i\n", n, fibo1(n));
+	printf("fibo2(%i) = %i\n", n, fibo2(n, 0, 1));
+	printf("fibo3(%i) = %i\n", n, fibo3(n, 0, 1));
+	printf("fibo4(%i) = %i\n", n, fibo4(n));
+
+	return 0;
+}
 
 
 int
@@ -40,21 +61,4 @@ fibo4(int n) {
 		acc = t + p;
 	}
 	return acc;
-}
-
-int
-main(int argc, char **argv) {
-	if (argc < 2) {
-		printf("fibonacci(n)\n");
-		return 1;
-	}
-	
-	int n = atoi(argv[1]);
-
-	printf("fibo1(%i) = %i\n", n, fibo1(n));
-	printf("fibo2(%i) = %i\n", n, fibo2(n, 0, 1));
-	printf("fibo3(%i) = %i\n", n, fibo3(n, 0, 1));
-	printf("fibo4(%i) = %i\n", n, fibo4(n));
-	
-	return 0;
 }

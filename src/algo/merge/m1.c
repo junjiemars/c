@@ -1,8 +1,27 @@
 #include <_algo_.h>
 
-/* 
+/*
  * merge two arrays based on order
  */
+
+static void merge(void*, size_t, void*, size_t, void*, size_t, size_t,
+                  int(*)(const void*, const void*));
+static void test_merge_int(void);
+static void test_merge_str(void);
+
+int
+main(int argc, char **argv)
+{
+	_unused_(argc);
+	_unused_(argv);
+
+  test_merge_int();
+  test_merge_str();
+
+	return 0;
+}
+
+
 void
 merge(void * const l, size_t lnel,
       void * const r, size_t rnel,
@@ -50,7 +69,7 @@ test_merge_int(void)
   list_array(al, alnel, sizeof(*al), print_int);
   list_array(ar, arnel, sizeof(*ar), print_int);
   printf("----------\n");
-  
+
   merge(al, alnel, ar, arnel, am, 0, sizeof(int), cmp_int);
 
   list_array(am, amnel, sizeof(*am), print_int);
@@ -70,21 +89,8 @@ test_merge_str(void)
   list_array(al, alnel, sizeof(*al), print_str);
   list_array(ar, arnel, sizeof(*ar), print_str);
   printf("----------\n");
-  
+
   merge(al, alnel, ar, arnel, am, 0, sizeof(char*), cmp_str);
 
   list_array(am, amnel, sizeof(*am), print_str);
-}
-
-
-int
-main(int argc, char **argv)
-{
-	_unused_(argc);
-	_unused_(argv);
-
-  test_merge_int();
-  test_merge_str();
-  
-	return 0;
 }

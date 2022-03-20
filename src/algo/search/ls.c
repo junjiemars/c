@@ -5,6 +5,20 @@ long linear_search(void*, void*, size_t, size_t,
 void test_linear_search_int(void);
 void test_linear_search_str(void);
 
+int
+main(int argc, char **argv)
+{
+	_unused_(argc);
+	_unused_(argv);
+
+  test_linear_search_int();
+  test_linear_search_str();
+
+	return 0;
+}
+
+
+
 long
 linear_search(void *what, void *base, size_t nel, size_t width,
 							int (*cmp)(const void *, const void *))
@@ -66,7 +80,7 @@ test_linear_search_str(void)
 	char *what = "dddd";
   const char *xx[] = { "ok", "failed" };
   int xxi = 1;
-  
+
 	printf("linear search for %s\n----------\n", what);
 	list_array(s1, sizeof(s1)/sizeof(*s1), sizeof(*s1), print_str);
   found = linear_search(&what, s1, sizeof(s1)/sizeof(*s1), sizeof(*s1),
@@ -96,16 +110,4 @@ test_linear_search_str(void)
         }
     }
 	printf("found: [%i] ... %s\n", found, xx[xxi]);
-}
-
-int
-main(int argc, char **argv)
-{
-	_unused_(argc);
-	_unused_(argv);
-
-  test_linear_search_int();
-  test_linear_search_str();
-
-	return 0;
 }

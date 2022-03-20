@@ -13,6 +13,29 @@ int prime2(int n);
 void list_all_primes(int l, int r, is_prime_fn is_prime);
 
 int
+main(int argc, char **argv)
+{
+  if (argc < 3)
+    {
+      printf("please, input range\n");
+      return 0;
+    }
+
+  int l, r;
+  sscanf(argv[1], "%i", &l);
+  sscanf(argv[2], "%i", &r);
+
+  printf("prime1\n------------\n");
+  list_all_primes(l, r, prime1);
+
+  printf("prime2\n------------\n");
+  list_all_primes(l, r, prime2);
+
+  return 0;
+}
+
+
+int
 prime1(int n)
 {
   for (int i = 2; i < n; i++)
@@ -51,26 +74,4 @@ list_all_primes(int l, int r, is_prime_fn is_prime)
         }
     }
   printf("\n");
-}
-
-int
-main(int argc, char **argv)
-{
-  if (argc < 3)
-    {
-      printf("please, input range\n");
-      return 0;
-    }
-
-  int l, r;
-  sscanf(argv[1], "%i", &l);
-  sscanf(argv[2], "%i", &r);
-
-  printf("prime1\n------------\n");
-  list_all_primes(l, r, prime1);
-
-  printf("prime2\n------------\n");
-  list_all_primes(l, r, prime2);
-  
-  return 0;
 }

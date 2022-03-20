@@ -1,5 +1,3 @@
-#include <_algo_.h>
-#include <stdio.h>
 #include "_hash_.h"
 
 
@@ -9,17 +7,7 @@
  * https://en.wikipedia.org/wiki/Daniel_J._Bernstein
  * https://theartincode.stanis.me/008-djb2/
  */
-unsigned long
-hash(const char *str)
-{
-  unsigned long h = 5381;
-  int c;
-  while (0 != (c = *str++))
-    {
-      h = ((h << 5) + h) + c;       /* h * 33 + c */
-    }
-  return h;
-}
+
 
 int
 main(int argc, char **argv)
@@ -34,4 +22,16 @@ main(int argc, char **argv)
       print_hash("djb2 hash", ss, h);
     }
   return 0;
+}
+
+unsigned long
+hash(const char *str)
+{
+  unsigned long h = 5381;
+  int c;
+  while (0 != (c = *str++))
+    {
+      h = ((h << 5) + h) + c;       /* h * 33 + c */
+    }
+  return h;
 }

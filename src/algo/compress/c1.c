@@ -7,6 +7,24 @@
 char *compress1(char const *ss, int len, char *ds);
 void test(char const *ss);
 
+
+int
+main(int argc, char **argv) {
+  _unused_(argc);
+  _unused_(argv);
+
+  if (argc < 2)
+    {
+      printf("please, input source string!\n");
+      return 0;
+    }
+
+  test(argv[1]);
+
+  return 0;
+}
+
+
 char*
 compress1(char const *ss, int len, char *ds)
 {
@@ -44,20 +62,4 @@ test(char const *ss)
   printf("src=%s\ndst=%s\n", ss, ds1);
 
   free(ds1);
-}
-
-int
-main(int argc, char **argv) {
-  _unused_(argc);
-  _unused_(argv);
-  
-  if (argc < 2)
-    {
-      printf("please, input source string!\n");
-      return 0;
-    }
-
-  test(argv[1]);
-
-  return 0;
 }

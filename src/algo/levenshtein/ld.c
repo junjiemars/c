@@ -11,6 +11,21 @@ void test_ld1(const char *s, const char *t);
 
 
 int
+main(int argc, char **argv)
+{
+  if (argc < 3)
+    {
+      printf("please, input source and target\n");
+      return 0;
+    }
+
+  test_ld1(argv[1], argv[2]);
+
+  return 0;
+}
+
+
+int
 ld1(const char *s, const char *t, dump_fn dump)
 {
   int n, m;
@@ -46,7 +61,7 @@ ld1(const char *s, const char *t, dump_fn dump)
   for (int i = 1; i <= n; i++)
     {
       si = s[i-1];
-      
+
       for (int j = 1; j <= m; j++)
         {
           tj = t[j-1];
@@ -63,7 +78,7 @@ ld1(const char *s, const char *t, dump_fn dump)
           above = *Mij(d, i, j-1, n) + 1;
           left = *Mij(d, i-1, j, n) + 1;
           diag = *Mij(d, i-1, j-1, n) + cost;
-          
+
           x = min_ld(above, left, diag);
           *Mij(d, i, j, n) = x;
         }
@@ -75,7 +90,7 @@ ld1(const char *s, const char *t, dump_fn dump)
       dump(d, s, t, n, m);
     }
   free(d);
-  
+
   return x;
 }
 
@@ -102,7 +117,7 @@ dump_Mij(int *M, const char *s, const char *t, int n, int m)
     printf("%4c ", s[i]);
   }
   printf("\n");
-  
+
   for (int j = 0; j <= m; j++)
     {
       if (j == 0)
@@ -117,7 +132,7 @@ dump_Mij(int *M, const char *s, const char *t, int n, int m)
         {
           printf("%4c ", t[j-1]);
         }
-      
+
       for (int i = 0; i <= n; i++)
         {
           printf("%04i ", *Mij(M, i, j, n));
@@ -131,18 +146,4 @@ test_ld1(const char *s, const char *t)
 {
   printf("s=%s, t=%s\n", s, t);
   printf("ld=%04i\n", ld1(s, t, dump_Mij));
-}
-
-int
-main(int argc, char **argv)
-{
-  if (argc < 3)
-    {
-      printf("please, input source and target\n");
-      return 0;
-    }
-
-  test_ld1(argv[1], argv[2]);
-
-  return 0;
 }

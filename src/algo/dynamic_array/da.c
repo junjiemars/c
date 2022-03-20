@@ -1,12 +1,27 @@
 #include <_algo_.h>
-#include <stdlib.h>
 #include <setjmp.h>
-#include <assert.h>
+
+
+static void add_element(int);
+static void test_add_element(void);
 
 char *dynamic;
 int current_element = 0;
 int total_elements = 4;
 jmp_buf env;
+
+
+int
+main(int argc, char **argv) {
+	_unused_(argc);
+	_unused_(argv);
+
+	test_add_element();
+	free(dynamic);
+
+	return 0;
+}
+
 
 void
 add_element(int c) {
@@ -28,16 +43,4 @@ test_add_element(void) {
 	}
 	assert(current_element == size);
 	assert(total_elements == 16);
-}
-
-
-int
-main(int argc, char **argv) {
-	_unused_(argc);
-	_unused_(argv);
-
-	test_add_element();
-	free(dynamic);
-	
-	return 0;
 }

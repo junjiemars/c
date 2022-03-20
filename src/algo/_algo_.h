@@ -2,7 +2,6 @@
 #define _ALGO_H_
 
 #include <nore.h>
-/* #include <npstd.h> */
 #include <ncstd.h>
 #include <stdlib.h>
 #include <assert.h>
