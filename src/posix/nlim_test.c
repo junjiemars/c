@@ -29,7 +29,9 @@ main(void)
 #endif  /* _XOPEN_VERSION */
 
 
+#if !(MSVC)
   conf_line_max();
+#endif  /* !MSVC */
 
 
   return 0;
