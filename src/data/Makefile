@@ -24,7 +24,7 @@ data_prefix := data
 INC += $(nm_inc_opt)$(data_root) $(nm_inc_opt)$(root)/posix
 
 
-ifeq ($(CC_NAME),msvc)
+ifeq ($(CC_NAME), msvc)
 getopt_c := $(root)/posix/getopt.c
 endif
 

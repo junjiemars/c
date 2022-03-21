@@ -15,6 +15,10 @@
 . src/posix/ncc_auto
 
 
+# checking for <nlim.h>
+. src/posix/nlim_auto
+
+
 # check for <ncstd.h>
 . src/posix/ncstd_auto
 

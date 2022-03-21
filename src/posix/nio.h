@@ -3,6 +3,7 @@
 
 
 #include <npstd.h>
+#include <nlim.h>
 
 #if (MSVC)
 #  pragma warning(disable:4996)

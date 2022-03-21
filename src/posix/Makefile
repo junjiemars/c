@@ -5,6 +5,7 @@
 posix: posix_nbits                              \
        posix_ndef                               \
        posix_getopt                             \
+       posix_lim                                \
        posix_nint                               \
        posix_nio                                \
        posix_nstr                               \
@@ -14,6 +15,7 @@ posix: posix_nbits                              \
 posix_test: posix_nbits_test                    \
             posix_ndef_test                     \
             posix_getopt_test                   \
+            posix_nlim_test                     \
             posix_nint_test                     \
             posix_nio_test                      \
             posix_nstr_test                     \
@@ -67,6 +69,16 @@ endif # end of msvc
 
 $(posix_getopt_binout): $(posix_root)/getopt_test.c $(posix_getopt_c)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# nlim
+posix_nlim_binout := $(bin_path)/$(posix_prefix)_nlim$(bin_ext)
+
+posix_nlim: $(posix_nlim_binout)
+posix_nlim_test: posix_nlim
+	$(posix_nlim_binout)
+
+$(posix_nlim_binout): $(posix_root)/nlim_test.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # ndef

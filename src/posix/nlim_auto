@@ -1,0 +1,74 @@
+#### -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## check posix features
+####
+
+
+# set _POSIX_C_SOURCE
+. src/posix/_POSIX_C_SOURCE
+
+
+echo "checking for <nlim.h> ..."
+
+
+# check LINE_MAX
+#----------------------------------------
+case $NM_SYSTEM in
+  Linux|Darwin)
+    nm_feature="LINE_MAX"
+    nm_feature_name="nm_line_max"
+    nm_feature_run=value
+    nm_feature_value=
+    nm_feature_h='
+#include <stdio.h>
+#include <unistd.h>
+#include <limits.h>
+'
+    nm_feature_flags=
+    nm_feature_test='
+long line_max = 2048;
+#if (_SC_LINE_MAX)
+    long sc = sysconf(_SC_LINE_MAX);
+    if (sc > 0) {
+       line_max = sc;
+    }
+#endif
+  printf("%ld\n", line_max);
+  return 0;
+'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  WinNT)
+    nm_feature="LINE_MAX"
+    nm_feature_name="nm_line_max"
+    nm_feature_run=value
+    nm_feature_value=
+    nm_feature_h='
+#include <stdio.h>
+#include <limits.h>
+#include <windows.h>
+'
+    nm_feature_flags=
+    nm_feature_test='
+long line_max = 2048;
+#if defined(LINE_MAX)
+    if (LINE_MAX > 0) {
+       line_max = LINE_MAX;
+    }
+#endif
+  printf("%d\n", line_max);
+  return 0;
+'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  *)
+    ;;
+esac                            # end of LINE_MAX
+
+
+
+
+# eof
