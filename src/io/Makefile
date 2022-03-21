@@ -81,7 +81,7 @@ $(io_access_open_file):
 	chmod 600 $@
 
 io_access_mode_test: $(io_access_mode_binout)
-	$(io_access_mode_binout) 0 < /dev/tty
+	-$(io_access_mode_binout) 0 < /dev/tty
 	$(io_access_mode_binout) 1 > $(io_access_mode_file)
 	cat $(io_access_mode_file)
 	$(io_access_mode_binout) 2 2>> $(io_access_mode_file)
