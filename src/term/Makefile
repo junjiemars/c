@@ -4,9 +4,9 @@
 #
 
 ifeq ($(CC_NAME), msvc)
-term: term_map
+term:
 	@echo "#skip ..."
-term_test: term_map_test
+term_test:
 	@echo "#skip ..."
 else
 

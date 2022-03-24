@@ -6,6 +6,7 @@
 #include <termios.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <assert.h>
 
 
 

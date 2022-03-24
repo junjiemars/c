@@ -52,6 +52,7 @@ main(void)
 
   for (;;)
     {
+      /* press Ctrl-\ to quit */
       pause();
     }
 
@@ -62,6 +63,7 @@ main(void)
 void
 pr_wsize(const struct ttysize *ts)
 {
+  /* real tty should show positive ts_lines and ts_cols */
   printf("%d rows, %d columns\n", ts->ts_lines, ts->ts_cols);
 }
 
