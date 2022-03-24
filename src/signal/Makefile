@@ -3,6 +3,14 @@
 #
 
 
+ifeq ($(CC_NAME), msvc)
+signal:
+	@echo "#skip ..."
+signal_test:
+	@echo "#skip ..."
+else
+
+
 signal: signal_reentrant                        \
         signal_set                              \
         signal_sleep                            \
@@ -17,18 +25,13 @@ signal_test: signal_reentrant_test              \
              signal_wait_test                   \
              signal_pause_test
 
+endif
+
 
 # env
 signal_prefix := signal
 INC += $(nm_inc_opt)$(signal_root) $(nm_inc_opt)$(root)/posix
 
-
-ifeq ($(CC_NAME), msvc)
-signal_pause:
-	@echo "#skip ..."
-signal_pause_test:
-	@echo "#skip ..."
-endif
 
 
 # reentrant

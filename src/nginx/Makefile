@@ -80,7 +80,7 @@ $(nginx_core_binout): $(nginx_home)                 \
     && make -j4 install                               \
     && cp $(nginx_core_root)/$(nginx_conf_inc)        \
           $(nginx_core_prefix)/conf/inc.conf          \
-    && cp $(nginx_core_root)/$(nginx_conf_inc)        \
+    && cp $(nginx_core_root)/$(nginx_conf)            \
 					$(nginx_core_prefix)/conf/nginx.conf
 
 
