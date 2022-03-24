@@ -56,7 +56,7 @@ term_csize_test: term_csize
 	$(term_csize_binout)
 
 $(term_csize_binout): $(term_root)/csize.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(nm_def_opt)_PAUSE_=0 $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # wsize
@@ -71,7 +71,7 @@ $(term_wsize_binout): $(term_wsize_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(term_wsize_cppout): $(term_root)/wsize.c
-	$(CC) $(CPPFLAGS) $(INC) $^ $(nm_stage_pre) $(cpp_out)$@
+	$(CC) $(CPPFLAGS) $(INC) $(nm_def_opt)_PAUSE_=0 $^ $(nm_stage_pre) $(cpp_out)$@
 
 # raw
 term_raw_binout := $(bin_path)/$(term_prefix)_raw$(bin_ext)
