@@ -12,10 +12,12 @@
 #include <nore.h>
 
 
-#if defined(_POSIX_C_SOURCE)
-#  undef _POSIX_C_SOURCE
-#endif
-#define _POSIX_C_SOURCE  200809L
+#if (LINUX)
+#  if defined(_POSIX_C_SOURCE)
+#    undef _POSIX_C_SOURCE
+#  endif
+#  define _POSIX_C_SOURCE  200809L
+#endif  /* LINUX */
 
 
 

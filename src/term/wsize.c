@@ -1,5 +1,4 @@
 #include "_term_.h"
-#include <sys/ioctl.h>
 
 /*
  * Watching SIGWINCH signal.
@@ -9,26 +8,14 @@
  */
 
 
-/* just pass compilation */
-#if (DARWIN)
-#  if !defined(SIGWINCH)
-#    define SIGWINCH  28
-#  endif
-#endif  /* DARWIN */
-
-#include <signal.h>
-
-
-static void pr_wsize(const struct ttysize *ts);
-static void on_sig_winch(int signo);
+static void pr_wsize(int);
+static void on_sig_winch(int);
 
 static int  fd  =  STDIN_FILENO;
 
 int
 main(void)
 {
-  int             rc;
-  struct ttysize  ts;
 
   if (isatty(fd) == 0)
     {
@@ -42,42 +29,46 @@ main(void)
       exit(EXIT_FAILURE);
     }
 
-  rc = ioctl(fd, TIOCGWINSZ, &ts);
-  if (rc == -1)
-    {
-      perror(NULL);
-      exit(EXIT_FAILURE);
-    }
-  pr_wsize(&ts);
+  pr_wsize(fd);
 
+
+#if (_PAUSE_)
   for (;;)
     {
-      /* press Ctrl-\ to quit */
+      /* press Ctrl-C or Ctrl-\ to quit */
       pause();
     }
+
+#endif  /* _PAUSE */
+
 
   exit(EXIT_SUCCESS);
 
 }
 
 void
-pr_wsize(const struct ttysize *ts)
+pr_wsize(int fd)
 {
-  /* real tty should show positive ts_lines and ts_cols */
-  printf("%d rows, %d columns\n", ts->ts_lines, ts->ts_cols);
+  struct winsize  wsz;
+
+  if (ioctl(fd, TIOCGWINSZ, (char *) &wsz) == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
+
+  printf("%d rows, %d columns\n", wsz.ws_row, wsz.ws_col);
+
 }
 
 
 void
 on_sig_winch(int signo)
 {
-  struct ttysize  ts;
-
   if (signo == SIGWINCH)
     {
-      if (ioctl(fd, TIOCGWINSZ, &ts) == -1)
-        {
-          pr_wsize(&ts);
-        }
+      printf("on %s...\n", _str_(SIGWINCH));
+
+      pr_wsize(fd);
     }
 }

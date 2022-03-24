@@ -56,7 +56,7 @@ term_csize_test: term_csize
 	$(term_csize_binout)
 
 $(term_csize_binout): $(term_root)/csize.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(nm_def_opt)_PAUSE_=0 $(INC) $^ $(bin_out)$@
 
 
 # wsize

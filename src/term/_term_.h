@@ -2,11 +2,12 @@
 #define _TERM_H_
 
 #include <nustd.h>
-#include <sys/types.h>
 #include <termios.h>
+#include <sys/ioctl.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <assert.h>
+
 
 
 
