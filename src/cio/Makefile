@@ -49,7 +49,7 @@ endif
 
 _MEMORY_ ?= 0
 ifeq ($(shell test $(_MEMORY_) -gt 0; echo $$?),0)
-CFLAGS += $(cflags_sanitize)
+CFLAGS += $(f_sanitize)
 endif
 
 
@@ -121,7 +121,7 @@ cio_format: $(cio_format_binout)
 cio_format_test: cio_format
 	$(cio_format_binout)
 
-$(cio_format_binout): $(cio_root)/format/f.c
+$(cio_format_binout): $(cio_root)/format/fo.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # fileno
