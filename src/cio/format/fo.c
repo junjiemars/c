@@ -17,6 +17,7 @@
  * B. field width:
  * 1) can be * (asterisk)
  * 2) an integer
+ *
  * C. precision:
  * 1) can be * (asterisk)
  * 2) an integer
@@ -31,11 +32,25 @@
  * 7) t ptrdiff_t
  * 8) L long double
  *
+ * E. convert type
+ * 1) d,i signed deciaml
+ * 2) o unsigned octal
+ * 3) x,X unsigned hexaidicmal
+ * 4) f double float-point number
+ * 5) e,E double float-point in exponential format
+ * 6) g,G interpreted as f,F,e, or E, depending on value converted
+ * 7) a,A double float-point in hexadecimal expoential format
+ * 8) c,C (lc) character
+ * 9) s,S (ls) string
+ * 10) P point to void
+ * %) a % character
+ *
  */
 
 static void fmt_flags(void);
 static void fmt_fldwidth(void);
 static void fmt_lenmodifier(void);
+static void fmt_convtype(void);
 
 
 int
@@ -44,6 +59,7 @@ main(void)
   fmt_flags();
   fmt_fldwidth();
   fmt_lenmodifier();
+  fmt_convtype();
 
   return 0;
 
@@ -95,5 +111,37 @@ fmt_lenmodifier(void)
   printf("%+td\n", (int *) &main - (int *) &fmt_lenmodifier);
   printf("%Lf\n", 12345.0L);
 
+
+}
+
+void
+fmt_convtype(void)
+{
+  printf("\nformat convert type\n------------\n");
+
+  printf("%e\n", 12345.0);
+  printf("%E\n", 12345.0);
+
+  printf("%g\n", 12345.0);
+  printf("%G\n", 12345.0);
+
+  printf("%a\n", 12345.0);
+  printf("%A\n", 12345.0);
+
+  printf("%c\n", 'a');
+  printf("%C\n", 0x3bb);
+  printf("%lc\n", 0x3bb);
+
+
+  printf("%s\n", "abc");
+  printf("%S\n", L"λ");
+  printf("%ls\n", L"λ");
+
+  printf("%p\n", &main);
+
+  int n = 12345;
+  printf("%n\n", &n);
+
+  printf("%%\n");
 
 }
