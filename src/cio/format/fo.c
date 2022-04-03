@@ -43,8 +43,10 @@
  *  8) a,A double float-point in hexadecimal exponential format
  *  9) c,C (lc) character
  * 10) s,S (ls) string
- * 11) p point to void
- * 12) % a % character
+ * 11) p point to a void
+ * 12) n point to a signed integer into which is writen the number of character
+ *     read so far
+ * 13) % a % character
  *
  */
 
@@ -53,7 +55,8 @@ static void out_fldwidth(void);
 static void out_precision(void);
 static void out_lenmodifier(void);
 static void out_convtype(void);
-static void out_wchar(void);
+static void out_convtype_lc(void);
+static void out_convtype_n(void);
 
 int
 main(void)
@@ -63,7 +66,9 @@ main(void)
   out_fldwidth();
   out_precision();
   out_lenmodifier();
-  out_wchar();
+
+  out_convtype_lc();
+  out_convtype_n();
 
   return 0;
 
@@ -90,6 +95,8 @@ out_convtype(void)
 
   printf("%s (string)\n", "abc");
 
+  printf("%p (p)\n", (int *) &main);
+
 }
 
 
@@ -111,6 +118,7 @@ out_flags()
   printf("%#x (#x)\n", 12345);
 
   printf("%0d (0)\n", 12345);
+
 }
 
 
@@ -152,10 +160,22 @@ out_lenmodifier(void)
 }
 
 void
-out_wchar(void)
+out_convtype_lc(void)
 {
   printf("\nout wide character\n------------\n");
 
   printf("%lc (c)\n", L'λ');
   printf("%ls (ls)\n", L"中文");
+}
+
+void
+out_convtype_n(void)
+{
+  int n;
+
+  printf("\nout conversion type: n\n------------%n\n", &n);
+  printf("(n = %d)\n", n);
+
+  printf("%d, %s%n", 12345, "abc", &n);
+  printf(" (n = %d)\n", n);
 }

@@ -10,7 +10,7 @@
  *
  * B. field width: see fo.c
  *
- * C. length modifier:
+ * C. length modifier: see fo.c
  *
  * D. conversion type:
  *  1) d signed decimal, base 10
@@ -23,28 +23,35 @@
  *  8) s (with l length modifier, wide string)
  *  9) [ matches a sequence of listed character, ending with ]
  * 10) [^ matches all characters except the ones listed, ending with ]
+ * 11) p point to a void
+ * 12) n point to a signed integer into which is writen the number of character
+ *     read so far
+ * 13) % a % sign
  *
  */
 
 
-static void in_types(void);
+static void in_convtype(void);
+static void in_convtype_n(void);
 static void in_seq(void);
 
 
 int
 main(void)
 {
-  in_types();
+  in_convtype();
+  in_convtype_n();
+
   in_seq();
 
   return 0;
 }
 
 void
-in_types(void)
+in_convtype(void)
 {
-  char *ss = "a 123 1234 12345 3.1 3.14 3.141";
-  char *fmt = "%c %hi %d %ld %f %lf %Lf";
+  char *ss = "a 123 1234 12345 3.1 3.14 3.141 12345";
+  char *fmt = "%c %hi %d %ld %f %lf %Lf %p";
 
   char c;
   short s;
@@ -53,14 +60,33 @@ in_types(void)
   float f;
   double d;
   long double ld;
+  int *p;
 
-  printf("\nin types\n------------\n");
+  printf("\nin conversion type\n------------\n");
 
-  sscanf(ss, fmt, &c, &s, &i, &l, &f, &d, &ld);
+  sscanf(ss, fmt, &c, &s, &i, &l, &f, &d, &ld, &p);
 
-  printf("%c(char) %hd(short) %d(int) %ld(long)\n"
-         "%f(float) %lf(double) %Lf(long double)\n",
-         c, s, i, l, f, d, ld);
+  printf("%c (char)\n"
+         "%hd (short)\n"
+         "%d (int)\n"
+         "%ld (long)\n"
+         "%f (float)\n"
+         "%lf (double)\n"
+         "%Lf (long double)\n"
+         "%p (p)\n",
+         c, s, i, l, f, d, ld, p);
+
+}
+
+void
+in_convtype_n(void)
+{
+  int n;
+
+  printf("\nin conversion type: n\n------------\n");
+
+  printf("%d, %s%n", 12345, "abc", &n);
+  printf(" (n = %d)\n", n);
 }
 
 void
