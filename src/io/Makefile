@@ -48,7 +48,7 @@ endif
 
 _MEMORY_ ?= 0
 ifeq ($(shell test $(_MEMORY_) -gt 0; echo $$?),0)
-CFLAGS += $(cflags_sanitize)
+CFLAGS += $(f_sanitize)
 endif
 
 
@@ -278,6 +278,18 @@ io_struct_test: io_struct
 
 $(io_struct_binout): $(io_root)/struct/s1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# temp
+# temp
+io_temp_binout := $(bin_path)/$(io_prefix)_temp$(bin_ext)
+
+io_temp: $(io_temp_binout)
+io_temp_test: io_temp
+	$(io_temp_binout) /tmp
+
+$(io_temp_binout): $(io_root)/temp/t.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 
 # eof

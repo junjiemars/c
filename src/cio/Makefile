@@ -25,7 +25,6 @@ cio: cio_basic                                  \
      cio_process                                \
      cio_reopen                                 \
      cio_scan                                   \
-     cio_temp                                   \
      cio_variadic                               \
      cio_wc                                     \
      cio_wchar
@@ -42,7 +41,6 @@ cio_test: cio_basic_test                        \
           cio_process_test                      \
           cio_reopen_test                       \
           cio_scan_test                         \
-          cio_temp_test                         \
           cio_variadic_test                     \
           cio_wc_test                           \
           cio_wchar_test
@@ -294,19 +292,6 @@ $(cio_scan_csv_binout): $(cio_root)/scan/csv.c
 $(cio_scan_free_binout): $(cio_root)/scan/free.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-
-# temp
-cio_temp_std_binout := $(bin_path)/$(cio_prefix)_temp_std$(bin_ext)
-
-cio_temp: $(cio_temp_std_binout)
-cio_temp_test: cio_temp_std_test
-	$(cio_temp_std_binout)
-
-cio_temp_std_test: $(cio_temp_std_binout)
-	$(cio_temp_std_binout)
-
-$(cio_temp_std_binout): $(cio_root)/temp/stdtmp.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # variadic
