@@ -22,7 +22,7 @@
  * 1) can be * (asterisk)
  * 2) an integer
  *
- * D. len modifier
+ * D. length modifier
  * 1) hh signed or unsigned char
  * 2) h signed or unsigned short
  * 3) l signed or unsigned long
@@ -32,7 +32,7 @@
  * 7) t ptrdiff_t
  * 8) L long double
  *
- * E. convert type
+ * E. conversion type
  * 1) d,i signed deciaml
  * 2) o unsigned octal
  * 3) x,X unsigned hexaidicmal
@@ -47,28 +47,28 @@
  *
  */
 
-static void fmt_flags(void);
-static void fmt_fldwidth(void);
-static void fmt_lenmodifier(void);
-static void fmt_convtype(void);
+static void out_flags(void);
+static void out_fldwidth(void);
+static void out_lenmodifier(void);
+static void out_convtype(void);
 
 
 int
 main(void)
 {
-  fmt_flags();
-  fmt_fldwidth();
-  fmt_lenmodifier();
-  fmt_convtype();
+  out_flags();
+  out_fldwidth();
+  out_lenmodifier();
+  out_convtype();
 
   return 0;
 
 }
 
 void
-fmt_flags()
+out_flags()
 {
-  printf("\nformat flags\n------------\n");
+  printf("\nout flags\n------------\n");
 
   printf("%s\n", "abc");
   printf("%-s\n", "abc");
@@ -87,9 +87,9 @@ fmt_flags()
 
 
 void
-fmt_fldwidth(void)
+out_fldwidth(void)
 {
-  printf("\nformat field width\n------------\n");
+  printf("\nout field width\n------------\n");
 
   printf("%10s%s\n", "abc", "|");
   printf("%-10s%s\n", "abc", "|");
@@ -99,25 +99,25 @@ fmt_fldwidth(void)
 }
 
 void
-fmt_lenmodifier(void)
+out_lenmodifier(void)
 {
-  printf("\nformat len modifier\n------------\n");
+  printf("\nout length modifier\n------------\n");
 
   printf("%hd\n", (short) 12345);
   printf("%ld\n", 12345L);
   printf("%lld\n", 12345LL);
   printf("%jd\n", INTMAX_MAX);
   printf("%zd\n", sizeof(int));
-  printf("%+td\n", (int *) &main - (int *) &fmt_lenmodifier);
+  printf("%+td\n", (int *) &main - (int *) &out_lenmodifier);
   printf("%Lf\n", 12345.0L);
 
 
 }
 
 void
-fmt_convtype(void)
+out_convtype(void)
 {
-  printf("\nformat convert type\n------------\n");
+  printf("\nout conversion type\n------------\n");
 
   printf("%e\n", 12345.0);
   printf("%E\n", 12345.0);
