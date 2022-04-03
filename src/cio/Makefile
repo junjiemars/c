@@ -137,13 +137,17 @@ $(cio_format_out_binout): $(cio_root)/format/fo.c
 
 # fileno
 cio_fileno_binout := $(bin_path)/$(cio_prefix)_fileno$(bin_ext)
-cio_fileno_tmp_out := $(tmp_path)/$(cio_prefix)_fileno.txt
+cio_fileno_file_out := $(tmp_path)/$(cio_prefix)_fileno.file
 
 cio_fileno: $(cio_fileno_binout)
-cio_fileno_test: cio_fileno
-	$(cio_fileno_binout)
-	$(cio_fileno_binout) > $(cio_fileno_tmp_out)
-	cat $(cio_fileno_tmp_out)
+cio_fileno_test: cio_fileno $(cio_fileno_file_out)
+	$(cio_fileno_binout) < /dev/null
+	$(cio_fileno_binout) <> $(cio_fileno_file_out)
+	cat $(cio_fileno_file_out)
+
+$(cio_fileno_file_out):
+	echo "" > $@
+
 
 $(cio_fileno_binout): $(cio_root)/fileno/fn.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

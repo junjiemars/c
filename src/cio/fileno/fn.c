@@ -6,12 +6,12 @@ static void out_file_attr(const FILE*, const char*);
 int
 main(void)
 {
-  /* int  rc; */
+  int  rc;
 
   fprintf(stdout, "stdin = %d, stdout = %d, stderr = %d\n",
           fileno(stdin), fileno(stdout), fileno(stderr));
 
-  /* rc = fgetc(stdin); */
+  rc = fgetc(stdin);
   fprintf(stderr, "to stderr\n");
 
   out_file_attr(stdin, _str_(stdin));
