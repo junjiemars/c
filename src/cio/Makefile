@@ -115,13 +115,22 @@ $(cio_error_binout): $(cio_root)/error/e1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # format I/O
-cio_format_binout := $(bin_path)/$(cio_prefix)_format$(bin_ext)
+cio_format_in_binout := $(bin_path)/$(cio_prefix)_format_in$(bin_ext)
+cio_format_out_binout := $(bin_path)/$(cio_prefix)_format_out$(bin_ext)
 
-cio_format: $(cio_format_binout)
+cio_format: $(cio_format_in_binout)             \
+            $(cio_format_out_binout)
 cio_format_test: cio_format
-	$(cio_format_binout)
+	$(cio_format_in_binout)
+	$(cio_format_out_binout)
 
-$(cio_format_binout): $(cio_root)/format/fo.c
+cio_format_in_test: $(cio_format_in_binout)
+	$(cio_format_in_binout)
+
+$(cio_format_in_binout): $(cio_root)/format/fi.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(cio_format_out_binout): $(cio_root)/format/fo.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # fileno
