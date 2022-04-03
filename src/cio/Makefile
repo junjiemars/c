@@ -140,7 +140,7 @@ cio_fileno_binout := $(bin_path)/$(cio_prefix)_fileno$(bin_ext)
 
 cio_fileno: $(cio_fileno_binout)
 cio_fileno_test: cio_fileno
-	$(cio_fileno_binout)
+	$(cio_fileno_binout) abc
 
 $(cio_fileno_binout): $(cio_root)/fileno/fn.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
