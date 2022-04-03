@@ -140,11 +140,14 @@ cio_fileno_binout := $(bin_path)/$(cio_prefix)_fileno$(bin_ext)
 cio_fileno_file_out := $(tmp_path)/$(cio_prefix)_fileno.file
 
 cio_fileno: $(cio_fileno_binout)
-cio_fileno_test: cio_fileno $(cio_fileno_file_out)
-	$(cio_fileno_binout) < /dev/null
+cio_fileno_test: cio_fileno                     \
+                 $(cio_fileno_file_out)
+	$(cio_fileno_binout) < $(cio_fileno_file_out)
 	$(cio_fileno_binout) <> $(cio_fileno_file_out)
 	cat $(cio_fileno_file_out)
 
+$(cio_fileno_file_in):
+	touch $@
 $(cio_fileno_file_out):
 	echo "" > $@
 
