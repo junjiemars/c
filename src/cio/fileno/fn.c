@@ -25,9 +25,9 @@ out_file_attr(const FILE * fp, const char *name)
   printf("\n%s (FILE @%p)\n------------\n", name, fp);
 
 #if (DARWIN)
-  printf("%_flags = %d\n"
-         "%_blksize = %u\n"
-         "%_offset = %lld\n",
+  printf("_flags = %d\n"
+         "_blksize = %u\n"
+         "_offset = %lld\n",
          fp->_flags,
          fp->_blksize,
          fp->_offset);
