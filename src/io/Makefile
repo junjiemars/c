@@ -242,7 +242,6 @@ io_stat_ft_sl := $(tmp_path)/$(io_prefix)_stat.sl
 
 io_stat: $(io_stat_ft_binout)
 io_stat_test: io_stat $(io_stat_ft_sl)
-	-$(io_stat_ft_binout)
 	$(io_stat_ft_binout) $(CURDIR)/$(bin_path)
 	$(io_stat_ft_binout) $(io_stat_ft_sl) /dev/null
 	$(io_stat_ft_binout) $(io_stat_ft_binout)
@@ -259,7 +258,6 @@ io_umask_binout := $(bin_path)/$(io_prefix)_umask$(bin_ext)
 
 io_umask: $(io_umask_binout)
 io_umask_test: io_umask
-	-$(io_umask_binout)
 	$(io_umask_binout) $(CURDIR)/$(tmp_path)
 	touch $(tmp_path)/x
 	mkdir $(tmp_path)/y
