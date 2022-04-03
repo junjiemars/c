@@ -37,9 +37,16 @@ main(int argc, char **argv)
   if (rc == -1)
     {
       perror("!panic");
-      exit(EXIT_FAILURE);
+      rc = EXIT_FAILURE;
+      goto clean_exit;
     }
-  printf("wrote %d bytes\n", rc);
 
-  exit(EXIT_SUCCESS);
+  printf("wrote %d bytes\n", rc);
+  rc = EXIT_SUCCESS;
+
+ clean_exit:
+  unlink(tmp);
+
+
+  exit(rc);
 }
