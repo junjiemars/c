@@ -17,6 +17,7 @@ cio: cio_basic                                  \
      cio_process                                \
      cio_reopen                                 \
      cio_scan                                   \
+     cio_temp                                   \
      cio_variadic                               \
      cio_wc                                     \
      cio_wchar
@@ -33,6 +34,7 @@ cio_test: cio_basic_test                        \
           cio_process_test                      \
           cio_reopen_test                       \
           cio_scan_test                         \
+          cio_temp_test                         \
           cio_variadic_test                     \
           cio_wc_test                           \
           cio_wchar_test
@@ -237,6 +239,7 @@ cio_scan_stdin_binout := $(bin_path)/$(cio_prefix)_scan$(bin_ext)
 cio_scan_csv_binout := $(bin_path)/$(cio_prefix)_scan_csv$(bin_ext)
 cio_scan_free_binout := $(bin_path)/$(cio_prefix)_scan_free$(bin_ext)
 cio_scan_free_file := $(tmp_path)/$(cio_prefix)_scan_free.file
+cio_scan_csv_file := $(tmp_path)/$(cio_prefix)_scan.csv
 
 cio_scan: cio_scan_stdin                        \
          cio_scan_csv                           \
@@ -252,8 +255,9 @@ cio_scan_free: $(cio_scan_free_binout)
 cio_scan_stdin_test: cio_scan_stdin
 	echo "X, 1234, 0x11223344, 5678, 3.1415, 2.718" | $(cio_scan_stdin_binout)
 
-cio_scan_csv_test: cio_scan_csv
-	$(cio_scan_csv_binout) $(CURDIR)/src/cio/scan/a.csv
+cio_scan_csv_test: cio_scan_csv                 \
+                   $(cio_scan_csv_file)
+	$(cio_scan_csv_binout) $(cio_scan_csv_file)
 
 cio_scan_free_test: cio_scan_free               \
                     $(cio_scan_free_file)
@@ -261,6 +265,11 @@ cio_scan_free_test: cio_scan_free               \
 
 $(cio_scan_free_file):
 	echo "10 100 1000" > $@
+
+$(cio_scan_csv_file):
+	echo "01,20,1500.11,Antone" > $@
+	echo "02,19,1621.22,Bourn" >> $@
+	echo "03,23,11223.33,Carrol" >> $@
 
 $(cio_scan_stdin_binout): $(cio_root)/scan/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -270,6 +279,20 @@ $(cio_scan_csv_binout): $(cio_root)/scan/csv.c
 
 $(cio_scan_free_binout): $(cio_root)/scan/free.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# temp
+cio_temp_std_binout := $(bin_path)/$(cio_prefix)_temp_std$(bin_ext)
+
+cio_temp: $(cio_temp_std_binout)
+cio_temp_test: cio_temp_std_test
+	$(cio_temp_std_binout)
+
+cio_temp_std_test: $(cio_temp_std_binout)
+	$(cio_temp_std_binout)
+
+$(cio_temp_std_binout): $(cio_root)/temp/stdtmp.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # variadic
@@ -283,14 +306,25 @@ cio_variadic_test: cio_variadic
 $(cio_variadic_binout): $(cio_root)/variadic/v1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-# wide char
+# wchar
 cio_wchar_ws_binout := $(bin_path)/$(cio_prefix)_wchar_ws$(bin_ext)
 cio_wchar_wc_binout := $(bin_path)/$(cio_prefix)_wchar_wc$(bin_ext)
+cio_wchar_file := $(tmp_path)/$(cio_prefix)_wchar.file
 
 cio_wchar: $(cio_wchar_ws_binout) $(cio_wchar_wc_binout)
-cio_wchar_test: cio_wchar
-	$(cio_wchar_ws_binout) $(CURDIR)/src/cio/wchar/sample.txt
-	$(cio_wchar_wc_binout) $(CURDIR)/src/cio/wchar/sample.txt
+cio_wchar_test: cio_wchar_ws_test               \
+                cio_wchar_wc_test
+
+cio_wchar_ws_test: $(cio_wchar_ws_binout)             \
+                   $(cio_wchar_file)
+	$(cio_wchar_ws_binout) $(cio_wchar_file)
+
+cio_wchar_wc_test: $(cio_wchar_wc_binout)       \
+                   $(cio_wchar_file)
+	$(cio_wchar_wc_binout) $(cio_wchar_file)
+
+$(cio_wchar_file):
+	echo "abc中文def" > $@
 
 $(cio_wchar_ws_binout): $(cio_root)/wchar/ws.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

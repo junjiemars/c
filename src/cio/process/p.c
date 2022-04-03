@@ -1,4 +1,4 @@
-#include <_cio_.h>
+#include "_cio_.h"
 
 #if MSVC
 #  if !(NM_HAVE_POPEN_FN) && (NM_HAVE__POPEN_FN)
