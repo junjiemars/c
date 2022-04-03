@@ -1,18 +1,18 @@
 #include <_cio_.h>
-#include <stdio.h>
+
 
 int
 main(int argc, char **argv)
 {
+  int  n    =  0;
+  int  sum  =  0;
+  int  num  =  0;
+
   if (argc < 2)
     {
-      fprintf(stderr, "where the free txt located?\n");
+      fprintf(stderr, "usage: <filename>\n");
       return 1;
     }
-
-  int n = 0;
-  int sum = 0;
-  int num = 0;
 
   FILE *in = fopen(argv[1], "r");
   if (!in)

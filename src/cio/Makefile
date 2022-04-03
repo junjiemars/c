@@ -120,9 +120,8 @@ cio_format_out_binout := $(bin_path)/$(cio_prefix)_format_out$(bin_ext)
 
 cio_format: $(cio_format_in_binout)             \
             $(cio_format_out_binout)
-cio_format_test: cio_format
-	$(cio_format_in_binout)
-	$(cio_format_out_binout)
+cio_format_test: cio_format_in_test             \
+                 cio_format_out_test
 
 cio_format_in_test: $(cio_format_in_binout)
 	$(cio_format_in_binout)
@@ -137,19 +136,17 @@ $(cio_format_out_binout): $(cio_root)/format/fo.c
 
 # fileno
 cio_fileno_binout := $(bin_path)/$(cio_prefix)_fileno$(bin_ext)
-cio_fileno_file_out := $(tmp_path)/$(cio_prefix)_fileno.file
+cio_fileno_file := $(tmp_path)/$(cio_prefix)_fileno.file
 
 cio_fileno: $(cio_fileno_binout)
 cio_fileno_test: cio_fileno                     \
-                 $(cio_fileno_file_out)
-	$(cio_fileno_binout) < $(cio_fileno_file_out)
-	$(cio_fileno_binout) <> $(cio_fileno_file_out)
-	cat $(cio_fileno_file_out)
+                 $(cio_fileno_file)
+	$(cio_fileno_binout) < $(cio_fileno_file)
+	$(cio_fileno_binout) <> $(cio_fileno_file)
+	cat $(cio_fileno_file)
 
-$(cio_fileno_file_in):
+$(cio_fileno_file):
 	touch $@
-$(cio_fileno_file_out):
-	echo "" > $@
 
 
 $(cio_fileno_binout): $(cio_root)/fileno/fn.c
@@ -239,13 +236,14 @@ $(cio_process_binout): $(cio_root)/process/p.c
 cio_scan_stdin_binout := $(bin_path)/$(cio_prefix)_scan$(bin_ext)
 cio_scan_csv_binout := $(bin_path)/$(cio_prefix)_scan_csv$(bin_ext)
 cio_scan_free_binout := $(bin_path)/$(cio_prefix)_scan_free$(bin_ext)
+cio_scan_free_file := $(tmp_path)/$(cio_prefix)_scan_free.file
 
-cio_scan: cio_scan_stdin                          \
-         cio_scan_csv                            \
+cio_scan: cio_scan_stdin                        \
+         cio_scan_csv                           \
          cio_scan_free
-cio_scan_test: cio_scan_stdin_test                \
-              cio_scan_csv_test                  \
-              cio_scan_free_test
+cio_scan_test: cio_scan_stdin_test              \
+               cio_scan_csv_test                \
+               cio_scan_free_test
 
 cio_scan_stdin: $(cio_scan_stdin_binout)
 cio_scan_csv: $(cio_scan_csv_binout)
@@ -253,10 +251,16 @@ cio_scan_free: $(cio_scan_free_binout)
 
 cio_scan_stdin_test: cio_scan_stdin
 	echo "X, 1234, 0x11223344, 5678, 3.1415, 2.718" | $(cio_scan_stdin_binout)
+
 cio_scan_csv_test: cio_scan_csv
 	$(cio_scan_csv_binout) $(CURDIR)/src/cio/scan/a.csv
-cio_scan_free_test: cio_scan_free
-	$(cio_scan_free_binout) $(CURDIR)/src/cio/scan/free.txt
+
+cio_scan_free_test: cio_scan_free               \
+                    $(cio_scan_free_file)
+	$(cio_scan_free_binout) $(cio_scan_free_file)
+
+$(cio_scan_free_file):
+	echo "10 100 1000" > $@
 
 $(cio_scan_stdin_binout): $(cio_root)/scan/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
