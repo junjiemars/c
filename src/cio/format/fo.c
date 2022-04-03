@@ -10,8 +10,8 @@
  * A. flags:
  * 1) - left justify the output of field
  * 2) + always display sign of a signed conversion
- * 3)   (space) prefix a space if no sign is generated
- * 4) # convert using alternate form
+ * 3) # convert using alternate form
+ * 4)   (space) prefix a space if no sign is generated
  * 5) 0 prefix with leading zeros instead of padding with spaces
  *
  * B. field width:
@@ -33,84 +33,39 @@
  * 8) L long double
  *
  * E. conversion type
- * 1) d,i signed deciaml
- * 2) o unsigned octal
- * 3) x,X unsigned hexaidicmal
- * 4) f double float-point number
- * 5) e,E double float-point in exponential format
- * 6) g,G interpreted as f,F,e, or E, depending on value converted
- * 7) a,A double float-point in hexadecimal expoential format
- * 8) c,C (lc) character
- * 9) s,S (ls) string
- * 10) P point to void
- * %) a % character
+ *  1) d,i signed deciaml
+ *  2) o unsigned octal
+ *  3) u unsigned decimal
+ *  4) x,X unsigned hexaidicmal
+ *  5) f double float-point number
+ *  6) e,E double float-point in exponential format
+ *  7) g,G interpreted as f,F,e, or E, depending on value converted
+ *  8) a,A double float-point in hexadecimal exponential format
+ *  9) c,C (lc) character
+ * 10) s,S (ls) string
+ * 11) p point to void
+ * 12) % a % character
  *
  */
 
 static void out_flags(void);
 static void out_fldwidth(void);
+static void out_precision(void);
 static void out_lenmodifier(void);
 static void out_convtype(void);
-
+static void out_wchar(void);
 
 int
 main(void)
 {
+  out_convtype();
   out_flags();
   out_fldwidth();
+  out_precision();
   out_lenmodifier();
-  out_convtype();
+  out_wchar();
 
   return 0;
-
-}
-
-void
-out_flags()
-{
-  printf("\nout flags\n------------\n");
-
-  printf("%s\n", "abc");
-  printf("%-s\n", "abc");
-
-  printf("%d\n", 12345);
-  printf("%-d\n", 12345);
-
-  printf("%+d\n", 12345);
-  printf("% d\n", 12345);
-
-  printf("%#o\n", 12345);
-  printf("%#x\n", 12345);
-
-  printf("%0d\n", 12345);
-}
-
-
-void
-out_fldwidth(void)
-{
-  printf("\nout field width\n------------\n");
-
-  printf("%10s%s\n", "abc", "|");
-  printf("%-10s%s\n", "abc", "|");
-
-  printf("%010d%s\n", 12345, "|");
-
-}
-
-void
-out_lenmodifier(void)
-{
-  printf("\nout length modifier\n------------\n");
-
-  printf("%hd\n", (short) 12345);
-  printf("%ld\n", 12345L);
-  printf("%lld\n", 12345LL);
-  printf("%jd\n", INTMAX_MAX);
-  printf("%zd\n", sizeof(int));
-  printf("%+td\n", (int *) &main - (int *) &out_lenmodifier);
-  printf("%Lf\n", 12345.0L);
-
 
 }
 
@@ -119,29 +74,88 @@ out_convtype(void)
 {
   printf("\nout conversion type\n------------\n");
 
-  printf("%e\n", 12345.0);
-  printf("%E\n", 12345.0);
+  printf("%c (char)\n"
+         "%d (int)\n"
+         "%i (int)\n"
+         "%o (octal)\n"
+         "%u (unsigned)\n"
+         "%x (hex)\n",
+         'a', 123, 12345, 12345, 12345, 12345);
 
-  printf("%g\n", 12345.0);
-  printf("%G\n", 12345.0);
+  printf("%f (float)\n"
+         "%e (float e)\n"
+         "%g (float g)\n"
+         "%a (double hex exponential)\n",
+         123.456, 123.456, 123456.789, 123.456);
 
-  printf("%a\n", 12345.0);
-  printf("%A\n", 12345.0);
+  printf("%s (string)\n", "abc");
 
-  printf("%c\n", 'a');
-  printf("%C\n", 0x3bb);
-  printf("%lc\n", 0x3bb);
+}
 
+
+void
+out_flags()
+{
+  printf("\nout flags\n------------\n");
 
   printf("%s\n", "abc");
-  printf("%S\n", L"λ");
-  printf("%ls\n", L"λ");
+  printf("%-s (-)\n", "abc");
 
-  printf("%p\n", &main);
+  printf("%d\n", 12345);
+  printf("%-d (-)\n", 12345);
 
-  int n = 12345;
-  printf("%n\n", &n);
+  printf("%+d (+)\n", 12345);
+  printf("% d ( )\n", 12345);
 
-  printf("%%\n");
+  printf("%#o (#o)\n", 12345);
+  printf("%#x (#x)\n", 12345);
 
+  printf("%0d (0)\n", 12345);
+}
+
+
+void
+out_fldwidth(void)
+{
+  printf("\nout field width\n------------\n");
+
+  printf("%-10d| (-10)\n", 12345);
+  printf("% 10d| ( 10)\n", 12345);
+  printf("%010d| (010)\n", 12345);
+
+}
+
+void
+out_precision(void)
+{
+  printf("\nout precision\n------------\n");
+
+  printf("%.2f (.2f)\n", 123.456789);
+  printf("%010.2f (010.2f)\n", 123.456789);
+
+}
+
+void
+out_lenmodifier(void)
+{
+  printf("\nout length modifier\n------------\n");
+
+  printf("%hd (hd)\n", (short) 12345);
+  printf("%ld (ld)\n", 12345L);
+  printf("%lld (lld)\n", 12345LL);
+  printf("%jd (jd)\n", INTMAX_MAX);
+  printf("%zd (zd)\n", sizeof(int));
+  printf("%td (td)\n", (int *) &main - (int *) &out_lenmodifier);
+  printf("%Lf (Lf)\n", 12345.6789L);
+
+
+}
+
+void
+out_wchar(void)
+{
+  printf("\nout wide character\n------------\n");
+
+  printf("%lc (c)\n", L'λ');
+  printf("%ls (ls)\n", L"中文");
 }

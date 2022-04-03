@@ -6,6 +6,8 @@
  * conversion specification:
  * %[*][fldwidth][lenmodifier]convtype
  *
+ * A. the optional asterisk is used to suppress conversion
+ *
  * B. field width: see fo.c
  *
  * C. length modifier:
