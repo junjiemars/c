@@ -47,6 +47,8 @@ cio_test: cio_basic_test                        \
           cio_wc_test                           \
           cio_wchar_test
 
+endif 													#skip
+
 
 # env
 cio_prefix := cio
@@ -222,11 +224,15 @@ $(cio_line_gets_binout): $(cio_root)/line/s.c
 
 # reopen
 cio_reopen_binout := $(bin_path)/$(cio_prefix)_reopen$(bin_ext)
+cio_reopen_file := $(tmp_path)/$(cio_prefix)_reopen.file
 
 cio_reopen: $(cio_reopen_binout)
-cio_reopen_test: cio_reopen
-	-@cp $(CURDIR)/src/cio/reopen/sample.txt $(tmp_path)/
-	$(cio_reopen_binout) $(tmp_path)/sample.txt
+cio_reopen_test: cio_reopen                     \
+                 $(cio_reopen_file)
+	$(cio_reopen_binout) $(cio_reopen_file)
+
+$(cio_reopen_file):
+	echo "abcdef" > $@
 
 $(cio_reopen_binout): $(cio_root)/reopen/ro.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
