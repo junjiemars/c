@@ -33,7 +33,7 @@
 
 static void in_convtype(void);
 static void in_convtype_n(void);
-static void in_seq(void);
+static void in_convtype_match(void);
 
 
 int
@@ -42,7 +42,7 @@ main(void)
   in_convtype();
   in_convtype_n();
 
-  in_seq();
+  in_convtype_match();
 
   return 0;
 }
@@ -90,20 +90,17 @@ in_convtype_n(void)
 }
 
 void
-in_seq(void)
+in_convtype_match(void)
 {
-  char *ss = "abc abd";
-  char *fmt1 = "%[abc] %[abc]";
-  char *fmt2 = "%[^ ]";
-  char b1[16];
-  char b2[16];
+  char *ss = "123 abc def";
+  char *fmt1 = "%3[^abc] %3[abc] %3s";
+  char b1[16] = {0};
+  char b2[16] = {0};
+  char b3[16] = {0};
 
-  printf("\nin sequence\n------------\n");
+  printf("\nin match\n------------\n");
 
-  sscanf(ss, fmt1, &b1, &b2);
-  printf("%s %s (%s -> %s)\n", b1, b2, ss, fmt1);
+  sscanf(ss, fmt1, &b1, &b2, &b3);
 
-  sscanf(ss, fmt2, &b2);
-  printf("%s (abc abd -> %s)\n", b2, fmt2);
-
+  printf("%s %s %s (%s -> %s)\n", b1, b2, b3, ss, fmt1);
 }
