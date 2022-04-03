@@ -5,6 +5,14 @@
 #
 
 
+ifeq ($(CC_NAME), msvc)
+process:
+	@echo "#skip ..."
+process_test: process
+	@echo "#skip ..."
+else
+
+
 cio: cio_basic                                  \
      cio_binary                                 \
 	   cio_diff                                   \
