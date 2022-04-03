@@ -50,6 +50,10 @@ main(int argc, char **argv)
       close(fd);
     }
 
+  _unused_(fd1);
+  _unused_(fd2);
+  _unused_(fd3);
+
   exit(EXIT_SUCCESS);
 }
 
