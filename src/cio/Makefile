@@ -5,12 +5,12 @@
 #
 
 
-ifeq ($(CC_NAME), msvc)
-process:
-	@echo "#skip ..."
-process_test: process
-	@echo "#skip ..."
-else
+# ifeq ($(CC_NAME), msvc)
+# process:
+# 	@echo "#skip ..."
+# process_test: process
+# 	@echo "#skip ..."
+# else
 
 
 cio: cio_basic                                  \
@@ -45,7 +45,7 @@ cio_test: cio_basic_test                        \
           cio_wc_test                           \
           cio_wchar_test
 
-endif 													#skip
+# endif 													#skip
 
 
 # env
