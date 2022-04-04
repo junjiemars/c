@@ -25,6 +25,7 @@ cio: cio_basic                                  \
      cio_process                                \
      cio_reopen                                 \
      cio_scan                                   \
+     cio_seek                                   \
      cio_variadic                               \
      cio_wc                                     \
      cio_wchar
@@ -41,6 +42,7 @@ cio_test: cio_basic_test                        \
           cio_process_test                      \
           cio_reopen_test                       \
           cio_scan_test                         \
+          cio_seek_test                         \
           cio_variadic_test                     \
           cio_wc_test                           \
           cio_wchar_test
@@ -292,6 +294,19 @@ $(cio_scan_csv_binout): $(cio_root)/scan/csv.c
 $(cio_scan_free_binout): $(cio_root)/scan/free.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+# seek
+cio_seek_binout := $(bin_path)/$(cio_prefix)_seek$(bin_ext)
+cio_seek_file := $(tmp_path)/$(cio_prefix)_seek.file
+
+cio_seek: $(cio_seek_binout)
+cio_seek_test: cio_seek
+	$(cio_seek_binout) $(cio_seek_file)
+	cat $(cio_seek_file)
+
+
+$(cio_seek_binout): $(cio_root)/seek/s1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # variadic

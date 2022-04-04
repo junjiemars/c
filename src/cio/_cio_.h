@@ -4,6 +4,8 @@
 #include <nore.h>
 #include <ndef.h>
 #include <nio.h>
+#include <nstr.h>
+#include <stdlib.h>
 
 
 void hex_out(const char *ss);
