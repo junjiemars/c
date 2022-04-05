@@ -302,7 +302,6 @@ cio_seek_file := $(tmp_path)/$(cio_prefix)_seek.file
 cio_seek: $(cio_seek_binout)
 cio_seek_test: cio_seek
 	$(cio_seek_binout) $(cio_seek_file)
-	cat $(cio_seek_file)
 
 
 $(cio_seek_binout): $(cio_root)/seek/s1.c
