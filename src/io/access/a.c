@@ -14,6 +14,12 @@ main(int argc, char **argv)
   int    rc;
   uid_t  uid, euid;
 
+  if (argc < 2)
+    {
+      fprintf(stderr, "usage: %s [pathname...]\n", basename(argv[0]));
+      exit(EXIT_FAILURE);
+    }
+
   uid = getuid();
   euid = geteuid();
 

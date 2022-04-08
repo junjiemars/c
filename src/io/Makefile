@@ -56,7 +56,7 @@ endif
 io_access_open_binout := $(bin_path)/$(io_prefix)_access_open$(bin_ext)
 io_access_mode_binout := $(bin_path)/$(io_prefix)_access_mode$(bin_ext)
 io_access_cntlfl_binout := $(bin_path)/$(io_prefix)_access_cntlfl$(bin_ext)
-io_access_open_file := $(tmp_path)/$(io_prefix)_access_open_file
+io_access_open_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_access_open_file
 io_access_mode_file := $(tmp_path)/$(io_prefix)_access_mode_file
 io_access_cntlfl_file := $(tmp_path)/$(io_prefix)_access_cntlfl_file
 
@@ -77,8 +77,7 @@ io_access_open_test: $(io_access_open_binout)   \
 	# stat $(io_access_binout)
 
 $(io_access_open_file):
-	touch $@
-	chmod 600 $@
+	touch $@ && chmod 600 $@
 
 io_access_mode_test: $(io_access_mode_binout)
 	-$(io_access_mode_binout) 0 < /dev/tty
@@ -224,16 +223,30 @@ $(io_share3_binout): $(io_root)/share/s2.c
 
 # seek
 io_seek_append_binout := $(bin_path)/$(io_prefix)_append$(bin_ext)
+io_seek_able_binout := $(bin_path)/$(io_prefix)_able$(bin_ext)
 io_seek_append_file := $(tmp_path)/$(io_prefix)_append.file
 
-io_seek: $(io_seek_append_binout)
-io_seek_test: io_seek_append_test
+io_seek: $(io_seek_append_binout)               \
+         $(io_seek_able_binout)
+io_seek_test: io_seek_append_test               \
+              io_seek_able_test
 
 io_seek_append_test: $(io_seek_append_binout)
 	$(io_seek_append_binout) $(io_seek_append_file)
 	cat $(io_seek_append_file)
 
+io_seek_able_test: $(io_seek_able_binout)
+	$(io_seek_able_binout) 0
+	$(io_seek_able_binout) 1
+	$(io_seek_able_binout) 2
+	$(io_seek_able_binout) 0 < /dev/null
+	cat < $(io_root)/seek/able.c | $(io_seek_able_binout) 0
+
+
 $(io_seek_append_binout): $(io_root)/seek/a.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_seek_able_binout): $(io_root)/seek/able.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # stat
