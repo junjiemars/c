@@ -12,7 +12,8 @@
 int
 main(void)
 {
-  ssize_t  n  =  sizeof(ALPHA_L10) - 1;
+  int      flag;
+  ssize_t  n  =  sizeof(ALPHA_L10)-1;
 
   if (write(STDOUT_FILENO, ALPHA_L10, n) != n)
     {
@@ -20,10 +21,28 @@ main(void)
       exit(EXIT_FAILURE);
     }
 
-  if (fsync(STDOUT_FILENO) == -1)
+  /* try to set O_SYNC, but there are bugs on Linux */
+  flag = fcntl(STDOUT_FILENO, F_GETFL);
+  if (flag == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
+    }
+  flag |= O_SYNC;
+  flag = fcntl(STDOUT_FILENO, F_SETFL, flag);
+  if (flag == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
+
+  if ((flag & O_SYNC) == O_SYNC)
+    {
+      if (fsync(STDOUT_FILENO) == -1)
+        {
+          perror(NULL);
+          exit(EXIT_FAILURE);
+        }
     }
 
   exit(EXIT_SUCCESS);
