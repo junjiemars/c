@@ -240,6 +240,7 @@ io_seek_able_test: $(io_seek_able_binout)
 	$(io_seek_able_binout) 1
 	$(io_seek_able_binout) 2
 	$(io_seek_able_binout) 0 < /dev/null
+	$(io_seek_able_binout) 0 < $(io_seek_able_binout)
 	cat < $(io_root)/seek/able.c | $(io_seek_able_binout) 0
 
 

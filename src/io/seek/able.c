@@ -30,19 +30,19 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  if (buf.st_mode & S_IFIFO)
+  if (S_ISFIFO(buf.st_mode))
     {
       printf("named pipe (fifo) file\n");
     }
-  else if (buf.st_mode & S_IFCHR)
+  else if (S_ISCHR(buf.st_mode))
     {
       printf("character special file\n");
     }
-  else if (buf.st_mode & S_IFBLK)
+  else if (S_ISBLK(buf.st_mode))
     {
       printf("block special file\n");
     }
-  else if (buf.st_mode & S_IFIFO)
+  else if (S_ISREG(buf.st_mode))
     {
       printf("regular file\n");
     }
