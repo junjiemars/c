@@ -4,8 +4,8 @@
 int
 main(int argc, char **argv)
 {
-  DIR *d;
-  struct dirent *ent;
+  DIR            *d;
+  struct dirent  *ent;
 
   if (argc < 2)
     {

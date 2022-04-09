@@ -19,6 +19,7 @@ io: io_access                                   \
     io_seek                                     \
     io_stat                                     \
     io_struct                                   \
+    io_sync                                     \
     io_umask
 
 io_test: io_access_test                         \
@@ -30,6 +31,7 @@ io_test: io_access_test                         \
          io_seek_test                           \
          io_stat_test                           \
          io_struct_test                         \
+         io_sync_test                           \
          io_umask_test
 
 endif
@@ -144,8 +146,8 @@ io_ls: $(io_ls_raw_binout)
 io_ls_test: io_ls_raw_test
 
 io_ls_raw_test: $(io_ls_raw_binout)
-	$(io_ls_raw_binout) $(CURDIR)
-	-$(io_ls_raw_binout) /dev/console
+	$< $(CURDIR)
+	$< /dev/fd
 
 $(io_ls_raw_binout): $(io_root)/ls/l1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -263,18 +265,6 @@ $(io_stat_ft_sl): $(io_stat_ft_binout)
 $(io_stat_ft_binout): $(io_root)/stat/ft.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-# umask
-io_umask_binout := $(bin_path)/$(io_prefix)_umask$(bin_ext)
-
-io_umask: $(io_umask_binout)
-io_umask_test: io_umask
-	$(io_umask_binout) $(CURDIR)/$(tmp_path)
-	touch $(tmp_path)/x
-	mkdir $(tmp_path)/y
-
-$(io_umask_binout): $(io_root)/umask/u1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
 
 # struct
 io_struct_binout := $(bin_path)/$(io_prefix)_struct$(bin_ext)
@@ -287,7 +277,18 @@ io_struct_test: io_struct
 $(io_struct_binout): $(io_root)/struct/s1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-# temp
+
+# sync
+io_sync_binout := $(bin_path)/$(io_prefix)_sync$(bin_ext)
+
+io_sync: $(io_sync_binout)
+io_sync_test: io_sync
+	$(io_sync_binout)
+
+$(io_sync_binout): $(io_root)/sync/s1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 # temp
 io_temp_binout := $(bin_path)/$(io_prefix)_temp$(bin_ext)
 
@@ -298,6 +299,18 @@ io_temp_test: io_temp
 $(io_temp_binout): $(io_root)/temp/t.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+# umask
+io_umask_binout := $(bin_path)/$(io_prefix)_umask$(bin_ext)
+
+io_umask: $(io_umask_binout)
+io_umask_test: io_umask
+	$(io_umask_binout) $(CURDIR)/$(tmp_path)
+	touch $(tmp_path)/x
+	mkdir $(tmp_path)/y
+
+$(io_umask_binout): $(io_root)/umask/u1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # eof
