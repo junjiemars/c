@@ -89,7 +89,7 @@ io_access_fl_test: $(io_access_fl_binout)       \
 
 io_access_sfl_test: $(io_access_sfl_binout)
 	$< $(io_access_sfl_file)
-	$< /dev/null
+	$< /dev/fd/0
 
 $(io_access_open_file):
 	touch $@ && chmod 600 $@
