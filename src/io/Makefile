@@ -13,7 +13,6 @@ else
 io: io_access                                   \
     io_copy                                     \
     io_dup                                      \
-    io_hole                                     \
     io_ls                                       \
     io_redirect                                 \
     io_share                                    \
@@ -25,7 +24,6 @@ io: io_access                                   \
 io_test: io_access_test                         \
          io_copy_test                           \
          io_dup_test                            \
-         io_hole_test                           \
          io_ls_test                             \
          io_redirect_test                       \
          io_share_test                          \
@@ -139,20 +137,6 @@ io_dup_close_test: $(io_dup_close_binout)
 $(io_dup_close_binout): $(io_root)/dup/d1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-# hole
-io_hole_binout := $(bin_path)/$(io_prefix)_hole$(bin_ext)
-io_hole_yes := $(tmp_path)/$(io_prefix)_hole.yes$(bin_ext)
-io_hole_no := $(tmp_path)/$(io_prefix)_hole.no$(bin_ext)
-
-io_hole: $(io_hole_binout)
-io_hole_test: io_hole
-	$(io_hole_binout) $(io_hole_yes)
-	$(io_hole_binout) $(io_hole_no) no
-	ls -ls $(tmp_path)/$(io_prefix)_hole*
-	od -c $(io_hole_yes)
-
-$(io_hole_binout): $(io_root)/hole/h1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # ls
 io_ls_raw_binout := $(bin_path)/$(io_prefix)_ls_raw$(bin_ext)
@@ -222,14 +206,19 @@ $(io_share3_binout): $(io_root)/share/s2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -DN=1000 -D_PWRITE_ $^ $(bin_out)$@
 
 # seek
-io_seek_append_binout := $(bin_path)/$(io_prefix)_append$(bin_ext)
-io_seek_able_binout := $(bin_path)/$(io_prefix)_able$(bin_ext)
-io_seek_append_file := $(tmp_path)/$(io_prefix)_append.file
+io_seek_append_binout := $(bin_path)/$(io_prefix)_seek_append$(bin_ext)
+io_seek_able_binout := $(bin_path)/$(io_prefix)_seek_able$(bin_ext)
+io_seek_hole_binout := $(bin_path)/$(io_prefix)_seek_hole$(bin_ext)
+io_seek_append_file := $(tmp_path)/$(io_prefix)_seek_append.file
+io_seek_hole_has_file := $(tmp_path)/$(io_prefix)_seek_hole_has.file
+io_seek_hole_non_file := $(tmp_path)/$(io_prefix)_seek_hole_non.file
 
 io_seek: $(io_seek_append_binout)               \
-         $(io_seek_able_binout)
+         $(io_seek_able_binout)                 \
+         $(io_seek_hole_binout)
 io_seek_test: io_seek_append_test               \
-              io_seek_able_test
+              io_seek_able_test                 \
+              io_seek_hole_test
 
 io_seek_append_test: $(io_seek_append_binout)
 	$(io_seek_append_binout) $(io_seek_append_file)
@@ -243,11 +232,19 @@ io_seek_able_test: $(io_seek_able_binout)
 	$(io_seek_able_binout) 0 < $(io_seek_able_binout)
 	cat < $(io_root)/seek/able.c | $(io_seek_able_binout) 0
 
+io_seek_hole_test: $(io_seek_hole_binout)
+	$< $(io_seek_hole_non_file)
+	$< $(io_seek_hole_has_file) 16384
+	ls -s $(CURDIR)/$(tmp_path)/$(io_prefix)_seek_hole*
+	od -c $(io_seek_hole_has_file)
 
 $(io_seek_append_binout): $(io_root)/seek/a.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_seek_able_binout): $(io_root)/seek/able.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_seek_hole_binout): $(io_root)/seek/hole.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # stat

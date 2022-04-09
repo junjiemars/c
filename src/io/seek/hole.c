@@ -4,13 +4,14 @@ int
 main(int argc, char **argv)
 {
   int    fd, n;
-  off_t  off;
+  off_t  rc, offset;
   char dbuf[]  =  "abcdefghij";
   char ubuf[]  =  "ABCDEFGHIJ";
 
   if (argc < 2)
     {
-      fprintf(stderr, "usage: %s <pathname> [yes|no]\n", argv[0]);
+      fprintf(stderr, "usage: %s <pathname> [holesize]\n",
+              basename(argv[0]));
       exit(EXIT_FAILURE);
     }
 
@@ -29,10 +30,11 @@ main(int argc, char **argv)
     }
 
   /* make hole */
-  if (argc < 3 || strcmp("yes", argv[2]) == 0)
+  if (argc > 2)
     {
-      off = lseek(fd, 4096 /* guess */, SEEK_END);
-      if (off == -1)
+      offset = (off_t) atoi(argv[2]);
+      rc = lseek(fd, offset, SEEK_END);
+      if (rc == -1)
         {
           perror("!panic");
           exit(EXIT_FAILURE);
