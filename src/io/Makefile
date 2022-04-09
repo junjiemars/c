@@ -13,6 +13,7 @@ else
 io: io_access                                   \
     io_copy                                     \
     io_dup                                      \
+    io_fcntl                                    \
     io_ls                                       \
     io_redirect                                 \
     io_share                                    \
@@ -25,6 +26,7 @@ io: io_access                                   \
 io_test: io_access_test                         \
          io_copy_test                           \
          io_dup_test                            \
+         io_fcntl_test                          \
          io_ls_test                             \
          io_redirect_test                       \
          io_share_test                          \
@@ -54,17 +56,13 @@ endif
 
 # access
 io_access_open_binout := $(bin_path)/$(io_prefix)_access_open$(bin_ext)
-io_access_mode_binout := $(bin_path)/$(io_prefix)_access_mode$(bin_ext)
 io_access_cntlfl_binout := $(bin_path)/$(io_prefix)_access_cntlfl$(bin_ext)
 io_access_open_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_access_open_file
-io_access_mode_file := $(tmp_path)/$(io_prefix)_access_mode_file
 io_access_cntlfl_file := $(tmp_path)/$(io_prefix)_access_cntlfl_file
 
 io_access: $(io_access_open_binout)             \
-           $(io_access_mode_binout)             \
            $(io_access_cntlfl_binout)
 io_access_test: io_access_open_test             \
-                io_access_mode_test             \
                 io_access_cntlfl_test
 
 io_access_open_test: $(io_access_open_binout)   \
@@ -79,18 +77,8 @@ io_access_open_test: $(io_access_open_binout)   \
 $(io_access_open_file):
 	touch $@ && chmod 600 $@
 
-io_access_mode_test: $(io_access_mode_binout)
-	-$(io_access_mode_binout) 0 < /dev/tty
-	$(io_access_mode_binout) 1 > $(io_access_mode_file)
-	cat $(io_access_mode_file)
-	$(io_access_mode_binout) 2 2>> $(io_access_mode_file)
-	$(io_access_mode_binout) 5 5<>$(io_access_mode_file)
-
 io_access_cntlfl_test: $(io_access_cntlfl_binout)
 	$(io_access_cntlfl_binout) $(io_access_cntlfl_file)
-
-$(io_access_mode_binout): $(io_root)/access/m.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_access_open_binout): $(io_root)/access/a.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -136,6 +124,32 @@ io_dup_close_test: $(io_dup_close_binout)
 	-rm 3
 
 $(io_dup_close_binout): $(io_root)/dup/d1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# fcntl
+io_fcntl_fl_binout := $(bin_path)/$(io_prefix)_fcntl_fl$(bin_ext)
+io_fcntl_fl_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_fcntl_fl.file
+
+
+io_fcntl: $(io_fcntl_fl_binout)
+io_fcntl_test: io_fcntl_fl_test
+
+io_fcntl_fl_test: $(io_fcntl_fl_binout)         \
+                  $(io_fcntl_fl_file)
+	$< 0 < /dev/null
+	$< 1 < /dev/null
+	$< 2 < /dev/null
+	$< 1 > $(io_fcntl_fl_file)
+	cat $(io_fcntl_fl_file)
+	$< 0 < $(io_fcntl_fl_file)
+	$< 2 2>> $(io_fcntl_fl_file)
+	$< 5 5<> $(io_fcntl_fl_file)
+
+$(io_fcntl_fl_file):
+	touch $@
+
+$(io_fcntl_fl_binout): $(io_root)/fcntl/fl.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
