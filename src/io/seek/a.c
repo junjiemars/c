@@ -49,6 +49,7 @@ main(int argc, char **argv)
     }
   assert(cur == n);
 
+  /* A1 */
   cur = lseek(fd, 0, SEEK_SET);
   if (cur == -1)
     {
@@ -64,6 +65,15 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
   assert(n == sizeof(buf1)-1);
+
+  /* A2 */
+  cur = lseek(fd, -3, SEEK_CUR);
+  if (cur == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
+  assert(cur == sizeof(buf1)-3-1);
 
   n = write(fd, buf2, sizeof(buf2)-1);
   if (n != sizeof(buf2)-1)
