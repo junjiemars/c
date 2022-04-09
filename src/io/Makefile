@@ -134,15 +134,27 @@ $(io_copy_stdbuf_binout): $(io_root)/copy/stdbuf.c
 
 # dup
 io_dup_fdft_binout := $(bin_path)/$(io_prefix)_dup_fdft$(bin_ext)
+io_dup_g2_binout := $(bin_path)/$(io_prefix)_dup_g2$(bin_ext)
 io_dup_fdft_file := $(tmp_path)/$(io_prefix)_dup_fdft.file
 
-io_dup: $(io_dup_fdft_binout)
-io_dup_test: io_dup_fdft_test
+
+io_dup: $(io_dup_fdft_binout)                   \
+        $(io_dup_g2_binout)
+io_dup_test: io_dup_fdft_test                   \
+             io_dup_g2_test
 
 io_dup_fdft_test: $(io_dup_fdft_binout)
 	$< $(io_dup_fdft_file)
+io_dup_g2_test: $(io_dup_g2_binout)
+	$< 1 < /dev/null
+
+$(io_dup_g2_file):
+	touch $@
 
 $(io_dup_fdft_binout): $(io_root)/dup/fdft.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_dup_g2_binout): $(io_root)/dup/g2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
