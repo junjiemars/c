@@ -33,7 +33,7 @@ main(int argc, char **argv)
   if (argc > 2)
     {
       offset = (off_t) atoi(argv[2]);
-      rc = lseek(fd, offset, SEEK_END);
+      rc = lseek(fd, offset, SEEK_SET);
       if (rc == -1)
         {
           perror("!panic");
