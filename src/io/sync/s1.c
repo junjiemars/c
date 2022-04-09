@@ -21,7 +21,7 @@ main(void)
       exit(EXIT_FAILURE);
     }
 
-  /* try to set O_SYNC, but there are bugs on Linux */
+  /* try to set O_SYNC */
   flag = fcntl(STDOUT_FILENO, F_GETFL);
   if (flag == -1)
     {
@@ -36,6 +36,14 @@ main(void)
       exit(EXIT_FAILURE);
     }
 
+  flag = fcntl(STDOUT_FILENO, F_GETFL);
+  if (flag == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
+
+  /* on Linux, O_SYNC via F_SETFL be ignored  */
   if ((flag & O_SYNC) == O_SYNC)
     {
       if (fsync(STDOUT_FILENO) == -1)
