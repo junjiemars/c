@@ -8,15 +8,18 @@
  *
  */
 
+#define ALPHA_L10  "abcdefghij"
+#define ALPHA_U10  "ABCDEFGHIJ"
+
 int
 main(int argc, char **argv)
 {
   int      fd;
-  ssize_t  n;
   off_t    cur;
-  char     buf1[]  =  "abcdefghij";
-  char     buf2[]  =  "ABCDEFGHIJ";
-  char     rbuf[64] = {0};
+  ssize_t  n;
+  char     buf1[]  =  ALPHA_L10;
+  char     buf2[]  =  ALPHA_U10;
+  char     rbuf[sizeof(ALPHA_L10) * 2];
 
   if (argc < 2)
     {
@@ -24,7 +27,7 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  fd = open(argv[1], O_RDWR | O_CREAT | O_APPEND | O_TRUNC, S_IRUSR | S_IWUSR);
+  fd = open(argv[1], O_RDWR | O_APPEND | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
   if (fd == -1)
     {
       perror(NULL);
@@ -32,12 +35,11 @@ main(int argc, char **argv)
     }
 
   n = write(fd, buf1, sizeof(buf1)-1);
-  if (n == -1)
+  if (n != sizeof(buf1)-1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
-  assert(n == sizeof(buf1)-1);
 
   cur = lseek(fd, 0, SEEK_CUR);
   if (cur == -1)
@@ -55,21 +57,21 @@ main(int argc, char **argv)
     }
   assert(cur == 0);
 
-  n = read(fd, rbuf, sizeof(rbuf)-1);
+  n = read(fd, rbuf, sizeof(rbuf));
   if (n == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
-  assert( n == sizeof(buf1)-1);
+  assert(n == sizeof(buf1)-1);
 
   n = write(fd, buf2, sizeof(buf2)-1);
-  if (n == -1)
+  if (n != sizeof(buf2)-1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
-  assert(n == sizeof(buf2)-1);
+
 
   exit(EXIT_SUCCESS);
 

@@ -209,9 +209,9 @@ $(io_share3_binout): $(io_root)/share/s2.c
 io_seek_append_binout := $(bin_path)/$(io_prefix)_seek_append$(bin_ext)
 io_seek_able_binout := $(bin_path)/$(io_prefix)_seek_able$(bin_ext)
 io_seek_hole_binout := $(bin_path)/$(io_prefix)_seek_hole$(bin_ext)
-io_seek_append_file := $(tmp_path)/$(io_prefix)_seek_append.file
-io_seek_hole_has_file := $(tmp_path)/$(io_prefix)_seek_hole_has.file
-io_seek_hole_non_file := $(tmp_path)/$(io_prefix)_seek_hole_non.file
+io_seek_append_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_seek_append.file
+io_seek_hole_has_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_seek_hole_has.file
+io_seek_hole_non_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_seek_hole_non.file
 
 io_seek: $(io_seek_append_binout)               \
          $(io_seek_able_binout)                 \
@@ -221,16 +221,16 @@ io_seek_test: io_seek_append_test               \
               io_seek_hole_test
 
 io_seek_append_test: $(io_seek_append_binout)
-	$(io_seek_append_binout) $(io_seek_append_file)
+	$< $(io_seek_append_file)
 	cat $(io_seek_append_file)
 
 io_seek_able_test: $(io_seek_able_binout)
-	$(io_seek_able_binout) 0
-	$(io_seek_able_binout) 1
-	$(io_seek_able_binout) 2
-	$(io_seek_able_binout) 0 < /dev/null
-	$(io_seek_able_binout) 0 < $(io_seek_able_binout)
-	cat < $(io_root)/seek/able.c | $(io_seek_able_binout) 0
+	$< 0
+	$< 1
+	$< 2
+	$< 0 < /dev/null
+	$< 0 < $<
+	cat < $(io_root)/seek/able.c | $< 0
 
 io_seek_hole_test: $(io_seek_hole_binout)
 	$< $(io_seek_hole_non_file)
