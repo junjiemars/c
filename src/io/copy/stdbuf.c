@@ -15,7 +15,7 @@ main(void)
   size_t  n;
   char    buf[BUFSIZE];
 
-  while ((n = fread(buf, sizeof(*buf), BUFSIZE/sizeof(*buf), stdin)) > 0)
+  while ((n = fread(buf, sizeof(*buf), BUFSIZE, stdin)) > 0)
     {
       if (fwrite(buf, sizeof(*buf), n, stdout) != n)
         {
