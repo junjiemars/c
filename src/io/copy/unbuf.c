@@ -2,6 +2,11 @@
 
 #define BUFSIZE  64
 
+/*
+ * Copy stdin to stdout.
+ *
+ */
+
 int
 main(void)
 {

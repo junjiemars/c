@@ -99,27 +99,26 @@ $(io_access_cntlfl_binout): $(io_root)/access/c.c
 
 # copy
 io_copy_unbuf_binout := $(bin_path)/$(io_prefix)_copy_unbuf$(bin_ext)
-io_copy_std_binout := $(bin_path)/$(io_prefix)_copy_std$(bin_ext)
+io_copy_stdbuf_binout := $(bin_path)/$(io_prefix)_copy_stdbuf$(bin_ext)
 
 io_copy: $(io_copy_unbuf_binout)                \
-         $(io_copy_std_binout)
+         $(io_copy_stdbuf_binout)
 io_copy_test: io_copy_unbuf_test                \
-              io_copy_std_test
+              io_copy_stdbuf_test
 
 io_copy_unbuf_test: $(io_copy_unbuf_binout)
-	echo "abc\ndef" | $(io_copy_unbuf_binout)
-	$(io_copy_unbuf_binout) < $(io_root)/copy/unbuf.c
+	echo "abc\ndef" | $<
+	$< < $(io_root)/copy/unbuf.c
 
-io_copy_std_test: $(io_copy_std_binout)
-	echo "abc\ndef" | $(io_copy_std_binout)
-	$(io_copy_std_binout) < $(io_root)/copy/std.c
+io_copy_stdbuf_test: $(io_copy_stdbuf_binout)
+	echo "abc\ndef" | $<
+	$< < $(io_root)/copy/stdbuf.c
 
 $(io_copy_unbuf_binout): $(io_root)/copy/unbuf.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(io_copy_std_binout): $(io_root)/copy/std.c
+$(io_copy_stdbuf_binout): $(io_root)/copy/stdbuf.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
 	# sudo chown root $@
 
 # dup
