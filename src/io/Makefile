@@ -13,6 +13,7 @@ else
 io: io_access                                   \
     io_copy                                     \
     io_dup                                      \
+    io_fcntl                                    \
     io_ls                                       \
     io_redirect                                 \
     io_share                                    \
@@ -25,6 +26,7 @@ io: io_access                                   \
 io_test: io_access_test                         \
          io_copy_test                           \
          io_dup_test                            \
+         io_fcntl_test                          \
          io_ls_test                             \
          io_redirect_test                       \
          io_share_test                          \
@@ -54,18 +56,10 @@ endif
 
 # access
 io_access_open_binout := $(bin_path)/$(io_prefix)_access_open$(bin_ext)
-io_access_fl_binout := $(bin_path)/$(io_prefix)_access_fl$(bin_ext)
-io_access_sfl_binout := $(bin_path)/$(io_prefix)_access_sfl$(bin_ext)
 io_access_open_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_access_open_file
-io_access_fl_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_access_fl.file
-io_access_sfl_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_access_sfl.file
 
-io_access: $(io_access_open_binout)             \
-           $(io_access_fl_binout)               \
-           $(io_access_sfl_binout)
-io_access_test: io_access_open_test             \
-                io_access_fl_test               \
-                io_access_sfl_test
+io_access: $(io_access_open_binout)
+io_access_test: io_access_open_test
 
 io_access_open_test: $(io_access_open_binout)   \
                      $(io_access_open_file)
@@ -76,37 +70,11 @@ io_access_open_test: $(io_access_open_binout)   \
 	# sudo chmod u+s $(io_access_binout)
 	# stat $(io_access_binout)
 
-io_access_fl_test: $(io_access_fl_binout)       \
-                   $(io_access_fl_file)
-	$< 0 < /dev/null
-	$< 1 < /dev/null
-	$< 2 < /dev/null
-	$< 1 > $(io_access_fl_file)
-	cat $(io_access_fl_file)
-	$< 0 < $(io_access_fl_file)
-	$< 2 2>> $(io_access_fl_file)
-	$< 5 5<> $(io_access_fl_file)
-
-io_access_sfl_test: $(io_access_sfl_binout)
-	$< $(io_access_sfl_file)
-	$< /dev/fd/0
-
 $(io_access_open_file):
 	touch $@ && chmod 600 $@
 
-$(io_access_fl_file):
-	touch $@
-
-
 $(io_access_open_binout): $(io_root)/access/a.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-$(io_access_fl_binout): $(io_root)/access/fl.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-$(io_access_sfl_binout): $(io_root)/access/sfl.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
 
 # copy
 io_copy_unbuf_binout := $(bin_path)/$(io_prefix)_copy_unbuf$(bin_ext)
@@ -155,6 +123,42 @@ $(io_dup_fdft_binout): $(io_root)/dup/fdft.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_dup_g2_binout): $(io_root)/dup/g2.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# fcntl
+io_fcntl_fl_binout := $(bin_path)/$(io_prefix)_fcntl_fl$(bin_ext)
+io_fcntl_sfl_binout := $(bin_path)/$(io_prefix)_fcntl_sfl$(bin_ext)
+io_fcntl_fl_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_fcntl_fl.file
+io_fcntl_sfl_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_fcntl_sfl.file
+
+io_fcntl: $(io_fcntl_fl_binout)               \
+          $(io_fcntl_sfl_binout)
+io_fcntl_test: io_fcntl_fl_test               \
+                io_fcntl_sfl_test
+
+io_fcntl_fl_test: $(io_fcntl_fl_binout)       \
+                   $(io_fcntl_fl_file)
+	$< 0 < /dev/null
+	$< 1 < /dev/null
+	$< 2 < /dev/null
+	$< 1 > $(io_fcntl_fl_file)
+	cat $(io_fcntl_fl_file)
+	$< 0 < $(io_fcntl_fl_file)
+	$< 2 2>> $(io_fcntl_fl_file)
+	$< 5 5<> $(io_fcntl_fl_file)
+
+io_fcntl_sfl_test: $(io_fcntl_sfl_binout)
+	$< $(io_fcntl_sfl_file)
+	$< /dev/fd/0
+
+$(io_fcntl_fl_file):
+	touch $@
+
+$(io_fcntl_fl_binout): $(io_root)/fcntl/fl.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_fcntl_sfl_binout): $(io_root)/fcntl/sfl.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
