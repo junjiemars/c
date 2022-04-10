@@ -2,6 +2,10 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 
+/*
+ * stat file type.
+ *
+ */
 
 
 int
@@ -57,7 +61,7 @@ main(int argc, char *argv[])
         }
       else
         {
-          s = "(unknown mode)";
+          s = "(unknown file type)";
         }
 
       printf("# %s\n", s);

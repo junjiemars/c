@@ -269,20 +269,21 @@ $(io_seek_hole_binout): $(io_root)/seek/hole.c
 
 # stat
 io_stat_ft_binout := $(bin_path)/$(io_prefix)_stat_ft$(bin_ext)
-io_stat_ft_sl := $(tmp_path)/$(io_prefix)_stat.sl
+io_stat_ft_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_stat.file
 
 io_stat: $(io_stat_ft_binout)
-io_stat_test: io_stat $(io_stat_ft_sl)
-	$(io_stat_ft_binout) $(CURDIR)/$(bin_path)
-	$(io_stat_ft_binout) $(io_stat_ft_sl) /dev/null
-	$(io_stat_ft_binout) $(io_stat_ft_binout)
-	stat $(io_stat_ft_binout)
+io_stat_test: io_stat_ft_test
 
-$(io_stat_ft_sl): $(io_stat_ft_binout)
-	ln -s $(io_stat_ft_binout) $@
+io_stat_ft_test: $(io_stat_ft_binout)           \
+                 $(io_stat_ft_file)
+	$< $(CURDIR)/$(bin_path) $(io_stat_ft_file) /dev/null $<
+	echo "abc" | $< /dev/fd/0
+
+$(io_stat_ft_file): $(io_stat_ft_binout)
+	ln -s $< $@
 
 $(io_stat_ft_binout): $(io_root)/stat/ft.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # struct
