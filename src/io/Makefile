@@ -63,15 +63,15 @@ io_access_test: io_access_open_test
 
 io_access_open_test: $(io_access_open_binout)   \
                      $(io_access_open_file)
-	$(io_access_binout) $(io_access_binout)
-	-$(io_access_binout) $(io_access_open_file)
-	stat $(io_access_open_file)
-	# sudo chown root $(io_access_binout)
-	# sudo chmod u+s $(io_access_binout)
-	# stat $(io_access_binout)
+	$< $<
+	$< $(io_access_open_file)
+	# sudo chown root $(io_access_open_file)
+	# sudo chmod u+s $<
+	# $< $(io_access_open_file)
 
 $(io_access_open_file):
-	touch $@ && chmod 600 $@
+	touch $@
+	chmod 600 $@
 
 $(io_access_open_binout): $(io_root)/access/a.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

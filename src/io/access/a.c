@@ -3,7 +3,8 @@
 
 
 /*
- * https://pubs.opengroup.org/onlinepubs/9699919799/functions/access.html
+ * 1. access just check real-user/group-id.
+ * 2. open check effective-user/group-id.
  *
  */
 
@@ -16,7 +17,8 @@ main(int argc, char **argv)
 
   if (argc < 2)
     {
-      fprintf(stderr, "usage: %s [pathname...]\n", basename(argv[0]));
+      fprintf(stderr, "usage: %s <pathname> [pathname...]\n",
+              basename(argv[0]));
       exit(EXIT_FAILURE);
     }
 
@@ -30,21 +32,21 @@ main(int argc, char **argv)
       rc = access(argv[i], R_OK);
       if (rc == -1)
         {
-          printf("access error@%s: %s\n", argv[1], strerror(errno));
+          perror("!access error");
         }
       else
         {
-          printf("read access@%s: ok\n", argv[i]);
+          printf("read access OK\n");
         }
 
       rc = open(argv[1], O_RDONLY);
       if (rc == -1)
         {
-          printf("read error@%s: %s\n", argv[1], strerror(errno));
+          perror("!read error");
         }
       else
         {
-          printf("open for read@%s: ok\n", argv[1]);
+          printf("open for reading OK\n");
         }
 
     }
