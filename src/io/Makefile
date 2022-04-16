@@ -15,6 +15,7 @@ io: io_access                                   \
     io_dup                                      \
     io_fcntl                                    \
     io_ls                                       \
+    io_own                                      \
     io_redirect                                 \
     io_share                                    \
     io_seek                                     \
@@ -28,6 +29,7 @@ io_test: io_access_test                         \
          io_dup_test                            \
          io_fcntl_test                          \
          io_ls_test                             \
+         io_own_test                            \
          io_redirect_test                       \
          io_share_test                          \
          io_seek_test                           \
@@ -174,6 +176,18 @@ io_ls_raw_test: $(io_ls_raw_binout)
 
 $(io_ls_raw_binout): $(io_root)/ls/l1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# own
+io_own_binout := $(bin_path)/$(io_prefix)_own$(bin_ext)
+
+io_own: $(io_own_binout)
+io_own_test: io_own
+	$(io_own_binout)
+
+$(io_own_binout): $(io_root)/own/o1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # redirect
 io_redirect_binout := $(bin_path)/$(io_prefix)_redirect$(bin_ext)
