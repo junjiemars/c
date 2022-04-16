@@ -19,6 +19,7 @@ io: io_access                                   \
     io_redirect                                 \
     io_share                                    \
     io_seek                                     \
+    io_size                                     \
     io_stat                                     \
     io_struct                                   \
     io_sync                                     \
@@ -33,6 +34,7 @@ io_test: io_access_test                         \
          io_redirect_test                       \
          io_share_test                          \
          io_seek_test                           \
+         io_size_test                           \
          io_stat_test                           \
          io_struct_test                         \
          io_sync_test                           \
@@ -283,6 +285,28 @@ $(io_seek_able_binout): $(io_root)/seek/able.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_seek_hole_binout): $(io_root)/seek/hole.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# size
+io_size_binout := $(bin_path)/$(io_prefix)_size$(bin_ext)
+io_size_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_size.file
+io_size_link := $(tmp_path)/$(io_prefix)_size.link
+
+io_size: $(io_size_binout)                      \
+         $(io_size_file)                        \
+         $(io_size_link)
+io_size_test: io_size
+	ls -lh $(tmp_path)
+	$(io_size_binout) $(io_size_binout)
+	$(io_size_binout) $(io_size_file)
+	$(io_size_binout) $(io_size_link)
+
+$(io_size_file):
+	touch $@
+$(io_size_link): $(io_size_file)
+	ln -s $< $@
+
+$(io_size_binout): $(io_root)/size/s1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # stat
