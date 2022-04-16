@@ -1,7 +1,7 @@
 #include "_io_.h"
 
 
-#define RRR (S_IRUSR | S_IRGRP | S_IROTH)
+#define R_SR__R__ (S_IRUSR |S_ISUID | S_IRGRP | S_IROTH)
 
 
 int
@@ -13,7 +13,7 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  if (chmod(argv[1], RRR) == -1)
+  if (chmod(argv[1], R_SR__R__) == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
