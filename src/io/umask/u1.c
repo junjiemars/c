@@ -6,7 +6,7 @@
 
 /*
  * 1. The default file mode creation mask: 666 for file, 777 for directory
- * 2. Any bits that are on in the file mode creation mask are turn off
+ * 2. Any bits that are in the file mode creation mask are turn off
  *    in the file's mode.
  * 3. The symbolic format of umask command specifies which permission
  *    are to be turn on.

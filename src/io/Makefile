@@ -336,15 +336,36 @@ $(io_temp_binout): $(io_root)/temp/t.c
 
 
 # umask
-io_umask_binout := $(bin_path)/$(io_prefix)_umask$(bin_ext)
+io_umask_create_binout := $(bin_path)/$(io_prefix)_umask_create$(bin_ext)
+io_umask_change_binout := $(bin_path)/$(io_prefix)_umask_change$(bin_ext)
+io_umask_change_file := $(tmp_path)/$(io_prefix)_umask_change.file
 
-io_umask: $(io_umask_binout)
-io_umask_test: io_umask
-	$(io_umask_binout) $(CURDIR)/$(tmp_path)
+io_umask: $(io_umask_create_binout)             \
+          $(io_umask_change_binout)
+io_umask_test: io_umask_create_test             \
+               io_umask_change_test
+
+io_umask_create_test: $(io_umask_create_binout)
+	$< $(CURDIR)/$(tmp_path)
 	touch $(tmp_path)/x
 	mkdir $(tmp_path)/y
+	umask
+	umask -S
+	ls -lh $(tmp_path)
 
-$(io_umask_binout): $(io_root)/umask/u1.c
+io_umask_change_test: $(io_umask_change_binout) \
+                      $(io_umask_change_file)
+	ls -lh $(io_umask_change_file)
+	$< $(io_umask_change_file)
+	ls -lh $(io_umask_change_file)
+
+$(io_umask_change_file):
+	touch $@
+
+$(io_umask_create_binout): $(io_root)/umask/u1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_umask_change_binout): $(io_root)/umask/c1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
