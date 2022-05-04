@@ -3,6 +3,10 @@
 #include <grp.h>
 #include <time.h>
 
+#if (LINUX)
+#  include <sys/sysmacros.h>
+#endif
+
 static void pr_stat(const char *, const struct stat *);
 static const char *file_type(const struct stat *);
 static const char *file_mode(const struct stat *);
@@ -10,7 +14,7 @@ static const char *str_uid(void);
 static const char *str_gid(void);
 
 
-static char link_or_pipe = '-';
+static char filetype_c = '-';
 
 
 int
@@ -48,17 +52,19 @@ void
 pr_stat(const char *name, const struct stat *buf)
 {
   printf("  File: %s\n", name);
-  printf("  Size: %-11lld  FileType: %s\n", buf->st_size, file_type(buf));
+  printf("  Size: %-11lld  FileType: %s\n",
+         (long long int) buf->st_size,
+         file_type(buf));
   printf("  Mode: (%s)        Uid: (%5d/%8s)  Gid: (%5d/%8s)\n",
          file_mode(buf),
          getuid(),
          str_uid(),
          getgid(),
          str_gid());
-  printf("Device: %d,%d   Inode: %lld    Links: %d\n",
+  printf("Device: %d,%d   Inode: %llu    Links: %d\n",
          major(buf->st_dev),
          minor(buf->st_dev),
-         buf->st_ino,
+         (unsigned long long) buf->st_ino,
          buf->st_nlink);
   printf("Access: %s"
          "Modify: %s"
@@ -74,36 +80,42 @@ file_type(const struct stat *buf)
 {
   if (S_ISREG(buf->st_mode))
     {
+      filetype_c = '-';
       return "regular file";
     }
   else if (S_ISDIR(buf->st_mode))
     {
+      filetype_c = 'd';
       return "directory";
     }
   else if (S_ISCHR(buf->st_mode))
     {
+      filetype_c = 'c';
       return "character device";
     }
   else if (S_ISBLK(buf->st_mode))
     {
+      filetype_c = 'b';
       return "block device";
     }
   else if (S_ISFIFO(buf->st_mode))
     {
-      link_or_pipe = 'p';
+      filetype_c = 'p';
       return "fifo file";
     }
   else if (S_ISLNK(buf->st_mode))
     {
-      link_or_pipe = 'l';
+      filetype_c = 'l';
       return "symbolic link";
     }
   else if (S_ISSOCK(buf->st_mode))
     {
+      filetype_c = 's';
       return "socket";
     }
   else
     {
+      filetype_c = '?';
       return "(unknown)";
     }
 
@@ -115,18 +127,17 @@ file_mode(const struct stat *buf)
   static char  ss[64];
   mode_t       m  =  buf->st_mode & (~S_IFMT);
 
-  sprintf(ss, "%04o/%c%c%c%c%c%c%c%c%c%c", m,
-          link_or_pipe,
-          (m & S_IRUSR) ? 'r' : '-',
-          (m & S_IWUSR) ? 'w' : '-',
-          (m & S_ISUID) ? 's' : (m & S_IXUSR) ? 'x' : '-',
-          (m & S_IRGRP) ? 'r' : '-',
-          (m & S_IWGRP) ? 'w' : '-',
-          (m & S_ISGID) ? : (m & S_IXGRP) ? 'x' : '-',
-          (m & S_IROTH) ? 'r' : '-',
-          (m & S_IWOTH) ? 'w' : '-',
-          (m & S_IXOTH) ? 'x' : '-'
-          );
+  snprintf(ss, sizeof(ss), "%04o/%c%c%c%c%c%c%c%c%c%c", m,
+           filetype_c,
+           (m & S_IRUSR) ? 'r' : '-',
+           (m & S_IWUSR) ? 'w' : '-',
+           (m & S_ISUID) ? 's' : (m & S_IXUSR) ? 'x' : '-',
+           (m & S_IRGRP) ? 'r' : '-',
+           (m & S_IWGRP) ? 'w' : '-',
+           (m & S_ISGID) ? : (m & S_IXGRP) ? 'x' : '-',
+           (m & S_IROTH) ? 'r' : '-',
+           (m & S_IWOTH) ? 'w' : '-',
+           (m & S_IXOTH) ? 'x' : '-');
   return ss;
 }
 
@@ -139,7 +150,7 @@ str_uid(void)
 
   if ((p = getpwuid(getuid())) != NULL)
     {
-      return strcpy(ss, p->pw_name);
+      return strncpy(ss, p->pw_name, sizeof(ss)-1);
     }
 
   return NULL;
@@ -153,7 +164,7 @@ str_gid(void)
 
   if ((p = getgrgid(getgid())) != NULL)
     {
-      return strcpy(ss, p->gr_name);
+      return strncpy(ss, p->gr_name, sizeof(ss)-1);
     }
 
   return NULL;
