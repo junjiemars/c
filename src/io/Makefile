@@ -338,7 +338,7 @@ io_stat_uid_test: $(io_stat_uid_binout)
 io_stat_d_test: $(io_stat_d_binout)             \
                 $(io_stat_d_file)
 	echo "abc" | $<
-	$< $< $(io_stat_d_file) /dev/null
+	$< $< $(io_stat_d_file) /dev/null $(bin_path)
 
 $(io_stat_ft_file): $(io_stat_ft_binout)
 	ln -s $< $@

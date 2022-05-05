@@ -61,11 +61,11 @@ pr_stat(const char *name, const struct stat *buf)
          str_uid(),
          getgid(),
          str_gid());
-  printf("Device: %d,%d   Inode: %llu    Links: %d\n",
+  printf("Device: %d,%d   Inode: %llu    Links: %lu\n",
          major(buf->st_dev),
          minor(buf->st_dev),
          (unsigned long long) buf->st_ino,
-         buf->st_nlink);
+         (unsigned long) buf->st_nlink);
   printf("Access: %s"
          "Modify: %s"
          "Change: %s",
