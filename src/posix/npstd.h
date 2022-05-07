@@ -1,7 +1,11 @@
 /**
- * Nore
+ * Nore POSIX standard
  *
- * POSIX: https://pubs.opengroup.org/onlinepubs/9699919799/mindex.html
+ * POSIX:
+ * https://pubs.opengroup.org/onlinepubs/9699919799/mindex.html
+ *
+ * XSI:
+ * https://unix.org/version4/overview.html
  *
  */
 

@@ -6,7 +6,7 @@ posix: posix_nasrt                              \
        posix_nbits                              \
        posix_ndef                               \
        posix_getopt                             \
-       posix_lim                                \
+       posix_nlim                               \
        posix_nint                               \
        posix_nio                                \
        posix_nstr                               \
