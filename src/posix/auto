@@ -10,8 +10,7 @@
 POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
 
 
-# set _POSIX_C_SOURCE
-. ${POSIX_ROOT}src/posix/_POSIX_C_SOURCE
+. ${POSIX_ROOT}src/posix/npstd_auto
 
 
 # checking for CC's features

@@ -7,7 +7,6 @@
 
 
 #include <nore.h>
-#include <npstd.h>
 #include <ncstd.h>
 
 
@@ -15,8 +14,14 @@
 #  include <windows.h>
 #  include <process.h>
 #else
-#  include <sys/types.h>
-#  include <unistd.h>
+#  if (DARWIN)
+#    if !defined (_DARWIN_C_SOURCE)
+#      define _DARWIN_C_SOURCE
+#      include <sys/types.h>
+#      undef _DARWIN_C_SOURCE
+#    endif
+#    include <unistd.h>
+#  endif
 #endif
 
 

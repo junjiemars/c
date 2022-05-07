@@ -7,8 +7,7 @@
 ####
 
 
-# set _POSIX_C_SOURCE
-. ${POSIX_ROOT}src/posix/_POSIX_C_SOURCE
+. ${POSIX_ROOT}src/posix/npstd_auto
 
 
 echo "checking for <nio.h> ..."
@@ -30,8 +29,11 @@ case $NM_SYSTEM in
     nm_feature="getdelim"
     nm_feature_name="nm_have_getdelim"
     nm_feature_run=no
-    nm_feature_h='#include <stdio.h>'
-    nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
+    nm_feature_h='
+#include "npstd.h"
+#include <stdio.h>
+'
+    nm_feature_flags=
     nm_feature_test='getdelim((char**)0,(size_t*)0,0x0a,stdout);'
     . ${NORE_ROOT}/auto/feature
     ;;
@@ -65,8 +67,11 @@ case $NM_SYSTEM in
     nm_feature="fileno"
     nm_feature_name="nm_have_fileno"
     nm_feature_run=no
-    nm_feature_h='#include <stdio.h>'
-    nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
+    nm_feature_h='
+#include "npstd.h"
+#include <stdio.h>
+'
+    nm_feature_flags=
     nm_feature_test='fileno(stdout);'
     . ${NORE_ROOT}/auto/feature
     ;;

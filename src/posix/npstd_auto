@@ -9,11 +9,12 @@ npstd_h="${POSIX_ROOT}src/posix/npstd.h"
 if [ ! -f "${npstd_h}" ]; then
 cat << END > "${npstd_h}"
 /**
- * Nore POSIX standard
+ * Nore
  *
- * https://pubs.opengroup.org/onlinepubs/9699919799/mindex.html
+ * POSIX: https://pubs.opengroup.org/onlinepubs/9699919799/mindex.html
  *
  */
+
 #ifndef _NPSTD_H_
 #define _NPSTD_H_
 
@@ -21,10 +22,26 @@ cat << END > "${npstd_h}"
 #include <nore.h>
 
 
+
 #if defined(_POSIX_C_SOURCE)
 #  undef _POSIX_C_SOURCE
 #endif
 #define _POSIX_C_SOURCE  ${_POSIX_C_SOURCE}
+
+
+#if (DARWIN)
+#  if !defined(_DARWIN_C_SOURCE)
+#    define _DARWIN_C_SOURCE
+#  endif
+#endif
+
+
+#if (LINUX)
+#  if !defined(_GNU_C_SOURCE)
+#    define _GNU_C_SOURCE
+#  endif
+#endif
+
 
 
 #endif /* _NPSTD_H_ */
