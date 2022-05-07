@@ -5,6 +5,7 @@
 #include <nstr.h>
 
 #include <errno.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <signal.h>
 #include <sys/wait.h>
