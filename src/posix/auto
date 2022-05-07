@@ -7,24 +7,27 @@
 ####
 
 
+POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
+
+
 # set _POSIX_C_SOURCE
-. src/posix/_POSIX_C_SOURCE
+. ${POSIX_ROOT}src/posix/_POSIX_C_SOURCE
 
 
 # checking for CC's features
-. src/posix/ncc_auto
+. ${POSIX_ROOT}src/posix/ncc_auto
 
 
 # checking for <nlim.h>
-. src/posix/nlim_auto
+. ${POSIX_ROOT}src/posix/nlim_auto
 
 
 # check for <ncstd.h>
-. src/posix/ncstd_auto
+. ${POSIX_ROOT}src/posix/ncstd_auto
 
 
 # checking for <nustd.h>
-. src/posix/nustd_auto
+. ${POSIX_ROOT}src/posix/nustd_auto
 
 
 # # check open function

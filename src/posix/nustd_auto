@@ -8,7 +8,7 @@
 
 
 # set _POSIX_C_SOURCE
-. src/posix/_POSIX_C_SOURCE
+. ${POSIX_ROOT}src/posix/_POSIX_C_SOURCE
 
 
 echo "checking for <nustd.h> ..."
