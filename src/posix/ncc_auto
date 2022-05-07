@@ -68,9 +68,6 @@ if (!sysctlbyname("hw.cachelinesize", &line, &size, 0, 0)) {
 }
 return 1;'
    . ${NORE_ROOT}/auto/feature
-   if [ "yes" = "$nm_found" ]; then
-     NM_CPU_CACHE_LINE=$nm_feature_value
-   fi
    ;;
  Linux)
    nm_feature="cache line size"
@@ -92,9 +89,6 @@ if (p) {
 }
 return 1;'
    . ${NORE_ROOT}/auto/feature
-   if [ "yes" = "$nm_found" ]; then
-     NM_CPU_CACHE_LINE=$nm_feature_value
-   fi
    ;;
  WinNT)
    nm_feature="cache line size"
@@ -134,9 +128,6 @@ if (line) {
 }
 return 1;'
    . ${NORE_ROOT}/auto/feature
-   if [ "yes" = "$nm_found" ]; then
-     NM_CPU_CACHE_LINE=$nm_feature_value
-   fi
    ;;
  *)
    nm_found=no
@@ -146,6 +137,7 @@ if [ "yes" = "$nm_found" ]; then
  NM_CPU_CACHE_LINE=$nm_feature_value
 else
  case "$NM_MACHINE" in
+   aarch64)           NM_CPU_CACHE_LINE=64 ;;
    x86_64|amd64|ia64) NM_CPU_CACHE_LINE=64 ;;
    i386|i686|i86pc|*) NM_CPU_CACHE_LINE=32 ;;
  esac
@@ -164,7 +156,8 @@ nm_feature_flags=
 nm_feature_test='int i=0x11223344;
                  char *p = (char*)&i;
                  int le = (0x44 == *p);
-                 printf("%d", le);'
+                 printf("%d", le);
+                 return 0'
 . ${NORE_ROOT}/auto/feature
 
 
