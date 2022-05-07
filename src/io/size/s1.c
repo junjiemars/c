@@ -17,8 +17,10 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  printf("size: %lld\nblock size: %d\nblocks: %lld\n",
-         buf.st_size, buf.st_blksize, buf.st_blocks);
+  printf("size: %lld\nblock size: %ld\nblocks: %lld\n",
+         buf.st_size,
+         (long long int) buf.st_blksize,
+         (long int) buf.st_blocks);
 
 
   exit(EXIT_SUCCESS);
