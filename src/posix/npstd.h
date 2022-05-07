@@ -13,10 +13,10 @@
 
 
 
-#if defined(_POSIX_C_SOURCE)
-#  undef _POSIX_C_SOURCE
+#if !defined(_POSIX_C_SOURCE)
+#  define _POSIX_C_SOURCE  200809L
 #endif
-#define _POSIX_C_SOURCE  200809L
+
 
 
 #if (DARWIN)
