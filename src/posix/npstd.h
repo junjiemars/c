@@ -12,12 +12,26 @@
 #include <nore.h>
 
 
-#if (LINUX)
-#  if defined(_POSIX_C_SOURCE)
-#    undef _POSIX_C_SOURCE
+
+#if defined(_POSIX_C_SOURCE)
+#  undef _POSIX_C_SOURCE
+#endif
+#define _POSIX_C_SOURCE  200809L
+
+
+#if (DARWIN)
+#  if !defined(_DARWIN_C_SOURCE)
+#    define _DARWIN_C_SOURCE
 #  endif
-#  define _POSIX_C_SOURCE  200809L
-#endif /* LINUX */
+#endif
+
+
+#if (LINUX)
+#  if !defined(_GNU_C_SOURCE)
+#    define _GNU_C_SOURCE
+#  endif
+#endif
+
 
 
 #endif /* _NPSTD_H_ */
