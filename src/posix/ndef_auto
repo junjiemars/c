@@ -57,16 +57,5 @@ case "$CC_NAME" in
 esac
 
 
-# check static_assert
-#----------------------------------------
-nm_feature="static_assert"
-nm_feature_name="nm_have_static_assert"
-nm_feature_run=yes
-nm_feature_h="#include <assert.h>"
-nm_feature_flags="$nm_std_opt"
-nm_feature_test="enum {N=5}; _Static_assert(N==5, \"N is not equal 5\");"
-. ${NORE_ROOT}/auto/feature     # end of static_assert
-
-
 
 # eof

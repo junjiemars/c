@@ -39,7 +39,7 @@ case $NM_SYSTEM in
     nm_feature_name="nm_have_strdup"
     nm_feature_run=no
     nm_feature_h='#include <string.h>'
-    nm_feature_flags=
+    nm_feature_flags='-D_CRT_SECURE_NO_WARNINGS'
     nm_feature_test='char *s = _strdup("abc");'
     . ${NORE_ROOT}/auto/feature
     ;;

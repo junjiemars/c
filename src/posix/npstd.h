@@ -1,7 +1,11 @@
 /**
  * Nore POSIX standard
  *
- * POSIX: https://pubs.opengroup.org/onlinepubs/9699919799/mindex.html
+ * POSIX:
+ * https://pubs.opengroup.org/onlinepubs/9699919799/mindex.html
+ *
+ * XSI:
+ * https://unix.org/version4/overview.html
  *
  */
 
@@ -13,10 +17,10 @@
 
 
 
-#if !defined(_POSIX_C_SOURCE)
-#  define _POSIX_C_SOURCE  200809L
+#if defined(_POSIX_C_SOURCE)
+#  undef _POSIX_C_SOURCE
 #endif
-
+#define _POSIX_C_SOURCE  200809L
 
 
 #if (DARWIN)
@@ -35,3 +39,4 @@
 
 
 #endif /* _NPSTD_H_ */
+

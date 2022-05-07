@@ -10,6 +10,10 @@
 . ${POSIX_ROOT}src/posix/npstd_auto
 
 
+# check for <nasrt.h>
+. ${POSIX_ROOT}src/posix/nasrt_auto
+
+
 # check for <ndef.h>
 . ${POSIX_ROOT}src/posix/ndef_auto
 

@@ -9,9 +9,13 @@ npstd_h="${POSIX_ROOT}src/posix/npstd.h"
 if [ ! -f "${npstd_h}" ]; then
 cat << END > "${npstd_h}"
 /**
- * Nore
+ * Nore POSIX standard
  *
- * POSIX: https://pubs.opengroup.org/onlinepubs/9699919799/mindex.html
+ * POSIX:
+ * https://pubs.opengroup.org/onlinepubs/9699919799/mindex.html
+ *
+ * XSI:
+ * https://unix.org/version4/overview.html
  *
  */
 
