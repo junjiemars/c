@@ -1,5 +1,5 @@
 /**
- * Nore
+ * Nore POSIX standard
  *
  * POSIX: https://pubs.opengroup.org/onlinepubs/9699919799/mindex.html
  *
@@ -35,4 +35,3 @@
 
 
 #endif /* _NPSTD_H_ */
-
