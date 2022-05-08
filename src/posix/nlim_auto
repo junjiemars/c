@@ -20,7 +20,6 @@ case $NM_SYSTEM in
     nm_feature="LINE_MAX"
     nm_feature_name="nm_line_max"
     nm_feature_run=value
-    nm_feature_value=
     nm_feature_h='
 #include <stdio.h>
 #include <unistd.h>
@@ -44,7 +43,6 @@ long line_max = 2048;
     nm_feature="LINE_MAX"
     nm_feature_name="nm_line_max"
     nm_feature_run=value
-    nm_feature_value=
     nm_feature_h='
 #include <stdio.h>
 #include <limits.h>

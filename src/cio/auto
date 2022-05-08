@@ -7,8 +7,11 @@
 ####
 
 
-# check posix features
-. src/posix/auto
+# check ncstd.h features
+. src/posix/ncstd_auto
+
+# check nlim.h feature
+. src/posix/nlim_auto
 
 
 echo "checking for {cio} ..."
