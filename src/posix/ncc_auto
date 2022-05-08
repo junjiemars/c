@@ -134,14 +134,15 @@ return 1;'
    ;;
 esac
 if [ "yes" = "$nm_found" ]; then
- NM_CPU_CACHE_LINE=$nm_feature_value
+  NM_CPU_CACHE_LINE=$nm_feature_value
 else
- case "$NM_MACHINE" in
-   aarch64)           NM_CPU_CACHE_LINE=64 ;;
-   x86_64|amd64|ia64) NM_CPU_CACHE_LINE=64 ;;
-   i386|i686|i86pc|*) NM_CPU_CACHE_LINE=32 ;;
- esac
- have=NM_CPU_CACHE_LINE value=$NM_CPU_CACHE_LINE . ${NORE_ROOT}/auto/define
+  case "$NM_MACHINE" in
+    aarch64)           NM_CPU_CACHE_LINE=64 ;;
+    x86_64|amd64|ia64) NM_CPU_CACHE_LINE=64 ;;
+    i386|i686|i86pc|*) NM_CPU_CACHE_LINE=32 ;;
+  esac
+  have=NM_CPU_CACHE_LINE value=$NM_CPU_CACHE_LINE \
+      . ${NORE_ROOT}/auto/define
 fi # end of check cache line size
 
 
