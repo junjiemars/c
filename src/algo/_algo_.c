@@ -107,24 +107,6 @@ test_verify(void)
   printf("test verify fn ... ok\n");
 }
 
-void
-test_swap(void)
-{
-	int i1 = 0x1122, i2 = 0x3344;
-	swap(&i1, &i2, sizeof(int));
-	assert(0x1122 == i2 && 0x3344 == i1);
-	int *p1 = &i1, *p2 = &i2;
-	swap(&p1, &p2, sizeof(int*));
-	assert(0x1122 == *p1 && 0x3344 == *p2);
-	char *s1 = "abcdef", *s2 = "12345";
-	swap(&s1, &s2, sizeof(char*));
-	assert(strcmp("abcdef", s2) == 0 && strcmp("12345", s1) == 0);
-	char sa1[] = "abcdef", sa2[] = "12345";
-	char *ss1 = sa1, *ss2 = sa2;
-	swap(&ss1, &ss2, sizeof(char*));
-	assert(strcmp("abcdef", ss2) == 0 && strcmp("12345", ss1) == 0);
-	printf("test swap macro ... ok\n");
-}
 
 int
 main(int argc, char **argv)
@@ -135,7 +117,6 @@ main(int argc, char **argv)
 	test_cmp_int();
 	test_cmp_str();
   test_verify();
-	test_swap();
 
 	return 0;
 }

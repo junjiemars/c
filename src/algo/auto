@@ -7,7 +7,7 @@
 ####
 
 
-# check posix features
+# check ncstd.h features
 . src/posix/ncstd_auto
 
 

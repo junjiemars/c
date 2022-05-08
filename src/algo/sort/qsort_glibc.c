@@ -63,11 +63,11 @@ sort(void *base, size_t n, size_t width,
 
           if (cmp(mid, lo) < 0)
             {
-              swap(mid, lo, width);
+              _swp_(mid, lo, width);
             }
           if (cmp(hi, mid) < 0)
             {
-              swap(mid, hi, width);
+              _swp_(mid, hi, width);
             }
           else
             {
@@ -75,7 +75,7 @@ sort(void *base, size_t n, size_t width,
             }
           if (cmp(mid, lo) < 0)
             {
-              swap(mid, lo, width);
+              _swp_(mid, lo, width);
             }
         jump_over:;
 
@@ -96,7 +96,7 @@ sort(void *base, size_t n, size_t width,
 
               if (left < right)
                 {
-                  swap(left, right, width);
+                  _swp_(left, right, width);
                   if (mid == left)
                     {
                       mid = right;
@@ -160,7 +160,7 @@ sort(void *base, size_t n, size_t width,
 
     if (tmp != b)
       {
-        swap(tmp, b, width);
+        _swp_(tmp, b, width);
       }
 
     run = b + width;

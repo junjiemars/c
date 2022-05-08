@@ -49,5 +49,21 @@
 #endif  /* _str_ */
 
 
+#define _swp_(a, b, w)                          \
+do                                              \
+  {                                             \
+    size_t __w = (w);                           \
+    char *__a = (char *) (a);                   \
+    char *__b = (char *) (b);                   \
+    do                                          \
+      {                                         \
+        char __tmp = *__a;                      \
+        *__a++ = *__b;                          \
+        *__b++ = __tmp;                         \
+      } while (--__w > 0);                      \
+  } while (0)
+
+
+
 
 #endif /* end of _NDEF_H_ */

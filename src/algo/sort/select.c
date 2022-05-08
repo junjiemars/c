@@ -20,7 +20,7 @@ sort(void *base, size_t n, size_t width,
         }
       if (i != min)
         {
-          swap((char*) base + min*width, (char*) base + i*width, width);
+          _swp_((char*) base + min*width, (char*) base + i*width, width);
         }
     }
 }

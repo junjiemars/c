@@ -4,28 +4,11 @@
 #include <nore.h>
 #include <ncstd.h>
 #include <stdlib.h>
-#include <assert.h>
 
 
 #if (MSVC)
 #pragma warning(disable:4996)
 #endif
-
-
-#define swap(a, b, w)                           \
-do                                              \
-  {                                             \
-    size_t __w = (w);                           \
-    char *__a = (char *) (a);                   \
-    char *__b = (char *) (b);                   \
-    do                                          \
-      {                                         \
-        char __tmp = *__a;                      \
-        *__a++ = *__b;                          \
-        *__b++ = __tmp;                         \
-      } while (--__w > 0);                      \
-  } while (0)
-
 
 
 struct score_s

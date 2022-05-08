@@ -13,7 +13,7 @@ sort(void *base, size_t n, size_t width,
         {
           if (cmp((char*) base + j*width, (char*) base + (j+1)*width) > 0)
             {
-              swap((char*) base + j*width, (char*) base + (j+1)*width, width);
+              _swp_((char*) base + j*width, (char*) base + (j+1)*width, width);
             }
         }
     }

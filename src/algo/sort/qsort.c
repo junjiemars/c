@@ -29,7 +29,7 @@ sort(void *base, size_t n, size_t width,
         } while (cmp(lo, pivot) < 0);
       if (lo < hi)
         {
-          swap(lo, hi, width);
+          _swp_(lo, hi, width);
         }
     }
 

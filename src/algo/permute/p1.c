@@ -17,13 +17,12 @@ permute(void *base, size_t n, size_t width, const size_t *permutation,
 
       src = (char *) base + width * i;
       dst = (char *) base + width * permutation[i];
-      
+
       if (src == dst || 0 == cmp(src, dst))
         {
           continue;
         }
 
-      swap(src, dst, width);
+      _swp_(src, dst, width);
     }
 }
-
