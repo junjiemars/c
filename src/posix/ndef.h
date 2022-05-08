@@ -14,17 +14,6 @@
 #endif  /* NM_HAVE_RESTRICT */
 
 
-/* #ifdef static_assert */
-/* #  undef static_assert */
-/* #endif */
-
-/* #if !(NM_HAVE_STATIC_ASSERT) */
-/* #  define static_assert(e, m) enum {static_assert = 1/!!((e) && (m))} */
-/* #else */
-/* #  define static_assert _Static_assert */
-/* #endif  /\* NM_HAVE_STATIC_ASSERT *\/ */
-
-
 #if !defined(_unused_)
 #  define _unused_(x)  ((void)(x))
 #endif  /* _unused_ */
