@@ -6,7 +6,7 @@
 /*
    Let's try to inject the equivalent of:
    void
-   greet (const char *name)
+   greet(const char *name)
    {
      printf ("hello %s\n", name);
    }
