@@ -33,6 +33,7 @@ jobs:
       - name: Build and Test
         env:
           _CFG_OPT_: --with-release=yes --with-optimize=yes --with-symbol=no
+          CC: ${{ matrix.CC }}
         run: |
           ./test.sh
       - name: Zip Build Artifact
@@ -69,6 +70,7 @@ jobs:
       - name: Build and Test
         env:
           _CFG_OPT_: --with-release=yes --with-optimize=yes --with-symbol=no
+          CC: ${{ matrix.CC }}
         run: |
           ./test.sh
       - name: Zip Build Artifact
@@ -113,8 +115,9 @@ jobs:
     - name: Build and Test
       env:
         _CFG_OPT_: --with-release=yes --with-optimize=-Os --with-symbol=no
+        CC: ${{ matrix.CC }}
       run: |
-         CC=${{ matrix.CC }} ./test.sh
+         ./test.sh
     - name: Zip Build Artifact
       env:
         _ZIP_X_: -x "out/tmp/*" -x "out/var/*" -x "*.ilk" -x "*.pdb" -x "*.obj" -x "*.exp"
