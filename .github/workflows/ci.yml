@@ -114,7 +114,7 @@ jobs:
       env:
         _CFG_OPT_: --with-release=yes --with-optimize=-Os --with-symbol=no
       run: |
-         ./test.sh
+         CC=${{ matrix.CC }} ./test.sh
     - name: Zip Build Artifact
       env:
         _ZIP_X_: -x "out/tmp/*" -x "out/var/*" -x "*.ilk" -x "*.pdb" -x "*.obj" -x "*.exp"
