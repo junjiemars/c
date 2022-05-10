@@ -1,0 +1,31 @@
+# -*- mode:sh -*- vim:ft=sh
+
+
+# check libgccjit features
+# ----------------------------------------
+case "$CC_NAME" in
+  clang|gcc)
+    nm_feature="libgccjit"
+    nm_feature_name=
+    nm_feature_indent=yes
+    nm_feature_run=no
+    nm_feature_h='#include <libgccjit.h>'
+    nm_feature_flags=
+    nm_feature_test=
+    . ${NORE_ROOT}/auto/feature
+
+    if [ yes = $nm_found ]; then
+      flag="has_libgccjit" op=":=" value="yes" \
+          . ${NORE_ROOT}/auto/make_define
+    fi
+    ;;
+  msvc)
+    ;;
+esac
+
+
+# check C compiler features
+. src/posix/ncc_auto
+
+
+# eof
