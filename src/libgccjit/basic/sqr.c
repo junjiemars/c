@@ -13,7 +13,7 @@
 */
 
 
-static void create_code (gcc_jit_context *);
+static void create_sqr_fn (gcc_jit_context *);
 
 
 int
@@ -42,7 +42,7 @@ main (int argc, char **argv)
                                   GCC_JIT_BOOL_OPTION_DUMP_GENERATED_CODE,
                                   0);
 
-  create_code(ctxt);
+  create_sqr_fn(ctxt);
 
   result = gcc_jit_context_compile(ctxt);
   if (!result)
@@ -70,7 +70,7 @@ main (int argc, char **argv)
 
 
 static void
-create_code (gcc_jit_context *ctxt)
+create_sqr_fn(gcc_jit_context *ctxt)
 {
   gcc_jit_type *int_type = gcc_jit_context_get_type(ctxt, GCC_JIT_TYPE_INT);
 
@@ -88,11 +88,11 @@ create_code (gcc_jit_context *ctxt)
   gcc_jit_block *block = gcc_jit_function_new_block (func, NULL);
 
   gcc_jit_rvalue *expr
-    = gcc_jit_context_new_binary_op (ctxt, NULL,
-                                     GCC_JIT_BINARY_OP_MULT, int_type,
-                                     gcc_jit_param_as_rvalue (param_n),
-                                     gcc_jit_param_as_rvalue (param_n));
+    = gcc_jit_context_new_binary_op(ctxt, NULL,
+                                    GCC_JIT_BINARY_OP_MULT, int_type,
+                                    gcc_jit_param_as_rvalue (param_n),
+                                    gcc_jit_param_as_rvalue (param_n));
 
-  gcc_jit_block_end_with_return (block, NULL, expr);
+  gcc_jit_block_end_with_return(block, NULL, expr);
 
 }
