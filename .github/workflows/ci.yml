@@ -23,13 +23,16 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install libuv1-dev
-          sudo apt-get install libjemalloc-dev
           sudo apt-get install libfl-dev
+          sudo apt-get install libgccjit0
+          sudo apt-get install libjemalloc-dev
           sudo apt-get install libssl-dev
+          sudo apt-get install libuv1-dev
           sudo apt-get install nodejs npm
       - name: Setup Env
-        run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
+        run: |
+          echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
+          echo "_A_MARK_=$(uname -m)-${{ matrix.CC }}" >> $GITHUB_ENV
       - name: Build and Test
         env:
           _CFG_OPT_: --with-release=yes --with-optimize=yes --with-symbol=no
@@ -40,12 +43,12 @@ jobs:
         env:
           _ZIP_X_: -x "out/tmp/*" -x "out/var/*" -x "*.o"
         run: |
-          zip -r c-linux-${{ env._OS_ARCH_ }}.zip out/ ${{ env._ZIP_X_ }}
+          zip -r c-linux-${{ env._A_MARK_ }}.zip out/ ${{ env._ZIP_X_ }}
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: c-linux-${{ env._OS_ARCH_ }}-${{ matrix.CC }}.zip
-          path: c-linux-${{ env._OS_ARCH_ }}-${{ matrix.CC }}.zip
+          name: c-linux-${{ env._A_MARK_ }}.zip
+          path: c-linux-${{ env._A_MARK_ }}.zip
 
 
   MacOS:
@@ -66,7 +69,9 @@ jobs:
           brew install node
           brew install openssl
       - name: Setup Env
-        run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
+        run: |
+          echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
+          echo "_A_MARK_=$(uname -m)-${{ matrix.CC }}" >> $GITHUB_ENV
       - name: Build and Test
         env:
           _CFG_OPT_: --with-release=yes --with-optimize=yes --with-symbol=no
@@ -77,12 +82,12 @@ jobs:
         env:
           _ZIP_X_: -x "out/tmp/*" -x "out/var/*" -x "**/*.dSYM/*" -x "**/.DS_Store" -x "*.o"
         run: |
-          zip -r c-macos-${{ env._OS_ARCH_ }}.zip out/ ${{ env._ZIP_X_ }}
+          zip -r c-macos-${{ env._A_MARK_ }}.zip out/ ${{ env._ZIP_X_ }}
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: c-macos-${{ env._OS_ARCH_ }}-${{ matrix.CC }}.zip
-          path: c-macos-${{ env._OS_ARCH_ }}-${{ matrix.CC }}.zip
+          name: c-macos-${{ env._A_MARK_ }}.zip
+          path: c-macos-${{ env._A_MARK_ }}.zip
 
 
   Windows:
@@ -107,11 +112,14 @@ jobs:
           git
           make
           mingw-w64-x86_64-gcc
+          mingw-w64-x86_64-libgccjit
           zip
           libuv
           pkg-config
     - name: Setup Env
-      run: echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
+      run: |
+        echo "_OS_ARCH_=$(uname -m)" >> $GITHUB_ENV
+        echo "_A_MARK_=$(uname -m)-${{ matrix.CC }}" >> $GITHUB_ENV
     - name: Build and Test
       env:
         _CFG_OPT_: --with-release=yes --with-optimize=-Os --with-symbol=no
@@ -122,12 +130,12 @@ jobs:
       env:
         _ZIP_X_: -x "out/tmp/*" -x "out/var/*" -x "*.ilk" -x "*.pdb" -x "*.obj" -x "*.exp"
       run: |
-        zip -r c-windows-${{ env._OS_ARCH_ }}.zip out/ ${{ env._ZIP_X_ }}
+        zip -r c-windows-${{ env._A_MARK_ }}.zip out/ ${{ env._ZIP_X_ }}
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v1
       with:
-        name: c-windows-${{ env._OS_ARCH_ }}-${{ matrix.CC }}.zip
-        path: c-windows-${{ env._OS_ARCH_ }}-${{ matrix.CC }}.zip
+        name: c-windows-${{ env._A_MARK_ }}.zip
+        path: c-windows-${{ env._A_MARK_ }}.zip
 
 
 # EOF
