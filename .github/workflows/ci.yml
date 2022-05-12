@@ -24,7 +24,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install libfl-dev
-          sudo apt-get install libgccjit0
+          sudo apt-get install libgccjit-10-dev
           sudo apt-get install libjemalloc-dev
           sudo apt-get install libssl-dev
           sudo apt-get install libuv1-dev
