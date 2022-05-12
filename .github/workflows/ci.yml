@@ -44,8 +44,8 @@ jobs:
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: c-linux-${{ env._OS_ARCH_ }}.zip
-          path: c-linux-${{ env._OS_ARCH_ }}.zip
+          name: c-linux-${{ env._OS_ARCH_ }}-${{ matrix.CC }}.zip
+          path: c-linux-${{ env._OS_ARCH_ }}-${{ matrix.CC }}.zip
 
 
   MacOS:
@@ -81,8 +81,8 @@ jobs:
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: c-macos-${{ env._OS_ARCH_ }}.zip
-          path: c-macos-${{ env._OS_ARCH_ }}.zip
+          name: c-macos-${{ env._OS_ARCH_ }}-${{ matrix.CC }}.zip
+          path: c-macos-${{ env._OS_ARCH_ }}-${{ matrix.CC }}.zip
 
 
   Windows:
@@ -126,8 +126,8 @@ jobs:
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v1
       with:
-        name: c-windows-${{ env._OS_ARCH_ }}.zip
-        path: c-windows-${{ env._OS_ARCH_ }}.zip
+        name: c-windows-${{ env._OS_ARCH_ }}-${{ matrix.CC }}.zip
+        path: c-windows-${{ env._OS_ARCH_ }}-${{ matrix.CC }}.zip
 
 
 # EOF
