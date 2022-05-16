@@ -31,8 +31,8 @@
 
 
 #if (LINUX)
-#  if !defined(_GNU_C_SOURCE)
-#    define _GNU_C_SOURCE
+#  if !defined(_GNU_SOURCE)
+#    define _GNU_SOURCE
 #  endif
 #endif
 

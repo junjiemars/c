@@ -2,16 +2,16 @@
 # ./configure --has-libgccjit
 #
 
-ifneq ($(has_libgccjit), yes)
-libgccjit:
-	@echo "#skip ..."
-libgccjit_test:
-	@echo "#skip ..."
-else
-
+ifeq ($(has_libgccjit), yes)
 libgccjit: libgccjit_basic
 
 libgccjit_test: libgccjit_basic_test
+else
+
+libgccjit:
+	echo "#skip ..."
+libgccjit_test:
+	echo "#skip ..."
 
 endif
 

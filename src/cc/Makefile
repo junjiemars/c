@@ -1,6 +1,5 @@
 #
 # ./configure --has-cc
-# make clean test
 #
 
 cc: cc_recursive_descent                        \

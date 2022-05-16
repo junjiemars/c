@@ -91,19 +91,19 @@ test_do() {
 if [ "basic" = "$_TEST_" ]; then
   test_do --has-posix
   test_do --has-algo
-  test_do --has-cio
+  # test_do --has-cio
   # test_do --has-cpu
   # test_do --has-ctl
-  test_do --has-data
-  test_do --has-ds
+  # test_do --has-data
+  # test_do --has-ds
   # test_do --has-ffi
   # test_do --has-flex
   test_do --has-hi
-  test_do --has-io
+  # test_do --has-io
   # test_do --has-lang
   # test_do --has-leptonica
-  # test_do --has-library
-  test_do --has-libgccgit
+  test_do --has-library
+  test_do --has-libgccjit
   # test_do --has-limit
   # test_do --has-memory
   # test_do --has-nginx

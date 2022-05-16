@@ -1,6 +1,11 @@
 # -*- mode:sh -*- vim:ft=sh
 
 
+# check C compiler features
+. src/posix/ncc_auto
+
+
+
 # check libgccjit features
 # ----------------------------------------
 case "$CC_NAME" in
@@ -22,10 +27,6 @@ case "$CC_NAME" in
   msvc)
     ;;
 esac
-
-
-# check C compiler features
-. src/posix/ncc_auto
 
 
 # eof

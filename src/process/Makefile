@@ -2,7 +2,7 @@
 # ./configure --has-process
 #
 
-ifeq ($(CC_NAME), msvc)
+ifeq ($(NM_SYSTEM), WinNT)
 process:
 	@echo "#skip ..."
 process_test: process
