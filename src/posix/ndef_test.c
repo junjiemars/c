@@ -47,6 +47,7 @@ test_nof(void)
 {
   int a[] = { 1, 2, 3, };
   assert(_nof_(a) == sizeof(a)/sizeof(*a));
+  printf("_nof_(a) = %zu\n", _nof_(a));
 }
 
 
