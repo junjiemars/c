@@ -1,9 +1,18 @@
 #ifndef _LIMIT_H_
 #define _LIMIT_H_
 
-#include <nustd.h>
-#include <ncstd.h>
-#include <limits.h>
+#include <nore.h>
+
+/* #include <nustd.h> */
+/* #include <ncstd.h> */
+/* #include <limits.h> */
+
+#if defined(LINUX)
+#  include <unistd.h>
+#  include <limits.h>
+#endif
+
+#include <stdio.h>
 
 
 #define FMT_S_L32(t)  "%-32s"t

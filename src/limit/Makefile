@@ -1,5 +1,5 @@
 #
-# ./configure --has-limit
+# ./configure --has-limit --with-std=no
 #
 
 ifeq ($(CC_NAME), msvc)
@@ -10,16 +10,16 @@ limit_test: limit
 else
 
 limit: limit_int                                \
-       limit_posix
+       limit_gc
 
 limit_test: limit_int_test                      \
-            limit_posix_test
+            limit_gc_test
 
 endif
 
 # limit env
 limit_prefix := limit
-INC += $(nm_inc_opt)$(limit_root) $(nm_inc_opt)$(root)/posix
+INC += $(nm_inc_opt)$(limit_root)
 
 
 # int
@@ -38,18 +38,20 @@ $(limit_int_cppout): $(limit_root)/i.c
 
 
 # posix
-limit_posix_binout := $(bin_path)/$(limit_prefix)_posix$(bin_ext)
-limit_posix_cppout := $(tmp_path)/$(limit_prefix)_posix$(cpp_ext)
+limit_gc_binout := $(bin_path)/$(limit_prefix)_gc$(bin_ext)
+limit_gc_source := $(tmp_path)/gc.c
+limit_gc_awk_src := $(limit_root)/l.awk
+limit_gc_awk_in := $(limit_root)/l.awk.in
 
-limit_posix: $(limit_posix_binout)
-limit_posix_test: limit_posix
-	-$(limit_posix_binout)
+limit_gc: $(limit_gc_binout)
+limit_gc_test: limit_gc
+	$(limit_gc_binout)
 
-$(limit_posix_binout): $(limit_posix_cppout)
-	$(CC) $(CFLAGS) $^ $(bin_out)$@
+$(limit_gc_binout): $(limit_gc_source)
+	$(CC) $(INC) $(CPPFLAGS) $(CFLAGS) $^ $(bin_out)$@
 
-$(limit_posix_cppout): $(limit_root)/posix.c
-	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+$(limit_gc_source): $(limit_gc_awk_src) $(limit_gc_awk_in)
+	awk -f $(limit_gc_awk_src) $(limit_gc_awk_in) > $@
 
 
 # eof
