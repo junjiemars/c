@@ -2,17 +2,19 @@ BEGIN {
     FS = ","
     print "#include <stdio.h>"
     print "#include <unistd.h>"
-    print "#include <limits.h>\n"
+    print "#include <limits.h>"
+    print "\n"
     
     print "#define STR(s)   #s"
     print "#define ULL(u)   (unsigned long long) (u)"
     print "#define SLL(s)   (long long) (s)"
     print "#define INT(i)   (int) (i)"
+    print ""
     print "#define FMT_ULL  \"%-35s%-24llu\\n\""
     print "#define FMT_SLL  \"%-35s%-24lld\\n\""
     print "#define FMT_INT  \"%-35s%-24d\\n\""
     print "#define FMT_SYM  \"%-35s(no symbol)\\n\""
-    print ""
+    print "\n"
     print "int main(void) \n{\n"
 }
 {
