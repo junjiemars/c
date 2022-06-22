@@ -38,20 +38,26 @@ $(limit_int_cppout): $(limit_root)/i.c
 
 
 # posix
-limit_gc_binout := $(bin_path)/$(limit_prefix)_gc$(bin_ext)
-limit_gc_source := $(tmp_path)/gc.c
-limit_gc_awk_src := $(limit_root)/l.awk
-limit_gc_awk_in := $(limit_root)/l.awk.in
+limit_l_binout := $(bin_path)/$(limit_prefix)_l$(bin_ext)
+limit_l_source := $(tmp_path)/l.c
+limit_l_awk_src := $(limit_root)/l.awk
+limit_l_awk_in := $(limit_root)/l.awk.in
+limit_l_awk_in_n := $(limit_root)/l.awk.in.n
 
-limit_gc: $(limit_gc_binout)
-limit_gc_test: limit_gc
-	$(limit_gc_binout)
+limit_l: $(limit_l_binout)
+limit_l_test: limit_l
+	$(limit_l_binout)
 
-$(limit_gc_binout): $(limit_gc_source)
+$(limit_l_binout): $(limit_l_source)
 	$(CC) $(INC) $(CPPFLAGS) $(CFLAGS) $^ $(bin_out)$@
 
-$(limit_gc_source): $(limit_gc_awk_src) $(limit_gc_awk_in)
-	awk -f $(limit_gc_awk_src) $(limit_gc_awk_in) > $@
+$(limit_l_source): $(limit_l_awk_src)           \
+                   $(limit_l_awk_in_n)          \
+                   $(limit_l_awk_in)
+	awk -f $(limit_l_awk_src)                     \
+		$(limit_l_awk_in_n)                         \
+		$(limit_l_awk_in)                           \
+		> $@
 
 
 # eof
