@@ -2,6 +2,7 @@
 #define _LIMIT_H_
 
 #include <nore.h>
+#include <float.h>
 
 /* #include <nustd.h> */
 /* #include <ncstd.h> */
