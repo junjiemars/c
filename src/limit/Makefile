@@ -54,10 +54,7 @@ $(limit_l_binout): $(limit_l_source)
 $(limit_l_source): $(limit_l_awk_src)           \
                    $(limit_l_awk_in_n)          \
                    $(limit_l_awk_in)
-	awk -f $(limit_l_awk_src)                     \
-		$(limit_l_awk_in_n)                         \
-		$(limit_l_awk_in)                           \
-		> $@
+	awk -f $^ > $@
 
 
 # eof
