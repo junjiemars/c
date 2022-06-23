@@ -1,5 +1,6 @@
 BEGIN {
     FS = ","
+
     print "#include <stdio.h>"
     print "#include <unistd.h>"
     print "#include <limits.h>"
