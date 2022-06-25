@@ -2,10 +2,6 @@
 
 
 # check C compiler features
-. src/posix/nustd_auto
-. src/posix/ncstd_auto
-
-
 
 
 # eof
