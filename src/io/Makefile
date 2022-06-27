@@ -70,7 +70,8 @@ io_access_open_test: $(io_access_open_binout)   \
 	$< $<
 	$< $(io_access_open_file)
 	# sudo chown root $(io_access_open_file)
-	# sudo chmod g+r $<
+	# sudo chown root $(io_access_open_binout)
+	# sudo chmod u+s $<
 	# $< $(io_access_open_file)
 
 $(io_access_open_file):
