@@ -10,7 +10,7 @@
 . ${POSIX_ROOT}src/posix/npstd_auto
 
 
-echo "checking for <nio.h> ..."
+echo "checking for nio.h ..."
 
 
 # check getdelim

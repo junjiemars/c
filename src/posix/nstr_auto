@@ -10,7 +10,7 @@
 . ${POSIX_ROOT}src/posix/npstd_auto
 
 
-echo "checking for <nstr.h> ..."
+echo "checking for nstr.h ..."
 
 
 # check strdup

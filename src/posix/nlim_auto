@@ -10,7 +10,7 @@
 . ${POSIX_ROOT}src/posix/npstd_auto
 
 
-echo "checking for <nlim.h> ..."
+echo "checking for nlim.h ..."
 
 
 # check LINE_MAX

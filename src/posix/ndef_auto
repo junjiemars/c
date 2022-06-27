@@ -10,7 +10,7 @@
 . ${POSIX_ROOT}src/posix/npstd_auto
 
 
-echo "checking for <ndef.h> ..."
+echo "checking for ndef.h ..."
 
 
 # check restrict keyword

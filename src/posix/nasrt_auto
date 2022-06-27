@@ -10,7 +10,7 @@
 . ${POSIX_ROOT}src/posix/npstd_auto
 
 
-echo "checking for <nasrt.h> ..."
+echo "checking for nasrt.h ..."
 
 
 # check static_assert

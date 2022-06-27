@@ -10,7 +10,7 @@
 . ${POSIX_ROOT}src/posix/npstd_auto
 
 
-echo "checking for <nint.h> ..."
+echo "checking for nint.h ..."
 
 # check header file existing
 #----------------------------------------
