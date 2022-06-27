@@ -87,24 +87,11 @@ return 0;
     ;;
   WinNT)
     nm_feature="PAGESIZE"
-    nm_feature_name="nm_line_max"
+    nm_feature_name="nm_pagesize"
     nm_feature_run=value
-    nm_feature_h='
-#include <stdio.h>
-#include <limits.h>
-#include <windows.h>
-'
+    nm_feature_h=
     nm_feature_flags=
-    nm_feature_test='
-long line_max = 2048;
-#if defined(PAGESIZE)
-    if (PAGESIZE > 0) {
-       line_max = PAGESIZE;
-    }
-#endif
-  printf("%d\n", line_max);
-  return 0;
-'
+    nm_feature_test=
     . ${NORE_ROOT}/auto/feature
     ;;
   *)
