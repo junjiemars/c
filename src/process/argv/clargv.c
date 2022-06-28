@@ -2,7 +2,8 @@
 #include <assert.h>
 
 /*
- * It's guaranteed by both ISO C and POSIX.1 that `argv[argc] == NULL' is true
+ * It's guaranteed by both ISO C and POSIX.1
+ * that `argv[argc] == NULL' is true
  *
  */
 

@@ -8,24 +8,32 @@ int
 main(void)
 {
   int    stat;
-  int    overwrite  =  1;
   pid_t  pid;
 
-  setenv("X1", "x", overwrite);
+  setenv("X1", "x", 1);
 
   pid = fork();
   if (0 == pid)
     {
-      printf("child: X1 = %s\n", getenv("X1"));
-      setenv("X2", "xx", overwrite);
-      printf("environ at %8p\n", environ);
-      exit(0);
+      pid_t pc = getpid();
+
+      setenv("X2", "xx", 1);
+
+      printf("[cid=%i] X1 = %s\n", pc, getenv("X1"));
+      printf("[cid=%i] X2 = %s\n", pc, getenv("X2"));
+      printf("[cid=%i] environ at %p\n", pc, environ);
+
     }
   else
     {
-      waitpid(pid, &stat, overwrite);
+      pid_t pp = getpid();
 
-      printf("parent: X2 = %s\n", getenv("X2"));
-      printf("environ at %8p\n", environ);
+      waitpid(pid, &stat, 0);
+
+      printf("[pid=%i] X1 = %s\n", pp, getenv("X1"));
+      printf("[pid=%i] X2 = %s\n", pp, getenv("X2"));
+      printf("[pid=%i] environ at %8p\n", pp, environ);
     }
+
+  exit(EXIT_SUCCESS);
 }
