@@ -241,13 +241,24 @@ $(process_layout_brk_binout): $(process_root)/layout/b.c
 
 # rlimit
 process_rlimit_binout := $(bin_path)/$(process_prefix)_rlimit$(bin_ext)
+process_rlimit_source := $(tmp_path)/rl.c
+process_rlimit_awk := $(process_root)/rlimit/rl.awk
+process_rlimit_awk_in := $(process_root)/rlimit/rl.awk.in
 
 process_rlimit: $(process_rlimit_binout)
 process_rlimit_test: process_rlimit
 	$(process_rlimit_binout)
 
-$(process_rlimit_binout): $(process_root)/rlimit/def.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+# $(process_rlimit_source)
+# $(process_root)/rlimit/def.c
+$(process_rlimit_binout): $(process_rlimit_source)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(process_rlimit_source): $(process_rlimit_awk)     \
+                          $(process_rlimit_awk_in)
+	awk -f $^ > $@
+
+
 
 
 # zombie
