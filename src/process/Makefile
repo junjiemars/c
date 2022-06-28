@@ -70,22 +70,22 @@ $(process_argv_binout): $(process_root)/argv/clargv.c
 
 # env
 process_env_raw_binout := $(bin_path)/$(process_prefix)_env_raw$(bin_ext)
-process_env_mem_binout := $(bin_path)/$(process_prefix)_env_mem$(bin_ext)
+process_env_mov_binout := $(bin_path)/$(process_prefix)_env_mov$(bin_ext)
 process_env_child_binout := $(bin_path)/$(process_prefix)_env_child$(bin_ext)
 
 process_env: $(process_env_raw_binout)          \
-             $(process_env_mem_binout)          \
+             $(process_env_mov_binout)          \
              $(process_env_child_binout)
 process_env_test: process_env
 	$(process_env_raw_binout)
-	$(process_env_mem_binout)
+	$(process_env_mov_binout)
 	$(process_env_child_binout)
 
 process_env_raw_test: $(process_env_raw_binout)
 	$(process_env_raw_binout)
 
-process_env_mem_test: $(process_env_mem_binout)
-	$(process_env_mem_binout)
+process_env_mov_test: $(process_env_mov_binout)
+	$(process_env_mov_binout)
 
 process_env_child_test: $(process_env_child_binout)
 	$(process_env_child_binout)
@@ -93,7 +93,7 @@ process_env_child_test: $(process_env_child_binout)
 $(process_env_raw_binout): $(process_root)/env/raw.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $^ $(bin_out)$@
 
-$(process_env_mem_binout): $(process_root)/env/mem.c
+$(process_env_mov_binout): $(process_root)/env/mov.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(process_env_child_binout): $(process_root)/env/child.c

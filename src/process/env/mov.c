@@ -15,16 +15,15 @@ extern char **environ;
 
 static void print_environ(void);
 
+
 int
 main(void)
 {
-  int  overwrite  =  1;
-
   /* before change */
   print_environ();
 
-  setenv("X1", "x", overwrite);
-  setenv("X2", "xx", overwrite);
+  setenv("X1", "x", 1);
+  setenv("X2", "xx", 1);
 
   /* after change */
   print_environ();
@@ -40,17 +39,25 @@ main(void)
 void
 print_environ(void)
 {
-  char        **ss  =  0;
+  /* char         *x1, *x2; */
+  char        **ss;
   static int    sn  =  0;
 
   ss = environ;
   printf("%2d. environ at %p\n------------\n", sn++, ss);
 
+  /* x1 = getenv("X1"); */
+  /* x2 = getenv("X2"); */
+
+  /* printf("%-16p->%16p: %s\n", &x1, x1, x1); */
+  /* printf("%-16p->%16p: %s\n", &x2, x1, x2); */
+
   while (*ss)
     {
-      printf("%8p: %s\n", *ss, *ss);
+      printf("%-16p->%16p: %s\n", ss, *ss, *ss);
       ss++;
     }
+
 
   printf("------------\n");
 }

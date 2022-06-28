@@ -5,9 +5,14 @@ extern char **environ;
 int
 main(void)
 {
-  while (*environ)
+  char  **ss;
+
+  ss = environ;
+
+  while (*ss)
     {
-      printf("%s\n", *environ++);
+      printf("%-16p->%16p: %s\n", ss, *ss, *ss);
+      ss++;
     }
 
   return 0;
