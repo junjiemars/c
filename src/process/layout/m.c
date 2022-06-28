@@ -28,14 +28,15 @@ main(int argc, char **argv)
   printf("%-24p auto2=%#x\n", &auto2, auto2);
   printf("%-24p auto1=%#x\n", &auto1, auto1);
 
+  printf("%-24p bss2=%#x\n", &bss2[0], bss2[0]);
+  printf("%-24p bss1=%#x\n", &bss1[0], bss1[0]);
+
   printf("%-24p ds2=%#x\n", &ds2, ds2);
   printf("%-24p ds1=%#x\n", &ds1, ds1);
 
   printf("%-24p ds4=%#x (readonly)\n", &ds4, ds4);
   printf("%-24p ds3=%#x (readonly)\n", &ds3, ds3);
 
-  printf("%-24p bss2=%#x\n", &bss2[0], bss2[0]);
-  printf("%-24p bss1=%#x\n", &bss1[0], bss1[0]);
 
   return 0;
 }
