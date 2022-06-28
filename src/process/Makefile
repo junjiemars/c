@@ -196,29 +196,42 @@ $(process_io_sync_binout): $(process_root)/io/c.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_SYNC_=1 $^ $(bin_out)$@
 
 # layout
-process_layout_binout := $(bin_path)/$(process_prefix)_layout$(bin_ext)
-process_layout_asmout := $(tmp_path)/$(process_prefix)_layout$(asm_ext)
-process_layout_static_binout := \
-  $(bin_path)/$(process_prefix)_layout_static$(bin_ext)
+process_layout_raw_binout := $(bin_path)/$(process_prefix)_layout_raw$(bin_ext)
+process_layout_asmout := $(tmp_path)/$(process_prefix)_layout_raw$(asm_ext)
+process_layout_static_binout := $(bin_path)/$(process_prefix)_layout_static$(bin_ext)
+process_layout_brk_binout := $(bin_path)/$(process_prefix)_layout_brk$(bin_ext)
 
-process_layout: $(process_layout_binout)        \
-                $(process_layout_static_binout)
-process_layout_test: process_layout
-	size $(process_layout_binout)
-	nm $(process_layout_binout)
-	size $(process_layout_static_binout)
+process_layout: $(process_layout_raw_binout)    \
+                $(process_layout_static_binout) \
+                $(process_layout_brk_binout)
+process_layout_test: process_layout_raw_test    \
+                     process_layout_static_test \
+                     process_layout_brk_test
+
+process_layout_raw_test: $(process_layout_raw_binout)
+	$<
+	size $<
+	nm $<
 
 process_layout_static_test: $(process_layout_static_binout)
-	$(process_layout_static_binout)
+	$<
+	size $<
 
-$(process_layout_binout): $(process_layout_asmout)
+process_layout_brk_test: $(process_layout_brk_binout)
+	$<
+	size $<
+
+$(process_layout_raw_binout): $(process_layout_asmout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(process_layout_asmout): $(process_root)/layout/mem.c
+$(process_layout_asmout): $(process_root)/layout/m.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_asm) $^ $(asm_out)$@
 
-$(process_layout_static_binout): $(process_root)/layout/mem.c
+$(process_layout_static_binout): $(process_root)/layout/m.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(cflags_static_opt) $^ $(bin_out)$@
+
+$(process_layout_brk_binout): $(process_root)/layout/b.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # rlimit
