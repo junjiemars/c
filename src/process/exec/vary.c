@@ -4,9 +4,9 @@
 int
 main(int argc, char * argv[])
 {
-  int  rc              =  0;
-  char *env[]          =  { "XXX=xxx", 0 };
-  char *const  varg[]  =  { _FILE_NAME_, "a", "b", "c", 0};
+  int           rc       =  0;
+  char         *env[]    =  { "XXX=xxx", 0 };
+  char *const   vargv[]  =  { _FILE_NAME_, "a", "b", "c", 0 };
 
   if (argc < 2)
     {
@@ -36,13 +36,13 @@ main(int argc, char * argv[])
   else if (0 == strcmp("execv", argv[1]))
     {
       /* arguments as Vector */
-      rc = execv(_PATH_NAME_, varg);
+      rc = execv(_PATH_NAME_, vargv);
 
     }
   else if (0 == strcmp("execvp", argv[1]))
     {
       /* arguments as Vector and using PATH environment variable */
-      rc = execvp(_FILE_NAME_, varg);
+      rc = execvp(_FILE_NAME_, vargv);
 
     }
 

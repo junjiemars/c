@@ -109,10 +109,12 @@ process_exec_child_binout := $(bin_path)/$(process_prefix)_exec_child$(bin_ext)
 process_exec: $(process_exec_echo_binout)       \
               $(process_exec_vary_binout)       \
               $(process_exec_child_binout)
-process_exec_test: process_exec                 \
+process_exec_test: process_exec_echo_test       \
                    process_exec_vary_test       \
                    process_exec_child_test
-	$(process_exec_echo_binout)
+
+process_exec_echo_test: $(process_exec_echo_binout)
+	$< a b c
 
 process_exec_vary_test: $(process_exec_echo_binout) \
                         $(process_exec_vary_binout)
