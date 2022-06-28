@@ -152,8 +152,11 @@ process_id_binout := $(bin_path)/$(process_prefix)_id$(bin_ext)
 process_id_asmout := $(tmp_path)/$(process_prefix)_id$(asm_ext)
 
 process_id: $(process_id_binout)
-process_id_test: process_id
-	$(process_id_binout)
+process_id_test: $(process_id_binout)
+	$<
+	# sudo chown root $<
+	# sudo chmod u+s $<
+	# $<
 
 $(process_id_binout): $(process_id_asmout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
