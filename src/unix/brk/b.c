@@ -1,8 +1,15 @@
 #include <_unix_.h>
 #include <stdio.h>
 
+#define ALLOC_SIZE  sizeof(long)
+
+
 static void test_brk(void);
 static void test_sbrk(void);
+static void test_alloc(void);
+
+static int  ds_var  =  0x1122;
+static int  bss_var;
 
 
 int
@@ -13,6 +20,7 @@ main(int argc, char **argv)
 
   test_brk();
   test_sbrk();
+  test_alloc();
 
   return 0;
 }
@@ -23,7 +31,7 @@ test_brk(void)
 {
   int    rc;
 
-  rc = brk(NULL);
+  rc = brk(0);
   if (rc)
     {
       perror(NULL);
@@ -43,5 +51,41 @@ test_sbrk(void)
       perror(NULL);
       return;
     }
+
+}
+
+void
+test_alloc(void)
+{
+  intptr_t  *rp;
+  int        rc;
+  char      *ss;
+
+  rp = sbrk(0);
+  if (rp == (void *) -1)
+    {
+      perror(NULL);
+      return;
+    }
+
+  rc = brk(rp + ALLOC_SIZE);
+  if (rc == -1)
+    {
+      perror(NULL);
+      return;
+    }
+
+  rp = sbrk(0);
+  if (rp == (void *) -1)
+    {
+      perror(NULL);
+      return;
+    }
+
+  ss = (char *) rp;
+  snprintf(ss, ALLOC_SIZE, "%s", "ABCD");
+  printf("%-8s%p\n", ss, rp);
+  printf("%#-8x%p\n", bss_var, &bss_var);
+  printf("%#-8x%p\n", ds_var, &ds_var);
 
 }
