@@ -14,7 +14,8 @@ main(int argc, char **argv)
 
   while (*argv)
     {
-      printf("argv[%d]: %s\n", i++, *argv++);
+      printf("%-16p->%16p: argv[%d]: %s\n", argv, &argv, i++, *argv);
+      argv++;
     }
 
   assert(i == argc);
