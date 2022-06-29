@@ -1,5 +1,6 @@
 #include <_process_.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define ALLOC_SIZE  sizeof(long)
 
@@ -58,7 +59,7 @@ void
 test_alloc(void)
 {
   int        rc;
-  char      *ss;
+  char      *ss, *ss1;
   intptr_t  *rp;
 
   rp = sbrk(0);
@@ -82,9 +83,20 @@ test_alloc(void)
       return;
     }
 
+  ss1 = malloc(ALLOC_SIZE);
+  if (!ss1)
+    {
+      perror(NULL);
+      return;
+    }
+
   ss = (char *) rp;
   snprintf(ss, ALLOC_SIZE, "%s", "ABCD");
   printf("%-8s%p\n", ss, rp);
+
+  snprintf(ss1, ALLOC_SIZE, "%s", "abcd");
+  printf("%-8s%p\n", ss1, ss1);
+
   printf("%#-8x%p\n", bss_var, &bss_var);
   printf("%#-8x%p\n", ds_var, &ds_var);
 

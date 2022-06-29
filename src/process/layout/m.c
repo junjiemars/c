@@ -22,6 +22,8 @@ main(int argc, char **argv)
   int auto1 = 0x55;
   int auto2 = 0x66;
 
+  (void) argc;
+
   printf("%-24p envp=%s\n", &environ[0], environ[0]);
   printf("%-24p argv=%s\n", &argv[0], argv[0]);
 
