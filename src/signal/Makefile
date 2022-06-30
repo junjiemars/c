@@ -35,14 +35,14 @@ INC += $(nm_inc_opt)$(signal_root) $(nm_inc_opt)$(root)/posix
 
 
 # reentrant
-signal_ree_non1_binout := $(bin_path)/$(signal_prefix)_ree_non1$(bin_ext)
+signal_reentrant_binout := $(bin_path)/$(signal_prefix)_reentrant$(bin_ext)
 
-signal_reentrant: $(signal_ree_non1_binout)
+signal_reentrant: $(signal_reentrant_binout)
 signal_reentrant_test: signal_reentrant
-	@echo "#skip ..."
+	$(signal_reentrant_binout) XXX
 
-$(signal_ree_non1_binout): $(signal_root)/reentrant/non1.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(signal_reentrant_binout): $(signal_root)/reentrant/r.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_REENTRANT_=1 $^ $(bin_out)$@
 
 
 # set

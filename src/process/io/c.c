@@ -12,7 +12,6 @@ static void need_wait(void);
 static void tell_parent(pid_t pid);
 static void wait_child(void);
 
-
 #endif  /* _SYNC_ */
 
 
