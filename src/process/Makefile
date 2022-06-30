@@ -179,9 +179,9 @@ process_io_test: process_io_buf_test            \
                  process_io_sync_test
 
 process_io_buf_test: $(process_io_buf_binout)
-	$(process_io_buf_binout)
-	$(process_io_buf_binout) > /tmp/$(process_prefix)_io_buf.txt
-	cat /tmp/$(process_prefix)_io_buf.txt
+	$<
+	$< > $(tmp_path)/$(process_prefix)_io_buf.txt
+	cat $(tmp_path)/$(process_prefix)_io_buf.txt
 
 process_io_async_test: $(process_io_async_binout)
 	$(process_io_async_binout)

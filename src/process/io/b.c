@@ -1,30 +1,36 @@
 #include "_process_.h"
 #include <stdio.h>
 
+/*
+ * 1. stdout is line buffered in shell.
+ * 2. stdout is full buffered in file.
+ *
+ */
+
+
 int  g_var  =  1;
-char ss[]   =  "#into stdout\n";
+char ss[]   =  "# into stdout\n";
 
 int
 main()
 {
   int    rc;
-  int    stat;
-  int    a_var  =  1;
   pid_t  pid;
+  int    a_var  =  1;
 
   rc = write(STDOUT_FILENO, ss, sizeof(ss)-1);
   if (rc == -1)
     {
-      perror("!panic:");
-      exit(1);
+      perror(NULL);
+      exit(EXIT_FAILURE);
     }
 
-  printf("#before fork\n");
+  printf("# before fork\n");
 
   pid = fork();
   if (pid == -1)
     {
-      perror("!panic:");
+      perror(NULL);
       exit(1);
     }
   else if (pid == 0)
@@ -34,15 +40,10 @@ main()
     }
   else
     {
-      pid = waitpid(pid, &stat, 0);
-      if (pid == -1)
-        {
-          perror("!panic:");
-          exit(1);
-        }
+      waitpid(pid, (int *) 0, 0);
     }
 
-  printf("pid=%08ld, g_var=%d, a_var=%d\n", (long) getpid(), g_var, a_var);
+  printf("[pid:%08d]: g_var=%d, a_var=%d\n", getpid(), g_var, a_var);
 
-  return 0;
+  exit(EXIT_SUCCESS);
 }
