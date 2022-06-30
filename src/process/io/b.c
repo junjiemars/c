@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 /*
- * 1. stdout is line buffered in shell.
+ * 1. stdout is line buffered in terminal.
  * 2. stdout is full buffered in file.
  *
  */

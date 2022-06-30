@@ -184,12 +184,10 @@ process_io_buf_test: $(process_io_buf_binout)
 	cat $(tmp_path)/$(process_prefix)_io_buf.txt
 
 process_io_async_test: $(process_io_async_binout)
-	$(process_io_async_binout)
-	$(process_io_async_binout)
+	$<
 
 process_io_sync_test: $(process_io_sync_binout)
-	$(process_io_sync_binout)
-	$(process_io_sync_binout)
+	$<
 
 $(process_io_buf_binout): $(process_root)/io/b.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

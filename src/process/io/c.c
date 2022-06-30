@@ -7,18 +7,16 @@
 static volatile sig_atomic_t  sflag;
 static sigset_t               nmask, omask, zmask;
 
-static void on_sig_usr(int signo);
-static void tell_wait(void);
-
+static void on_sig_usr(int sig);
+static void need_wait(void);
 static void tell_parent(pid_t pid);
-
 static void wait_child(void);
 
 
 #endif  /* _SYNC_ */
 
 
-static void char_attime(const char *ss);
+static void out(const char *ss);
 
 
 int
@@ -27,7 +25,7 @@ main(void)
   pid_t  pid;
 
 #if (_SYNC_)
-  tell_wait();
+  need_wait();
 
 #endif  /* _SYNC_ */
 
@@ -35,13 +33,12 @@ main(void)
   pid = fork();
   if (pid == -1)
     {
-      perror("!panic:");
-      return 1;
+      perror(NULL);
+      exit(EXIT_FAILURE);
     }
-
-  if (pid == 0)
+  else if (pid == 0)
     {
-      char_attime("output from child\n");
+      out("# output from child\n");
 
 #if (_SYNC_)
       tell_parent(getppid());
@@ -57,24 +54,25 @@ main(void)
 
 #endif  /* _SYNC_ */
 
-      char_attime("output from parent\n");
+      out("# output from parent\n");
     }
 
-  return 0;
+  exit(EXIT_SUCCESS);
 }
+
 
 #if (_SYNC_)
 
 static void
-on_sig_usr(int signo)
+on_sig_usr(int sig)
 {
-  _unused_(signo);
+  _unused_(sig);
 
   sflag = 1;
 }
 
 static void
-tell_wait(void)
+need_wait(void)
 {
   signal(SIGUSR1, on_sig_usr);
   signal(SIGUSR2, on_sig_usr);
@@ -112,12 +110,13 @@ wait_child(void)
 
 
 static void
-char_attime(const char *ss)
+out(const char *ss)
 {
   int          c;
   const char  *s;
 
-  setbuf(stdout, NULL);
+  /* unbuffered */
+  setvbuf(stdout, NULL, _IONBF, 0);
 
   for (s = ss; (c = *s++) != 0;)
     {
