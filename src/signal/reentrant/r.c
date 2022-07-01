@@ -11,7 +11,6 @@
  */
 
 #define ALRM_N            16
-#define GETPW_R_SIZE_MAX  40960
 
 static void on_sig_segv(int sig);
 static void on_sig_alrm(int sig);
