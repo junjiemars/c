@@ -5,19 +5,30 @@
 #include <stdlib.h>
 
 /*
- * 1. getpwnam is nonreentrant function.
- * 2. usually, the program would be terminated by a SIGSEGV signal.
+ * getpwnam is nonreentrant function because which using static data
+ * struct inside.
  *
  */
 
 static void on_sig_segv(int sig);
 static void on_sig_alrm(int sig);
 
+const char  *username1;
+const char  *username2;
+
 
 int
-main(void)
+main(int argc, char **argv)
 {
-  struct passwd  *ptr = 0;
+  struct passwd  *p  =  NULL;
+
+  if (argc < 3)
+    {
+      printf("usage: %s <username1> <username2>\n", argv[0]);
+      exit(EXIT_FAILURE);
+    }
+  username1 = argv[1];
+  username2 = argv[2];
 
   signal(SIGALRM, on_sig_alrm);
   signal(SIGSEGV, on_sig_segv);
@@ -28,15 +39,23 @@ main(void)
 
   for (;;)
     {
-      if ((ptr == getpwnam("yyy")) == 0)
+      errno = 0;
+      if (NULL == (p = getpwnam(username1)))
         {
-          printf("! main: getpwnam(\"yyy\")");
+          if (errno)
+            {
+              perror(NULL);
+            }
           continue;
         }
 
-      if (0 != strcmp(ptr->pw_name, "yyy"))
+      /* may be interrupted by signal at here */
+
+      if (0 != strcmp(p->pw_name, username1))
         {
-          printf("! main: corrupted, pw_name = %s\n", ptr->pw_name);
+          printf("! corrupted: expect <%s> but got <%s>\n",
+                 username1, p->pw_name);
+          break;
         }
     }
 
@@ -58,16 +77,16 @@ on_sig_segv(int sig)
 void
 on_sig_alrm(int sig)
 {
+  struct passwd  *p  =  NULL;
+
   if (SIGALRM == sig)
     {
       printf("# %s\n", _str_(SIGALRM));
 
-      /* struct passwd  *ptr = 0; */
-
-      /* if ((ptr = getpwnam("xxx")) == 0) */
-      /*   { */
-      /*     printf("! on_sig_alrm: getpwnam(\"xxx\")\n"); */
-      /*   } */
+      if (NULL == (p = getpwnam(username2)))
+        {
+          /* wipped out the result of previous getpwnam call */
+        }
     }
 
   alarm(1);

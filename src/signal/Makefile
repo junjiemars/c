@@ -25,7 +25,7 @@ signal_test: signal_reentrant_test              \
              signal_wait_test                   \
              signal_pause_test
 
-endif
+endif														# msvc
 
 
 # env
@@ -38,8 +38,14 @@ INC += $(nm_inc_opt)$(signal_root) $(nm_inc_opt)$(root)/posix
 signal_reentrant_binout := $(bin_path)/$(signal_prefix)_reentrant$(bin_ext)
 
 signal_reentrant: $(signal_reentrant_binout)
+
+ifeq ($(NM_SYSTEM), Linux)
 signal_reentrant_test: signal_reentrant
-	$(signal_reentrant_binout) XXX
+	$(signal_reentrant_binout) root daemon
+else
+signal_reentrant_test: signal_reentrant
+	$(signal_reentrant_binout) nobody root
+endif														# system
 
 $(signal_reentrant_binout): $(signal_root)/reentrant/r.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_REENTRANT_=1 $^ $(bin_out)$@

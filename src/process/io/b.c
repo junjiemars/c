@@ -3,7 +3,7 @@
 
 /*
  * 1. stdout is line buffered in terminal.
- * 2. stdout is full buffered in file.
+ * 2. stdout is fully buffered in file.
  *
  */
 
