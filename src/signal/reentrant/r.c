@@ -78,6 +78,7 @@ main(int argc, char **argv)
 
 #if (_REENTRANT_)
       free(buf);
+
 #endif
 
     }
