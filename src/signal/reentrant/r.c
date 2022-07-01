@@ -10,7 +10,7 @@
  *
  */
 
-#define ALRM_N            16
+#define ALRM_N  16
 
 static void on_sig_segv(int sig);
 static void on_sig_alrm(int sig);
