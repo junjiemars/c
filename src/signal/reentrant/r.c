@@ -10,28 +10,20 @@
  *
  */
 
-#define ALRM_N  16
+#define ALRM_N            16
+#define GETPW_R_SIZE_MAX  40960
 
 static void on_sig_segv(int sig);
 static void on_sig_alrm(int sig);
-static struct passwd *fn(const char *name);
 
 const char  *username1;
 const char  *username2;
-static int  count  =  ALRM_N;
-
-
-#if (_REENTRANT_)
-char  pwdbuf[NM_GETPW_R_SIZE_MAX];
-
-#endif
+static int   count  =  ALRM_N;
 
 
 int
 main(int argc, char **argv)
 {
-  struct passwd  *p  =  NULL;
-
   if (argc < 3)
     {
       printf("usage: %s <username1> <username2>\n", argv[0]);
@@ -49,12 +41,32 @@ main(int argc, char **argv)
 
   for (;;)
     {
-      errno = 0;
-      p = fn(username1);
-      if (NULL == p)
+      struct passwd  *p  =  NULL;
+
+#if (_REENTRANT_)
+      char           *buf;
+      struct passwd   pwd;
+
+      buf = malloc(NM_GETPW_R_SIZE_MAX);
+
+      if (getpwnam_r(username1, &pwd, buf, NM_GETPW_R_SIZE_MAX, &p))
         {
+          perror(NULL);
+          free(buf);
           continue;
         }
+#else
+      errno = 0;
+      if (NULL == (p = getpwnam(username1)))
+        {
+          if (errno)
+            {
+              perror(NULL);
+            }
+          continue;
+        }
+
+#endif
 
       /* may be interrupted by signal at here */
 
@@ -64,6 +76,11 @@ main(int argc, char **argv)
                  username1, p->pw_name);
           break;
         }
+
+#if (_REENTRANT_)
+      free(buf);
+#endif
+
     }
 
   exit(EXIT_SUCCESS);
@@ -94,11 +111,20 @@ on_sig_alrm(int sig)
           exit(EXIT_SUCCESS);
         }
 
+      /* wipped out the result of previous getpwnam call */
+
 #if (_REENTRANT_)
+      char           *buf;
+      struct passwd  *p, pwd;
+
+      buf = malloc(NM_GETPW_R_SIZE_MAX);
+
+      (void) getpwnam_r(username2, &pwd, buf, NM_GETPW_R_SIZE_MAX, &p);
+
+      free(buf);
 
 #else
-      /* wipped out the result of previous getpwnam call */
-      (void *) fn(username2);
+      (void *) getpwnam(username2);
 
 #endif
 
@@ -106,33 +132,4 @@ on_sig_alrm(int sig)
 
 
   alarm(1);
-}
-
-struct passwd*
-fn(const char *name)
-{
-  struct passwd  *p  =  0;
-
-  errno = 0;
-
-#if (_REENTRANT_)
-  struct passwd  pwd;
-
-  if (getpwnam_r(name, &pwd, pwdbuf, sizeof(pwdbuf), &p))
-    {
-      perror(NULL);
-    }
-
-#else
-  if (NULL == (p = getpwnam(name)))
-    {
-      if (errno)
-        {
-          perror(NULL);
-        }
-    }
-
-#endif
-
-  return p;
 }
