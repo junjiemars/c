@@ -99,6 +99,39 @@ return 0;
 esac                            # end of PAGESIZE
 
 
+# check GETPW_R_SIZE_MAX
+#----------------------------------------
+case $NM_SYSTEM in
+  Linux|Darwin)
+    nm_feature="GETPW_R_SIZE_MAX"
+    nm_feature_name="nm_getpw_r_size_max"
+    nm_feature_run=value
+    nm_feature_h='
+#include <stdio.h>
+#include <unistd.h>
+'
+    nm_feature_flags=
+    nm_feature_test='
+long sc = sysconf(_SC_GETPW_R_SIZE_MAX);
+printf("%ld\n", sc);
+return 0;
+'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  WinNT)
+    nm_feature="GETPW_R_SIZE_MAX"
+    nm_feature_name="nm_getpw_r_size_max"
+    nm_feature_run=value
+    nm_feature_h=
+    nm_feature_flags=
+    nm_feature_test=
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  *)
+    ;;
+esac                            # end of GETPW_R_SIZE_MAX
+
+
 
 
 # eof

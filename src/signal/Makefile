@@ -35,19 +35,28 @@ INC += $(nm_inc_opt)$(signal_root) $(nm_inc_opt)$(root)/posix
 
 
 # reentrant
-signal_reentrant_binout := $(bin_path)/$(signal_prefix)_reentrant$(bin_ext)
+signal_reentrant_n_binout := $(bin_path)/$(signal_prefix)_reentrant_n$(bin_ext)
+signal_reentrant_r_binout := $(bin_path)/$(signal_prefix)_reentrant_r$(bin_ext)
 
-signal_reentrant: $(signal_reentrant_binout)
+signal_reentrant: $(signal_reentrant_n_binout)  \
+                  $(signal_reentrant_r_binout)
+signal_reentrant_test: signal_reentrant_n_test  \
+                       signal_reentrant_r_test
 
-ifeq ($(NM_SYSTEM), Linux)
-signal_reentrant_test: signal_reentrant
-	$(signal_reentrant_binout) root daemon
-else
-signal_reentrant_test: signal_reentrant
-	$(signal_reentrant_binout) nobody root
-endif														# system
+signal_reentrant_n_test: $(signal_reentrant_n_binout)
+	$< root daemon
 
-$(signal_reentrant_binout): $(signal_root)/reentrant/r.c
+signal_reentrant_r_test: $(signal_reentrant_r_binout)
+	$< root daemon
+
+signal_reentrant_r_binout: $(signal_reentrant_r_binout)
+	$< root daemon
+
+
+$(signal_reentrant_n_binout): $(signal_root)/reentrant/r.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(signal_reentrant_r_binout): $(signal_root)/reentrant/r.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_REENTRANT_=1 $^ $(bin_out)$@
 
 

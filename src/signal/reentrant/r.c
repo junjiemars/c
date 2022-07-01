@@ -10,11 +10,21 @@
  *
  */
 
+#define ALRM_N  16
+
 static void on_sig_segv(int sig);
 static void on_sig_alrm(int sig);
+static struct passwd *fn(const char *name);
 
 const char  *username1;
 const char  *username2;
+static int  count  =  ALRM_N;
+
+
+#if (_REENTRANT_)
+char  pwdbuf[NM_GETPW_R_SIZE_MAX];
+
+#endif
 
 
 int
@@ -40,12 +50,9 @@ main(int argc, char **argv)
   for (;;)
     {
       errno = 0;
-      if (NULL == (p = getpwnam(username1)))
+      p = fn(username1);
+      if (NULL == p)
         {
-          if (errno)
-            {
-              perror(NULL);
-            }
           continue;
         }
 
@@ -77,17 +84,55 @@ on_sig_segv(int sig)
 void
 on_sig_alrm(int sig)
 {
-  struct passwd  *p  =  NULL;
-
   if (SIGALRM == sig)
     {
       printf("# %s\n", _str_(SIGALRM));
 
-      if (NULL == (p = getpwnam(username2)))
+      if (count-- <= 0)
         {
-          /* wipped out the result of previous getpwnam call */
+          printf("# exceed %s=%d\n", _str_(ALRM_N), ALRM_N);
+          exit(EXIT_SUCCESS);
+        }
+
+#if (_REENTRANT_)
+
+#else
+      /* wipped out the result of previous getpwnam call */
+      (void *) fn(username2);
+
+#endif
+
+    }
+
+
+  alarm(1);
+}
+
+struct passwd*
+fn(const char *name)
+{
+  struct passwd  *p  =  0;
+
+  errno = 0;
+
+#if (_REENTRANT_)
+  struct passwd  pwd;
+
+  if (getpwnam_r(name, &pwd, pwdbuf, sizeof(pwdbuf), &p))
+    {
+      perror(NULL);
+    }
+
+#else
+  if (NULL == (p = getpwnam(name)))
+    {
+      if (errno)
+        {
+          perror(NULL);
         }
     }
 
-  alarm(1);
+#endif
+
+  return p;
 }
