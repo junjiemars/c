@@ -5,19 +5,26 @@
 #include <stdlib.h>
 
 /*
- * getpwnam is nonreentrant function because which using static data
- * struct inside.
+ * 1. getpwnam is nonreentrant function because which using static
+ * data struct inside.
+ *
+ * 2. getpwnam should be blocked in on_sig_alrm after first call if
+ * there no printf ___ statement above the comment.
  *
  */
 
+
+#if (_REENTRANT_)
 #define ALRM_N  16
+static int   count  =  ALRM_N;
+#endif
+
 
 static void on_sig_segv(int sig);
 static void on_sig_alrm(int sig);
 
 const char  *username1;
 const char  *username2;
-static int   count  =  ALRM_N;
 
 
 int
@@ -64,6 +71,7 @@ main(int argc, char **argv)
             }
           continue;
         }
+      printf("# ___\n");
 
 #endif
 
@@ -103,28 +111,39 @@ on_sig_alrm(int sig)
 {
   if (SIGALRM == sig)
     {
+      struct passwd  *p  =  0;
       printf("# %s\n", _str_(SIGALRM));
 
-      if (count-- <= 0)
+      /* wipped out the result of previous getpwnam call */
+
+#if (_REENTRANT_)
+
+      if (--count < 1)
         {
           printf("# exceed %s=%d\n", _str_(ALRM_N), ALRM_N);
           exit(EXIT_SUCCESS);
         }
 
-      /* wipped out the result of previous getpwnam call */
-
-#if (_REENTRANT_)
       char           *buf;
-      struct passwd  *p, pwd;
+      struct passwd   pwd;
 
       buf = malloc(NM_GETPW_R_SIZE_MAX);
 
-      (void) getpwnam_r(username2, &pwd, buf, NM_GETPW_R_SIZE_MAX, &p);
+      if (getpwnam_r(username2, &pwd, buf, NM_GETPW_R_SIZE_MAX, &p))
+        {
+          perror(NULL);
+        }
 
       free(buf);
 
 #else
-      (void *) getpwnam(username2);
+      errno = 0;
+      p = getpwnam(username2);
+      if (errno)
+        {
+          perror(NULL);
+        }
+      _unused_(p);
 
 #endif
 
