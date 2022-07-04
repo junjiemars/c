@@ -5,5 +5,8 @@
 
 #include <signal.h>
 #include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 
 #endif /* end of _SIGNAL_H_ */

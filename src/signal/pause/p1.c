@@ -1,6 +1,11 @@
 #include "_signal_.h"
-#include <stdio.h>
-#include <stdlib.h>
+
+
+/*
+ * Implementations derived from UNIX System V support the signal
+ * function, but it provides the old unreliable signal semantics.
+ *
+ */
 
 static void on_sig_usr1(int signo);
 static void on_sig_term(int signo);
