@@ -3,22 +3,21 @@
 #include <stdlib.h>
 
 static void on_sig_usr1(int signo);
+static void on_sig_term(int signo);
 
 
 int
 main(void)
 {
-  printf("%d\n", getpid());
+  pid_t  pid;
 
-  if (SIG_ERR == signal(SIGUSR1, on_sig_usr1))
-    {
-      perror(NULL);
-      exit(EXIT_FAILURE);
-    }
+  pid = getpid();
+  signal(SIGUSR1, on_sig_usr1);
+  signal(SIGTERM, on_sig_term);
 
   for (;;)
     {
-      printf("# pause\n");
+      printf("# kill -USR1 %d\n# kill -TERM %d\n", pid, pid);
       pause();
     }
 
@@ -32,5 +31,15 @@ on_sig_usr1(int signo)
   if (SIGUSR1 == signo)
     {
       printf("! %s\n", _str_(SIGUSR1));
+    }
+}
+
+void
+on_sig_term(int signo)
+{
+  if (SIGTERM == signo)
+    {
+      printf("! %s\n", _str_(SIGTERM));
+      exit(EXIT_SUCCESS);
     }
 }
