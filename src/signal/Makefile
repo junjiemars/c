@@ -62,6 +62,7 @@ $(signal_alarm_n_binout): $(signal_root)/alarm/n.c
 
 # reentrant
 signal_reentrant_n_binout := $(bin_path)/$(signal_prefix)_reentrant_n$(bin_ext)
+signal_reentrant_n_cppout := $(tmp_path)/$(signal_prefix)_reentrant_n$(cpp_ext)
 signal_reentrant_r_binout := $(bin_path)/$(signal_prefix)_reentrant_r$(bin_ext)
 
 
@@ -74,15 +75,17 @@ signal_reentrant_test: signal_reentrant_n_test  \
 signal_reentrant_n_test: $(signal_reentrant_n_binout)
 	$< root daemon
 
+signal_reentrant_r_test: $(signal_reentrant_r_binout)
+	$< root daemon
+
 signal_reentrant_r_binout: $(signal_reentrant_r_binout)
 	$< root daemon
 
+$(signal_reentrant_n_binout): $(signal_reentrant_n_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(signal_reentrant_o_binout): $(signal_root)/reentrant/y.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-$(signal_reentrant_n_binout): $(signal_root)/reentrant/r.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(signal_reentrant_n_cppout): $(signal_root)/reentrant/r.c
+	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 $(signal_reentrant_r_binout): $(signal_root)/reentrant/r.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_REENTRANT_=1 $^ $(bin_out)$@

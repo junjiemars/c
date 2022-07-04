@@ -62,16 +62,17 @@ main(int argc, char **argv)
           continue;
         }
 #else
-      errno = 0;
-      if (NULL == (p = getpwnam(username1)))
+      p = getpwnam(username1);
+      if (errno)
         {
-          if (errno)
-            {
-              perror(NULL);
-            }
+          perror(NULL);
           continue;
         }
-      printf("# ___\n");
+      if (NULL == p)
+        {
+          continue;
+        }
+      /* printf("# ___\n"); */
 
 #endif
 
@@ -137,7 +138,6 @@ on_sig_alrm(int sig)
       free(buf);
 
 #else
-      errno = 0;
       p = getpwnam(username2);
       if (errno)
         {
