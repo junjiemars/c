@@ -13,21 +13,29 @@ BEGIN {
     print "  struct rlimit r;\n"
 }
 
-(/^\s*$/) {
+(/^[ \t]*$/) {
 
     print ""
 }
 
-(/^\s*#.*$/) {
+(/^[ \t]*#.*$/) {
 
-    match($0, /^\s*#\s*(.*?)\s*$/, ms)
-    if (ms[1] ~ /^\s*$/)
+    # match($0, /^\s*#\s*(.*?)\s*$/, ms)
+    # if (ms[1] ~ /^\s*$/)
+    #     print ""
+    # else
+    #     printf("/* %s */\n", ms[1])
+
+    if ($1 ~ /^[ \t]*#[ \t]*?$/) {
         print ""
-    else
-        printf("/* %s */\n", ms[1])
+    } else {
+        comment = $1
+        sub(/^[ \t]*?#[ \t]*?/, null, comment)
+        printf("/* %s */\n", comment)
+    }
 }
 
-! (/^\s*$/ || /^\s*#.*$/) {
+! (/^[ \t]*$/ || /^[ \t]*#.*$/) {
 
     printf("#if defined(%s)\n", $1)
     print "{"
