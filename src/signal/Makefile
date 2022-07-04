@@ -78,9 +78,6 @@ signal_reentrant_n_test: $(signal_reentrant_n_binout)
 signal_reentrant_r_test: $(signal_reentrant_r_binout)
 	$< root daemon
 
-signal_reentrant_r_binout: $(signal_reentrant_r_binout)
-	$< root daemon
-
 $(signal_reentrant_n_binout): $(signal_reentrant_n_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
