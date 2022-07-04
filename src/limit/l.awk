@@ -20,36 +20,40 @@ BEGIN {
     print "int main(void) \n{\n"
 }
 
-(/^\s*$/) {
+(/^[ \t]*$/) {
 
     print ""
 }
 
-(/^\s*#.*$/) {
+(/^[ \t]*#.*$/) {
 
-    match($0, /^\s*#\s*(.*?)\s*$/, ms)
-    if (ms[1] ~ /^\s*$/)
+    # match($0, /^\s*#\s*(.*?)\s*$/, ms)
+    # if (ms[1] ~ /^\s*$/)
+    #     print ""
+    # else
+    #     printf("/* %s */\n", ms[1])
+
+    if ($1 ~ /^[ \t]*#[ \t]*?$/) {
         print ""
-    else
-        printf("/* %s */\n", ms[1])
+    } else {
+        comment = $1
+        sub(/^[ \t]*?#[ \t]*?/, null, comment)
+        printf("/* %s */\n", comment)
+    }
 }
 
-! (/^\s*$/ || /^\s*#.*$/) {
+! (/^[ \t]*$/ || /^[ \t]*#.*$/) {
 
     printf("#if defined(%s)\n", $1)
 
     if ($3 == null) $3 = $1
 
-    switch ($2) {
-    case "ULL":
+    if ("ULL" == $2) {
         printf("  printf(FMT_ULL, STR(%s), ULL(%s));\n", $1, $3)
-        break
-    case "SLL":
+    } else if ("SLL" == $2) {
         printf("  printf(FMT_SLL, STR(%s), SLL(%s));\n", $1, $3)
-        break
-    case "DBL":
+    } if ("DBL" == $2) {
         printf("  printf(FMT_DBL, STR(%s), DBL(%s));\n", $1, $3)
-        break
     }
 
     printf("#else\n")
