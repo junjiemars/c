@@ -6,7 +6,7 @@ BEGIN {
     print "\n"
 
     print "#define STR(s)   #s"
-    print "#define FMT_SYM  \"%-35s (no symbol)\\n\""
+    print "#define FMT_SYM  \"%-18s (no symbol)\\n\""
     print "\n"
     print "int main(void)"
     print "{"
