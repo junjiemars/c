@@ -44,7 +44,7 @@ main(void)
         }
       else
         {
-          snprintf(cmd, NM_LINE_MAX, "ps -l -p %d", pid);
+          snprintf(cmd, NM_LINE_MAX, "ps -p %d", pid);
           system(cmd);
         }
     }
