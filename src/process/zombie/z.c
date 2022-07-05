@@ -1,22 +1,30 @@
 #include "_process_.h"
-#include <stdio.h>
-#include <sys/wait.h>
+
+/*
+ * 1. On Linux, a child that terminates but had not been waited for
+ * becomes a zombie.
+ *
+ * 2. On Darwin,
+ *
+ */
+
+
+
+static char  cmd[NM_LINE_MAX];
 
 
 int
 main(void)
 {
-  int    i;
   int    stat;
   pid_t  pid;
-  char   cmd[256];
 
   printf("parent[%d]\n", getpid());
 
-  for (i = 0; i < 5; i++)
+  for (int i = 0; i < 5; i++)
     {
       pid = fork();
-      if (pid == -1)
+      if (1 == -pid)
         {
           perror(0);
           exit(errno);
@@ -25,7 +33,7 @@ main(void)
       if (0 == pid)
         {
           printf("child[%d]\n", getpid());
-          exit(0);
+          exit(EXIT_SUCCESS);
         }
 
       /* only wait odd ones, the even ones should be zombies */
@@ -36,10 +44,10 @@ main(void)
         }
       else
         {
-          sprintf(cmd, "ps -l -p %d", pid);
+          snprintf(cmd, NM_LINE_MAX, "ps -l -p %d", pid);
           system(cmd);
         }
     }
 
-  return 0;
+  exit(EXIT_SUCCESS);
 }
