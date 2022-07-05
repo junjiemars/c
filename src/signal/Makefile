@@ -17,7 +17,8 @@ signal: signal_alarm                            \
         signal_sleep                            \
         signal_timeout                          \
         signal_wait                             \
-        signal_pause
+        signal_pause                            \
+        sigal_child
 
 signal_test: signal_alarm_test                  \
              signal_reentrant_test              \
@@ -25,7 +26,8 @@ signal_test: signal_alarm_test                  \
              signal_sleep_test                  \
              signal_timeout_test                \
              signal_wait_test                   \
-             signal_pause_test
+             signal_pause_test                  \
+             signal_child_test
 
 endif														# msvc
 
@@ -142,6 +144,17 @@ signal_pause_test: signal_pause
 
 $(signal_pause_binout): $(signal_root)/pause/p1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# child
+signal_child_binout := $(bin_path)/$(signal_prefix)_child$(bin_ext)
+
+signal_child: $(signal_child_binout)
+signal_child_test: signal_child
+	$(signal_child_binout)
+
+$(signal_child_binout): $(signal_root)/child/c1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # eof
