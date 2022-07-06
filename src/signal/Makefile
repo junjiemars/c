@@ -103,14 +103,24 @@ $(signal_set1_binout): $(signal_root)/set/s1.c
 
 # sleep
 signal_sleep1_binout := $(bin_path)/$(signal_prefix)_sleep1$(bin_ext)
+signal_sleep2_binout := $(bin_path)/$(signal_prefix)_sleep2$(bin_ext)
 
-signal_sleep: $(signal_sleep1_binout)
-signal_sleep_test: signal_sleep
-	$(signal_sleep1_binout)
-	# @echo "#skip ..."
+signal_sleep: $(signal_sleep1_binout)           \
+              $(signal_sleep2_binout)
+signal_sleep_test: signal_sleep1_test           \
+                   signal_sleep2_test
+
+signal_sleep1_test: $(signal_sleep1_binout)
+	$< 1
+
+signal_sleep2_test: $(signal_sleep2_binout)
+	$< 1
 
 $(signal_sleep1_binout): $(signal_root)/sleep/s1.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(signal_sleep2_binout): $(signal_root)/sleep/s2.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # timeout

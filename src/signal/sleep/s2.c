@@ -1,32 +1,27 @@
 #include "_signal_.h"
+#include <setjmp.h>
 
 
 /*
- * 1. emulate sleep.
- * 2. there is race condition.
- * 3. alarm and pause had been obsolete.
+ * try to fix the race condition between the alarm call and the pause
+ * call.
  *
  */
 
 
-static unsigned sleep1(unsigned int);
-
+static unsigned sleep2(unsigned nsecs);
 static void on_sig_alrm(int signo);
 static void race(long);
 
-static long  N  =  0;
+static long     N  =  0;
+static jmp_buf  env_alrm;
 
 int
-main(int argc, char **argv)
+main(void)
 {
-  if (argc > 1)
-    {
-      N = atol(argv[1]);
-    }
-
-  sleep1(1);
-  sleep1(1);
-  sleep1(1);
+  sleep2(1);
+  sleep2(1);
+  sleep2(1);
 
   return 0;
 }
@@ -37,11 +32,13 @@ on_sig_alrm(int signo)
   if (SIGALRM == signo)
     {
       printf("# %s\n", _str_(SIGALRM));
+
+      longjmp(env_alrm, 1);
     }
 }
 
 unsigned
-sleep1(unsigned nsecs)
+sleep2(unsigned nsecs)
 {
   if (nsecs == 0)
     {
@@ -54,12 +51,15 @@ sleep1(unsigned nsecs)
       return (nsecs);
     }
 
-  alarm(nsecs);
+  if (0 == setjmp(env_alrm))
+    {
+      alarm(nsecs);
 
-  /* race condition: between alarm and pause */
-  race(N);
+      /* race condition: between alarm and pause */
+      race(N);
 
-  pause();
+      pause();
+    }
 
   return alarm(0);
 }
