@@ -18,7 +18,7 @@ main(void)
 {
   sleep1(1);
   sleep1(2);
-	sleep1(3);
+  sleep1(3);
 
   return 0;
 }
@@ -28,7 +28,7 @@ on_sig_alrm(int signo)
 {
   if (SIGALRM == signo)
     {
-			printf("# %s\n", _str_(SIGALRM));
+      printf("# %s\n", _str_(SIGALRM));
     }
 }
 
@@ -41,10 +41,10 @@ sleep1(unsigned nsecs)
     }
 
   if (SIG_ERR == signal(SIGALRM, on_sig_alrm))
-		{
-			perror(NULL);
-			return (nsecs);
-		}
+    {
+      perror(NULL);
+      return (nsecs);
+    }
 
   alarm(nsecs);
 
@@ -54,4 +54,3 @@ sleep1(unsigned nsecs)
 
   return alarm(0);
 }
-
