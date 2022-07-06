@@ -1,5 +1,6 @@
 #include "_signal_.h"
 
+
 /*
  * 1. emulate sleep.
  * 2. there is race condition.
@@ -12,16 +13,26 @@ static unsigned sleep1(unsigned nsecs);
 
 static void on_sig_alrm(int signo);
 
+int
+main(void)
+{
+  sleep1(1);
+  sleep1(2);
+	sleep1(3);
 
-static void on_sig_alrm(int signo)
+  return 0;
+}
+
+void
+on_sig_alrm(int signo)
 {
   if (SIGALRM == signo)
     {
-      /* void */
+			printf("# %s\n", _str_(SIGALRM));
     }
 }
 
-static unsigned
+unsigned
 sleep1(unsigned nsecs)
 {
   if (nsecs == 0)
@@ -29,7 +40,11 @@ sleep1(unsigned nsecs)
       return nsecs;
     }
 
-  signal(SIGALRM, on_sig_alrm);
+  if (SIG_ERR == signal(SIGALRM, on_sig_alrm))
+		{
+			perror(NULL);
+			return (nsecs);
+		}
 
   alarm(nsecs);
 
@@ -40,12 +55,3 @@ sleep1(unsigned nsecs)
   return alarm(0);
 }
 
-int
-main(void)
-{
-  sleep1(2);
-
-  sleep1(4);
-
-  return 0;
-}

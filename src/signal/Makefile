@@ -106,7 +106,8 @@ signal_sleep1_binout := $(bin_path)/$(signal_prefix)_sleep1$(bin_ext)
 
 signal_sleep: $(signal_sleep1_binout)
 signal_sleep_test: signal_sleep
-	@echo "#skip ..."
+	$(signal_sleep1_binout)
+	# @echo "#skip ..."
 
 $(signal_sleep1_binout): $(signal_root)/sleep/s1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
