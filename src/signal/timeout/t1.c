@@ -1,44 +1,33 @@
 #include "_signal_.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include <setjmp.h>
-
-
-#define READ_TIMEOUT  1
-
-static jmp_buf  read_env;
 
 
 static void on_sig_alrm(int signo);
 
-static void
-on_sig_alrm(int signo)
-{
-  if (SIGALRM == signo)
-    {
-      longjmp(read_env, READ_TIMEOUT);
-    }
-}
+static jmp_buf  env_alrm;
+static int      timeout  =  1;
+
 
 int
-main(void)
+main(int argc, char **argv)
 {
   int   rc;
   char  buf[sizeof(int)];
 
+  if (argc > 1)
+    {
+      timeout = atoi(argv[1]);
+    }
+
   signal(SIGALRM, on_sig_alrm);
 
-  switch (setjmp(read_env))
+  if (setjmp(env_alrm) == timeout)
     {
-    case READ_TIMEOUT:
-      printf("!read: timeout\n");
-      return READ_TIMEOUT;
+      printf("! timeout\n");
+      exit(EXIT_FAILURE);
+    }
 
-    default:
-      break;
-     }
-
-  alarm(10);
+  alarm(timeout);
   rc = read(STDIN_FILENO, buf, sizeof(buf));
   if (-1 == rc)
     {
@@ -48,5 +37,14 @@ main(void)
 
   write(STDOUT_FILENO, buf, rc);
 
-  return 0;
+  exit(EXIT_SUCCESS);
+}
+
+void
+on_sig_alrm(int signo)
+{
+  if (SIGALRM == signo)
+    {
+      longjmp(env_alrm, timeout);
+    }
 }
