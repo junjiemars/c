@@ -127,8 +127,11 @@ $(signal_sleep2_binout): $(signal_root)/sleep/s2.c
 signal_timeout1_binout := $(bin_path)/$(signal_prefix)_timeout1$(bin_ext)
 
 signal_timeout: $(signal_timeout1_binout)
-signal_timeout_test: signal_timeout
-	@echo "#skip ..."
+signal_timeout_test: signal_timeout1_test
+
+signal_timeout1_test: $(signal_timeout1_binout)
+	# $<
+	echo "a" | $<
 
 $(signal_timeout1_binout): $(signal_root)/timeout/t1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
