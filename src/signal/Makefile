@@ -92,13 +92,23 @@ $(signal_reentrant_r_binout): $(signal_root)/reentrant/r.c
 
 # set
 signal_set1_binout := $(bin_path)/$(signal_prefix)_set1$(bin_ext)
+signal_set1_source := $(tmp_path)/$(signal_prefix)_set1.c
+signal_set1_awk := $(signal_root)/set/s1.awk
+signal_set1_awk_in := $(signal_root)/set/s1.awk.in
+
 
 signal_set: $(signal_set1_binout)
-signal_set_test: signal_set
-	@echo "#skip ..."
+signal_set_test: signal_set1_test
 
-$(signal_set1_binout): $(signal_root)/set/s1.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+signal_set1_test: $(signal_set1_binout)
+	$<
+
+$(signal_set1_binout): $(signal_set1_source)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(signal_set1_source): $(signal_set1_awk)       \
+                       $(signal_set1_awk_in)
+	awk -f $^ > $@
 
 
 # sleep
@@ -146,7 +156,6 @@ signal_wait_test: signal_wait
 
 $(signal_wait1_binout): $(signal_root)/wait/w1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
 
 # pause
 signal_pause_binout := $(bin_path)/$(signal_prefix)_pause$(bin_ext)
