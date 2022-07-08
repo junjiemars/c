@@ -24,13 +24,13 @@ BEGIN {
 
 (/^[ \t]*$/) {
 
-    print ""
+    print
 }
 
 (/^[ \t]*#.*$/) {
 
     if ($1 ~ /^[ \t]*#[ \t]*?$/) {
-        print ""
+        print
     } else {
         comment = $1
         sub(/^[ \t]*?#[ \t]*?/, null, comment)

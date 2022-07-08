@@ -43,5 +43,6 @@ int main(void)
   printf(FMT_SYM, STR(SIGUSR1));
 #endif
 
+
   return 0;
 }
