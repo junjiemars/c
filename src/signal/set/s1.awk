@@ -9,7 +9,7 @@ BEGIN {
     print "#define STR(s)   #s"
     print "#define YES(s)   (s) ? \"yes\" : \"no\""
     print ""
-    print "#define FMT_SIG  \"%-16s %04i, %-4s\\n\""
+    print "#define FMT_SIG  \"%-16s %02i, %-4s\\n\""
     print "#define FMT_SYM  \"%-16s (no symbol)\\n\""
     print
     print
@@ -44,7 +44,7 @@ BEGIN {
 
     print  "  {"
     printf("     rc = sigismember(&oset, %s);\n", $1)
-    printf("     printf(FMT_SIG, STR(%s), %s, YES(%s));\n", $1, $1, $1)
+    printf("     printf(FMT_SIG, STR(%s), %s, YES(rc));\n", $1, $1)
     print  "  }"
 
     printf("#else\n")
