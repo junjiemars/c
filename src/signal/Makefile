@@ -93,33 +93,18 @@ $(signal_reentrant_r_binout): $(signal_root)/reentrant/r.c
 
 
 # set
-signal_set1_binout := $(bin_path)/$(signal_prefix)_set1$(bin_ext)
 signal_set2_binout := $(bin_path)/$(signal_prefix)_set2$(bin_ext)
-signal_set1_source := $(tmp_path)/$(signal_prefix)_set1.c
-signal_set1_awk := $(signal_root)/set/s1.awk
-signal_set1_awk_in := $(signal_root)/set/s1.awk.in
 
+signal_set: $(signal_set2_binout)
+signal_set_test: signal_set2_test
 
-signal_set: $(signal_set1_binout)               \
-            $(signal_set2_binout)
-signal_set_test: signal_set1_test               \
-                 signal_set2_test
-
-signal_set1_test: $(signal_set1_binout)
-	$<
 signal_set2_test: $(signal_set2_binout)
 	$< | cat -
 	# press  or kill -QUIT to generate SIGQUIT
 
-$(signal_set1_binout): $(signal_set1_source)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(signal_set2_binout): $(signal_root)/set/s2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-$(signal_set1_source): $(signal_set1_awk)       \
-                       $(signal_set1_awk_in)
-	awk -f $^ > $@
 
 
 # sleep
