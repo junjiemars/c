@@ -18,7 +18,8 @@ signal: signal_alarm                            \
         signal_timeout                          \
         signal_wait                             \
         signal_pause                            \
-        sigal_child
+        sigal_child                             \
+        signal_info
 
 signal_test: signal_alarm_test                  \
              signal_reentrant_test              \
@@ -27,7 +28,8 @@ signal_test: signal_alarm_test                  \
              signal_timeout_test                \
              signal_wait_test                   \
              signal_pause_test                  \
-             signal_child_test
+             signal_child_test                  \
+             signal_info_test
 
 endif														# msvc
 
@@ -186,6 +188,19 @@ signal_child_test: signal_child
 	$(signal_child_binout)
 
 $(signal_child_binout): $(signal_root)/child/c1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# info
+signal_info_name1_binout := $(bin_path)/$(signal_prefix)_name1$(bin_ext)
+
+signal_info: $(signal_info_name1_binout)
+signal_info_test: signal_info_name1_test
+
+signal_info_name1_test: $(signal_info_name1_binout)
+	$<
+
+$(signal_info_name1_binout): $(signal_root)/info/n1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

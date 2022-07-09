@@ -38,10 +38,12 @@ main(int argc, char **argv)
   username1 = argv[1];
   username2 = argv[2];
 
+  setvbuf(stdout, NULL, _IONBF, 0);
+
+  printf("%d\n", getpid());
+
   signal(SIGALRM, on_sig_alrm);
   signal(SIGSEGV, on_sig_segv);
-
-  setvbuf(stdout, NULL, _IONBF, 0);
 
   alarm(1);
 
