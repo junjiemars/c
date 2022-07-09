@@ -239,7 +239,7 @@ $(process_layout_brk_binout): $(process_root)/layout/b.c
 
 # rlimit
 process_rlimit_binout := $(bin_path)/$(process_prefix)_rlimit$(bin_ext)
-process_rlimit_source := $(tmp_path)/rl.c
+process_rlimit_source := $(tmp_path)/$(process_prefix)_rl.c
 process_rlimit_awk := $(process_root)/rlimit/rl.awk
 process_rlimit_awk_in := $(process_root)/rlimit/rl.awk.in
 
