@@ -1,9 +1,9 @@
 #include <_signal_.h>
 
-static void _unused_(on_sig_int)(int);
+static void _unused_of_ on_sig_int(int);
 
 int
-main(int _unused_(argc), char ** _unused_(argv))
+main(void)
 {
   sigset_t  nset, oset;
 

@@ -19,6 +19,15 @@
 #endif  /* _unused_ */
 
 
+#if !defined(_unused_of_)
+#  if defined(CLANG) || defined(GCC)
+#    define _unused_of_  __attribute__((unused))
+#  else
+#    define _unused_of_
+#  endif
+#endif
+
+
 #if !defined(_isut_)
 #  define _isut_(t)  (((t)~1) > 0)
 #endif  /* _isut_ */
@@ -30,7 +39,7 @@
 
 
 #if !defined(_diff_)
-#  define _diff_(l, r, w)  (((char*)(r)-(char*)(l))/(w))
+#  define _diff_(l, r, w)  (((char*)(r) - (char*)(l)) / (w))
 #endif  /* _diff_ */
 
 
