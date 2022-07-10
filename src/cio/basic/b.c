@@ -3,12 +3,9 @@
 /* debugging: C-d */
 
 int
-main(int argc, char *argv[])
+main(void)
 {
   int  ch;
-
-  _unused_(argc);
-  _unused_(argv);
 
   while (EOF != (ch = fgetc(stdin)))
     {

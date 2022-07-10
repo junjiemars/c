@@ -11,10 +11,8 @@
 #endif
 
 int
-main(int argc, char **argv) {
-	_unused_(argc);
-	_unused_(argv);
-
+main(void)
+{
 	int n = 0;
 	int ch = fgetc(stdin);
 	fprintf(stdout, "[%i] %c\n", n++, ch);

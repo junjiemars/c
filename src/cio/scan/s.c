@@ -2,15 +2,13 @@
 #include <stdio.h>
 
 int
-main(int argc, char **argv) {
-  _unused_(argc);
-  _unused_(argv);
-
-  char c;
-  int i, h;
-  long l;
-  float f;
-  double d;
+main(void)
+{
+  char    c;
+  int     i, h;
+  long    l;
+  float   f;
+  double  d;
 
   int n = fscanf(stdin,
                  "%c, %i, 0x%x, %li, %f, %lf",

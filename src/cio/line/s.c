@@ -32,10 +32,8 @@ test_fgets(const char *filename) {
 }
 
 int
-main(int argc, char **argv) {
-	_unused_(argc);
-	_unused_(argv);
-
+main(int argc, char **argv)
+{
 	if (argc > 1) {
 		char *f = malloc(strlen(argv[1]) + 1);
 		if (0 == f) {

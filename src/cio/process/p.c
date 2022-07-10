@@ -19,9 +19,8 @@
 #include <stdio.h>
 
 int
-main(int argc, char **argv) {
-	_unused_(argc);
-	_unused_(argv);
+main(void)
+{
 
 #if (NM_HAVE_POPEN_FN) || (NM_HAVE__POPEN_FN)
 	fprintf(stdout, "popen process i/o\n");
