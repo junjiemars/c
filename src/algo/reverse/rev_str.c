@@ -18,11 +18,10 @@ reverse_string(char *s) {
 
 
 int
-main(int argc, char **argv) {
-	_unused_(argc);
-	_unused_(argv);
+main(_unused_(int argc), char **argv)
+{
+	char  s[256];
 
-	char s[256];
 	strcpy(s, argv[0]);
 	reverse_string(s);
 	printf("reversed: %s", s);

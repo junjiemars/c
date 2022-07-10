@@ -7,11 +7,8 @@ static void test_static_assert(void);
 
 
 void
-test_assert(int a, int b)
+test_assert(_unused_(int a), _unused_(int b))
 {
-  _unused_(a);
-  _unused_(b);
-
   assert(a == b);
   printf("%s\n------------\n", __FUNCTION__);
 }
@@ -25,10 +22,8 @@ test_static_assert(void)
 
 
 int
-main(int argc, char **argv)
+main(int argc, _unused_(char **argv))
 {
-  _unused_(argv);
-
   test_assert(argc, argc);
   test_static_assert();
 

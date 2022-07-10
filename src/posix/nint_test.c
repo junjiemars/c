@@ -32,16 +32,13 @@ test_int(void)
          "%"PRIu8"," "%"PRIu16"," "%"PRIu32"," "%"PRIu64"\n",
          __FUNCTION__,
          i8, i16, i32, i64, u8, u16, u32, u64);
-  
+
 }
 
 
 int
-main(int argc, char **argv)
+main(void)
 {
-  _unused_(argc);
-  _unused_(argv);
-
   test_int();
 
   return 0;

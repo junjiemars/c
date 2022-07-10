@@ -1,6 +1,6 @@
 #include <_signal_.h>
 
-static void _unused_of_ on_sig_int(int);
+_unused_(static void on_sig_int(int));
 
 int
 main(void)

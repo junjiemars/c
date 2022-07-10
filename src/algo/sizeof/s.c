@@ -12,11 +12,8 @@ struct point_s {
 int a1[16];
 
 int
-main(int argc, char **argv)
+main(void)
 {
-	_unused_(argc);
-	_unused_(argv);
-
 	assert(sizeof(short) == field_sizeof(struct point_s, x)
 				 && "field_sizeof macro failed");
 

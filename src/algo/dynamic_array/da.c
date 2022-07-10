@@ -12,10 +12,8 @@ jmp_buf env;
 
 
 int
-main(int argc, char **argv) {
-	_unused_(argc);
-	_unused_(argv);
-
+main(void)
+{
 	test_add_element();
 	free(dynamic);
 

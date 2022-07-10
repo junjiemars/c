@@ -3,11 +3,8 @@
 static size_t strlen_utf8(const char*);
 
 int
-main(int argc, char **argv)
+main(void)
 {
-	_unused_(argc);
-	_unused_(argv);
-
 	char *s = "a中文bc12def";
 	size_t n = strlen_utf8(s);
 	printf("strlen_utf8(%s) = %zu\n", s, n);

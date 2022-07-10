@@ -6,11 +6,8 @@ void test_linear_search_int(void);
 void test_linear_search_str(void);
 
 int
-main(int argc, char **argv)
+main(void)
 {
-	_unused_(argc);
-	_unused_(argv);
-
   test_linear_search_int();
   test_linear_search_str();
 

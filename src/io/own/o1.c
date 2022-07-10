@@ -1,10 +1,7 @@
 #include "_io_.h"
 
 int
-main(int argc, char **argv)
+main(_unused_(int argc), _unused_(char **argv))
 {
-  _unused_(argc);
-  _unused_(argv);
-
   exit(EXIT_SUCCESS);
 }

@@ -3,11 +3,8 @@
 
 
 int
-main(int argc, char **argv)
+main(void)
 {
-  _unused_(argc);
-  _unused_(argv);
-
 	int a1[] =
     {
       0x3, 0x5, 0x1, 0x4, 0x1, 0x2

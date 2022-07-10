@@ -9,7 +9,10 @@
 int
 main(int argc, char **argv)
 {
-  int  fd, fd0, fd1, fd2;
+  _unused_(int fd);
+  _unused_(int fd0);
+  _unused_(int fd1);
+  _unused_(int fd2);
 
   if (argc < 2)
     {
@@ -27,11 +30,6 @@ main(int argc, char **argv)
     {
       close(fd);
     }
-
-  _unused_(fd0);
-  _unused_(fd1);
-  _unused_(fd2);
-
 
   exit(EXIT_SUCCESS);
 }

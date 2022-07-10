@@ -17,13 +17,13 @@ static char * strscpy(char*, const char*, size_t);
 
 
 int
-main(int argc, char **argv)
+main(void)
 {
-	_unused_(argc);
-	_unused_(argv);
-	char s[] = "abc";
-	char *s1 = strscpy(s, s, sizeof(s));
+	char   s[]  =  "abc";
+	char  *s1   =  strscpy(s, s, sizeof(s));
+
 	printf("%s\n", s1);
+
 	return 0;
 }
 

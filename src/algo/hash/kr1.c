@@ -7,8 +7,6 @@ main(int argc, char **argv)
   const char     *ss;
   unsigned long   h;
 
-	_unused_(argc);
-
 	if (argc > 1)
     {
       ss = argv[1];

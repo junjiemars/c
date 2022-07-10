@@ -31,11 +31,8 @@
 
 
 int
-main(int argc, char **argv)
+main(void)
 {
-  _unused_(argc);
-  _unused_(argv);
-
   printf("%#18" PRIx8 " = " BPRI8, (uint8_t) 0x12, BIT8(0x12));
 
   printf("%#18" PRIx16 " = " BPRI16, (uint16_t) 0x1234, BIT16(0x1234));

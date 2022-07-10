@@ -15,10 +15,8 @@ test_strdup(char *s)
 
 
 int
-main(int argc, char **argv)
+main(_unused_(int argc), char **argv)
 {
-  _unused_(argc);
-
   test_strdup(argv[0]);
 
   return 0;

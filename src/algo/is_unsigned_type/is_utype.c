@@ -3,11 +3,8 @@
 
 #define IS_UNSIGNED_TYPE(t) ((t)~1 > 0)
 
-int main(int argc, char **argv)
+int main(void)
 {
-	_unused_(argc);
-	_unused_(argv);
-
 	printf("is_unsigned_type(char)=%i\n", IS_UNSIGNED_TYPE(char));
 	printf("is_unsigned_type(unsigned char)=%i\n", IS_UNSIGNED_TYPE(unsigned char));
 

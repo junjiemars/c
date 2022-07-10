@@ -37,11 +37,8 @@ static void test_bsearch_str(const void *key, const void *base,
 
 
 int
-main(int argc, char **argv)
+main(void)
 {
-  _unused_(argc);
-  _unused_(argv);
-
   int int_base[] = { 0x1, 0x2, 0x3, 0x4, 0x5 };
   int int_keys[] = { 0x5, 0x6, 0x3 };
   char *str_base[] = { "a", "bb", "ccc", "dddd", "eeeee" };

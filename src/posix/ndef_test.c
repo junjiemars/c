@@ -5,7 +5,7 @@
 #include <string.h>
 
 
-static void test_restrict(const char *restrict);
+static void test_restrict(const int *restrict, const char *restrict);
 static void test_isut(void);
 static void test_nof(void);
 static void test_swp(void);
@@ -14,10 +14,7 @@ static void test_swp(void);
 int
 main(int argc, char **argv)
 {
-  _unused_(argc);
-
-  test_restrict((const char *restrict) argv[0]);
-
+  test_restrict((const int *restrict) &argc, (const char *restrict) argv[0]);
   test_isut();
   test_nof();
   test_swp();
@@ -27,9 +24,9 @@ main(int argc, char **argv)
 
 
 void
-test_restrict(const char *restrict ss)
+test_restrict(_unused_(const int *restrict ii),
+              _unused_(const char *restrict ss))
 {
-  _unused_(ss);
   printf("%s\n", __FUNCTION__);
 }
 

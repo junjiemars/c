@@ -14,16 +14,14 @@
 #endif  /* NM_HAVE_RESTRICT */
 
 
+
 #if !defined(_unused_)
-#  define _unused_(x)  ((void)(x))
-#endif  /* _unused_ */
-
-
-#if !defined(_unused_of_)
-#  if defined(CLANG) || defined(GCC)
-#    define _unused_of_  __attribute__((unused))
+#  if (CLANG) || (GCC)
+#    define _unused_(x)  __attribute__((unused)) x
+#  elif (MSVC)
+#    define _unused_(x)  __pragma(warning(suppress:4100 4101 4189)) x
 #  else
-#    define _unused_of_
+#    define _unused_(x)  ((void)(sizeof(x,0)))
 #  endif
 #endif
 

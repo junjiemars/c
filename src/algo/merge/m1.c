@@ -10,11 +10,8 @@ static void test_merge_int(void);
 static void test_merge_str(void);
 
 int
-main(int argc, char **argv)
+main(void)
 {
-	_unused_(argc);
-	_unused_(argv);
-
   test_merge_int();
   test_merge_str();
 

@@ -14,10 +14,8 @@ static struct node_s* reverse1(struct node_s*);
 struct node_s* reverse2(struct node_s*, struct node_s*, struct node_s*);
 
 int
-main(int argc, char **argv) {
-	_unused_(argc);
-	_unused_(argv);
-
+main(void)
+{
 	struct node_s *lst = calloc(LIST_SIZE, sizeof(*lst));
 	for (int i = 0; i < LIST_SIZE-1; i++) {
 		lst[i].val = i+1;

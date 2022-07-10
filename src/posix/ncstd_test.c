@@ -2,10 +2,7 @@
 #include <stdlib.h>
 
 int
-main(int argc, char **argv)
+main(void)
 {
-  _unused_(argc);
-  _unused_(argv);
-
   return 0;
 }

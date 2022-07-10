@@ -69,8 +69,8 @@ void
 test_cmp_int(void)
 {
 	int i1 = 0x1122, i2 = 0x3344;
-	int cmp = cmp_int(&i1, &i2);
-  _unused_(cmp);
+	_unused_(int cmp) = cmp_int(&i1, &i2);
+
 	assert(cmp < 0 && "cmp_int(0x1122, 0x3344) should < 0");
 	cmp = cmp_int(&i1, &i1);
 	assert(cmp == 0 && "cmp_int(0x1122, 0x1122) should == 0");
@@ -85,8 +85,9 @@ test_cmp_str(void)
 	char *ss[] = { "abc123", "123", };
 	assert(0 == cmp_str(ss, ss));
 	assert(0 != cmp_str(&ss[0], &ss[1]));
-	char *s1 = ss[0]+3;
-  _unused_(s1);
+
+	_unused_(char *s1) = ss[0]+3;
+
 	assert(0 == cmp_str(&s1, &ss[1]));
 	printf("test cmp_str fn ... ok\n");
 }
@@ -109,11 +110,8 @@ test_verify(void)
 
 
 int
-main(int argc, char **argv)
+main(void)
 {
-	_unused_(argc);
-	_unused_(argv);
-
 	test_cmp_int();
 	test_cmp_str();
   test_verify();

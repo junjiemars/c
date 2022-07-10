@@ -9,9 +9,8 @@ void test(char const *ss);
 
 
 int
-main(int argc, char **argv) {
-  _unused_(argc);
-  _unused_(argv);
+main(int argc, char **argv)
+{
 
   if (argc < 2)
     {
