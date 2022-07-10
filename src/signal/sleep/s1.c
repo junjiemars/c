@@ -67,12 +67,10 @@ sleep1(unsigned nsecs)
 void
 race(long n)
 {
-  volatile double  d  =  0;
+  _unused_(volatile double  d)  =  0;
 
   for (long i = 0; i < n; i++)
     {
       d += rand() * n;
     }
-
-  _unused_(d);
 }

@@ -204,12 +204,19 @@ process_layout_asmout := $(tmp_path)/$(process_prefix)_layout_raw$(asm_ext)
 process_layout_static_binout := $(bin_path)/$(process_prefix)_layout_static$(bin_ext)
 process_layout_brk_binout := $(bin_path)/$(process_prefix)_layout_brk$(bin_ext)
 
+ifeq ($(NM_SYSTEM), Darwin)
+process_layout:
+	@echo "#skip ..."
+process_layout_test: process_layout
+	@echo "#skip ..."
+else
 process_layout: $(process_layout_raw_binout)    \
                 $(process_layout_static_binout) \
                 $(process_layout_brk_binout)
 process_layout_test: process_layout_raw_test    \
                      process_layout_static_test \
                      process_layout_brk_test
+endif
 
 process_layout_raw_test: $(process_layout_raw_binout)
 	$<

@@ -14,11 +14,8 @@ static int  bss_var;
 
 
 int
-main(int argc, char **argv)
+main(void)
 {
-  _unused_(argc);
-  _unused_(argv);
-
   test_brk();
   test_sbrk();
   test_alloc();

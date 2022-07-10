@@ -63,10 +63,8 @@ main(void)
 #if (_SYNC_)
 
 static void
-on_sig_usr(int sig)
+on_sig_usr(_unused_(int sig))
 {
-  _unused_(sig);
-
   sflag = 1;
 }
 
