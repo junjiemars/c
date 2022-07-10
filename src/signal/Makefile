@@ -19,7 +19,8 @@ signal: signal_alarm                            \
         signal_wait                             \
         signal_pause                            \
         sigal_child                             \
-        signal_info
+        signal_info                             \
+        signal_suspend
 
 signal_test: signal_alarm_test                  \
              signal_reentrant_test              \
@@ -29,7 +30,8 @@ signal_test: signal_alarm_test                  \
              signal_wait_test                   \
              signal_pause_test                  \
              signal_child_test                  \
-             signal_info_test
+             signal_info_test                   \
+             signal_suspend_test
 
 endif														# msvc
 
@@ -188,5 +190,17 @@ signal_info_name1_test: $(signal_info_name1_binout)
 $(signal_info_name1_binout): $(signal_root)/info/n1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+# suspend
+signal_suspend1_binout := $(bin_path)/$(signal_prefix)_suspend1$(bin_ext)
+
+signal_suspend: $(signal_suspend1_binout)
+signal_suspend_test: signal_suspend1_test
+
+signal_suspend1_test: $(signal_suspend1_binout)
+	@echo "skip..."
+
+$(signal_suspend1_binout): $(signal_root)/suspend/s1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # eof
