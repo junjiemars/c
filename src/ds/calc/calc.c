@@ -28,9 +28,8 @@ _getc_(void)
 
 static
 int
-_ungetc_(int c, FILE* stream)
+_ungetc_(int c, _unused_(FILE* stream))
 {
-  _unused_(stream);
   _str_in_i_--;
   return c;
 }
@@ -80,7 +79,7 @@ isop(int c)
     case '+':
     case '-': return 1;
     default: return 0;
-    }    
+    }
 }
 
 int
@@ -240,7 +239,7 @@ test_postfix(void)
     }
   putchar('\n');
 
-  queue_free(&expr);  
+  queue_free(&expr);
 }
 #endif /* end of !(NDEBUG) */
 
@@ -267,9 +266,6 @@ test_eval(void)
 int
 main(int argc, char **argv)
 {
-  _unused_(argc);
-  _unused_(argv);
-
 
 #if (NDEBUG)
   queue_s  expr;
