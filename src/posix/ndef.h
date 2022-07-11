@@ -16,7 +16,7 @@
 
 
 #if !defined(_unused_)
-#  if (CLANG) || (GCC)
+#  if defined(__has_attribute) && __has_attribute(unused)
 #    define _unused_(x)  __attribute__((unused)) x
 #  elif (MSVC)
 #    define _unused_(x)  __pragma(warning(suppress:4100 4101 4189)) x
@@ -57,7 +57,7 @@
 
 
 #if !defined(_fallthrough_)
-#   if (GCC)
+#   if defined(__has_attribute) && __has_attribute(fallthrough)
 #     define _fallthrough_  __attribute__((fallthrough))
 #   else
 #     define _fallthrough_
