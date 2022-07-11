@@ -56,25 +56,33 @@
 #endif  /* _str_ */
 
 
-#define _swp_(a, b, w)                                            \
-do                                                                \
-  {                                                               \
-    int    __w1  =  (int) (w);                                    \
-    int    __n1  =  (__w1 + 7) / 8;                               \
-    char  *__a1  =  (char *) (a);                                 \
-    char  *__b1  =  (char *) (b);                                 \
-    char   __t1  =  0;                                            \
-    switch (__w1 % 8) {                                           \
-      case 0: do { __t1 = *__a1; *__a1++ = *__b1; *__b1++ = __t1; \
-      case 7:      __t1 = *__a1; *__a1++ = *__b1; *__b1++ = __t1; \
-      case 6:      __t1 = *__a1; *__a1++ = *__b1; *__b1++ = __t1; \
-      case 5:      __t1 = *__a1; *__a1++ = *__b1; *__b1++ = __t1; \
-      case 4:      __t1 = *__a1; *__a1++ = *__b1; *__b1++ = __t1; \
-      case 3:      __t1 = *__a1; *__a1++ = *__b1; *__b1++ = __t1; \
-      case 2:      __t1 = *__a1; *__a1++ = *__b1; *__b1++ = __t1; \
-      case 1:      __t1 = *__a1; *__a1++ = *__b1; *__b1++ = __t1; \
-                 } while (--__n1 > 0);                            \
-    }                                                             \
+#if !defined(_fallthrough_)
+#   if (GCC)
+#     define _fallthrough_  __attribute__((fallthrough))
+#   else
+#     define _fallthrough_
+#   endif
+#endif
+
+#define _swp_(a, b, w)                                          \
+do                                                              \
+  {                                                             \
+    int    w1_ =  (int) (w);                                    \
+    int    n1_ =  (w1_ + 7) / 8;                                \
+    char  *a1_ =  (char *) (a);                                 \
+    char  *b1_ =  (char *) (b);                                 \
+    char   t1_ =  0;                                            \
+    switch (w1_ % 8) {                                          \
+    case 0: do { t1_=*a1_;*a1_++=*b1_;*b1_++=t1_;_fallthrough_; \
+    case 7:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_;_fallthrough_; \
+    case 6:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_;_fallthrough_; \
+    case 5:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_;_fallthrough_; \
+    case 4:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_;_fallthrough_; \
+    case 3:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_;_fallthrough_; \
+    case 2:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_;_fallthrough_; \
+    case 1:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_;               \
+               } while (--n1_ > 0);                             \
+    }                                                           \
   } while (0)
 
 
