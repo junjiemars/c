@@ -21,7 +21,7 @@
 #  elif (MSVC)
 #    define _unused_(x)  __pragma(warning(suppress:4100 4101 4189)) x
 #  else
-#    define _unused_(x)  ((void)(sizeof(x,0)))
+#    define _unused_(x)  x
 #  endif
 #endif
 
