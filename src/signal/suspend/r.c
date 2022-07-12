@@ -1,18 +1,33 @@
 #include <_signal_.h>
 
-_unused_(static void on_sig_int(int));
+static void on_sig_int(int);
+
+static int  N  =  1;
+
 
 int
-main(void)
+main(int argc, char **argv)
 {
   sigset_t  nset, oset;
+
+  if (argc > 1)
+    {
+      N = atoi(argv[1]);
+    }
 
   setvbuf(stdout, NULL, _IONBF, 0);
   printf("%d\n", getpid());
 
+  if (SIG_ERR == signal(SIGINT, on_sig_int))
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
 
   sigemptyset(&nset);
   sigaddset(&nset, SIGINT);
+
+  printf("! enter...\n");
 
   if (sigprocmask(SIG_BLOCK, &nset, &oset))
     {
@@ -20,7 +35,17 @@ main(void)
       exit(EXIT_FAILURE);
     }
 
-  printf("# critical region\n");
+  sleep(N);
+
+  printf("! leaved\n");
+
+  if (-1 == sigsuspend(&nset))
+    {
+      if (errno)
+        {
+          perror(NULL);
+        }
+    }
 
   if (sigprocmask(SIG_SETMASK, &oset, NULL))
     {
@@ -28,12 +53,11 @@ main(void)
       exit(EXIT_FAILURE);
     }
 
-  printf("# before pause\n");
 
-  pause();
 
-  printf("# after pause\n");
+  sleep(N);
 
+  printf("# exit\n");
   exit(EXIT_SUCCESS);
 }
 

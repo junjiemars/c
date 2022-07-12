@@ -17,7 +17,7 @@ main(void)
   for (unsigned i = 1; i < NSIG; i++)
     {
       strupper(sys_signame[i], name);
-      printf("%-16s: %s\n", name, sys_siglist[i]);
+      printf("%-16s: [%02i] %s\n", name, i, sys_siglist[i]);
     }
 
   exit(EXIT_SUCCESS);

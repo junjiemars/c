@@ -1,21 +1,24 @@
 #include <_signal_.h>
 
 /*
- * 1. the first sleep be protected by block SIGQUIT.
+ * expect:
  *
- * 2. signals are not queued if we generate SIGQUIT more than once but
- * it's be caught only once.
+ * 1. block specified signal before enter critical section.
+ * 2. unblock the signal after leaving critical section.
+ * 3. pause and wait the deferred signal.
  *
  */
 
+
 static void on_sig_quit(int);
 
-static unsigned int  N  =  3;
+
+static int  N  =  1;
 
 int
 main(int argc, char **argv)
 {
-  sigset_t  nset, oset, pset;
+  sigset_t  nset, oset;
 
   if (argc > 1)
     {
@@ -23,54 +26,49 @@ main(int argc, char **argv)
     }
 
   setvbuf(stdout, NULL, _IONBF, 0);
-
   printf("%d\n", getpid());
 
-  if (SIG_ERR == signal(SIGQUIT, on_sig_quit))
+  if (SIG_ERR == signal(SIGINT, on_sig_quit))
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
 
   sigemptyset(&nset);
-  sigaddset(&nset, SIGQUIT);
+  sigaddset(&nset, SIGINT);
+
+  printf("! enter...\n");
+
   if (sigprocmask(SIG_BLOCK, &nset, &oset))
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
-  printf("! %s blocked\n", _str_(SIGQUIT));
 
   sleep(N);
 
-  if (sigpending(&pset))
-    {
-      perror(NULL);
-      exit(EXIT_FAILURE);
-    }
-  if (sigismember(&pset, SIGQUIT))
-    {
-      printf("# %s pending\n", _str_(SIGQUIT));
-    }
+  printf("! leaved\n");
 
   if (sigprocmask(SIG_SETMASK, &oset, NULL))
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
-
   printf("! %s unblocked\n", _str_(SIGQUIT));
 
-  sleep(N);
+  /* race condition here */
+  pause();
 
+  printf("# exit\n");
   exit(EXIT_SUCCESS);
 }
+
 
 void
 on_sig_quit(int signo)
 {
   if (SIGQUIT == signo)
     {
-      printf("# %s caught\n", _str_(SIGQUIT));
+      printf("# %s\n", _str_(SIGQUIT));
     }
 }

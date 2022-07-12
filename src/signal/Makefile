@@ -97,15 +97,23 @@ $(signal_reentrant_r_binout): $(signal_root)/reentrant/r.c
 
 
 # set
+signal_set1_binout := $(bin_path)/$(signal_prefix)_set1$(bin_ext)
 signal_set2_binout := $(bin_path)/$(signal_prefix)_set2$(bin_ext)
 
-signal_set: $(signal_set2_binout)
-signal_set_test: signal_set2_test
+signal_set: $(signal_set1_binout)               \
+            $(signal_set2_binout)
+signal_set_test: signal_set1_test               \
+                 signal_set2_test
+
+signal_set1_test: $(signal_set1_binout)
+	$<
 
 signal_set2_test: $(signal_set2_binout)
 	$< | cat -
 	# press  or kill -QUIT to generate SIGQUIT
 
+$(signal_set1_binout): $(signal_root)/set/s1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(signal_set2_binout): $(signal_root)/set/s2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -194,15 +202,26 @@ $(signal_info_name1_binout): $(signal_root)/info/n1.c
 
 
 # suspend
-signal_suspend1_binout := $(bin_path)/$(signal_prefix)_suspend1$(bin_ext)
+signal_suspend_raw_binout := $(bin_path)/$(signal_prefix)_suspend_raw$(bin_ext)
+signal_suspend_wrong_binout := $(bin_path)/$(signal_prefix)_suspend_wrong$(bin_ext)
 
-signal_suspend: $(signal_suspend1_binout)
-signal_suspend_test: signal_suspend1_test
+signal_suspend: $(signal_suspend_raw_binout)    \
+                $(signal_suspend_wrong_binout)
+signal_suspend_test: signal_suspend_raw_test    \
+                     signal_suspend_wrong_test
 
-signal_suspend1_test: $(signal_suspend1_binout)
-	@echo "skip..."
+signal_suspend_raw_test: $(signal_suspend_raw_binout)
+	# $<
+	@echo "#skip ..."
 
-$(signal_suspend1_binout): $(signal_root)/suspend/s1.c
+signal_suspend_wrong_test: $(signal_suspend_wrong_binout)
+	# $<
+	@echo "#skip ..."
+
+$(signal_suspend_raw_binout): $(signal_root)/suspend/r.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(signal_suspend_wrong_binout): $(signal_root)/suspend/w.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # eof
