@@ -1,5 +1,11 @@
 #include <_signal_.h>
 
+/*
+ * on sigsuspend return the previous set of masked signals is
+ * restored.
+ *
+ */
+
 static void on_sig_int(int);
 
 static int  N  =  1;
@@ -8,7 +14,7 @@ static int  N  =  1;
 int
 main(int argc, char **argv)
 {
-  sigset_t  nset, oset;
+  sigset_t  nset, oset, wset;
 
   if (argc > 1)
     {
@@ -24,10 +30,13 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
+  sigemptyset(&wset);
+  sigaddset(&wset, SIGUSR1);
   sigemptyset(&nset);
   sigaddset(&nset, SIGINT);
 
-  printf("! enter...\n");
+
+  printf("! %s blocked\n", _str_(SIGINT));
 
   if (sigprocmask(SIG_BLOCK, &nset, &oset))
     {
@@ -35,11 +44,13 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
+  printf("! enter...\n");
+
   sleep(N);
 
   printf("! leaved\n");
 
-  if (-1 == sigsuspend(&nset))
+  if (-1 == sigsuspend(&wset))
     {
       if (errno)
         {
@@ -52,10 +63,8 @@ main(int argc, char **argv)
       perror(NULL);
       exit(EXIT_FAILURE);
     }
+  printf("! %s unblocked\n", _str_(SIGINT));
 
-
-
-  sleep(N);
 
   printf("# exit\n");
   exit(EXIT_SUCCESS);

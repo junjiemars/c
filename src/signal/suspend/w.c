@@ -10,7 +10,7 @@
  */
 
 
-static void on_sig_quit(int);
+static void on_sig_int(int);
 
 
 static int  N  =  1;
@@ -28,7 +28,7 @@ main(int argc, char **argv)
   setvbuf(stdout, NULL, _IONBF, 0);
   printf("%d\n", getpid());
 
-  if (SIG_ERR == signal(SIGINT, on_sig_quit))
+  if (SIG_ERR == signal(SIGINT, on_sig_int))
     {
       perror(NULL);
       exit(EXIT_FAILURE);
@@ -37,13 +37,15 @@ main(int argc, char **argv)
   sigemptyset(&nset);
   sigaddset(&nset, SIGINT);
 
-  printf("! enter...\n");
+  printf("! %s blocked\n", _str_(SIGINT));
 
   if (sigprocmask(SIG_BLOCK, &nset, &oset))
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
+
+  printf("! enter...\n");
 
   sleep(N);
 
@@ -54,7 +56,7 @@ main(int argc, char **argv)
       perror(NULL);
       exit(EXIT_FAILURE);
     }
-  printf("! %s unblocked\n", _str_(SIGQUIT));
+  printf("! %s unblocked\n", _str_(SIGINT));
 
   /* race condition here */
   pause();
@@ -65,10 +67,10 @@ main(int argc, char **argv)
 
 
 void
-on_sig_quit(int signo)
+on_sig_int(int signo)
 {
-  if (SIGQUIT == signo)
+  if (SIGINT == signo)
     {
-      printf("# %s\n", _str_(SIGQUIT));
+      printf("# %s\n", _str_(SIGINT));
     }
 }
