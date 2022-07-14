@@ -20,7 +20,8 @@ signal: signal_alarm                            \
         signal_pause                            \
         sigal_child                             \
         signal_info                             \
-        signal_suspend
+        signal_suspend                          \
+        signal_sync
 
 signal_test: signal_alarm_test                  \
              signal_reentrant_test              \
@@ -31,7 +32,8 @@ signal_test: signal_alarm_test                  \
              signal_pause_test                  \
              signal_child_test                  \
              signal_info_test                   \
-             signal_suspend_test
+             signal_suspend_test                \
+             signal_sync_test
 
 endif														# msvc
 
@@ -222,7 +224,8 @@ signal_suspend_wrong_test: $(signal_suspend_wrong_binout)
 	@echo "#skip ..."
 
 signal_suspend_flag_test: $(signal_suspend_flag_binout)
-	$<
+	# $<
+	@echo "#skip ..."
 
 $(signal_suspend_raw_binout): $(signal_root)/suspend/r.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -231,6 +234,19 @@ $(signal_suspend_wrong_binout): $(signal_root)/suspend/w.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(signal_suspend_flag_binout): $(signal_root)/suspend/f.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# sync
+signal_sync_child_binout := $(bin_path)/$(signal_prefix)_sync_child$(bin_ext)
+
+signal_sync: $(signal_sync_child_binout)
+signal_sync_test: signal_sync_child_test
+
+signal_sync_child_test: $(signal_sync_child_binout)
+	$<
+
+$(signal_sync_child_binout): $(signal_root)/sync/s1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # eof
