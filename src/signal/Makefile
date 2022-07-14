@@ -204,11 +204,14 @@ $(signal_info_name1_binout): $(signal_root)/info/n1.c
 # suspend
 signal_suspend_raw_binout := $(bin_path)/$(signal_prefix)_suspend_raw$(bin_ext)
 signal_suspend_wrong_binout := $(bin_path)/$(signal_prefix)_suspend_wrong$(bin_ext)
+signal_suspend_flag_binout := $(bin_path)/$(signal_prefix)_suspend_flag$(bin_ext)
 
 signal_suspend: $(signal_suspend_raw_binout)    \
-                $(signal_suspend_wrong_binout)
+                $(signal_suspend_wrong_binout)  \
+                $(signal_suspend_flag_binout)
 signal_suspend_test: signal_suspend_raw_test    \
-                     signal_suspend_wrong_test
+                     signal_suspend_wrong_test  \
+                     signal_suspend_flag_test
 
 signal_suspend_raw_test: $(signal_suspend_raw_binout)
 	# $<
@@ -218,10 +221,16 @@ signal_suspend_wrong_test: $(signal_suspend_wrong_binout)
 	# $<
 	@echo "#skip ..."
 
+signal_suspend_flag_test: $(signal_suspend_flag_binout)
+	$<
+
 $(signal_suspend_raw_binout): $(signal_root)/suspend/r.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(signal_suspend_wrong_binout): $(signal_root)/suspend/w.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(signal_suspend_flag_binout): $(signal_root)/suspend/f.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # eof
