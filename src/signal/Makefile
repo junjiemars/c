@@ -21,7 +21,8 @@ signal: signal_alarm                            \
         sigal_child                             \
         signal_info                             \
         signal_suspend                          \
-        signal_sync
+        signal_sync                             \
+        signal_abort
 
 signal_test: signal_alarm_test                  \
              signal_reentrant_test              \
@@ -33,7 +34,8 @@ signal_test: signal_alarm_test                  \
              signal_child_test                  \
              signal_info_test                   \
              signal_suspend_test                \
-             signal_sync_test
+             signal_sync_test                   \
+             signal_abort_test
 
 endif														# msvc
 
@@ -247,6 +249,27 @@ signal_sync_child_test: $(signal_sync_child_binout)
 	$<
 
 $(signal_sync_child_binout): $(signal_root)/sync/s1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# abort
+signal_abort_raw_binout := $(bin_path)/$(signal_prefix)_abort_raw$(bin_ext)
+signal_abort_posix_binout := $(bin_path)/$(signal_prefix)_abort_posix$(bin_ext)
+
+signal_abort: $(signal_abort_raw_binout)        \
+              $(signal_abort_posix_binout)
+signal_abort_test: signal_abort_raw_test        \
+                   signal_abort_posix_test
+
+signal_abort_raw_test: $(signal_abort_raw_binout)
+	-$<
+
+signal_abort_posix_test: $(signal_abort_posix_binout)
+	-$<
+
+$(signal_abort_raw_binout): $(signal_root)/abort/r.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(signal_abort_posix_binout): $(signal_root)/abort/a1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # eof
