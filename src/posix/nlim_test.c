@@ -7,6 +7,7 @@
 #if (NM_HAVE_SYSCONF)
 static void pr_sysconf(const char*, int);
 static void conf_line_max(void);
+
 #endif  /* NM_HAVE_SYSCONF */
 
 
@@ -14,12 +15,30 @@ int
 main(void)
 {
 
+
+#if defined(__STDC__)
+  printf("%s: %d\n", _str_(__STDC__), __STDC__);
+#else
+  printf("%s: (no symbol)\n", _str_(__STDC__));
+
+#endif  /* __STDC__ */
+
+
+#if defined(__STDC_VERSION__)
+  printf("%s: %ld\n", _str_(__STDC_VERSION__), __STDC_VERSION__);
+#else
+  printf("%s: (no symbol)\n", _str_(__STDC_VERSION__));
+
+#endif  /* __STDC_VERSION__ */
+
+
 #if defined(_POSIX_VERSION)
   printf("%s: %ld\n", _str_(_POSIX_VERSION), _POSIX_VERSION+0);
 #else
   printf("%s: (no symbol)\n", _str_(_POSIX_VERSION));
 
 #endif  /* _POSIX_VERSION */
+
 
 #if defined(_XOPEN_VERSION)
   printf("%s: %d\n", _str_(_XOPEN_VERSION), _XOPEN_VERSION+0);
@@ -39,7 +58,7 @@ main(void)
 }
 
 
-#if !(MSVC)
+#if (NM_HAVE_SYSCONF)
 
 void
 pr_sysconf(const char *ss, int name)
@@ -76,12 +95,14 @@ pr_sysconf(const char *ss, int name)
 void
 conf_line_max(void)
 {
+
 #if defined(LINE_MAX)
   printf("%s (defined): %ld\n", _str_(LINE_MAX), (long) (LINE_MAX+0));
 #else
   printf("%s: (no symbol)\n", _str_(LINE_MAX));
 
 #endif
+
 
 #if defined(_SC_LINE_MAX)
   pr_sysconf(_str_(LINE_MAX) " (sysconf)", _SC_LINE_MAX);
@@ -90,12 +111,14 @@ conf_line_max(void)
 
 #endif
 
+
 #if defined(NM_LINE_MAX)
   printf("%s: %ld\n", _str_(NM_LINE_MAX), (long) (NM_LINE_MAX+0));
 #else
   printf("%s: (no symbol)\n", _str_(NM_LINE_MAX);
 
 #endif
+
 }
 
-#endif  /*  !MSVC */
+#endif  /* NM_HAVE_SYSCONF */
