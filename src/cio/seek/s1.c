@@ -44,7 +44,7 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  printf("position at %ld\n", _fpos_(pos));
+  printf("position at %lld\n", (long long) _fpos_(pos));
 
   _fpos_(pos) = 3;
   if (fsetpos(fp, &pos) == -1)
@@ -52,7 +52,7 @@ main(int argc, char **argv)
       perror("!panic");
       exit(EXIT_FAILURE);
     }
-  printf("position reset to %ld\n", _fpos_(pos));
+  printf("position reset to %lld\n", (long long) _fpos_(pos));
 
   len = strlen(us);
   if ((n = fwrite(us, sizeof(*us), len, fp)) != len)
@@ -73,7 +73,7 @@ main(int argc, char **argv)
       perror("!panic");
       exit(EXIT_FAILURE);
     }
-  printf("position reset to %ld\n", _fpos_(pos));
+  printf("position reset to %lld\n", (long long) _fpos_(pos));
 
   if ((n = fread(buf, sizeof(*buf), NM_LINE_MAX, fp)) == 0)
     {
