@@ -4,10 +4,10 @@
 #include <errno.h>
 
 
-#if !(MSVC)
+#if (NM_HAVE_SYSCONF)
 static void pr_sysconf(const char*, int);
 static void conf_line_max(void);
-#endif  /* !MSVC */
+#endif  /* NM_HAVE_SYSCONF */
 
 
 int
@@ -29,9 +29,10 @@ main(void)
 #endif  /* _XOPEN_VERSION */
 
 
-#if !(MSVC)
+#if (NM_HAVE_SYSCONF)
   conf_line_max();
-#endif  /* !MSVC */
+
+#endif  /* NM_HAVE_SYSCONF */
 
 
   return 0;
