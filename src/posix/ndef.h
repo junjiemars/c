@@ -16,10 +16,10 @@
 
 
 #if !defined(_unused_)
-#  if defined(__has_attribute) && __has_attribute(unused)
-#    define _unused_(x)  __attribute__((unused)) x
-#  elif (MSVC)
+#  if (MSVC)
 #    define _unused_(x)  __pragma(warning(suppress:4100 4101 4189)) x
+#  elif defined(__has_attribute) && __has_attribute(unused)
+#    define _unused_(x)  __attribute__((unused)) x
 #  else
 #    define _unused_(x)  x
 #  endif
@@ -57,7 +57,9 @@
 
 
 #if !defined(_fallthrough_)
-#   if defined(__has_attribute) && __has_attribute(fallthrough)
+#   if (MSVC)
+#     define _fallthrough_
+#   elif defined(__has_attribute) && __has_attribute(fallthrough)
 #     define _fallthrough_  __attribute__((fallthrough))
 #   else
 #     define _fallthrough_
