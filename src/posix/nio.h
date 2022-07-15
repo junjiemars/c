@@ -35,4 +35,13 @@ ssize_t getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
 #endif  /* !NM_HAVE_FILENO */
 
 
+#if !defined(_fpos_)
+#  if (LINUX)
+#    define _fpos_(x)  x.__pos
+#  else
+#    define _fpos_(x)  x
+#  endif
+#endif
+
+
 #endif /* end of _NIO_H_ */

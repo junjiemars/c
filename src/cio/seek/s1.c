@@ -19,14 +19,14 @@ main(int argc, char **argv)
   if (argc < 2)
     {
       fprintf(stderr, "usage: <filename>\n");
-      return 1;
+      exit(EXIT_FAILURE);
     }
 
   fp = fopen(argv[1], "w+");
   if (!fp)
     {
       perror("!panic");
-      return 1;
+      exit(EXIT_FAILURE);
     }
 
   printf("write \"%s\" into %s\n", ss, argv[1]);
@@ -44,15 +44,15 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  printf("position at %lld\n", pos);
+  printf("position at %ld\n", _fpos_(pos));
 
-  pos = 3;
+  _fpos_(pos) = 3;
   if (fsetpos(fp, &pos) == -1)
     {
       perror("!panic");
       exit(EXIT_FAILURE);
     }
-  printf("position reset to %lld\n", pos);
+  printf("position reset to %ld\n", _fpos_(pos));
 
   len = strlen(us);
   if ((n = fwrite(us, sizeof(*us), len, fp)) != len)
@@ -67,13 +67,13 @@ main(int argc, char **argv)
       clearerr(fp);
     }
 
-  pos = 0;
+  _fpos_(pos) = 0;
   if (fsetpos(fp, &pos) == -1)
     {
       perror("!panic");
       exit(EXIT_FAILURE);
     }
-  printf("position reset to %lld\n", pos);
+  printf("position reset to %ld\n", _fpos_(pos));
 
   if ((n = fread(buf, sizeof(*buf), NM_LINE_MAX, fp)) == 0)
     {
