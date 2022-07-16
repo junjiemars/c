@@ -184,14 +184,27 @@ $(signal_pause_binout): $(signal_root)/pause/p1.c
 
 
 # child
-signal_child_binout := $(bin_path)/$(signal_prefix)_child$(bin_ext)
+signal_child_proc_binout := $(bin_path)/$(signal_prefix)_child_proc$(bin_ext)
+signal_child_chld_binout := $(bin_path)/$(signal_prefix)_child_chld$(bin_ext)
 
-signal_child: $(signal_child_binout)
-signal_child_test: signal_child
-	$(signal_child_binout)
+signal_child: $(signal_child_proc_binout)       \
+              $(signal_child_chld_binout)
+signal_child_test: signal_child_proc_test         \
+                   signal_child_chld_test
 
-$(signal_child_binout): $(signal_root)/child/c1.c
+
+signal_child_proc_test: $(signal_child_proc_binout)
+	$<
+
+signal_child_chld_test: $(signal_child_chld_binout)
+	$< 1
+
+$(signal_child_proc_binout): $(signal_root)/child/p1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(signal_child_chld_binout): $(signal_root)/child/c1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 
 # info

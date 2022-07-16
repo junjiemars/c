@@ -1,52 +1,64 @@
 #include <_signal_.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
-/*
- * The child inherits the parent's signal dispositions when a process
- * calls fork.
- *
- */
+static void on_sig_chld(int);
 
-static void on_sig_alrm(int);
-
+static int  N  =  5;
 
 int
-main(void)
+main(int argc, char **argv)
 {
-  int    stat;
   pid_t  pid;
 
-  signal(SIGALRM, on_sig_alrm);
+  printf("%d\n", getpid());
+
+  if (argc > 1)
+    {
+      N = atoi(argv[1]);
+    }
+
+  if (SIG_ERR == signal(SIGCHLD, on_sig_chld))
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
 
   pid = fork();
   if (-1 == pid)
     {
       perror(NULL);
-      exit(errno);
     }
   else if (0 == pid)
     {
-      printf("%-8d: pause...\n", getpid());
-      pause();
+      sleep(N);
+      _exit(0);
     }
-  else
-    {
-      printf("%-8d: sleep(1)...\n", getpid());
 
-      sleep(1);
-      kill(pid, SIGALRM);
-
-      waitpid(pid, &stat, 0);
-    }
+  pause();
 
   exit(EXIT_SUCCESS);
-
 }
 
+
 void
-on_sig_alrm(int signo)
+on_sig_chld(int signo)
 {
-  if (SIGALRM == signo)
+  pid_t  pid;
+  int    status;
+
+  if (SIGCHLD == signo)
     {
-      printf("%-8d: %s\n", getpid(), _str_(SIGALRM));
+      if (SIG_ERR == signal(SIGCHLD, on_sig_chld))
+        {
+          perror(NULL);
+        }
+
+      if (-1 == (pid = wait(&status)))
+        {
+          perror(NULL);
+        }
+
+      printf("# %s %d\n", _str_(SIGCHLD), pid);
     }
 }
