@@ -12,6 +12,7 @@ else
 
 
 signal: signal_alarm                            \
+        signal_kill                             \
         signal_reentrant                        \
         signal_set                              \
         signal_sleep                            \
@@ -26,6 +27,7 @@ signal: signal_alarm                            \
         signal_system
 
 signal_test: signal_alarm_test                  \
+             signal_kill_test                   \
              signal_reentrant_test              \
              signal_set_test                    \
              signal_sleep_test                  \
@@ -71,6 +73,15 @@ $(signal_alarm_o_binout): $(signal_root)/alarm/o.c
 $(signal_alarm_n_binout): $(signal_root)/alarm/n.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+# kill
+signal_kill_binout := $(bin_path)/$(signal_prefix)_kill$(bin_ext)
+
+signal_kill: $(signal_kill_binout)
+signal_kill_test: signal_kill
+	$(signal_kill_binout)
+
+$(signal_kill_binout): $(signal_root)/kill/k1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # reentrant
 signal_reentrant_n_binout := $(bin_path)/$(signal_prefix)_reentrant_n$(bin_ext)
