@@ -22,7 +22,8 @@ signal: signal_alarm                            \
         signal_info                             \
         signal_suspend                          \
         signal_sync                             \
-        signal_abort
+        signal_abort                            \
+        signal_system
 
 signal_test: signal_alarm_test                  \
              signal_reentrant_test              \
@@ -35,7 +36,8 @@ signal_test: signal_alarm_test                  \
              signal_info_test                   \
              signal_suspend_test                \
              signal_sync_test                   \
-             signal_abort_test
+             signal_abort_test                  \
+             signal_system_test
 
 endif														# msvc
 
@@ -270,6 +272,30 @@ $(signal_abort_raw_binout): $(signal_root)/abort/r.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(signal_abort_posix_binout): $(signal_root)/abort/a1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# system
+signal_system_dri_binout := $(bin_path)/$(signal_prefix)_system_dri$(bin_ext)
+signal_system_art_binout := $(bin_path)/$(signal_prefix)_system_art$(bin_ext)
+
+signal_system: $(signal_system_dri_binout)      \
+               $(signal_system_art_binout)
+signal_system_test: signal_system_dri_test      \
+                    signal_system_art_test
+
+signal_system_dri_test: $(signal_system_dri_binout)
+	# $< "/bin/ed"
+	@echo "#skip ..."
+
+signal_system_art_test: $(signal_system_art_binout)
+	# $< "/bin/ed"
+	@echo "#skip ..."
+
+$(signal_system_dri_binout): $(signal_root)/system/d.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(signal_system_art_binout): $(signal_root)/system/d.c   \
+                             $(signal_root)/system/s.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # eof
