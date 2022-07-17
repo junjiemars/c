@@ -24,7 +24,8 @@ signal: signal_alarm                            \
         signal_suspend                          \
         signal_sync                             \
         signal_abort                            \
-        signal_system
+        signal_system                           \
+        signal_job
 
 signal_test: signal_alarm_test                  \
              signal_kill_test                   \
@@ -39,7 +40,8 @@ signal_test: signal_alarm_test                  \
              signal_suspend_test                \
              signal_sync_test                   \
              signal_abort_test                  \
-             signal_system_test
+             signal_system_test                 \
+             signal_job_test
 
 endif														# msvc
 
@@ -320,6 +322,22 @@ $(signal_system_dri_binout): $(signal_root)/system/d.c
 
 $(signal_system_art_binout): $(signal_root)/system/d.c   \
                              $(signal_root)/system/s.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# job
+signal_job_tstp_binout := $(bin_path)/$(signal_prefix)_job_tstp$(bin_ext)
+
+signal_job: signal_job_tstp
+signal_job_test: signal_job_tstp_test
+
+signal_job_tstp: $(signal_job_tstp_binout)
+
+signal_job_tstp_test: $(signal_job_tstp_binout)
+	# $<
+	@echo "#skip ..."
+
+$(signal_job_tstp_binout): $(signal_root)/job/j1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # eof
