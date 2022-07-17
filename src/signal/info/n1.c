@@ -1,33 +1,26 @@
 #include <_signal_.h>
 #include <ctype.h>
 
-#define N  16
+/*
+ * 1. sys_signame is not portable.
+ * 2. prefer strsignal sys_siglist.
+ * 3. strsig is portable implementation.
+ *
+ */
 
-static void strupper(const char*, char*);
 
 extern const char * const  sys_siglist[];
-extern const char * const  sys_signame[];
+/* extern const char * const  sys_signame[]; */
+extern char * strsig(int);
 
 
 int
 main(void)
 {
-  char  name[N];
-
   for (unsigned i = 1; i < NSIG; i++)
     {
-      strupper(sys_signame[i], name);
-      printf("%-16s: [%02i] %s\n", name, i, sys_siglist[i]);
+      printf("%-16s: [%02i] %s\n", strsig(i), i, sys_siglist[i]);
     }
 
   exit(EXIT_SUCCESS);
-}
-
-void
-strupper(const char *s, char *u)
-{
-  while ((*u++ = (char) toupper(*s++)) != 0)
-    {
-      /* void */
-    }
 }
