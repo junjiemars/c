@@ -9,48 +9,16 @@
  */
 
 
-static unsigned sleep2(unsigned nsecs);
-static void on_sig_alrm(int signo);
-static void race(long);
+unsigned sleep(unsigned);
 
-static long     N  =  0;
+extern void race(long);
+extern unsigned  N;
+
 static jmp_buf  env_alrm;
 
-int
-main(void)
-{
-  sleep2(1);
-  sleep2(1);
-  sleep2(1);
-
-  return 0;
-}
-
-void
-on_sig_alrm(int signo)
-{
-  if (SIGALRM == signo)
-    {
-      printf("# %s\n", _str_(SIGALRM));
-
-      longjmp(env_alrm, 1);
-    }
-}
-
 unsigned
-sleep2(unsigned nsecs)
+sleep(unsigned nsecs)
 {
-  if (nsecs == 0)
-    {
-      return nsecs;
-    }
-
-  if (SIG_ERR == signal(SIGALRM, on_sig_alrm))
-    {
-      perror(NULL);
-      return (nsecs);
-    }
-
   if (0 == setjmp(env_alrm))
     {
       alarm(nsecs);
@@ -62,15 +30,4 @@ sleep2(unsigned nsecs)
     }
 
   return alarm(0);
-}
-
-void
-race(long n)
-{
-  _unused_(volatile double  d)  =  0;
-
-  for (long i = 0; i < n; i++)
-    {
-      d += rand() * n;
-    }
 }

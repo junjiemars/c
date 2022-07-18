@@ -139,24 +139,38 @@ $(signal_set2_binout): $(signal_root)/set/s2.c
 
 
 # sleep
-signal_sleep1_binout := $(bin_path)/$(signal_prefix)_sleep1$(bin_ext)
-signal_sleep2_binout := $(bin_path)/$(signal_prefix)_sleep2$(bin_ext)
+signal_sleep_raw_binout := $(bin_path)/$(signal_prefix)_sleep_raw$(bin_ext)
+signal_sleep_1_binout := $(bin_path)/$(signal_prefix)_sleep_1$(bin_ext)
+signal_sleep_2_binout := $(bin_path)/$(signal_prefix)_sleep_2$(bin_ext)
 
-signal_sleep: $(signal_sleep1_binout)           \
-              $(signal_sleep2_binout)
-signal_sleep_test: signal_sleep1_test           \
-                   signal_sleep2_test
+signal_sleep: $(signal_sleep_raw_binout)        \
+              $(singal_sleep_1_binout)           \
+              $(signal_sleep_2_binout)
+signal_sleep_test: signal_sleep_raw_test        \
+                   signal_sleep_1_test           \
+                   signal_sleep_2_test
 
-signal_sleep1_test: $(signal_sleep1_binout)
+signal_sleep_raw_test: $(signal_sleep_raw_binout)
 	$< 1
 
-signal_sleep2_test: $(signal_sleep2_binout)
+signal_sleep_1_test: $(signal_sleep_1_binout)
 	$< 1
 
-$(signal_sleep1_binout): $(signal_root)/sleep/s1.c
+signal_sleep_2_test: $(signal_sleep_2_binout)
+	$< 1
+
+$(signal_sleep_raw_binout): $(signal_root)/sleep/d.c  \
+                            $(signal_root)/sleep/r.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(signal_sleep2_binout): $(signal_root)/sleep/s2.c
+$(signal_sleep_1_binout): $(signal_root)/sleep/d.c  \
+                          $(signal_root)/sleep/r.c  \
+                          $(signal_root)/sleep/s1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(signal_sleep_2_binout): $(signal_root)/sleep/d.c  \
+                          $(signal_root)/sleep/r.c  \
+                          $(signal_root)/sleep/s2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
