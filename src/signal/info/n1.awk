@@ -1,24 +1,29 @@
 BEGIN {
     FS = ","
 
-    print "#include <signal.h>"
-    print
+    ss = ""
 
+    print "#include <signal.h>"
+    print ""
     print "char *strsigno(int);"
-    print
-    print "char *strsigno(int signo)"
-    print "{"
-    print "  static char *ss[] = "
-    print "    { \"\", "
+    print ""
+    print ""
 }
 
 {
-    printf("    \"%s\",\n", $1);
+    ss = ss sprintf("      \"%s\",\n", $1)
 }
 
 END {
-    print "  };"
-    print "  if (signo < (int)(sizeof(ss)/sizeof(*ss)))"
+    print "char *"
+    print "strsigno(int signo)"
+    print "{"
+    print "  static char *ss[] = "
+    print "    {"
+    print ss
+    print "    };"
+    print ""
+    print "  if (signo < (int) (sizeof(ss)/sizeof(*ss)))"
     print "    {"
     print "      return ss[signo];"
     print "    }"
