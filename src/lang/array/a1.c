@@ -4,6 +4,13 @@
 /* base, row-index, col-index, col-n, width */
 #define Aij(b, r, c, n, w) ((char*)(b) + (r)*(n)*(w) + (c)*(w))
 
+static void f1(char**);
+static void f2(char*[]);
+static void g1(char (*)[3][4], int);
+static void g2(char [][3][4], int);
+static void h1(int (*)[4], int);
+static void h2(int (*)[3][4]);
+
 char *s1[] =
 {
 	"aaa", "bbb", "ccc", 0,
@@ -28,11 +35,25 @@ int i2[][3][4] =
   { {21,22,23,24}, {25,26,27,28}, {29,30,31,32}, },
 };
 
+
+int
+main(void)
+{
+	f1(s1);
+	f2(s1);
+	g1(s2, 3);
+	g2(s2, 3);
+  h1(i1, sizeof(i1)/sizeof(i1[0]));
+	h2(i2);
+
+	return 0;
+}
+
+
 void
 f1(char **args)
 {
-	char x = args[1][2];
-  _unused_(x);
+	_unused_(char x) = args[1][2];
 
   printf("char **args\n------------\n");
   while (*args)
@@ -46,8 +67,7 @@ f1(char **args)
 void
 f2(char *args[])
 {
-	char x = args[1][2];
-	_unused_(x);
+	_unused_(char x) = args[1][2];
 
   printf("char *args[]\n------------\n");
   while (*args)
@@ -58,11 +78,10 @@ f2(char *args[])
   printf("\n\n");
 }
 
-void 
+void
 g1(char (*args)[3][4], int n)
 {
-	char x = args[1][2][3];
-	_unused_(x);
+	_unused_(char x) = args[1][2][3];
 
   printf("char (*args)[3][4]\n------------\n");
   for (int i = 0; i < n; i++)
@@ -79,8 +98,7 @@ g1(char (*args)[3][4], int n)
 void
 g2(char args[][3][4], int n)
 {
-	char x = args[1][2][3];
-	_unused_(x);
+	_unused_(char x) = args[1][2][3];
 
   printf("char args[][3][4]\n------------\n");
   for (int i = 0; i < n; i++)
@@ -98,8 +116,7 @@ g2(char args[][3][4], int n)
 void
 h1(int (*i)[4], int n)
 {
-	int x = i[1][2];
-	_unused_(x);
+	_unused_(int x) = i[1][2];
 
   printf("int (*i)[4]\n------------\n");
   for (int j = 0; j < n; j++)
@@ -116,22 +133,5 @@ h1(int (*i)[4], int n)
 void
 h2(int (*i)[3][4])
 {
-  int x = i[0][1][2];
-  _unused_(x);
-}
-
-int
-main(int argc, char **argv)
-{
-	_unused_(argc);
-	_unused_(argv);
-
-	f1(s1);
-	f2(s1);
-	g1(s2, 3);
-	g2(s2, 3);
-  h1(i1, sizeof(i1)/sizeof(i1[0]));
-	h2(i2);
-	
-	return 0;
+  _unused_(int x) = i[0][1][2];
 }

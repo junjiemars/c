@@ -3,44 +3,39 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-#if !(NM_HAVE_STATIC_ASSERT)
-#  ifdef static_assert
-#    undef static_assert
-#  endif
-#  define static_assert(e, m) enum {static_assert = 1/!!((e) && (m))}
-#endif
-
-int
-sqr(int x)
-{
-    assert(((0 < x) && (x < 100)) && "x !in (0, 100)");
-    return (x * x);
-}
+static int sqr(int);
 
 int
 main(int argc, const char **argv)
 {
-    int  n;
+  int  n;
 
-    if (argc < 2)
-      {
-        fprintf(stderr, "usage: one <int>\n");
-        return 1;
-      }
+  if (argc < 2)
+    {
+      fprintf(stderr, "usage: one <int>\n");
+      return 1;
+    }
 
-    printf("# %s mode\n",
+  printf("# %s mode\n",
 #if (NDEBUG)
-           "RELEASE"
+         "RELEASE"
 #else
-           "DEBUG"
+         "DEBUG"
 #endif  /* NDEBUG */
-        );
+         );
 
-    static_assert(4 == sizeof(int), "sizeof(int) != 4 bytes");
+  static_assert(4 == sizeof(int), "sizeof(int) != 4 bytes");
 
-    n = atoi(argv[1]);
-    printf("sqr(%i)=%u\n", n, sqr(n));
+  n = atoi(argv[1]);
+  printf("sqr(%i)=%u\n", n, sqr(n));
 
-    return 0;
+  return 0;
+}
+
+
+int
+sqr(int x)
+{
+  assert(((0 < x) && (x < 100)) && "x !in (0, 100)");
+  return (x * x);
 }
