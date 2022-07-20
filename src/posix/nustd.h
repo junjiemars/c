@@ -7,6 +7,21 @@
 
 
 #include <nore.h>
+
+#if (DARWIN)
+#  if !defined(_DARWIN_C_SOURCE)
+#    define _DARWIN_C_SOURCE
+#  endif
+#endif
+
+
+#if (LINUX)
+#  if !defined(_GNU_SOURCE)
+#    define _GNU_SOURCE
+#  endif
+#endif
+
+
 #include <npstd.h>
 #include <ncstd.h>
 
