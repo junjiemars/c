@@ -1,7 +1,4 @@
 #include <_lang_.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 
 #define N  32
 
@@ -20,7 +17,7 @@ test_setenv(const char *name, const char *value)
     char  *env;
     char  *new_value  =  0;
     char  *new_env    =  0;
-    
+
     rc = setenv(name, value, 0);
     if (rc) {
         perror(0);
@@ -66,14 +63,14 @@ test_setenv(const char *name, const char *value)
     }
     env = getenv(name);
     printf("%s=%s\n", name, env);
-    
+
 clean_exit:
     free(new_value);
     free(new_env);
 }
 
-int 
-main(int argc, const char **argv) 
+int
+main(int argc, const char **argv)
 {
     if (argc < 3) {
         fprintf(stderr, "please, input an env, such as NAME VALUE\n");

@@ -1,8 +1,11 @@
 #ifndef _LANG_H_
 #define _LANG_H_
 
+#include <npstd.h>
 #include <ncstd.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 
 /* #if (GCC) */
