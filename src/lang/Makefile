@@ -274,17 +274,24 @@ $(lang_iso646_binout): $(lang_root)/iso646/646.c
 
 # jmp
 lang_jmp_basic_binout := $(bin_path)/$(lang_prefix)_jmp_basic$(bin_ext)
+lang_jmp_var_binout := $(bin_path)/$(lang_prefix)_jmp_var$(bin_ext)
 lang_jmp_catch_binout := $(bin_path)/$(lang_prefix)_jmp_catch$(bin_ext)
 lang_jmp_catch_cppout := $(tmp_path)/$(lang_prefix)_jmp_catch$(cpp_ext)
 
 lang_jmp: lang_jmp_basic                        \
+          lang_jmp_var                          \
           lang_jmp_catch
 lang_jmp_test: lang_jmp_basic_test              \
+               lang_jmp_var_test                \
                lang_jmp_catch_test
 
 lang_jmp_basic: $(lang_jmp_basic_binout)
 lang_jmp_basic_test: lang_jmp_basic
 	$(lang_jmp_basic_binout)
+
+lang_jmp_var: $(lang_jmp_var_binout)
+lang_jmp_var_test: lang_jmp_var
+	$(lang_jmp_var_binout)
 
 lang_jmp_catch: $(lang_jmp_catch_binout)
 lang_jmp_catch_test: lang_jmp_catch
@@ -292,6 +299,9 @@ lang_jmp_catch_test: lang_jmp_catch
 
 $(lang_jmp_basic_binout): $(lang_root)/jmp/j.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(lang_jmp_var_binout): $(lang_root)/jmp/v.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_jmp_catch_binout): $(lang_jmp_catch_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
