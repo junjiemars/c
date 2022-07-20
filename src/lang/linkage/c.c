@@ -1,25 +1,15 @@
 #include <_lang_.h>
 #include "lnk.h"
-#include <assert.h>
+
 
 static int fn_i(int);
-
-int
-fn_i(int i) {
-  return i*i;
-}
-
-extern int
-fn_cube(int a) {
-  return a*a*a;
-}
+extern int fn_cube(int);
 
 static int state_i = 0x1122;
 
 int
-main(int argc, char **argv) {
-	_unused_(argc);
-	_unused_(argv);
+main(void)
+{
 
   int val = fn(1);
   assert(val == state + 0x1 /* state_i:lnk.c */ + 1);
@@ -32,7 +22,7 @@ main(int argc, char **argv) {
   /* size: read-only, defined in lnk.h with internal linkage */
   assert(size == 3);
 
-  /* same identifier, declaration with internal linkage in lnk.c 
+  /* same identifier, declaration with internal linkage in lnk.c
    * so compiler generates different instances.
    */
   val = fn_i(state_i);
@@ -46,9 +36,22 @@ main(int argc, char **argv) {
   extern int state_c;
   state_c += 0x1122;
   assert(0x2244 == state_c);
-  
+
   val = fn_cube(3);
   assert(3*3*3 == val);
 
   return 0;
+}
+
+
+int
+fn_i(int i)
+{
+  return i*i;
+}
+
+extern int
+fn_cube(int a)
+{
+  return a*a*a;
 }

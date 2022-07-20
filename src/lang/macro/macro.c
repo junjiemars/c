@@ -44,11 +44,8 @@
 
 
 int
-main(int argc, char *argv[])
+main(void)
 {
-  _unused_(argc);
-  _unused_(argv);
-
   printf("\ndouble macro\n");
   printf("--------------\n");
   printf("double_v1(1+1)*8=%i\n", double_v1(1+1)*8);

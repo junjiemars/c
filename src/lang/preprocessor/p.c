@@ -61,12 +61,9 @@ enum color
 
 
 int
-main(int argc, char *argv[])
+main(void)
 {
-	_unused_(argc);
-	_unused_(argv);
-
-	char *platform = 
+	char *platform =
 #if defined(LINUX)
     "Linux";
 #elif defined(DARWIN)

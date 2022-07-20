@@ -1,9 +1,6 @@
 #include "_lang_.h"
 #include <locale.h>
-#include <stdio.h>
 #include <time.h>
-#include <assert.h>
-#include <string.h>
 
 
 void print_LC_ALL(void);
@@ -15,9 +12,9 @@ print_LC_ALL(void)
 {
   static char text[128];
   time_t t = time(0);
-  
+
   printf("%.3f\n", 31415.9265354);
-  
+
   strftime(text, sizeof(text), "%A, %B, %d, %Y(%x)\n", localtime(&t));
   puts(text);
 }

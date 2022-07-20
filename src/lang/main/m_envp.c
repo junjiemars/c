@@ -1,17 +1,18 @@
 #include <_lang_.h>
-#include <stdio.h>
+
 
 int
-main(int argc, char **argv, char **envp) {
-  _unused_(argc);
-  _unused_(argv);
+main(_unused_(int argc),
+     _unused_(char **argv),
+     _unused_(char **envp))
+{
+  char  **p  =  envp;
 
-  char **p = envp;
   printf("char **envp ...\n----------\n");
-  while (*p) {
-    printf("%s\n", *p++);
-  }
+  while (*p)
+    {
+      printf("%s\n", *p++);
+    }
 
   return 0;
 }
-

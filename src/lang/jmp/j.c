@@ -5,22 +5,28 @@
 jmp_buf env;
 volatile int flag = 0x11223344;
 
-void a(void);
-void b(volatile int*);
-void c(volatile int*);
+static void a(void);
+static void b(volatile int*);
+static void c(volatile int*);
+
+int
+main(void)
+{
+	a();
+}
 
 void
 a(void)
 {
 	int val;
 	volatile int flag_in_stack = flag;
-	
-	printf("> setjmp()\n[flag=0x%x, flag_in_stack=0x%x]\n=> ", 
+
+	printf("> setjmp()\n[flag=0x%x, flag_in_stack=0x%x]\n=> ",
 				 flag, flag_in_stack);
 
 	if (0 != (val = setjmp(env)))
     {
-      printf("\n< longjmp(0x%x)\n[flag=0x%x, flag_in_stack=0x%x]\n", 
+      printf("\n< longjmp(0x%x)\n[flag=0x%x, flag_in_stack=0x%x]\n",
              val, flag, flag_in_stack);
     }
   else
@@ -30,7 +36,7 @@ a(void)
     }
 }
 
-void 
+void
 b(volatile int *flag_in_stack)
 {
 	printf("c() => ");
@@ -44,12 +50,4 @@ c(volatile int *flag_in_stack)
 	*flag_in_stack = flag;
 	printf("longjmp() => ");
 	longjmp(env, 0x1234);
-}
-
-int
-main(int argc, char *argv[])
-{
-	_unused_(argc);
-	_unused_(argv);
-	a();	
 }

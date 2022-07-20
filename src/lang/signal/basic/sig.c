@@ -1,7 +1,6 @@
 #include <_lang_.h>
 #include <signal.h>
-#include <stdio.h>
-#include <string.h>
+
 
 #ifdef MSVC
 static void psignal(int sig, const char *s);
@@ -75,13 +74,10 @@ on_sigterm_continue(int sig)
 }
 
 int
-main(int argc, char **argv)
+main(void)
 {
-	_unused_(argc);
-	_unused_(argv);
-
 	printf("pid=%d\n", getpid());
-	
+
 	int n = 0;
 	on_signal onsig = signal(SIGINT, on_sigint_continue);
   if (SIG_ERR == onsig)

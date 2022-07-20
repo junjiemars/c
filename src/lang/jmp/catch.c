@@ -4,15 +4,27 @@
 
 /* https://en.wikipedia.org/wiki/Setjmp.h */
 
+
+#define INDENT_0 ""
+#define INDENT_1 "  "
+#define INDENT_2 INDENT_1 INDENT_1
+
+
+
 static void throw(jmp_buf*);
 static void f(void);
 static void g(jmp_buf*);
 
 static volatile int exception_type;
 
-#define INDENT_0 ""
-#define INDENT_1 "  "
-#define INDENT_2 INDENT_1 INDENT_1
+
+
+int main(void)
+{
+	f();
+
+	return 0;
+}
 
 
 void f(void)
@@ -38,7 +50,7 @@ void g(jmp_buf *env)
 {
 	jmp_buf local_env;
 	printf("%s g()\n", INDENT_1);
-	
+
 	switch (setjmp(local_env))
     {
     case 0x11000000:
@@ -63,15 +75,4 @@ void throw(jmp_buf *env)
 {
 	printf("%s throw()\n", INDENT_2);
 	longjmp(*env, exception_type |= 0x11000000);
-}
-
-
-int main(int argc, char *argv[])
-{
-	_unused_(argc);
-	_unused_(argv);
-
-	f();
-	
-	return 0;
 }

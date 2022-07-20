@@ -171,7 +171,7 @@ test_flex1_s(void) {
   for (int i = 0; i < 1; i++) {
     printf("fsd2->n2[%d] = %8li\n", i, fsd2->n2[i]);
   }
-  
+
   free(fs64);
   free(fsd2);
 }
@@ -237,7 +237,7 @@ test_nest_s(void) {
 
   struct nest2_s *n21 = (struct nest2_s*)&n1->base;
   printf("n21->base = %s, %zu\n", n21->base, n21->len);
-  
+
   free(n1);
 }
 
@@ -245,7 +245,7 @@ void
 test_padding_s(void) {
   struct padding_s *p1 = malloc(sizeof(struct padding_s));
   printf("sizeof(padding_s) = %zu\n", sizeof(struct padding_s));
-  
+
   free(p1);
 }
 
@@ -253,15 +253,13 @@ void
 test_packed_s(void) {
   struct packed_s *p1 = malloc(sizeof(struct packed_s));
   printf("sizeof(packed_s) = %zu\n", sizeof(struct packed_s));
-  
+
   free(p1);
 }
 
 int
-main(int argc, char **argv) {
-  _unused_(argc);
-  _unused_(argv);
-  
+main(void) {
+
   test_flex1_s();
   test_flex2_s();
   test_noname1_s();

@@ -1,9 +1,7 @@
 #include "_lang_.h"
 #include <float.h>
 #include <math.h>
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
+
 
 #define BIT8_SUF "\n"
 #include <nbits.h>
@@ -35,7 +33,7 @@ void test_double_equal(void);
 void test_double_classify(void);
 
 unsigned int
-to_ui(float x) 
+to_ui(float x)
 {
   unsigned int u;
   memcpy((char*)&u, (char*)&x, sizeof(x));
@@ -43,7 +41,7 @@ to_ui(float x)
 }
 
 unsigned long
-to_ul(double x) 
+to_ul(double x)
 {
   unsigned long u;
   memcpy((char*)&u, (char*)&x, sizeof(x));
@@ -51,7 +49,7 @@ to_ul(double x)
 }
 
 void
-test_cmp_float(void) 
+test_cmp_float(void)
 {
   float d1 = 0.1f, d2 = 0.2f, d3 = 0.3f;
   unsigned int u1 = to_ui(d1);
@@ -70,9 +68,9 @@ test_cmp_float(void)
   printf(BPRI32, BIT32(u12));
   printf(BPRI32, BIT32(u3));
 
-  ASSERT(u3 == u12);
-  ASSERT(d3 == d1 + d2);
-  
+  assert(u3 == u12);
+  assert(d3 == d1 + d2);
+
   int less, greater, lessgreater, unordered, lessequal, greaterequal;
   less = isless(d3, d1+d2);
   greater = isgreater(d3, d1+d2);
@@ -81,12 +79,12 @@ test_cmp_float(void)
   greaterequal = isgreaterequal(d3, d1+d2);
   unordered = isunordered(d3, d1+d2);
 
-  ASSERT(!unordered);
-  ASSERT(!less);
-  ASSERT(!greater);
-  ASSERT(!lessgreater);
-  ASSERT((less || greater) == lessgreater);
-  ASSERT(lessequal && greaterequal);
+  assert(!unordered);
+  assert(!less);
+  assert(!greater);
+  assert(!lessgreater);
+  assert((less || greater) == lessgreater);
+  assert(lessequal && greaterequal);
 
   int less1, greater1, lessgreater1;
   float lg1 = 0.1f, lg2 = 0.2f, lg3 = 0.3001f;
@@ -94,19 +92,19 @@ test_cmp_float(void)
   greater1 = isgreater(lg3, lg1+lg2);
   lessgreater1 = islessgreater(lg3, lg1+lg2);
 
-  ASSERT(less1 || greater1);
-  ASSERT(lessgreater1);
-  ASSERT((less1 || greater1) == lessgreater1);
+  assert(less1 || greater1);
+  assert(lessgreater1);
+  assert((less1 || greater1) == lessgreater1);
 }
 
 void
-test_cmp_double(void) 
+test_cmp_double(void)
 {
   double d1 = 0.1, d2 = 0.2, d3 = 0.3;
-  unsigned long u1 = to_ul(d1);  
+  unsigned long u1 = to_ul(d1);
   unsigned long u2 = to_ul(d2);
   unsigned long u12 = to_ul(d1+d2);
-  unsigned long u3 = to_ul(d3); 
+  unsigned long u3 = to_ul(d3);
 
   printf("compare double\n--------------------\n");
   printf("%16lf = 0x%lX\n", d1, to_ul(d1));
@@ -119,9 +117,9 @@ test_cmp_double(void)
   printf(BPRI64, BIT64(u12));
   printf(BPRI64, BIT64(u3));
 
-  ASSERT(u3 != u12);
-  ASSERT(d3 != d1 + d2);
-  
+  assert(u3 != u12);
+  assert(d3 != d1 + d2);
+
   int less, greater, lessgreater, unordered, lessequal, greaterequal;
   less = isless(d3, d1+d2);
   greater = islessgreater(d3, d1+d2);
@@ -130,12 +128,12 @@ test_cmp_double(void)
   greaterequal = isgreaterequal(d3, d1+d2);
   unordered = isunordered(d3, d1+d2);
 
-  ASSERT(!unordered);
-  ASSERT(less);
-  ASSERT(greater);
-  ASSERT(lessgreater);
-  ASSERT(lessequal || greaterequal);
-  ASSERT(less && greater);
+  assert(!unordered);
+  assert(less);
+  assert(greater);
+  assert(lessgreater);
+  assert(lessequal || greaterequal);
+  assert(less && greater);
 
   int less1, greater1, lessgreater1;
   double lg1 = 0.1, lg2 = 0.2, lg3 = 0.3001;
@@ -143,38 +141,36 @@ test_cmp_double(void)
   greater1 = isgreater(lg3, lg1+lg2);
   lessgreater1 = islessgreater(lg3, lg1+lg2);
 
-  ASSERT(less1 || greater1);
-  ASSERT(lessgreater1);
-  ASSERT((less1 || greater1) == lessgreater1);
+  assert(less1 || greater1);
+  assert(lessgreater1);
+  assert((less1 || greater1) == lessgreater1);
 }
 
 void
-test_asm_double(void) 
+test_asm_double(void)
 {
-  double d1 = 0.1, d2 = 0.2, d3 = 0.3;
-  int x = (int)((d1+d2) - d3);
-  _unused_(x);
+  double  d1           =  0.1, d2 = 0.2, d3 = 0.3;
+  _unused_(int     x)  =  (int) ((d1+d2) - d3);
 }
 
 void
-test_asm_long_double(void) 
+test_asm_long_double(void)
 {
-  long double d1 = 0.1L, d2 = 0.2L, d3 = 0.3L;
-  int x = (int)((d1+d2) - d3);
-  _unused_(x);
+  long double  d1  =  0.1L, d2 = 0.2L, d3 = 0.3L;
+  _unused_(int x)  =  (int) ((d1+d2) - d3);
 }
 
 void
-test_epsilon_double(void) 
+test_epsilon_double(void)
 {
   double d1 = 0.1, d2 = 0.2, d3 = 0.3;
   double epsilon = DBL_EPSILON;
   int x = fabs((d1+d2) - d3) < epsilon;
-  ASSERT(x);
+  assert(x);
 }
 
 void
-test_double_zero(void) 
+test_double_zero(void)
 {
   double d1 = 0.0, d2 = 0.0;
   int le, ge;
@@ -182,54 +178,51 @@ test_double_zero(void)
   le = islessequal(d1, d2);
   ge = isgreaterequal(d1, d2);
 
-  ASSERT(FP_ZERO == fpclassify(d1));
-  ASSERT(d1 == d2);
-  ASSERT(le && ge);
+  assert(FP_ZERO == fpclassify(d1));
+  assert(d1 == d2);
+  assert(le && ge);
 }
 
 void
-test_double_equal(void) 
+test_double_equal(void)
 {
   double d1 = 0.1, d2 = 0.2, d3 = 0.3;
   int le, ge, l, g;
-  
+
   le = islessequal(d1+d2, d3);
   ge = isgreaterequal(d1+d2, d3);
   l = isless(d1+d2, d3);
   g = isgreater(d1+d2, d3);
 
-  ASSERT((le || ge) && (l || g));
-  ASSERT(g && ge);
+  assert((le || ge) && (l || g));
+  assert(g && ge);
 }
 
 void
-test_double_classify(void) 
+test_double_classify(void)
 {
-  ASSERT(FP_ZERO == fpclassify(0.0));
-  ASSERT(FP_ZERO == fpclassify(0.0/DBL_MAX));
-  ASSERT(FP_NORMAL == fpclassify(1.0));
-  ASSERT(FP_NORMAL != fpclassify(0.0));
+  assert(FP_ZERO == fpclassify(0.0));
+  assert(FP_ZERO == fpclassify(0.0/DBL_MAX));
+  assert(FP_NORMAL == fpclassify(1.0));
+  assert(FP_NORMAL != fpclassify(0.0));
 
 #if !defined(MSVC)
-  ASSERT(FP_INFINITE == fpclassify(1.0/0.0));
-  ASSERT(FP_INFINITE == fpclassify(-1.0/0.0));
-  ASSERT(FP_NAN == fpclassify((1.0L/0.0) / (1.0/0.0)));
+  assert(FP_INFINITE == fpclassify(1.0/0.0));
+  assert(FP_INFINITE == fpclassify(-1.0/0.0));
+  assert(FP_NAN == fpclassify((1.0L/0.0) / (1.0/0.0)));
 #endif
 
-  ASSERT(isfinite(0.0));
+  assert(isfinite(0.0));
 #if !defined(MSVC)
-  ASSERT(isinf(1.0/0.0));
-  ASSERT(isnan((1.0/0.0)/(1.0/0.0)));
+  assert(isinf(1.0/0.0));
+  assert(isnan((1.0/0.0)/(1.0/0.0)));
 #endif
-  ASSERT(isnormal(0.1));
+  assert(isnormal(0.1));
 }
 
 int
-main(int argc, char **argv) 
+main(void)
 {
-  _unused_(argc);
-  _unused_(argv);
-
   test_cmp_float();
   test_cmp_double();
   test_asm_double();
