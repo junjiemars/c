@@ -9,6 +9,11 @@
  */
 
 
+#if (GCC)
+#  pragma GCC diagnostic ignored "-Wclobbered"
+#endif
+
+
 static void f1(int, int, int, int);
 static void f2(int);
 static void print_var(int, int, int, int);
