@@ -5,22 +5,30 @@
 #include <nore.h>
 
 
+#if !defined(__has_attribute)
+#  if !defined(__attribute)
+#    define __attribute__(_) _
+#  endif
+#endif
+
 
 #if (MSVC)
-#  if !(defined(unused) || defined(__attribute__))
-#    define unused  warning(suppress:4100 4101 4189)
-#    define __attribute__(unused)  __pragma unused
+#  if !defined(unused)
+#    define unused  __pragma(warning(suppress:4100 4101 4189))
 #  endif
 #elif defined(__has_attribute) && __has_attribute(unused)
-#elif !defined(__attribute__)
-#  define __attribute__(_)
+#elif !defined(unused)
+#  define unused
 #endif
 
 
 #if defined(__has_attribute) && __has_attribute(fallthrough)
-#elif !(defined(__attribute__) || defined(fallthrough))
-#  define fallthrough
-#  define __attribute__(_)
+#elif !defined(fallthrough)
+#  if defined(__attribute__)
+#    define fallthrough  void
+#  else
+#    define fallthrough
+#  endif;
 #endif
 
 
