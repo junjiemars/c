@@ -68,8 +68,9 @@ verify(const void *lhs, const void *rhs, size_t size)
 void
 test_cmp_int(void)
 {
-	int i1 = 0x1122, i2 = 0x3344;
-	_unused_(int cmp) = cmp_int(&i1, &i2);
+	int  i1  =  0x1122;
+  int  i2  =  0x3344;
+	__attribute__((unused)) int cmp = cmp_int(&i1, &i2);
 
 	assert(cmp < 0 && "cmp_int(0x1122, 0x3344) should < 0");
 	cmp = cmp_int(&i1, &i1);
@@ -86,7 +87,7 @@ test_cmp_str(void)
 	assert(0 == cmp_str(ss, ss));
 	assert(0 != cmp_str(&ss[0], &ss[1]));
 
-	_unused_(char *s1) = ss[0]+3;
+	char *s1 = ss[0]+3;
 
 	assert(0 == cmp_str(&s1, &ss[1]));
 	printf("test cmp_str fn ... ok\n");

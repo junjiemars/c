@@ -18,7 +18,7 @@ reverse_string(char *s) {
 
 
 int
-main(_unused_(int argc), char **argv)
+main(__attribute__((unused)) int argc, char **argv)
 {
 	char  s[256];
 
