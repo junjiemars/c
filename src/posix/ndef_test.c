@@ -16,9 +16,6 @@ static void test_swp(void);
 int
 main(int argc, char **argv)
 {
-
-  (void)ZZZ( ( argc ) );
-
   test_unused(1);
   test_isut();
   test_nof();
