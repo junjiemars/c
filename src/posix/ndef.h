@@ -18,7 +18,8 @@
 
 
 #if defined(__has_attribute) && __has_attribute(fallthrough)
-#elif !defined(__attribute__)
+#elif !(defined(__attribute__) || defined(fallthrough))
+#  define fallthrough
 #  define __attribute__(_)
 #endif
 
