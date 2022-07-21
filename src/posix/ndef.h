@@ -16,10 +16,8 @@
 #endif
 
 
-#if !defined(fallthrough)
-#   if !(defined(__has_attribute) && __has_attribute(fallthrough))
-#     define __attribute__(_)
-#   endif
+#if !(defined(__has_attribute) && __has_attribute(fallthrough))
+#  define __attribute__(_)
 #endif
 
 
