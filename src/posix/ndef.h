@@ -5,6 +5,25 @@
 #include <nore.h>
 
 
+
+#if (MSVC)
+#  if !defined(unused)
+#    define unused  warning(suppress:4100 4101 4189)
+#    define __attribute__(unused)  __pragma unused
+#  endif
+#elif !(defined(__has_attribute) && __has_attribute(unused))
+#  define __attribute__(_)
+#endif
+
+
+#if !defined(fallthrough)
+#   if !(defined(__has_attribute) && __has_attribute(fallthrough))
+#     define __attribute__(_)
+#   endif
+#endif
+
+
+
 #if !(NM_HAVE_RESTRICT)
 #  if (NM_HAVE___RESTRICT)
 #    define restrict __restrict
@@ -13,17 +32,6 @@
 #  endif
 #endif  /* NM_HAVE_RESTRICT */
 
-
-
-#if !defined(_unused_)
-#  if (MSVC)
-#    define _unused_(x)  __pragma(warning(suppress:4100 4101 4189)) x
-#  elif defined(__has_attribute) && __has_attribute(unused)
-#    define _unused_(x)  __attribute__((unused)) x
-#  else
-#    define _unused_(x)  x
-#  endif
-#endif
 
 
 #if !defined(_isut_)
@@ -56,35 +64,33 @@
 #endif  /* _str_ */
 
 
-#if !defined(_fallthrough_)
-#   if (MSVC)
-#     define _fallthrough_
-#   elif defined(__has_attribute) && __has_attribute(fallthrough)
-#     define _fallthrough_  __attribute__((fallthrough))
-#   else
-#     define _fallthrough_
-#   endif
-#endif
 
-#define _swp_(a, b, w)                                          \
-do                                                              \
-  {                                                             \
-    int    w1_ =  (int) (w);                                    \
-    int    n1_ =  (w1_ + 7) / 8;                                \
-    char  *a1_ =  (char *) (a);                                 \
-    char  *b1_ =  (char *) (b);                                 \
-    char   t1_ =  0;                                            \
-    switch (w1_ % 8) {                                          \
-    case 0: do { t1_=*a1_;*a1_++=*b1_;*b1_++=t1_;_fallthrough_; \
-    case 7:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_;_fallthrough_; \
-    case 6:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_;_fallthrough_; \
-    case 5:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_;_fallthrough_; \
-    case 4:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_;_fallthrough_; \
-    case 3:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_;_fallthrough_; \
-    case 2:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_;_fallthrough_; \
-    case 1:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_;               \
-               } while (--n1_ > 0);                             \
-    }                                                           \
+#define _swp_(a, b, w)                            \
+do                                                \
+  {                                               \
+    int    w1_ =  (int) (w);                      \
+    int    n1_ =  (w1_ + 7) / 8;                  \
+    char  *a1_ =  (char *) (a);                   \
+    char  *b1_ =  (char *) (b);                   \
+    char   t1_ =  0;                              \
+    switch (w1_ % 8) {                            \
+    case 0: do { t1_=*a1_;*a1_++=*b1_;*b1_++=t1_; \
+        __attribute__((fallthrough));             \
+    case 7:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_; \
+        __attribute__((fallthrough));             \
+    case 6:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_; \
+        __attribute__((fallthrough));             \
+    case 5:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_; \
+        __attribute__((fallthrough));             \
+    case 4:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_; \
+        __attribute__((fallthrough));             \
+    case 3:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_; \
+        __attribute__((fallthrough));             \
+    case 2:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_; \
+        __attribute__((fallthrough));             \
+    case 1:      t1_=*a1_;*a1_++=*b1_;*b1_++=t1_; \
+               } while (--n1_ > 0);               \
+    }                                             \
   } while (0)
 
 

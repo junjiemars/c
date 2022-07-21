@@ -15,7 +15,7 @@ test_strdup(char *s)
 
 
 int
-main(_unused_(int argc), char **argv)
+main(__attribute__((unused)) int argc, char **argv)
 {
   test_strdup(argv[0]);
 
