@@ -1,6 +1,12 @@
 #include <_lang_.h>
 #include <signal.h>
 
+/*
+ * the topic about signal is complicated and its implementation
+ * defined, see src/signal for more.
+ *
+ */
+
 
 #ifdef MSVC
 static void psignal(int sig, const char *s);

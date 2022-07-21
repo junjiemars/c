@@ -282,10 +282,10 @@ _ftoa_(double d, char *buf, size_t *size, size_t frac)
 void
 test_fprintf_basic(void)
 {
-  int rc1, rc2, rc3;
-  _unused_(rc1);
-  _unused_(rc2);
-  _unused_(rc3);
+  _unused_(int rc1);
+  _unused_(int rc2);
+  _unused_(int rc3);
+
 
   /* escape % */
   rc1 = fprintf(stdout, "%%\n");
@@ -364,10 +364,9 @@ test_fprintf_basic(void)
 void
 test_fprintf_macro(void)
 {
-  int rc1, rc2, rc3;
-  _unused_(rc1);
-  _unused_(rc2);
-  _unused_(rc3);
+  _unused_(int rc1);
+  _unused_(int rc2);
+  _unused_(int rc3);
 
   /* %d */
   rc1 = fprintf(stdout, "%d\n", -123);
@@ -379,9 +378,8 @@ test_fprintf_macro(void)
 void
 test_fprintf_fn(fbsprintf fn)
 {
-  int rc1, rc2;
-  _unused_(rc1);
-  _unused_(rc2);
+  _unused_(int rc1);
+  _unused_(int rc2);
 
   /* %d */
   rc1 = fprintf(stdout, "%d\n", -123);
@@ -390,11 +388,8 @@ test_fprintf_fn(fbsprintf fn)
 }
 
 int
-main(int argc, char **argv)
+main(void)
 {
-  _unused_(argc);
-  _unused_(argv);
-
   test_fprintf_basic();
   test_fprintf_macro();
   test_fprintf_fn(buffered_fprintf);

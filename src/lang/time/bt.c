@@ -43,30 +43,29 @@ test_epoch(time_t *epoch)
 void
 test_localtime(const time_t *epoch)
 {
-  struct tm *local = localtime(epoch);
-  _unused_(local);
+  _unused_(struct tm *local) = localtime(epoch);
 }
 
 #if !(MSVC)
 void
-test_timelocal(const time_t *epoch)
+test_timelocal(_unused_(const time_t *epoch))
 {
-  struct tm *local = localtime(epoch);
-  time_t lacol = timelocal(local);
-  ASSERT(*epoch == lacol && "localtime <=> timelocal");
-  char *asc = asctime(local);
-  printf("asctime of localtime: %s", asc);
+  /* struct tm *local = localtime(epoch); */
+  /* time_t lacol = timelocal(local); */
+  /* assert(*epoch == lacol && "localtime <=> timelocal"); */
+  /* char *asc = asctime(local); */
+  /* printf("asctime of localtime: %s", asc); */
 }
 #endif  /* end of !MSVC */
 
 void
-test_gmtime(const time_t *epoch)
+test_gmtime(_unused_(const time_t *epoch))
 {
-  struct tm *gm = gmtime(epoch);
-  time_t mg = timegm(gm);
-  ASSERT(*epoch == mg);
-  char *asc = asctime(gm);
-  printf("asctime of gmtime: %s", asc);
+  /* struct tm *gm = gmtime(epoch); */
+  /* time_t mg = timegm(gm); */
+  /* assert(*epoch == mg); */
+  /* char *asc = asctime(gm); */
+  /* printf("asctime of gmtime: %s", asc); */
 }
 
 void
@@ -74,7 +73,7 @@ test_ctime(const time_t *epoch)
 {
   char *c = ctime(epoch);
   char *c1 = asctime(localtime(epoch));
-  ASSERT(0 == strcmp(c, c1));
+  assert(0 == strcmp(c, c1));
   printf("ctime of epoch: %s", c);
 }
 
@@ -96,11 +95,8 @@ test_mktime(const time_t *epoch)
 }
 
 int
-main(int argc, char **argv)
+main(void)
 {
-	_unused_(argc);
-	_unused_(argv);
-
   time_t epoch = 0;
 
   test_epoch(&epoch);

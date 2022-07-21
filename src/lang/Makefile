@@ -588,35 +588,15 @@ $(lang_scope_binout): $(lang_root)/scope/scope.c
 
 # signal
 lang_signal_basic_binout := $(bin_path)/$(lang_prefix)_signal_basic$(bin_ext)
-lang_signal_list_binout := $(bin_path)/$(lang_prefix)_signal_list$(bin_ext)
-lang_signal_fork_binout := $(bin_path)/$(lang_prefix)_signal_fork$(bin_ext)
 
-lang_signal: lang_signal_basic                  \
-             lang_signal_list                   \
-             lang_signal_fork
-lang_signal_test: lang_signal_basic_test        \
-                  lang_signal_list_test         \
-                  lang_signal_fork_test
+lang_signal: lang_signal_basic
+lang_signal_test: lang_signal_basic_test
 
 lang_signal_basic: $(lang_signal_basic_binout)
 lang_signal_basic_test: lang_signal_basic
 	$(lang_signal_basic_binout)
 
-lang_signal_list: $(lang_signal_list_binout)
-lang_signal_list_test: lang_signal_list
-	$(lang_signal_list_binout)
-
-lang_signal_fork: $(lang_signal_fork_binout)
-lang_signal_fork_test: lang_signal_fork
-	$(lang_signal_fork_binout)
-
-$(lang_signal_basic_binout): $(lang_root)/signal/basic/sig.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-$(lang_signal_list_binout): $(lang_root)/signal/list/list-sig.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-$(lang_signal_fork_binout): $(lang_root)/signal/fork/f.c
+$(lang_signal_basic_binout): $(lang_root)/signal/sig.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # sizeof

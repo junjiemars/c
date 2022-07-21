@@ -6,7 +6,7 @@
 char *to_asctime(const time_t *epoch);
 
 char*
-to_asctime(const time_t *epoch) 
+to_asctime(const time_t *epoch)
 {
   char *c = ctime(epoch);
   if (!c)
@@ -17,10 +17,10 @@ to_asctime(const time_t *epoch)
 }
 
 int
-main(int argc, char **argv) 
+main(int argc, char **argv)
 {
   time_t epoch;
-  if (argc < 2) 
+  if (argc < 2)
     {
       epoch = 0;
       if ((time_t) -1 == time(&epoch))
@@ -35,8 +35,8 @@ main(int argc, char **argv)
   if (0 == strncmp("-", argv[1], sizeof(int)))
     {
       int n = fscanf(stdin, "%lu", (unsigned long*) &epoch);
-      _unused_(n);
-      printf("%s", to_asctime(&epoch));      
+      assert(n);
+      printf("%s", to_asctime(&epoch));
       return 0;
     }
 

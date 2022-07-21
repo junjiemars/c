@@ -75,7 +75,7 @@ test_strndup(strndup_fn fn, const char *s)
         perror(0);
         return;
     }
-    ASSERT(0 == memcmp(s, eq, n));
+    assert(0 == memcmp(s, eq, n));
     printf("ndup: %s\n", eq);
     free(eq);
 
@@ -84,7 +84,7 @@ test_strndup(strndup_fn fn, const char *s)
         perror(0);
         return;
     }
-    ASSERT(0 == memcmp(s, lt, n - 1));
+    assert(0 == memcmp(s, lt, n - 1));
     printf("ndup: %s\n", lt);
     free(lt);
 
@@ -93,7 +93,7 @@ test_strndup(strndup_fn fn, const char *s)
         perror(0);
         return;
     }
-    ASSERT(0 == memcmp(s, gt, n + 1));
+    assert(0 == memcmp(s, gt, n + 1));
     printf("ndup: %s\n", gt);
     free(gt);
 }

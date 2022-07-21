@@ -1,6 +1,4 @@
 #include <_lang_.h>
-#include <stdio.h>
-#include <assert.h>
 
 
 /* C4456: declaration of 'i' hides previous local declaration */
@@ -24,19 +22,19 @@ automatic_storage_class(void)
 #if (GCC)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wuninitialized"
-  ASSERT(x == x);
+  assert(x == x);
 # pragma GCC diagnostic pop
 #else
   _unused_(x);
 #endif
 
 	auto int i = 0x1122;
-	
+
   {
 		auto int i = 0x3344;
-    ASSERT(0x3344 == i);
+    assert(0x3344 == i);
 	}
-  ASSERT(0x1122 == i);
+  assert(0x1122 == i);
 }
 
 
@@ -74,15 +72,15 @@ void
 static_storage_class_fn(void)
 {
 	static int i;
-	
+
   {
     static int x;
     x = i;
 		static int i = 0x11223344;
-    ASSERT((0x11223344 + x) == i);
+    assert((0x11223344 + x) == i);
     i++;
 	}
-  ASSERT((0 + i) == f_int);
+  assert((0 + i) == f_int);
   f_int++;
   i++;
 }
@@ -91,7 +89,7 @@ int
 static_storage_class_fn_raw(int x)
 {
   static int v;
-  ASSERT(0 == v);
+  assert(0 == v);
   v += x;
   return v;
 }
@@ -110,11 +108,8 @@ external_storage_class(void)
 
 
 int
-main(int argc, char *argv[])
+main(int argc, _unused_(char *argv[]))
 {
-	_unused_(argc);
-	_unused_(argv);
-
 	printf("\nautomatic storage class\n");
 	printf("-------------------------\n");
 	automatic_storage_class();
@@ -135,6 +130,6 @@ main(int argc, char *argv[])
 	printf("------------------------\n");
 	external_storage_class();
 	external_storage_class();
-  
+
   return 0;
 }

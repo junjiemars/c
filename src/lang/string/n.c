@@ -1,8 +1,5 @@
 #include <_lang_.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
+
 
 
 typedef size_t (*strnlen_fn)(const char *src, size_t n);
@@ -68,17 +65,17 @@ test_strnlen(strnlen_fn fn, const char *s)
 
     eq = n;
     r = fn(s, eq);
-    ASSERT(r == eq);
+    assert(r == eq);
     printf("strnlen | n = %zu, eq = %zu, r = %zu: %s\n", n, eq, r, s);
 
     lt = n - 1;
     r = fn(s, lt);
-    ASSERT(r == lt);
+    assert(r == lt);
     printf("strnlen | n = %zu, lt = %zu, r = %zu: %s\n", n, lt, r, s);
 
     gt = n + 1;
     r = fn(s, gt);
-    ASSERT(r < gt);
+    assert(r < gt);
     printf("strnlen | n = %zu, gt = %zu, r = %zu: %s\n", n, gt, r, s);
 }
 
@@ -96,14 +93,14 @@ test_strncpy(strncpy_fn fn, char *src)
 
     eq = n;
     d = fn(dst, src, n);
-    ASSERT(d == dst);
+    assert(d == dst);
     r = strlen(d);
     printf("strncpy | n = %zu, eq = %zu, r = %zu: %s, %s\n",
            n, eq, r, src, dst);
 
     lt = n - 1;
     d = fn(dst, src, lt);
-    ASSERT(dst[lt] != 0);
+    assert(dst[lt] != 0);
     dst[n] = 0;
     r = strlen(d);
     printf("strncpy | n = %zu, lt = %zu, r = %zu: %s, %s\n",
@@ -111,7 +108,7 @@ test_strncpy(strncpy_fn fn, char *src)
 
     gt = n + 1;
     d = fn(dst, src, gt);
-    ASSERT(dst[gt - 1] == 0);
+    assert(dst[gt - 1] == 0);
     r = strlen(d);
     printf("strncpy | n = %zu, gt = %zu, r = %zu: %s, %s\n",
            n, gt, r, src, dst);
@@ -132,7 +129,7 @@ test_strncmp(strncmp_fn fn, const char *s1, const char *s2)
 
     eq = n;
     r = fn(s1, s2, eq);
-    ASSERT(r == 0);
+    assert(r == 0);
     printf("strncmp | n = %zu, eq = %zu, r = %02i: %s, %s\n",
            n, eq, r, s1, s2);
 

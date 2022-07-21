@@ -19,16 +19,16 @@ nm_feature="restrict keyword"
 nm_feature_name="nm_have_restrict"
 nm_feature_run=
 nm_feature_h=
-nm_feature_flags=
-nm_feature_test='int x = 0x11; int *restrict p = &x;'
+nm_feature_flags="$CFLAGS"
+nm_feature_test='int x = 0x11; int *restrict p = &x; (void)sizeof(p);'
 . ${NORE_ROOT}/auto/feature
 if [ "yes" != $nm_found ]; then
 	nm_feature="__restrict keyword"
 	nm_feature_name="nm_have___restrict"
 	nm_feature_run=
 	nm_feature_h=
-	nm_feature_flags=
-	nm_feature_test='int x = 0x11; int *__restrict p = &x;'
+	nm_feature_flags="$CFLAGS"
+	nm_feature_test='int x = 0x11; int *__restrict p = &x; (void)sizeof(p);'
 	. ${NORE_ROOT}/auto/feature
 fi                              # end of restrict
 
@@ -41,8 +41,8 @@ case "$CC_NAME" in
     nm_feature_name='NM_HAVE_TYPEOF'
     nm_feature_run=no
     nm_feature_h=
-    nm_feature_flags=
-    nm_feature_test='int x = 0x1122; typeof(x) y = 0x3344;'
+    nm_feature_flags="$CFLAGS"
+    nm_feature_test='int x = 0x1122; typeof(x) y = 0x3344; (void)sizeof(y);'
     . ${NORE_ROOT}/auto/feature
     ;;
   msvc)
