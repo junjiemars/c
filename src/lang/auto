@@ -6,87 +6,13 @@
 . src/posix/auto
 
 
-# check -Wimplicit-fallthrough
-#----------------------------------------
-case "$CC_NAME" in
-	clang)
-		;;
-	gcc)
-		nm_feature="$CC_NAME -Wimplicit-fallthrough"
-		nm_feature_name='NM_HAVE_NO_IMPLICIT_FALLTHROUGH'
-		nm_feature_run=no
-		nm_feature_h=
-		nm_feature_flags='-Wno-implicit-fallthrough'
-		nm_feature_test=
-    flag=CFLAGS op="+=" value=$nm_feature_flags  \
-        . ${NORE_ROOT}/auto/make_define
-		. ${NORE_ROOT}/auto/feature
-		;;
-	msvc)
-		;;
-esac
-
-
 # check header files
 #----------------------------------------
-include="stdint.h" . ${NORE_ROOT}/auto/include
-include="inttypes.h" . ${NORE_ROOT}/auto/include
+# include="stdint.h" . ${NORE_ROOT}/auto/include
+# include="inttypes.h" . ${NORE_ROOT}/auto/include
 include="iso646.h" . ${NORE_ROOT}/auto/include
-include="wchar.h" . ${NORE_ROOT}/auto/include
-include="wctype.h" . ${NORE_ROOT}/auto/include
-
-
-# check restrict keyword
-#----------------------------------------
-nm_feature="restrict keyword"
-nm_feature_name="NM_HAVE_RESTRICT"
-nm_feature_run=
-nm_feature_h=
-nm_feature_flags=
-nm_feature_test='int x = 0x11; int *restrict p = &x;'
-. ${NORE_ROOT}/auto/feature
-if [ "yes" != $nm_found ]; then
-	nm_feature="__restrict keyword"
-	nm_feature_name="NM_HAVE___RESTRICT"
-	nm_feature_run=
-	nm_feature_h=
-	nm_feature_flags=
-	nm_feature_test='int x = 0x11; int *__restrict p = &x;'
-	. ${NORE_ROOT}/auto/feature
-fi
-
-
-# check typeof keyword
-#----------------------------------------
-case "$CC_NAME" in
-	clang)
-		nm_feature="typeof keyword"
-		nm_feature_name='NM_HAVE_TYPEOF'
-		nm_feature_run=no
-		nm_feature_h=
-		nm_feature_flags='-std=c11'
-		nm_feature_test='int x = 0x1122; typeof(x) y = 0x3344'
-		. ${NORE_ROOT}/auto/feature
-		;;
-	gcc)
-		nm_feature="typeof keyword"
-		nm_feature_name='NM_HAVE_TYPEOF'
-		nm_feature_run=no
-		nm_feature_h=
-		nm_feature_flags='-std=c11'
-		nm_feature_test='int x = 0x1122; typeof(x) y = 0x3344'
-		. ${NORE_ROOT}/auto/feature
-		;;
-	msvc)
-		nm_feature="typeof keyword"
-		nm_feature_name='NM_HAVE_TYPEOF'
-		nm_feature_run=no
-		nm_feature_h=
-		nm_feature_flags='-std=c11'
-		nm_feature_test='int x = 0x1122; decltype(x) y = 0x3344'
-		. ${NORE_ROOT}/auto/feature
-		;;
-esac
+# include="wchar.h" . ${NORE_ROOT}/auto/include
+# include="wctype.h" . ${NORE_ROOT}/auto/include
 
 
 # check variadic macro
@@ -264,30 +190,6 @@ case "$CC_NAME" in
     . ${NORE_ROOT}/auto/feature
     ;;
   *)
-    ;;
-esac
-
-
-# check machine features
-#----------------------------------------
-case "$NM_SYSTEM" in
-  Darwin)
-    ;;
-  Linux)
-    nm_feature="secure_getenv()"
-    nm_feature_name='NM_HAVE_SECURE_GETENV'
-    nm_feature_indent=yes
-    nm_feature_run=no
-    nm_feature_h='#include <stdlib.h>'
-    nm_feature_flags=
-    nm_feature_value=
-    nm_feature_test='secure_getenv("SHELL");'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  WinNT)
-    ;;
-  *)
-    nm_found=no
     ;;
 esac
 

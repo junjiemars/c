@@ -158,6 +158,7 @@ $(lang_enum_cppout): $(lang_root)/enum/e.c
 lang_env_lst_binout := $(bin_path)/$(lang_prefix)_env_lst$(bin_ext)
 lang_env_get_binout := $(bin_path)/$(lang_prefix)_env_get$(bin_ext)
 lang_env_set_binout := $(bin_path)/$(lang_prefix)_env_set$(bin_ext)
+lang_env_set_cppout := $(tmp_path)/$(lang_prefix)_env_set$(cpp_ext)
 
 lang_env: lang_env_lst                          \
           lang_env_get                          \
@@ -190,8 +191,11 @@ $(lang_env_lst_binout): $(lang_root)/env/lst.c
 $(lang_env_get_binout): $(lang_root)/env/get.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(lang_env_set_binout): $(lang_root)/env/set.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(lang_env_set_binout): $(lang_env_set_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(lang_env_set_cppout): $(lang_root)/env/set.c
+	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
 # error

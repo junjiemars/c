@@ -1,8 +1,5 @@
 #include <_lang_.h>
 #include <setjmp.h>
-#include <stdio.h>
-
-/* https://en.wikipedia.org/wiki/Setjmp.h */
 
 
 #define INDENT_0 ""
@@ -57,6 +54,7 @@ void g(jmp_buf *env)
       exception_type |= 0x00220000;
       printf("%s catch throw(), exception_type=0x%x, jump to 0x%x\n",
              INDENT_1, 0x11000000, exception_type);
+      _fallthrough_;
     default:
       longjmp(*env, exception_type);
       break;
