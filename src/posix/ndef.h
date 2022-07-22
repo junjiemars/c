@@ -5,9 +5,10 @@
 #include <nore.h>
 
 
+
 #if !defined(__has_attribute)
 #  if !defined(__attribute)
-#    define _esc_(_)  _
+#    define _esc_(...)  __VA_ARGS__
 #    define __attribute__(_)  _esc_ _
 #  endif
 #endif

@@ -7,6 +7,7 @@
 
 static void test_unused(int);
 static void test_unused_fn(void);
+static void test_fallthrough(int);
 static void test_restrict(const int *restrict, const char *restrict);
 static void test_isut(void);
 static void test_nof(void);
@@ -17,6 +18,7 @@ int
 main(int argc, char **argv)
 {
   test_unused(1);
+  test_fallthrough(1);
   test_isut();
   test_nof();
   test_swp();
@@ -38,6 +40,18 @@ void
 test_unused_fn(void)
 {
   /* void */
+}
+
+void
+test_fallthrough(int a)
+{
+  switch (a)
+    {
+    case 0:
+      __attribute__((fallthrough));
+    case 1:
+      break;
+    }
 }
 
 void
