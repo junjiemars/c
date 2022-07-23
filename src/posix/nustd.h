@@ -26,7 +26,7 @@
 #include <ncstd.h>
 
 
-#if (WINNT)
+#if (MSVC)
 #  include <windows.h>
 #  include <process.h>
 #else
@@ -37,19 +37,15 @@
 
 #if !(NM_HAVE_SLEEP)
 #  error "sleep no found"
-#else
-#  if (WINNT)
-#    define sleep(x)  Sleep((x) * 1000)
-#  endif
+#elif (MSVC)
+#  define sleep(x)  Sleep((x) * 1000)
 #endif  /* sleep */
 
 
 #if !(NM_HAVE_GETPID)
 #  error "getpid no found"
-#else
-#  if (WINNT)
-#    define getpid  _getpid
-#  endif
+#elif (WINNT)
+#  define getpid  _getpid
 #endif  /* getpid */
 
 
