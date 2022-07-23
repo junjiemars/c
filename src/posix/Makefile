@@ -232,7 +232,7 @@ $(posix_nustd_binout): $(posix_nustd_cppout)
 
 $(posix_nustd_cppout): $(posix_root)/nustd_test.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
-
+	cat $@
 
 
 # eof
