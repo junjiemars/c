@@ -30,7 +30,7 @@
 #elif !defined(__has_attribute) && defined(__attribute__)
 #  if !defined(fallthrough)
 #    define fallthrough
-#  endif;
+#  endif
 #endif
 
 
