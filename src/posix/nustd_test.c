@@ -1,15 +1,15 @@
 #include "nustd.h"
 #include <stdio.h>
 
-/* static void test_sleep(void); */
-/* static void test_getpid(void); */
+static void test_sleep(void);
+static void test_getpid(void);
 
 
 int
 main(void)
 {
-  /* test_sleep(); */
-  /* test_getpid(); */
+  test_sleep();
+  test_getpid();
 
   return 0;
 }
