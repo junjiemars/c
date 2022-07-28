@@ -11,7 +11,7 @@
 #include <nint.h>
 #include <nstr.h>
 #include <nio.h>
-#include <stddef.h>
+
 
 
 #endif /* _NCSTD_H_ */

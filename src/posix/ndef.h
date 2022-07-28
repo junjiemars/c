@@ -3,7 +3,7 @@
 
 
 #include <nore.h>
-
+#include <stddef.h>
 
 
 #if !defined(__has_attribute)
