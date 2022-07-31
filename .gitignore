@@ -110,3 +110,7 @@ src/webassembly/emsdk_home
 
 # tesseract
 src/tesseract/tesseract_home
+
+# zig
+src/zig/**/zig-cache/
+src/zig/**/zig-out/
