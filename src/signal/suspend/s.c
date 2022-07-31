@@ -25,12 +25,11 @@ main(int argc, char **argv)
 
   sleep(N);
 
-  sigsuspend(&pmask);
+  sigpending(&pmask);
   if (sigismember(&pmask, SIGQUIT))
     {
       printf("# %s pending\n", _str_(SIGQUIT));
     }
-
 
   sigprocmask(SIG_SETMASK, &omask, NULL);
   printf("! %s unblocked\n", _str_(SIGQUIT));
