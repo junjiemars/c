@@ -23,9 +23,7 @@ main(int argc, char **argv)
   sigprocmask(SIG_BLOCK, &nmask, &omask);
   printf("! %s blocked\n", _str_(SIGQUIT));
 
-
   sleep(N);
-
 
   sigsuspend(&pmask);
   if (sigismember(&pmask, SIGQUIT))
@@ -33,10 +31,13 @@ main(int argc, char **argv)
       printf("# %s pending\n", _str_(SIGQUIT));
     }
 
+
   sigprocmask(SIG_SETMASK, &omask, NULL);
   printf("! %s unblocked\n", _str_(SIGQUIT));
 
   sleep(N);
+
+
 
   exit(EXIT_SUCCESS);
 }
