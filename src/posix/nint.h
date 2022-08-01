@@ -4,6 +4,19 @@
 #include <nore.h>
 #include <stdint.h>
 
+#if (MSVC)
+#  include <BaseTsd.h>
+#endif
+
+#if (NM_HAVE_SSIZE_T)
+#  if (MSVC)
+typedef SSIZE_T  ssize_t;
+#  endif
+#else
+typedef long  ssize_t;
+#endif  /* ssize_t */
+
+
 
 /* #if (MSVC) */
 /* typedef __int8            int8_t; */

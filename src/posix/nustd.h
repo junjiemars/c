@@ -50,10 +50,6 @@
 #endif  /* getpid */
 
 
-#if !(NM_HAVE_SSIZE_T)
-typedef long ssize_t;
-#endif  /* ssize_t */
-
 
 
 #endif /* _NUSTD_H_ */
