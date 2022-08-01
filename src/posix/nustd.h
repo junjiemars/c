@@ -27,6 +27,7 @@
 
 
 #if (MSVC)
+#  include <BaseTsd.h>
 #  include <windows.h>
 #  include <process.h>
 #else
@@ -49,14 +50,7 @@
 #endif  /* getpid */
 
 
-#if (NM_HAVE_SSIZE_T)
-#  if (MSVC)
-#    include <BaseTsd.h>
-typedef SSIZE_T ssize_t;
-#  else
-#    include <sys/types.h>
-#  endif
-#else
+#if !(NM_HAVE_SSIZE_T)
 typedef long ssize_t;
 #endif  /* ssize_t */
 
