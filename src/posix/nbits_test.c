@@ -1,7 +1,5 @@
-#include "ndef.h"
 #include <inttypes.h>
 #include <stdio.h>
-
 #include "nbits.h"
 
 #if defined(BIT8_SEP)
@@ -39,10 +37,11 @@ main(void)
 
   printf("%#18" PRIx32 " = " BPRI32, (uint32_t) 0x12345678, BIT32(0x12345678));
 
-#if (NM_CPU_CACHE_LINE == 64)
-  printf("0x%16" PRIx64 " = " BPRI64, (uint64_t) 0x1234567890abcdef,
-         BIT64(0x1234567890abcdef));
-#endif
+  if (sizeof(void*) == 8)
+    {
+      printf("0x%16" PRIx64 " = " BPRI64, (uint64_t) 0x1234567890abcdef,
+             BIT64(0x1234567890abcdef));
+    }
 
   return 0;
 }

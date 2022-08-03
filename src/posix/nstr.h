@@ -3,13 +3,6 @@
 
 
 #include <npstd.h>
-
-
-#if (MSVC)
-#  pragma warning(disable:4996)
-#endif  /* _CRT_SECURE_NO_WARNINGS */
-
-
 #include <string.h>
 
 

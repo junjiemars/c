@@ -2,7 +2,8 @@
 # ./configure --has-posix
 #
 
-posix: posix_nasrt                              \
+posix: posix_npstd                              \
+       posix_nasrt                              \
        posix_nbits                              \
        posix_ndef                               \
        posix_getopt                             \
@@ -13,7 +14,8 @@ posix: posix_nasrt                              \
        posix_ncstd                              \
        posix_nustd
 
-posix_test: posix_nasrt_test                    \
+posix_test: posix_npstd_test                    \
+            posix_nasrt_test                    \
             posix_nbits_test                    \
             posix_ndef_test                     \
             posix_getopt_test                   \
@@ -34,6 +36,16 @@ ifeq ($(_MEMORY_), 1)
 	CFLAGS += $(f_sanitize)
 endif # end of _MEMORY_
 
+
+# npstd
+posix_npstd_binout := $(bin_path)/$(posix_prefix)_npstd$(bin_ext)
+
+posix_npstd: $(posix_npstd_binout)
+posix_npstd_test: posix_npstd
+	$(posix_npstd_binout)
+
+$(posix_npstd_binout): $(posix_root)/npstd_test.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # nasrt
 posix_nasrt_binout := $(bin_path)/$(posix_prefix)_nasrt$(bin_ext)

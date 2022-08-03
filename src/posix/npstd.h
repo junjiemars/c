@@ -15,14 +15,11 @@
 
 #include <nore.h>
 
-
-
 #if defined(_POSIX_C_SOURCE)
 #  undef _POSIX_C_SOURCE
 #endif
 #define _POSIX_C_SOURCE  200809L
 
 
-
-
 #endif /* _NPSTD_H_ */
+
