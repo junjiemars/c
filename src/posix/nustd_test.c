@@ -3,7 +3,7 @@
 
 static void test_sleep(void);
 static void test_getpid(void);
-static void test_ssize_t(void);
+/* static void test_ssize_t(void); */
 
 
 int
@@ -11,7 +11,7 @@ main(void)
 {
   test_sleep();
   test_getpid();
-  test_ssize_t();
+  /* test_ssize_t(); */
 
   return 0;
 }
@@ -31,8 +31,8 @@ test_getpid(void)
 }
 
 
-void
-test_ssize_t(void)
-{
-  printf("ssize_t: %zu(bytes)\n", sizeof(ssize_t));
-}
+/* void */
+/* test_ssize_t(void) */
+/* { */
+/*   printf("ssize_t: %zu(bytes)\n", sizeof(ssize_t)); */
+/* } */
