@@ -3,7 +3,6 @@
  */
 
 #include <nore.h>
-#include <nstr.h>
 
 #if (MSVC)
 
@@ -24,6 +23,7 @@
 
 /* All the headers include this file. */
 #include <crtdefs.h>
+
 
 #ifdef __cplusplus
 extern "C" {

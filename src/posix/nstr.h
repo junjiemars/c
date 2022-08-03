@@ -3,15 +3,11 @@
 
 
 #include <npstd.h>
+#include <string.h>
 
 #if (MSVC)
-#pragma warning(push)
 #  pragma warning(disable:4996)
-#  include <string.h>
-#pragma warning(pop)
-#else
-#  include <string.h>
-#endif
+#endif  /* _CRT_SECURE_NO_WARNINGS */
 
 
 #if !(NM_HAVE_STRDUP)

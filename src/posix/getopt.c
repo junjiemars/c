@@ -46,15 +46,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <nore.h>
 
 #include <errno.h>
 #include <stdlib.h>
-#include <string.h>
-#include <getopt.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <windows.h>
+#include "getopt.h"
+#include "nstr.h"
 
 #define	REPLACE_GETOPT		/* use this getopt as the system getopt(3) */
 
@@ -119,7 +118,7 @@ static int env_posix() {
 	size_t l;
 	if (!_dupenv_s(&b, &l, "POSIXLY_CORRECT") && 0 < l) {
 		v = (int)*b;
-	} 
+	}
 	free(b);
 #else
 	v = (getenv("POSIXLY_CORRECT") != NULL);
