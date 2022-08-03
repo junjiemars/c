@@ -243,7 +243,7 @@ posix_nustd_test: posix_nustd
 	$(posix_nustd_binout)
 
 $(posix_nustd_binout): $(posix_root)/nustd_test.c
-	$(CC) $(CPPFLAGS) $(INC) $(CFLAGS) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # $(posix_nustd_cppout): $(posix_root)/nustd_test.c
 # 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@

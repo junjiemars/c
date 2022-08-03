@@ -46,18 +46,18 @@
 
 
 
-#if !(NM_HAVE_SLEEP)
-#  error "sleep no found"
-#elif (MSVC)
-#  define sleep(x)  Sleep((x) * 1000)
-#endif  /* sleep */
+/* #if !(NM_HAVE_SLEEP) */
+/* #  error "sleep no found" */
+/* #elif (MSVC) */
+/* #  define sleep(x)  Sleep((x) * 1000) */
+/* #endif  /\* sleep *\/ */
 
 
-#if !(NM_HAVE_GETPID)
-#  error "getpid no found"
-#elif (WINNT)
-#  define getpid  _getpid
-#endif  /* getpid */
+/* #if !(NM_HAVE_GETPID) */
+/* #  error "getpid no found" */
+/* #elif (WINNT) */
+/* #  define getpid  _getpid */
+/* #endif  /\* getpid *\/ */
 
 
 
