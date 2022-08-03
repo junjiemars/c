@@ -18,8 +18,10 @@
 #if defined(_POSIX_C_SOURCE)
 #  undef _POSIX_C_SOURCE
 #endif
-#define _POSIX_C_SOURCE  200809L
+
+#if !(MSVC)
+#  define _POSIX_C_SOURCE  200809L
+#endif
 
 
 #endif /* _NPSTD_H_ */
-
