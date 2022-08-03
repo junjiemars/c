@@ -1,6 +1,4 @@
-#include "ndef.h"
 #include "nint.h"
-#include <inttypes.h>
 #include <stdio.h>
 
 static void test_int(void);
