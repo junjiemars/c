@@ -37,7 +37,7 @@ main(void)
 
   printf("%#18" PRIx32 " = " BPRI32, (uint32_t) 0x12345678, BIT32(0x12345678));
 
-  if (sizeof(void*) == 8)
+  if (sizeof(void*) == (size_t) 8)
     {
       printf("0x%16" PRIx64 " = " BPRI64, (uint64_t) 0x1234567890abcdef,
              BIT64(0x1234567890abcdef));
