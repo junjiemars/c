@@ -9,8 +9,8 @@ getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
          FILE * restrict stream)
 {
 	int       c;
-	ssize_t   len;
 	char     *p, *p1;
+	ssize_t   len;
 
   if (0 == lineptr)
     {

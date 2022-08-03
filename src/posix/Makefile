@@ -8,28 +8,27 @@
 #        posix_ndef                                 \
 #        posix_nlim                                 \
 #        posix_nint                                 \
-#        posix_nio                                  \
 #        posix_nstr                                 \
 #        posix_ncstd                                \
 #        posix_nustd                                \
+#        posix_nio                                  \
 #        posix_getopt
 
 # posix_test: posix_npstd_test                      \
 #             posix_nasrt_test                      \
 #             posix_nbits_test                      \
 #             posix_ndef_test                       \
-#                                                   \
 #             posix_nlim_test                       \
 #             posix_nint_test                       \
-#             posix_nio_test                        \
 #             posix_nstr_test                       \
 #             posix_ncstd_test                      \
 #             posix_nustd_test                      \
+#             posix_nio_test                        \
 #             posix_getopt_test
 
 
 posix: posix_nustd
-posix: posix_nustd_test
+posix_test: posix_nustd_test
 
 # env
 posix_prefix := posix
