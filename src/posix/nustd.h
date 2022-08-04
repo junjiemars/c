@@ -23,7 +23,7 @@
 
 
 #include <npstd.h>
-/* #include <ncstd.h> */
+#include <ncstd.h>
 
 
 #if (MSVC)
