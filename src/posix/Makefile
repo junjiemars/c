@@ -41,6 +41,9 @@ ifeq ($(_MEMORY_), 1)
 	CFLAGS += $(f_sanitize)
 endif # end of _MEMORY_
 
+ifeq ($(CC_NAME), msvc)
+	CFLAGS += -Zc:preprocessor
+endif
 
 # npstd
 posix_npstd_binout := $(bin_path)/$(posix_prefix)_npstd$(bin_ext)
