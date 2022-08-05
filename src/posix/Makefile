@@ -27,8 +27,10 @@
 #             posix_getopt_test
 
 
-posix: posix_nustd
-posix_test: posix_nustd_test
+posix: posix_nustd                              \
+       posix_nio
+posix_test: posix_nustd_test                    \
+            posix_nio_test
 
 # env
 posix_prefix := posix

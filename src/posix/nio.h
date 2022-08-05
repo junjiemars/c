@@ -2,7 +2,7 @@
 #define _NIO_H_
 
 
-#include <npstd.h>
+#include <nustd.h>
 #include <nlim.h>
 
 #if (MSVC)
