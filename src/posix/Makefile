@@ -42,7 +42,7 @@ ifeq ($(_MEMORY_), 1)
 endif # end of _MEMORY_
 
 ifeq ($(CC_NAME), msvc)
-	CFLAGS += -Zc:preprocessor
+	CFLAGS += -Zc:preprocessor-
 endif
 
 # npstd
