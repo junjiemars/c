@@ -27,22 +27,22 @@
 
 
 #if (MSVC)
-/* #  include <BaseTsd.h> */
-/* #  include <windows.h> */
-/* #  include <process.h> */
+#  include <BaseTsd.h>
+#  include <windows.h>
+#  include <process.h>
 #else
 #  include <sys/types.h>
 #  include <unistd.h>
 #endif
 
 
-/* #if (NM_HAVE_SSIZE_T) */
-/* #  if (MSVC) */
-/* typedef long int  ssize_t; */
-/* #  endif  /\* MSVC *\/ */
-/* #else */
-/* typedef long  ssize_t; */
-/* #endif  /\* ssize_t *\/ */
+#if (NM_HAVE_SSIZE_T)
+#  if (MSVC)
+typedef long int  ssize_t;
+#  endif
+#else
+typedef long  ssize_t;
+#endif  /* ssize_t */
 
 
 

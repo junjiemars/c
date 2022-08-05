@@ -1,7 +1,4 @@
-#include "ndef.h"
-#include "nio.h"
-#include "ndef.h"
-#include "nstr.h"
+#include <nio.h>
 #include <stdlib.h>
 
 static void test_getline(const char *where);
