@@ -14,11 +14,12 @@
 #endif
 
 
-#if (MSVC)
-#  if !defined(unused)
-#    define unused  __pragma(warning(suppress:4100 4101 4189))
-#  endif
-#elif !defined(__has_attribute) && defined(__attribute__)
+#if !defined(unused) && (MSVC)
+#  define unused  __pragma(warning(suppress:4100 4101 4189))
+#endif
+
+
+#if !defined(__has_attribute) && defined(__attribute__)
 #   if !defined(unused)
 #     define unused
 #   endif
@@ -39,7 +40,7 @@
 #  else
 #    define restrict
 #  endif
-#endif  /* NM_HAVE_RESTRICT */
+#endif  /* restrict */
 
 
 

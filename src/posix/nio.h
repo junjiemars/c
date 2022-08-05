@@ -15,9 +15,10 @@
 
 
 #if !(NM_HAVE_GETDELIM)
-#  include <nint.h>
+
 ssize_t getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
                  FILE * restrict stream);
+
 #  if defined(getline)
 #    undef getline
 #  endif
@@ -32,7 +33,7 @@ ssize_t getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
 #  if (MSVC)
 #    define fileno  _fileno
 #  endif
-#endif  /* !NM_HAVE_FILENO */
+#endif  /* fileno */
 
 
 #if !defined(_fpos_)

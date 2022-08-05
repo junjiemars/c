@@ -54,4 +54,4 @@ getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
 	return len;
 }
 
-#endif  /* NM_HAVE_GETDELIM */
+#endif  /* getdelim */
