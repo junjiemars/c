@@ -14,8 +14,10 @@
 #endif
 
 
-#if !defined(unused) && (MSVC)
-#  define unused  __pragma(warning(suppress:4100 4101 4189))
+#if (MSVC)
+#  if !defined(unused) && defined(__attribute__)
+#    define unused  __pragma(warning(suppress:4100 4101 4189))
+#  endif
 #endif
 
 
