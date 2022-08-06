@@ -28,12 +28,8 @@ ssize_t getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
 #endif  /* end of getdelim */
 
 
-#if !(NM_HAVE_FILENO)
-#  error "fileno no found"
-#else
-#  if (MSVC)
-#    define fileno  _fileno
-#  endif
+#if (MSVC) && (NM_HAVE_FILENO)
+#  define fileno  _fileno
 #endif  /* fileno */
 
 
