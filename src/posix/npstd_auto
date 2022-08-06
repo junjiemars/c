@@ -1,5 +1,9 @@
 #### -*- mode:sh -*- vim:ft=sh
 
+if [ -z "$defined_npstd_h" ]; then
+
+defined_npstd_h="npstd.h"
+
 
 _POSIX_C_SOURCE="200809L"
 
@@ -35,4 +39,9 @@ cat << END > "${npstd_h}"
 
 END
 
-fi
+fi                              # generate npstd.h
+
+
+fi                              # defined_npstd_h
+
+# eof

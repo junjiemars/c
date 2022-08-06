@@ -7,6 +7,14 @@
 ####
 
 
+if [ -z "$defined_ndef_h" ]; then
+
+defined_ndef_h="ndef.h"
+
+
+POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
+
+# check for <npstd.h>
 . ${POSIX_ROOT}src/posix/npstd_auto
 
 
@@ -32,6 +40,8 @@ if [ "yes" != $nm_found ]; then
 	. ${NORE_ROOT}/auto/feature
 fi                              # end of restrict
 
+
+fi                              # defined_npstd_h
 
 
 # eof

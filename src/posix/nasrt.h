@@ -1,7 +1,7 @@
 #ifndef _NASRT_H_
 #define _NASRT_H_
 
-
+#include <npstd.h>
 #include <assert.h>
 
 

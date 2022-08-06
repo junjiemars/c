@@ -7,7 +7,15 @@
 ####
 
 
-. ${POSIX_ROOT}src/posix/npstd_auto
+if [ -z "$defined_nio_h" ]; then
+
+defined_nio_h="nio.h"
+
+
+POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
+
+# check for <nustd.h>
+. ${POSIX_ROOT}src/posix/nustd_auto
 
 
 echo "checking for nio.h ..."
@@ -65,5 +73,6 @@ case $CC_NAME in
 esac                            # end of fileno
 
 
+fi                              # defined_nio_h
 
 # eof

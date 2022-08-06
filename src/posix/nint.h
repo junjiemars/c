@@ -1,7 +1,7 @@
 #ifndef _NINT_H_
 #define _NINT_H_
 
-#include <nore.h>
+#include <npstd.h>
 #include <stdint.h>
 #include <inttypes.h>
 

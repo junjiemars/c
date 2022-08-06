@@ -7,7 +7,15 @@
 ####
 
 
-. ${POSIX_ROOT}src/posix/npstd_auto
+if [ -z "$defined_nlim_h" ]; then
+
+defined_nlim_h="nlim.h"
+
+
+POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
+
+# check for <nustd.h>
+. ${POSIX_ROOT}src/posix/nustd_auto
 
 
 echo "checking for nlim.h ..."
@@ -132,6 +140,7 @@ return 0;
 esac                            # end of GETPW_R_SIZE_MAX
 
 
+fi                              # defined_nlim_h
 
 
 # eof

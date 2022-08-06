@@ -5,17 +5,9 @@
 #include <npstd.h>
 #include <string.h>
 
-#if (MSVC)
-#  pragma warning(disable:4996)
-#endif  /* _CRT_SECURE_NO_WARNINGS */
 
-
-#if !(NM_HAVE_STRDUP)
-#  error "strdup no found"
-#else
-#  if (MSVC)
-#    define strdup  _strdup
-#  endif
+#if (MSVC) && (NM_HAVE_STRDUP)
+#  define strdup  _strdup
 #endif  /* strdup */
 
 

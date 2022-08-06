@@ -6,7 +6,7 @@
 
 #if (MSVC)
 #  pragma warning(disable:4996)
-#endif  /* _CRT_SECURE_NO_WARNINGS */
+#endif
 
 static void test_strdup(char*);
 

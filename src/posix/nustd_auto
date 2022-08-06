@@ -7,8 +7,20 @@
 ####
 
 
+if [ -z "$defined_nustd_h" ]; then
+
+defined_nustd_h="nustd.h"
+
+
+POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
+
+
+# check for <npstd.h>
 . ${POSIX_ROOT}src/posix/npstd_auto
 
+
+# check for <ncstd.h>
+. ${POSIX_ROOT}src/posix/ncstd_auto
 
 
 echo "checking for nustd.h ..."
@@ -92,6 +104,8 @@ case $CC_NAME in
     ;;
 esac                            # end of getpid
 
+
+fi                              # defined_nustd_h
 
 
 # eof

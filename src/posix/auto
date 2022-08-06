@@ -10,15 +10,7 @@
 POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
 
 
-. ${POSIX_ROOT}src/posix/npstd_auto
-
-
-. ${POSIX_ROOT}src/posix/ncc_auto
-
-
-. ${POSIX_ROOT}src/posix/ncstd_auto
-
-
+# check for <nustd.h>
 . ${POSIX_ROOT}src/posix/nustd_auto
 
 

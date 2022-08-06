@@ -7,6 +7,16 @@
 ####
 
 
+if [ -z "$defined_ncstd_h" ]; then
+
+defined_ncstd_h="ncstd.h"
+
+
+
+POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
+
+
+# check for <npstd.h>
 . ${POSIX_ROOT}src/posix/npstd_auto
 
 
@@ -26,5 +36,6 @@
 . ${POSIX_ROOT}src/posix/nstr_auto
 
 
+fi                              # defined_ncstd_h
 
 # eof

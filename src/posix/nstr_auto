@@ -7,6 +7,14 @@
 ####
 
 
+if [ -z "$defined_nstr_h" ]; then
+
+defined_nstr_h="nstr.h"
+
+
+POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
+
+# check for <npstd.h>
 . ${POSIX_ROOT}src/posix/npstd_auto
 
 
@@ -15,31 +23,22 @@ echo "checking for nstr.h ..."
 
 # check strdup
 #----------------------------------------
-case $NM_SYSTEM in
-  Darwin)
+case $CC_NAME in
+  clang|gcc)
     nm_feature="strdup"
     nm_feature_name="nm_have_strdup"
     nm_feature_run=no
     nm_feature_h='#include <string.h>'
-    nm_feature_flags=
+    nm_feature_flags="$CFLAGS"
     nm_feature_test='char *s = strdup("abc");'
     . ${NORE_ROOT}/auto/feature
     ;;
-  Linux)
+  msvc)
     nm_feature="strdup"
     nm_feature_name="nm_have_strdup"
     nm_feature_run=no
     nm_feature_h='#include <string.h>'
-    nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
-    nm_feature_test='char *s = strdup("abc");'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  WinNT)
-    nm_feature="strdup"
-    nm_feature_name="nm_have_strdup"
-    nm_feature_run=no
-    nm_feature_h='#include <string.h>'
-    nm_feature_flags='-D_CRT_SECURE_NO_WARNINGS'
+    nm_feature_flags="-D_CRT_SECURE_NO_WARNINGS $CFLAGS"
     nm_feature_test='char *s = _strdup("abc");'
     . ${NORE_ROOT}/auto/feature
     ;;
@@ -48,6 +47,6 @@ case $NM_SYSTEM in
 esac                            # end of strdup
 
 
-
+fi                              # defined_nstr_h
 
 # eof

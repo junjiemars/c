@@ -7,6 +7,14 @@
 ####
 
 
+if [ -z "$defined_nasrt_h" ]; then
+
+defined_nasrt_h="nart.h"
+
+POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
+
+
+# check for <npstd.h>
 . ${POSIX_ROOT}src/posix/npstd_auto
 
 
@@ -24,5 +32,6 @@ nm_feature_test="enum {N=5}; _Static_assert(N==5, \"N is not equal 5\");"
 . ${NORE_ROOT}/auto/feature     # end of static_assert
 
 
+fi                              # defined_nart_h
 
 # eof
