@@ -1,7 +1,6 @@
 #ifndef _ALGO_H_
 #define _ALGO_H_
 
-#include <nore.h>
 #include <ncstd.h>
 #include <stdio.h>
 #include <stdlib.h>
