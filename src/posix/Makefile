@@ -27,9 +27,11 @@
 #             posix_getopt_test
 
 
-posix: posix_nustd                              \
+posix: posix_ndef                               \
+       posix_nustd                              \
        posix_nio
-posix_test: posix_nustd_test                    \
+posix_test: posix_ndef_test                     \
+            posix_nustd_test                    \
             posix_nio_test
 
 # env
@@ -41,9 +43,6 @@ ifeq ($(_MEMORY_), 1)
 	CFLAGS += $(f_sanitize)
 endif # end of _MEMORY_
 
-ifeq ($(CC_NAME), msvc)
-	CFLAGS += -Zc:preprocessor-
-endif
 
 # npstd
 posix_npstd_binout := $(bin_path)/$(posix_prefix)_npstd$(bin_ext)
