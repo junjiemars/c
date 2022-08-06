@@ -55,7 +55,7 @@
 
 
 #if (MSVC) && (NM_HAVE_SSIZE_T)
-typedef SSIZE_T  ssize_t
+#  define SSIZE_T  ssize_t
 #endif  /* ssize_t */
 
 

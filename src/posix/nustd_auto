@@ -18,6 +18,15 @@ echo "checking for nustd.h ..."
 # check ssize_t
 #----------------------------------------
 case $CC_NAME in
+  clang|gcc)
+    nm_feature="ssize_t"
+    nm_feature_name="nm_have_ssize_t"
+    nm_feature_run=no
+    nm_feature_h='#include <unistd.h>'
+    nm_feature_flags=
+    nm_feature_test='ssize_t ss = -1;'
+    . ${NORE_ROOT}/auto/feature
+    ;;
   msvc)
     nm_feature="ssize_t"
     nm_feature_name="nm_have_ssize_t"

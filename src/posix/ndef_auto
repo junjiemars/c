@@ -15,7 +15,7 @@ echo "checking for ndef.h ..."
 
 # check restrict keyword
 #----------------------------------------
-nm_feature="restrict keyword"
+nm_feature="restrict"
 nm_feature_name="nm_have_restrict"
 nm_feature_run=
 nm_feature_h=
