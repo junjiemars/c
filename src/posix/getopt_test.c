@@ -5,6 +5,11 @@
 #include <stdio.h>
 
 
+#if (MSVC)
+#  pragma warning(disable:4996)
+#endif
+
+
 #define OPT_REQUIRED_MAX  256
 
 
