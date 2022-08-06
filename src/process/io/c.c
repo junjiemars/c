@@ -63,7 +63,7 @@ main(void)
 #if (_SYNC_)
 
 static void
-on_sig_usr(_unused_(int sig))
+on_sig_usr(__attribute__((unused)) int sig)
 {
   sflag = 1;
 }
