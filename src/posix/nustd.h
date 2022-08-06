@@ -27,9 +27,9 @@
 
 
 #if (MSVC)
-/* #  include <BaseTsd.h> */
-/* #  include <windows.h> */
-/* #  include <process.h> */
+#  include <BaseTsd.h>
+#  include <windows.h>
+#  include <process.h>
 #else
 #  include <sys/types.h>
 #  include <unistd.h>
