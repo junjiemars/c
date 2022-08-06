@@ -18,32 +18,4 @@ include="stdint.h" . ${NORE_ROOT}/auto/include
 include="inttypes.h" . ${NORE_ROOT}/auto/include
 
 
-
-# check ssize_t
-#----------------------------------------
-case $CC_NAME in
-  gcc|clang)
-    nm_feature="ssize_t"
-    nm_feature_name="nm_have_ssize_t"
-    nm_feature_run=no
-    nm_feature_h='#include <sys/types.h>'
-    nm_feature_flags=
-    nm_feature_test='ssize_t ss = -1;'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  msvc)
-    nm_feature="ssize_t"
-    nm_feature_name="nm_have_ssize_t"
-    nm_feature_run=no
-    nm_feature_h='#include <BaseTsd.h>'
-    nm_feature_flags=
-    nm_feature_test='SSIZE_T ss = -1;'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  *)
-    ;;
-esac                            # ssize_t
-
-
-
 # eof

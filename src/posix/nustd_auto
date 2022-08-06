@@ -10,22 +10,32 @@
 . ${POSIX_ROOT}src/posix/npstd_auto
 
 
+
 echo "checking for nustd.h ..."
+
+
+
+# check ssize_t
+#----------------------------------------
+case $CC_NAME in
+  msvc)
+    nm_feature="ssize_t"
+    nm_feature_name="nm_have_ssize_t"
+    nm_feature_run=no
+    nm_feature_h='#include <BaseTsd.h>'
+    nm_feature_flags=
+    nm_feature_test='SSIZE_T ss = -1;'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  *)
+    ;;
+esac                            # ssize_t
 
 
 # check sleep
 #----------------------------------------
-case $NM_SYSTEM in
-  Darwin|Linux)
-    nm_feature="sleep"
-    nm_feature_name="nm_have_sleep"
-    nm_feature_run=no
-    nm_feature_h='#include <unistd.h>'
-    nm_feature_flags=
-    nm_feature_test='sleep(1);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  WinNT)
+case $CC_NAME in
+  msvc)
     nm_feature="sleep"
     nm_feature_name="nm_have_sleep"
     nm_feature_run=no
@@ -41,17 +51,8 @@ esac                            # end of sleep
 
 # check getpid
 #----------------------------------------
-case $NM_SYSTEM in
-  Darwin|Linux)
-    nm_feature="getpid"
-    nm_feature_name="nm_have_getpid"
-    nm_feature_run=no
-    nm_feature_h='#include <unistd.h>'
-    nm_feature_flags=
-    nm_feature_test='getpid();'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  WinNT)
+case $CC_NAME in
+  msvc)
     nm_feature="getpid"
     nm_feature_name="nm_have_getpid"
     nm_feature_run=no

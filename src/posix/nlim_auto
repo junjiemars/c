@@ -13,17 +13,6 @@
 echo "checking for nlim.h ..."
 
 
-# check sysconf
-#----------------------------------------
-nm_feature="sysconf"
-nm_feature_name="nm_have_sysconf"
-nm_feature_run=yes
-nm_feature_h="#include <unistd.h>"
-nm_feature_flags="$nm_std_opt"
-nm_feature_test="sysconf(_SC_ARG_MAX);"
-. ${NORE_ROOT}/auto/feature     # end of sysconf
-
-
 # check LINE_MAX
 #----------------------------------------
 case $NM_SYSTEM in

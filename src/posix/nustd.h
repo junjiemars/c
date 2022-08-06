@@ -54,28 +54,20 @@
 #endif
 
 
-#if !(NM_HAVE_SSIZE_T)
-#  if (MSVC)
+#if (MSVC) && (NM_HAVE_SSIZE_T)
 typedef SSIZE_T  ssize_t
-#  endif
-#else
-typedef long  ssize_t;
 #endif  /* ssize_t */
 
 
 
-/* #if !(NM_HAVE_SLEEP) */
-/* #  error "sleep no found" */
-/* #elif (MSVC) */
-/* #  define sleep(x)  Sleep((x) * 1000) */
-/* #endif  /\* sleep *\/ */
+#if (MSVC)
+#  define sleep(x)  Sleep((x) * 1000)
+#endif  /* sleep */
 
 
-/* #if !(NM_HAVE_GETPID) */
-/* #  error "getpid no found" */
-/* #elif (WINNT) */
-/* #  define getpid  _getpid */
-/* #endif  /\* getpid *\/ */
+#if (MSVC)
+#  define getpid  _getpid
+#endif  /* getpid */
 
 
 

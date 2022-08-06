@@ -10,20 +10,16 @@
 . ${POSIX_ROOT}src/posix/npstd_auto
 
 
-# check for <nasrt.h>
-. ${POSIX_ROOT}src/posix/nasrt_auto
-
-
 # check for <ndef.h>
 . ${POSIX_ROOT}src/posix/ndef_auto
 
 
+# check for <nasrt.h>
+. ${POSIX_ROOT}src/posix/nasrt_auto
+
+
 # checking for <nint.h>
 . ${POSIX_ROOT}src/posix/nint_auto
-
-
-# checking for <nio.h>
-. ${POSIX_ROOT}src/posix/nio_auto
 
 
 # checking for <nstr.h>

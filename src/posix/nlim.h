@@ -2,7 +2,7 @@
 #define _NLIM_H_
 
 
-#include <npstd.h>
+#include <nustd.h>
 #include <limits.h>
 
 

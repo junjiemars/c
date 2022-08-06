@@ -13,97 +13,21 @@ POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
 . ${POSIX_ROOT}src/posix/npstd_auto
 
 
-# checking for CC's features
 . ${POSIX_ROOT}src/posix/ncc_auto
+
+
+. ${POSIX_ROOT}src/posix/ncstd_auto
+
+
+. ${POSIX_ROOT}src/posix/nustd_auto
+
+
+# checking for <nio.h>
+. ${POSIX_ROOT}src/posix/nio_auto
 
 
 # checking for <nlim.h>
 . ${POSIX_ROOT}src/posix/nlim_auto
-
-
-# check for <ncstd.h>
-. ${POSIX_ROOT}src/posix/ncstd_auto
-
-
-# checking for <nustd.h>
-. ${POSIX_ROOT}src/posix/nustd_auto
-
-
-# # check open function
-# #----------------------------------------
-# case $NM_SYSTEM in
-#   Darwin|Linux)
-#     nm_feature="open"
-#     nm_feature_name="nm_have_open"
-#     nm_feature_run=no
-#     nm_feature_h='#include <fcntl.h>'
-#     nm_feature_flags=
-#     nm_feature_test='int fd = open("/dev/zero", 0);'
-#     . ${NORE_ROOT}/auto/feature
-#     ;;
-#   WinNT)
-#     ;;
-#   *)
-#     ;;
-# esac                            # end of open
-
-
-# # mmap
-# #----------------------------------------
-# case $NM_SYSTEM in
-#   Darwin|Linux)
-#     nm_feature="mmap"
-#     nm_feature_name="nm_have_mmap"
-#     nm_feature_run=no
-#     nm_feature_h='#include <sys/mman.h>'
-#     nm_feature_flags=
-#     nm_feature_test='mmap(0, 16, 1, 0, 3, 0);'
-#     . ${NORE_ROOT}/auto/feature
-#     ;;
-#   WinNT)
-#     ;;
-#   *)
-#     ;;
-# esac                            # end of mmap
-
-# # sysconf
-# #----------------------------------------
-# case $NM_SYSTEM in
-#   Darwin|Linux)
-#     nm_feature="sysconf"
-#     nm_feature_name="nm_have_sysconf"
-#     nm_feature_run=no
-#     nm_feature_h='#include <unistd.h>'
-#     nm_feature_flags=
-#     nm_feature_test='sysconf(_SC_PAGESIZE);'
-#     . ${NORE_ROOT}/auto/feature
-#     ;;
-#   WinNT)
-#     ;;
-#   *)
-#     ;;
-# esac                            # end of sysconf
-
-
-# # tmpfile
-# #----------------------------------------
-# nm_feature="tmpfile"
-# nm_feature_name="nm_have_tmpfile"
-# nm_feature_run=
-# nm_feature_h='#include <stdio.h>'
-# nm_feature_flags=
-# nm_feature_test='(void)tmpfile();'
-# . ${NORE_ROOT}/auto/feature
-
-# # mkstemp
-# #----------------------------------------
-# nm_feature="mkstemp"
-# nm_feature_name="nm_have_mkstemp"
-# nm_feature_run=
-# nm_feature_h='#include <stdlib.h>'
-# nm_feature_flags=
-# nm_feature_test='mkstemp("abc");'
-# . ${NORE_ROOT}/auto/feature
 
 
 
