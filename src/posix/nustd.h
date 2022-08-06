@@ -28,14 +28,14 @@
 
 #if (MSVC)
 #  if defined(__attribute__) && defined(unused)
-#    pragma pop_macro("unused")
-#    define __attribute____unused__
+#    define __attribute____unused__  unused
+#    undef unused
 #  endif
 #  include <BaseTsd.h>
 #  include <windows.h>
 #  include <process.h>
 #  if defined(__attribute____unused__)
-#    pragma push_macro("unused")
+#    define unused  __attribute____unused__
 #    undef __attribute____unused__
 #  endif
 #else
