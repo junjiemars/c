@@ -28,11 +28,9 @@
 
 
 posix: posix_ndef                               \
-       posix_nustd                              \
-       posix_nio
+       posix_nustd
 posix_test: posix_ndef_test                     \
-            posix_nustd_test                    \
-            posix_nio_test
+            posix_nustd_test
 
 # env
 posix_prefix := posix
