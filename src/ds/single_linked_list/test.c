@@ -73,13 +73,13 @@ test_static_str_list()
   list_append(head, "Candy", new_node);
   list_append(head, "Duck", new_node);
 
-  _unused_(node_s *nil) = list_find(0, "Bee", cmp_str_node);
+  __attribute__((unused)) node_s *nil = list_find(0, "Bee", cmp_str_node);
   assert(0 == nil);
 
-  _unused_(node_s *tail) = list_find(head, 0, cmp_str_node);
+  __attribute__((unused)) node_s *tail = list_find(head, 0, cmp_str_node);
   assert(0 == tail);
 
-  _unused_(node_s *bee) = list_find(head, "Bee", cmp_str_node);
+  __attribute__((unused)) node_s *bee = list_find(head, "Bee", cmp_str_node);
   assert(0 == strcmp(bee->val, "Bee"));
   list_iterate(head, iter_str_node);
 
@@ -111,13 +111,13 @@ test_dynamic_str_list()
   char *duck = malloc(32);
   list_append(head, strcpy(duck, "Duck"), new_node);
 
-  _unused_(node_s *nil) = list_find(0, bee, cmp_str_node);
+  __attribute__((unused)) node_s *nil = list_find(0, bee, cmp_str_node);
   assert(0 == nil);
 
-  _unused_(node_s *tail) = list_find(head, 0, cmp_str_node);
+  __attribute__((unused)) node_s *tail = list_find(head, 0, cmp_str_node);
   assert(0 == tail);
 
-  _unused_(node_s *bee_node) = list_find(head, bee, cmp_str_node);
+  __attribute__((unused)) node_s *bee_node = list_find(head, bee, cmp_str_node);
   assert(0 == strcmp(bee_node->val, bee));
 
   list_delete(&head, bee, cmp_str_node, free_alloc_node);
@@ -140,7 +140,7 @@ test_int_list()
 
   int *two = malloc(sizeof(int));
   *two = 2;
-  _unused_(node_s *n) = list_append(head, two, new_node);
+  __attribute__((unused)) node_s *n = list_append(head, two, new_node);
 	assert((0 != n) && (2 == *(int*)(n->val)));
 
   int *three = malloc(sizeof(int));

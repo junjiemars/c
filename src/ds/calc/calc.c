@@ -28,7 +28,7 @@ _getc_(void)
 
 static
 int
-_ungetc_(int c, _unused_(FILE* stream))
+_ungetc_(int c, __attribute__((unused)) FILE* stream)
 {
   _str_in_i_--;
   return c;
