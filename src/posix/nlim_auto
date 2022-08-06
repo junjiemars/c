@@ -7,9 +7,9 @@
 ####
 
 
-if [ -z "$defined_nlim_h" ]; then
+if [ -z "$define_nlim_h" ]; then
 
-defined_nlim_h="nlim.h"
+define_nlim_h="nlim.h"
 
 
 POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
@@ -140,7 +140,7 @@ return 0;
 esac                            # end of GETPW_R_SIZE_MAX
 
 
-fi                              # defined_nlim_h
+fi                              # define_nlim_h
 
 
 # eof

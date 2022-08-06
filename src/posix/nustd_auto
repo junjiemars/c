@@ -7,9 +7,9 @@
 ####
 
 
-if [ -z "$defined_nustd_h" ]; then
+if [ -z "$define_nustd_h" ]; then
 
-defined_nustd_h="nustd.h"
+define_nustd_h="nustd.h"
 
 
 POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
@@ -105,7 +105,7 @@ case $CC_NAME in
 esac                            # end of getpid
 
 
-fi                              # defined_nustd_h
+fi                              # define_nustd_h
 
 
 # eof

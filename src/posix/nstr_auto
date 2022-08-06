@@ -7,9 +7,9 @@
 ####
 
 
-if [ -z "$defined_nstr_h" ]; then
+if [ -z "$define_nstr_h" ]; then
 
-defined_nstr_h="nstr.h"
+define_nstr_h="nstr.h"
 
 
 POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
@@ -47,6 +47,6 @@ case $CC_NAME in
 esac                            # end of strdup
 
 
-fi                              # defined_nstr_h
+fi                              # define_nstr_h
 
 # eof

@@ -7,9 +7,9 @@
 ####
 
 
-if [ -z "$defined_nio_h" ]; then
+if [ -z "$define_nio_h" ]; then
 
-defined_nio_h="nio.h"
+define_nio_h="nio.h"
 
 
 POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
@@ -73,6 +73,6 @@ case $CC_NAME in
 esac                            # end of fileno
 
 
-fi                              # defined_nio_h
+fi                              # define_nio_h
 
 # eof

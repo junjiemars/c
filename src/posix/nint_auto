@@ -7,9 +7,9 @@
 ####
 
 
-if [ -z "$defined_nint_h" ]; then
+if [ -z "$define_nint_h" ]; then
 
-defined_nint_h="nint.h"
+define_nint_h="nint.h"
 
 POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
 
@@ -24,6 +24,6 @@ include="stdint.h" . ${NORE_ROOT}/auto/include
 include="inttypes.h" . ${NORE_ROOT}/auto/include
 
 
-fi                              # defined_nint_h
+fi                              # define_nint_h
 
 # eof

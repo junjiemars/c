@@ -7,9 +7,9 @@
 ####
 
 
-if [ -z "$defined_ndef_h" ]; then
+if [ -z "$define_ndef_h" ]; then
 
-defined_ndef_h="ndef.h"
+define_ndef_h="ndef.h"
 
 
 POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
@@ -41,7 +41,7 @@ if [ "yes" != $nm_found ]; then
 fi                              # end of restrict
 
 
-fi                              # defined_npstd_h
+fi                              # define_npstd_h
 
 
 # eof

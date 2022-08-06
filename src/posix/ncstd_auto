@@ -7,9 +7,9 @@
 ####
 
 
-if [ -z "$defined_ncstd_h" ]; then
+if [ -z "$define_ncstd_h" ]; then
 
-defined_ncstd_h="ncstd.h"
+define_ncstd_h="ncstd.h"
 
 
 
@@ -36,6 +36,6 @@ POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
 . ${POSIX_ROOT}src/posix/nstr_auto
 
 
-fi                              # defined_ncstd_h
+fi                              # define_ncstd_h
 
 # eof
