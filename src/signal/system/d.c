@@ -1,4 +1,4 @@
-#include <_signal_.h>
+#include "_signal_.h"
 
 extern int system(const char *);
 

@@ -1,23 +1,23 @@
 #include <_signal_.h>
 
 static void on_sig_usr(int);
-_unused_(static void tell_wait(void));
-_unused_(static void tell_parent(pid_t));
-_unused_(static void wait_parent(void));
-_unused_(static void tell_child(pid_t pid));
-_unused_(static void wait_child(void));
+__attribute__((unused)) static void tell_wait(void);
+__attribute__((unused)) static void tell_parent(pid_t);
+__attribute__((unused)) static void wait_parent(void);
+__attribute__((unused)) static void tell_child(pid_t pid);
+__attribute__((unused)) static void wait_child(void);
 
 static volatile sig_atomic_t  sflag;
 static sigset_t               nset, oset, zset;
 
 int
-main(_unused_(int argc), _unused_(char **argv))
+main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 {
   exit(EXIT_SUCCESS);
 }
 
 void
-on_sig_usr(_unused_(int signo))
+on_sig_usr(__attribute__((unused)) int signo)
 {
   sflag = 0;
 }

@@ -8,7 +8,7 @@ static volatile sig_atomic_t  qflag;
 
 
 int
-main(_unused_(int argc), _unused_(char **argv))
+main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 {
   sigset_t  nset, oset, zset;
 

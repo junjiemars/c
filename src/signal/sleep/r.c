@@ -6,7 +6,7 @@ void race(long);
 void
 race(long n)
 {
-  _unused_(volatile double  d)  =  0;
+  __attribute__((unused)) volatile double  d  =  0;
 
   for (long i = 0; i < n; i++)
     {

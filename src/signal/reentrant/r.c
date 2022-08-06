@@ -114,7 +114,7 @@ on_sig_alrm(int sig)
 {
   if (SIGALRM == sig)
     {
-      _unused_(struct passwd  *p)  =  0;
+      __attribute__((unused)) struct passwd  *p  =  0;
       printf("# %s\n", _str_(SIGALRM));
 
       /* wipped out the result of previous getpwnam call */
