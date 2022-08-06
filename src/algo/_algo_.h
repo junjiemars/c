@@ -3,6 +3,7 @@
 
 #include <nore.h>
 #include <ncstd.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 
