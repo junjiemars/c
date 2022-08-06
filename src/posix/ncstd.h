@@ -6,7 +6,7 @@
 #define _NCSTD_H_
 
 
-/* #include <ndef.h> */
+#include <ndef.h>
 #include <nasrt.h>
 #include <nint.h>
 #include <nstr.h>

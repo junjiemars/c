@@ -9,7 +9,7 @@
 #if !defined(__has_attribute)
 #  if !defined(__attribute__)
 #    define __attribute__esc_(...)  __VA_ARGS__
-#    define __attribute__(_)  __attribute__esc_  _
+#    define __attribute__(x)  __attribute__esc_  x
 #  endif
 #endif
 
