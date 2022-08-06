@@ -54,13 +54,13 @@
 #endif
 
 
-/* #if !(NM_HAVE_SSIZE_T) */
-/* #  if (MSVC) */
-/* #    define SSIZE_T  ssize_t */
-/* #  endif */
-/* #else */
-/* typedef long  ssize_t; */
-/* #endif  /\* ssize_t *\/ */
+#if !(NM_HAVE_SSIZE_T)
+#  if (MSVC)
+typedef SSIZE_T  ssize_t
+#  endif
+#else
+typedef long  ssize_t;
+#endif  /* ssize_t */
 
 
 
