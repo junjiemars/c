@@ -44,13 +44,22 @@ esac                            # ssize_t
 # check sleep
 #----------------------------------------
 case $CC_NAME in
+  clang|gcc)
+    nm_feature="sleep"
+    nm_feature_name="nm_have_sleep"
+    nm_feature_run=no
+    nm_feature_h='#include <unistd.h>'
+    nm_feature_flags=
+    nm_feature_test='sleep(1);'
+    . ${NORE_ROOT}/auto/feature
+    ;;
   msvc)
     nm_feature="sleep"
     nm_feature_name="nm_have_sleep"
     nm_feature_run=no
     nm_feature_h='#include <windows.h>'
     nm_feature_flags=
-    nm_feature_test='Sleep(1);'
+    nm_feature_test='Sleep(1*1000);'
     . ${NORE_ROOT}/auto/feature
     ;;
   *)
@@ -61,6 +70,15 @@ esac                            # end of sleep
 # check getpid
 #----------------------------------------
 case $CC_NAME in
+  clang|gcc)
+    nm_feature="getpid"
+    nm_feature_name="nm_have_getpid"
+    nm_feature_run=no
+    nm_feature_h='#include <unistd.h>'
+    nm_feature_flags=
+    nm_feature_test='getpid();'
+    . ${NORE_ROOT}/auto/feature
+    ;;
   msvc)
     nm_feature="getpid"
     nm_feature_name="nm_have_getpid"
