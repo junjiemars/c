@@ -15,7 +15,6 @@ main(void)
   printf("%s=%li\n", _str_(NM_PAGE_SIZE), (long) (NM_PAGE_SIZE+0));
 #else
   printf("%s=(no symbol)\n", _str_(NM_PAGE_SIZE));
-  exit(1);
 #endif
 
 #if defined(NM_GETPW_R_SIZE_MAX)

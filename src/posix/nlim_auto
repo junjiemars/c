@@ -79,8 +79,8 @@ esac                            # end of LINE_MAX
 
 # check PAGE_SIZE
 #----------------------------------------
-case $CC_NAME in
-  clang|gcc)
+case $NM_SYSTEM in
+  Darwin|Linux)
     nm_feature="PAGE_SIZE"
     nm_feature_name="nm_page_size"
     nm_feature_run=value
@@ -96,7 +96,7 @@ return 0;
 '
     . ${NORE_ROOT}/auto/feature
     ;;
-  msvc)
+  WinNT)
     nm_feature="PAGE_SIZE"
     nm_feature_name="nm_page_size"
     nm_feature_run=value
