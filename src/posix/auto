@@ -16,13 +16,13 @@ fi
 . ${POSIX_ROOT}/nustd_auto
 
 
-# checking for <nio.h>
-. ${POSIX_ROOT}/nio_auto
-
-
 # checking for <nlim.h>
+nlim_auto_check="${POSIX_ROOT}/nlim_auto_check"
 . ${POSIX_ROOT}/nlim_auto
 
+
+# checking for <nio.h>
+. ${POSIX_ROOT}/nio_auto
 
 
 
