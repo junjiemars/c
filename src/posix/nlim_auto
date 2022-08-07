@@ -88,7 +88,7 @@ case $CC_NAME in
 #include <stdio.h>
 #include <unistd.h>
 '
-    nm_feature_flags="$CFLAGS"
+    nm_feature_flags=
     nm_feature_test='
 long sc = sysconf(_SC_PAGE_SIZE);
 printf("%ld\n", sc);
@@ -104,7 +104,7 @@ return 0;
 #include <windows.h>
 #include <stdio.h>
 '
-    nm_feature_flags="$CFLAGS"
+    nm_feature_flags=
     nm_feature_test='
 SYSTEM_INFO sc;
 GetSystemInfo(&sc);
