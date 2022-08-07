@@ -1,30 +1,50 @@
 #include <nio.h>
-#include <stdlib.h>
 
+/*
+ * An implementation conform IEEE Std 1003.1-2017:
+ * https://pubs.opengroup.org/onlinepubs/9699919799/functions/getdelim.html
+ *
+*/
 
 #if !(NM_HAVE_GETDELIM)
 
+#include <errno.h>
+#include <stdlib.h>
+
 ssize_t
-getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
-         FILE * restrict stream)
+getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
+         FILE *restrict stream)
 {
 	int       c;
 	char     *p, *p1;
 	ssize_t   len;
 
-  if (0 == lineptr)
+  if (NULL == lineptr || NULL == n || NULL == stream
+      || (UCHAR_MAX < delimiter || delimiter < 0))
+    {
+      errno = EINVAL;
+      return EOF;
+    }
+
+  if (feof(stream) || ferror(stream))
     {
       return EOF;
     }
+
 	if (0 == *lineptr)
     {
-      *n = NM_LINE_MAX;
+      if (0 == *n)
+        {
+          *n = NM_LINE_MAX;
+        }
+
       *lineptr = malloc(*n);
       if (0 == *lineptr)
         {
           return EOF;
         }
     }
+
   p = *lineptr;
   len = 0;
 
@@ -48,6 +68,11 @@ getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
         {
           break;
         }
+    }
+
+  if (ferror(stream))
+    {
+      return EOF;
     }
 
   *p = 0;
