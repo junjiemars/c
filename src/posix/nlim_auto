@@ -24,6 +24,65 @@ fi
 echo "checking for nlim.h ..."
 
 
+# check PATH_MAX
+#----------------------------------------
+case $NM_SYSTEM in
+  Darwin|Linux)
+    nm_feature="PATH_MAX"
+    nm_feature_name="nm_path_max"
+    nm_feature_run=value
+    nm_feature_h='
+#include <stdio.h>
+#include <unistd.h>
+#include <limits.h>
+'
+    nm_feature_flags=
+    nm_feature_test='
+long path_max = 0;
+#if defined(PATH_MAX) && (PATH_MAX > 0)
+   path_max = PATH_MAX;
+#else
+  path_max = pathconf("/", _PC_PATH_MAX);
+  if (path_max <= 0) {
+#   if defined(_POSIX_PATH_MAX) && (_POSIX_PATH_MAX > 0)
+      path_max = _POSIX_PATH_MAX;
+#   else
+      path_max = 256;
+#   endif
+  } else {
+    path_max++;
+  }
+#endif
+  printf("%li\n", path_max);
+  return 0;
+'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  WinNT)
+    nm_feature="PATH_MAX"
+    nm_feature_name="nm_path_max"
+    nm_feature_run=value
+    nm_feature_h='
+#include <windows.h>
+#include <stdlib.h>
+#include <limits.h>
+'
+    nm_feature_flags=
+    nm_feature_test='
+long path_max = 256;
+#if defined(MAX_PATH) && (MAX_PATH > 0)
+  path_max = MAX_PATH;
+#endif
+  printf("%li\n", path_max);
+  return 0;
+'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  *)
+    ;;
+esac                            # end of PATH_MAX
+
+
 # check LINE_MAX
 #----------------------------------------
 case $NM_SYSTEM in

@@ -5,6 +5,12 @@
 int
 main(void)
 {
+#if defined(NM_PATH_MAX)
+  printf("%s=%li\n", _str_(NM_PATH_MAX), (long) (NM_PATH_MAX));
+#else
+  printf("%s=(no symbol)\n", _str_(NM_PATH_MAX));
+#endif
+
 #if defined(NM_LINE_MAX)
   printf("%s=%li\n", _str_(NM_LINE_MAX), (long) (NM_LINE_MAX+0));
 #else
