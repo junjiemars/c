@@ -32,7 +32,7 @@ case $CC_NAME in
     nm_feature_run=no
     nm_feature_h='#include <string.h>'
     nm_feature_flags="$CFLAGS"
-    nm_feature_test='char *s = strdup("abc");'
+    nm_feature_test='char *s = strdup("abc"); (void)s;'
     . ${NORE_ROOT}/auto/feature
     ;;
   msvc)
