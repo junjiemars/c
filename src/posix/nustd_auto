@@ -12,15 +12,17 @@ if [ -z "$define_nustd_h" ]; then
 define_nustd_h="nustd.h"
 
 
-POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
 
 
 # check for <npstd.h>
-. ${POSIX_ROOT}src/posix/npstd_auto
+. ${POSIX_ROOT}/npstd_auto
 
 
 # check for <ncstd.h>
-. ${POSIX_ROOT}src/posix/ncstd_auto
+. ${POSIX_ROOT}/ncstd_auto
 
 
 echo "checking for nustd.h ..."

@@ -4,10 +4,14 @@ if [ -z "$define_npstd_h" ]; then
 
 define_npstd_h="npstd.h"
 
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+
+npstd_h="${POSIX_ROOT}/npstd.h"
 
 _POSIX_C_SOURCE="200809L"
-
-npstd_h="${POSIX_ROOT}src/posix/npstd.h"
 
 
 if [ ! -f "${npstd_h}" ]; then

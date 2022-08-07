@@ -12,28 +12,29 @@ if [ -z "$define_ncstd_h" ]; then
 define_ncstd_h="ncstd.h"
 
 
-
-POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
 
 
 # check for <npstd.h>
-. ${POSIX_ROOT}src/posix/npstd_auto
+. ${POSIX_ROOT}/npstd_auto
 
 
 # check for <ndef.h>
-. ${POSIX_ROOT}src/posix/ndef_auto
+. ${POSIX_ROOT}/ndef_auto
 
 
 # check for <nasrt.h>
-. ${POSIX_ROOT}src/posix/nasrt_auto
+. ${POSIX_ROOT}/nasrt_auto
 
 
 # checking for <nint.h>
-. ${POSIX_ROOT}src/posix/nint_auto
+. ${POSIX_ROOT}/nint_auto
 
 
 # checking for <nstr.h>
-. ${POSIX_ROOT}src/posix/nstr_auto
+. ${POSIX_ROOT}/nstr_auto
 
 
 fi                              # define_ncstd_h

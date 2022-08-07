@@ -12,10 +12,13 @@ if [ -z "$define_ndef_h" ]; then
 define_ndef_h="ndef.h"
 
 
-POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
 
 # check for <npstd.h>
-. ${POSIX_ROOT}src/posix/npstd_auto
+. ${POSIX_ROOT}/npstd_auto
 
 
 echo "checking for ndef.h ..."

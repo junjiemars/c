@@ -12,10 +12,12 @@ if [ -z "$define_nstr_h" ]; then
 define_nstr_h="nstr.h"
 
 
-POSIX_ROOT="${POSIX_ROOT:+${POSIX_ROOT%/}/}"
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
 
 # check for <npstd.h>
-. ${POSIX_ROOT}src/posix/npstd_auto
+. ${POSIX_ROOT}/npstd_auto
 
 
 echo "checking for nstr.h ..."
