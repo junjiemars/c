@@ -116,7 +116,6 @@ return 0;
   *)
     ;;
 esac                            # end of PAGESIZE
-exit 1
 
 
 # check GETPW_R_SIZE_MAX
