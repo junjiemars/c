@@ -108,7 +108,7 @@ return 0;
 SYSTEM_INFO sc;
 GetSystemInfo(&sc);
 printf("%ld\n", sc.dwPageSize);
-return 0;
+return 1;
 '
     . ${NORE_ROOT}/auto/feature
     ;;
