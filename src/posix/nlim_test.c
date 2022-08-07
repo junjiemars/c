@@ -11,10 +11,10 @@ main(void)
   printf("%s=(no symbol)\n", _str_(NM_LINE_MAX));
 #endif
 
-#if defined(NM_PAGESIZE)
-  printf("%s=%li\n", _str_(NM_PAGESIZE), (long) (NM_PAGESIZE+0));
+#if defined(NM_PAGE_SIZE)
+  printf("%s=%li\n", _str_(NM_PAGE_SIZE), (long) (NM_PAGE_SIZE+0));
 #else
-  printf("%s=(no symbol)\n");
+  printf("%s=(no symbol)\n", _str_(NM_PAGE_SIZE));
 #endif
 
 #if defined(NM_GETPW_R_SIZE_MAX)

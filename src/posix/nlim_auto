@@ -77,32 +77,39 @@ long line_max = 2048;
 esac                            # end of LINE_MAX
 
 
-# check PAGESIZE
+# check PAGE_SIZE
 #----------------------------------------
-case $NM_SYSTEM in
-  Linux|Darwin)
-    nm_feature="PAGESIZE"
-    nm_feature_name="nm_pagesize"
+case $CC_NAME in
+  clang|gcc)
+    nm_feature="PAGE_SIZE"
+    nm_feature_name="nm_page_size"
     nm_feature_run=value
     nm_feature_h='
 #include <stdio.h>
 #include <unistd.h>
 '
-    nm_feature_flags=
+    nm_feature_flags="$CFLAGS"
     nm_feature_test='
-long sc = sysconf(_SC_PAGESIZE);
+long sc = sysconf(_SC_PAGE_SIZE);
 printf("%ld\n", sc);
 return 0;
 '
     . ${NORE_ROOT}/auto/feature
     ;;
-  WinNT)
-    nm_feature="PAGESIZE"
-    nm_feature_name="nm_pagesize"
+  msvc)
+    nm_feature="PAGE_SIZE"
+    nm_feature_name="nm_page_size"
     nm_feature_run=value
-    nm_feature_h=
-    nm_feature_flags=
-    nm_feature_test=
+    nm_feature_h='
+#include <windows.h>
+'
+    nm_feature_flags="$CFLAGS"
+    nm_feature_test='
+SYSTEM_INFO sc;
+GetSystemInfo(&sc);
+printf("%ld\n", sc.dwPageSize);
+return 0;
+'
     . ${NORE_ROOT}/auto/feature
     ;;
   *)
