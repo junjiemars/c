@@ -97,12 +97,14 @@ case $NM_SYSTEM in
 '
     nm_feature_flags=
     nm_feature_test='
-long line_max = 2048;
-#if (_SC_LINE_MAX)
-    long sc = sysconf(_SC_LINE_MAX);
-    if (sc > 0) {
-       line_max = sc;
-    }
+long line_max = 0;
+#if defined(LINE_MAX) && (LINE_MAX > 0)
+  line_max = LINE_MAX;
+#else
+  line_max = sysconf(_SC_LINE_MAX);
+  if (line_max <= 0) {
+    line_max = 2048;
+  }
 #endif
   printf("%ld\n", line_max);
   return 0;
@@ -121,10 +123,8 @@ long line_max = 2048;
     nm_feature_flags=
     nm_feature_test='
 long line_max = 2048;
-#if defined(LINE_MAX)
-    if (LINE_MAX > 0) {
-       line_max = LINE_MAX;
-    }
+#if defined(LINE_MAX) && (LINE_MAX > 0)
+   line_max = LINE_MAX;
 #endif
   printf("%d\n", line_max);
   return 0;
