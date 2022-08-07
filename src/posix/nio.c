@@ -15,9 +15,9 @@ ssize_t
 getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
          FILE *restrict stream)
 {
-	int       c;
-	char     *p, *p1;
-	ssize_t   len;
+  int       c;
+  char     *p, *p1;
+  ssize_t   len;
 
   if (NULL == lineptr || NULL == n || NULL == stream
       || (UCHAR_MAX < delimiter || delimiter < 0))
@@ -31,7 +31,7 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
       return EOF;
     }
 
-	if (0 == *lineptr)
+  if (0 == *lineptr)
     {
       if (0 == *n)
         {
@@ -48,7 +48,7 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
   p = *lineptr;
   len = 0;
 
-	while (EOF != (c = fgetc(stream)))
+  while (EOF != (c = fgetc(stream)))
     {
       if ((size_t) len == (*n - 1))
         {
@@ -76,7 +76,7 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
     }
 
   *p = 0;
-	return len;
+  return len;
 }
 
 #endif  /* getdelim */

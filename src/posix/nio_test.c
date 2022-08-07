@@ -57,9 +57,9 @@ test_getline(const char *where)
 void
 test_fileno(void)
 {
-	printf("stdin=%d, stdout=%d, stderr=%d\n",
-				 fileno(stdin),
-				 fileno(stdout),
-				 fileno(stderr));
+  printf("stdin=%d, stdout=%d, stderr=%d\n",
+         fileno(stdin),
+         fileno(stdout),
+         fileno(stderr));
 
 }
