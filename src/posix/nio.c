@@ -1,7 +1,7 @@
 #include <nio.h>
 
 /*
- * An implementation conform IEEE Std 1003.1-2017:
+ * An implementation conform to IEEE Std 1003.1-2017:
  * https://pubs.opengroup.org/onlinepubs/9699919799/functions/getdelim.html
  *
 */
