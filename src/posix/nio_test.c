@@ -11,7 +11,7 @@ main(int argc, char **argv)
 {
   if (argc < 2)
     {
-      printf("!need a file to read\n");
+      printf("usage: %s <file>\n", argv[0]);
       return 0;
     }
   test_getline(argv[1]);

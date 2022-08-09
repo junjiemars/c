@@ -1,4 +1,5 @@
 #include <nio.h>
+#include <limits.h>
 
 /*
  * An implementation conform to IEEE Std 1003.1-2017:
@@ -35,7 +36,7 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
     {
       if (0 == *n)
         {
-          *n = 512;
+          *n = NM_LINE_MAX;
         }
 
       *lineptr = malloc(*n);
