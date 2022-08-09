@@ -7,10 +7,11 @@
 ####
 
 
-# check ncstd.h features
+# check <ncstd.h> features
 . src/posix/ncstd_auto
 
-# check nlim.h feature
+nlim_auto_check="src/posix/nlim_auto_check"
+# check <nlim.h> feature
 . src/posix/nlim_auto
 
 
