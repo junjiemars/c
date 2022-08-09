@@ -35,7 +35,7 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
     {
       if (0 == *n)
         {
-          *n = NM_LINE_MAX;
+          *n = 512;
         }
 
       *lineptr = malloc(*n);
