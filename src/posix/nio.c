@@ -20,7 +20,7 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
   char     *p, *p1;
   ssize_t   len;
 
-  if (NULL == lineptr || NULL == n ||
+  if (NULL == lineptr || NULL == n
       || (NULL == stream || feof(stream))
       || (UCHAR_MAX < delimiter || delimiter < 0))
     {
@@ -35,7 +35,7 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
 
   if (NULL == *lineptr)
     {
-      if (NULL == *n)
+      if (0 == *n)
         {
           *n = NM_LINE_MAX;
         }
