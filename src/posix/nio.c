@@ -20,15 +20,14 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
   char     *p, *p1;
   ssize_t   len;
 
-  if (NULL == lineptr || NULL == n
-      || (NULL == stream || feof(stream))
+  if (NULL == lineptr || NULL == n || NULL == stream
       || (UCHAR_MAX < delimiter || delimiter < 0))
     {
       errno = EINVAL;
       return EOF;
     }
 
-  if (ferror(stream))
+  if (feof(stream) || ferror(stream))
     {
       return EOF;
     }
