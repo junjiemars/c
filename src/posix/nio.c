@@ -20,27 +20,28 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
   char     *p, *p1;
   ssize_t   len;
 
-  if (NULL == lineptr || NULL == n || NULL == stream
+  if (NULL == lineptr || NULL == n ||
+      || (NULL == stream || feof(stream))
       || (UCHAR_MAX < delimiter || delimiter < 0))
     {
       errno = EINVAL;
       return EOF;
     }
 
-  if (feof(stream) || ferror(stream))
+  if (ferror(stream))
     {
       return EOF;
     }
 
-  if (0 == *lineptr)
+  if (NULL == *lineptr)
     {
-      if (0 == *n)
+      if (NULL == *n)
         {
           *n = NM_LINE_MAX;
         }
 
       *lineptr = malloc(*n);
-      if (0 == *lineptr)
+      if (NULL == *lineptr)
         {
           return EOF;
         }
@@ -55,7 +56,7 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
         {
           *n <<= 1;
           p1 = realloc(*lineptr, *n);
-          if (0 == p1)
+          if (NULL == p1)
             {
               return EOF;
             }
