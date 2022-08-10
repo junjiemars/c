@@ -52,7 +52,13 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
 
   while (EOF != (c = fgetc(stream)))
     {
-      if ((size_t) len == (*n - 1))
+      if (SSIZE_MAX == (ssize_t) len)
+        {
+          errno = EOVERFLOW;
+          return EOF;
+        }
+
+      if ((*n - 1) == (size_t) len)
         {
           *n <<= 1;
           p1 = realloc(*lineptr, *n);
