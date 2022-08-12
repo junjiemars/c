@@ -1,11 +1,8 @@
 #ifndef _CIO_H_
 #define _CIO_H_
 
-#include <nore.h>
-#include <ndef.h>
-#include <nio.h>
-#include <nstr.h>
-#include <nlim.h>
+#include <ncstd.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 

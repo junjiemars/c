@@ -303,7 +303,6 @@ cio_seek: $(cio_seek_binout)
 cio_seek_test: cio_seek
 	$(cio_seek_binout) $(cio_seek_file)
 
-
 $(cio_seek_binout): $(cio_root)/seek/s1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
