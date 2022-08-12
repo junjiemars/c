@@ -7,7 +7,6 @@
 
 
 #include <ndef.h>
-#include <nasrt.h>
 #include <nint.h>
 #include <nstr.h>
 

@@ -17,16 +17,16 @@ if [ -z "$POSIX_ROOT" ]; then
 fi
 
 
+# check for cc's feature
+. ${POSIX_ROOT}/ncc_auto
+
+
 # check for <npstd.h>
 . ${POSIX_ROOT}/npstd_auto
 
 
 # check for <ndef.h>
 . ${POSIX_ROOT}/ndef_auto
-
-
-# check for <nasrt.h>
-. ${POSIX_ROOT}/nasrt_auto
 
 
 # checking for <nint.h>

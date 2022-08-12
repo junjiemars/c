@@ -8,7 +8,10 @@
 static void test_unused(int);
 static void test_unused_fn(void);
 static void test_fallthrough(int);
+
 static void test_restrict(const int *restrict, const char *restrict);
+static void test_static_assert(void);
+
 static void test_isut(void);
 static void test_nof(void);
 static void test_swp(void);
@@ -19,10 +22,13 @@ main(int argc, char **argv)
 {
   test_unused(1);
   test_fallthrough(1);
+
+  test_restrict((const int *restrict) &argc, (const char *restrict) argv[0]);
+  test_static_assert();
+
   test_isut();
   test_nof();
   test_swp();
-  test_restrict((const int *restrict) &argc, (const char *restrict) argv[0]);
 
   return 0;
 }
@@ -58,6 +64,13 @@ void
 test_restrict(const int *restrict ii, const char *restrict ss)
 {
   printf("%s(%i, %s)\n", __FUNCTION__, *ii, ss);
+}
+
+void
+test_static_assert(void)
+{
+  static_assert(sizeof(char) == 1, "sizeof(char) must be 1 byte");
+  printf("%s\n------------\n", __FUNCTION__);
 }
 
 

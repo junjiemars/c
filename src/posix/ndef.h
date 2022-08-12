@@ -38,11 +38,26 @@
 
 #if !(NM_HAVE_RESTRICT)
 #  if (NM_HAVE___RESTRICT)
+#    if defined(restrict)
+#      undef restrict
+#    endif
 #    define restrict  __restrict
 #  else
 #    define restrict
 #  endif
 #endif  /* restrict */
+
+
+#if !(NM_HAVE_STATIC_ASSERT)
+#  if defined(static_assert)
+#    undef static_assert
+#  endif
+#  define static_assert(e, m) enum {static_assert = 1/!!((e) && (m))}
+#else
+#  if !defined(static_assert)
+#    define static_assert  _Static_assert
+#  endif
+#endif  /* static_assert */
 
 
 

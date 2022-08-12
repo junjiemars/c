@@ -7,7 +7,14 @@
 ####
 
 
-. ${POSIX_ROOT}src/posix/npstd_auto
+if [ -z "$define_ncc_auto" ]; then
+
+define_ncc_auto="ncc_auto"
+
+
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
 
 
 echo "checking for CC's features ..."
@@ -163,5 +170,5 @@ nm_feature_test='int i=0x11223344;
 
 
 
-
+fi                              # define_ncc_auto
 # eof

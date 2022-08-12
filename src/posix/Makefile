@@ -3,7 +3,6 @@
 #
 
 posix: posix_npstd                              \
-       posix_nasrt                              \
        posix_ndef                               \
        posix_nint                               \
        posix_nstr                               \
@@ -15,7 +14,6 @@ posix: posix_npstd                              \
        posix_getopt
 
 posix_test: posix_npstd_test                    \
-            posix_nasrt_test                    \
             posix_ndef_test                     \
             posix_nint_test                     \
             posix_nstr_test                     \

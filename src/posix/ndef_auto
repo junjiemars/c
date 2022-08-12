@@ -44,7 +44,17 @@ if [ "yes" != $nm_found ]; then
 fi                              # end of restrict
 
 
+# check static_assert
+#----------------------------------------
+nm_feature="static_assert"
+nm_feature_name="nm_have_static_assert"
+nm_feature_run=yes
+nm_feature_h=""
+nm_feature_flags="$CFLAGS"
+nm_feature_test="enum {N=5}; _Static_assert(N==5, \"N is not equal 5\");"
+. ${NORE_ROOT}/auto/feature     # end of static_assert
+
+
+
 fi                              # define_npstd_h
-
-
 # eof
