@@ -6,8 +6,10 @@
 #include <string.h>
 
 
-#if (MSVC) && (NM_HAVE_STRDUP)
-#  define strdup  _strdup
+#if (NM_HAVE_STRDUP)
+#  if (MSVC)
+#    define strdup  _strdup
+#  endif
 #endif  /* strdup */
 
 

@@ -26,12 +26,21 @@ echo "checking for nstr.h ..."
 # check strdup
 #----------------------------------------
 case $CC_NAME in
-  clang|gcc)
+  clang)
     nm_feature="strdup"
     nm_feature_name="nm_have_strdup"
     nm_feature_run=no
     nm_feature_h='#include <string.h>'
     nm_feature_flags="$CFLAGS"
+    nm_feature_test='char *s = strdup("abc"); (void)s;'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  gcc)
+    nm_feature="strdup"
+    nm_feature_name="nm_have_strdup"
+    nm_feature_run=no
+    nm_feature_h='#include <string.h>'
+    nm_feature_flags="-D_POSIX_C_SOURCE=$_POSIX_C_SOURCE $CFLAGS"
     nm_feature_test='char *s = strdup("abc"); (void)s;'
     . ${NORE_ROOT}/auto/feature
     ;;
