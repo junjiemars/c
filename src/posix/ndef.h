@@ -49,12 +49,12 @@
 
 
 #if !(NM_HAVE_STATIC_ASSERT)
-#  if defined(static_assert)
-#    undef static_assert
-#  endif
-#  define static_assert(e, m) enum {static_assert = 1/!!((e) && (m))}
-#else
-#  if !defined(static_assert)
+#  if !(NM_HAVE___STATIC_ASSERT)
+#    define static_assert(e, m)  enum {static_assert = 1/!!((e) && (m))}
+#  else
+#    if defined(static_accsert)
+#      undef static_assert
+#    endif
 #    define static_assert  _Static_assert
 #  endif
 #endif  /* static_assert */
