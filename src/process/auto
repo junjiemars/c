@@ -13,4 +13,30 @@
 
 echo "checking for {process} ..."
 
+
+# check _SC_CLK_TCK
+#----------------------------------------
+case $NM_SYSTEM in
+  Linux|Darwin)
+    nm_feature="_SC_CLK_TCK"
+    nm_feature_name="nm_clk_tck"
+    nm_feature_run=value
+    nm_feature_h='
+#include <stdio.h>
+#include <unistd.h>
+'
+    nm_feature_flags=
+    nm_feature_test='
+printf("%ld\n", sysconf(_SC_CLK_TCK));
+return 0;
+'
+    . ${NORE_ROOT}/auto/feature
+    ;;
+  WinNT)
+    ;;
+  *)
+    ;;
+esac                            # end of _SC_CLK_TCK
+
+
 # eof

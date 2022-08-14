@@ -17,6 +17,7 @@ process: process_main                           \
          process_io                             \
          process_layout                         \
          process_rlimit                         \
+         process_time                           \
          process_zombie
 
 process_test: process_main_test                 \
@@ -27,6 +28,7 @@ process_test: process_main_test                 \
               process_io_test                   \
               process_layout_test               \
               process_rlimit_test               \
+              process_time_test                 \
               process_zombie_test
 
 endif
@@ -264,6 +266,26 @@ $(process_rlimit_source): $(process_rlimit_awk)     \
 	awk -f $^ > $@
 
 
+# time
+process_time1_binout := $(bin_path)/$(process_prefix)_time1$(bin_ext)
+process_time2_binout := $(bin_path)/$(process_prefix)_time2$(bin_ext)
+
+process_time: $(process_time1_binout)           \
+              $(process_time2_binout)
+process_time_test: process_time1_test           \
+                   process_time2_test
+
+process_time1_test: $(process_time1_binout)
+	$<
+
+process_time2_test: $(process_time2_binout)
+	$< ps
+
+$(process_time1_binout): $(process_root)/time/t1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(process_time2_binout): $(process_root)/time/t2.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # zombie
