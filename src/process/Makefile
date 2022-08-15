@@ -49,7 +49,7 @@ _WITH_EXIT_ ?= 0
 
 process_main: $(process_main_binout)
 process_main_test: process_main
-	-$(process_main_binout)
+	$(process_main_binout)
 
 $(process_main_binout): $(process_root)/main/m99.c
 	$(CC) $(CFLAGS) $(INC)                        \
