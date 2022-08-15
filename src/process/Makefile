@@ -279,7 +279,7 @@ process_time1_test: $(process_time1_binout)
 	$<
 
 process_time2_test: $(process_time2_binout)
-	$< ps
+	$< sleep 1
 
 $(process_time1_binout): $(process_root)/time/t1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
