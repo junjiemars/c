@@ -35,7 +35,6 @@ main(int argc, char **argv)
           time_diff(e_tms.tms_utime, s_tms.tms_utime));
   fprintf(stderr, "sys:  %7.2f\n",
           time_diff(e_tms.tms_stime, s_tms.tms_stime));
-}
 
   exit(EXIT_SUCCESS);
 }
