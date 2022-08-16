@@ -22,13 +22,13 @@ main(void)
 
 
 #if (_WITH_RETURN_)
-  return 0x1100;
+  return 0x1112;
 
 #endif /* _WITH_RETURN_ */
 
 
 #if (_WITH_EXIT_)
-  exit(0x3300);
+  exit(0x3334);
 
 #endif /* _WITH_EXIT_ */
 
