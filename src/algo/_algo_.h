@@ -4,6 +4,7 @@
 #include <ncstd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 
 #if (MSVC)

@@ -7,8 +7,13 @@
 ####
 
 
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+
 # check ncstd.h features
-. src/posix/ncstd_auto
+. ${POSIX_ROOT}/ncstd_auto
 
 
 echo "checking for {algo} ..."

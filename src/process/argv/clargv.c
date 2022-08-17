@@ -11,6 +11,10 @@ int
 main(int argc, char **argv)
 {
   int  i  =  0;
+  __attribute__((unused)) int aa[] =
+    {
+     0,1,2,3,4,
+    };
 
   while (*argv)
     {
