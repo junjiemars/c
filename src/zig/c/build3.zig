@@ -1,12 +1,14 @@
 const std = @import("std");
 
 pub fn build(b: *std.build.Builder) void {
-    const exe = b.addExecutable("zig_z1", null);
-    exe.addCSourceFile("c.c", &[_][]const u8{});
+    const exe = b.addExecutable("zig_z3", null);
+    exe.addObjectSource("c.o", "c.zig", null);
     exe.addCSourceFile("m.c", &[_][]const u8{});
 
     exe.setTarget(b.standardTargetOptions(.{}));
     exe.setBuildMode(b.standardReleaseOptions());
+    exe.addIncludeDir("./");
+    exe.addObjectFile("c.o");
     exe.linkLibC();
     exe.install();
 
@@ -16,6 +18,6 @@ pub fn build(b: *std.build.Builder) void {
         run_cmd.addArgs(args);
     }
 
-    const run_step = b.step("run", "Run z1");
+    const run_step = b.step("run", "Run z3");
     run_step.dependOn(&run_cmd.step);
 }

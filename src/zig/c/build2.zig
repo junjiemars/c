@@ -1,7 +1,7 @@
 const std = @import("std");
 
 pub fn build(b: *std.build.Builder) void {
-    const exe = b.addExecutable("z2", "m.zig");
+    const exe = b.addExecutable("zig_z2", "m.zig");
     exe.addCSourceFile("c.c", &[_][]const u8{});
 
     exe.setTarget(b.standardTargetOptions(.{}));
@@ -16,6 +16,6 @@ pub fn build(b: *std.build.Builder) void {
         run_cmd.addArgs(args);
     }
 
-    const run_step = b.step("run", "Run z1");
+    const run_step = b.step("run", "Run z2");
     run_step.dependOn(&run_cmd.step);
 }
