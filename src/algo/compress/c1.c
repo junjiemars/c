@@ -27,8 +27,9 @@ main(int argc, char **argv)
 char*
 compress1(char const *ss, int len, char *ds)
 {
-  int di = 0;
-  int i = 0;
+  int  i   =  0;
+  int  di  =  0;
+
   while (i < len)
     {
       int j = i;
@@ -43,8 +44,11 @@ compress1(char const *ss, int len, char *ds)
           return NULL;
         }
       di += n;
+
       i++;
     }
+  ds[di] = 0;
+
   return ds;
 }
 
@@ -52,9 +56,9 @@ void
 test(char const *ss)
 {
   char *ds1;
-  int len = (int)strlen(ss);
+  int len = (int) strlen(ss);
 
-  ds1 = malloc(sizeof(*ds1) * len + 1);
+  ds1 = malloc(sizeof(*ds1) * len * 2 + 1);
   compress1(ss, len, ds1);
 
   printf("compress:\n------------\n");

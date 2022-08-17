@@ -52,7 +52,7 @@ algo_prefix := algo
 INC += $(nm_inc_opt)$(algo_root) $(nm_inc_opt)$(root)/posix
 
 ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
-	CFLAGS += $(cflags_sanitize)
+	CFLAGS += $(f_sanitize)
 endif
 
 ifeq ($(NM_SYSTEM), Linux)
