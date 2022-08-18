@@ -55,8 +55,8 @@ compress1(char const *ss, int len, char *ds)
 void
 test(char const *ss)
 {
-  char *ds1;
-  int len = (int) strlen(ss);
+  char  *ds1;
+  int    len  =  (int) strlen(ss);
 
   ds1 = malloc(sizeof(*ds1) * len * 2 + 1);
   compress1(ss, len, ds1);
