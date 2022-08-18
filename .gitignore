@@ -114,3 +114,7 @@ src/tesseract/tesseract_home
 # zig
 src/zig/**/zig-cache/
 src/zig/**/zig-out/
+
+# rust
+src/rust/**/target/
+src/rust/**/Cargo.lock
