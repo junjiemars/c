@@ -18,7 +18,7 @@ main(int argc, char **argv)
 
   while (*argv)
     {
-      printf("%-16p->%16p: argv[%d]: %s\n", argv, &argv, i++, *argv);
+      printf("%-16p: argv[%d]: %s\n", argv, i++, *argv);
       argv++;
     }
 
