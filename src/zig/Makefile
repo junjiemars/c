@@ -6,10 +6,12 @@
 
 zig: zig_hi                                     \
      zig_c                                      \
-     zig_game
+     zig_game                                   \
+     zig_value
 zig_test: zig_hi_test                           \
           zig_c_test                            \
-          zig_game_test
+          zig_game_test                         \
+          zig_value_test
 
 
 # env
@@ -117,6 +119,26 @@ $(zig_game_build): $(ZIG)
 
 $(zig_game_binout): $(zig_game_build)             \
                     $(zig_root)/game/src/main.zig
+	$(ZIG) build                                  \
+    --build-file $<                             \
+    --cache-dir $(zig_cache_dir)                \
+    --prefix-exe-dir $(zig_prefix_exe_dir)
+
+# value
+zig_value_build := $(CURDIR)/$(zig_root)/value/build.zig
+zig_value_binout := $(bin_path)/$(zig_prefix)_value$(bin_ext)
+
+zig_value: $(zig_value_binout)
+zig_value_test: zig_value
+	$(zig_value_binout)
+
+$(zig_value_build): $(zig_root)/value
+	cd $< && $(ZIG) init-exe
+$(zig_root)/value: $(ZIG)
+	-$(MKDIR) -p $@
+
+$(zig_value_binout): $(zig_value_build)             \
+                     $(zig_root)/value/src/main.zig
 	$(ZIG) build                                  \
     --build-file $<                             \
     --cache-dir $(zig_cache_dir)                \
