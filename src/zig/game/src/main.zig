@@ -11,7 +11,7 @@ pub fn main() !void {
     while (true) {
         const stdin = std.io.getStdIn().reader();
         var buf = [_]u8{0} ** 16;
-        const n = stdin.read(&buf) catch |err| return err;
+        const n = stdin.read(&buf) catch continue;
 
         if ('Q' == buf[0]) {
             try stdout.print("Quit!\n", .{});
@@ -21,7 +21,7 @@ pub fn main() !void {
         const line = std.mem.trim(u8, buf[0 .. n - 1], " \n");
         try stdout.print("You guessed: {s}\n", .{line});
 
-        var guess = std.fmt.parseInt(i32, line, 10) catch |err| return err;
+        var guess = std.fmt.parseInt(i32, line, 10) catch continue;
         if (guess < secret_number) {
             try stdout.print("Too small!\n", .{});
         } else if (guess > secret_number) {
