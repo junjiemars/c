@@ -5,9 +5,11 @@
 
 
 zig: zig_hi                                     \
-     zig_c
+     zig_c                                      \
+     zig_game
 zig_test: zig_hi_test                           \
-          zig_c_test
+          zig_c_test                            \
+          zig_game_test
 
 
 # env
@@ -15,6 +17,9 @@ ZIG := $(shell which zig)
 zig_prefix := zig
 zig_cache_dir := $(CURDIR)/$(tmp_path)/zig-cache
 zig_prefix_exe_dir := $(CURDIR)/$(bin_path)
+
+zig_clean: $(bin_path)
+	-$(RM) -r $(bin_path)/*
 
 
 # hi
@@ -99,3 +104,20 @@ $(zig_c_zigout3): $(zig_root)/c/build3.zig      \
     --prefix-exe-dir $(zig_prefix_exe_dir)
 
 
+# game
+zig_game_build := $(CURDIR)/$(zig_root)/game/build.zig
+zig_game_binout := $(bin_path)/$(zig_prefix)_game$(bin_ext)
+
+zig_game: $(zig_game_binout)
+zig_game_test: zig_game
+	echo 39 | $(zig_game_binout)
+
+$(zig_game_build): $(ZIG)
+	cd $(zig_root)/game && $(ZIG) init-exe
+
+$(zig_game_binout): $(zig_game_build)             \
+                    $(zig_root)/game/src/main.zig
+	$(ZIG) build                                  \
+    --build-file $<                             \
+    --cache-dir $(zig_cache_dir)                \
+    --prefix-exe-dir $(zig_prefix_exe_dir)
