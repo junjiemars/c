@@ -1,6 +1,7 @@
 const std = @import("std");
 const print = std.debug.print;
 const assert = std.debug.assert;
+const mem = std.mem;
 
 pub fn main() anyerror!void {
     // integers
@@ -49,4 +50,30 @@ pub fn main() anyerror!void {
         @typeName(@TypeOf(number_or_error)),
         number_or_error,
     });
+
+    // string literal
+    const bytes = "hello";
+    print("{s}\n", .{@typeName(@TypeOf(bytes))}); // *const [5:0]u8
+    print("{d}\n", .{bytes.len}); // 5
+    print("{c}\n", .{bytes[1]}); // 'e'
+    print("{d}\n", .{bytes[5]}); // 0
+    print("{}\n", .{'e' == '\x65'}); // true
+    print("{d}\n", .{'\u{1f4a9}'}); // 128169
+    print("{d}\n", .{'💯'}); // 128175
+    print("{}\n", .{mem.eql(u8, "hello", "h\x65llo")}); // true
+    // non-UTF-8 strings are possible with \xNN notation.
+    print("0x{x}\n", .{"\xff"[0]});
+    print("{u}\n", .{'⚡'});
+
+    // multiline string literal
+    const multiline_string =
+        \\
+        \\#include <stdio.h>
+        \\
+        \\int main(int argc, char **argv) {
+        \\    printf("hello world\n");
+        \\    return 0;
+        \\}
+    ;
+    print("multiline string = {s}\n", .{multiline_string});
 }
