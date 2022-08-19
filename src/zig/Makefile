@@ -110,7 +110,7 @@ zig_game_binout := $(bin_path)/$(zig_prefix)_game$(bin_ext)
 
 zig_game: $(zig_game_binout)
 zig_game_test: zig_game
-	echo 39 | $(zig_game_binout)
+	echo Q | $(zig_game_binout)
 
 $(zig_game_build): $(ZIG)
 	cd $(zig_root)/game && $(ZIG) init-exe
