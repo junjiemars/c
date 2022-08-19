@@ -7,7 +7,7 @@
 #  define _CRT_RAND_S
 #endif  /* NM_HAVE_CRT_RAND_S */
 
-#include <stdlib.h>
+
 
 
 #if (NM_HAVE_ARC4RANDOM_UNIFORM) || (NM_HAVE_CRT_RAND_S)
@@ -42,9 +42,9 @@ __rand_s(unsigned int u)
 int
 main(int argc, char **argv)
 {
-  _unused_(unsigned int r);
-  _unused_(size_t n);
-  _unused_(unsigned int u)  =  10;
+  __attribute__((unused)) unsigned int  r;
+  __attribute__((unused)) size_t        n;
+  __attribute__((unused)) unsigned int  u  =  10;
 
   if (argc < 2) {
     fprintf(stderr, "please input: <N>\n");

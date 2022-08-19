@@ -123,7 +123,7 @@ void
 test_strcat(void)
 {
   char  buf1[8];
-  _unused_(char  buf2[8]);
+  __attribute__((unused)) char  buf2[8];
 
   memset(buf1, 0, sizeof(buf1)/sizeof(*buf1));
   memset(buf2, 0, sizeof(buf2)/sizeof(*buf2));
@@ -142,7 +142,7 @@ test_strcat(void)
 }
 
 int
-main(_unused_(int argc), char **argv)
+main(__attribute__((unused)) int argc, char **argv)
 {
   test_empty();
   test_static_len();

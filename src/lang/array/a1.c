@@ -53,7 +53,7 @@ main(void)
 void
 f1(char **args)
 {
-	_unused_(char x) = args[1][2];
+	__attribute__((unused)) char  x  =  args[1][2];
 
   printf("char **args\n------------\n");
   while (*args)
@@ -67,7 +67,7 @@ f1(char **args)
 void
 f2(char *args[])
 {
-	_unused_(char x) = args[1][2];
+	__attribute__((unused)) char x = args[1][2];
 
   printf("char *args[]\n------------\n");
   while (*args)
@@ -81,7 +81,7 @@ f2(char *args[])
 void
 g1(char (*args)[3][4], int n)
 {
-	_unused_(char x) = args[1][2][3];
+	__attribute__((unused)) char x = args[1][2][3];
 
   printf("char (*args)[3][4]\n------------\n");
   for (int i = 0; i < n; i++)
@@ -98,7 +98,7 @@ g1(char (*args)[3][4], int n)
 void
 g2(char args[][3][4], int n)
 {
-	_unused_(char x) = args[1][2][3];
+	__attribute__((unused)) char x = args[1][2][3];
 
   printf("char args[][3][4]\n------------\n");
   for (int i = 0; i < n; i++)
@@ -116,7 +116,7 @@ g2(char args[][3][4], int n)
 void
 h1(int (*i)[4], int n)
 {
-	_unused_(int x) = i[1][2];
+	__attribute__((unused)) int x = i[1][2];
 
   printf("int (*i)[4]\n------------\n");
   for (int j = 0; j < n; j++)
@@ -133,5 +133,5 @@ h1(int (*i)[4], int n)
 void
 h2(int (*i)[3][4])
 {
-  _unused_(int x) = i[0][1][2];
+  __attribute__((unused)) int x = i[0][1][2];
 }

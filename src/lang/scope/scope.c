@@ -43,7 +43,7 @@ int map(int (*fn)(int n), int *a) {
   }
 
 int
-main(_unused_(int argc), _unused_(char *argv[]))
+main(__attribute__((unused)) int argc, __attribute__((unused)) char *argv[])
 {
   printf("epoch: i0=%i, i1=%i, i2=%i\n", i0, i1, i2);
 

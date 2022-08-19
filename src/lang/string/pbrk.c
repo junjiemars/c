@@ -40,7 +40,7 @@ self_strpbrk(const char *s, const char *d)
 
 
 int
-main(_unused_(int argc), char **argv)
+main(__attribute__((unused)) int argc, char **argv)
 {
 
   if (argc < 3)

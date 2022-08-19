@@ -43,12 +43,12 @@ test_epoch(time_t *epoch)
 void
 test_localtime(const time_t *epoch)
 {
-  _unused_(struct tm *local) = localtime(epoch);
+  __attribute__((unused)) struct tm *local = localtime(epoch);
 }
 
 #if !(MSVC)
 void
-test_timelocal(_unused_(const time_t *epoch))
+test_timelocal(__attribute__((unused)) const time_t *epoch)
 {
   /* struct tm *local = localtime(epoch); */
   /* time_t lacol = timelocal(local); */
@@ -59,7 +59,7 @@ test_timelocal(_unused_(const time_t *epoch))
 #endif  /* end of !MSVC */
 
 void
-test_gmtime(_unused_(const time_t *epoch))
+test_gmtime(__attribute__((unused)) const time_t *epoch)
 {
   /* struct tm *gm = gmtime(epoch); */
   /* time_t mg = timegm(gm); */

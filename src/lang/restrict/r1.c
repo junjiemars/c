@@ -18,7 +18,7 @@ static void f1(int*, int*, int*);
 static void f2(int*, int*, int*restrict);
 
 int
-main(int argc, _unused_(char **argv))
+main(int argc, __attribute__((unused)) char **argv)
 {
 
   printf("support restrict keyword = %s\n----------\n",

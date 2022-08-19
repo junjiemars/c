@@ -2,9 +2,9 @@
 
 
 int
-main(_unused_(int argc),
-     _unused_(char **argv),
-     _unused_(char **envp))
+main(__attribute__((unused)) int argc,
+     __attribute__((unused)) char **argv,
+     __attribute__((unused)) char **envp)
 {
   char  **p  =  envp;
 

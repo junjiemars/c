@@ -2,8 +2,15 @@
 #
 
 
-# check posix features
-. src/posix/auto
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+# check ncstd.h features
+. ${POSIX_ROOT}/ncstd_auto
+
+# # check posix features
+# . src/posix/auto
 
 
 # check header files
@@ -158,7 +165,7 @@ case "$NM_SYSTEM" in
     nm_feature_indent=yes
     nm_feature_run=no
     nm_feature_h='#include <stdlib.h>'
-    nm_feature_flags=
+    nm_feature_flags="$CFLAGS"
     nm_feature_test='arc4random_uniform(1);'
     . ${NORE_ROOT}/auto/feature
     ;;

@@ -14,7 +14,7 @@ static void test_diff(int*);
 static void test_comp(int*);
 
 int
-main(_unused_(int argc), char **argv)
+main(__attribute__((unused)) int argc, char **argv)
 {
   int *a = malloc(N*sizeof(a[0]));
   if (!a)
@@ -49,7 +49,7 @@ test_null(int c)
 }
 
 void
-test_array_boundary(_unused_(char **a))
+test_array_boundary(__attribute__((unused)) char **a)
 {
   /* void */
 }

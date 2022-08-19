@@ -19,7 +19,7 @@
 #  undef _POSIX_C_SOURCE
 #endif
 
-#if !(MSVC)
+#if (LINUX)
 #  define _POSIX_C_SOURCE  200809L
 #endif
 

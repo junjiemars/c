@@ -18,14 +18,12 @@ void external_storage_class(void);
 void
 automatic_storage_class(void)
 {
-	auto int x; /* garbage value */
+	__attribute__((unused)) auto int x; /* garbage value */
 #if (GCC)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wuninitialized"
   assert(x == x);
 # pragma GCC diagnostic pop
-#else
-  _unused_(x);
 #endif
 
 	auto int i = 0x1122;
@@ -108,7 +106,7 @@ external_storage_class(void)
 
 
 int
-main(int argc, _unused_(char *argv[]))
+main(int argc, __attribute__((unused)) char *argv[])
 {
 	printf("\nautomatic storage class\n");
 	printf("-------------------------\n");

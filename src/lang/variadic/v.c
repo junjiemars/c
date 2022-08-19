@@ -1,9 +1,6 @@
 #include <_lang_.h>
-#include <stdlib.h>
 #include <stdarg.h>
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
+
 
 #define BSIZE 64
 
@@ -282,9 +279,9 @@ _ftoa_(double d, char *buf, size_t *size, size_t frac)
 void
 test_fprintf_basic(void)
 {
-  _unused_(int rc1);
-  _unused_(int rc2);
-  _unused_(int rc3);
+  __attribute__((unused)) int rc1;
+  __attribute__((unused)) int rc2;
+  __attribute__((unused)) int rc3;
 
 
   /* escape % */
@@ -364,9 +361,9 @@ test_fprintf_basic(void)
 void
 test_fprintf_macro(void)
 {
-  _unused_(int rc1);
-  _unused_(int rc2);
-  _unused_(int rc3);
+  __attribute__((unused)) int rc1;
+  __attribute__((unused)) int rc2;
+  __attribute__((unused)) int rc3;
 
   /* %d */
   rc1 = fprintf(stdout, "%d\n", -123);
@@ -378,8 +375,8 @@ test_fprintf_macro(void)
 void
 test_fprintf_fn(fbsprintf fn)
 {
-  _unused_(int rc1);
-  _unused_(int rc2);
+  __attribute__((unused)) int rc1;
+  __attribute__((unused)) int rc2;
 
   /* %d */
   rc1 = fprintf(stdout, "%d\n", -123);

@@ -149,15 +149,15 @@ test_cmp_double(void)
 void
 test_asm_double(void)
 {
-  double  d1           =  0.1, d2 = 0.2, d3 = 0.3;
-  _unused_(int     x)  =  (int) ((d1+d2) - d3);
+  double                       d1  =  0.1, d2 = 0.2, d3 = 0.3;
+  __attribute__((unused)) int  x   =  (int) ((d1+d2) - d3);
 }
 
 void
 test_asm_long_double(void)
 {
-  long double  d1  =  0.1L, d2 = 0.2L, d3 = 0.3L;
-  _unused_(int x)  =  (int) ((d1+d2) - d3);
+  long double                  d1  =  0.1L, d2 = 0.2L, d3 = 0.3L;
+  __attribute__((unused)) int  x   =  (int) ((d1+d2) - d3);
 }
 
 void

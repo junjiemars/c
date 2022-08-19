@@ -13,7 +13,7 @@ randomize(const uint32_t n)
 
 
 int
-main(_unused_(int argc), _unused_(char **argv))
+main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
 {
 
 #if (NM_HAVE_ARC4RANDOM_UNIFORM)

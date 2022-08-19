@@ -17,7 +17,7 @@ foo(int *volatile i)
 }
 
 int
-main(int argc, _unused_(char **argv))
+main(int argc, __attribute__((unused)) char **argv)
 {
 	x = &argc;
 	foo(x);
