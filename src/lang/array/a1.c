@@ -49,7 +49,6 @@ main(void)
 	return 0;
 }
 
-
 void
 f1(char **args)
 {

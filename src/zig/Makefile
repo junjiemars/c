@@ -3,7 +3,6 @@
 # make clean test
 #
 
-
 zig: zig_hi                                     \
      zig_c                                      \
      zig_game                                   \
@@ -15,7 +14,7 @@ zig_test: zig_hi_test                           \
 
 
 # env
-ZIG := $(shell which zig)
+ZIG := $(has_zig)
 zig_prefix := zig
 zig_cache_dir := $(CURDIR)/$(tmp_path)/zig-cache
 zig_prefix_exe_dir := $(CURDIR)/$(bin_path)
