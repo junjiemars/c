@@ -2839,3 +2839,5 @@ lscpu
 
 - [[https://www.gnu.org/prep/standards/standards.html#Writing-C][GNU Coding Standards]]
 - [[http://nginx.org/en/docs/dev/development_guide.html][Nginx Development guide]]
+- [[https://open-std.org/JTC1/SC22/WG14/][C standard]]
+- [[https://pubs.opengroup.org/onlinepubs/9699919799/functions/contents.html][POSIX standard]]
