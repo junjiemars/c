@@ -7,11 +7,13 @@
 rust: rust_hi                                   \
       rust_libc                                 \
       rust_game                                 \
-      rust_owner
+      rust_owner                                \
+      rust_generic
 rust_test: rust_hi_test                         \
            rust_libc_test                       \
            rust_game_test                       \
-           rust_owner_test
+           rust_owner_test                      \
+           rust_generic_test
 
 
 # env
@@ -92,6 +94,28 @@ $(rust_owner_cargo): $(CARGO)
 
 $(rust_owner_binout): $(rust_owner_cargo)             \
                       $(rust_root)/owner/src/main.rs
+	$(CARGO) build                                \
+    --manifest-path $<                          \
+    -Z unstable-options                         \
+    --target-dir $(cargo_target_dir)            \
+    --out-dir $(bin_path)
+
+
+# generic
+rust_generic_cargo := $(rust_root)/generic/Cargo.toml
+rust_generic_binout := $(bin_path)/$(rust_prefix)_generic$(bin_ext)
+
+rust_generic: $(rust_generic_binout)
+rust_generic_doc: $(rust_generic_cargo)
+	-$(CARGO) doc --open --manifest-path $<
+rust_generic_test: rust_generic
+	$(rust_generic_binout)
+
+$(rust_generic_cargo): $(CARGO)
+	$(CARGO) new --bin --name $(rust_prefix)_generic $(rust_root)/generic
+
+$(rust_generic_binout): $(rust_generic_cargo)             \
+                        $(rust_root)/generic/src/main.rs
 	$(CARGO) build                                \
     --manifest-path $<                          \
     -Z unstable-options                         \
