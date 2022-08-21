@@ -6,16 +6,19 @@
 
 rust: rust_hi                                   \
       rust_libc                                 \
-      rust_game
+      rust_game                                 \
+      rust_owner
 rust_test: rust_hi_test                         \
            rust_libc_test                       \
-           rust_game_test
+           rust_game_test                       \
+           rust_owner_test
 
 
 # env
 rust_prefix := rust
 RUSTC := $(has_rustc)
-CARGO := $(shell which cargo)
+CARGO := $(has_cargo)
+cargo_target_dir := $(CURDIR)/$(tmp_path)
 
 
 # hi
@@ -72,4 +75,25 @@ $(rust_game_binout): $(rust_game_cargo)             \
 	$(CARGO) build                                \
     --manifest-path $<                          \
     -Z unstable-options                         \
+    --out-dir $(bin_path)
+
+# owner
+rust_owner_cargo := $(rust_root)/owner/Cargo.toml
+rust_owner_binout := $(bin_path)/$(rust_prefix)_owner$(bin_ext)
+
+rust_owner: $(rust_owner_binout)
+rust_owner_doc: $(rust_owner_cargo)
+	-$(CARGO) doc --open --manifest-path $<
+rust_owner_test: rust_owner
+	$(rust_owner_binout)
+
+$(rust_owner_cargo): $(CARGO)
+	$(CARGO) new --bin --name $(rust_prefix)_owner $(rust_root)/owner
+
+$(rust_owner_binout): $(rust_owner_cargo)             \
+                      $(rust_root)/owner/src/main.rs
+	$(CARGO) build                                \
+    --manifest-path $<                          \
+    -Z unstable-options                         \
+    --target-dir $(cargo_target_dir)            \
     --out-dir $(bin_path)
