@@ -14,7 +14,7 @@ rust_test: rust_hi_test                         \
 
 # env
 rust_prefix := rust
-RUSTC := $(shell which rustc)
+RUSTC := $(has_rustc)
 CARGO := $(shell which cargo)
 
 
@@ -53,7 +53,8 @@ $(rust_libc_binout): $(rust_libc_cargo)             \
 	$(CARGO) build                                \
     --manifest-path $<                          \
     -Z unstable-options                         \
-    --out-dir $(bin_path)
+    --out-dir $(bin_path)                       \
+    --verbose
 
 
 # game
@@ -72,5 +73,3 @@ $(rust_game_binout): $(rust_game_cargo)             \
     --manifest-path $<                          \
     -Z unstable-options                         \
     --out-dir $(bin_path)
-
-

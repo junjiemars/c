@@ -1,0 +1,17 @@
+#### -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## posix/ndef_auto
+####
+
+
+echo ${echo_n} " + checking for rustc ... " ${echo_c}
+flag=has_rustc value="`command -v rustc`" . ${NORE_ROOT}/auto/make_define
+echo "yes"
+
+
+echo ${echo_n} " + checking for cargo ... " ${echo_c}
+flag=has_cargo value="`command -v cargo`" . ${NORE_ROOT}/auto/make_define
+echo "yes"
