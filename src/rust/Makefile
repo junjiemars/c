@@ -8,12 +8,14 @@ rust: rust_hi                                   \
       rust_libc                                 \
       rust_game                                 \
       rust_owner                                \
-      rust_generic
+      rust_generic                              \
+      rust_error
 rust_test: rust_hi_test                         \
            rust_libc_test                       \
            rust_game_test                       \
            rust_owner_test                      \
-           rust_generic_test
+           rust_generic_test                    \
+           rust_error_test
 
 
 # env
@@ -121,3 +123,25 @@ $(rust_generic_binout): $(rust_generic_cargo)             \
     -Z unstable-options                         \
     --target-dir $(cargo_target_dir)            \
     --out-dir $(bin_path)
+
+# error
+rust_error_cargo := $(rust_root)/error/Cargo.toml
+rust_error_binout := $(bin_path)/$(rust_prefix)_error$(bin_ext)
+
+rust_error: $(rust_error_binout)
+rust_error_doc: $(rust_error_cargo)
+	-$(CARGO) doc --open --manifest-path $<
+rust_error_test: rust_error
+	-$(shell RUST_BACKTRACE=1 $(rust_error_binout))
+
+$(rust_error_cargo): $(CARGO)
+	$(CARGO) new --bin --name $(rust_prefix)_error $(rust_root)/error
+
+$(rust_error_binout): $(rust_error_cargo)             \
+                        $(rust_root)/error/src/main.rs
+	$(CARGO) build                                \
+    --manifest-path $<                          \
+    -Z unstable-options                         \
+    --target-dir $(cargo_target_dir)            \
+    --out-dir $(bin_path)
+
