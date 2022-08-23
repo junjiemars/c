@@ -164,6 +164,7 @@ rust_grep_doc: $(rust_grep_cargo)
 rust_grep_test: $(rust_grep_cargo)
 	$(CARGO) test --manifest-path $<
 rust_grep_run: rust_grep
+	-$(rust_grep_binout)
 	$(rust_grep_binout) use $(rust_root)/grep/src/main.rs
 
 $(rust_grep_cargo): $(CARGO)
