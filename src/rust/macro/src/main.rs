@@ -46,6 +46,22 @@ macro_rules! find_min {
 		)
 }
 
+macro_rules! calculate {
+    (eval $e: expr) => {
+				{
+						let val: usize = $e;
+						println!("{} = {}", stringify!{$e}, val);
+				}
+		};
+
+		(eval $e: expr, $(eval $es: expr) ,+) => {
+				{
+						calculate! { eval $e }
+						calculate! { $(eval $es) ,+ }
+				}
+		}
+}
+
 create_fn!(foo);
 
 fn main() {
@@ -57,4 +73,10 @@ fn main() {
 
     println!("{}", find_min!(1));
     println!("{}", find_min!(1 + 2, 4));
+
+    calculate! {
+				eval 3 + 4,
+				eval (2 * 3) + 1,
+        eval (1 + 2) * (12 / 4)
+    }
 }
