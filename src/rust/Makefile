@@ -14,6 +14,7 @@ rust: rust_hi                                   \
       rust_io                                   \
       rust_iter                                 \
       rust_lib                                  \
+      rust_macro                                \
       rust_module
 rust_test: rust_hi_test                         \
            rust_libc_test                       \
@@ -25,6 +26,7 @@ rust_test: rust_hi_test                         \
            rust_io_test                         \
            rust_iter_test                       \
            rust_lib_test                        \
+           rust_macro_test                      \
            rust_module_test
 
 
@@ -46,7 +48,7 @@ rust_hi_test: rust_hi
 	$(rust_hi_binout)
 
 $(rust_hi_cargo): $(RUSTC)
-	$(CARGO) new $(rust_root)/hi
+	$(CARGO) new --bin $(rust_prefix)_hi $(rust_root)/hi
 
 $(rust_hi_binout): $(rust_hi_cargo)             \
                    $(rust_root)/hi/src/main.rs
@@ -247,6 +249,29 @@ $(rust_lib_binout): $(rust_lib_cargo)             \
     --target-dir $(cargo_target_dir)            \
     --out-dir $(bin_path)
 	@cp $(cargo_target_dir)/debug/$(rust_lib_rlib) $@
+
+
+# macro
+rust_macro_cargo := $(rust_root)/macro/Cargo.toml
+rust_macro_binout := $(bin_path)/$(rust_prefix)_macro$(bin_ext)
+
+rust_macro: $(rust_macro_binout)
+rust_macro_doc: $(rust_macro_cargo)
+	-$(CARGO) doc --open --manifest-path $<
+rust_macro_test: rust_macro
+	$(rust_macro_binout)
+
+$(rust_macro_cargo): $(CARGO)
+	$(CARGO) new --bin --name $(rust_prefix)_macro $(rust_root)/macro
+
+$(rust_macro_binout): $(rust_macro_cargo)             \
+                      $(rust_root)/macro/src/main.rs
+	$(CARGO) build                                \
+    --manifest-path $<                          \
+    -Z unstable-options                         \
+    --target-dir $(cargo_target_dir)            \
+    --out-dir $(bin_path)
+
 
 
 # module
