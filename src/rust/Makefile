@@ -12,6 +12,7 @@ rust: rust_hi                                   \
       rust_error                                \
       rust_grep                                 \
       rust_io                                   \
+      rust_iter                                 \
       rust_lib                                  \
       rust_module
 rust_test: rust_hi_test                         \
@@ -22,6 +23,7 @@ rust_test: rust_hi_test                         \
            rust_error_test                      \
            rust_grep_test                       \
            rust_io_test                         \
+           rust_iter_test                       \
            rust_lib_test                        \
            rust_module_test
 
@@ -161,7 +163,8 @@ rust_grep_binout := $(bin_path)/$(rust_prefix)_grep$(bin_ext)
 rust_grep: $(rust_grep_binout)
 rust_grep_doc: $(rust_grep_cargo)
 	-$(CARGO) doc --open --manifest-path $<
-rust_grep_test: $(rust_grep_cargo)
+rust_grep_test: $(rust_grep_cargo)              \
+                rust_grep
 	$(CARGO) test --manifest-path $<
 rust_grep_run: rust_grep
 	-$(rust_grep_binout)
@@ -194,6 +197,27 @@ $(rust_io_cargo): $(CARGO)
 
 $(rust_io_binout): $(rust_io_cargo)             \
                    $(rust_root)/io/src/main.rs
+	$(CARGO) build                                \
+    --manifest-path $<                          \
+    -Z unstable-options                         \
+    --target-dir $(cargo_target_dir)            \
+    --out-dir $(bin_path)
+
+# iter
+rust_iter_cargo := $(rust_root)/iter/Cargo.toml
+rust_iter_binout := $(bin_path)/$(rust_prefix)_iter$(bin_ext)
+
+rust_iter: $(rust_iter_binout)
+rust_iter_doc: $(rust_iter_cargo)
+	-$(CARGO) doc --open --manifest-path $<
+rust_iter_test: rust_iter
+	$(rust_iter_binout)
+
+$(rust_iter_cargo): $(CARGO)
+	$(CARGO) new --bin --name $(rust_prefix)_iter $(rust_root)/iter
+
+$(rust_iter_binout): $(rust_iter_cargo)             \
+                     $(rust_root)/iter/src/main.rs
 	$(CARGO) build                                \
     --manifest-path $<                          \
     -Z unstable-options                         \

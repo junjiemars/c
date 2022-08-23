@@ -152,7 +152,7 @@ fn lifetime3() -> String {
 }
 
 use std::fmt::Display;
-fn longest_with_announcement<'a, T>(a: &'a str, b: &'a str, ann: T) -> &'a strc
+fn longest_with_announcement<'a, T>(a: &'a str, b: &'a str, ann: T) -> &'a str
 where
     T: Display,
 {
