@@ -24,6 +24,16 @@ fn main() {
     let simulated_random_number = 7;
 
     generate_workout(simulated_user_specified_value, simulated_random_number);
+
+    let identity = |x| x;
+    println!("identity = {}", identity(1));
+
+    let mut lst1 = vec![1, 2, 3];
+    let mut closure1 = || lst1.push(7);
+    // let mut closure2 = || lst1.push(8);
+    // closure2();
+    closure1();
+    println!("list = {:?}", lst1);
 }
 
 #[derive(Debug, PartialEq, Copy, Clone)]
@@ -63,7 +73,7 @@ impl Inventory {
 fn generate_workout(intensity: u32, random_number: u32) {
     let expensive_closure = |num: u32| -> u32 {
         println!("calculating slowly...");
-        thread::sleep(Duration::from_secs(2));
+        thread::sleep(Duration::from_millis(500));
         num
     };
 
