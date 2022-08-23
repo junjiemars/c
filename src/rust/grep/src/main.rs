@@ -1,8 +1,8 @@
 // #![allow(unused)]
 
+use rust_grep::{run, Config};
 use std::env;
 use std::process;
-use rust_grep::{Config, run};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -20,4 +20,3 @@ fn main() {
         process::exit(1);
     }
 }
-
