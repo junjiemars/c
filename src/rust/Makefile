@@ -15,7 +15,9 @@ rust: rust_hi                                   \
       rust_iter                                 \
       rust_lib                                  \
       rust_module                               \
-      rust_min
+      rust_min                                  \
+      rust_macro                                \
+      rust_unsafe
 rust_test: rust_hi_test                         \
            rust_libc_test                       \
            rust_game_test                       \
@@ -27,7 +29,9 @@ rust_test: rust_hi_test                         \
            rust_iter_test                       \
            rust_lib_test                        \
            rust_module_test                     \
-           rust_min_test
+           rust_min_test                        \
+           rust_macro_test                      \
+           rust_unsafe_test
 
 
 # env
@@ -48,7 +52,7 @@ rust_hi_test: rust_hi
 	$(rust_hi_binout)
 
 $(rust_hi_cargo): $(RUSTC)
-	$(CARGO) new $(rust_root)/hi
+	$(CARGO) new --bin $(rust_prefix)_hi $(rust_root)/hi
 
 $(rust_hi_binout): $(rust_hi_cargo)             \
                    $(rust_root)/hi/src/main.rs
@@ -252,6 +256,29 @@ $(rust_lib_binout): $(rust_lib_cargo)             \
 	@cp $(cargo_target_dir)/debug/$(rust_lib_rlib) $@
 
 
+# macro
+rust_macro_cargo := $(rust_root)/macro/Cargo.toml
+rust_macro_binout := $(bin_path)/$(rust_prefix)_macro$(bin_ext)
+
+rust_macro: $(rust_macro_binout)
+rust_macro_doc: $(rust_macro_cargo)
+	-$(CARGO) doc --open --manifest-path $<
+rust_macro_test: rust_macro
+	$(rust_macro_binout)
+
+$(rust_macro_cargo): $(CARGO)
+	$(CARGO) new --bin --name $(rust_prefix)_macro $(rust_root)/macro
+
+$(rust_macro_binout): $(rust_macro_cargo)             \
+                      $(rust_root)/macro/src/main.rs
+	$(CARGO) build                                \
+    --manifest-path $<                          \
+    -Z unstable-options                         \
+    --target-dir $(cargo_target_dir)            \
+    --out-dir $(bin_path)
+
+
+
 # module
 rust_module_cargo := $(rust_root)/module/Cargo.toml
 rust_module_binout := $(bin_path)/$(rust_prefix)_module$(bin_ext)
@@ -278,7 +305,6 @@ rust_min_cargo := $(rust_root)/min/Cargo.toml
 rust_min_binout := $(bin_path)/$(rust_prefix)_min$(bin_ext)
 rust_min_profile ?= min
 
-
 rust_min: $(rust_min_binout)
 rust_min_test: rust_min
 	size $(rust_min_binout)
@@ -292,6 +318,28 @@ $(rust_min_binout): $(rust_min_cargo)             \
 	$(CARGO) build                                \
     --manifest-path $<                          \
     --profile $(rust_min_profile)               \
+    -Z unstable-options                         \
+    --target-dir $(cargo_target_dir)            \
+    --out-dir $(bin_path)
+
+
+# unsafe
+rust_unsafe_cargo := $(rust_root)/unsafe/Cargo.toml
+rust_unsafe_binout := $(bin_path)/$(rust_prefix)_unsafe$(bin_ext)
+
+rust_unsafe: $(rust_unsafe_binout)
+rust_unsafe_doc: $(rust_unsafe_cargo)
+	-$(CARGO) doc --open --manifest-path $<
+rust_unsafe_test: rust_unsafe
+	$(rust_unsafe_binout)
+
+$(rust_unsafe_cargo): $(CARGO)
+	$(CARGO) new --bin --name $(rust_prefix)_unsafe $(rust_root)/unsafe
+
+$(rust_unsafe_binout): $(rust_unsafe_cargo)             \
+                       $(rust_root)/unsafe/src/main.rs
+	$(CARGO) build                                \
+    --manifest-path $<                          \
     -Z unstable-options                         \
     --target-dir $(cargo_target_dir)            \
     --out-dir $(bin_path)
