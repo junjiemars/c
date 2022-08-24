@@ -1,0 +1,18 @@
+[package]
+name = "rust_min"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+
+[profile.min]
+inherits = "release"
+debug = 0
+debug-assertions = false
+opt-level = "z"
+overflow-checks = false
+strip = "symbols"
+lto = true

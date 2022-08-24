@@ -14,7 +14,8 @@ rust: rust_hi                                   \
       rust_io                                   \
       rust_iter                                 \
       rust_lib                                  \
-      rust_module
+      rust_module                               \
+      rust_min
 rust_test: rust_hi_test                         \
            rust_libc_test                       \
            rust_game_test                       \
@@ -25,7 +26,8 @@ rust_test: rust_hi_test                         \
            rust_io_test                         \
            rust_iter_test                       \
            rust_lib_test                        \
-           rust_module_test
+           rust_module_test                     \
+           rust_min_test
 
 
 # env
@@ -53,6 +55,7 @@ $(rust_hi_binout): $(rust_hi_cargo)             \
 	$(CARGO) build                                \
 		--manifest-path $<                          \
 		-Z unstable-options                         \
+    --target-dir $(cargo_target_dir)            \
     --out-dir $(bin_path)
 
 # libc
@@ -266,6 +269,29 @@ $(rust_module_binout): $(rust_module_cargo)             \
                        $(rust_root)/module/src/main.rs
 	$(CARGO) build                                \
     --manifest-path $<                          \
+    -Z unstable-options                         \
+    --target-dir $(cargo_target_dir)            \
+    --out-dir $(bin_path)
+
+# min
+rust_min_cargo := $(rust_root)/min/Cargo.toml
+rust_min_binout := $(bin_path)/$(rust_prefix)_min$(bin_ext)
+rust_min_profile ?= min
+
+
+rust_min: $(rust_min_binout)
+rust_min_test: rust_min
+	size $(rust_min_binout)
+	$(rust_min_binout)
+
+$(rust_min_cargo): $(RUSTC)
+	$(CARGO) new $(rust_root)/min
+
+$(rust_min_binout): $(rust_min_cargo)             \
+                    $(rust_root)/min/src/main.rs
+	$(CARGO) build                                \
+    --manifest-path $<                          \
+    --profile $(rust_min_profile)               \
     -Z unstable-options                         \
     --target-dir $(cargo_target_dir)            \
     --out-dir $(bin_path)
