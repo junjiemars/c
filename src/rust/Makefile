@@ -178,7 +178,11 @@ rust_grep_doc: $(rust_grep_cargo)
 	-$(CARGO) doc --open --manifest-path $<
 rust_grep_test: $(rust_grep_cargo)              \
                 rust_grep
-	$(CARGO) test --manifest-path $<
+	$(CARGO) test                                 \
+    --manifest-path $<                          \
+    -Z unstable-options                         \
+    --target-dir $(cargo_target_dir)
+
 rust_grep_run: rust_grep
 	-$(rust_grep_binout)
 	$(rust_grep_binout) use $(rust_root)/grep/src/main.rs

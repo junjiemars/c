@@ -7,6 +7,9 @@ fn main() {
 		use crate::List::{Cons, Nil};
 
 		let l1 = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
+		
+		println!();
+		println!("ddd");
 }
 
 
