@@ -17,7 +17,8 @@ rust: rust_hi                                   \
       rust_module                               \
       rust_min                                  \
       rust_macro                                \
-      rust_unsafe
+      rust_unsafe                               \
+      rust_box
 rust_test: rust_hi_test                         \
            rust_libc_test                       \
            rust_game_test                       \
@@ -31,7 +32,8 @@ rust_test: rust_hi_test                         \
            rust_module_test                     \
            rust_min_test                        \
            rust_macro_test                      \
-           rust_unsafe_test
+           rust_unsafe_test                     \
+           rust_box_test
 
 
 # env
@@ -69,6 +71,8 @@ rust_libc_binout := $(bin_path)/$(rust_prefix)_libc$(bin_ext)
 rust_libc: $(rust_libc_binout)
 rust_libc_doc: $(rust_libc_cargo)
 	-$(CARGO) doc --open --manifest-path $<
+rust_libc_tree: $(rust_libc_cargo)
+	$(CARGO) tree --manifest-path $<
 
 rust_libc_test: rust_libc
 	$(rust_libc_binout)
@@ -79,6 +83,7 @@ $(rust_libc_binout): $(rust_libc_cargo)             \
     --manifest-path $<                          \
     -Z unstable-options                         \
     --out-dir $(bin_path)                       \
+    --target-dir $(cargo_target_dir)            \
     --verbose
 
 
@@ -97,6 +102,7 @@ $(rust_game_binout): $(rust_game_cargo)             \
 	$(CARGO) build                                \
     --manifest-path $<                          \
     -Z unstable-options                         \
+    --target-dir $(cargo_target_dir)            \
     --out-dir $(bin_path)
 
 # owner
@@ -338,6 +344,28 @@ $(rust_unsafe_cargo): $(CARGO)
 
 $(rust_unsafe_binout): $(rust_unsafe_cargo)             \
                        $(rust_root)/unsafe/src/main.rs
+	$(CARGO) build                                \
+    --manifest-path $<                          \
+    -Z unstable-options                         \
+    --target-dir $(cargo_target_dir)            \
+    --out-dir $(bin_path)
+
+
+# box
+rust_box_cargo := $(rust_root)/box/Cargo.toml
+rust_box_binout := $(bin_path)/$(rust_prefix)_box$(bin_ext)
+
+rust_box: $(rust_box_binout)
+rust_box_doc: $(rust_box_cargo)
+	-$(CARGO) doc --open --manifest-path $<
+rust_box_test: rust_box
+	$(rust_box_binout)
+
+$(rust_box_cargo): $(CARGO)
+	$(CARGO) new --bin --name $(rust_prefix)_box $(rust_root)/box
+
+$(rust_box_binout): $(rust_box_cargo)             \
+                    $(rust_root)/box/src/main.rs
 	$(CARGO) build                                \
     --manifest-path $<                          \
     -Z unstable-options                         \
