@@ -2,63 +2,16 @@
 fn main() {
     short();
 
-    let s1 = String::from("abc");
-    let (s11, len) = calculate_length1(s1);
-    println!("len({}) = {}", s11, len);
+    borrow_more_than_once_at_a_time();
 
-    let s2 = String::from("def");
-    let len2 = calculate_length2(&s2);
-    println!("len({}) = {}", s2, len2);
+    combining_mutable_immutable();
 
-    let mut s3 = String::from("123");
-    let len3 = calculate_length3(&mut s3);
-    println!("len({}) = {}", s3, len3);
+    dangle1();
 
-    let mut s4 = String::from("hello world");
-    let w4 = first_word1(&s4);
-    println!("word(\"{}\") = {}", s4, w4);
-    s4.clear();
-    println!("word(\"{}\") = {}", s4, w4);
-
-    let /* mut */ s5 = String::from("hello world");
-    let w5 = first_word2(&s5);
-    println!("word(\"{}\") = {}", s5, w5);
-    // s5.clear();
-
-    let l1 = String::from("abcd");
-    let l11 = "xyz";
-    let l111 = longest1(l1.as_str(), l11);
-    println!("longest1({}, {}) = {}", l1, l11, l111);
-
-    let l21 = String::from("long long string");
-    let result;
-    {
-        let l211 = String::from("abc");
-        result = longest1(l21.as_str(), l211.as_str());
-        println!("longest1 = {}", result);
-    }
-    // println!("longest1 = {}", result);
-    let l3 = 29;
-    let l31 = Twin { age: &l3 };
-    assert_eq!(29, *l31.age);
-    assert_eq!(29, *l31.return_age());
-
-    let l4 = String::from("Julius");
-    let l41 = Twin1 {
-        first_name: l4.as_str(),
-    };
-    println!("twin1.first_name = {}", l41.first_name);
-
-    let l5 = lifetime2();
-    println!("static lifetime: {}", l5);
-
-    let l6 = lifetime3();
-    println!("ownership move: {}", l6);
-
-    let m1 = String::from("abcd");
-    let m11 = "abc";
-    let m1r = longest_with_announcement(m1.as_str(), m11, "who care");
-    println!("longest_with_announcement: {}", m1r);
+    lifetime1();
+    lifetime2();
+    lifetime3();
+		lifetime4();
 }
 
 fn short() {
@@ -66,42 +19,31 @@ fn short() {
     println!("short: {}", s);
 }
 
-fn calculate_length1(s: String) -> (String, usize) {
-    let length = s.len();
-    return (s, length);
+fn change(ss: &mut String) {
+    ss.push_str("X");
 }
 
-fn calculate_length2(s: &String) -> usize {
-    return s.len();
+fn dangle1() -> String {
+    let s = String::from("A");
+    // &s
+    s
 }
 
-fn calculate_length3(s: &mut String) -> usize {
-    s.push_str(",abc");
-    return s.len();
+fn borrow_more_than_once_at_a_time() {
+    let mut s = String::from("A");
+    let s1 = &mut s;
+    let s2 = &mut s;
+    // println!("{}, {}", s1, s2);
+    println!("{}", s2);
 }
 
-fn first_word1(s: &String) -> usize {
-    let bytes = s.as_bytes();
-
-    for (i, &item) in bytes.iter().enumerate() {
-        if item == b' ' {
-            return i;
-        }
-    }
-
-    return s.len();
-}
-
-fn first_word2(s: &String) -> &str {
-    let bytes = s.as_bytes();
-
-    for (i, &item) in bytes.iter().enumerate() {
-        if item == b' ' {
-            return &s[0..i];
-        }
-    }
-
-    return &s[..];
+fn combining_mutable_immutable() {
+    let mut s = String::from("A");
+    let s1 = &s;
+    let s2 = &s;
+    let s3 = &mut s;
+    // println!("{}, {}", s2, s3);
+    println!("{}", s3);
 }
 
 fn lifetime1() {
@@ -127,6 +69,23 @@ fn longest1<'a>(a: &'a str, b: &'a str) -> &'a str {
     }
 }
 
+fn lifetime2() {
+    let a = "A";
+    let b = "BB";
+    let longest = longest1(a, b);
+    assert_eq!(longest, b);
+}
+
+fn lifetime_static1() -> &'static str {
+    let s: &'static str = "elder, partiarch";
+    s
+}
+
+fn lifetime3() {
+    let s = lifetime_static1();
+    println!("{}", s);
+}
+
 pub struct Twin<'a> {
     age: &'a i32,
 }
@@ -141,25 +100,13 @@ pub struct Twin1<'a> {
     first_name: &'a str,
 }
 
-fn lifetime2() -> &'static str {
-    let s: &'static str = "elder, partiarch";
-    return s;
+fn lifetime4() {
+		let t1 = Twin { age: &22 };
+		assert_eq!(*t1.age, 22);
 }
 
-fn lifetime3() -> String {
-    let s = String::from("MiIlroy");
-    return s;
+fn lifetime5() {
+		let t1 = Twin1 { first_name: "A" };
+		assert_eq!(t1.first_name, "A");
 }
 
-use std::fmt::Display;
-fn longest_with_announcement<'a, T>(a: &'a str, b: &'a str, ann: T) -> &'a str
-where
-    T: Display,
-{
-    println!("ann: {}", ann);
-    if a.len() > b.len() {
-        return a;
-    } else {
-        return b;
-    }
-}
