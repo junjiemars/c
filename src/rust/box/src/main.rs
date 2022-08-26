@@ -7,8 +7,9 @@ use std::ops;
 fn main() {
     boxing();
     deref_ct_cu();
-		deref_mt_mu();
-		deref_mt_u();
+    deref_mt_mu();
+    deref_mt_u();
+    drop0();
 }
 
 fn boxing() {
@@ -43,14 +44,36 @@ fn deref_mt_mu() {
     let mut b1 = 5;
 
     let mut b2 = DerefOnBox::new(&mut b1);
-		assert_eq!(5, **b2);
+    assert_eq!(5, **b2);
 }
 
 fn deref_mt_u() {
-		let mut b1 = 5;
-		
-		let b2 = DerefOnBox::new(&b1);
-		assert_eq!(5, **b2);
+    let mut b1 = 5;
+
+    let b2 = DerefOnBox::new(&b1);
+    assert_eq!(5, **b2);
+}
+
+fn drop0() {
+    let s1 = String::from("A");
+    let s2 = Ptr1 {
+        data: String::from("B"),
+    };
+    drop1(s2);
+}
+
+fn drop1(s: Ptr1) {
+    drop2(s);
+}
+
+fn drop2(s: Ptr1) {
+    let p1 = Ptr1 {
+        data: String::from("C"),
+    };
+    let p2 = Ptr1 {
+        data: String::from("D"),
+    };
+    drop(s);
 }
 
 enum List {
@@ -112,5 +135,15 @@ impl<T> ops::Deref for DerefOnBox<T> {
 impl<T> ops::DerefMut for DerefOnBox<T> {
     fn deref_mut(&mut self) -> &mut T {
         &mut self.0
+    }
+}
+
+struct Ptr1 {
+    data: String,
+}
+
+impl Drop for Ptr1 {
+    fn drop(&mut self) {
+        println!("dropping {}@{:p}", self.data, &self.data);
     }
 }
