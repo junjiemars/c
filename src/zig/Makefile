@@ -131,14 +131,15 @@ zig_value: $(zig_value_binout)
 zig_value_test: zig_value
 	$(zig_value_binout)
 
-$(zig_value_build): $(zig_root)/value
+$(zig_value_build): $(zig_root)/value/build.zig
 	cd $< && $(ZIG) init-exe
 $(zig_root)/value: $(ZIG)
-	-$(MKDIR) -p $@
+	$(MKDIR) -p $@
 
 $(zig_value_binout): $(zig_value_build)             \
                      $(zig_root)/value/src/main.zig
 	$(ZIG) build                                  \
     --build-file $<                             \
     --cache-dir $(zig_cache_dir)                \
-    --prefix-exe-dir $(zig_prefix_exe_dir)
+    --prefix-exe-dir $(zig_prefix_exe_dir)      \
+    --verbose
