@@ -18,7 +18,8 @@ rust: rust_hi                                   \
       rust_min                                  \
       rust_macro                                \
       rust_unsafe                               \
-      rust_box
+      rust_box                                  \
+      rust_websrv
 rust_test: rust_hi_test                         \
            rust_libc_test                       \
            rust_game_test                       \
@@ -33,7 +34,8 @@ rust_test: rust_hi_test                         \
            rust_min_test                        \
            rust_macro_test                      \
            rust_unsafe_test                     \
-           rust_box_test
+           rust_box_test                        \
+           rust_websrv_test
 
 
 # env
@@ -375,3 +377,27 @@ $(rust_box_binout): $(rust_box_cargo)             \
     -Z unstable-options                         \
     --target-dir $(cargo_target_dir)            \
     --out-dir $(bin_path)
+
+# websrv
+rust_websrv_cargo := $(rust_root)/websrv/Cargo.toml
+rust_websrv_binout := $(bin_path)/$(rust_prefix)_websrv$(bin_ext)
+rust_websrv_html := $(rust_root)/websrv/h.html
+
+rust_websrv: $(rust_websrv_binout)
+rust_websrv_doc: $(rust_websrv_cargo)
+	-$(CARGO) doc --open --manifest-path $<
+rust_websrv_test: rust_websrv
+	RUST_BACKTRACE=1 $(rust_websrv_binout)
+
+$(rust_websrv_cargo): $(CARGO)
+	$(CARGO) new --bin --name $(rust_prefix)_websrv $(rust_root)/websrv
+
+$(rust_websrv_binout): $(rust_websrv_cargo)             \
+                       $(rust_root)/websrv/src/main.rs  \
+                       $(rust_websrv_html)
+	$(CARGO) build                                \
+    --manifest-path $<                          \
+    -Z unstable-options                         \
+    --target-dir $(cargo_target_dir)            \
+    --out-dir $(bin_path)
+	@cp $(rust_websrv_html) $(bin_path)/
