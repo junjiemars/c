@@ -1,8 +1,17 @@
 #![allow(unused)]
 
 use crate::List::{Cons, Nil};
+use std::fmt;
+use std::ops;
 
 fn main() {
+    boxing();
+    deref_ct_cu();
+		deref_mt_mu();
+		deref_mt_u();
+}
+
+fn boxing() {
     let b1 = Box::new(5);
     println!("b1 = {}", b1);
 
@@ -21,12 +30,33 @@ fn main() {
     println!("Cons: {}", l1);
 }
 
+fn deref_ct_cu() {
+    let b1 = 5;
+    let b2 = Box::new(b1);
+    assert_eq!(b1, *b2);
+
+    let b3 = DerefOnBox::new(b1);
+    assert_eq!(b1, *b3);
+}
+
+fn deref_mt_mu() {
+    let mut b1 = 5;
+
+    let mut b2 = DerefOnBox::new(&mut b1);
+		assert_eq!(5, **b2);
+}
+
+fn deref_mt_u() {
+		let mut b1 = 5;
+		
+		let b2 = DerefOnBox::new(&b1);
+		assert_eq!(5, **b2);
+}
+
 enum List {
     Cons(i32, Box<List>),
     Nil,
 }
-
-use std::fmt;
 
 impl fmt::Display for List {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -60,5 +90,27 @@ impl<T: fmt::Display> fmt::Display for BoxedArray<T> {
             write!(f, "{}", *a);
         }
         write!(f, "]_")
+    }
+}
+
+struct DerefOnBox<T>(T);
+
+impl<T> DerefOnBox<T> {
+    fn new(x: T) -> DerefOnBox<T> {
+        DerefOnBox(x)
+    }
+}
+
+impl<T> ops::Deref for DerefOnBox<T> {
+    type Target = T;
+
+    fn deref(&self) -> &T /* &Self::Target */ {
+        &self.0
+    }
+}
+
+impl<T> ops::DerefMut for DerefOnBox<T> {
+    fn deref_mut(&mut self) -> &mut T {
+        &mut self.0
     }
 }
