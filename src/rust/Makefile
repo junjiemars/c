@@ -43,6 +43,14 @@ rust_prefix := rust
 RUSTC := $(has_rustc)
 CARGO := $(has_cargo)
 cargo_target_dir := $(CURDIR)/$(tmp_path)
+rust_tags_opt := $(rust_root)/ctags.rust
+rust_tags_file := .tags
+rust_src_dir := "$(shell rustc --print sysroot)/lib/rustlib/src/rust"
+
+
+$(rust_tags_file): $(rust_tags_opt)
+	ctags -R -e -a -o $@ --options=$< $(rust_src_dir)
+
 
 
 # hi
