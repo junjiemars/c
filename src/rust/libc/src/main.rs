@@ -1,16 +1,22 @@
+use libc::{getpid, printf, strlen};
 use std::ffi::CString;
-
-extern {
-    static stdout: *mut libc::FILE;
-}
-
 
 fn main() {
     // getpid
-    let pid = unsafe { libc::getpid() };
+    let pid = unsafe { getpid() };
     println!("pid = {}", pid);
-		
-		// fprintf
-		let cstr = CString::new("inside C, %d\n").expect("CString::new failed");
-		unsafe { libc::fprintf(stdout, cstr.as_ptr(), pid); };
+
+    // printf
+    unsafe {
+        let cstr = CString::new("Inside C, %d\n").expect("XX");
+        printf(cstr.as_ptr(), pid);
+    }
+
+    // strlen
+		unsafe {
+				let cstr = CString::new("Inside C").expect("XX");
+				let fmt = CString::new("strlen(\"%s\") = %d\n").expect("XX");
+				let len = strlen(cstr.as_ptr());
+				printf(fmt.as_ptr(), cstr.as_ptr(), len);
+		}
 }

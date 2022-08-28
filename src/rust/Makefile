@@ -85,8 +85,7 @@ $(rust_libc_binout): $(rust_libc_cargo)             \
     --manifest-path $<                          \
     -Z unstable-options                         \
     --out-dir $(bin_path)                       \
-    --target-dir $(cargo_target_dir)            \
-    --verbose
+    --target-dir $(cargo_target_dir)
 
 
 # game
