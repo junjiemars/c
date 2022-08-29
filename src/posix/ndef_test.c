@@ -78,11 +78,15 @@ test_static_assert(void)
 void
 test_variadic_macro(void)
 {
-#define test_vm(...)  sprintf(__VA_ARGS__)
+#define test_vm_sprintf(...)  sprintf(__VA_ARGS__)
+#define test_vm_args(...)  puts(#__VA_ARGS__)
 
-  char buf[sizeof(short)];
-  test_vm(buf, "%c", '1');
+  char  buf[sizeof(short)];
+
+  test_vm_sprintf(buf, "%c", '1');
   assert('1' == buf[0]);
+
+  test_vm_args(first, second, third);
 }
 
 void
