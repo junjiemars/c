@@ -14,18 +14,21 @@ main(void)
 #endif
 
 
-#if (__STDC_HOSTED__)
-  printf("__STDC_HOSTED__=%i\n", (int) __STDC_HOSTED__);
-#else
-  printf("__STDC_HOSTED__=(no symbol)\n");
-
-#endif
-
-
 #if (__STDC_VERSION__)
   printf("__STDC_VERSION__=%luL\n", (unsigned long) __STDC_VERSION__);
 #else
   printf("__STDC_VERSION__=(no symbol)\n");
 
 #endif
+
+
+#if (__STDC_LIB_EXT1__)
+  printf("__STDC_LIB_EXT1__=%luL\n", (unsigned long) __STDC_LIB_EXT1__);
+#else
+  printf("__STDC_LIB_EXT1__=(no symbol)\n");
+
+#endif
+
+
+
 }
