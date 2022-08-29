@@ -366,13 +366,10 @@ $(lang_locale_binout): $(lang_root)/locale/b.c
 # macro
 lang_macro_binout := $(bin_path)/$(lang_prefix)_macro$(bin_ext)
 lang_macro_cppout := $(tmp_path)/$(lang_prefix)_macro$(cpp_ext)
-lang_macro_nested_binout := $(bin_path)/$(lang_prefix)_macro_nested$(bin_ext)
-lang_macro_nested_cppout := $(tmp_path)/$(lang_prefix)_macro_nested$(cpp_ext)
 
-lang_macro: $(lang_macro_binout) $(lang_macro_nested_binout)
+lang_macro: $(lang_macro_binout)
 lang_macro_test: lang_macro
 	$(lang_macro_binout)
-	$(lang_macro_nested_binout)
 
 $(lang_macro_binout): $(lang_macro_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
@@ -380,11 +377,6 @@ $(lang_macro_binout): $(lang_macro_cppout)
 $(lang_macro_cppout): $(lang_root)/macro/macro.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
-$(lang_macro_nested_binout): $(lang_macro_nested_cppout)
-	$(CC) $(CFLAGS) $^ $(bin_out)$@
-
-$(lang_macro_nested_cppout): $(lang_root)/macro/nested.c
-	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # main
 lang_main_binout := $(bin_path)/$(lang_prefix)_main$(bin_ext)
