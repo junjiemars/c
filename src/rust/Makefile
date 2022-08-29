@@ -394,7 +394,8 @@ rust_websrv: $(rust_websrv_binout)
 rust_websrv_doc: $(rust_websrv_cargo)
 	-$(CARGO) doc --open --manifest-path $<
 rust_websrv_test: rust_websrv
-	RUST_BACKTRACE=1 $(rust_websrv_binout)
+	size $(rust_websrv_binout)
+	# RUST_BACKTRACE=1 $(rust_websrv_binout)
 
 $(rust_websrv_cargo): $(CARGO)
 	$(CARGO) new --bin --name $(rust_prefix)_websrv $(rust_root)/websrv

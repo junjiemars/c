@@ -64,21 +64,6 @@ if [ "yes" != $nm_found ]; then
 fi                              # end of _Static_assert
 
 
-# check variadic macro
-#----------------------------------------
-nm_feature="variadic macro"
-nm_feature_name="nm_have_variadic_macro"
-nm_feature_run=yes
-nm_feature_h='
-#include <stdio.h>
-#define vmp(...)  sprintf(__VA_ARGS__)'
-nm_feature_flags=
-nm_feature_test="char buf[sizeof(short)];
-                 vmp(buf, \"%c\", '1');
-                 return (buf[0] != '1');"
-. ${NORE_ROOT}/auto/feature     # end of __VA_ARGS__
-
-
 
 fi                              # define_npstd_h
 

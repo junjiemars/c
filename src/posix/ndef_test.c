@@ -11,7 +11,6 @@ static void test_fallthrough(int);
 
 static void test_restrict(const int *restrict, const char *restrict);
 static void test_static_assert(void);
-static void test_variadic_macro(void);
 
 static void test_isut(void);
 static void test_nof(void);
@@ -26,7 +25,6 @@ main(int argc, char **argv)
 
   test_restrict((const int *restrict) &argc, (const char *restrict) argv[0]);
   test_static_assert();
-  test_variadic_macro();
 
   test_isut();
   test_nof();
@@ -73,20 +71,6 @@ test_static_assert(void)
 {
   static_assert(sizeof(char) == 1, "sizeof(char) must be 1 byte");
   printf("%s\n------------\n", __FUNCTION__);
-}
-
-void
-test_variadic_macro(void)
-{
-#define test_vm_sprintf(...)  sprintf(__VA_ARGS__)
-#define test_vm_args(...)  puts(#__VA_ARGS__)
-
-  char  buf[sizeof(short)];
-
-  test_vm_sprintf(buf, "%c", '1');
-  assert('1' == buf[0]);
-
-  test_vm_args(first, second, third);
 }
 
 void

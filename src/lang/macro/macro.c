@@ -54,6 +54,7 @@ static void test_sum_macro(void);
 static void test_blank_macro(void);
 static void test_variadic_macro(void);
 static void test_nested_macro(void);
+static void test_variadic_macro(void);
 
 int
 main(void)
@@ -167,14 +168,19 @@ test_nested_macro(void)
 void
 test_variadic_macro(void)
 {
-  printf("\nio_sprintf macro\n");
+  printf("\nvariadic macro\n");
   printf("------------------\n");
 
 #if (NM_HAVE_VARIADIC_MACRO)
-  char  strbuf[32];
-  io_sprintf(strbuf, "0x%x", 0xff00);
-  printf("sprintf out=%s\n", strbuf);
+#  define test_vm_sprintf(...)  sprintf(__VA_ARGS__)
+#  define test_vm_args(...)  puts(#__VA_ARGS__)
 
+  char  buf[sizeof(short)];
+
+  test_vm_sprintf(buf, "%c", '1');
+  assert('1' == buf[0]);
+
+  test_vm_args(first, second, third);
 #else
   printf("!no variadic macro");
 
