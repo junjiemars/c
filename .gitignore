@@ -65,6 +65,7 @@ nore/
 /TAGS
 /tags
 **/.tags
+**/*.tags
 
 # darwin
 .DS_Store
