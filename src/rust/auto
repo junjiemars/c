@@ -8,10 +8,31 @@
 
 
 echo ${echo_n} " + checking for rustc ... " ${echo_c}
-flag=has_rustc value="`command -v rustc`" . ${NORE_ROOT}/auto/make_define
-echo "yes"
+has_rustc="`command -v rustc`"
+if [ -n "$has_rustc" ]; then
+  flag=has_rustc value="${has_rustc}" . ${NORE_ROOT}/auto/make_define
+  echo "yes"
+else
+  echo "no"
+fi
 
 
 echo ${echo_n} " + checking for cargo ... " ${echo_c}
 flag=has_cargo value="`command -v cargo`" . ${NORE_ROOT}/auto/make_define
 echo "yes"
+
+
+if [ -n "$has_rustc" ]; then
+  echo ${echo_n} " + checking for rust src ... " ${echo_c}
+  has_rust_src="$(rustc --print sysroot)/lib/rustlib/src/rust"
+  has_rust_ctags="$(rustc --print sysroot)/lib/rustlib/src/rust/src/etc/ctags.rust"
+  if [ -r "$has_rust_ctags" ]; then
+    flag=has_rust_src value="${has_rust_src}" . ${NORE_ROOT}/auto/make_define
+    flag=has_rust_ctags value="${has_rust_ctags}" . ${NORE_ROOT}/auto/make_define
+    echo "yes"
+  else
+    has_rust_src=""
+    has_rust_ctags=""
+    echo "no"
+  fi
+fi
