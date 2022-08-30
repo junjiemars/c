@@ -2,8 +2,8 @@
 #define _IO_H_
 
 #include <nustd.h>
-#include <ncstd.h>
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <libgen.h>
 #include <assert.h>
