@@ -49,9 +49,9 @@ typedef SOCKET sockfd_t;
 #else
 
 typedef int sockfd_t;
-#define __sendto(s, buf, len, flags, dst, dst_len)                \
+#define __sendto(s, buf, len, flags, dst, dst_len)                    \
   sendto(s, buf, len, flags, (const struct sockaddr *) dst, dst_len)
-#define __recvfrom(s, buf, len, flags, dst, dst_len) \
+#define __recvfrom(s, buf, len, flags, dst, dst_len)              \
   recvfrom(s, buf, len, flags, (struct sockaddr *) dst, dst_len)
 #define log_sockerr(r, s)                       \
   do                                            \
