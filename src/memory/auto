@@ -12,9 +12,6 @@ if [ -z "$POSIX_ROOT" ]; then
 fi
 
 
-# check ncstd.h features
-. ${POSIX_ROOT}/ncc_auto
-
 
 # check ncstd.h features
 . ${POSIX_ROOT}/ndef_auto

@@ -1,11 +1,11 @@
 #include <_memory_.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <inttypes.h>
 
 
+#if defined(BIT8_SUF)
+#  undef BIT8_SUF
+#endif
 #define BIT8_SUF  "\n"
-#include <nbits.h>
+
 
 
 void unsigned_left_shift() {

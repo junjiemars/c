@@ -1,8 +1,13 @@
 #ifndef _MEMORY_H_
 #define _MEMORY_H_
 
-#include <ndef.h>
+#include <ncstd.h>
+#include <nbits.h>
+
 #include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 
 
 #ifdef _bool_
