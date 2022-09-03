@@ -1,7 +1,7 @@
 #ifndef _MEMORY_H_
 #define _MEMORY_H_
 
-#include "nore.h"
+#include <ndef.h>
 #include <assert.h>
 
 #ifdef _unused_

@@ -46,7 +46,7 @@ void ieee_float(void);
 void ieee_float_special_values(void);
 void ieee_double(void);
 
-void 
+void
 int_types(void) {
 	uint8_t  x1 = 'A';
 	printf("uint8_t:   %8c  =  ", x1);
@@ -96,7 +96,7 @@ float_types() {
   printf(BPRI64, BIT64(x8fs.u));
 }
 
-void 
+void
 ieee_float() {
   ufloat32_t x4f0 = { .f = 0.0f };
 	printf("float: %16f \t=  ", x4f0.f);
@@ -189,7 +189,7 @@ ieee_float_special_values(void) {
   printf(BPRI32, BIT32(x4fmax.u));
 }
 
-void 
+void
 ieee_double() {
 	ufloat64_t x8f2 =  { .f = 2.0 };
 	printf("float: %16f \t=  ", x8f2.f);
@@ -198,7 +198,7 @@ ieee_double() {
 	ufloat64_t x8f2n = { .f = -2.0 };
 	printf("float: %16f \t=  ", x8f2n.f);
   printf(BPRI64, BIT64(x8f2n.u));
-  
+
 	/* printf("  sign     =  " BPRI64, BIT64(x8f2n.layout.sign)); */
 	/* printf("  exponent =  " BPRI64, BIT64(x8f2n.layout.exponent)); */
 	/* printf("  mantissa =  " BPRI64, BIT64(x8f2n.layout.mantissa)); */
@@ -233,10 +233,8 @@ ieee_double() {
 }
 
 int
-main(int argc, char *argv[]) {
-	_unused_(argc);
-	_unused_(argv);
-	
+main(void) {
+
 	printf("\n*%s ENDIAN*\n", NM_CPU_LITTLE_ENDIAN ? "LITTLE" : "BIG");
 	printf("----------\n");
 
@@ -259,5 +257,5 @@ main(int argc, char *argv[]) {
 	printf("\nIEEE DOUBLE\n");
 	printf("----------\n");
 	ieee_double();
-  
+
 }

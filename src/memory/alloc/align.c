@@ -14,10 +14,7 @@
 
 
 int
-main(int argc, const char *argv[]) {
-	_unused_(argc);
-	_unused_(argv);
-
+main(void) {
 	int *p = 0;
 
 #if NM_HAVE_ALIGNED_ALLOC_FN

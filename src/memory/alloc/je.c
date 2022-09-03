@@ -41,9 +41,9 @@ test_free(void)
 int
 main(int argc, char **argv)
 {
-  _unused_(argc);
-  _unused_(argv);
-  
+  __attribute__((unused)) argc;
+  __attribute__((unused)) argv;
+
   test_malloc();
   test_calloc();
   test_posix_memalign();

@@ -10,11 +10,11 @@
 void
 swap(void *a, void *b, size_t size) {
 #if ! defined( NM_HAVE_VLA )
-  // current msvc does not support C99 variable length array 
+  // current msvc does not support C99 variable length array
   // https://stackoverflow.com/questions/7303740/error-c2057-expected-constant-expression
   uint8_t *buffer = malloc(size);
 #else
-  uint8_t buffer[size];	
+  uint8_t buffer[size];
 #endif
   memcpy(buffer, a, size);
   memcpy(a, b, size);
@@ -33,13 +33,13 @@ swap_test() {
   printf("0x%x \t 0x%x\n", i1, i2);
 
   int32_t i32 = 0x11223344;
-  int32_t _gap_ = 0; _unused_(_gap_);
-  int16_t i16 = 0x7788; 
+  int32_t _gap_ = 0; __attribute__((unused)) _gap_;
+  int16_t i16 = 0x7788;
   printf("swap(0x%x, 0x%x, %zu) \t\t => ", i32, i16, sizeof(int16_t));
   swap(&i32, &i16, sizeof(int16_t));
   printf("0x%x \t 0x%x\n", i32, i16);
 
-#ifdef _RISKY_ 
+#ifdef _RISKY_
   // 1) use $(nm_def_opt)_RISKY_=1 in makefile;
   // 2) or, use CFLAGS=-D_RISKY_=1 in make command lien;
   printf("swap(0x%x, 0x%x, %zu) \t\t => ", i32, i16, sizeof(int32_t));
@@ -60,8 +60,8 @@ swap_test() {
   putchar('\n');
 }
 
-void* 
-linear_search(void *key, void *base, size_t n, size_t size, 
+void*
+linear_search(void *key, void *base, size_t n, size_t size,
               int (*test)(const void *x, const void*y, size_t size)) {
 
   for (size_t i = 0; i < n; i++) {
@@ -107,8 +107,8 @@ linear_search_test() {
 
 int
 main(int argc, char *argv[]) {
-  _unused_(argc);
-  _unused_(argv);
+  __attribute__((unused)) argc;
+  __attribute__((unused)) argv;
 
   printf("\n*%s ENDIAN*\n", NM_CPU_LITTLE_ENDIAN ? "LITTLE" : "BIG");
   printf("----------\n\n");

@@ -5,8 +5,8 @@
 
 int
 main(int argc, const char *argv[]) {
-	_unused_(argc);
-	_unused_(argv);
+	__attribute__((unused)) argc;
+	__attribute__((unused)) argv;
 
 	char ss[] = "ABCDEFGH";
 	int p = 3;

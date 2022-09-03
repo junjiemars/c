@@ -2,35 +2,38 @@
 #include <stdlib.h>
 
 
-typedef struct node_s {
+typedef struct node_s
+{
 	int val;
 	struct node_s* next;
 } node_s;
 
 
-int* 
-cast(const size_t length) {
+int*
+cast(const size_t length)
+{
 	int *x = (int*)malloc(sizeof(int) * length);
 	return x;
 }
 
 int*
-non_cast(const size_t length) {
+non_cast(const size_t length)
+{
 	int *x = malloc(length * sizeof *x);
 	return x;
 }
 
 int*
-better(const short length) {
+better(const short length)
+{
 	int *x = malloc(sizeof *x * length);
 	return x;
 }
 
 int
-main(int argc, const char *argv[]) {
-	_unused_(argc);
-	_unused_(argv);
-	
+main(void)
+{
+
 	int* int_ptr = cast(10);
 	int_ptr[9] = 0x1122;
 	free(int_ptr);

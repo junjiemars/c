@@ -24,6 +24,7 @@ echo "checking for nint.h ..."
 #----------------------------------------
 include="stdint.h" . ${NORE_ROOT}/auto/include
 include="inttypes.h" . ${NORE_ROOT}/auto/include
+include="stdbool.h" . ${NORE_ROOT}/auto/include
 
 
 fi                              # define_nint_h

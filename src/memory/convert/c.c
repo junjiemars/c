@@ -42,7 +42,7 @@ int_float() {
 	printf("----------\n");
 
   printf("int: %" PRIu32 " \t\t\t =  " BIT_FMT_32 "\n", i, BIT_32(i));
-	printf("int -> *(float*)&int: %f\n\t\t\t =  " BIT_FMT_32 "\n", 
+	printf("int -> *(float*)&int: %f\n\t\t\t =  " BIT_FMT_32 "\n",
 		*(float*)&i, BIT_32(*(uint32_t*)&i));
 
 #if defined (_RISKY_) && (_RISKY_) > 0
@@ -51,20 +51,20 @@ int_float() {
 #endif
 }
 
-void 
+void
 float_short() {
-	float f = 3.14159f;	
+	float f = 3.14159f;
 
 	printf("\nFLOAT => SHORT\n");
 	printf("----------\n");
 
   printf("float: %f\n \t\t\t =  " BIT_FMT_32 "\n", f, BIT_32(*(uint32_t*)&f));
-	printf("float -> *(short*)&float: %" PRIi16 "\n\t\t\t =  " BIT_FMT_16 "\n", 
+	printf("float -> *(short*)&float: %" PRIi16 "\n\t\t\t =  " BIT_FMT_16 "\n",
 		*(short*)&f, BIT_16(*(uint16_t*)&f));
 
 #if defined (_RISKY_) && (_RISKY_) > 0
 	int16_t s = f;
-  printf("float -> short: %" PRIi16 "\n \t\t\t =  " BIT_FMT_16 "\n", 
+  printf("float -> short: %" PRIi16 "\n \t\t\t =  " BIT_FMT_16 "\n",
 		s, BIT_16(*(uint16_t*)&s));
 #endif
 }
@@ -76,15 +76,15 @@ math() {
 	printf("\nMATH of INT => SHORT\n");
 	printf("----------\n");
 
-	printf("*(short*)&int(x)  == int(x) & (~0u >> 8*sizeof(short)) \t\t=> %s\n", 
+	printf("*(short*)&int(x)  == int(x) & (~0u >> 8*sizeof(short)) \t\t=> %s\n",
 		_bool_(*(uint16_t*)&u32 == (u32 & (~0u >> 8*sizeof(uint16_t)))) );
 }
 
 
-int 
+int
 main(int argc, char *argv[]) {
-	_unused_(argc);
-	_unused_(argv);
+	__attribute__((unused)) argc;
+	__attribute__((unused)) argv;
 
 	char_short();
 	int_float();

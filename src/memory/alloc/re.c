@@ -98,13 +98,10 @@ same(void) {
 }
 
 int
-main(int argc, char **argv) {
-	_unused_(argc);
-	_unused_(argv);
-
+main(void) {
 	printf("illegle?\n--------------------\n");
 	illegle();
-	
+
 	printf("as_malloc\n--------------------\n");
 	as_malloc();
 
@@ -119,6 +116,6 @@ main(int argc, char **argv) {
 
 	printf("same\n--------------------\n");
 	same();
-	
+
 	return 0;
 }

@@ -22,10 +22,7 @@ typedef union u_bitfield {
 } u_bitfield;
 
 int
-main(int argc, char *argv[]) {
-	_unused_(argc);
-	_unused_(argv);
-
+main(void) {
 	u_bitfield u;
 	memset(&u, 0, sizeof(u));
 
