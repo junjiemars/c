@@ -191,16 +191,30 @@ $(memory_bit_binout): $(memory_root)/bit/bit.c
 # byte
 memory_byte_binout := $(bin_path)/$(memory_prefix)_byte$(bin_ext)
 memory_byte_cppout := $(tmp_path)/byte$(cpp_ext)
+memory_byte_qry_binout := $(bin_path)/$(memory_prefix)_byte_qry$(bin_ext)
 
-memory_byte: $(memory_byte_binout)
-memory_byte_test: memory_byte
-	$(memory_byte_binout)
+memory_byte: $(memory_byte_binout)              \
+             $(memory_byte_qry_binout)
+memory_byte_test: memory_byte_test              \
+                  memory_byte_qry_test
+
+memory_byte_test: $(memory_byte_binout)
+	$<
+memory_byte_qry_test: $(memory_byte_qry_binout)
+	$< int 123 2
+	$< float 3.88 A
+	$< float 3.8800004 A
+	$< float 3.8800006 A
+	$< float 3.8800008 A
 
 $(memory_byte_binout): $(memory_byte_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(memory_byte_cppout): $(memory_root)/byte/byte.c
 	$(CPP) $(nm_stage_pre) $(INC) $^ $(cpp_out)$@
+
+$(memory_byte_qry_binout): $(memory_root)/byte/q.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # copy
