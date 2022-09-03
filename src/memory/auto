@@ -13,7 +13,12 @@ fi
 
 
 # check ncstd.h features
-. ${POSIX_ROOT}/ncstd_auto
+. ${POSIX_ROOT}/ncc_auto
+
+
+# check ncstd.h features
+. ${POSIX_ROOT}/ndef_auto
+
 
 
 echo "checking for {memory} ..."

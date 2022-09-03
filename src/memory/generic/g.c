@@ -33,7 +33,7 @@ swap_test() {
   printf("0x%x \t 0x%x\n", i1, i2);
 
   int32_t i32 = 0x11223344;
-  int32_t _gap_ = 0; __attribute__((unused)) _gap_;
+  __attribute__((unused)) int32_t _gap_ = 0;
   int16_t i16 = 0x7788;
   printf("swap(0x%x, 0x%x, %zu) \t\t => ", i32, i16, sizeof(int16_t));
   swap(&i32, &i16, sizeof(int16_t));
@@ -86,19 +86,19 @@ linear_search_test() {
   int ia[] = { 1, 9, 7, 0, 4, 5 };
   int ikey = 7;
   printf("linear_search(%i) \t\t => ", ikey);
-  int *i = linear_search(&ikey, ia, _sizeof_array_(ia), sizeof(int), memcmp);
+  int *i = linear_search(&ikey, ia, _nof_(ia), sizeof(int), memcmp);
   printf("%i \t\t|\t %p\n", *i, i);
 
   char ca[] = "hello, world!";
   char ckey = 'r';
   printf("linear_search('%c') \t\t => ", ckey);
-  char *c = linear_search(&ckey, ca, _sizeof_array_(ca), sizeof(char), memcmp);
+  char *c = linear_search(&ckey, ca, _nof_(ca), sizeof(char), memcmp);
   printf("'%c' \t|\t %p\n", *c, c);
 
   char *sa[] = {"Lisp", "MaCarthy", "Russell"};
   char *skey = "MaCarthy";
   printf("linear_search(\"%s\") \t => ", skey);
-  char **s = linear_search(&skey, &sa, _sizeof_array_(sa), sizeof(char*), test_str);
+  char **s = linear_search(&skey, &sa, _nof_(sa), sizeof(char*), test_str);
   printf("\"%s\" \t|\t %p\n", *s, *s);
 
   putchar('\n');
@@ -106,10 +106,7 @@ linear_search_test() {
 
 
 int
-main(int argc, char *argv[]) {
-  __attribute__((unused)) argc;
-  __attribute__((unused)) argv;
-
+main(void) {
   printf("\n*%s ENDIAN*\n", NM_CPU_LITTLE_ENDIAN ? "LITTLE" : "BIG");
   printf("----------\n\n");
 

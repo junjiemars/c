@@ -115,7 +115,7 @@ memory_alloc_test: memory_alloc_std_test        \
                    memory_alloc_je_test
 
 memory_alloc_std: $(memory_alloc_a_binout)      \
-                    $(memory_alloc_m_binout)    \
+                  $(memory_alloc_m_binout)      \
                   $(memory_alloc_c_binout)      \
                   $(memory_alloc_re_binout)     \
                   $(memory_alloc_align_binout)

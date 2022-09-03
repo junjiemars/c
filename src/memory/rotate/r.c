@@ -4,22 +4,19 @@
 
 
 int
-main(int argc, const char *argv[]) {
-	__attribute__((unused)) argc;
-	__attribute__((unused)) argv;
-
+main(void) {
 	char ss[] = "ABCDEFGH";
 	int p = 3;
 
 	printf("\nROTATE %s[%i]\n", ss, p);
 	printf("----------\n");
-	rotate(ss, &ss[p], &ss[_sizeof_array_(ss)-1]);
+	rotate(ss, &ss[p], &ss[_nof_(ss)-1]);
 	printf("%s\n", ss);
 
 	p = 4;
 	printf("\nROTATE %s[%i]\n", ss, p);
 	printf("----------\n");
-	rotate(ss, &ss[p], &ss[_sizeof_array_(ss)-1]);
+	rotate(ss, &ss[p], &ss[_nof_(ss)-1]);
 	printf("%s\n", ss);
 
 }

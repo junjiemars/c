@@ -59,10 +59,7 @@ void math() {
 
 
 int
-main(int argc, const char *argv[]) {
-	__attribute__((unused)) argc;
-	__attribute__((unused)) argv;
-
+main(void) {
 	printf("\n*%s ENDIAN*\n", NM_CPU_LITTLE_ENDIAN ? "LITTLE" : "BIG");
 	printf("----------\n");
 
