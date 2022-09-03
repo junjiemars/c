@@ -69,6 +69,7 @@ inspect_int(const char *t, const char *v, const char *r)
   if (rc < 1)
     {
       perror(NULL);
+      return;
     }
 
   if (strcmp(r, "2") == 0)
@@ -77,6 +78,11 @@ inspect_int(const char *t, const char *v, const char *r)
     }
   else if (strcmp(r, "16") == 0)
     {
+      printf("%x\n", val);
+    }
+  else if (strcmp(r, "A") == 0)
+    {
+      printf(BPRI8, BIT8(val));
       printf("%x\n", val);
     }
 
@@ -94,6 +100,7 @@ inspect_float(const char *t, const char *v, const char *r)
   if (rc < 1)
     {
       perror(NULL);
+      return;
     }
 
   if (strcmp(r, "2") == 0)
