@@ -1,5 +1,4 @@
 #include "_memory_.h"
-#include <stdio.h>
 #include <float.h>
 
 
@@ -12,37 +11,25 @@
 
 typedef union
 {
-	float f;
-	uint32_t u;
+	float     f;
+	uint32_t  u;
 	struct
   {
-#if NM_CPU_LITTLE_ENDIAN
-		uint32_t mantissa: 23; /* (u & 0x007fffff) */
-		uint32_t exponent:  8; /* ((u & 0x07800000) >> 23) */
-		uint32_t sign:      1; /* (u >> 31) */
-#else
-		uint32_t sign:      1;
-		uint32_t exponent:  8;
-		uint32_t manitssa: 23;
-#endif
+		uint32_t sign:      1;      /* (u & 0x007fffff) */
+		uint32_t exponent:  8;      /* ((u & 0x07800000) >> 23) */
+		uint32_t mantissa: 23;      /* (u >> 31) */
 	} layout;
 } ufloat32_t;
 
 typedef union
 {
-	double f;
-	uint64_t u;
+	double    f;
+	uint64_t  u;
   struct
   {
-#if NM_CPU_LITTLE_ENDIAN
-    uint64_t mantissa: 52;
-    uint64_t exponent: 11;
-    uint64_t sign:      1;
-#else
     uint64_t sign:      1;
     uint64_t exponent: 11;
     uint64_t mantissa: 52;
-#endif
   } layout;
 } ufloat64_t;
 
