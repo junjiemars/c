@@ -1888,8 +1888,8 @@ fraction bits.
 | double precision | 1 [63] | 11 [62-52]      | 52 [51-00]            |
 
 **** References
-- [[http://www.toves.org/books/float/][Floating-point representation]]
-- [[https://docs.microsoft.com/en-us/cpp/build/ieee-floating-point-representation?view=vs-2019][Microsoft: IEEE Floating-Point Representation]]
+- [[https://codedocs.org/what-is/ieee-754][CodeDocs.org: IEEE754]]
+- [[http://mathcenter.oxford.emory.edu/site/cs170/ieee754/][Emory University: The IEEE 754 Format]]
 
 *** Record
 		:PROPERTIES:
