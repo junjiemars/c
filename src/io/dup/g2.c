@@ -9,10 +9,10 @@
 int
 main(int argc, char **argv)
 {
-  _unused_(int fd);
-  _unused_(int fd0);
-  _unused_(int fd1);
-  _unused_(int fd2);
+  __attribute__((unused)) int fd;
+  __attribute__((unused)) int fd0;
+  __attribute__((unused)) int fd1;
+  __attribute__((unused)) int fd2;
 
   if (argc < 2)
     {

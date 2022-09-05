@@ -7,6 +7,11 @@
 ####
 
 
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+
 # check posix features
 . src/posix/auto
 

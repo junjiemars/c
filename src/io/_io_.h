@@ -3,12 +3,13 @@
 
 #include <nustd.h>
 
+#include <sys/stat.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <libgen.h>
 #include <assert.h>
+#include <limits.h>
 #include <fcntl.h>
-#include <sys/stat.h>
 
 
 #endif /* end of _IO_H_ */

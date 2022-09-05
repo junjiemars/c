@@ -1,7 +1,7 @@
 #include "_io_.h"
 
 int
-main(_unused_(int argc), _unused_(char **argv))
+main(void)
 {
   exit(EXIT_SUCCESS);
 }
