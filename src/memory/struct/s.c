@@ -27,7 +27,7 @@ basic_layout(void)
       .numerator = 0x1100,
       .denominator = 0x22
     };
-  int gap[sizeof(fraction_s)/sizeof(int)];
+  __attribute__((unused)) int gap[sizeof(fraction_s)/sizeof(int)];
 
 	((fraction_s*) &f.denominator)->numerator = f.numerator;
 	/* f.numerator == f.denominator) => true */
@@ -39,8 +39,6 @@ basic_layout(void)
 
   gap[0] = ((fraction_s*) &f.denominator)[0].numerator;
   /* gap[0] == f.denominator => true */
-#else
-  _unused_(gap);
 #endif
 }
 
@@ -67,7 +65,7 @@ complex_layout(void)
 #endif
 
   student_s gap;
-  _unused_(gap);
+  __attribute__((unused)) gap;
 
 	friends[4].units = 21;
 
@@ -94,11 +92,8 @@ heap_layout(void)
 }
 
 int
-main(int argc, char *argv[])
+main(void)
 {
-	_unused_(argc);
-	_unused_(argv);
-
 	printf("sizeof(struct fraction_s)=%zu\n", sizeof(fraction_s));
 	printf("sizeof(struct student_s)=%zu\n", sizeof(student_s));
 

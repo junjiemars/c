@@ -12,20 +12,30 @@
 #  endif
 #endif
 
+static void test_alloca(void);
+
+int
+main(void)
+{
+	test_alloca();
+}
+
+
+void
 #if (NM_HAVE_ALLOCA_FN)
-void foo(void) {
+test_alloca(void)
+{
 	int *pi = alloca(sizeof(int) * 10);
 	assert((0 != pi) && strerror(errno));
 	pi[0] = 0x11223344;
 	/* depend on implementation */
 	/* assert((0 == pi[1]) && "filled with non-zero"); */
 }
-#endif
 
-int
-main(int argc, char **argv) {
-	_unused_(argc);
-	_unused_(argv);
-
-	foo();
+#else
+test_alloca(void)
+{
+  /* void */
 }
+
+#endif

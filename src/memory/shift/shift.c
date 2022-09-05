@@ -1,11 +1,11 @@
 #include <_memory_.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <inttypes.h>
 
 
+#if defined(BIT8_SUF)
+#  undef BIT8_SUF
+#endif
 #define BIT8_SUF  "\n"
-#include <nbits.h>
+
 
 
 void unsigned_left_shift() {
@@ -21,7 +21,7 @@ void unsigned_right_shift() {
   uint16_t x2 = 0x1122;
   printf("uint16_t: %"PRIu16"      =  ", x2);
   printf(BPRI16, BIT16(x2));
-  
+
   printf("uint16_t: %"PRIu16" >> 2 =  ", x2);
   printf(BPRI16, BIT16(x2 >> 2));
 }
@@ -42,7 +42,7 @@ void signed_right_shift() {
 
   printf("int16_t: %"PRIi16" >> 2 =  ", x2s);
   printf(BPRI16, BIT16((uint16_t)(x2s >> 2)));
-} 
+}
 
 void math() {
   uint16_t u = 2;
@@ -54,15 +54,12 @@ void math() {
   printf("i >> x == (unsigned)i >> x | ~(~0u >> x) => %s\n",
 				 _bool_((i >> 2) == (int16_t)(((uint16_t)i >> 2) | ~(~0u >> 2))) );
 
-	printf("-x == ~x + 1         => %s\n", _bool_(-i == (~i + 1)) );	
+	printf("-x == ~x + 1         => %s\n", _bool_(-i == (~i + 1)) );
 }
 
 
-int 
-main(int argc, const char *argv[]) {
-	_unused_(argc);
-	_unused_(argv);
-
+int
+main(void) {
 	printf("\n*%s ENDIAN*\n", NM_CPU_LITTLE_ENDIAN ? "LITTLE" : "BIG");
 	printf("----------\n");
 

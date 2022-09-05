@@ -1,18 +1,14 @@
 #ifndef _MEMORY_H_
 #define _MEMORY_H_
 
-#include "nore.h"
+#include <ncstd.h>
+#include <nbits.h>
+
 #include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-#ifdef _unused_
-#  undef _unused_
-#endif
-#define _unused_(x) ((void)(x))
 
-#ifdef _sizeof_array_
-#  undef _sizeof_array_
-#endif
-#define _sizeof_array_(a) sizeof((a))/sizeof((a)[0])
 
 #ifdef _bool_
 #  undef _bool_

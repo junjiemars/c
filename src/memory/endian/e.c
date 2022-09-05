@@ -25,19 +25,17 @@ void
 swap() {
 	uint16_t u16 = 0x1122;
 	uint32_t u32 = 0x11223344;
-	
-  printf("uint16_t: 0x%" PRIx16 " \t => 0x%" PRIx16 "\n", 
+
+  printf("uint16_t: 0x%" PRIx16 " \t => 0x%" PRIx16 "\n",
 		u16, bit_swap16(u16));
-	
-  printf("uint32_t: 0x%" PRIx32 " \t => 0x%" PRIx32 "\n", 
+
+  printf("uint32_t: 0x%" PRIx32 " \t => 0x%" PRIx32 "\n",
 		u32, bit_swap32(u32));
 }
 
 
 int
-main(int argc, char *argv[]) {
-  _unused_(argc);
-  _unused_(argv);
+main(void) {
 
   printf("\nlittle endian: %s\n", _bool_(NM_CPU_LITTLE_ENDIAN));
 	printf("----------\n");
