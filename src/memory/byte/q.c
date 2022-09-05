@@ -75,7 +75,7 @@ inspect_int8(const char *t, const char *v, const char *r)
 
   printf("%s: %s\n------------\n", t, v);
 
-  rc = sscanf(v, "%"PRIi8, &val);
+  rc = sscanf(v, "%i", (int*) &val);
   if (rc < 1)
     {
       perror(NULL);
