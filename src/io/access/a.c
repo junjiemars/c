@@ -1,10 +1,12 @@
 #include "_io_.h"
-#include <errno.h>
 
 
 /*
  * 1. access just check real-user/group-id.
  * 2. open check effective-user/group-id.
+ *
+ * References:
+ * 1. https://pubs.opengroup.org/onlinepubs/9699919799/functions/access.html#tag_16_09
  *
  */
 
@@ -18,7 +20,7 @@ main(int argc, char **argv)
   if (argc < 2)
     {
       fprintf(stderr, "usage: %s <pathname> [pathname...]\n",
-              basename(argv[0]));
+             basename(argv[0]));
       exit(EXIT_FAILURE);
     }
 
@@ -29,24 +31,22 @@ main(int argc, char **argv)
 
   for (int i = 1; i < argc; i++)
     {
+      rc = access(argv[i], F_OK);
+      if (rc == -1)
+        {
+          perror("!exist access");
+        }
+
       rc = access(argv[i], R_OK);
       if (rc == -1)
         {
-          perror("!access error");
-        }
-      else
-        {
-          printf("read access OK\n");
+          perror("!read access");
         }
 
-      rc = open(argv[1], O_RDONLY);
+      rc = open(argv[i], O_RDONLY);
       if (rc == -1)
         {
-          perror("!read error");
-        }
-      else
-        {
-          printf("open for reading OK\n");
+          perror("!open for read");
         }
 
     }
