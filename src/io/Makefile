@@ -61,21 +61,26 @@ endif
 # access
 io_access_open_binout := $(bin_path)/$(io_prefix)_access_open$(bin_ext)
 io_access_open_file := $(tmp_path)/$(io_prefix)_access_open_file
+io_access_open_link := $(tmp_path)/$(io_prefix)_access_open_link
 
 io_access: $(io_access_open_binout)
 io_access_test: io_access_open_test
 
 io_access_open_test: $(io_access_open_binout)   \
-                     $(io_access_open_file)
+                     $(io_access_open_file)     \
+                     $(io_access_open_link)
+	ls -lh $(shell command -v passwd)
 	$< $(io_access_open_file)
 	# sudo chown root:root $(io_access_open_file)
 	# sudo chown root $(io_access_open_binout) && sudo chmod u+s $<
 	# $< $(io_access_open_file)
 
 $(io_access_open_file):
-	touch $@
+	echo "abc" > $@
 	chmod 400 $@
 	ls -lh $@
+$(io_access_open_link): $(io_access_open_file)
+	ln -s $(CURDIR)/$< $@
 
 $(io_access_open_binout): $(io_root)/access/a.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
