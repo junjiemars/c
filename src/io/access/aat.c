@@ -23,13 +23,13 @@ main(int argc, char **argv)
   for (int i = 1; i < argc; i++)
     {
       /* same as access(argv[i], F_OK) */
-      rc = faccessat(AT_FDCWD, argv[i], F_OK, AT_SYMLINK_FOLLOW);
+      rc = faccessat(AT_FDCWD, argv[i], F_OK, 0);
       if (rc == -1)
         {
           perror("!exist access");
         }
 
-      rc = faccessat(AT_FDCWD, argv[i], R_OK, AT_SYMLINK_FOLLOW);
+      rc = faccessat(AT_FDCWD, argv[i], R_OK, 0);
       if (rc == -1)
         {
           perror("!read access");

@@ -65,7 +65,8 @@ io_access_at_binout := $(bin_path)/$(io_prefix)_access_at$(bin_ext)
 io_access_open_file := $(tmp_path)/$(io_prefix)_access_open_file
 io_access_open_link := $(tmp_path)/$(io_prefix)_access_open_link
 
-io_access: $(io_access_open_binout)
+io_access: $(io_access_open_binout)             \
+           $(io_access_at_binout)
 io_access_test: io_access_open_test             \
                 io_access_at_test
 
@@ -78,7 +79,7 @@ io_access_open_test: $(io_access_open_binout)   \
 	# sudo chown root $(io_access_open_binout) && sudo chmod u+s $<
 	# $< $(io_access_open_file)
 
-io_access_at_test: $(io_access_open_binout)     \
+io_access_at_test: $(io_access_at_binout)       \
                    $(io_access_open_file)       \
                    $(io_access_open_link)
 	ls -lh $(shell which passwd)
