@@ -2752,18 +2752,23 @@ table in a executable.
 
 *** Memory
 
-| *example*                       | *command*                                                  |
-|---------------------------------+------------------------------------------------------------|
-| check /argv/ in /main/ entry    | *(lldb)* =x -t'char*' -c`argc` argv=                       |
-|                                 | *0:000>* =dp @@(argv)=                                     |
-|                                 |                                                            |
-| check array of /char*/ of /argv | *(lldb)* =x -s`sizeof(char*)` -c`argc` -fx argv=           |
-|                                 |                                                            |
-| check /&argc/ in /main/ entry   | *(lldb)* =x -s`sizeof(int)` -fx -c1 &argc=                 |
-|                                 | *(gdb)*  =x/1xw &argc=                                     |
-|                                 |                                                            |
-| memory read                     | *(lldb)* memory read -o/tmp/x.out -s1 -fu -c10 -- &argv[0] |
-|                                 |                                                            |
+| *example*                         | *command*                                                  |
+|-----------------------------------+------------------------------------------------------------|
+| print /argv in /main/ entry       | *(lldb)* =p -Z`argc` -- argv=                              |
+|                                   | *0:000* ==                                                 |
+|                                   | *(gdb)* =p -- argv[0]@argc=                                |
+|                                   |                                                            |
+| examine /argv/ in /main/ entry    | *(lldb)* =x -t'char*' -c`argc` argv=                       |
+|                                   | *0:000>* =dp @@(argv)=                                     |
+|                                   | *(gdb)* ==                                                 |
+|                                   |                                                            |
+| examine array of /char*/ of /argv | *(lldb)* =x -s`sizeof(char*)` -c`argc` -fx argv=           |
+|                                   |                                                            |
+| exmaine /&argc/ in /main/ entry   | *(lldb)* =x -s`sizeof(int)` -fx -c1 &argc=                 |
+|                                   | *(gdb)*  =x/1xw &argc=                                     |
+|                                   |                                                            |
+| memory read                       | *(lldb)* memory read -o/tmp/x.out -s1 -fu -c10 -- &argv[0] |
+|                                   |                                                            |
 
 ~*** Frame
 
