@@ -37,6 +37,12 @@ main(int argc, char **argv)
           perror("!exist access");
         }
 
+      rc = access(argv[i], X_OK);
+      if (rc == -1)
+        {
+          perror("!execute access");
+        }
+
       rc = access(argv[i], R_OK);
       if (rc == -1)
         {

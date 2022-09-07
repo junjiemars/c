@@ -86,7 +86,7 @@ io_access_at_test: $(io_access_at_binout)       \
 	$< $(io_access_open_file)
 
 $(io_access_open_file):
-	echo "abc" > $@
+	echo "#!/bin/sh\necho abc" > $@
 	chmod 400 $@
 	ls -lh $@
 $(io_access_open_link): $(io_access_open_file)
