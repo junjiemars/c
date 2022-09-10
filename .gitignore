@@ -81,6 +81,21 @@ nore/
 **/*.html
 **/*.odt
 
+# info mode
+*.tgz
+*.dvi
+*.doc
+*.aux
+*.cp
+*.fn
+*.ky
+*.log
+*.pg
+*.tmp
+*.toc
+*.tp
+*.vr
+
 # nginx
 src/nginx/nd.sh
 src/nginx/nginx.sh
@@ -119,3 +134,10 @@ src/zig/**/zig-out/
 # rust
 src/rust/**/target/
 src/rust/**/Cargo.lock
+
+# gnucm
+src/gnucm/c
+src/gnucm/c-1
+src/gnucm/c-2
+src/gnucm/c-3
+

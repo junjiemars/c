@@ -3,6 +3,17 @@
 #include <string.h>
 #include <stdlib.h>
 
+/*
+ * 1. the struct layout in the order of the struct's fields are
+ * declared.
+ *
+ * 2. stack grows from high address to low address.
+ *
+ * 3. the struct in heap from high address to low address alongs the
+ * order of fields are declared.
+ *
+ */
+
 
 typedef struct
 {

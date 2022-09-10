@@ -1,0 +1,1801 @@
+
+@c Copyright @copyright{} 2022 Richard Stallman and Free Software Foundation, Inc.
+
+This is part of the GNU C Intro and Reference Manual
+and covered by its license.
+
+@node    Floating Point in Depth
+@chapter Floating Point in Depth
+
+@menu
+* Floating Representations::
+* Floating Type Specs::
+* Special Float Values::
+* Invalid Optimizations::
+* Exception Flags::
+* Exact Floating-Point::
+* Rounding::
+* Rounding Issues::
+* Significance Loss::
+* Fused Multiply-Add::
+* Error Recovery::
+@c * Double-Rounding Problems::
+* Exact Floating Constants::
+* Handling Infinity::
+* Handling NaN::
+* Signed Zeros::
+* Scaling by the Base::
+* Rounding Control::
+* Machine Epsilon::
+* Complex Arithmetic::
+* Round-Trip Base Conversion::
+* Further Reading::
+@end menu
+
+@node    Floating Representations
+@section Floating-Point Representations
+@cindex floating-point representations
+@cindex representation of floating-point numbers
+
+@cindex IEEE 754-2008 Standard
+Storing numbers as @dfn{floating point} allows representation of
+numbers with fractional values, in a range larger than that of
+hardware integers.  A floating-point number consists of a sign bit, a
+@dfn{significand} (also called the @dfn{mantissa}), and a power of a
+fixed base.  GNU C uses the floating-point representations specified by
+the @cite{IEEE 754-2008 Standard for Floating-Point Arithmetic}.
+
+The IEEE 754-2008 specification defines basic binary floating-point
+formats of five different sizes: 16-bit, 32-bit, 64-bit, 128-bit, and
+256-bit.  The formats of 32, 64, and 128 bits are used for the
+standard C types @code{float}, @code{double}, and @code{long double}.
+GNU C supports the 16-bit floating point type @code{_Float16} on some
+platforms, but does not support the 256-bit floating point type.
+
+Each of the formats encodes the floating-point number as a sign bit.
+After this comes an exponent that specifies a power of 2 (with a fixed
+offset).  Then comes the significand.
+
+The first bit of the significand, before the binary point, is always
+1, so there is no need to store it in memory.  It is called the
+@dfn{hidden bit} because it doesn't appear in the floating-point
+number as used in the computer itself.
+
+All of those floating-point formats are sign-magnitude representations,
+so +0 and @minus{}0 are different values.
+
+Besides the IEEE 754 format 128-bit float, GNU C also offers a format
+consisting of a pair of 64-bit floating point numbers.  This lacks the
+full exponent range of the IEEE 128-bit format, but is useful when the
+underlying hardware platform does not support that.
+
+@node Floating Type Specs
+@section Floating-Point Type Specifications
+
+The standard library header file @file{float.h} defines a number of
+constants that describe the platform's implementation of
+floating-point types @code{float}, @code{double} and @code{long
+double}.  They include:
+
+@findex FLT_MIN
+@findex DBL_MIN
+@findex LDBL_MIN
+@findex FLT_HAS_SUBNORM
+@findex DBL_HAS_SUBNORM
+@findex LDBL_HAS_SUBNORM
+@findex FLT_TRUE_MIN
+@findex DBL_TRUE_MIN
+@findex LDBL_TRUE_MIN
+@findex FLT_MAX
+@findex DBL_MAX
+@findex LDBL_MAX
+@findex FLT_DECIMAL_DIG
+@findex DBL_DECIMAL_DIG
+@findex LDBL_DECIMAL_DIG
+
+@table @code
+@item FLT_MIN
+@itemx DBL_MIN
+@itemx LDBL_MIN
+Defines the minimum normalized positive floating-point values that can
+be represented with the type.
+
+@item FLT_HAS_SUBNORM
+@itemx DBL_HAS_SUBNORM
+@itemx LDBL_HAS_SUBNORM
+Defines if the floating-point type supports subnormal (or ``denormalized'')
+numbers or not (@pxref{subnormal numbers}).
+
+@item FLT_TRUE_MIN
+@itemx DBL_TRUE_MIN
+@itemx LDBL_TRUE_MIN
+Defines the minimum positive values (including subnormal values) that
+can be represented with the type.
+
+@item FLT_MAX
+@itemx DBL_MAX
+@itemx LDBL_MAX
+Defines the largest values that can be represented with the type.
+
+@item FLT_DECIMAL_DIG
+@itemx DBL_DECIMAL_DIG
+@itemx LDBL_DECIMAL_DIG
+Defines the number of decimal digits @code{n} such that any
+floating-point number that can be represented in the type can be
+rounded to a floating-point number with @code{n} decimal digits, and
+back again, without losing any precision of the value.
+@end table
+
+@node Special Float Values
+@section Special Floating-Point Values
+@cindex special floating-point values
+@cindex floating-point values, special
+
+IEEE floating point provides for special values that are not ordinary
+numbers.
+
+@table @asis
+
+@item infinities
+@code{+Infinity} and @code{-Infinity} are two different infinite
+values, one positive and one negative.  These result from
+operations such as @code{1 / 0}, @code{Infinity + Infinity},
+@code{Infinity * Infinity}, and @code{Infinity + @var{finite}}, and also
+from a result that is finite, but larger than the most positive possible
+value or smaller than the most negative possible value.
+
+@xref{Handling Infinity}, for more about working with infinities.
+
+@item NaNs (not a number)
+@cindex QNaN
+@cindex SNaN
+There are two special values, called Not-a-Number (NaN): a quiet
+NaN (QNaN), and a signaling NaN (SNaN).
+
+A QNaN is produced by operations for which the value is undefined
+in real arithmetic, such as @code{0 / 0}, @code{sqrt (-1)},
+@code{Infinity - Infinity}, and any basic operation in which an
+operand is a QNaN.
+
+The signaling NaN is intended for initializing
+otherwise-unassigned storage, and the goal is that unlike a
+QNaN, an SNaN @emph{does} cause an interrupt that can be caught
+by a software handler, diagnosed, and reported.  In practice,
+little use has been made of signaling NaNs, because the most
+common CPUs in desktop and portable computers fail to implement
+the full IEEE 754 Standard, and supply only one kind of NaN, the
+quiet one.  Also, programming-language standards have taken
+decades to catch up to the IEEE 754 standard, and implementations
+of those language standards make an additional delay before
+programmers become willing to use these features.
+
+To enable support for signaling NaNs, use the GCC command-line option
+@option{-fsignaling-nans}, but this is an experimental feature and may
+not work as expected in every situation.
+
+A NaN has a sign bit, but its value means nothing.
+
+@xref{Handling NaN}, for more about working with NaNs.
+
+@item subnormal numbers
+@cindex subnormal numbers
+@cindex underflow, floating
+@cindex floating underflow
+@anchor{subnormal numbers}
+It can happen that a computed floating-point value is too small to
+represent, such as when two tiny numbers are multiplied.  The result
+is then said to @dfn{underflow}.  The traditional behavior before
+the IEEE 754 Standard was to use zero as the result, and possibly to report
+the underflow in some sort of program output.
+
+The IEEE 754 Standard is vague about whether rounding happens
+before detection of floating underflow and overflow, or after, and CPU
+designers may choose either.
+
+However, the Standard does something unusual compared to earlier
+designs, and that is that when the result is smaller than the
+smallest @dfn{normalized} representable value (i.e., one in
+which the leading significand bit is @code{1}), the normalization
+requirement is relaxed, leading zero bits are permitted, and
+precision is gradually lost until there are no more bits in the
+significand.  That phenomenon is called @dfn{gradual underflow},
+and it serves important numerical purposes, although it does
+reduce the precision of the final result.  Some floating-point
+designs allow you to choose at compile time, or even at
+run time, whether underflows are gradual, or are flushed abruptly
+to zero.  Numbers that have entered the region of gradual
+underflow are called @dfn{subnormal}.
+
+You can use the library functions @code{fesetround} and
+@code{fegetround} to set and get the rounding mode.  Rounding modes
+are defined (if supported by the platform) in @code{fenv.h} as:
+@code{FE_UPWARD} to round toward positive infinity; @code{FE_DOWNWARD}
+to round toward negative infinity; @code{FE_TOWARDZERO} to round
+toward zero; and @code{FE_TONEAREST} to round to the nearest
+representable value, the default mode.  It is best to use
+@code{FE_TONEAREST} except when there is a special need for some other
+mode.
+@end table
+
+@node Invalid Optimizations
+@section Invalid Optimizations 
+@cindex invalid optimizations in floating-point arithmetic
+@cindex floating-point arithmetic invalid optimizations
+
+Signed zeros, Infinity, and NaN invalidate some optimizations by
+programmers and compilers that might otherwise have seemed obvious:
+
+@itemize @bullet
+@item
+@code{x + 0} and @code{x - 0} are not the same as @code{x} when
+@code{x} is zero, because the result depends on the rounding rule.
+@xref{Rounding}, for more about rounding rules.
+
+@item
+@code{x * 0.0} is not the same as @code{0.0} when @code{x} is
+Infinity, a NaN, or negative zero.
+
+@item
+@code{x / x} is not the same as @code{1.0} when @code{x} is Infinity,
+a NaN, or zero.
+
+@item
+@code{(x - y)} is not the same as @code{-(y - x)} because when the
+operands are finite and equal, one evaluates to @code{+0} and the
+other to @code{-0}.
+
+@item
+@code{x - x} is not the same as @code{0.0} when @var{x} is Infinity or
+a NaN.
+
+@item
+@code{x == x} and @code{x != x} are not equivalent to @code{1} and
+@code{0} when @var{x} is a NaN.
+
+@item
+@code{x < y} and @code{isless (x, y)} are not equivalent, because the
+first sets a sticky exception flag (@pxref{Exception Flags}) when an
+operand is a NaN, whereas the second does not affect that flag.  The
+same holds for the other @code{isxxx} functions that are companions to
+relational operators.  @xref{FP Comparison Functions, , , libc, The
+GNU C Library Reference Manual}.
+
+@end itemize
+
+The @option{-funsafe-math-optimizations} option enables
+these optimizations.
+
+
+@node Exception Flags
+@section Floating Arithmetic Exception Flags
+@cindex floating arithmetic exception flags
+@cindex exception flags (floating point)
+@cindex sticky exception flags (floating point)
+@cindex floating overflow
+@cindex overflow, floating
+@cindex floating underflow
+@cindex underflow, floating
+
+@dfn{Sticky exception flags} record the occurrence of particular
+conditions: once set, they remain set until the program explicitly
+clears them.
+
+The conditions include @emph{invalid operand},
+@emph{division-by_zero}, @emph{inexact result} (i.e., one that
+required rounding), @emph{underflow}, and @emph{overflow}.  Some
+extended floating-point designs offer several additional exception
+flags.  The functions @code{feclearexcept}, @code{feraiseexcept},
+@code{fetestexcept}, @code{fegetexceptflags}, and
+@code{fesetexceptflags} provide a standardized interface to those
+flags.  @xref{Status bit operations, , , libc, The GNU C Library
+Reference Manual}.
+
+One important use of those @anchor{fetestexcept}flags is to do a
+computation that is normally expected to be exact in floating-point
+arithmetic, but occasionally might not be, in which case, corrective
+action is needed.  You can clear the @emph{inexact result} flag with a
+call to @code{feclearexcept (FE_INEXACT)}, do the computation, and
+then test the flag with @code{fetestexcept (FE_INEXACT)}; the result
+of that call is 0 if the flag is not set (there was no rounding), and
+1 when there was rounding (which, we presume, implies the program has
+to correct for that).
+
+@c =====================================================================
+
+@ignore
+@node    IEEE 754 Decimal Arithmetic
+@section IEEE 754 Decimal Arithmetic
+@cindex IEEE 754 decimal arithmetic
+
+One of the difficulties that users of computers for numerical
+work face, whether they realize it or not, is that the computer
+does not operate in the number base that most people are familiar
+with.  As a result, input decimal fractions must be converted to
+binary floating-point values for use in computations, and then
+the final results converted back to decimal for humans.  Because the
+precision is finite and limited, and because algorithms for correct
+round-trip conversion between number bases were not known until the
+1990s, and are still not implemented on most systems and most
+programming languages, the result is frequent confusion for users,
+when a simple expression like @code{3.0*(1.0/3.0)} evaluates to
+0.999999 instead of the expected 1.0.  Here is an
+example from a floating-point calculator that allows rounding-mode
+control, with the mode set to @emph{round-towards-zero}:
+
+@example
+for (k = 1; k <= 10; ++k)
+     (void)printf ("%2d\t%10.6f\n", k, k*(1.0/k))
+ 1        1.000000
+ 2        1.000000
+ 3        0.999999
+ 4        1.000000
+ 5        0.999999
+ 6        0.999999
+ 7        0.999999
+ 8        1.000000
+ 9        0.999999
+10        0.999999
+@end example
+
+Increasing working precision can sometimes help by reducing
+intermediate rounding errors, but the reality is that when
+fractional values are involved, @emph{no amount} of extra
+precision can suffice for some computations.  For example, the
+nice decimal value @code{1/10} in C99-style binary representation
+is @code{+0x1.999999999999ap-4}; that final digit @code{a} is the
+rounding of an infinite string of @code{9}'s.
+
+Financial computations in particular depend critically on correct
+arithmetic, and the losses due to rounding errors can be
+large, especially for businesses with large numbers of small
+transactions, such as grocery stores and telephone companies.
+Tax authorities are particularly picky, and demand specific
+rounding rules, including one that instead of rounding ties to
+the nearest number, rounds instead in the direction that favors
+the taxman.
+
+Programming languages used for business applications, notably the
+venerable Cobol language, have therefore always implemented
+financial computations in @emph{fixed-point decimal arithmetic}
+in software, and because of the large monetary amounts that must be
+processed, successive Cobol standards have increased the minimum
+number size from 18 to 32 decimal digits, and the most recent one
+requires a decimal exponent range of at least @code{[-999, +999]}.
+
+The revised IEEE 754-2008 standard therefore requires decimal
+floating-point arithmetic, as well as the now-widely used binary
+formats from 1985.  Like the binary formats, the decimal formats
+also support Infinity, NaN, and signed zero, and the five basic
+operations are also required to produce correctly rounded
+representations of infinitely precise exact results.
+
+However, the financial applications of decimal arithmetic
+introduce some new features:
+
+@itemize @bullet
+
+@item
+There are three decimal formats occupying 32, 64, and 128 bits of
+storage, and offering exactly 7, 16, and 34 decimal digits of
+precision.  If one size has @code{n} digits, the next larger size
+has @code{2 n + 2} digits.  Thus, a future 256-bit format would
+supply 70 decimal digits, and at least one library already
+supports the 256-bit binary and decimal formats.
+
+@item
+Decimal arithmetic has an additional rounding mode, called
+@emph{round-ties-to-away-from-zero}, meaning that a four-digit
+rounding of @code{1.2345} is @code{1.235}, and @code{-1.2345}
+becomes @code{-1.235}.  That rounding mode is mandated by
+financial laws in several countries.
+
+@item
+The decimal significand is an
+@anchor{decimal-significand}@emph{integer}, instead of a fractional
+value, and trailing zeros are only removed at user request.  That
+feature allows floating-point arithmetic to emulate the
+@emph{fixed-point arithmetic} traditionally used in financial
+computations.
+
+@end itemize
+
+@noindent
+We can easily estimate how many digits are likely to be needed for
+financial work: seven billion people on Earth, with an average annual
+income of less than US$10,000, means a world financial base that can
+be represented in just 15 decimal digits.  Even allowing for alternate
+currencies, future growth, multiyear accounting, and intermediate
+computations, the 34 digits supplied by the 128-bit format are more
+than enough for financial purposes.
+
+We return to decimal arithmetic later in this chapter
+(@pxref{More on decimal floating-point arithmetic}), after we have
+covered more about floating-point arithmetic in general.
+
+@c =====================================================================
+
+@end ignore
+
+@node    Exact Floating-Point
+@section Exact Floating-Point Arithmetic
+@cindex exact floating-point arithmetic
+@cindex floating-point arithmetic, exact
+
+As long as the numbers are exactly representable (fractions whose
+denominator is a power of 2), and intermediate results do not require
+rounding, then floating-point arithmetic is @emph{exact}.  It is easy
+to predict how many digits are needed for the results of arithmetic
+operations:
+
+@itemize @bullet
+
+@item
+addition and subtraction of two @var{n}-digit values with the
+@emph{same} exponent require at most @code{@var{n} + 1} digits, but
+when the exponents differ, many more digits may be needed;
+
+@item
+multiplication of two @var{n}-digit values requires exactly
+2 @var{n} digits;
+
+@item
+although integer division produces a quotient and a remainder of
+no more than @var{n}-digits, floating-point remainder and square
+root may require an unbounded number of digits, and the quotient
+can need many more digits than can be stored.
+
+@end itemize
+
+Whenever a result requires more than @var{n} digits, rounding
+is needed.
+
+@c =====================================================================
+
+@node Rounding
+@section Rounding
+@cindex rounding
+
+When floating-point arithmetic produces a result that can't fit
+exactly in the significand of the type that's in use, it has to
+@dfn{round} the value.  The basic arithmetic operations---addition,
+subtraction, multiplication, division, and square root---always produce
+a result that is equivalent to the exact, possibly infinite-precision
+result rounded to storage precision according to the current rounding
+rule.
+
+Rounding sets the @code{FE_INEXACT} exception flag (@pxref{Exception
+Flags}).  This enables programs to determine that rounding has
+occurred.
+
+Rounding consists of adjusting the exponent to bring the significand
+back to the required base-point alignment, then applying the current
+@dfn{rounding rule} to squeeze the significand into the fixed
+available size.
+
+The current rule is selected at run time from four options.  Here they
+are:
+
+@itemize *
+@item
+@emph{round-to-nearest}, with ties rounded to an even integer;
+
+@item
+@emph{round-up}, towards @code{+Infinity};
+
+@item
+@emph{round-down}, towards @code{-Infinity};
+
+@item
+@emph{round-towards-zero}.
+@end itemize
+
+Under those four rounding rules, a decimal value
+@code{-1.2345} that is to be rounded to a four-digit result would
+become @code{-1.234}, @code{-1.234}, @code{-1.235}, and
+@code{-1.234}, respectively.
+
+The default rounding rule is @emph{round-to-nearest}, because that has
+the least bias, and produces the lowest average error.  When the true
+result lies exactly halfway between two representable machine numbers,
+the result is rounded to the one that ends with an even digit.
+
+The @emph{round-towards-zero} rule was common on many early computer
+designs, because it is the easiest to implement: it just requires
+silent truncation of all extra bits.
+
+The two other rules, @emph{round-up} and @emph{round-down}, are
+essential for implementing @dfn{interval arithmetic}, whereby
+each arithmetic operation produces lower and upper bounds that
+are guaranteed to enclose the exact result.
+
+@xref{Rounding Control}, for details on getting and setting the
+current rounding mode.
+
+@node    Rounding Issues
+@section Rounding Issues
+@cindex rounding issues (floating point)
+@cindex floating-point rounding issues
+
+The default IEEE 754 rounding mode minimizes errors, and most
+normal computations should not suffer any serious accumulation of
+errors from rounding.
+
+Of course, you can contrive examples where that is not so.  Here
+is one: iterate a square root, then attempt to recover the
+original value by repeated squaring.
+
+@example
+#include <stdio.h>
+#include <math.h>
+
+int main (void)
+@{
+  double x = 100.0;
+  double y;
+  for (n = 10; n <= 100; n += 10)
+    @{
+      y = x;
+      for (k = 0; k < n; ++k) y = sqrt (y);
+      for (k = 0; k < n; ++k) y *= y;
+      printf ("n = %3d; x = %.0f\ty = %.6f\n", n, x, y);
+    @}
+  return 0;
+@}
+@end example
+
+@noindent
+Here is the output:
+
+@example
+n =  10; x = 100        y = 100.000000
+n =  20; x = 100        y = 100.000000
+n =  30; x = 100        y = 99.999977
+n =  40; x = 100        y = 99.981025
+n =  50; x = 100        y = 90.017127
+n =  60; x = 100        y = 1.000000
+n =  70; x = 100        y = 1.000000
+n =  80; x = 100        y = 1.000000
+n =  90; x = 100        y = 1.000000
+n = 100; x = 100        y = 1.000000
+@end example
+
+After 50 iterations, @code{y} has barely one correct digit, and
+soon after, there are no correct digits.
+
+@c =====================================================================
+
+@node    Significance Loss
+@section Significance Loss
+@cindex significance loss (floating point)
+@cindex floating-point significance loss
+
+A much more serious source of error in floating-point computation is
+@dfn{significance loss} from subtraction of nearly equal values.  This
+means that the number of bits in the significand of the result is
+fewer than the size of the value would permit.  If the values being
+subtracted are close enough, but still not equal, a @emph{single
+subtraction} can wipe out all correct digits, possibly contaminating
+all future computations.
+
+Floating-point calculations can sometimes be carefully designed so
+that significance loss is not possible, such as summing a series where
+all terms have the same sign.  For example, the Taylor series
+expansions of the trigonometric and hyperbolic sines have terms of
+identical magnitude, of the general form @code{@var{x}**(2*@var{n} +
+1) / (2*@var{n} + 1)!}.  However, those in the trigonometric sine series
+alternate in sign, while those in the hyperbolic sine series are all
+positive.  Here is the output of two small programs that sum @var{k}
+terms of the series for @code{sin (@var{x})}, and compare the computed
+sums with known-to-be-accurate library functions:
+
+@example
+x = 10      k = 51
+s (x)   = -0.544_021_110_889_270
+sin (x) = -0.544_021_110_889_370
+
+x = 20      k = 81
+s (x)   = 0.912_945_250_749_573
+sin (x) = 0.912_945_250_727_628
+
+x = 30      k = 109
+s (x)   = -0.987_813_746_058_855
+sin (x) = -0.988_031_624_092_862
+
+x = 40      k = 137
+s (x)   = 0.617_400_430_980_474
+sin (x) = 0.745_113_160_479_349
+
+x = 50      k = 159
+s (x)   = 57_105.187_673_745_720_532
+sin (x) = -0.262_374_853_703_929
+
+// sinh(x) series summation with positive signs
+// with k terms needed to converge to machine precision
+
+x = 10      k = 47
+t (x)    = 1.101_323_287_470_340e+04
+sinh (x) = 1.101_323_287_470_339e+04
+
+x = 20      k = 69
+t (x)    = 2.425_825_977_048_951e+08
+sinh (x) = 2.425_825_977_048_951e+08
+
+x = 30      k = 87
+t (x)    = 5.343_237_290_762_229e+12
+sinh (x) = 5.343_237_290_762_231e+12
+
+x = 40      k = 105
+t (x)    = 1.176_926_334_185_100e+17
+sinh (x) = 1.176_926_334_185_100e+17
+
+x = 50      k = 121
+t (x)    = 2.592_352_764_293_534e+21
+sinh (x) = 2.592_352_764_293_536e+21
+@end example
+
+@noindent
+We have added underscores to the numbers to enhance readability.
+
+The @code{sinh (@var{x})} series with positive terms can be summed to
+high accuracy.  By contrast, the series for @code{sin (@var{x})}
+suffers increasing significance loss, so that when @var{x} = 30 only
+two correct digits remain.  Soon after, all digits are wrong, and the
+answers are complete nonsense.
+
+An important skill in numerical programming is to recognize when
+significance loss is likely to contaminate a computation, and revise
+the algorithm to reduce this problem.  Sometimes, the only practical
+way to do so is to compute in higher intermediate precision, which is
+why the extended types like @code{long double} are important.
+
+@c Formerly mentioned @code{__float128}
+
+@c =====================================================================
+
+@node    Fused Multiply-Add
+@section Fused Multiply-Add
+@cindex fused multiply-add in floating-point computations
+@cindex floating-point fused multiply-add
+
+In 1990, when IBM introduced the POWER architecture, the CPU
+provided a previously unknown instruction, the @dfn{fused
+multiply-add} (FMA).  It computes the value @code{x * y + z} with
+an @strong{exact} double-length product, followed by an addition with a
+@emph{single} rounding.  Numerical computation often needs pairs of
+multiply and add operations, for which the FMA is well-suited.
+
+On the POWER architecture, there are two dedicated registers that
+hold permanent values of @code{0.0} and @code{1.0}, and the
+normal @emph{multiply} and @emph{add} instructions are just
+wrappers around the FMA that compute @code{x * y + 0.0} and
+@code{x * 1.0 + z}, respectively.
+
+In the early days, it appeared that the main benefit of the FMA
+was getting two floating-point operations for the price of one,
+almost doubling the performance of some algorithms.  However,
+numerical analysts have since shown numerous uses of the FMA for
+significantly enhancing accuracy.  We discuss one of the most
+important ones in the next section.
+
+A few other architectures have since included the FMA, and most
+provide variants for the related operations @code{x * y - z}
+(FMS), @code{-x * y + z} (FNMA), and @code{-x * y - z} (FNMS).
+@c The IEEE 754-2008 revision requires implementations to provide
+@c the FMA, as a sixth basic operation.
+
+The functions @code{fmaf}, @code{fma}, and @code{fmal} implement fused
+multiply-add for the @code{float}, @code{double}, and @code{long
+double} data types.  Correct implementation of the FMA in software is
+difficult, and some systems that appear to provide those functions do
+not satisfy the single-rounding requirement.  That situation should
+change as more programmers use the FMA operation, and more CPUs
+provide FMA in hardware.
+
+Use the @option{-ffp-contract=fast} option to allow generation of FMA
+instructions, or @option{-ffp-contract=off} to disallow it.
+
+@c =====================================================================
+
+@node    Error Recovery
+@section Error Recovery
+@cindex error recovery (floating point)
+@cindex floating-point error recovery
+
+When two numbers are combined by one of the four basic
+operations, the result often requires rounding to storage
+precision.  For accurate computation, one would like to be able
+to recover that rounding error.  With historical floating-point
+designs, it was difficult to do so portably, but now that IEEE
+754 arithmetic is almost universal, the job is much easier.
+
+For addition with the default @emph{round-to-nearest} rounding
+mode, we can determine the error in a sum like this:
+
+@example
+volatile double err, sum, tmp, x, y;
+
+if (fabs (x) >= fabs (y))
+  @{
+    sum = x + y;
+    tmp = sum - x;
+    err = y - tmp;
+  @}
+else /* fabs (x) < fabs (y) */
+  @{
+    sum = x + y;
+    tmp = sum - y;
+    err = x - tmp;
+  @}
+@end example
+
+@noindent
+@cindex twosum
+Now, @code{x + y} is @emph{exactly} represented by @code{sum + err}.
+This basic operation, which has come to be called @dfn{twosum}
+in the numerical-analysis literature, is the first key to tracking,
+and accounting for, rounding error.
+
+To determine the error in subtraction, just swap the @code{+} and
+@code{-} operators.
+
+We used the @code{volatile} qualifier (@pxref{volatile}) in the
+declaration of the variables, which forces the compiler to store and
+retrieve them from memory, and prevents the compiler from optimizing
+@code{err = y - ((x + y) - x)} into @code{err = 0}.
+
+For multiplication, we can compute the rounding error without
+magnitude tests with the FMA operation (@pxref{Fused Multiply-Add}),
+like this:
+
+@example
+volatile double err, prod, x, y;
+prod = x * y;                /* @r{rounded product} */
+err  = fma (x, y, -prod);    /* @r{exact product @code{= @var{prod} + @var{err}}} */
+@end example
+
+For addition, subtraction, and multiplication, we can represent the
+exact result with the notional sum of two values.  However, the exact
+result of division, remainder, or square root potentially requires an
+infinite number of digits, so we can at best approximate it.
+Nevertheless, we can compute an error term that is close to the true
+error: it is just that error value, rounded to machine precision.
+
+For division, you can approximate @code{x / y} with @code{quo + err}
+like this:
+
+@example
+volatile double err, quo, x, y;
+quo = x / y;
+err = fma (-quo, y, x) / y;
+@end example
+
+For square root, we can approximate @code{sqrt (x)} with @code{root +
+err} like this:
+
+@example
+volatile double err, root, x;
+root = sqrt (x);
+err = fma (-root, root, x) / (root + root);
+@end example
+
+With the reliable and predictable floating-point design provided
+by IEEE 754 arithmetic, we now have the tools we need to track
+errors in the five basic floating-point operations, and we can
+effectively simulate computing in twice working precision, which
+is sometimes sufficient to remove almost all traces of arithmetic
+errors.
+
+@c =====================================================================
+
+@ignore
+@node    Double-Rounding Problems
+@section Double-Rounding Problems
+@cindex double-rounding problems (floating point)
+@cindex floating-point double-rounding problems
+
+Most developers today use 64-bit x86 processors with a 64-bit
+operating system, with a Streaming SIMD Extensions (SSE) instruction
+set.  In the past, using a 32-bit x87 instruction set was common,
+leading to issues described in this section.
+
+To offer a few more digits of precision and a wider exponent range,
+the IEEE 754 Standard included an optional @emph{temporary real}
+format, with 11 more bits in the significand, and 4 more bits in the
+biased exponent.
+
+Compilers are free to exploit the longer format, and most do so.
+That is usually a @emph{good thing}, such as in computing a
+lengthy sum or product, or in implementing the computation of the
+hypotenuse of a right-triangle as @code{sqrt (x*x + y*y)}: the
+wider exponent range is critical there for avoiding disastrous
+overflow or underflow.
+
+@findex fesetprec
+@findex fegetprec
+However, sometimes it is critical to know what the intermediate
+precision and rounding mode are, such as in tracking errors with
+the techniques of the preceding section.  Some compilers provide
+options to prevent the use of the 80-bit format in computations
+with 64-bit @code{double}, but ensuring that code is always
+compiled that way may be difficult.  The x86 architecture has the
+ability to force rounding of all operations in the 80-bit
+registers to the 64-bit storage format, and some systems provide
+a software interface with the functions @code{fesetprec} and
+@code{fegetprec}.  Unfortunately, neither of those functions is
+defined by the ISO Standards for C and C++, and consequently,
+they are not standardly available on all platforms that use
+the x86 floating-point design.
+
+When @code{double} computations are done in the 80-bit format,
+results necessarily involve a @dfn{double rounding}: first to the
+64-bit significand in intermediate operations in registers, and
+then to the 53-bit significand when the register contents are
+stored to memory.  Here is an example in decimal arithmetic where
+such a double rounding results in the wrong answer: round
+@code{1_234_999} from seven to five to four digits. The result is
+@code{1_235_000}, whereas the correct representation to four
+significant digits is @code{1_234_000}.
+
+@cindex -ffloat-store
+One way to reduce the use of the 80-bit format is to declare variables
+as @code{volatile double}: that way, the compiler is required to store
+and load intermediates from memory, rather than keeping them in 80-bit
+registers over long sequences of floating-point instructions.  Doing
+so does not, however, eliminate double rounding.  The now-common
+x86-64 architecture has separate sets of 32-bit and 64-bit
+floating-point registers.  The option @option{-float-store} says that
+floating-point computation should use only those registers, thus eliminating
+the possibility of double rounding.
+@end ignore
+
+@c =====================================================================
+
+@node    Exact Floating Constants
+@section Exact Floating-Point Constants
+@cindex exact specification of floating-point constants
+@cindex floating-point constants, exact specification of
+
+One of the frustrations that numerical programmers have suffered
+with since the dawn of digital computers is the inability to
+precisely specify numbers in their programs.  On the early
+decimal machines, that was not an issue: you could write a
+constant @code{1e-30} and be confident of that exact value
+being used in floating-point operations.  However, when the
+hardware works in a base other than 10, then human-specified
+numbers have to be converted to that base, and then converted
+back again at output time.  The two base conversions are rarely
+exact, and unwanted rounding errors are introduced.
+
+@cindex hexademical floating-point constants
+As computers usually represent numbers in a base other than 10,
+numbers often must be converted to and from different bases, and
+rounding errors can occur during conversion.  This problem is solved
+in C using hexademical floating-point constants.  For example,
+@code{+0x1.fffffcp-1} is the number that is the IEEE 754 32-bit value
+closest to, but below, @code{1.0}. The significand is represented as a
+hexadecimal fraction, and the @emph{power of two} is written in
+decimal following the exponent letter @code{p} (the traditional
+exponent letter @code{e} is not possible, because it is a hexadecimal
+digit).
+
+In @code{printf} and @code{scanf} and related functions, you can use
+the @samp{%a} and @samp{%A} format specifiers for writing and reading
+hexadecimal floating-point values.  @samp{%a} writes them with lower
+case letters and @samp{%A} writes them with upper case letters.  For
+instance, this code reproduces our sample number:
+
+@example
+printf ("%a\n", 1.0 - pow (2.0, -23));
+    @print{} 0x1.fffffcp-1
+@end example
+
+@noindent
+The @code{strtod} family was similarly extended to recognize
+numbers in that new format.
+
+If you want to ensure exact data representation for transfer of
+floating-point numbers between C programs on different
+computers, then hexadecimal constants are an optimum choice.
+
+@c =====================================================================
+
+@node    Handling Infinity
+@section Handling Infinity
+@cindex infinity in floating-point arithmetic
+@cindex floating-point infinity
+
+As we noted earlier, the IEEE 754 model of computing is not to stop
+the program when exceptional conditions occur.  It takes note of
+exceptional values or conditions by setting sticky @dfn{exception
+flags}, or by producing results with the special values Infinity and
+QNaN.  In this section, we discuss Infinity; @pxref{Handling NaN} for
+the other.
+
+In GNU C, you can create a value of negative Infinity in software like
+this:
+
+@verbatim
+double x;
+
+x = -1.0 / 0.0;
+@end verbatim
+
+GNU C supplies the @code{__builtin_inf}, @code{__builtin_inff}, and
+@code{__builtin_infl} macros, and the GNU C Library provides the
+@code{INFINITY} macro, all of which are compile-time constants for
+positive infinity.
+
+GNU C also provides a standard function to test for an Infinity:
+@code{isinf (x)} returns @code{1} if the argument is a signed
+infinity, and @code{0} if not.
+
+Infinities can be compared, and all Infinities of the same sign are
+equal: there is no notion in IEEE 754 arithmetic of different kinds of
+Infinities, as there are in some areas of mathematics.  Positive
+Infinity is larger than any finite value, and negative Infinity is
+smaller than finite value.
+
+Infinities propagate in addition, subtraction, multiplication,
+and square root, but in division, they disappear, because of the
+rule that @code{finite / Infinity} is @code{0.0}.  Thus, an
+overflow in an intermediate computation that produces an Infinity
+is likely to be noticed later in the final results.  The programmer can
+then decide whether the overflow is expected, and acceptable, or whether
+the code possibly has a bug, or needs to be run in higher
+precision, or redesigned to avoid the production of the Infinity.
+
+@c =====================================================================
+
+@node    Handling NaN
+@section Handling NaN
+@cindex NaN in floating-point arithmetic
+@cindex not a number
+@cindex floating-point NaN
+
+NaNs are not numbers: they represent values from computations that
+produce undefined results.  They have a distinctive property that
+makes them unlike any other floating-point value: they are
+@emph{unequal to everything, including themselves}!  Thus, you can
+write a test for a NaN like this:
+
+@example
+if (x != x)
+  printf ("x is a NaN\n");
+@end example
+
+@noindent
+This test works in GNU C, but some compilers might evaluate that test
+expression as false without properly checking for the NaN value.
+A more portable way to test for NaN is to use the @code{isnan}
+function declared in @code{math.h}:
+
+@example
+if (isnan (x))
+  printf ("x is a NaN\n");
+@end example
+
+@noindent
+@xref{Floating Point Classes, , , libc, The GNU C Library Reference Manual}.
+
+One important use of NaNs is marking of missing data.  For
+example, in statistics, such data must be omitted from
+computations.  Use of any particular finite value for missing
+data would eventually collide with real data, whereas such data
+could never be a NaN, so it is an ideal marker.  Functions that
+deal with collections of data that may have holes can be written
+to test for, and ignore, NaN values.
+
+It is easy to generate a NaN in computations: evaluating @code{0.0 /
+0.0} is the commonest way, but @code{Infinity - Infinity},
+@code{Infinity / Infinity}, and @code{sqrt (-1.0)} also work.
+Functions that receive out-of-bounds arguments can choose to return a
+stored NaN value, such as with the @code{NAN} macro defined in
+@code{math.h}, but that does not set the @emph{invalid operand}
+exception flag, and that can fool some programs.
+
+@cindex NaNs-always-propagate rule
+Like Infinity, NaNs propagate in computations, but they are even
+stickier, because they never disappear in division. Thus, once a
+NaN appears in a chain of numerical operations, it is almost
+certain to pop out into the final results.  The programmer 
+has to decide whether that is expected, or whether there is a
+coding or algorithmic error that needs repair.
+
+In general, when function gets a NaN argument, it usually returns a
+NaN.  However, there are some exceptions in the math-library functions
+that you need to be aware of, because they violate the
+@emph{NaNs-always-propagate} rule:
+
+@itemize @bullet
+
+@item
+@code{pow (x, 0.0)} always returns @code{1.0}, even if @code{x} is
+0.0, Infinity, or a NaN.
+
+@item
+@code{pow (1, y)} always returns @code{1}, even if @code{y} is a NaN.
+
+@item
+@code{hypot (INFINITY, y)} and @code{hypot (-INFINITY, y)} both
+always return @code{INFINITY}, even if @code{y} is a Nan.
+
+@item
+If just one of the arguments to @code{fmax (x, y)} or
+@code{fmin (x, y)} is a NaN, it returns the other argument.  If
+both arguments are NaNs, it returns a NaN, but there is no
+requirement about where it comes from: it could be @code{x}, or
+@code{y}, or some other quiet NaN.
+@end itemize
+
+NaNs are also used for the return values of math-library
+functions where the result is not representable in real
+arithmetic, or is mathematically undefined or uncertain, such as
+@code{sqrt (-1.0)} and @code{sin (Infinity)}.  However, note that a
+result that is merely too big to represent should always produce
+an Infinity, such as with @code{exp (1000.0)} (too big) and
+@code{exp (Infinity)} (truly infinite).
+
+@c =====================================================================
+
+@node    Signed Zeros
+@section Signed Zeros
+@cindex signed zeros in floating-point arithmetic
+@cindex floating-point signed zeros
+
+The sign of zero is significant, and important, because it records the
+creation of a value that is too small to represent, but came from
+either the negative axis, or from the positive axis.  Such fine
+distinctions are essential for proper handling of @dfn{branch cuts}
+in complex arithmetic (@pxref{Complex Arithmetic}).
+
+The key point about signed zeros is that in comparisons, their sign
+does not matter: @code{0.0 == -0.0} must @emph{always} evaluate to
+@code{1} (true).  However, they are not @emph{the same number}, and
+@code{-0.0} in C code stands for a negative zero.
+
+@c =====================================================================
+
+@node    Scaling by the Base
+@section Scaling by Powers of the Base
+@cindex scaling floating point by powers of the base
+@cindex floating-point scaling by powers of the base
+
+We have discussed rounding errors several times in this chapter,
+but it is important to remember that when results require no more
+bits than the exponent and significand bits can represent, those results
+are @emph{exact}.
+
+One particularly useful exact operation is scaling by a power of
+the base.  While one, in principle, could do that with code like
+this:
+
+@example
+y = x * pow (2.0, (double)k);   /* @r{Undesirable scaling: avoid!} */
+@end example
+
+@noindent
+that is not advisable, because it relies on the quality of the
+math-library power function, and that happens to be one of the
+most difficult functions in the C math library to make accurate.
+What is likely to happen on many systems is that the returned
+value from @code{pow} will be close to a power of two, but
+slightly different, so the subsequent multiplication introduces
+rounding error.
+
+The correct, and fastest, way to do the scaling is either via the
+traditional C library function, or with its C99 equivalent:
+
+@example
+y = ldexp (x, k);            /* @r{Traditional pre-C99 style.} */
+y = scalbn (x, k);           /* @r{C99 style.} */
+@end example
+
+@noindent
+Both functions return @code{x * 2**k}.
+@xref{Normalization Functions, , , libc, The GNU C Library Reference Manual}.
+
+@c =====================================================================
+
+@node    Rounding Control
+@section Rounding Control
+@cindex rounding control (floating point)
+@cindex floating-point rounding control
+
+Here we describe how to specify the rounding mode at run time.  System
+header file @file{fenv.h} provides the prototypes for these functions.
+@xref{Rounding, , , libc, The GNU C Library Reference Manual}.
+
+@noindent
+That header file also provides constant names for the four rounding modes:
+@code{FE_DOWNWARD}, @code{FE_TONEAREST}, @code{FE_TOWARDZERO}, and
+@code{FE_UPWARD}.
+
+The function @code{fegetround} examines and returns the current
+rounding mode.  On a platform with IEEE 754 floating point,
+the value will always equal one of those four constants.
+On other platforms, it may return a negative value. The function
+@code{fesetround} sets the current rounding mode.
+
+Changing the rounding mode can be slow, so it is useful to minimize
+the number of changes.  For interval arithmetic, we seem to need three
+changes for each operation, but we really only need two, because we
+can write code like this example for interval addition of two reals:
+
+@example
+@{
+  struct interval_double
+    @{
+      double hi, lo;
+    @} v;
+  volatile double x, y;
+  int rule;
+
+  rule = fegetround ();
+
+  if (fesetround (FE_UPWARD) == 0)
+    @{
+      v.hi = x + y;
+      v.lo = -(-x - y);
+    @}
+  else
+    fatal ("ERROR: failed to change rounding rule");
+
+  if (fesetround (rule) != 0)
+    fatal ("ERROR: failed to restore rounding rule");
+@}
+@end example
+
+@noindent
+The @code{volatile} qualifier (@pxref{volatile}) is essential on x86
+platforms to prevent an optimizing compiler from producing the same
+value for both bounds.
+
+@ignore  We no longer discuss the double rounding issue.
+                        The code also needs to be compiled with the
+option @option{-ffloat-store} that prevents use of higher precision
+for the basic operations, because that would introduce double rounding
+that could spoil the bounds guarantee of interval arithmetic.
+@end ignore
+
+@c =====================================================================
+
+@node    Machine Epsilon
+@section Machine Epsilon
+@cindex machine epsilon (floating point)
+@cindex floating-point machine epsilon
+
+In any floating-point system, three attributes are particularly
+important to know: @dfn{base} (the number that the exponent specifies
+a power of), @dfn{precision} (number of digits in the significand),
+and @dfn{range} (difference between most positive and most negative
+values).  The allocation of bits between exponent and significand
+decides the answers to those questions.
+
+A measure of the precision is the answer to the question: what is
+the smallest number that can be added to @code{1.0} such that the
+sum differs from @code{1.0}?  That number is called the
+@dfn{machine epsilon}.
+
+We could define the needed machine-epsilon constants for @code{float},
+@code{double}, and @code{long double} like this:
+
+@example
+static const float  epsf = 0x1p-23;  /* @r{about 1.192e-07} */
+static const double eps  = 0x1p-52;  /* @r{about 2.220e-16} */
+static const long double epsl = 0x1p-63;  /* @r{about 1.084e-19} */
+@end example
+
+@noindent
+Instead of the hexadecimal constants, we could also have used the
+Standard C macros, @code{FLT_EPSILON}, @code{DBL_EPSILON}, and
+@code{LDBL_EPSILON}.
+
+It is useful to be able to compute the machine epsilons at
+run time, and we can easily generalize the operation by replacing
+the constant @code{1.0} with a user-supplied value:
+
+@example
+double
+macheps (double x)
+@{ /* @r{Return machine epsilon for @var{x},}  */
+      @r{such that @var{x} + macheps (@var{x}) > @var{x}.}  */
+  static const double base = 2.0;
+  double eps;
+
+  if (isnan (x))
+      eps = x;
+  else
+    @{
+      eps = (x == 0.0) ? 1.0 : x;
+
+      while ((x + eps / base) != x)
+          eps /= base;          /* @r{Always exact!}  */
+    @}
+
+  return (eps);
+@}
+@end example
+
+@noindent
+If we call that function with arguments from @code{0} to
+@code{10}, as well as Infinity and NaN, and print the returned
+values in hexadecimal, we get output like this:
+
+@example
+macheps (  0) = 0x1.0000000000000p-1074
+macheps (  1) = 0x1.0000000000000p-52
+macheps (  2) = 0x1.0000000000000p-51
+macheps (  3) = 0x1.8000000000000p-52
+macheps (  4) = 0x1.0000000000000p-50
+macheps (  5) = 0x1.4000000000000p-51
+macheps (  6) = 0x1.8000000000000p-51
+macheps (  7) = 0x1.c000000000000p-51
+macheps (  8) = 0x1.0000000000000p-49
+macheps (  9) = 0x1.2000000000000p-50
+macheps ( 10) = 0x1.4000000000000p-50
+macheps (Inf) = infinity
+macheps (NaN) = nan
+@end example
+
+@noindent
+Notice that @code{macheps} has a special test for a NaN to prevent an
+infinite loop.
+
+@ignore  We no longer discuss double rounding.
+To ensure that no expressions are evaluated with an intermediate higher
+precision, we can compile with the @option{-fexcess-precision=standard}
+option, which tells the compiler that all calculation results, including
+intermediate results, are to be put on the stack, forcing rounding.
+@end ignore
+
+Our code made another test for a zero argument to avoid getting a
+zero return.  The returned value in that case is the smallest
+representable floating-point number, here the subnormal value
+@code{2**(-1074)}, which is about @code{4.941e-324}.
+
+No special test is needed for an Infinity, because the
+@code{eps}-reduction loop then terminates at the first iteration.
+
+Our @code{macheps} function here assumes binary floating point; some
+architectures may differ.
+
+The C library includes some related functions that can also be used to
+determine machine epsilons at run time:
+
+@example
+#include <math.h>           /* @r{Include for these prototypes.} */
+
+double      nextafter  (double x, double y);
+float       nextafterf (float x, float y);
+long double nextafterl (long double x, long double y);
+@end example
+
+@noindent
+These return the machine number nearest @var{x} in the direction of
+@var{y}.  For example, @code{nextafter (1.0, 2.0)} produces the same
+result as @code{1.0 + macheps (1.0)} and @code{1.0 + DBL_EPSILON}.
+@xref{FP Bit Twiddling, , , libc, The GNU C Library Reference Manual}.
+
+It is important to know that the machine epsilon is not symmetric
+about all numbers.  At the boundaries where normalization changes the
+exponent, the epsilon below @var{x} is smaller than that just above
+@var{x} by a factor @code{1 / base}.  For example, @code{macheps
+(1.0)} returns @code{+0x1p-52}, whereas @code{macheps (-1.0)} returns
+@code{+0x1p-53}.  Some authors distinguish those cases by calling them
+the @emph{positive} and @emph{negative}, or @emph{big} and
+@emph{small}, machine epsilons.  You can produce their values like
+this:
+
+@example
+eps_neg = 1.0 - nextafter (1.0, -1.0);
+eps_pos = nextafter (1.0, +2.0) - 1.0;
+@end example
+
+If @var{x} is a variable, such that you do not know its value at
+compile time, then you can substitute literal @var{y} values with
+either @code{-inf()} or @code{+inf()}, like this:
+
+@example
+eps_neg = x - nextafter (x, -inf ());
+eps_pos = nextafter (x, +inf() - x);
+@end example
+
+@noindent
+In such cases, if @var{x} is Infinity, then @emph{the @code{nextafter}
+functions return @var{y} if @var{x} equals @var{y}}.  Our two
+assignments then produce @code{+0x1.fffffffffffffp+1023} (about
+1.798e+308) for @var{eps_neg} and Infinity for @var{eps_pos}.  Thus,
+the call @code{nextafter (INFINITY, -INFINITY)} can be used to find
+the largest representable finite number, and with the call
+@code{nextafter (0.0, 1.0)}, the smallest representable number (here,
+@code{0x1p-1074} (about 4.491e-324), a number that we saw before as
+the output from @code{macheps (0.0)}).
+
+@c =====================================================================
+
+@node    Complex Arithmetic
+@section Complex Arithmetic
+@cindex complex arithmetic in floating-point calculations
+@cindex floating-point arithmetic with complex numbers
+
+We've already looked at defining and referring to complex numbers
+(@pxref{Complex Data Types}).  What is important to discuss here are
+some issues that are unlikely to be obvious to programmers without
+extensive experience in both numerical computing, and in complex
+arithmetic in mathematics.
+
+The first important point is that, unlike real arithmetic, in complex
+arithmetic, the danger of significance loss is @emph{pervasive}, and
+affects @emph{every one} of the basic operations, and @emph{almost
+all} of the math-library functions.  To understand why, recall the
+rules for complex multiplication and division:
+
+@example
+a = u + I*v              /* @r{First operand.} */
+b = x + I*y              /* @r{Second operand.} */
+
+prod = a * b
+     = (u + I*v) * (x + I*y)
+     = (u * x - v * y) + I*(v * x + u * y)
+
+quo  = a / b
+     = (u + I*v) / (x + I*y)
+     = [(u + I*v) * (x - I*y)] / [(x + I*y) * (x - I*y)]
+     = [(u * x + v * y) + I*(v * x - u * y)] / (x**2 + y**2)
+@end example
+
+@noindent
+There are four critical observations about those formulas:
+
+@itemize @bullet
+
+@item
+the multiplications on the right-hand side introduce the
+possibility of premature underflow or overflow;
+
+@item
+the products must be accurate to twice working precision;
+
+@item
+there is @emph{always} one subtraction on the right-hand sides
+that is subject to catastrophic significance loss; and
+
+@item
+complex multiplication has up to @emph{six} rounding errors, and
+complex division has @emph{ten} rounding errors.
+
+@end itemize
+
+@cindex branch cuts
+Another point that needs careful study is the fact that many functions
+in complex arithmetic have @dfn{branch cuts}.  You can view a
+function with a complex argument, @code{f (z)}, as @code{f (x + I*y)},
+and thus, it defines a relation between a point @code{(x, y)} on the
+complex plane with an elevation value on a surface.  A branch cut
+looks like a tear in that surface, so approaching the cut from one
+side produces a particular value, and from the other side, a quite
+different value.  Great care is needed to handle branch cuts properly,
+and even small numerical errors can push a result from one side to the
+other, radically changing the returned value.  As we reported earlier,
+correct handling of the sign of zero is critically important for
+computing near branch cuts.
+
+The best advice that we can give to programmers who need complex
+arithmetic is to always use the @emph{highest precision available},
+and then to carefully check the results of test calculations to gauge
+the likely accuracy of the computed results.  It is easy to supply
+test values of real and imaginary parts where all five basic
+operations in complex arithmetic, and almost all of the complex math
+functions, lose @emph{all} significance, and fail to produce even a
+single correct digit.
+
+Even though complex arithmetic makes some programming tasks
+easier, it may be numerically preferable to rework the algorithm
+so that it can be carried out in real arithmetic.  That is
+commonly possible in matrix algebra.
+
+GNU C can perform code optimization on complex number multiplication and
+division if certain boundary checks will not be needed.  The
+command-line option @option{-fcx-limited-range} tells the compiler that
+a range reduction step is not needed when performing complex division,
+and that there is no need to check if a complex multiplication or
+division results in the value @code{Nan + I*NaN}.  By default these
+checks are enabled.  You can explicitly enable them with the
+@option{-fno-cx-limited-range} option.
+
+@ignore
+@c =====================================================================
+
+@node    More on Decimal Floating-Point Arithmetic
+@section More on Decimal Floating-Point Arithmetic
+@cindex decimal floating-point arithmetic
+@cindex floating-point arithmetic, decimal
+
+Proposed extensions to the C programming language call for the
+inclusion of decimal floating-point arithmetic, which handles
+floating-point numbers with a specified radix of 10, instead of the
+unspecified traditional radix of 2.
+
+The proposed new types are @code{_Decimal32}, @code{_Decimal64}, and
+@code{_Decimal128}, with corresponding literal constant suffixes of
+@code{df}, @code{dd}, and @code{dl}, respectively.  For example, a
+32-bit decimal floating-point variable could be defined as:
+
+@example
+_Decimal32 foo = 42.123df;
+@end example
+
+We stated earlier (@pxref{decimal-significand}) that the significand
+in decimal floating-point arithmetic is an integer, rather than
+fractional, value.  Decimal instructions do not normally alter the
+exponent by normalizing nonzero significands to remove trailing zeros.
+That design feature is intentional: it allows emulation of the
+fixed-point arithmetic that has commonly been used for financial
+computations.
+
+One consequence of the lack of normalization is that there are
+multiple representations of any number that does not use all of the
+significand digits.  Thus, in the 32-bit format, the values
+@code{1.DF}, @code{1.0DF}, @code{1.00DF}, @dots{}, @code{1.000_000DF},
+all have different bit patterns in storage, even though they compare
+equal.  Thus, programmers need to be careful about trailing zero
+digits, because they appear in the results, and affect scaling.  For
+example, @code{1.0DF * 1.0DF} evaluates to @code{1.00DF}, which is
+stored as @code{100 * 10**(-2)}.
+
+In general, when you look at a decimal expression with fractional
+digits, you should mentally rewrite it in integer form with suitable
+powers of ten.  Thus, a multiplication like @code{1.23 * 4.56} really
+means @code{123 * 10**(-2) * 456 * 10**(-2)}, which evaluates to
+@code{56088 * 10**(-4)}, and would be output as @code{5.6088}.
+
+Another consequence of the decimal significand choice is that
+initializing decimal floating-point values to a pattern of
+all-bits-zero does not produce the expected value @code{0.}: instead,
+the result is the subnormal values @code{0.e-101}, @code{0.e-398}, and
+@code{0.e-6176} in the three storage formats.
+
+GNU C currently supports basic storage and manipulation of decimal
+floating-point values on some platforms, and support is expected to
+grow in future releases.
+
+@c ??? Suggest chopping the rest of this section, at least for the time
+@c ??? being.  Decimal floating-point support in GNU C is not yet complete,
+@c ??? and functionality discussed appears to not be available on all
+@c ??? platforms, and is not obviously documented for end users of GNU C. --TJR
+
+The exponent in decimal arithmetic is called the @emph{quantum}, and
+financial computations require that the quantum always be preserved.
+If it is not, then rounding may have happened, and additional scaling
+is required.
+
+The function @code{samequantumd (x,y)} for 64-bit decimal arithmetic
+returns @code{1} if the arguments have the same exponent, and @code{0}
+otherwise.
+
+The function @code{quantized (x,y)} returns a value of @var{x} that has
+been adjusted to have the same quantum as @var{y}; that adjustment
+could require rounding of the significand.  For example,
+@code{quantized (5.dd, 1.00dd)} returns the value @code{5.00dd}, which
+is stored as @code{500 * 10**(-2)}.  As another example, a sales-tax
+computation might be carried out like this:
+
+@example
+decimal_long_double amount, rate, total;
+
+amount = 0.70DL;
+rate   = 1.05DL;
+total  = quantizedl (amount * rate, 1.00DL);
+@end example
+
+@noindent
+Without the call to @code{quantizedl}, the result would have been
+@code{0.7350}, instead of the correctly rounded @code{0.74}.  That
+particular example was chosen because it illustrates yet another
+difference between decimal and binary arithmetic: in the latter, the
+factors each require an infinite number of bits, and their product,
+when converted to decimal, looks like @code{0.734_999_999@dots{}}.
+Thus, rounding the product in binary format to two decimal places
+always gets @code{0.73}, which is the @emph{wrong} answer for tax
+laws.
+
+In financial computations in decimal floating-point arithmetic, the
+@code{quantized} function family is expected to receive wide use
+whenever multiplication or division change the desired quantum of the
+result.
+
+The function call @code{normalized (x)} returns a value that is
+numerically equal to @var{x}, but with trailing zeros trimmed.
+Here are some examples of its operation:
+
+@multitable @columnfractions .5 .5
+@headitem Function Call        @tab Result
+@item normalized (+0.00100DD)   @tab +0.001DD
+@item normalized (+1.00DD)      @tab +1.DD
+@item normalized (+1.E2DD)      @tab +1E+2DD
+@item normalized (+100.DD)      @tab +1E+2DD
+@item normalized (+100.00DD)    @tab +1E+2DD
+@item normalized (+NaN(0x1234)) @tab +NaN(0x1234)
+@item normalized (-NaN(0x1234)) @tab -NaN(0x1234)
+@item normalized (+Infinity)    @tab +Infinity
+@item normalized (-Infinity)    @tab -Infinity
+@end multitable
+
+@noindent
+The NaN examples show that payloads are preserved.
+
+Because the @code{printf} and @code{scanf} families were designed long
+before IEEE 754 decimal arithmetic, their format items do not support
+distinguishing between numbers with identical values, but different
+quanta, and yet, that distinction is likely to be needed in output.
+
+The solution adopted by one early library for decimal arithmetic is to
+provide a family of number-to-string conversion functions that
+preserve quantization.  Here is a code fragment and its output that
+shows how they work.
+
+@example
+decimal_float x;
+
+x = 123.000DF;
+printf ("%%He:    x = %He\n", x);
+printf ("%%Hf:    x = %Hf\n", x);
+printf ("%%Hg:    x = %Hg\n", x);
+printf ("ntosdf (x) = %s\n", ntosdf (x));
+
+%He:    x = 1.230000e+02
+%Hf:    x = 123.000000
+%Hg:    x = 123
+ntosdf (x) = +123.000
+@end example
+
+@noindent
+The format modifier letter @code{H} indicates a 32-bit decimal value,
+and the modifiers @code{DD} and @code{DL} correspond to the two other
+formats.
+
+@c =====================================================================
+@end ignore
+
+@node    Round-Trip Base Conversion
+@section Round-Trip Base Conversion
+@cindex round-trip base conversion
+@cindex base conversion (floating point)
+@cindex floating-point round-trip base conversion
+
+Most numeric programs involve converting between base-2 floating-point
+numbers, as represented by the computer, and base-10 floating-point
+numbers, as entered and handled by the programmer.  What might not be
+obvious is the number of base-2 bits vs. base-10 digits required for
+each representation.  Consider the following tables showing the number of
+decimal digits representable in a given number of bits, and vice versa:
+
+@multitable @columnfractions .5 .1 .1 .1 .1 .1
+@item binary in   @tab 24 @tab 53 @tab 64 @tab 113 @tab 237
+@item decimal out @tab 9  @tab 17 @tab 21 @tab 36  @tab 73
+@end multitable
+
+@multitable @columnfractions .5 .1 .1 .1 .1
+@item decimal in  @tab 7  @tab 16 @tab 34  @tab 70
+@item binary out  @tab 25 @tab 55 @tab 114 @tab 234
+@end multitable
+
+We can compute the table numbers with these two functions:
+
+@example
+int
+matula(int nbits)
+@{   /* @r{Return output decimal digits needed for nbits-bits input.} */
+    return ((int)ceil((double)nbits / log2(10.0) + 1.0));
+@}
+
+int
+goldberg(int ndec)
+@{   /* @r{Return output bits needed for ndec-digits input.} */
+    return ((int)ceil((double)ndec / log10(2.0) + 1.0));
+@}
+@end example
+
+One significant observation from those numbers is that we cannot
+achieve correct round-trip conversion between the decimal and
+binary formats in the same storage size!  For example, we need 25
+bits to represent a 7-digit value from the 32-bit decimal format,
+but the binary format only has 24 available.  Similar
+observations hold for each of the other conversion pairs.
+
+The general input/output base-conversion problem is astonishingly
+complicated, and solutions were not generally known until the
+publication of two papers in 1990 that are listed later near the end
+of this chapter.  For the 128-bit formats, the worst case needs more
+than 11,500 decimal digits of precision to guarantee correct rounding
+in a binary-to-decimal conversion!
+
+For further details see the references for Bennett Goldberg and David
+Matula.
+
+@c =====================================================================
+
+@node    Further Reading
+@section Further Reading
+
+The subject of floating-point arithmetic is much more complex
+than many programmers seem to think, and few books on programming
+languages spend much time in that area.  In this chapter, we have
+tried to expose the reader to some of the key ideas, and to warn
+of easily overlooked pitfalls that can soon lead to nonsensical
+results.  There are a few good references that we recommend
+for further reading, and for finding other important material
+about computer arithmetic:
+
+@c =====================================================================
+@c Each bibliography item has a sort key, so the bibliography can be
+@c sorted in emacs with M-x sort-paragraphs on the region with the items.
+@c =====================================================================
+
+@itemize @bullet
+
+@item   @c sort-key: Abbott
+Paul H. Abbott and 15 others, @cite{Architecture and software support
+in IBM S/390 Parallel Enterprise Servers for IEEE Floating-Point
+arithmetic}, IBM Journal of Research and Development @b{43}(5/6)
+723--760 (1999),
+@uref{https://doi.org/10.1147/rd.435.0723}. This article gives
+a good description of IBM's algorithm for exact decimal-to-binary
+conversion, complementing earlier ones by Clinger and others.
+
+@item   @c sort-key: Beebe
+Nelson H. F. Beebe, @cite{The Mathematical-Function Computation Handbook:
+Programming Using the MathCW Portable Software Library},
+Springer (2017), ISBN 3-319-64109-3 (hardcover), 3-319-64110-7 (e-book)
+(xxxvi + 1114 pages),
+@uref{https://doi.org/10.1007/978-3-319-64110-2}.
+This book describes portable implementations of a large superset
+of the mathematical functions available in many programming
+languages, extended to a future 256-bit format (70 decimal
+digits), for both binary and decimal floating point.  It includes
+a substantial portion of the functions described in the famous
+@cite{NIST Handbook of Mathematical Functions}, Cambridge (2018),
+ISBN 0-521-19225-0.
+See
+@uref{http://www.math.utah.edu/pub/mathcw}
+for compilers and libraries.
+
+@item   @c sort-key: Clinger-1990
+William D. Clinger, @cite{How to Read Floating Point Numbers
+Accurately},  ACM SIGPLAN Notices @b{25}(6) 92--101 (June 1990),
+@uref{https://doi.org/10.1145/93548.93557}.
+See also the papers by Steele & White.
+
+@item   @c sort-key: Clinger-2004
+William D. Clinger, @cite{Retrospective: How to read floating
+point numbers accurately}, ACM SIGPLAN Notices @b{39}(4) 360--371 (April 2004),
+@uref{http://doi.acm.org/10.1145/989393.989430}.  Reprint of 1990 paper,
+with additional commentary.
+
+@item   @c sort-key: Goldberg-1967
+I. Bennett Goldberg, @cite{27  Bits Are Not Enough For 8-Digit Accuracy},
+Communications of the ACM @b{10}(2) 105--106 (February 1967),
+@uref{http://doi.acm.org/10.1145/363067.363112}.  This paper,
+and its companions by David Matula, address the base-conversion
+problem, and show that the naive formulas are wrong by one or
+two digits.
+
+@item   @c sort-key: Goldberg-1991
+David Goldberg, @cite{What Every Computer Scientist Should Know
+About Floating-Point Arithmetic}, ACM Computing Surveys @b{23}(1)
+5--58 (March 1991), corrigendum @b{23}(3) 413 (September 1991),
+@uref{https://doi.org/10.1145/103162.103163}.
+This paper has been widely distributed, and reissued in vendor
+programming-language documentation.  It is well worth reading,
+and then rereading from time to time.
+
+@item   @c sort-key: Juffa
+Norbert Juffa and Nelson H. F. Beebe, @cite{A Bibliography of
+Publications on Floating-Point Arithmetic},
+@uref{http://www.math.utah.edu/pub/tex/bib/fparith.bib}.
+This is the largest known bibliography of publications about
+floating-point, and also integer, arithmetic.  It is actively
+maintained, and in mid 2019, contains more than 6400 references to
+original research papers, reports, theses, books, and Web sites on the
+subject matter.  It can be used to locate the latest research in the
+field, and the historical coverage dates back to a 1726 paper on
+signed-digit arithmetic, and an 1837 paper by Charles Babbage, the
+intellectual father of mechanical computers.  The entries for the
+Abbott, Clinger, and Steele & White papers cited earlier contain
+pointers to several other important related papers on the
+base-conversion problem.
+
+@item   @c sort-key: Kahan
+William Kahan, @cite{Branch Cuts for Complex Elementary Functions, or
+Much Ado About Nothing's Sign Bit}, (1987),
+@uref{http://people.freebsd.org/~das/kahan86branch.pdf}.
+This Web document about the fine points of complex arithmetic
+also appears in the volume edited by A. Iserles and
+M. J. D. Powell, @cite{The State of the Art in Numerical
+Analysis: Proceedings of the Joint IMA/SIAM Conference on the
+State of the Art in Numerical Analysis held at the University of
+Birmingham, 14--18 April 1986}, Oxford University Press (1987),
+ISBN 0-19-853614-3 (xiv + 719 pages).  Its author is the famous
+chief architect of the IEEE 754 arithmetic system, and one of the
+world's greatest experts in the field of floating-point
+arithmetic.  An entire generation of his students at the
+University of California, Berkeley, have gone on to careers in
+academic and industry, spreading the knowledge of how to do
+floating-point arithmetic right.
+
+@item   @c sort-key: Knuth
+Donald E. Knuth, @cite{A Simple Program Whose Proof Isn't},
+in @cite{Beauty is our business: a birthday salute to Edsger
+W. Dijkstra}, W. H. J. Feijen, A. J. M. van Gasteren,
+D. Gries, and J. Misra (eds.), Springer (1990), ISBN
+1-4612-8792-8,
+@uref{https://doi.org/10.1007/978-1-4612-4476-9}.  This book
+chapter supplies a correctness proof of the decimal to
+binary, and binary to decimal, conversions in fixed-point
+arithmetic in the TeX typesetting system.  The proof evaded
+its author for a dozen years.
+
+@item   @c sort-key: Matula-1968a
+David W. Matula, @cite{In-and-out conversions},
+Communications of the ACM @b{11}(1) 57--50 (January 1968),
+@uref{https://doi.org/10.1145/362851.362887}.
+
+@item   @c sort-key: Matula-1968b
+David W. Matula, @cite{The Base Conversion Theorem},
+Proceedings of the American Mathematical Society @b{19}(3)
+716--723 (June 1968).  See also other papers here by this author,
+and by I. Bennett Goldberg.
+
+@item   @c sort-key: Matula-1970
+David W. Matula, @cite{A Formalization of Floating-Point Numeric
+Base Conversion}, IEEE Transactions on Computers @b{C-19}(8)
+681--692 (August 1970),
+@uref{https://doi.org/10.1109/T-C.1970.223017}.
+
+@item   @c sort-key: Muller-2010
+Jean-Michel Muller and eight others, @cite{Handbook of
+Floating-Point Arithmetic}, Birkh@"auser-Boston (2010), ISBN
+0-8176-4704-X (xxiii + 572 pages),
+@uref{https://doi.org/10.1007/978-0-8176-4704-9}.  This is a
+comprehensive treatise from a French team who are among the
+world's greatest experts in floating-point arithmetic, and among
+the most prolific writers of research papers in that field.  They
+have much to teach, and their book deserves a place on the
+shelves of every serious numerical programmer.
+
+@item   @c sort-key: Muller-2018
+Jean-Michel Muller and eight others, @cite{Handbook of
+Floating-Point Arithmetic}, Second edition, Birkh@"auser-Boston (2018), ISBN
+3-319-76525-6 (xxv + 627 pages),
+@uref{https://doi.org/10.1007/978-3-319-76526-6}.  This is a new
+edition of the preceding entry.
+
+@item   @c sort-key: Overton
+Michael Overton, @cite{Numerical Computing with IEEE Floating
+Point Arithmetic, Including One Theorem, One Rule of Thumb, and
+One Hundred and One Exercises}, SIAM (2001), ISBN 0-89871-482-6
+(xiv + 104 pages),
+@uref{http://www.ec-securehost.com/SIAM/ot76.html}.
+This is a small volume that can be covered in a few hours.
+
+@item   @c sort-key: Steele-1990
+Guy L. Steele Jr. and Jon L. White, @cite{How to Print
+Floating-Point Numbers Accurately}, ACM SIGPLAN Notices
+@b{25}(6) 112--126 (June 1990),
+@uref{https://doi.org/10.1145/93548.93559}.
+See also the papers by Clinger.
+
+@item   @c sort-key: Steele-2004
+Guy L. Steele Jr. and Jon L. White, @cite{Retrospective: How to
+Print Floating-Point Numbers Accurately}, ACM SIGPLAN Notices
+@b{39}(4) 372--389 (April 2004),
+@uref{http://doi.acm.org/10.1145/989393.989431}.  Reprint of 1990
+paper, with additional commentary.
+
+@item   @c sort-key: Sterbenz
+Pat H. Sterbenz, @cite{Floating Point Computation}, Prentice-Hall
+(1974), ISBN 0-13-322495-3 (xiv + 316 pages).  This often-cited book
+provides solid coverage of what floating-point arithmetic was like
+@emph{before} the introduction of IEEE 754 arithmetic.
+
+@end itemize
