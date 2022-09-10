@@ -31,9 +31,10 @@ mach_prefix := mach
 
 INC += $(nm_inc_opt)$(mach_root) $(nm_inc_opt)$(root)/posix
 
-ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
-	CFLAGS += $(cflags_sanitize)
+ifdef _MEMORY_
+	CFLAGS += $(f_sanitize)
 endif
+
 
 ifdef _RISKY_
 CFLAGS += -D_RISKY_=$(_RISKY_)
@@ -301,7 +302,7 @@ mach_struct_test: mach_struct
 	$(mach_struct_binout)
 
 $(mach_struct_binout): $(mach_root)/struct/s.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 .PHONY: mach_alloc mach_alloc_test          \

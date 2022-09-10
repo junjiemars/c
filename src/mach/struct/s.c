@@ -13,91 +13,99 @@ typedef struct
 
 typedef struct
 {
-	char *name;
-	char suid[8];
-	int units;
+	char  *name;
+	char   suid[8];
+	int    units;
 } student_s;
 
 
-void
-basic_layout(void)
+static void test_stack_layout(void);
+static void test_heap_layout(void);
+static void test_complex_layout(void);
+
+int
+main(void)
 {
-	fraction_s f =
+	printf("sizeof(struct fraction_s) = %4zu\n", sizeof(fraction_s));
+	printf("sizeof(struct student_s)  = %4zu\n", sizeof(student_s));
+
+	test_stack_layout();
+  test_heap_layout();
+	test_complex_layout();
+}
+
+
+void
+test_stack_layout(void)
+{
+#if (_RISKY_)
+  int  gap[sizeof(fraction_s)/sizeof(int)];
+#endif
+
+	fraction_s f      =
     {
-      .numerator = 0x1100,
-      .denominator = 0x22
+      .numerator    =  0x1100,
+      .denominator  =  0x22
     };
-  __attribute__((unused)) int gap[sizeof(fraction_s)/sizeof(int)];
 
 	((fraction_s*) &f.denominator)->numerator = f.numerator;
-	/* f.numerator == f.denominator) => true */
+	assert(f.numerator == f.denominator);
 
-#if defined (_RISKY_) && (_RISKY_) > 0
-  gap[0] = 0x33;
-	((fraction_s*) &gap[1])->denominator = gap[0];
-	/* gap[0] == f.numerator => true */
+#if (_RISKY_)
+  gap[0]  =  0x33;
 
-  gap[0] = ((fraction_s*) &f.denominator)[0].numerator;
-  /* gap[0] == f.denominator => true */
+  /* (&f)[1]->numerator */
+  assert(gap[0] == ((fraction_s*) ((char*) &f + sizeof(f)))->numerator);
+
+	((fraction_s*) &gap[1])->numerator = gap[0];
+  assert(gap[0] == (&f)[1].denominator);
+
 #endif
+
 }
 
 void
-complex_layout(void)
+test_complex_layout(void)
 {
-	student_s friends[4];
-
-	friends[0].name = friends[2].suid + 3;
-
-	strcpy(friends[1].suid, "aabbccd");
-	strcpy(friends->name, "Tiger Woods");
-
-  friends[2].units = 0x11223344;
-
-#if _RISKY_
-#ifdef CLANG
-	memcpy((char*) &friends[0].units,
-         (const char*) &friends[2].units,
-         strlen((const char*) &friends[2].units));
-#else
-	strcpy((char*) &friends[0].units,
-         (const char*) &friends[2].units);
+#if (_RISKY_)
+  __attribute__((unused)) student_s  gap;
 #endif
 
-  student_s gap;
-  __attribute__((unused)) gap;
+	student_s  ss[4];
 
-	friends[4].units = 21;
+  /* strcpy(ss[2].suid, "ABCD"); */
+  memcpy(ss[2].suid, "ABCD", sizeof("ABCD"));
+	ss[0].name = ss[2].suid + 3;
 
-	*(char***) &(((fraction_s*) &friends)[3].denominator) = &friends[0].name+1;
+	strcpy(ss[1].suid, "aabbccd");
+  assert(strcmp(ss[1].suid, "aabbccd") == 0);
 
-#endif
+#if (_RISKY_)
+
+	strcpy(ss->name, "Tiger Woods");
+  assert(strcmp(ss->name, ss[2].suid + 3) == 0);
+  assert(strcmp((char*) &ss[3].name, "ds") == 0);
+
+  ss[2].units = 0x11223344;
+  strcpy((char*) &ss[0].units, (const char*) &ss[2].units);
+
+#endif  /* end of _RISKY_ */
+
 }
 
 void
-heap_layout(void)
+test_heap_layout(void)
 {
-  fraction_s *f = malloc(sizeof(fraction_s));
+  fraction_s  *f  =  malloc(sizeof(fraction_s));
   if (!f)
     {
+      perror(NULL);
       return;
     }
   f->numerator = 0x1100;
   f->denominator = 0x22;
 
-	((fraction_s*) &f->denominator)->numerator = f->numerator;
-	/* f->numerator == f->denominator) => true */
+	assert(f->denominator == ((fraction_s*) &f->denominator)->numerator);
 
   free(f);
-}
-
-int
-main(void)
-{
-	printf("sizeof(struct fraction_s)=%zu\n", sizeof(fraction_s));
-	printf("sizeof(struct student_s)=%zu\n", sizeof(student_s));
-
-	basic_layout();
-	complex_layout();
-  heap_layout();
 }
