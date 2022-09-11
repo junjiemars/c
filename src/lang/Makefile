@@ -820,16 +820,20 @@ lang_type_int_binout := $(bin_path)/$(lang_prefix)_type_int$(bin_ext)
 lang_type_int_cppout := $(tmp_path)/$(lang_prefix)_type_int$(cpp_ext)
 lang_type_c_binout := $(bin_path)/$(lang_prefix)_type_c$(bin_ext)
 lang_type_c_cppout := $(tmp_path)/$(lang_prefix)_type_c$(cpp_ext)
+lang_type_float_binout := $(bin_path)/$(lang_prefix)_type_float$(bin_ext)
 
 lang_type: $(lang_type_int_binout)              \
            $(lang_type_c_binout)
 lang_type_test: lang_type_int_test              \
-                lang_type_c_test
+                lang_type_c_test                \
+                lang_type_float_test
 
 lang_type_int_test: $(lang_type_int_binout)
 	$(lang_type_int_binout)
 lang_type_c_test: $(lang_type_c_binout)
 	$(lang_type_c_binout) 11ff22aa
+lang_type_float_test: $(lang_type_float_binout)
+	$<
 
 $(lang_type_int_binout): $(lang_type_int_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
@@ -842,6 +846,9 @@ $(lang_type_c_binout): $(lang_type_c_cppout)
 
 $(lang_type_c_cppout): $(lang_root)/type/ct.c
 	$(CPP) $(INC) $(CPPFLAGS) $(nm_stage_pre) $^ $(cpp_out)$@
+
+$(lang_type_float_binout): $(lang_root)/type/float.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # typedef
