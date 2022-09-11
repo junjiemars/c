@@ -14,6 +14,7 @@ algo: _algo_                                    \
       algo_is_unsigned_integer                  \
       algo_is_unsigned_type                     \
       algo_levenshtein                          \
+      algo_loop                                 \
       algo_merge                                \
       algo_num                                  \
       algo_permute                              \
@@ -23,8 +24,8 @@ algo: _algo_                                    \
       algo_sizeof                               \
       algo_sort                                 \
       algo_strlen_utf8                          \
-      algo_strscpy                              \
-      algo_tile
+      algo_strscpy
+
 
 algo_test: _algo_test                           \
            algo_compress_test                   \
@@ -36,6 +37,7 @@ algo_test: _algo_test                           \
            algo_is_unsigned_integer_test        \
            algo_is_unsigned_type_test           \
            algo_levenshtein_test                \
+           algo_loop_test                       \
            algo_merge_test                      \
            algo_num_test                        \
            algo_permute_test                    \
@@ -45,8 +47,8 @@ algo_test: _algo_test                           \
            algo_sizeof_test                     \
            algo_sort_test                       \
            algo_strlen_utf8_test                \
-           algo_strscpy_test                    \
-           algo_tile_test
+           algo_strscpy_test
+
 
 # env
 algo_prefix := algo
@@ -231,6 +233,36 @@ algo_levenshtein_test: algo_levenshtein
 
 $(algo_levenshtein_binout): $(algo_root)/levenshtein/ld.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# loop
+algo_loop_tile_binout := $(bin_path)/$(algo_prefix)_loop_tile$(bin_ext)
+algo_loop_invar_binout := $(bin_path)/$(algo_prefix)_loop_invar$(bin_ext)
+algo_loop_hoist_binout := $(bin_path)/$(algo_prefix)_loop_hoist$(bin_ext)
+
+algo_loop: $(algo_loop_tile_binout)             \
+           $(algo_loop_invar_binout)            \
+           $(algo_loop_hoist_binout)
+algo_loop_test: algo_loop_tile_test             \
+                algo_loop_invar_test            \
+                algo_loop_hoist_test
+
+algo_loop_tile_test: $(algo_loop_tile_binout)
+	$<
+algo_loop_invar_test: $(algo_loop_invar_binout)
+	$<
+algo_loop_hoist_test: $(algo_loop_hoist_binout)
+	$<
+
+$(algo_loop_tile_binout): $(algo_root)/loop/tile.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(algo_loop_invar_binout): $(algo_root)/loop/invar.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(algo_loop_hoist_binout): $(algo_root)/loop/hoist.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # merge
 algo_merge_binout := $(bin_path)/$(algo_prefix)_merge$(bin_ext)
@@ -418,15 +450,3 @@ algo_strscpy_test: algo_strscpy
 
 $(algo_strscpy_binout): $(algo_root)/strscpy/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-# tile
-algo_tile_1_binout := $(bin_path)/$(algo_prefix)_tile_1$(bin_ext)
-
-algo_tile: $(algo_tile_1_binout)
-algo_tile_test: algo_tile_1_test
-
-algo_tile_1_test: $(algo_tile_1_binout)
-	$<
-
-$(algo_tile_1_binout): $(algo_root)/tile/t1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
