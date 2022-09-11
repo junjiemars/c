@@ -379,17 +379,19 @@ $(lang_macro_cppout): $(lang_root)/macro/macro.c
 
 
 # main
-lang_main_binout := $(bin_path)/$(lang_prefix)_main$(bin_ext)
+lang_main_raw_binout := $(bin_path)/$(lang_prefix)_main_raw$(bin_ext)
 lang_main_envp_binout := $(bin_path)/$(lang_prefix)_main_envp$(bin_ext)
 
-lang_main: $(lang_main_binout)                  \
+lang_main: $(lang_main_raw_binout)              \
            $(lang_main_envp_binout)
+lang_main_test: lang_main_raw_test              \
+                lang_main_envp_test
+lang_main_raw_test: $(lang_main_raw_binout)
+	$< a bb ccc
+lang_main_envp_test: $(lang_main_envp_binout)
+	ZZZ=xyz $<
 
-lang_main_test: lang_main
-	$(lang_main_binout) a bb ccc
-	ZZZ=xyz $(lang_main_envp_binout)
-
-$(lang_main_binout): $(lang_root)/main/m.c
+$(lang_main_raw_binout): $(lang_root)/main/m.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_main_envp_binout): $(lang_root)/main/m_envp.c
@@ -649,10 +651,10 @@ $(lang_stor_binout): $(lang_stor_extern_objout) $(lang_stor_s_objout)
 	$(LINK) $^ $(bin_out)$@
 
 $(lang_stor_s_objout): $(lang_root)/storage/s.c
-	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
 $(lang_stor_extern_objout): $(lang_root)/storage/extern.c
-	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
 # string
 lang_string_basic_binout := $(bin_path)/$(lang_prefix)_string_basic$(bin_ext)

@@ -1,24 +1,52 @@
 #include <_lang_.h>
 
 
-/* C4456: declaration of 'i' hides previous local declaration */
 #if (MSVC)
+/* C4456: declaration of 'i' hides previous local declaration */
 #  pragma warning(disable:4456)
 #endif
 
 
-static int f_int;
+static void automatic_storage_class(void);
+static void static_storage_class(void);
+static void array_decay(char *);
+static void register_storage_class(register int x);
+static void external_storage_class(void);
 
-void automatic_storage_class(void);
-static void static_storage_class_fn(void);
-static int static_storage_class_fn_raw(int);
-void array_decay(char *);
-void external_storage_class(void);
+
+static int  f_int;
+
+int
+main(void)
+{
+	printf("\nautomatic storage class\n");
+	printf("-------------------------\n");
+	automatic_storage_class();
+	automatic_storage_class();
+
+	printf("\nregister storage class\n");
+	printf("-----------------------\n");
+	register_storage_class(0x11223344);
+
+	printf("\nstatic storage class\n");
+	printf("---------------------\n");
+	static_storage_class();
+	static_storage_class();
+	static_storage_class();
+
+	printf("\nexternal storage class\n");
+	printf("------------------------\n");
+	external_storage_class();
+	external_storage_class();
+
+  return 0;
+}
+
 
 void
 automatic_storage_class(void)
 {
-	__attribute__((unused)) auto int x; /* garbage value */
+	__attribute__((unused)) auto int x;  /* garbage value */
 #if (GCC)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wuninitialized"
@@ -39,95 +67,66 @@ automatic_storage_class(void)
 void
 array_decay(char *a)
 {
-	printf("a[0] = 0x%02x\n", a[0]);
+	assert(a[0] == 0x11);
 }
 
 
 void
 register_storage_class(register int x)
 {
-	register int i;
+	register int  i;
+
   i = x;
-	printf("i = 0x%08x\n", i++);
+	assert(i == x);
+
 	/* error: address of register variable requested */
 	/* int *p = &i; */
 
-	register char a[] =
-    { 0x11, 0x22, 0x33, 0x44, };
-#if MSVC
-	printf("a[0/%zu]\n", sizeof(a));
-#elif CLANG || GCC
-	printf("a[0/%zu] = 0x%02x\n", sizeof(a)/sizeof(a[0]), a[0]);
-# if CLANG
-	/* GCC error: address of register variable ‘a’ requested */
+	register char  a[]  =  { 0x11, 0x22, 0x33, 0x44, };
+  assert(sizeof(a)/sizeof(*a) == 4);
+
+
 	array_decay(a);
-# endif
-#endif
+
 }
 
 
 void
-static_storage_class_fn(void)
+static_storage_class(void)
 {
-	static int i;
+	static int  i  =  0;
 
   {
-    static int x;
+    static int  x;
+		static int  i  =  0x11223344;
+
     x = i;
-		static int i = 0x11223344;
-    assert((0x11223344 + x) == i);
+    f_int = 0;
+
+    assert(x == i);
+
+    f_int++;
     i++;
 	}
-  assert((0 + i) == f_int);
-  f_int++;
+
   i++;
+  assert(i >= f_int);
 }
 
-int
-static_storage_class_fn_raw(int x)
-{
-  static int v;
-  assert(0 == v);
-  v += x;
-  return v;
-}
 
 /* definition for external linkage */
 int g_var_x = 0x1122;
+
 
 void
 external_storage_class(void)
 {
 	extern int g_var_x;
   extern int g_var_y;
-	printf("g_var_x = 0x%08x\n", g_var_x++);
-  printf("g_var_y = 0x%08x\n", g_var_y);
-}
+  extern int external_sum(int, int);
 
-
-int
-main(int argc, __attribute__((unused)) char *argv[])
-{
-	printf("\nautomatic storage class\n");
-	printf("-------------------------\n");
-	automatic_storage_class();
-	automatic_storage_class();
-
-	printf("\nregister storage class\n");
-	printf("-----------------------\n");
-	register_storage_class(0x11223344);
-
-	printf("\nstatic storage class\n");
-	printf("---------------------\n");
-	static_storage_class_fn();
-	static_storage_class_fn();
-	static_storage_class_fn();
-  static_storage_class_fn_raw(argc);
-
-	printf("\nexternal storage class\n");
-	printf("------------------------\n");
-	external_storage_class();
-	external_storage_class();
-
-  return 0;
+	printf("g_var_x = 0x%x\n", g_var_x++);
+  printf("g_var_y = 0x%x\n", g_var_y);
+  printf("sum(0x%x, 0x%x) = 0x%x\n", g_var_x,
+         g_var_y, external_sum(g_var_x, g_var_y));
 }
