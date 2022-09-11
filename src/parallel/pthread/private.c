@@ -34,15 +34,12 @@ destructor(void *arg)
 }
 
 int
-main(int argc, char **argv)
+main(void)
 {
-  _unused_(argc);
-  _unused_(argv);
-
+  int rc;
+  int *data = 0;
   pthread_t thread[N_THREAD];
   thread_state_s state[N_THREAD];
-  int *data = 0;
-  int rc;
 
   /* alloc data */
   data = malloc(sizeof(*data) * N_THREAD);
@@ -94,6 +91,6 @@ main(int argc, char **argv)
 
  clean_exit:
   free(data);
-  
+
   return 0;
 }

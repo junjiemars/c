@@ -1,10 +1,11 @@
-#include "_parallel_.h"
+#include <_parallel_.h>
 #include <stdio.h>
 #include <pthread.h>
 #include <stdlib.h>
 #include <assert.h>
 
-#define N_THREAD 4
+
+#define N_THREAD  4
 
 typedef struct thread_state_s
 {
@@ -28,11 +29,8 @@ echo(void *arg)
 }
 
 int
-main(int argc, char **argv)
+main(void)
 {
-  _unused_(argc);
-  _unused_(argv);
-
   thread_state_s  state[N_THREAD];
   void           *retval;
   int             rc;

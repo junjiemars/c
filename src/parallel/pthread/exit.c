@@ -1,8 +1,8 @@
-#include "_parallel_.h"
+#include <_parallel_.h>
 #include <stdio.h>
 #include <pthread.h>
 #include <stdlib.h>
-#include <assert.h> 
+#include <assert.h>
 
 #define N_THREAD 4
 
@@ -56,11 +56,8 @@ do__(void *arg)
 
 
 int
-main(int argc, char **argv)
+main(void)
 {
-  _unused_(argc);
-  _unused_(argv);
-
   thread_state_s  state[N_THREAD];
   void           *retval = 0;
   int             rc;
@@ -85,8 +82,8 @@ main(int argc, char **argv)
         {
           perror(NULL);
         }
-      
-      ASSERT(PTHREAD_CANCELED != retval
+
+      assert(PTHREAD_CANCELED != retval
              && ((thread_state_s *) retval)->sn == state[i].sn);
     }
 

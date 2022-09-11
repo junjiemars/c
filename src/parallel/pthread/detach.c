@@ -82,11 +82,8 @@ detached_routine(void *arg)
 }
 
 int
-main(int argc, char **argv)
+main(void)
 {
-  _unused_(argc);
-  _unused_(argv);
-
   pthread_attr_t attr;
   int            detach;
   int            rc;

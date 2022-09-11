@@ -51,11 +51,8 @@ race(void *arg)
 }
 
 int
-main(int argc, char **argv)
+main(int argc, char *argv[])
 {
-  _unused_(argc);
-  _unused_(argv);
-
   thread_state_t  states[N_THREAD];
   int             rc;
 

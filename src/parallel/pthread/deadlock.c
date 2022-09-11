@@ -100,9 +100,6 @@ race(void *arg)
 int
 main(int argc, char **argv)
 {
-  _unused_(argc);
-  _unused_(argv);
-
   if (argc > 1)
     {
       opt_has_deadlock = atoi(argv[1]);

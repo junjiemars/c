@@ -23,7 +23,8 @@ algo: _algo_                                    \
       algo_sizeof                               \
       algo_sort                                 \
       algo_strlen_utf8                          \
-      algo_strscpy
+      algo_strscpy                              \
+      algo_tile
 
 algo_test: _algo_test                           \
            algo_compress_test                   \
@@ -44,7 +45,8 @@ algo_test: _algo_test                           \
            algo_sizeof_test                     \
            algo_sort_test                       \
            algo_strlen_utf8_test                \
-           algo_strscpy_test
+           algo_strscpy_test                    \
+           algo_tile_test
 
 # env
 algo_prefix := algo
@@ -416,3 +418,15 @@ algo_strscpy_test: algo_strscpy
 
 $(algo_strscpy_binout): $(algo_root)/strscpy/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# tile
+algo_tile_1_binout := $(bin_path)/$(algo_prefix)_tile_1$(bin_ext)
+
+algo_tile: $(algo_tile_1_binout)
+algo_tile_test: algo_tile_1_test
+
+algo_tile_1_test: $(algo_tile_1_binout)
+	$<
+
+$(algo_tile_1_binout): $(algo_root)/tile/t1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

@@ -37,16 +37,14 @@ check_stacksize(void *arg)
 }
 
 int
-main(int argc, char **argv)
+main(void)
 {
-  _unused_(argc);
-  _unused_(argv);
-
+  int            rc;
   pthread_t      threads[N_THREAD];
   thread_state_s states[N_THREAD];
   pthread_attr_t attr;
   size_t         stacksize;
-  int            rc;
+
 
   /* check default stacksize */
   rc = pthread_attr_init(&attr);

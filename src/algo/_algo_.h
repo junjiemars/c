@@ -5,11 +5,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <time.h>
 
 
 #if (MSVC)
 #pragma warning(disable:4996)
 #endif
+
+
+#define _time_(E, V)                            \
+do                                              \
+{                                               \
+  clock_t _epoch_1_ = clock();                  \
+  (E);                                          \
+  V = (clock() - _epoch_1_);                    \
+} while (0)
+
 
 
 struct score_s

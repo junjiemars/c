@@ -149,16 +149,14 @@ produce(void *arg)
 }
 
 int
-main(int argc, char **argv)
+main(void)
 {
-  _unused_(argc);
-  _unused_(argv);
-
+  int            rc;
   thread_state_s consumer_state[N_CONSUMER];
   thread_state_s producer_state[N_CONSUMER];
   pthread_t      consumer[N_CONSUMER];
   pthread_t      producer[N_PRODUCER];
-  int            rc;
+
 
   /* init mutex */
   rc = pthread_mutex_init(&mutex, 0);

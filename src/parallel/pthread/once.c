@@ -21,13 +21,10 @@ init_routine(void)
 }
 
 int
-main(int argc, char **argv)
+main(void)
 {
-  pthread_once_t once = PTHREAD_ONCE_INIT;
   int            rc;
-
-  _unused_(argc);
-  _unused_(argv);
+  pthread_once_t once = PTHREAD_ONCE_INIT;
 
   for (long i = 0; i < N_THREAD; i++)
     {
@@ -37,7 +34,7 @@ main(int argc, char **argv)
           perror(NULL);
         }
     }
-  ASSERT(count == 1 && "init just only once");
+  assert(count == 1 && "init just only once");
 
   return 0;
 }
