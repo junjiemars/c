@@ -3,7 +3,7 @@
 ## No More than a C build system for clang, gcc and msvc.
 ## https://github.com/junjiemars/nore
 ####
-## io/auto
+## process/auto
 ####
 
 

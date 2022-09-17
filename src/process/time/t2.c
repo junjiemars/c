@@ -1,6 +1,13 @@
 #include "_process_.h"
 #include <sys/times.h>
 
+/*
+ * simulate time(1)
+ *
+ */
+
+
+
 #define clk_diff(a, b)  ((a) - (b)) / (double) NM_CLK_TCK
 #define time_diff(a, b)  ((a) - (b)) / (double) NM_CLK_TCK
 
@@ -12,8 +19,8 @@ int
 main(int argc, char **argv)
 {
   int         rc;
-  clock_t     s_clk  =  0, e_clk = 0;
-  struct tms  s_tms  =  {0}, e_tms = {0};
+  clock_t     b_clk  =  0, e_clk = 0;
+  struct tms  b_tms  =  {0}, e_tms = {0};
 
   for (int i = 1; i < argc; i++)
     {
@@ -22,7 +29,7 @@ main(int argc, char **argv)
     }
 
 
-  s_clk = times(&s_tms);
+  b_clk = times(&b_tms);
   if ((rc = system(cmd)) < 0)
     {
       perror(NULL);
@@ -30,11 +37,11 @@ main(int argc, char **argv)
   e_clk = times(&e_tms);
 
 
-  fprintf(stderr, "real: %7.2f\n", clk_diff(e_clk, s_clk));
+  fprintf(stderr, "real: %7.2f\n", clk_diff(e_clk, b_clk));
   fprintf(stderr, "user: %7.2f\n",
-          time_diff(e_tms.tms_utime, s_tms.tms_utime));
+          time_diff(e_tms.tms_utime, b_tms.tms_utime));
   fprintf(stderr, "sys:  %7.2f\n",
-          time_diff(e_tms.tms_stime, s_tms.tms_stime));
+          time_diff(e_tms.tms_stime, b_tms.tms_stime));
 
   exit(EXIT_SUCCESS);
 }

@@ -2,8 +2,8 @@
 
 
 /*
- * 1. access just check real-user/group-id.
- * 2. open check effective-user/group-id.
+ * 1. access just check real user/group-id.
+ * 2. open check effective user/group-id.
  *
  * References:
  * 1. https://pubs.opengroup.org/onlinepubs/9699919799/functions/access.html#tag_16_09

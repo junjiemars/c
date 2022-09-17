@@ -13,7 +13,7 @@ fi
 
 
 # check posix features
-. src/posix/auto
+. src/posix/nustd_auto
 
 
 echo "checking for {io} ..."

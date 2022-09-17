@@ -7,11 +7,13 @@ static int fibo4(int);
 
 
 int
-main(int argc, char **argv) {
-	if (argc < 2) {
-		printf("fibonacci(n)\n");
-		return 1;
-	}
+main(int argc, char **argv)
+{
+	if (argc < 2)
+    {
+      printf("fibonacci(n)\n");
+      return 1;
+    }
 
 	int n = atoi(argv[1]);
 
@@ -25,40 +27,54 @@ main(int argc, char **argv) {
 
 
 int
-fibo1(int n) {
-	if (0 == n || 1 == n) {
-		return 1;
-	}
+fibo1(int n)
+{
+	if (0 == n || 1 == n)
+    {
+      return 1;
+    }
+
 	return fibo1(n-1) + fibo1(n-2);
 }
 
 int
-fibo2(int n, int p, int acc) {
-	if (0 == n) {
-		return acc;
-	}
+fibo2(int n, int p, int acc)
+{
+	if (0 == n)
+    {
+      return acc;
+    }
+
 	return fibo2(n-1, acc, p+acc);
 }
 
 int
-fibo3(int n, int p, int acc) {
-	int t;
-	while (n-- > 0) {
-		t = p;
-		p = acc;
-		acc = t + p;
-	}
+fibo3(int n, int p, int acc)
+{
+	int  t;
+
+	while (n-- > 0)
+    {
+      t = p;
+      p = acc;
+      acc = t + p;
+    }
+
 	return acc;
 }
 
 int
-fibo4(int n) {
-	int t;
-	int p = 0, acc = 1;
-	while (n-- > 0) {
-		t = p;
-		p = acc;
-		acc = t + p;
-	}
+fibo4(int n)
+{
+	int  t;
+	int  p  =  0, acc = 1;
+
+	while (n-- > 0)
+    {
+      t = p;
+      p = acc;
+      acc = t + p;
+    }
+
 	return acc;
 }

@@ -12,6 +12,7 @@ else
 
 io: io_access                                   \
     io_copy                                     \
+    io_dir                                      \
     io_dup                                      \
     io_fcntl                                    \
     io_ls                                       \
@@ -27,6 +28,7 @@ io: io_access                                   \
 
 io_test: io_access_test                         \
          io_copy_test                           \
+         io_dir_test                            \
          io_dup_test                            \
          io_fcntl_test                          \
          io_ls_test                             \
@@ -51,7 +53,6 @@ INC += $(nm_inc_opt)$(io_root) $(nm_inc_opt)$(root)/posix
 ifeq ($(CC_NAME),msvc)
 getopt_c := $(root)/posix/getopt.c
 endif
-
 _MEMORY_ ?= 0
 ifeq ($(shell test $(_MEMORY_) -gt 0; echo $$?),0)
 CFLAGS += $(f_sanitize)
@@ -123,6 +124,18 @@ $(io_copy_unbuf_binout): $(io_root)/copy/unbuf.c
 $(io_copy_stdbuf_binout): $(io_root)/copy/stdbuf.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 	# sudo chown root $@
+
+# dir
+io_dir_1_binout := $(bin_path)/$(io_prefix)_dir_1$(bin_ext)
+
+io_dir: $(io_dir_1_binout)
+io_dir_test: io_dir_1_test
+
+io_dir_1_test: $(io_dir_1_binout)
+	$< $(CURDIR)/$(io_root)/dir
+
+$(io_dir_1_binout): $(io_root)/dir/d1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # dup
 io_dup_fdft_binout := $(bin_path)/$(io_prefix)_dup_fdft$(bin_ext)
