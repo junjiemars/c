@@ -1,0 +1,65 @@
+# -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## io/auto
+####
+
+
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+
+# check posix features
+. src/posix/nustd_auto
+
+
+echo "checking for {webkit2gtk} ..."
+
+has_pkg_config=no
+has_webkit2gtk=no
+echo $echo_n " + checking for pkg-config ... $echo_c"
+if [ 0 -eq $(pkg-config --version 2>&1 1>/dev/null;echo $?) ]; then
+  echo "yes"
+  has_pkg_config=yes
+  flag=has_pkg_config op=":=" value="$has_pkg_config" \
+      . ${NORE_ROOT}/auto/make_define
+else
+  echo "no"
+fi
+if [ "$has_pkg_config" = "yes" ]; then
+  webkit2gtk_ver=$(pkg-config --list-all \
+                     | grep -e 'webkit2gtk[-.0-9]*' \
+                     | cut -d' ' -f1)
+  webkit2gtk_ldlibs=$(pkg-config --libs ${webkit2gtk_ver})
+  webkit2gtk_cflags=$(pkg-config --cflags ${webkit2gtk_ver})
+  if [ -n "$webkit2gtk_ldlibs" ]; then
+    nm_feature="webkit2gtk"
+    nm_feature_name="nm_have_webkit2gtk"
+    nm_feature_indent=yes
+    nm_feature_run=yes
+    nm_feature_h='
+#include <gtk/gtk.h>
+#include <webkit2/webkit2.h>
+'
+    nm_feature_flags="--verbose $webkit2gtk_cflags"
+    nm_feature_tails="$webkit2gtk_ldlibs"
+    nm_feature_test='printf("%u", WEBKIT_MAJOR_VERSION);'
+    . ${NORE_ROOT}/auto/feature
+    if [ yes = $nm_found ]; then
+      flag=has_webkit2gtk op=":=" value="yes" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=webkit2gtk_ldlibs op=":=" value="$webkit2gtk_ldlibs" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=webkit2gtk_cflags op=":=" value="$webkit2gtk_cflags" \
+          . ${NORE_ROOT}/auto/make_define
+    fi
+  fi
+fi
+
+
+
+
+# eof
