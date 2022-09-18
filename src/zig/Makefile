@@ -142,4 +142,4 @@ $(zig_value_binout): $(zig_value_build)             \
     --build-file $<                             \
     --cache-dir $(zig_cache_dir)                \
     --prefix-exe-dir $(zig_prefix_exe_dir)      \
-    --verbose
+    --verbosie

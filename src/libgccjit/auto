@@ -1,9 +1,22 @@
 # -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## libgccjit/auto
+####
 
 
-# check C compiler features
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+
+# check posix features
 . src/posix/ncc_auto
 
+
+echo "checking for {libgccjit} ..."
 
 
 # check libgccjit features
