@@ -16,6 +16,7 @@ io: io_access                                   \
     io_dup                                      \
     io_fcntl                                    \
     io_ls                                       \
+    io_name                                     \
     io_own                                      \
     io_redirect                                 \
     io_share                                    \
@@ -32,6 +33,7 @@ io_test: io_access_test                         \
          io_dup_test                            \
          io_fcntl_test                          \
          io_ls_test                             \
+         io_name_test                           \
          io_own_test                            \
          io_redirect_test                       \
          io_share_test                          \
@@ -210,6 +212,16 @@ io_ls_raw_test: $(io_ls_raw_binout)
 	$< /dev/fd
 
 $(io_ls_raw_binout): $(io_root)/ls/l1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# name
+io_name_binout := $(bin_path)/$(io_prefix)_name$(bin_ext)
+
+io_name: $(io_name_binout)
+io_name_test: io_name
+	-$(io_name_binout) 256xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+$(io_name_binout): $(io_root)/name/n.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
