@@ -23,17 +23,40 @@ main(int argc, char **argv)
   printf("_POSIX_NO_TRUNC=(no symbol)\n");
 #endif
 
-  if (argc < 2)
+  for (int i = 1; i < argc; i++)
     {
-      printf("usage: <pathname>\n");
-      exit(EXIT_FAILURE);
+      printf("argv[%d]: %s\n------------\n", i, argv[i]);
+
+#if (_PC_NAME_MAX)
+      long name_max = pathconf(argv[i], _PC_NAME_MAX);
+      if (name_max == -1)
+        {
+          perror(NULL);
+          continue;
+        }
+      printf("_PC_NAME_MAX=%ld\n", name_max);
+
+#endif
+
+#if (_PC_PATH_MAX)
+      long path_max = pathconf(argv[i], _PC_PATH_MAX);
+      if (path_max == -1)
+        {
+          perror(NULL);
+          continue;
+        }
+      printf("_PC_PATH_MAX=%ld\n", path_max);
+
+#endif
+
+      int fd = open(argv[1], O_RDONLY);
+      if (fd == -1)
+        {
+          perror(NULL);
+        }
     }
 
-  int fd = open(argv[1], O_RDONLY);
-  if (fd == -1)
-    {
-      perror(NULL);
-    }
+
 
   exit(EXIT_SUCCESS);
 }
