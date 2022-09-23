@@ -229,15 +229,15 @@ $(io_name_binout): $(io_root)/name/n.c
 
 
 # open
-io_open_raw_binout := $(bin_path)/$(io_prefix)_open_raw$(bin_ext)
+io_open_max_binout := $(bin_path)/$(io_prefix)_open_max$(bin_ext)
 
-io_open: $(io_open_raw_binout)
-io_open_test: io_open_raw_test
+io_open: $(io_open_max_binout)
+io_open_test: io_open_max_test
 
-io_open_raw_test: $(io_open_raw_binout)
-	$< $(io_root)/open/o1.c
+io_open_max_test: $(io_open_max_binout)
+	-$< $(io_root)/open/256xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-$(io_open_raw_binout): $(io_root)/open/o1.c
+$(io_open_max_binout): $(io_root)/open/max.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

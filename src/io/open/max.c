@@ -1,5 +1,10 @@
 #include <_io_.h>
 
+/*
+ * NAME_MAX, PATH_MAX
+ *
+ */
+
 
 int
 main(int argc, char **argv)
@@ -12,7 +17,7 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  fd = openat(AT_FDCWD, argv[1], O_RDONLY);
+  fd = openat(AT_FDCWD, argv[1], O_WRONLY);
   if (fd == -1)
     {
       perror(NULL);
