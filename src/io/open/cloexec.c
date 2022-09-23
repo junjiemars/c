@@ -12,7 +12,7 @@ main(int argc, char **argv)
       printf("usage: <pathname> [0|1]\n");
       exit(EXIT_FAILURE);
     }
-  if (argc >= 2)
+  if (argc > 2)
     {
       sscanf(argv[2], "%d", &opt_cloexec);
     }
