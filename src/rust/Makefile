@@ -42,15 +42,26 @@ rust_test: rust_hi_test                         \
 rust_prefix := rust
 RUSTC := $(has_rustc)
 CARGO := $(has_cargo)
+RUSTFMT := $(has_rustfmt)
 cargo_target_dir := $(CURDIR)/$(tmp_path)
 rust_tags_opt := $(has_rust_ctags)
-rust_tags_file := .rust.tags
+rust_tags_file := $(rust_root)/TAGS
 rust_src_dir := $(has_rust_src)
+rust_fmt_file := $(rust_root)/rustfmt.toml
 
 
 $(rust_tags_file): $(rust_tags_opt)
 	ctags -R -e -a -o $@ --options=$< $(rust_src_dir)
 
+$(rust_fmt_file):
+	$(RUSTFMT) --print-config default \
+    | sed -e 's#max_width = .*#max_width = 79#g' > $@
+
+rust_lldb_source_map:
+	echo "settings set target.source-map XXX $(rust_src_dir)"
+
+rust_gdb_source_map:
+	echo "? XXX $(rust_src_dir)"
 
 
 # hi
@@ -63,8 +74,8 @@ rust_hi_test: rust_hi
 	size $(rust_hi_binout)
 	$(rust_hi_binout)
 
-$(rust_hi_cargo): $(RUSTC)
-	$(CARGO) new --bin $(rust_prefix)_hi $(rust_root)/hi
+$(rust_hi_cargo):
+	$(CARGO) new --bin --vcs=none --name=$(rust_prefix)_hi $(rust_root)/hi
 
 $(rust_hi_binout): $(rust_hi_cargo)             \
                    $(rust_root)/hi/src/main.rs
@@ -185,6 +196,7 @@ rust_grep_binout := $(bin_path)/$(rust_prefix)_grep$(bin_ext)
 rust_grep: $(rust_grep_binout)
 rust_grep_doc: $(rust_grep_cargo)
 	-$(CARGO) doc --open --manifest-path $<
+
 rust_grep_test: $(rust_grep_cargo)              \
                 rust_grep
 	$(CARGO) test                                 \
@@ -195,9 +207,10 @@ rust_grep_test: $(rust_grep_cargo)              \
 rust_grep_run: rust_grep
 	-$(rust_grep_binout)
 	$(rust_grep_binout) use $(rust_root)/grep/src/main.rs
+	IGNORE_CASE=0 $(rust_grep_binout) use $(rust_root)/grep/src/main.rs
 
-$(rust_grep_cargo): $(CARGO)
-	$(CARGO) new --bin --name $(rust_prefix)_grep $(rust_root)/grep
+$(rust_grep_cargo):
+	$(CARGO) new --bin --name=$(rust_prefix)_grep $(rust_root)/grep
 
 $(rust_grep_binout): $(rust_grep_cargo)             \
                      $(rust_root)/grep/src/main.rs
@@ -239,8 +252,8 @@ rust_iter_doc: $(rust_iter_cargo)
 rust_iter_test: rust_iter
 	$(rust_iter_binout)
 
-$(rust_iter_cargo): $(CARGO)
-	$(CARGO) new --bin --name $(rust_prefix)_iter $(rust_root)/iter
+$(rust_iter_cargo):
+	$(CARGO) new --bin --name=$(rust_prefix)_iter $(rust_root)/iter
 
 $(rust_iter_binout): $(rust_iter_cargo)             \
                      $(rust_root)/iter/src/main.rs
@@ -285,8 +298,8 @@ rust_macro_doc: $(rust_macro_cargo)
 rust_macro_test: rust_macro
 	$(rust_macro_binout)
 
-$(rust_macro_cargo): $(CARGO)
-	$(CARGO) new --bin --name $(rust_prefix)_macro $(rust_root)/macro
+$(rust_macro_cargo):
+	$(CARGO) new --bin --name=$(rust_prefix)_macro $(rust_root)/macro
 
 $(rust_macro_binout): $(rust_macro_cargo)             \
                       $(rust_root)/macro/src/main.rs
@@ -308,8 +321,8 @@ rust_module_doc: $(rust_module_cargo)
 rust_module_test: rust_module
 	$(rust_module_binout)
 
-$(rust_module_cargo): $(CARGO)
-	$(CARGO) new --bin --name $(rust_prefix)_module $(rust_root)/module
+$(rust_module_cargo):
+	$(CARGO) new --bin --name=$(rust_prefix)_module $(rust_root)/module
 
 $(rust_module_binout): $(rust_module_cargo)             \
                        $(rust_root)/module/src/main.rs

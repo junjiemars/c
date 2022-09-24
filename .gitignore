@@ -133,6 +133,8 @@ src/zig/**/zig-out/
 # rust
 src/rust/**/target/
 src/rust/**/Cargo.lock
+**/.rustfmt.toml
+**/rustfmt.toml
 
 # gnucm
 src/gnucm/c

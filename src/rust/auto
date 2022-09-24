@@ -9,7 +9,7 @@
 
 echo ${echo_n} " + checking for rustc ... " ${echo_c}
 has_rustc="`command -v rustc`"
-if [ -n "$has_rustc" ]; then
+if [ -x "$has_rustc" ]; then
   flag=has_rustc value="${has_rustc}" . ${NORE_ROOT}/auto/make_define
   echo "yes"
 else
@@ -18,21 +18,82 @@ fi
 
 
 echo ${echo_n} " + checking for cargo ... " ${echo_c}
-flag=has_cargo value="`command -v cargo`" . ${NORE_ROOT}/auto/make_define
-echo "yes"
+has_cargo="`command -v cargo`"
+if [ -x "$has_cargo" ]; then
+  flag=has_cargo value="${has_cargo}" . ${NORE_ROOT}/auto/make_define
+  echo "yes"
+else
+  has_cargo=""
+  echo "no"
+fi
 
 
+echo ${echo_n} " + checking for rustfmt ... " ${echo_c}
+has_rust_fmt="`command -v rustfmt`"
+if [ -x "$has_rust_fmt" ]; then
+  flag=has_rustfmt value="${has_rust_fmt}" . ${NORE_ROOT}/auto/make_define
+  echo "yes"
+else
+  has_rust_fmt=""
+  echo "no"
+fi
+
+
+# check gdb/lldb
+#----------------------------------------
+case $NM_SYSTEM in
+  Darwin)
+    echo ${echo_n} " + checking for rust-lldb ... " ${echo_c}
+    has_lldb="`command -v lldb`"
+    has_rust_lldb="`command -v rust-lldb`"
+    if [ -x "$has_lldb" -a -x "$has_rust_lldb" ]; then
+      flag=has_rust_lldb value="$has_rust_lldb" \
+                         . ${NORE_ROOT}/auto/make_define
+      echo "yes"
+    else
+      has_rust_lldb=""
+      echo "no"
+    fi
+    ;;
+  Linux|*)
+    echo ${echo_n} " + checking for rust-gdb ... " ${echo_c}
+    has_gdb="`command -v gdb`"
+    has_rust_gdb="`command -v rust-gdb`"
+    if [ -x "$has_gdb" -a -x "$has_rust_gdb" ]; then
+      flag=has_rust_gdb value="$has_rust_gdb" \
+                        . ${NORE_ROOT}/auto/make_define
+      echo "yes"
+    else
+      has_rust_gdb=""
+      echo "no"
+    fi
+    ;;
+esac
+
+
+# check rust src/etc
+#----------------------------------------
 if [ -n "$has_rustc" ]; then
   echo ${echo_n} " + checking for rust src ... " ${echo_c}
   has_rust_src="$(rustc --print sysroot)/lib/rustlib/src/rust"
-  has_rust_ctags="$(rustc --print sysroot)/lib/rustlib/src/rust/src/etc/ctags.rust"
-  if [ -r "$has_rust_ctags" ]; then
+  if [ -d "$has_rust_src" ]; then
     flag=has_rust_src value="${has_rust_src}" . ${NORE_ROOT}/auto/make_define
-    flag=has_rust_ctags value="${has_rust_ctags}" . ${NORE_ROOT}/auto/make_define
     echo "yes"
   else
     has_rust_src=""
-    has_rust_ctags=""
     echo "no"
   fi
+
+  echo ${echo_n} " + checking for rust etc ... " ${echo_c}
+  has_rust_etc="$(rustc --print sysroot)/lib/rustlib/etc"
+  if [ -d "$has_rust_etc" ]; then
+    flag=has_rust_etc value="${has_rust_etc}" . ${NORE_ROOT}/auto/make_define
+    echo "yes"
+  else
+    has_rust_etc=""
+    echo "no"
+  fi
+
 fi
+
+# eof

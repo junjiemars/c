@@ -1,3 +1,15 @@
+/*
+ * 1. Custom #[derive] macro: specify code added with the `derive'
+ * attribute used on structs and enums.
+ *
+ * 2. Attribute-like macro: define custom attributes usable on any item.
+ *
+ * 3. Function-like macro: clone of Scheme's macro.
+ *
+*/
+
+
+
 macro_rules! say_hello {
     () => {
         println!("Dummy macro");
