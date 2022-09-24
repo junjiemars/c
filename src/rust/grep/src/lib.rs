@@ -1,9 +1,8 @@
 #![allow(unused)]
 
+use std::env;
 use std::error::Error;
 use std::fs;
-use std::env;
-
 
 pub fn run(c: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(c.file_path)?;
@@ -29,12 +28,12 @@ pub struct Config {
 impl Config {
     pub fn build(args: &[String]) -> Result<Config, &'static str> {
         if args.len() < 3 {
-            return Err("not enough arguments");
+            return Err("usage: <query> <file>");
         }
         Ok(Config {
             query: args[1].clone(),
             file_path: args[2].clone(),
-						ignore_case: env::var("IGNORE_CASE").is_ok(),
+            ignore_case: env::var("IGNORE_CASE").is_ok(),
         })
     }
 }
@@ -50,7 +49,10 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     results
 }
 
-pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search_case_insensitive<'a>(
+    query: &str,
+    contents: &'a str,
+) -> Vec<&'a str> {
     let mut results = Vec::new();
     let query = query.to_lowercase();
 

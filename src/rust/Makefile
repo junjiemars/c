@@ -19,7 +19,8 @@ rust: rust_hi                                   \
       rust_macro                                \
       rust_unsafe                               \
       rust_box                                  \
-      rust_websrv
+      rust_websrv                               \
+      rust_ws
 rust_test: rust_hi_test                         \
            rust_libc_test                       \
            rust_game_test                       \
@@ -35,7 +36,8 @@ rust_test: rust_hi_test                         \
            rust_macro_test                      \
            rust_unsafe_test                     \
            rust_box_test                        \
-           rust_websrv_test
+           rust_websrv_test                     \
+           rust_ws_test
 
 
 # env
@@ -43,15 +45,25 @@ rust_prefix := rust
 RUSTC := $(has_rustc)
 CARGO := $(has_cargo)
 RUSTFMT := $(has_rustfmt)
+
 cargo_target_dir := $(CURDIR)/$(tmp_path)
 rust_tags_opt := $(has_rust_ctags)
-rust_tags_file := $(rust_root)/TAGS
+rust_tags_file := $(CURDIR)/.rust.tags
+rust_tags_sub_file := $(rust_root)/TAGS
 rust_src_dir := $(has_rust_src)
 rust_fmt_file := $(rust_root)/rustfmt.toml
 
+rust_release_opt :=
+ifeq ($(NM_BUILD), YES)
+rust_release_opt := --release
+endif
+
 
 $(rust_tags_file): $(rust_tags_opt)
-	ctags -R -e -a -o $@ --options=$< $(rust_src_dir)
+	ctags -R -e -a -o $@ --options="$<" $(rust_src_dir)
+
+$(rust_tags_sub_file): $(rust_tags_opt)
+	ctags -R -e -a -o $@ --options="$<" $(CURDIR)/$(rust_root)
 
 $(rust_fmt_file):
 	$(RUSTFMT) --print-config default \
@@ -79,7 +91,7 @@ $(rust_hi_cargo):
 
 $(rust_hi_binout): $(rust_hi_cargo)             \
                    $(rust_root)/hi/src/main.rs
-	$(CARGO) build                                \
+	$(CARGO) build $(rust_release_opt)            \
 		--manifest-path $<                          \
 		-Z unstable-options                         \
     --target-dir $(cargo_target_dir)            \
@@ -196,18 +208,19 @@ rust_grep_binout := $(bin_path)/$(rust_prefix)_grep$(bin_ext)
 rust_grep: $(rust_grep_binout)
 rust_grep_doc: $(rust_grep_cargo)
 	-$(CARGO) doc --open --manifest-path $<
+rust_grep_test: rust_grep_run
 
-rust_grep_test: $(rust_grep_cargo)              \
-                rust_grep
+rust_grep_unit_test: $(rust_grep_cargo)         \
+                     rust_grep
 	$(CARGO) test                                 \
     --manifest-path $<                          \
     -Z unstable-options                         \
     --target-dir $(cargo_target_dir)
 
-rust_grep_run: rust_grep
-	-$(rust_grep_binout)
-	$(rust_grep_binout) use $(rust_root)/grep/src/main.rs
-	IGNORE_CASE=0 $(rust_grep_binout) use $(rust_root)/grep/src/main.rs
+rust_grep_run: $(rust_grep_binout)
+	-$<
+	$< USE $(rust_root)/grep/src/main.rs
+	IGNORE_CASE= $< USE $(rust_root)/grep/src/main.rs
 
 $(rust_grep_cargo):
 	$(CARGO) new --bin --name=$(rust_prefix)_grep $(rust_root)/grep
@@ -422,3 +435,32 @@ $(rust_websrv_binout): $(rust_websrv_cargo)             \
     --target-dir $(cargo_target_dir)            \
     --out-dir $(bin_path)
 	@cp $(rust_websrv_html) $(bin_path)/
+
+
+# ws : workspace
+rust_ws_cargo := $(rust_root)/ws/Cargo.toml
+rust_ws_binout := $(bin_path)/adder
+
+
+rust_ws: $(rust_ws_binout)
+rust_ws_test: rust_ws
+	$(rust_ws_binout)
+
+rust_ws_unit_test: $(rust_ws_cargo)             \
+                   rust_ws
+	$(CARGO) test                                 \
+		--manifest-path $<                          \
+		-Z unstable-options                         \
+    --target-dir $(cargo_target_dir)
+
+
+$(rust_ws_binout): $(rust_ws_cargo)
+	$(CARGO) build $(rust_release_opt)            \
+		--manifest-path $<                          \
+		-Z unstable-options                         \
+    --target-dir $(cargo_target_dir)            \
+    --out-dir $(bin_path)
+
+
+
+# eof

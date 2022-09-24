@@ -76,9 +76,21 @@ esac
 if [ -n "$has_rustc" ]; then
   echo ${echo_n} " + checking for rust src ... " ${echo_c}
   has_rust_src="$(rustc --print sysroot)/lib/rustlib/src/rust"
+
   if [ -d "$has_rust_src" ]; then
     flag=has_rust_src value="${has_rust_src}" . ${NORE_ROOT}/auto/make_define
     echo "yes"
+
+    echo ${echo_n} " + checking for ctags.rust ... " ${echo_c}
+    has_rust_ctags="${has_rust_src}/src/etc/ctags.rust"
+    if [ -r "$has_rust_ctags" ]; then
+      flag=has_rust_ctags value="${has_rust_ctags}" \
+                          . ${NORE_ROOT}/auto/make_define
+      echo "yes"
+    else
+      echo "no"
+    fi
+
   else
     has_rust_src=""
     echo "no"
