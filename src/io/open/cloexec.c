@@ -19,7 +19,7 @@ main(int argc, char **argv)
       sscanf(argv[2], "%d", &opt_cloexec);
     }
 
-  oflags = O_WRONLY | O_CREAT | O_TRUNC;
+  oflags = O_WRONLY | O_CREAT;
   if (opt_cloexec > 0)
     {
       oflags |= O_CLOEXEC;
@@ -33,7 +33,13 @@ main(int argc, char **argv)
     }
 
   pid = fork();
-  if (pid)
+  if (pid == -1)
+    {
+      perror(NULL);
+      exit(EXIT_SUCCESS);
+    }
+
+  if (pid == 0)
     {
       if (write(fd, "abc", sizeof("abc")-1) == -1)
         {

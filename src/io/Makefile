@@ -231,11 +231,14 @@ $(io_name_binout): $(io_root)/name/n.c
 # open
 io_open_max_binout := $(bin_path)/$(io_prefix)_open_max$(bin_ext)
 io_open_cloexec_binout := $(bin_path)/$(io_prefix)_open_cloexec$(bin_ext)
+io_open_sync_binout := $(bin_path)/$(io_prefix)_open_sync$(bin_ext)
 
 io_open: $(io_open_max_binout)                  \
-         $(io_open_cloexec_binout)
+         $(io_open_cloexec_binout)              \
+         $(io_open_sync_binout)
 io_open_test: io_open_max_test                  \
-              io_open_cloexec_test
+              io_open_cloexec_test              \
+              io_open_sync_test
 
 io_open_max_test: $(io_open_max_binout)
 	-$< $(io_root)/open/256xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -243,11 +246,17 @@ io_open_max_test: $(io_open_max_binout)
 io_open_cloexec_test: $(io_open_cloexec_binout)
 	$< $(tmp_path)/$(io_prefix)_open_cloexec_file
 
+io_open_sync_test: $(io_open_sync_binout)
+	$< $(tmp_path)/$(io_prefix)_open_sync_file
+
 
 $(io_open_max_binout): $(io_root)/open/max.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_open_cloexec_binout): $(io_root)/open/cloexec.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_open_sync_binout): $(io_root)/open/sync.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
