@@ -53,10 +53,10 @@ endif
 io_prefix := io
 INC += $(nm_inc_opt)$(io_root) $(nm_inc_opt)$(root)/posix
 
-
 ifeq ($(CC_NAME),msvc)
 getopt_c := $(root)/posix/getopt.c
 endif
+
 _MEMORY_ ?= 0
 ifeq ($(shell test $(_MEMORY_) -gt 0; echo $$?),0)
 CFLAGS += $(f_sanitize)
@@ -142,16 +142,26 @@ $(io_dir_1_binout): $(io_root)/dir/d1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # dup
+io_dup_raw_binout := $(bin_path)/$(io_prefix)_dup_raw$(bin_ext)
+io_dup_raw2_binout := $(bin_path)/$(io_prefix)_dup_raw2$(bin_ext)
 io_dup_fdft_binout := $(bin_path)/$(io_prefix)_dup_fdft$(bin_ext)
 io_dup_g2_binout := $(bin_path)/$(io_prefix)_dup_g2$(bin_ext)
 io_dup_fdft_file := $(tmp_path)/$(io_prefix)_dup_fdft.file
 
 
-io_dup: $(io_dup_fdft_binout)                   \
+io_dup: $(io_dup_raw_binout)                    \
+        $(io_dup_raw2_binout)                   \
+        $(io_dup_fdft_binout)                   \
         $(io_dup_g2_binout)
-io_dup_test: io_dup_fdft_test                   \
+io_dup_test: io_dup_raw_test                    \
+             io_dup_raw2_test                   \
+             io_dup_fdft_test                   \
              io_dup_g2_test
 
+io_dup_raw_test: $(io_dup_raw_binout)
+	$< < $(io_root)/dup/r.c
+io_dup_raw2_test: $(io_dup_raw2_binout)
+	$< < $(io_root)/dup/r2.c
 io_dup_fdft_test: $(io_dup_fdft_binout)
 	$< $(io_dup_fdft_file)
 io_dup_g2_test: $(io_dup_g2_binout)
@@ -159,6 +169,12 @@ io_dup_g2_test: $(io_dup_g2_binout)
 
 $(io_dup_g2_file):
 	touch $@
+
+$(io_dup_raw_binout): $(io_root)/dup/r.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_dup_raw2_binout): $(io_root)/dup/r2.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_dup_fdft_binout): $(io_root)/dup/fdft.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
