@@ -25,7 +25,7 @@ copy_block(int src, int dst)
 void
 copy_block_sync(int src, int dst)
 {
-  int  n, fl;
+  int  fl;
 
   fl = fcntl(dst, F_GETFL);
   if (fl == -1)
@@ -41,14 +41,7 @@ copy_block_sync(int src, int dst)
       exit(EXIT_FAILURE);
     }
 
-  while ((n = read(src, blk, BLKSIZ)) > 0)
-    {
-      if (write(dst, blk, n) != n)
-        {
-          perror(NULL);
-          exit(EXIT_FAILURE);
-        }
-    }
+  copy_block(src, dst);
 
   if (fsync(dst) == -1)
     {
