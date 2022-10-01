@@ -1,8 +1,10 @@
 #include "_io_.h"
 
 /*
- * Tranditional implementations of the UNIX system have a buffer
- * cache or page cache in the kernel through which most disk I/O passes.
+ * 1. Tranditional implementations of the UNIX system have a buffer
+ * cache or page cache in the kernel through which most disk I/O
+ * passes.
+ *
  *
  */
 

@@ -9,7 +9,7 @@
 int
 main(int argc, char **argv)
 {
-  int  fd, fl;
+  int  fd, fstatus;
 
   if (argc < 2)
     {
@@ -18,15 +18,15 @@ main(int argc, char **argv)
     }
   fd = atoi(argv[1]);
 
-  fl = fcntl(fd, F_GETFL);
-  if (fl == -1)
+  fstatus = fcntl(fd, F_GETFL);
+  if (fstatus == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
 
   /* access mode */
-  switch (fl & O_ACCMODE)
+  switch (fstatus & O_ACCMODE)
     {
     case O_RDONLY:
       printf("%s: 0x%04x", _str_(O_RDONLY), O_RDONLY);
@@ -42,7 +42,7 @@ main(int argc, char **argv)
 
 #if defined(O_EXEC)
     case O_EXEC:
-      printf("%s: 0x%04x", _str_(O_EXEC), O_EXEC);
+      printf("execute only");
       break;
 
 #endif  /* O_EXEC */
@@ -55,34 +55,33 @@ main(int argc, char **argv)
 #endif  /* O_SEARCH */
 
     default:
-      printf("(no symbol): 0x%04x", (fl & O_ACCMODE));
+      printf("(no symbol): 0x%04x", (fstatus & O_ACCMODE));
       break;
     }
 
   /* optional */
-  if (fl & O_APPEND)
+  if (fstatus & O_APPEND)
     {
       printf(", %s: 0x%04x", _str_(O_APPEND), O_APPEND);
     }
 
-  if (fl & O_NONBLOCK)
+  if (fstatus & O_NONBLOCK)
     {
       printf(", %s: 0x%04x", _str_(O_NONBLOCK), O_NONBLOCK);
     }
 
-  if (fl & O_SYNC)
+  if (fstatus & O_SYNC)
     {
       printf(", %s: 0x%04x", _str_(O_SYNC), O_SYNC);
     }
 
 #if defined(O_FSYNC) && (O_FSYNC != O_SYNC)
-  if (fl & O_FSYNC)
+  if (fstatus & O_FSYNC)
     {
       printf(", %s: 0x%04x", _str_(O_FSYNC), O_FSYNC);
     }
 
 #endif  /* O_FSYNC */
-
 
   putchar('\n');
 

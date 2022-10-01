@@ -159,9 +159,9 @@ io_dup_test: io_dup_raw_test                    \
              io_dup_g2_test
 
 io_dup_raw_test: $(io_dup_raw_binout)
-	$< < $(io_root)/dup/r.c
+	$< < $(io_root)/dup/d.c
 io_dup_raw2_test: $(io_dup_raw2_binout)
-	$< < $(io_root)/dup/r2.c
+	$< < $(io_root)/dup/d2.c
 io_dup_fdft_test: $(io_dup_fdft_binout)
 	$< $(io_dup_fdft_file)
 io_dup_g2_test: $(io_dup_g2_binout)
@@ -170,10 +170,10 @@ io_dup_g2_test: $(io_dup_g2_binout)
 $(io_dup_g2_file):
 	touch $@
 
-$(io_dup_raw_binout): $(io_root)/dup/r.c
+$(io_dup_raw_binout): $(io_root)/dup/d.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(io_dup_raw2_binout): $(io_root)/dup/r2.c
+$(io_dup_raw2_binout): $(io_root)/dup/d2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_dup_fdft_binout): $(io_root)/dup/fdft.c
@@ -184,24 +184,34 @@ $(io_dup_g2_binout): $(io_root)/dup/g2.c
 
 
 # fcntl
+io_fcntl_dup_binout := $(bin_path)/$(io_prefix)_fcntl_dup$(bin_ext)
 io_fcntl_fl_binout := $(bin_path)/$(io_prefix)_fcntl_fl$(bin_ext)
 io_fcntl_sfl_binout := $(bin_path)/$(io_prefix)_fcntl_sfl$(bin_ext)
 io_fcntl_fl_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_fcntl_fl.file
 io_fcntl_sfl_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_fcntl_sfl.file
 
-io_fcntl: $(io_fcntl_fl_binout)               \
+io_fcntl: $(io_fcntl_dup_binout)                \
+          $(io_fcntl_fl_binout)                 \
           $(io_fcntl_sfl_binout)
-io_fcntl_test: io_fcntl_fl_test               \
-                io_fcntl_sfl_test
+io_fcntl_test: io_fcntl_dup_test                \
+               io_fcntl_fl_test                 \
+               io_fcntl_sfl_test
 
-io_fcntl_fl_test: $(io_fcntl_fl_binout)       \
-                   $(io_fcntl_fl_file)
+io_fcntl_dup_test: $(io_fcntl_dup_binout)
+	$< < $(io_root)/fcntl/d.c
+
+io_fcntl_fl_test: $(io_fcntl_fl_binout)         \
+                  $(io_fcntl_fl_file)
+	$< 0
+	$< 1
+	$< 2
 	$< 0 < /dev/null
 	$< 1 < /dev/null
 	$< 2 < /dev/null
-	$< 1 > $(io_fcntl_fl_file)
-	cat $(io_fcntl_fl_file)
 	$< 0 < $(io_fcntl_fl_file)
+	$< 1 < $(io_fcntl_fl_file)
+	$< 2 < $(io_fcntl_fl_file)
+	$< 1 1> $(io_fcntl_fl_file) && cat $(io_fcntl_fl_file)
 	$< 2 2>> $(io_fcntl_fl_file)
 	$< 5 5<> $(io_fcntl_fl_file)
 
@@ -211,6 +221,9 @@ io_fcntl_sfl_test: $(io_fcntl_sfl_binout)
 
 $(io_fcntl_fl_file):
 	touch $@
+
+$(io_fcntl_dup_binout): $(io_root)/fcntl/d.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_fcntl_fl_binout): $(io_root)/fcntl/fl.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

@@ -14,6 +14,7 @@ main(void)
       perror(NULL);
       exit(EXIT_FAILURE);
     }
+  assert(fd == 3);
 
   while ((n = read(fd, buf, BUFSIZ)) > 0)
     {
