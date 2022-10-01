@@ -21,5 +21,13 @@
 #endif
 
 
+#define _time_(E, S)                                \
+do                                                  \
+{                                                   \
+  clock_t _epoch_1_ = clock();                      \
+  (E);                                              \
+  S = (double)(clock() - _epoch_1_)/CLOCKS_PER_SEC; \
+} while (0)
+
 
 #endif /* _NCSTD_H_ */

@@ -13,16 +13,6 @@
 #endif
 
 
-#define _time_(E, V)                            \
-do                                              \
-{                                               \
-  clock_t _epoch_1_ = clock();                  \
-  (E);                                          \
-  V = (clock() - _epoch_1_);                    \
-} while (0)
-
-
-
 struct score_s
 {
   char  name[32];

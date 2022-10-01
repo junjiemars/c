@@ -17,7 +17,7 @@
 
 
 static void tile(char *const, int, int);
-static void print_time(char *const, long);
+static void print_time(char *const, double);
 static int validate(const char*, const char*);
 static void test_raw(char *const);
 static void test_tile(char *const);
@@ -68,10 +68,9 @@ tile(char *const table, int row_size, int col_size)
 
 
 void
-print_time(char *const what, long elapsed)
+print_time(char *const what, double elapsed)
 {
-  printf("%8s, escaped %8li cpu time, %16lf sec\n",
-         what, elapsed, (double)elapsed/CLOCKS_PER_SEC);
+  printf("%8s, escaped %16lf sec\n", what, elapsed);
 }
 
 void
@@ -106,7 +105,7 @@ validate(const char *a, const char *b)
 void
 test_raw(char *const table)
 {
-  clock_t elapsed;
+  double elapsed;
   _time_(raw(table, ROW_SIZE, COL_SIZE), elapsed);
   print_time("raw", elapsed);
 }
@@ -114,7 +113,7 @@ test_raw(char *const table)
 void
 test_tile(char *const table)
 {
-  clock_t elapsed;
+  double elapsed;
   _time_(tile(table, ROW_SIZE, COL_SIZE), elapsed);
   print_time("tile", elapsed);
 }
