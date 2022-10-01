@@ -1,90 +1,81 @@
-#include "_io_.h"
+#include <_io_.h>
 
 /*
- * 1. F_GETFL
+ * 1. fcntl(fd, F_SETFD) just affect the fd;
+ *
+ * 2. fcntl(fd, F_SETFL) affect the file table.
  *
  */
 
+#define ON   0
+#define OFF  1
 
 int
 main(int argc, char **argv)
 {
-  int  fd, fstatus;
+
+  int  fd, fd1, fd2, fd3, fl;
 
   if (argc < 2)
     {
-      fprintf(stderr, "usage: %s <fd>\n", basename(argv[0]));
-      exit(EXIT_FAILURE);
-    }
-  fd = atoi(argv[1]);
-
-  fstatus = fcntl(fd, F_GETFL);
-  if (fstatus == -1)
-    {
-      perror(NULL);
+      fprintf(stderr, "usage: <path>\n");
       exit(EXIT_FAILURE);
     }
 
-  /* access mode */
-  switch (fstatus & O_ACCMODE)
-    {
-    case O_RDONLY:
-      printf("%s: 0x%04x", _str_(O_RDONLY), O_RDONLY);
-      break;
+  fd1 = open(argv[1], O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+  fd2 = dup(fd1);
+  fd3 = open(argv[1], O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
 
-    case O_WRONLY:
-      printf("%s: 0x%04x", _str_(O_WRONLY), O_WRONLY);
-      break;
+  assert(0 == turn_fd_flags(fd1, FD_CLOEXEC, OFF));
 
-    case O_RDWR:
-      printf("%s: 0x%04x", _str_(O_RDWR), O_RDWR);
-      break;
-
-#if defined(O_EXEC)
-    case O_EXEC:
-      printf("execute only");
-      break;
-
-#endif  /* O_EXEC */
-
-#if defined(O_SEARCH)
-    case O_SEARCH:
-      printf("%s: 0x%04x", _str_(O_SEARCH), O_SEARCH);
-      break;
-
-#endif  /* O_SEARCH */
-
-    default:
-      printf("(no symbol): 0x%04x", (fstatus & O_ACCMODE));
-      break;
-    }
-
-  /* optional */
-  if (fstatus & O_APPEND)
-    {
-      printf(", %s: 0x%04x", _str_(O_APPEND), O_APPEND);
-    }
-
-  if (fstatus & O_NONBLOCK)
-    {
-      printf(", %s: 0x%04x", _str_(O_NONBLOCK), O_NONBLOCK);
-    }
-
-  if (fstatus & O_SYNC)
-    {
-      printf(", %s: 0x%04x", _str_(O_SYNC), O_SYNC);
-    }
-
-#if defined(O_FSYNC) && (O_FSYNC != O_SYNC)
-  if (fstatus & O_FSYNC)
-    {
-      printf(", %s: 0x%04x", _str_(O_FSYNC), O_FSYNC);
-    }
-
-#endif  /* O_FSYNC */
-
-  putchar('\n');
 
   exit(EXIT_SUCCESS);
 
+}
+
+int
+turn_fd_flags(int fd, int flags, int off)
+{
+  int  fd_flags;
+
+  fd_flags = fcntl(fd, F_GETFD);
+  if (fd_flags == -1)
+    {
+      return -1;
+    }
+
+  if (off == OFF)
+    {
+      fd_flags &= ~flags;
+    }
+  else
+    {
+      fd_flags |= flags;
+    }
+
+  if (fcntl(fd, F_SETFD, rc) == -1)
+    {
+      return -1;
+    }
+
+  return 0;
+}
+
+int
+has_fd_flags(int fd, int flags)
+{
+  int  fd_flags;
+
+  fd_flags = fcntl(fd, F_GETFD);
+  if (fd_flags == -1)
+    {
+      return -1;
+    }
+
+  if ((fd_flags & flags) == flags)
+    {
+      return 0;
+    }
+
+  return -1;
 }

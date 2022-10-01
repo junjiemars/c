@@ -1,7 +1,10 @@
 #include <_io_.h>
 
 /*
- * close(fd) just remove the fd's entry from the process table.
+ * 1. close(fd) just remove the fd's entry from the process table.
+ *
+ * 2. if the fd is the last entry that point to the file table, the
+ * file table also been closed.
  *
  */
 
@@ -19,7 +22,11 @@ main(void)
       exit(EXIT_FAILURE);
     }
 
-  close(STDOUT_FILENO);
+  if (close(STDOUT_FILENO) == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
 
   if (write(fd, ALPHA_L, _nof_(ALPHA_L)-1) != _nof_(ALPHA_L)-1)
     {

@@ -201,13 +201,16 @@ io_fcntl_fl_binout := $(bin_path)/$(io_prefix)_fcntl_fl$(bin_ext)
 io_fcntl_sfl_binout := $(bin_path)/$(io_prefix)_fcntl_sfl$(bin_ext)
 io_fcntl_fl_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_fcntl_fl.file
 io_fcntl_sfl_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_fcntl_sfl.file
+io_fcntl_affect_binout := $(bin_path)/$(io_prefix)_fcntl_affect$(bin_ext)
 
 io_fcntl: $(io_fcntl_dup_binout)                \
           $(io_fcntl_fl_binout)                 \
-          $(io_fcntl_sfl_binout)
+          $(io_fcntl_sfl_binout)                \
+          $(io_fcntl_affect_binout)
 io_fcntl_test: io_fcntl_dup_test                \
                io_fcntl_fl_test                 \
-               io_fcntl_sfl_test
+               io_fcntl_sfl_test                \
+               io_fcntl_affect_test
 
 io_fcntl_dup_test: $(io_fcntl_dup_binout)
 	$< < $(io_root)/fcntl/d.c
@@ -234,6 +237,9 @@ io_fcntl_sfl_test: $(io_fcntl_sfl_binout)
 $(io_fcntl_fl_file):
 	touch $@
 
+io_fcntl_affect_test: $(io_fcntl_affect_binout)
+	$< $<
+
 $(io_fcntl_dup_binout): $(io_root)/fcntl/d.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
@@ -241,6 +247,9 @@ $(io_fcntl_fl_binout): $(io_root)/fcntl/fl.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_fcntl_sfl_binout): $(io_root)/fcntl/sfl.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_fcntl_affect_binout): $(io_root)/fcntl/aff.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

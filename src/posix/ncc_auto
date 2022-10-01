@@ -53,7 +53,65 @@ case "$CC_NAME" in
 esac
 
 
-# check machine features
+# check frame-pointer features
+#----------------------------------------
+case "$CC_NAME" in
+   clang|gcc)
+     nm_feature="-fomit-frame-pointer"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-fomit-frame-pointer'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=omit_frame_pointer op=":=" value=$nm_feature_flags \
+         . ${NORE_ROOT}/auto/make_define
+     fi
+     nm_feature="-fno-omit-frame-pointer"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-fno-omit-frame-pointer'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=cflags_no_omit_frame_pointer op=":=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     ;;
+   msvc)
+     nm_feature="-Oy"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-Oy'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=omit_frame_pointer op=":=" value=$nm_feature_flags \
+         . ${NORE_ROOT}/auto/make_define
+     fi
+     nm_feature="-Oy-"
+     nm_feature_name=
+     nm_feature_indent=yes
+     nm_feature_run=no
+     nm_feature_h=
+     nm_feature_flags='-Oy-'
+     nm_feature_test=
+     . ${NORE_ROOT}/auto/feature
+     if [ yes = $nm_found ]; then
+       flag=cflags_no_omit_frame_pointer op=":=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+     fi
+     ;;
+esac
+
+
+# check cache-line features
 # ----------------------------------------
 case "$NM_SYSTEM" in
  Darwin)
@@ -153,7 +211,7 @@ else
 fi # end of check cache line size
 
 
-# check machine features
+# check endian features
 #----------------------------------------
 nm_feature="cpu endian"
 nm_feature_name="nm_cpu_little_endian"
