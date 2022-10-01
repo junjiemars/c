@@ -142,3 +142,5 @@ src/gnucm/c-1
 src/gnucm/c-2
 src/gnucm/c-3
 
+# io
+**/.*.file
