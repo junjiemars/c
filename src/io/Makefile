@@ -11,6 +11,7 @@ io_test:
 else
 
 io: io_access                                   \
+    io_close                                    \
     io_copy                                     \
     io_dir                                      \
     io_dup                                      \
@@ -29,6 +30,7 @@ io: io_access                                   \
     io_umask
 
 io_test: io_access_test                         \
+         io_close_test                          \
          io_copy_test                           \
          io_dir_test                            \
          io_dup_test                            \
@@ -103,6 +105,16 @@ $(io_access_open_binout): $(io_root)/access/a.c
 $(io_access_at_binout): $(io_root)/access/aat.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+# close
+io_close_binout := $(bin_path)/$(io_prefix)_close$(bin_ext)
+
+io_close: $(io_close_binout)
+io_close_test: io_close
+	$(io_close_binout)
+
+$(io_close_binout): $(io_root)/close/c1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # copy
@@ -308,6 +320,7 @@ io_redirect_out2 := $(tmp_path)/$(io_prefix)_redirect.out2
 
 io_redirect: $(io_redirect_binout)
 io_redirect_test: io_redirect
+	$(io_redirect_binout)
 	$(io_redirect_binout) > $(io_redirect_out1) 2>&1
 	cat $(io_redirect_out1)
 	$(io_redirect_binout) 2>&1 >$(io_redirect_out2)

@@ -3,13 +3,15 @@
 /*
  * Q1: If you open a file for read-write with append flag, can you
  * still read from anywhere in the file using lseek?
+ * A1: Yes.
  *
  * Q2: Can you use lseek to replace existing data in the file?
+ * A2: No.
  *
  */
 
-#define ALPHA_L10  "abcdefghij"
-#define ALPHA_U10  "ABCDEFGHIJ"
+#define ALPHA_L  "abcdefghij"
+#define ALPHA_U  "ABCDEFGHIJKLMN"
 
 int
 main(int argc, char **argv)
@@ -17,9 +19,9 @@ main(int argc, char **argv)
   int      fd;
   off_t    cur;
   ssize_t  n;
-  char     buf1[]  =  ALPHA_L10;
-  char     buf2[]  =  ALPHA_U10;
-  char     rbuf[sizeof(ALPHA_L10) * 2];
+  char     buf1[]  =  ALPHA_L;
+  char     buf2[]  =  ALPHA_U;
+  char     rbuf[sizeof(ALPHA_L) * 2];
 
   if (argc < 2)
     {
@@ -34,8 +36,8 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  n = write(fd, buf1, sizeof(buf1)-1);
-  if (n != sizeof(buf1)-1)
+  n = write(fd, buf1, _nof_(buf1)-1);
+  if (n != _nof_(buf1)-1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
