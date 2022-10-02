@@ -433,9 +433,14 @@ io_size: $(io_size_binout)                      \
          $(io_size_link)
 io_size_test: io_size
 	ls -lh $(tmp_path)
-	$(io_size_binout) $(io_size_binout)
-	$(io_size_binout) $(io_size_file)
-	$(io_size_binout) $(io_size_link)
+	$(io_size_binout) $(io_size_binout)           \
+    $(io_size_file)                             \
+    $(io_size_link)                             \
+    /dev/null                                   \
+    /dev/zero                                   \
+    $(io_root)/size/s1.c                        \
+    $(io_root)                                  \
+    $(io_root)/size
 
 $(io_size_file):
 	touch $@
