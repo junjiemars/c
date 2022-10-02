@@ -1,9 +1,9 @@
 #include <_io_.h>
 
 /*
- * 1. fcntl(fd, F_SETFD) just affect the fd;
+ * 1. fcntl(fd, F_SETFD) just affects the fd entry.
  *
- * 2. fcntl(fd, F_SETFL) affect the file table.
+ * 2. fcntl(fd, F_SETFL) affects the file table entry.
  *
  */
 

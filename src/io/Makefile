@@ -157,18 +157,18 @@ $(io_dir_1_binout): $(io_root)/dir/d1.c
 io_dup_raw_binout := $(bin_path)/$(io_prefix)_dup_raw$(bin_ext)
 io_dup_raw2_binout := $(bin_path)/$(io_prefix)_dup_raw2$(bin_ext)
 io_dup_fdft_binout := $(bin_path)/$(io_prefix)_dup_fdft$(bin_ext)
-io_dup_g2_binout := $(bin_path)/$(io_prefix)_dup_g2$(bin_ext)
+io_dup_close_binout := $(bin_path)/$(io_prefix)_dup_close$(bin_ext)
 io_dup_fdft_file := $(tmp_path)/$(io_prefix)_dup_fdft.file
 
 
 io_dup: $(io_dup_raw_binout)                    \
         $(io_dup_raw2_binout)                   \
         $(io_dup_fdft_binout)                   \
-        $(io_dup_g2_binout)
+        $(io_dup_close_binout)
 io_dup_test: io_dup_raw_test                    \
              io_dup_raw2_test                   \
              io_dup_fdft_test                   \
-             io_dup_g2_test
+             io_dup_close_test
 
 io_dup_raw_test: $(io_dup_raw_binout)
 	$< < $(io_root)/dup/d.c
@@ -176,8 +176,9 @@ io_dup_raw2_test: $(io_dup_raw2_binout)
 	$< < $(io_root)/dup/d2.c
 io_dup_fdft_test: $(io_dup_fdft_binout)
 	$< $(io_dup_fdft_file)
-io_dup_g2_test: $(io_dup_g2_binout)
-	$< 1 < /dev/null
+io_dup_close_test: $(io_dup_close_binout)
+	$< 1 1< /dev/null
+	$< 3 3< /dev/null
 
 $(io_dup_g2_file):
 	touch $@
@@ -191,7 +192,7 @@ $(io_dup_raw2_binout): $(io_root)/dup/d2.c
 $(io_dup_fdft_binout): $(io_root)/dup/fdft.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(io_dup_g2_binout): $(io_root)/dup/g2.c
+$(io_dup_close_binout): $(io_root)/dup/close.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

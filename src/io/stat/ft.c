@@ -1,5 +1,5 @@
-#include "_io_.h"
-#include <sys/stat.h>
+#include <_io_.h>
+
 
 /*
  * stat file type.
@@ -26,7 +26,7 @@ main(int argc, char *argv[])
       rc = lstat(argv[i], &buf);
       if (rc == -1)
         {
-          perror("!panic");
+          perror(argv[i]);
           continue;
         }
 
