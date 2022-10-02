@@ -460,13 +460,13 @@ io_stat_test: io_stat_ft_test                   \
 
 io_stat_ft_test: $(io_stat_ft_binout)           \
                  $(io_stat_ft_file)
-	$< $(CURDIR)/$(bin_path) $(io_stat_ft_file) /dev/null $<
+	$< $(CURDIR)/$(bin_path) $(io_stat_ft_file) /dev/null /dev/zero $<
 	echo "abc" | $< /dev/fd/0
 
 io_stat_uid_test: $(io_stat_uid_binout)
 	$< $<
 	chmod ug+s $<
-	$< $<
+	$< $< $(shell command -v passwd)
 
 io_stat_d_test: $(io_stat_d_binout)             \
                 $(io_stat_d_file)

@@ -63,7 +63,7 @@ main(int argc, char *argv[])
           s = "(unknown file type)";
         }
 
-      printf("# %s\n", s);
+      printf("%s: %s\n", argv[i], s);
 
     }
 

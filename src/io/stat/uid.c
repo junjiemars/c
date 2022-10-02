@@ -3,7 +3,7 @@
 
 
 /*
- * check setuid and setgid
+ * check owner/saved uid/gid
  *
  */
 
@@ -11,25 +11,30 @@
 int
 main(int argc, char **argv)
 {
-  int          rc;
+  int          i, rc;
   struct stat  buf;
 
   if (argc < 2)
     {
-      fprintf(stderr, "usage: %s <pathname>\n", basename(argv[0]));
+      fprintf(stderr, "usage: %s <pathname> [pathname...]\n",
+              basename(argv[0]));
       exit(EXIT_FAILURE);
     }
 
-  rc = lstat(argv[1], &buf);
-  if (rc == -1)
+  for (i = 1; i < argc; i++)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      rc = lstat(argv[i], &buf);
+      if (rc == -1)
+        {
+          perror(argv[i]);
+          continue;
+        }
+
+      printf("%s: uid(%d)", argv[i], buf.st_uid);
+      printf(",suid(%d)", buf.st_mode & S_ISUID);
+      printf(",sgid(%d)\n", buf.st_mode & S_ISGID);
+
     }
-
-
-  printf("set-user-id is %s\n", buf.st_mode & S_ISUID ? "on" : "off");
-  printf("set-group-id is %s\n", buf.st_mode & S_ISGID ? "on" : "off");
 
 
   exit(EXIT_SUCCESS);
