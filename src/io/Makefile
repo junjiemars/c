@@ -27,6 +27,7 @@ io: io_access                                   \
     io_stat                                     \
     io_struct                                   \
     io_sync                                     \
+    io_trunc                                    \
     io_umask
 
 io_test: io_access_test                         \
@@ -46,6 +47,7 @@ io_test: io_access_test                         \
          io_stat_test                           \
          io_struct_test                         \
          io_sync_test                           \
+         io_trunc_test                          \
          io_umask_test
 
 endif
@@ -542,6 +544,20 @@ io_temp_test: io_temp
 	$(io_temp_binout) /tmp
 
 $(io_temp_binout): $(io_root)/temp/t.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# trunc
+io_trunc_binout := $(bin_path)/$(io_prefix)_trunc$(bin_ext)
+io_trunc_file := $(tmp_path)/$(io_prefix)_trunc_file
+
+io_trunc: $(io_trunc_binout)
+io_trunc_test: io_trunc
+	echo "abc" > $(io_trunc_file)                 \
+    && $(io_trunc_binout) $(io_trunc_file) 10   \
+    && cat $(io_trunc_file)
+
+
+$(io_trunc_binout): $(io_root)/trunc/t1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
