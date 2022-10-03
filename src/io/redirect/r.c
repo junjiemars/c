@@ -13,7 +13,7 @@
  * A2:
  * 1. dup2(d1, d2)
  * 2. dup2(f1, d1)
- * so fd(2) point to d1's file table and fd(1) point to f1's file table.
+ * so fd(2) points to d1's file table and fd(1) points to f1's file table.
  *
  */
 

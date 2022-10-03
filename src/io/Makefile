@@ -16,6 +16,7 @@ io: io_access                                   \
     io_dir                                      \
     io_dup                                      \
     io_fcntl                                    \
+    io_link                                     \
     io_ls                                       \
     io_name                                     \
     io_open                                     \
@@ -36,6 +37,7 @@ io_test: io_access_test                         \
          io_dir_test                            \
          io_dup_test                            \
          io_fcntl_test                          \
+         io_link_test                           \
          io_ls_test                             \
          io_name_test                           \
          io_open_test                           \
@@ -256,6 +258,16 @@ $(io_fcntl_sfl_binout): $(io_root)/fcntl/sfl.c
 $(io_fcntl_affect_binout): $(io_root)/fcntl/aff.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+# link
+io_link_binout := $(bin_path)/$(io_prefix)_link$(bin_ext)
+
+io_link: $(io_link_binout)
+io_link_test: io_link
+	$(io_link_binout)
+
+$(io_link_binout): $(io_root)/link/lk1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # ls
 io_ls_raw_binout := $(bin_path)/$(io_prefix)_ls_raw$(bin_ext)

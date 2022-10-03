@@ -3,7 +3,7 @@
 /*
  * 1. close(fd) just remove the fd's entry from the process table.
  *
- * 2. if the fd is the last entry that point to the file table, the
+ * 2. if the fd is the last entry that points to the file table, the
  * file table also been closed.
  *
  */

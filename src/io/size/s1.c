@@ -5,7 +5,7 @@
  * 1. regular file: actual bytes.
  *
  * 2. symbol link: the bytes of the absolute pathname of the link
- * point to.
+ * points to.
  *
  * 3. device: 0.
  *

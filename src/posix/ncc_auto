@@ -16,36 +16,52 @@ if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
 
+if [    "$ncc_sanitize_address" = "yes"         \
+     -o "$ncc_sanitize_leak" = "yes"            \
+     -o "$ncc_omit_frame_pointer" = "yes"       \
+     -o "$ncc_no_omit_frame_pointer" = "yes"    \
+     -o "$ncc_cache_line_size" = "yes"          \
+     -o "$ncc_cpu_endian" = "yes"               \
+   ]; then
+  echo "checking for CC's features ..."
+else
+  return
+fi
 
-echo "checking for CC's features ..."
 
 # check sanitize feature
 #----------------------------------------
 case "$CC_NAME" in
    gcc|clang)
-     nm_feature="-fsanitize=address"
-     nm_feature_name=
-     nm_feature_indent=yes
-     nm_feature_run=no
-     nm_feature_h=
-     nm_feature_flags='-fsanitize=address'
-     nm_feature_test=
-     . ${NORE_ROOT}/auto/feature
-     if [ yes = $nm_found ]; then
-       flag=f_sanitize op="+=" value=$nm_feature_flags \
+     if [ "$ncc_sanitize_address" = "yes" ]; then
+       nm_feature="-fsanitize=address"
+       nm_feature_name=
+       nm_feature_indent=yes
+       nm_feature_run=no
+       nm_feature_h=
+       nm_feature_flags='-fsanitize=address'
+       nm_feature_test=
+       . ${NORE_ROOT}/auto/feature
+       if [ yes = $nm_found ]; then
+         flag=f_sanitize                        \
+           op="+=" value=$nm_feature_flags      \
            . ${NORE_ROOT}/auto/make_define
+       fi
      fi
-     nm_feature="-fsanitize=leak"
-     nm_feature_name=
-     nm_feature_indent=yes
-     nm_feature_run=no
-     nm_feature_h=
-     nm_feature_flags='-fsanitize=leak'
-     nm_feature_test=
-     . ${NORE_ROOT}/auto/feature
-     if [ yes = $nm_found ]; then
-       flag=f_sanitize op="+=" value=$nm_feature_flags \
+     if [ "$ncc_sanitize_leak" = "yes" ]; then
+       nm_feature="-fsanitize=leak"
+       nm_feature_name=
+       nm_feature_indent=yes
+       nm_feature_run=no
+       nm_feature_h=
+       nm_feature_flags='-fsanitize=leak'
+       nm_feature_test=
+       . ${NORE_ROOT}/auto/feature
+       if [ yes = $nm_found ]; then
+         flag=f_sanitize                        \
+           op="+=" value=$nm_feature_flags      \
            . ${NORE_ROOT}/auto/make_define
+       fi
      fi
      ;;
    msvc)
@@ -56,56 +72,68 @@ esac
 # check frame-pointer features
 #----------------------------------------
 case "$CC_NAME" in
-   clang|gcc)
-     nm_feature="-fomit-frame-pointer"
-     nm_feature_name=
-     nm_feature_indent=yes
-     nm_feature_run=no
-     nm_feature_h=
-     nm_feature_flags='-fomit-frame-pointer'
-     nm_feature_test=
-     . ${NORE_ROOT}/auto/feature
-     if [ yes = $nm_found ]; then
-       flag=omit_frame_pointer op=":=" value=$nm_feature_flags \
-         . ${NORE_ROOT}/auto/make_define
-     fi
-     nm_feature="-fno-omit-frame-pointer"
-     nm_feature_name=
-     nm_feature_indent=yes
-     nm_feature_run=no
-     nm_feature_h=
-     nm_feature_flags='-fno-omit-frame-pointer'
-     nm_feature_test=
-     . ${NORE_ROOT}/auto/feature
-     if [ yes = $nm_found ]; then
-       flag=cflags_no_omit_frame_pointer op=":=" value=$nm_feature_flags \
-           . ${NORE_ROOT}/auto/make_define
+  clang|gcc)
+    if [ "$ncc_omit_frame_pointer" = "yes" ]; then
+      nm_feature="-fomit-frame-pointer"
+      nm_feature_name=
+      nm_feature_indent=yes
+      nm_feature_run=no
+      nm_feature_h=
+      nm_feature_flags='-fomit-frame-pointer'
+      nm_feature_test=
+      . ${NORE_ROOT}/auto/feature
+      if [ yes = $nm_found ]; then
+        flag=omit_frame_pointer                 \
+          op=":=" value=$nm_feature_flags       \
+          . ${NORE_ROOT}/auto/make_define
+      fi
+    fi
+    if [ "$ncc_no_omit_frame_pointer" = "yes" ]; then
+      nm_feature="-fno-omit-frame-pointer"
+      nm_feature_name=
+      nm_feature_indent=yes
+      nm_feature_run=no
+      nm_feature_h=
+      nm_feature_flags='-fno-omit-frame-pointer'
+      nm_feature_test=
+      . ${NORE_ROOT}/auto/feature
+      if [ yes = $nm_found ]; then
+        flag=cflags_no_omit_frame_pointer       \
+          op=":=" value=$nm_feature_flags       \
+          . ${NORE_ROOT}/auto/make_define
+      fi
      fi
      ;;
    msvc)
-     nm_feature="-Oy"
-     nm_feature_name=
-     nm_feature_indent=yes
-     nm_feature_run=no
-     nm_feature_h=
-     nm_feature_flags='-Oy'
-     nm_feature_test=
-     . ${NORE_ROOT}/auto/feature
-     if [ yes = $nm_found ]; then
-       flag=omit_frame_pointer op=":=" value=$nm_feature_flags \
-         . ${NORE_ROOT}/auto/make_define
-     fi
-     nm_feature="-Oy-"
-     nm_feature_name=
-     nm_feature_indent=yes
-     nm_feature_run=no
-     nm_feature_h=
-     nm_feature_flags='-Oy-'
-     nm_feature_test=
-     . ${NORE_ROOT}/auto/feature
-     if [ yes = $nm_found ]; then
-       flag=cflags_no_omit_frame_pointer op=":=" value=$nm_feature_flags \
+     if [ "$ncc_omit_frame_pointer" = "yes" ]; then
+       nm_feature="-Oy"
+       nm_feature_name=
+       nm_feature_indent=yes
+       nm_feature_run=no
+       nm_feature_h=
+       nm_feature_flags='-Oy'
+       nm_feature_test=
+       . ${NORE_ROOT}/auto/feature
+       if [ yes = $nm_found ]; then
+         flag=omit_frame_pointer                \
+           op=":=" value=$nm_feature_flags      \
            . ${NORE_ROOT}/auto/make_define
+       fi
+     fi
+     if [ "$ncc_no_omit_frame_pointer" = "yes" ]; then
+       nm_feature="-Oy-"
+       nm_feature_name=
+       nm_feature_indent=yes
+       nm_feature_run=no
+       nm_feature_h=
+       nm_feature_flags='-Oy-'
+       nm_feature_test=
+       . ${NORE_ROOT}/auto/feature
+       if [ yes = $nm_found ]; then
+         flag=cflags_no_omit_frame_pointer      \
+           op=":=" value=$nm_feature_flags      \
+           . ${NORE_ROOT}/auto/make_define
+       fi
      fi
      ;;
 esac
@@ -113,6 +141,8 @@ esac
 
 # check cache-line features
 # ----------------------------------------
+if [ "$ncc_cache_line_size" = "yes" ]; then
+
 case "$NM_SYSTEM" in
  Darwin)
    nm_feature="cache line size"
@@ -210,21 +240,25 @@ else
       . ${NORE_ROOT}/auto/define
 fi # end of check cache line size
 
+fi # end of $ncc_cache_line_size
+
 
 # check endian features
 #----------------------------------------
-nm_feature="cpu endian"
-nm_feature_name="nm_cpu_little_endian"
-nm_feature_indent=yes
-nm_feature_run=value
-nm_feature_h="#include <stdio.h>"
-nm_feature_flags=
-nm_feature_test='int i=0x11223344;
+if [ "$ncc_cpu_endian" = "yes" ]; then
+  nm_feature="cpu endian"
+  nm_feature_name="nm_cpu_little_endian"
+  nm_feature_indent=yes
+  nm_feature_run=value
+  nm_feature_h="#include <stdio.h>"
+  nm_feature_flags=
+  nm_feature_test='int i=0x11223344;
                  char *p = (char*)&i;
                  int le = (0x44 == *p);
                  printf("%d", le);
                  return 0'
-. ${NORE_ROOT}/auto/feature
+  . ${NORE_ROOT}/auto/feature
+fi
 
 
 

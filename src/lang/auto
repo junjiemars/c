@@ -6,6 +6,9 @@ if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
 
+ncc_cache_line_size="yes"
+ncc_cpu_endian="yes"
+
 # check ncstd.h features
 . ${POSIX_ROOT}/ncstd_auto
 
