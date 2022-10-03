@@ -13,10 +13,10 @@ fn main() {
     }
 
     // strlen
-		unsafe {
-				let cstr = CString::new("Inside C").expect("XX");
-				let fmt = CString::new("strlen(\"%s\") = %d\n").expect("XX");
-				let len = strlen(cstr.as_ptr());
-				printf(fmt.as_ptr(), cstr.as_ptr(), len);
-		}
+    unsafe {
+        let cstr = CString::new("Inside C").expect("XX");
+        let fmt = CString::new("strlen(\"%s\") = %d\n").expect("XX");
+        let len = strlen(cstr.as_ptr());
+        printf(fmt.as_ptr(), cstr.as_ptr(), len);
+    }
 }

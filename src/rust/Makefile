@@ -147,7 +147,7 @@ rust_owner_doc: $(rust_owner_cargo)
 rust_owner_test: rust_owner
 	$(rust_owner_binout)
 
-$(rust_owner_cargo): $(CARGO)
+$(rust_owner_cargo):
 	$(CARGO) new --bin --name $(rust_prefix)_owner $(rust_root)/owner
 
 $(rust_owner_binout): $(rust_owner_cargo)             \
@@ -169,7 +169,7 @@ rust_generic_doc: $(rust_generic_cargo)
 rust_generic_test: rust_generic
 	$(rust_generic_binout)
 
-$(rust_generic_cargo): $(CARGO)
+$(rust_generic_cargo):
 	$(CARGO) new --bin --name $(rust_prefix)_generic $(rust_root)/generic
 
 $(rust_generic_binout): $(rust_generic_cargo)             \
@@ -190,7 +190,7 @@ rust_error_doc: $(rust_error_cargo)
 rust_error_test: rust_error
 	-$(shell RUST_BACKTRACE=1 $(rust_error_binout))
 
-$(rust_error_cargo): $(CARGO)
+$(rust_error_cargo):
 	$(CARGO) new --bin --name $(rust_prefix)_error $(rust_root)/error
 
 $(rust_error_binout): $(rust_error_cargo)             \
@@ -244,7 +244,7 @@ rust_io_doc: $(rust_io_cargo)
 rust_io_test: rust_io
 	$(rust_io_binout)
 
-$(rust_io_cargo): $(CARGO)
+$(rust_io_cargo):
 	$(CARGO) new --bin --name $(rust_prefix)_io $(rust_root)/io
 
 $(rust_io_binout): $(rust_io_cargo)             \
@@ -288,7 +288,7 @@ rust_lib_doc: $(rust_lib_cargo)
 rust_lib_test: rust_lib
 	size $(rust_lib_binout)
 
-$(rust_lib_cargo): $(CARGO)
+$(rust_lib_cargo):
 	$(CARGO) new --lib --name $(rust_prefix)_lib $(rust_root)/lib
 
 $(rust_lib_binout): $(rust_lib_cargo)             \
@@ -355,7 +355,7 @@ rust_min_test: rust_min
 	size $(rust_min_binout)
 	$(rust_min_binout)
 
-$(rust_min_cargo): $(RUSTC)
+$(rust_min_cargo):
 	$(CARGO) new $(rust_root)/min
 
 $(rust_min_binout): $(rust_min_cargo)             \
@@ -378,7 +378,7 @@ rust_unsafe_doc: $(rust_unsafe_cargo)
 rust_unsafe_test: rust_unsafe
 	$(rust_unsafe_binout)
 
-$(rust_unsafe_cargo): $(CARGO)
+$(rust_unsafe_cargo):
 	$(CARGO) new --bin --name $(rust_prefix)_unsafe $(rust_root)/unsafe
 
 $(rust_unsafe_binout): $(rust_unsafe_cargo)             \
@@ -400,7 +400,7 @@ rust_box_doc: $(rust_box_cargo)
 rust_box_test: rust_box
 	$(rust_box_binout)
 
-$(rust_box_cargo): $(CARGO)
+$(rust_box_cargo):
 	$(CARGO) new --bin --name $(rust_prefix)_box $(rust_root)/box
 
 $(rust_box_binout): $(rust_box_cargo)             \
@@ -423,7 +423,7 @@ rust_websrv_test: rust_websrv
 	size $(rust_websrv_binout)
 	# RUST_BACKTRACE=1 $(rust_websrv_binout)
 
-$(rust_websrv_cargo): $(CARGO)
+$(rust_websrv_cargo):
 	$(CARGO) new --bin --name $(rust_prefix)_websrv $(rust_root)/websrv
 
 $(rust_websrv_binout): $(rust_websrv_cargo)             \
