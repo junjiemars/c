@@ -262,13 +262,16 @@ $(io_fcntl_affect_binout): $(io_root)/fcntl/aff.c
 # link
 io_link_hard_binout := $(bin_path)/$(io_prefix)_link_hard$(bin_ext)
 io_link_un_binout := $(bin_path)/$(io_prefix)_link_un$(bin_ext)
+io_link_rd_binout := $(bin_path)/$(io_prefix)_link_rd$(bin_ext)
 io_link_dir := $(tmp_path)/$(io_prefix)_link_dir
 io_link_file := $(tmp_path)/$(io_prefix)_link_file
 
 io_link: $(io_link_hard_binout)                 \
-         $(io_link_un_binout)
+         $(io_link_un_binout)                   \
+         $(io_link_rd_binout)
 io_link_test: io_link_hard_test                 \
-              io_link_un_test
+              io_link_un_test                   \
+              io_link_rd_test
 
 io_link_hard_test: $(io_link_hard_binout)
 	$< $< $(io_link_file) && ls -lh $(io_link_file)
@@ -278,10 +281,17 @@ io_link_un_test: $(io_link_un_binout)
 	$< $(io_link_file) && ls -lh $(tmp_path)
 	$< $(io_link_dir) && ls -lh $(tmp_path)
 
+io_link_rd_test: $(io_link_rd_binout)
+	mkdir -p $(io_link_dir) && ls -lh $(tmp_path)
+	$< $(io_link_dir) && ls -lh $(tmp_path)
+
 $(io_link_hard_binout): $(io_root)/link/lk1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_link_un_binout): $(io_root)/link/ulk1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_link_rd_binout): $(io_root)/link/rd.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

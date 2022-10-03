@@ -48,7 +48,6 @@ main(int argc, char **argv)
     }
 
   printf("unlink %s(%c)... ", argv[1], S_ISREG(ss.st_mode) ? 'f' : 'd');
-  sleep(5);
   printf("done\n");
 
 
