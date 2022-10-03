@@ -8,7 +8,7 @@ main(int argc, char **argv)
 
   if (argc < 2)
     {
-      printf("usage: <pathname>\n");
+      printf("usage: <path>\n");
       exit(EXIT_FAILURE);
     }
 

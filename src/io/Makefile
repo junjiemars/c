@@ -266,17 +266,20 @@ io_link_hard_binout := $(bin_path)/$(io_prefix)_link_hard$(bin_ext)
 io_link_un_binout := $(bin_path)/$(io_prefix)_link_un$(bin_ext)
 io_link_rmdir_binout := $(bin_path)/$(io_prefix)_link_rmdir$(bin_ext)
 io_link_rm_binout := $(bin_path)/$(io_prefix)_link_rm$(bin_ext)
+io_link_sym_binout := $(bin_path)/$(io_prefix)_link_sym$(bin_ext)
 io_link_dir := $(tmp_path)/$(io_prefix)_link_dir
 io_link_file := $(tmp_path)/$(io_prefix)_link_file
 
 io_link: $(io_link_hard_binout)                 \
          $(io_link_un_binout)                   \
          $(io_link_rm_binout)                   \
-         $(io_link_rmdir_binout)
+         $(io_link_rmdir_binout)                \
+         $(io_link_sym_binout)
 io_link_test: io_link_hard_test                 \
               io_link_un_test                   \
               io_link_rm_test                   \
-              io_link_rmdir_test
+              io_link_rmdir_test                \
+              io_link_sym_test
 
 io_link_hard_test: $(io_link_hard_binout)
 	$< $< $(io_link_file) && ls -lh $(io_link_file)
@@ -295,6 +298,15 @@ io_link_rmdir_test: $(io_link_rmdir_binout)
 	mkdir -p $(io_link_dir) && ls -lh $(tmp_path)
 	$< $(io_link_dir) && ls -lh $(tmp_path)
 
+io_link_sym_test: $(io_link_sym_binout)
+	$< $(io_root)/link/sym1.c $(io_link_file) && ls -F $(io_link_file)
+	-rm -rf $(io_link_dir) $(io_link_file)            \
+    && $< $(CURDIR)/$(io_link_dir) $(io_link_file)  \
+    && test -d $(io_link_dir)                       \
+    || mkdir -p $(io_link_dir)                      \
+    && echo "abc" > $(io_link_dir)/zzz              \
+    && cat $(io_link_file)/zzz
+
 $(io_link_hard_binout): $(io_root)/link/lk1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
@@ -305,6 +317,9 @@ $(io_link_rm_binout): $(io_root)/link/rm.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_link_rmdir_binout): $(io_root)/link/rd.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_link_sym_binout): $(io_root)/link/sym1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -334,16 +349,25 @@ $(io_name_binout): $(io_root)/name/n.c
 
 
 # open
+io_open_at_binout := $(bin_path)/$(io_prefix)_open_at$(bin_ext)
 io_open_max_binout := $(bin_path)/$(io_prefix)_open_max$(bin_ext)
 io_open_cloexec_binout := $(bin_path)/$(io_prefix)_open_cloexec$(bin_ext)
 io_open_sync_binout := $(bin_path)/$(io_prefix)_open_sync$(bin_ext)
+io_open_file := $(tmp_path)/$(io_prefix)_open_file
 
-io_open: $(io_open_max_binout)                  \
+io_open: $(io_open_at_binout)                   \
+         $(io_open_max_binout)                  \
          $(io_open_cloexec_binout)              \
          $(io_open_sync_binout)
-io_open_test: io_open_max_test                  \
+io_open_test: io_open_at_test                   \
+              io_open_max_test                  \
               io_open_cloexec_test              \
               io_open_sync_test
+
+io_open_at_test: $(io_open_at_binout)
+	$< $(io_root)/open/o1.c
+	-ln -s $(tmp_path)/$(io_prefix)/no/such/file $(io_open_file)  \
+     $< $(io_open_file)
 
 io_open_max_test: $(io_open_max_binout)
 	-$< $(io_root)/open/256xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -353,6 +377,9 @@ io_open_cloexec_test: $(io_open_cloexec_binout)
 
 io_open_sync_test: $(io_open_sync_binout)
 	$< $(tmp_path)/$(io_prefix)_open_sync_file
+
+$(io_open_at_binout): $(io_root)/open/o1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 $(io_open_max_binout): $(io_root)/open/max.c

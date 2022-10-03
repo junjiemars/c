@@ -12,8 +12,6 @@ ncc_cpu_endian="yes"
 # check ncstd.h features
 . ${POSIX_ROOT}/ncstd_auto
 
-# # check posix features
-# . src/posix/auto
 
 
 # check header files

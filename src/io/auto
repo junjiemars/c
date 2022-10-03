@@ -11,6 +11,7 @@ if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
 
+ncc_sanitize_address="yes"
 
 # check posix features
 . src/posix/nustd_auto
