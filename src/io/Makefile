@@ -418,7 +418,13 @@ io_rename_dir_test: $(io_rename_binout)
 	mkdir -p $(io_rename_prefix)_Y                \
     && echo "abc" > $(io_rename_prefix)_Y/yyy   \
     && find $(io_rename_prefix)_Y
-	$< $(io_rename_prefix)_Y $(io_rename_prefix)_Z && ls -lh $(tmp_path)
+	mkdir -p $(io_rename_prefix)_Z                \
+    && echo "def" > $(io_rename_prefix)_Z/zzz   \
+    && ls -lh $(tmp_path)
+	-$< $(io_rename_prefix)_Z $(io_rename_prefix)_Y
+	rm $(io_rename_prefix)_Y/yyy                        \
+    && $< $(io_rename_prefix)_Z $(io_rename_prefix)_Y \
+    && ls -lh $(io_rename_prefix)_Y
 
 
 $(io_rename_file):
