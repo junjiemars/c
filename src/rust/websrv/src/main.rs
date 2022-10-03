@@ -23,7 +23,9 @@ fn on_connect(mut ss: TcpStream) {
         let stauts_line = "HTTP/1.1 200 OK";
         let contents = fs::read_to_string("out/bin/h.html").unwrap();
         let length = contents.len();
-        let res = format!("{stauts_line}\r\nContent-Length: {length}\r\n\r\n{contents}");
+        let res = format!(
+            "{stauts_line}\r\nContent-Length: {length}\r\n\r\n{contents}"
+        );
         ss.write_all(res.as_bytes()).unwrap();
     } else {
         ss.write_all("HTTP/1.1 200 OK\r\n\r\n".as_bytes()).unwrap();

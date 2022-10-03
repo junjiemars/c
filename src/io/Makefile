@@ -22,6 +22,7 @@ io: io_access                                   \
     io_open                                     \
     io_own                                      \
     io_redirect                                 \
+    io_rename                                   \
     io_share                                    \
     io_seek                                     \
     io_size                                     \
@@ -43,6 +44,7 @@ io_test: io_access_test                         \
          io_open_test                           \
          io_own_test                            \
          io_redirect_test                       \
+         io_rename                              \
          io_share_test                          \
          io_seek_test                           \
          io_size_test                           \
@@ -262,16 +264,19 @@ $(io_fcntl_affect_binout): $(io_root)/fcntl/aff.c
 # link
 io_link_hard_binout := $(bin_path)/$(io_prefix)_link_hard$(bin_ext)
 io_link_un_binout := $(bin_path)/$(io_prefix)_link_un$(bin_ext)
-io_link_rd_binout := $(bin_path)/$(io_prefix)_link_rd$(bin_ext)
+io_link_rmdir_binout := $(bin_path)/$(io_prefix)_link_rmdir$(bin_ext)
+io_link_rm_binout := $(bin_path)/$(io_prefix)_link_rm$(bin_ext)
 io_link_dir := $(tmp_path)/$(io_prefix)_link_dir
 io_link_file := $(tmp_path)/$(io_prefix)_link_file
 
 io_link: $(io_link_hard_binout)                 \
          $(io_link_un_binout)                   \
-         $(io_link_rd_binout)
+         $(io_link_rm_binout)                   \
+         $(io_link_rmdir_binout)
 io_link_test: io_link_hard_test                 \
               io_link_un_test                   \
-              io_link_rd_test
+              io_link_rm_test                   \
+              io_link_rmdir_test
 
 io_link_hard_test: $(io_link_hard_binout)
 	$< $< $(io_link_file) && ls -lh $(io_link_file)
@@ -281,7 +286,12 @@ io_link_un_test: $(io_link_un_binout)
 	$< $(io_link_file) && ls -lh $(tmp_path)
 	$< $(io_link_dir) && ls -lh $(tmp_path)
 
-io_link_rd_test: $(io_link_rd_binout)
+io_link_rm_test: $(io_link_rm_binout)
+	mkdir -p $(io_link_dir) && echo "abc" > $(io_link_file) && ls -lh $(tmp_path)
+	$< $(io_link_file) && ls -lh $(tmp_path)
+	$< $(io_link_dir) && ls -lh $(tmp_path)
+
+io_link_rmdir_test: $(io_link_rmdir_binout)
 	mkdir -p $(io_link_dir) && ls -lh $(tmp_path)
 	$< $(io_link_dir) && ls -lh $(tmp_path)
 
@@ -291,7 +301,10 @@ $(io_link_hard_binout): $(io_root)/link/lk1.c
 $(io_link_un_binout): $(io_root)/link/ulk1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(io_link_rd_binout): $(io_root)/link/rd.c
+$(io_link_rm_binout): $(io_root)/link/rm.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_link_rmdir_binout): $(io_root)/link/rd.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -379,6 +392,41 @@ io_redirect_test: io_redirect
 
 $(io_redirect_binout): $(io_root)/redirect/r.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# rename
+io_rename_binout := $(bin_path)/$(io_prefix)_rename$(bin_ext)
+io_rename_prefix := $(tmp_path)/$(io_prefix)_rename
+
+io_rename: $(io_rename_binout)
+io_rename_test: io_rename_file_test             \
+                io_rename_dir_test
+
+io_rename_file_test: $(io_rename_binout)
+	echo "abc" > $(io_rename_prefix)_X && ls -lh $(tmp_path)
+	$< $(io_rename_prefix)_X $(io_rename_prefix)_X && ls -lh $(tmp_path)
+	$< $(io_rename_prefix)_X $(io_rename_prefix)_Z && ls -lh $(tmp_path)
+	echo "def" > $(io_rename_prefix)_Y && ls -lh $(tmp_path)
+	$< $(io_rename_prefix)_Y $(io_rename_prefix)_Z  \
+    && ls -lh $(tmp_path)                         \
+    && cat $(io_rename_prefix)_Z
+
+io_rename_dir_test: $(io_rename_binout)
+	rm -rf $(io_rename_prefix)_* && mkdir -p $(io_rename_prefix)_X  \
+    && ls -lh $(tmp_path)
+	$< $(io_rename_prefix)_X $(io_rename_prefix)_X && ls -lh $(tmp_path)
+	$< $(io_rename_prefix)_X $(io_rename_prefix)_Z && ls -lh $(tmp_path)
+	mkdir -p $(io_rename_prefix)_Y                \
+    && echo "abc" > $(io_rename_prefix)_Y/yyy   \
+    && find $(io_rename_prefix)_Y
+	$< $(io_rename_prefix)_Y $(io_rename_prefix)_Z && ls -lh $(tmp_path)
+
+
+$(io_rename_file):
+	echo "abc" > $@
+
+$(io_rename_binout): $(io_root)/rename/r1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # share
 io_share1_binout := $(bin_path)/$(io_prefix)_share1$(bin_ext)

@@ -3,21 +3,17 @@
 int
 main(int argc, char **argv)
 {
-  if (argc < 2)
+  if (argc < 3)
     {
-      fprintf(stderr, "usage: <dir>\n");
+      fprintf(stderr, "usage: <old> <new>\n");
       exit(EXIT_FAILURE);
     }
 
-  printf("rmdir %s, ", argv[1]);
-
-  if (rmdir(argv[1]) == -1)
+  if (renameat(AT_FDCWD, argv[1], AT_FDCWD, argv[2]) == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
-  printf("done\n");
-
 
   exit(EXIT_SUCCESS);
 }
