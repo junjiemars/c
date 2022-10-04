@@ -31,7 +31,7 @@ main(int argc, char **argv)
 #endif
 
 #if (O_RSYNC)
-  printf("%s=0x%x\n", _str_(O_RSYNC), O_RSYNC)
+  printf("%s=0x%x\n", _str_(O_RSYNC), O_RSYNC);
 #endif
 
   if (argc < 2)
