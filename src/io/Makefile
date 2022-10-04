@@ -686,15 +686,32 @@ $(io_temp_binout): $(io_root)/temp/t.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # time
-io_time_binout := $(bin_path)/$(io_prefix)_time$(bin_ext)
+io_time_raw_binout := $(bin_path)/$(io_prefix)_time_raw$(bin_ext)
+io_time_nac_binout := $(bin_path)/$(io_prefix)_time_nac$(bin_ext)
+io_time_file := $(tmp_path)/$(io_prefix)_time_file
 
-io_time: $(io_time_binout)
-io_time_test: $(io_time_binout)
+io_time: $(io_time_raw_binout)                  \
+         $(io_time_nac_binout)
+io_time_test: io_time_raw_test                  \
+              io_time_nac_test
+
+io_time_raw_test: $(io_time_raw_binout)
 	$< $(CURDIR)/$(io_root)/time/t1.c \
     && $(stat) $(io_root)/time/t1.c
 
-$(io_time_binout): $(io_root)/time/t1.c
+io_time_nac_test: $(io_time_nac_binout)
+	echo "abc" > $(io_time_file)
+	sleep 1
+	$(stat) $(io_time_file)
+	$< $(io_time_file)
+	$(stat) $(io_time_file)
+
+$(io_time_raw_binout): $(io_root)/time/t1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_time_nac_binout): $(io_root)/time/t2.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # trunc
 io_trunc_binout := $(bin_path)/$(io_prefix)_trunc$(bin_ext)
