@@ -29,6 +29,7 @@ io: io_access                                   \
     io_stat                                     \
     io_struct                                   \
     io_sync                                     \
+    io_time                                     \
     io_trunc                                    \
     io_umask
 
@@ -51,6 +52,7 @@ io_test: io_access_test                         \
          io_stat_test                           \
          io_struct_test                         \
          io_sync_test                           \
+         io_time_test                           \
          io_trunc_test                          \
          io_umask_test
 
@@ -68,6 +70,11 @@ endif
 _MEMORY_ ?= 0
 ifeq ($(shell test $(_MEMORY_) -gt 0; echo $$?),0)
 CFLAGS += $(f_sanitize)
+endif
+
+stat := stat
+ifeq ($(NM_SYSTEM), Darwin)
+stat := stat -x
 endif
 
 
@@ -267,6 +274,7 @@ io_link_un_binout := $(bin_path)/$(io_prefix)_link_un$(bin_ext)
 io_link_rmdir_binout := $(bin_path)/$(io_prefix)_link_rmdir$(bin_ext)
 io_link_rm_binout := $(bin_path)/$(io_prefix)_link_rm$(bin_ext)
 io_link_sym_binout := $(bin_path)/$(io_prefix)_link_sym$(bin_ext)
+io_link_read_binout := $(bin_path)/$(io_prefix)_link_read$(bin_ext)
 io_link_dir := $(tmp_path)/$(io_prefix)_link_dir
 io_link_file := $(tmp_path)/$(io_prefix)_link_file
 
@@ -274,12 +282,14 @@ io_link: $(io_link_hard_binout)                 \
          $(io_link_un_binout)                   \
          $(io_link_rm_binout)                   \
          $(io_link_rmdir_binout)                \
-         $(io_link_sym_binout)
+         $(io_link_sym_binout)                  \
+         $(io_link_read_binout)
 io_link_test: io_link_hard_test                 \
               io_link_un_test                   \
               io_link_rm_test                   \
               io_link_rmdir_test                \
-              io_link_sym_test
+              io_link_sym_test                  \
+              io_link_read_test
 
 io_link_hard_test: $(io_link_hard_binout)
 	$< $< $(io_link_file) && ls -lh $(io_link_file)
@@ -307,6 +317,11 @@ io_link_sym_test: $(io_link_sym_binout)
     && echo "abc" > $(io_link_dir)/zzz              \
     && cat $(io_link_file)/zzz
 
+io_link_read_test: $(io_link_read_binout)
+	ln -s $(CURDIR)/$^ $(io_link_file) && readlink $(io_link_file)
+	$< $(io_link_file)
+	-$< $^
+
 $(io_link_hard_binout): $(io_root)/link/lk1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
@@ -320,6 +335,9 @@ $(io_link_rmdir_binout): $(io_root)/link/rd.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_link_sym_binout): $(io_root)/link/sym1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_link_read_binout): $(io_root)/link/rl.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -354,6 +372,7 @@ io_open_max_binout := $(bin_path)/$(io_prefix)_open_max$(bin_ext)
 io_open_cloexec_binout := $(bin_path)/$(io_prefix)_open_cloexec$(bin_ext)
 io_open_sync_binout := $(bin_path)/$(io_prefix)_open_sync$(bin_ext)
 io_open_file := $(tmp_path)/$(io_prefix)_open_file
+io_open_dir := $(tmp_path)/$(io_prefix)_open_dir
 
 io_open: $(io_open_at_binout)                   \
          $(io_open_max_binout)                  \
@@ -368,6 +387,7 @@ io_open_at_test: $(io_open_at_binout)
 	$< $(io_root)/open/o1.c
 	-ln -s $(tmp_path)/$(io_prefix)/no/such/file $(io_open_file)  \
      $< $(io_open_file)
+	mkdir -p $(io_open_dir) && $< $(io_open_dir)
 
 io_open_max_test: $(io_open_max_binout)
 	-$< $(io_root)/open/256xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -663,6 +683,17 @@ io_temp_test: io_temp
 	$(io_temp_binout) /tmp
 
 $(io_temp_binout): $(io_root)/temp/t.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# time
+io_time_binout := $(bin_path)/$(io_prefix)_time$(bin_ext)
+
+io_time: $(io_time_binout)
+io_time_test: $(io_time_binout)
+	$< $(CURDIR)/$(io_root)/time/t1.c \
+    && $(stat) $(io_root)/time/t1.c
+
+$(io_time_binout): $(io_root)/time/t1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # trunc
