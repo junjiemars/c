@@ -1,5 +1,11 @@
 #include <_io_.h>
 
+/*
+ * Truncate the file but doesn't changed the access time and change
+ * time.
+ *
+ */
+
 int
 main(int argc, char **argv)
 {

@@ -156,15 +156,27 @@ $(io_copy_stdbuf_binout): $(io_root)/copy/stdbuf.c
 	# sudo chown root $@
 
 # dir
-io_dir_1_binout := $(bin_path)/$(io_prefix)_dir_1$(bin_ext)
+io_dir_raw_binout := $(bin_path)/$(io_prefix)_dir_raw$(bin_ext)
+io_dir_mk_binout := $(bin_path)/$(io_prefix)_dir_mk$(bin_ext)
+io_dir_prefix := $(tmp_path)/$(io_prefix)_dir
 
-io_dir: $(io_dir_1_binout)
-io_dir_test: io_dir_1_test
+io_dir: $(io_dir_raw_binout)                    \
+        $(io_dir_mk_binout)
+io_dir_test: io_dir_raw_test                    \
+             io_dir_mk_test
 
-io_dir_1_test: $(io_dir_1_binout)
+io_dir_raw_test: $(io_dir_raw_binout)
 	$< $(CURDIR)/$(io_root)/dir
 
-$(io_dir_1_binout): $(io_root)/dir/d1.c
+io_dir_mk_test: $(io_dir_mk_binout)
+	mkdir -p $(io_dir_prefix)
+	$< $(io_dir_prefix) a b c
+	ls -lh $(io_dir_prefix)
+
+$(io_dir_raw_binout): $(io_root)/dir/r1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_dir_mk_binout): $(io_root)/dir/d1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # dup

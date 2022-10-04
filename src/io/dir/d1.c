@@ -1,13 +1,17 @@
 #include <_io_.h>
 
+/*
+ *
+ */
+
 int
 main(int argc, char **argv)
 {
-  int  fd, fd1, fdr;
+  int  fd;
 
   if (argc < 2)
     {
-      printf("usage <pathname>\n");
+      printf("usage <pathname> [dir...]\n");
       exit(EXIT_SUCCESS);
     }
 
@@ -17,25 +21,16 @@ main(int argc, char **argv)
       perror(NULL);
       exit(EXIT_FAILURE);
     }
-  fd1 = openat(fd, "d1.c", O_RDONLY);
-  if (fd1 == -1)
+
+  for (int i = 2; i < argc; i++)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      if (mkdirat(fd, argv[i], S_IRUSR | S_IWUSR | S_IXUSR) == -1)
+        {
+          perror(NULL);
+          continue;
+        }
     }
 
-  if (fchdir(fd) == -1)
-    {
-      perror(NULL);
-      exit(EXIT_FAILURE);
-    }
-
-  fdr = openat(AT_FDCWD, "d1.c", O_RDONLY);
-  if (fdr == -1)
-    {
-      perror(NULL);
-      exit(EXIT_FAILURE);
-    }
 
   exit(EXIT_SUCCESS);
 
