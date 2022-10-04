@@ -13,6 +13,7 @@ main(int argc, char **argv)
 
   ts[0].tv_sec = 1;
   ts[1].tv_sec = 2;
+  ts[1].tv_nsec = UTIME_OMIT;
 
   if (utimensat(AT_FDCWD, argv[1], ts, AT_SYMLINK_NOFOLLOW) == -1)
     {
