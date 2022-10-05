@@ -134,11 +134,15 @@ $(io_close_binout): $(io_root)/close/c1.c
 # copy
 io_copy_unbuf_binout := $(bin_path)/$(io_prefix)_copy_unbuf$(bin_ext)
 io_copy_stdbuf_binout := $(bin_path)/$(io_prefix)_copy_stdbuf$(bin_ext)
+io_copy_cp_binout := $(bin_path)/$(io_prefix)_copy_cp$(bin_ext)
+io_copy_file := $(tmp_path)/$(io_prefix)_copy_file
 
 io_copy: $(io_copy_unbuf_binout)                \
-         $(io_copy_stdbuf_binout)
+         $(io_copy_stdbuf_binout)               \
+         $(io_copy_cp_binout)
 io_copy_test: io_copy_unbuf_test                \
-              io_copy_stdbuf_test
+              io_copy_stdbuf_test               \
+              io_copy_cp_test
 
 io_copy_unbuf_test: $(io_copy_unbuf_binout)
 	echo "abc\ndef" | $<
@@ -148,12 +152,23 @@ io_copy_stdbuf_test: $(io_copy_stdbuf_binout)
 	echo "abc\ndef" | $<
 	$< < $(io_root)/copy/stdbuf.c
 
+io_copy_cp_test: $(io_copy_cp_binout)
+	$< $(CURDIR)/$(io_root)/copy/cp1.c $(CURDIR)/$(io_copy_file) \
+    && cat $(CURDIR)/$(io_copy_file)
+	$< $(CURDIR)/$(io_root)/copy/hole $(CURDIR)/$(io_copy_file)_X \
+    && cat $(CURDIR)/$(io_copy_file)_X
+
 $(io_copy_unbuf_binout): $(io_root)/copy/unbuf.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_copy_stdbuf_binout): $(io_root)/copy/stdbuf.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 	# sudo chown root $@
+
+$(io_copy_cp_binout): $(io_root)/copy/cp1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 
 # dir
 io_dir_raw_binout := $(bin_path)/$(io_prefix)_dir_raw$(bin_ext)
