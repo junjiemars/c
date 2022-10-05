@@ -1,6 +1,7 @@
 #include <_io_.h>
 
 /*
+ * 1. `mkdir'
  *
  */
 
@@ -24,7 +25,7 @@ main(int argc, char **argv)
 
   for (int i = 2; i < argc; i++)
     {
-      if (mkdirat(fd, argv[i], S_IRUSR | S_IWUSR | S_IXUSR) == -1)
+      if (mkdirat(fd, argv[i], 0755) == -1)
         {
           perror(NULL);
           continue;
