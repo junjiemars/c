@@ -17,10 +17,8 @@
 int
 main(int argc, char **argv)
 {
-  int          fd;
-  int          oflags;
-  const char  *ss  =  "abc";
-  size_t       n   =  sizeof(ss);
+  int         fd;
+  int         oflags;
 
 #if (O_SYNC)
   printf("%s=0x%x\n", _str_(O_SYNC), O_SYNC);
@@ -50,7 +48,7 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  if (write(fd, ss, n-1) == -1)
+  if (write(fd, "abc", sizeof("abc")-1) == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);

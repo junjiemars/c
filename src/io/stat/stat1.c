@@ -3,15 +3,20 @@
 #include <grp.h>
 #include <time.h>
 
+/*
+ * Emulate `stat(1)'.
+ *
+*/
+
 #if (LINUX)
 #  include <sys/sysmacros.h>
 #endif
 
-static void pr_stat(const char *, const struct stat *);
-static const char *file_type(const struct stat *);
-static const char *file_mode(const struct stat *);
-static const char *str_uid(void);
-static const char *str_gid(void);
+static void         pr_stat(const char *, const struct stat *);
+static const char  *file_type(const struct stat *);
+static const char  *file_mode(const struct stat *);
+static const char  *str_uid(void);
+static const char  *str_gid(void);
 
 
 static char filetype_c = '-';

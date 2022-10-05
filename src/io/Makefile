@@ -403,17 +403,23 @@ io_open_at_binout := $(bin_path)/$(io_prefix)_open_at$(bin_ext)
 io_open_max_binout := $(bin_path)/$(io_prefix)_open_max$(bin_ext)
 io_open_cloexec_binout := $(bin_path)/$(io_prefix)_open_cloexec$(bin_ext)
 io_open_sync_binout := $(bin_path)/$(io_prefix)_open_sync$(bin_ext)
+io_open_creat_binout := $(bin_path)/$(io_prefix)_open_creat$(bin_ext)
+io_open_creat1_binout := $(bin_path)/$(io_prefix)_open_creat1$(bin_ext)
 io_open_file := $(tmp_path)/$(io_prefix)_open_file
 io_open_dir := $(tmp_path)/$(io_prefix)_open_dir
 
 io_open: $(io_open_at_binout)                   \
          $(io_open_max_binout)                  \
          $(io_open_cloexec_binout)              \
-         $(io_open_sync_binout)
+         $(io_open_sync_binout)                 \
+         $(io_open_creat_binout)                \
+         $(io_open_creat1_binout)
 io_open_test: io_open_at_test                   \
               io_open_max_test                  \
               io_open_cloexec_test              \
-              io_open_sync_test
+              io_open_sync_test                 \
+              io_open_creat_test                \
+              io_open_creat1_test
 
 io_open_at_test: $(io_open_at_binout)
 	$< $(io_root)/open/o1.c
@@ -430,9 +436,21 @@ io_open_cloexec_test: $(io_open_cloexec_binout)
 io_open_sync_test: $(io_open_sync_binout)
 	$< $(tmp_path)/$(io_prefix)_open_sync_file
 
+io_open_creat_test: $(io_open_creat_binout)
+	-rm $(io_open_file)
+	$< $(io_open_file) && ls -lh $(io_open_file)
+	chmod a-r $(io_open_file) && ls -lh $(io_open_file)
+	$< $(io_open_file) && ls -lh $(io_open_file)
+
+io_open_creat1_test: $(io_open_creat1_binout)
+	-rm $(io_open_file)
+	$< $(io_open_file) && ls -lh $(io_open_file)
+	chmod a-r $(io_open_file) && ls -lh $(io_open_file)
+	-$< $(io_open_file) && ls -lh $(io_open_file)
+
+
 $(io_open_at_binout): $(io_root)/open/o1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
 
 $(io_open_max_binout): $(io_root)/open/max.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -443,6 +461,11 @@ $(io_open_cloexec_binout): $(io_root)/open/cloexec.c
 $(io_open_sync_binout): $(io_root)/open/sync.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+$(io_open_creat_binout): $(io_root)/open/c1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_open_creat1_binout): $(io_root)/open/c2.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # own
@@ -626,20 +649,22 @@ $(io_size_binout): $(io_root)/size/s1.c
 # stat
 io_stat_ft_binout := $(bin_path)/$(io_prefix)_stat_ft$(bin_ext)
 io_stat_uid_binout := $(bin_path)/$(io_prefix)_stat_uid$(bin_ext)
-io_stat_d_binout := $(bin_path)/$(io_prefix)_stat_d$(bin_ext)
-io_stat_ft_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_stat.file
-io_stat_d_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_stat_d.file
+io_stat_stat1_binout := $(bin_path)/$(io_prefix)_stat1$(bin_ext)
+io_stat_dev_binout := $(bin_path)/$(io_prefix)_dev$(bin_ext)
+io_stat_link := $(CURDIR)/$(tmp_path)/$(io_prefix)_stat.link
 
 io_stat: $(io_stat_ft_binout)                   \
          $(io_stat_uid_binout)                  \
-         $(io_stat_d_binout)
+         $(io_stat_stat1_binout)                \
+         $(io_stat_dev_binout)
 io_stat_test: io_stat_ft_test                   \
               io_stat_uid_test                  \
-              io_stat_d_test
+              io_stat_stat1_test                \
+              io_stat_dev_test
 
-io_stat_ft_test: $(io_stat_ft_binout)           \
-                 $(io_stat_ft_file)
-	$< $(CURDIR)/$(bin_path) $(io_stat_ft_file) /dev/null /dev/zero $<
+io_stat_ft_test: $(io_stat_ft_binout)
+	-rm $(io_stat_link) || ln -s $(CURDIR)/$< $(io_stat_link)
+	$< $(CURDIR)/$(bin_path) $(io_stat_link) /dev/null /dev/zero $<
 	echo "abc" | $< /dev/fd/0
 
 io_stat_uid_test: $(io_stat_uid_binout)
@@ -647,16 +672,14 @@ io_stat_uid_test: $(io_stat_uid_binout)
 	chmod ug+s $<
 	$< $< $(shell command -v passwd)
 
-io_stat_d_test: $(io_stat_d_binout)             \
-                $(io_stat_d_file)
+io_stat_stat1_test: $(io_stat_stat1_binout)
 	echo "abc" | $<
-	$< $< $(io_stat_d_file) /dev/null $(bin_path)
+	-rm $(io_stat_link) || ln -s $(CURDIR)/$< $(io_stat_link)
+	$< $< $(io_stat_link) $(bin_path) /dev/null /dev/zero
 
-$(io_stat_ft_file): $(io_stat_ft_binout)
-	ln -s $< $@
-
-$(io_stat_d_file): $(io_stat_d_binout)
-	ln -s $< $@
+io_stat_dev_test: $(io_stat_dev_binout)
+	-ls -lh $(out)/nore.h /dev/null /dev/zero /dev/tty[01] /dev/ttyv[01]
+	$< $(out)/nore.h /dev/null /dev/zero /dev/tty[01] /dev/ttyv[01]
 
 $(io_stat_ft_binout): $(io_root)/stat/ft.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -664,8 +687,12 @@ $(io_stat_ft_binout): $(io_root)/stat/ft.c
 $(io_stat_uid_binout): $(io_root)/stat/uid.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(io_stat_d_binout): $(io_root)/stat/stat1.c
+$(io_stat_stat1_binout): $(io_root)/stat/stat1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_stat_dev_binout): $(io_root)/stat/dev1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 
 # struct
