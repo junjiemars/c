@@ -159,14 +159,17 @@ $(io_copy_stdbuf_binout): $(io_root)/copy/stdbuf.c
 io_dir_raw_binout := $(bin_path)/$(io_prefix)_dir_raw$(bin_ext)
 io_dir_mk_binout := $(bin_path)/$(io_prefix)_dir_mk$(bin_ext)
 io_dir_itor_binout := $(bin_path)/$(io_prefix)_dir_itor$(bin_ext)
+io_dir_tell_binout := $(bin_path)/$(io_prefix)_dir_tell$(bin_ext)
 io_dir_prefix := $(tmp_path)/$(io_prefix)_dir
 
 io_dir: $(io_dir_raw_binout)                    \
         $(io_dir_mk_binout)                     \
-        $(io_dir_itor_binout)
+        $(io_dir_itor_binout)                   \
+        $(io_dir_tell_binout)
 io_dir_test: io_dir_raw_test                    \
              io_dir_mk_test                     \
-             io_dir_itor_test
+             io_dir_itor_test                   \
+             io_dir_tell_test
 
 io_dir_raw_test: $(io_dir_raw_binout)
 	$< $(CURDIR)/$(io_root)/dir
@@ -181,6 +184,9 @@ io_dir_itor_test: $(io_dir_itor_binout)
 	$< $(CURDIR)/$(io_root)/dir/itor.c
 	$< $(CURDIR)/$(io_root)
 
+io_dir_tell_test: $(io_dir_tell_binout)
+	$< $(CURDIR)/$(bin_path)
+
 $(io_dir_raw_binout): $(io_root)/dir/r1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
@@ -188,6 +194,9 @@ $(io_dir_mk_binout): $(io_root)/dir/d1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_dir_itor_binout): $(io_root)/dir/itor.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_dir_tell_binout): $(io_root)/dir/d2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # dup
