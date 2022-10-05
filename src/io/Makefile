@@ -395,8 +395,7 @@ io_ls: $(io_ls_raw_binout)
 io_ls_test: io_ls_raw_test
 
 io_ls_raw_test: $(io_ls_raw_binout)
-	$< $(CURDIR)
-	$< /dev/fd
+	$< $(out)
 
 $(io_ls_raw_binout): $(io_root)/ls/l1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

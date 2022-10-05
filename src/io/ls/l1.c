@@ -1,6 +1,11 @@
 #include "_io_.h"
 #include <dirent.h>
 
+/*
+ * Emulates `ls(1)' program.
+ *
+ */
+
 int
 main(int argc, char **argv)
 {
@@ -9,7 +14,7 @@ main(int argc, char **argv)
 
   if (argc < 2)
     {
-      fprintf(stderr, "usage: %s <directory>\n", basename(argv[0]));
+      fprintf(stderr, "usage: %s <dir>\n", basename(argv[0]));
       exit(EXIT_FAILURE);
     }
 
