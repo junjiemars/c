@@ -93,8 +93,7 @@ iter(int fd, const char *path, counter cnt)
 
   while ((ent = readdir(dir)) != NULL)
     {
-      if ((ent->d_namlen == 1 && strcmp(".", ent->d_name) == 0)
-          || (ent->d_namlen == 2 && strcmp("..", ent->d_name) == 0))
+      if ((strcmp(".", ent->d_name) == 0) || (strcmp("..", ent->d_name) == 0))
         {
           continue;
         }
