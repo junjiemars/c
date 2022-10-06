@@ -1,12 +1,8 @@
 #include <_ld_.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <linux/fs.h>
 
-#if (LINUX)
-#include <unistd.h>
+
 extern char **environ;
-#endif
+
 
 void
 entry(void)

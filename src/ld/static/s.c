@@ -1,15 +1,11 @@
 #include <_ld_.h>
-#include <stdio.h>
 
 int
-main(int argc, char **argv)
+main(void)
 {
-    if (argc > 1) {
-        printf("echo: %s\n", argv[1]);
+  int  rc;
 
-    } else {
-        printf("w r u?\n");
-    }
+  rc = write(STDOUT_FILENO, "abc", sizeof("abc")-1);
 
-    return 0;
+  return rc;
 }

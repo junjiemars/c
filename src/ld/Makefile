@@ -1,31 +1,89 @@
 #
-# ./configure --without-debug --has-ld
+# ./configure --has-ld
 #
 
-ld: ld_entry																		\
-    ld_nostartfiles															\
-    ld_nostdlib																	\
-    ld_static																		\
-    ld_tiny																			\
+
+ifeq ($(CC_NAME), msvc)
+io:
+	@echo "#skip ..."
+io_test:
+	@echo "#skip ..."
+else
+
+
+ld: ld_asm                                      \
+    ld_bone                                     \
+    ld_entry                                    \
+    ld_nostartfiles                             \
+    ld_nostdlib                                 \
+    ld_static                                   \
+    ld_tiny                                     \
     ld_wrap
 
-ld_test: ld_entry_test													\
-         ld_nostartfiles_test										\
-         ld_nostdlib_test												\
-         ld_static_test													\
-         ld_tiny_test														\
+ld_test: ld_asm_test                            \
+         ld_bone_test                           \
+         ld_entry_test                          \
+         ld_nostartfiles_test                   \
+         ld_nostdlib_test                       \
+         ld_static_test                         \
+         ld_tiny_test                           \
          ld_wrap_test
 
+endif
 
+# env
 ld_prefix := ld
+INC += $(nm_inc_opt)$(ld_root) $(nm_inc_opt)$(root)/posix
 
-INC += -I$(ld_root)
+ifeq ($(CC_NAME),msvc)
+getopt_c := $(root)/posix/getopt.c
+endif
+
+
+# asm
+ld_asm_binout := $(bin_path)/$(ld_prefix)_asm$(bin_ext)
+ld_asm_objout := $(bin_path)/$(ld_prefix)_asm$(obj_ext)
+
+ifeq ($(ld_nopie_opt),)
+ld_asm:
+	@echo "#skip ld_asm_test ..."
+ld_asm_test: ld_asm
+else
+ld_asm: $(ld_asm_binout)
+ld_asm_test: ld_asm
+	$(ld_asm_binout)
+endif
+
+# $(ld_asm_binout): $(ld_asm_objout)
+# 	$(LINK) $^ $(bin_out)$@
+
+$(ld_asm_binout): $(ld_root)/asm/a.s
+	$(CC) $(ld_nopie_opt) $^ $(bin_out)$@
+
+# bone
+ld_bone_binout := $(bin_path)/$(ld_prefix)_bone$(bin_ext)
+ld_bone_m_objout := $(tmp_path)/$(ld_prefix)_bone_m$(obj_ext)
+ld_bone_a_objout := $(tmp_path)/$(ld_prefix)_bone_a$(obj_ext)
+
+ld_bone: $(ld_bone_binout)
+ld_bone_test: ld_bone
+	$(ld_bone_binout)
+
+$(ld_bone_binout): $(ld_bone_m_objout)          \
+                   $(ld_bone_a_objout)
+	$(LINK) $^ $(bin_out) $@
+
+$(ld_bone_m_objout): $(ld_root)/bone/m.c
+	$(CC) $(INC) $(nm_stage_c) $^ $(obj_out)$@
+
+$(ld_bone_a_objout): $(ld_root)/bone/a.c
+	$(CC) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
 
 # entry
 ld_entry_binout := $(bin_path)/$(ld_prefix)_entry$(bin_ext)
 
-ifeq (NO, $(ld_entry_opt))
+ifeq ($(ld_entry_opt),)
 ld_entry:
 	@echo "#skip ld_entry_test ..."
 ld_entry_test: ld_entry
@@ -36,13 +94,13 @@ ld_entry_test: ld_entry
 endif
 
 $(ld_entry_binout): $(ld_root)/entry/e.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_entry_opt)
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_entry_opt)_entry
 
 
 # nostartfiles
 ld_nostartfiles_binout := $(bin_path)/$(ld_prefix)_nostartfiles$(bin_ext)
 
-ifeq (NO, $(ld_nostartfiles_opt))
+ifeq ($(ld_nostartfiles_opt),)
 ld_nostartfiles:
 	@echo "#skip ld_nostartfiles_test ..."
 ld_nostartfiles_test: ld_nostartfiles
@@ -59,7 +117,7 @@ $(ld_nostartfiles_binout): $(ld_root)/nostartfiles/nosfs.c
 # static
 ld_static_binout := $(bin_path)/$(ld_prefix)_static$(bin_ext)
 
-ifeq (NO, $(ld_static_opt))
+ifeq ($(ld_static_opt),)
 ld_static:
 	@echo "#skip ld_static_test ..."
 ld_static_test: ld_static
@@ -76,7 +134,7 @@ $(ld_static_binout): $(ld_root)/static/s.c
 # nostdlib
 ld_nostdlib_binout := $(bin_path)/$(ld_prefix)_nostdlib$(bin_ext)
 
-ifeq (NO, $(ld_nostdlib_opt))
+ifeq ($(ld_nostdlib_opt),)
 ld_nostdlib:
 	@echo "#skip ld_nostdlib_test ..."
 ld_nostdlib_test: ld_nostdlib
@@ -87,34 +145,28 @@ ld_nostdlib_test: ld_nostdlib
 endif
 
 $(ld_nostdlib_binout): $(ld_root)/nostdlib/nostd.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_nostdlib_opt)
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_nostdlib_opt) $(nm_lib_opt)c
 
 
 # tiny
 ld_tiny_binout := $(bin_path)/$(ld_prefix)_tiny$(bin_ext)
 ld_tiny_objout := $(bin_path)/$(ld_prefix)_tiny$(obj_ext)
 
-ifeq (YES, $(ld_tiny_opt))
 ld_tiny: $(ld_tiny_binout)
 ld_tiny_test: ld_tiny
 	$(ld_tiny_binout)
-else
-ld_tiny:
-	@echo "#skip ld_tiny_test ..."
-ld_tiny_test: ld_tiny
-endif
 
 $(ld_tiny_binout): $(ld_tiny_objout)
-	$(LD) $^ $(bin_out)$@
+	$(LINK) $^ $(bin_out)$@
 
-$(ld_tiny_objout): $(ld_root)/tiny/t.s
-	$(CC) $(nm_stage_c) $^ $(bin_out)$@
+$(ld_tiny_objout): $(ld_root)/tiny/t.c
+	$(CC) $(INC) $(nm_stage_c) $^ $(bin_out)$@
 
 
 # wrap
 ld_wrap_binout := $(bin_path)/$(ld_prefix)_wrap$(bin_ext)
 
-ifeq (NO, $(ld_wrap_opt))
+ifeq ($(ld_wrap_opt),)
 ld_wrap:
 	@echo "#skip ld_wrap_test ..."
 ld_wrap_test: ld_wrap

@@ -14,8 +14,8 @@
 
 #endif  /* sys_exit */
 
-void
-_start(void)
+int
+main(void)
 {
-    sys_exit();
+  sys_exit();
 }

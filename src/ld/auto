@@ -3,178 +3,127 @@
 ## No More than a C build system for clang, gcc and msvc.
 ## https://github.com/junjiemars/nore
 ####
-## ds/auto
+## ld/auto
 ####
 
 
-# check as's option
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+
+# check posix features
+. src/posix/nustd_auto
+
+
+echo "checking for {ld} ..."
+
+
+# check entry point
 #----------------------------------------
-ld_tiny_opt=
+nm_feature="-e"
+nm_feature_name=
+nm_feature_indent=yes
+nm_feature_run=no
+nm_feature_h=
+nm_feature_flags=
+nm_feature_test=
+. ${NORE_ROOT}/auto/feature
+if [ yes = $nm_found ]; then
+  flag="ld_entry_opt" op=":=" value="-e" . ${NORE_ROOT}/auto/make_define
+fi
+
+
+# check static option
+#----------------------------------------
+nm_feature="-static"
+nm_feature_name=
+nm_feature_indent=yes
+nm_feature_run=yes
+nm_feature_h=
+nm_feature_flags='-static'
+nm_feature_test='return 0;'
+. ${NORE_ROOT}/auto/feature
+if [ yes = $nm_found ]; then
+  flag="ld_static_opt" op="=" value="$nm_feature"  \
+    . ${NORE_ROOT}/auto/make_define
+fi
+
+# check nostartfiles option
+#----------------------------------------
+nm_feature="-nostartfiles"
+nm_feature_name=
+nm_feature_indent=yes
+nm_feature_run=no
+nm_feature_h=
+nm_feature_flags=
+nm_feature_test=
+. ${NORE_ROOT}/auto/feature
+if [ yes = $nm_found ]; then
+  flag="ld_nostartfiles_opt" op=":=" value="$nm_feature"  \
+    . ${NORE_ROOT}/auto/make_define
+fi
+
+# check nostdlib option
+#----------------------------------------
+nm_feature="-nostdlib"
+nm_feature_name=
+nm_feature_indent=yes
+nm_feature_run=no
+nm_feature_h=
+nm_feature_flags=
+nm_feature_test=
+. ${NORE_ROOT}/auto/feature
+if [ yes = $nm_found ]; then
+  flag="ld_nostdlib_opt" op=":=" value="$nm_feature"  \
+    . ${NORE_ROOT}/auto/make_define
+fi
+
+
+# check no-pie option
+#----------------------------------------
 case "$CC_NAME" in
   clang)
     ;;
   gcc)
-    case "$NM_SYSTEM" in
-      Linux)
-        case "$NM_MACHINE" in
-          x86_64)
-            ld_tiny_opt="YES"
-            flag=ld_tiny_opt op=":=" value="$ld_tiny_opt" \
-                . ${NORE_ROOT}/auto/make_define
-            ;;
-          *)
-          ;;
-        esac
-        ;;
-      *)
-        ;;
-    esac
+    nm_feature="-fno-pie"
+    nm_feature_name=
+    nm_feature_indent=yes
+    nm_feature_run=yes
+    nm_feature_h=
+    nm_feature_flags='-fno-pie'
+    nm_feature_test='return 0;'
+    . ${NORE_ROOT}/auto/feature
+    if [ yes = $nm_found ]; then
+      flag="ld_nopie_opt" op=":=" value="$nm_feature"  \
+        . ${NORE_ROOT}/auto/make_define
+    fi
     ;;
   msvc)
     ;;
 esac
 
-# check ld's option
+
+# check -Wl,' link option for CC
 #----------------------------------------
-ld_entry_opt=
-ld_static_opt=
-ld_nostartfiles_opt=
-ld_nostdlib_opt=
 case "$CC_NAME" in
-  clang)
-  ;;
-  gcc)
-    case "$NM_SYSTEM" in
-      Linux)
-        case "$NM_MACHINE" in
-          x86_64)
-            echo $echo_n " + checking for $CC_NAME: -e ... $echo_c"
-            ld_entry_opt="-eentry -nostartfiles"
-            flag=ld_entry_opt op=":=" value="$ld_entry_opt" \
-                . ${NORE_ROOT}/auto/make_define
-            echo "yes"
-
-            echo $echo_n " + checking for $CC_NAME: -nostartfiles ... $echo_c"
-            ld_nostartfiles_opt="-nostartfiles"
-            flag=ld_nostartfiles_opt op=":=" value="$ld_nostartfiles_opt" \
-                . ${NORE_ROOT}/auto/make_define
-            echo "yes"
-
-            echo $echo_n " + checking for $CC_NAME: -static ... $echo_c"
-            ld_static_opt="-static"
-            flag=ld_static_opt op=":=" value="$ld_static_opt" \
-                . ${NORE_ROOT}/auto/make_define
-            echo "yes"
-
-            echo $echo_n " + checking for $CC_NAME: -nostdlib ... $echo_c"
-            ld_nostdlib_opt="-nostdlib"
-            flag=ld_nostdlib_opt op=":=" value="$ld_nostdlib_opt" \
-                . ${NORE_ROOT}/auto/make_define
-            echo "yes"
-            ;;
-          aarch64)
-            echo $echo_n " + checking for $CC_NAME: -e ... $echo_c"
-            ld_entry_opt="-eentry -nostartfiles"
-            flag=ld_entry_opt op=":=" value="$ld_entry_opt" \
-                . ${NORE_ROOT}/auto/make_define
-            echo "yes"
-
-            echo $echo_n " + checking for $CC_NAME: -nostartfiles ... $echo_c"
-            ld_nostartfiles_opt="-nostartfiles"
-            flag=ld_nostartfiles_opt op=":=" value="$ld_nostartfiles_opt" \
-                . ${NORE_ROOT}/auto/make_define
-            echo "yes"
-
-            echo $echo_n " + checking for $CC_NAME: -static ... $echo_c"
-            ld_static_opt="-static"
-            flag=ld_static_opt op=":=" value="$ld_static_opt" \
-                . ${NORE_ROOT}/auto/make_define
-            echo "yes"
-
-            echo $echo_n " + checking for $CC_NAME: -nostdlib ... $echo_c"
-            ld_nostdlib_opt="-nostdlib"
-            flag=ld_nostdlib_opt op=":=" value="$ld_nostdlib_opt" \
-                . ${NORE_ROOT}/auto/make_define
-            echo "yes"
-            ;;
-          *)
-            ;;
-        esac
-        ;;
-      Darwin)
-        ;;
-      WinNT)
-        ;;
-    esac
+  clang|gcc)
+    nm_feature="-Wl,--wrap"
+    nm_feature_name=
+    nm_feature_indent=yes
+    nm_feature_run=no
+    nm_feature_h=
+    nm_feature_flags='-Wl,--wrap'
+    nm_feature_test=
+    . ${NORE_ROOT}/auto/feature
+    if [ yes = $nm_found ]; then
+      flag="ld_wrap_opt" op=":=" value="${nm_feature}="  \
+        . ${NORE_ROOT}/auto/make_define
+    fi
     ;;
   msvc)
     ;;
 esac
-if [ -z "$ld_entry_opt" ]; then
-  echo $echo_n " + checking for $CC_NAME: -e ... $echo_c"
-  ld_entry_opt="NO"
-  flag=ld_entry_opt op=":=" value="$ld_entry_opt" \
-      . ${NORE_ROOT}/auto/make_define
-  echo "no"
-fi
-if [ -z "$ld_static_opt" ]; then
-  echo $echo_n " + checking for $CC_NAME: -nostartfiles ... $echo_c"
-  ld_nostartfiles_opt="NO"
-  flag=ld_nostartfiles_opt op=":=" value="$ld_nostartfiles_opt" \
-      . ${NORE_ROOT}/auto/make_define
-  echo "no"
-fi
-if [ -z "$ld_nostartfiles_opt" ]; then
-  echo $echo_n " + checking for $CC_NAME: -static ... $echo_c"
-  ld_static_opt="NO"
-  flag=ld_static_opt op=":=" value="$ld_static_opt" \
-      . ${NORE_ROOT}/auto/make_define
-  echo "no"
-fi
-if [ -z "$ld_nostdlib_opt" ]; then
-  echo $echo_n " + checking for $CC_NAME: -nostdlib ... $echo_c"
-  ld_nostdlib_opt="NO"
-  flag=ld_nostdlib_opt op=":=" value="$ld_nostdlib_opt" \
-      . ${NORE_ROOT}/auto/make_define
-  echo "no"
-fi
-
-
-# check ld's option
-#----------------------------------------
-ld_wrap_opt=NO
-case "$CC_NAME" in
-  clang)
-    ;;
-  gcc)
-    case "$NM_SYSTEM" in
-      Linux)
-        case "$NM_MACHINE" in
-          x86_64)
-            echo $echo_n " + checking for $CC_NAME: -Wl,--wrap ... $echo_c"
-            ld_wrap_opt="-Wl,--wrap="
-            flag=ld_wrap_opt op=":=" value="$ld_wrap_opt" \
-                . ${NORE_ROOT}/auto/make_define
-            echo "yes"
-            ;;
-          *)
-          ;;
-        esac
-        ;;
-      *)
-        ;;
-    esac
-    ;;
-  msvc)
-    ;;
-esac
-if [ -z "$ld_wrap_opt" ]; then
-  echo $echo_n " + checking for $CC_NAME: --wrap ... $echo_c"
-  ld_wrap_opt="NO"
-  flag=ld_wrap_opt op=":=" value="$ld_wrap_opt" \
-      . ${NORE_ROOT}/auto/make_define
-  echo "no"
-fi
 
 
 # eof

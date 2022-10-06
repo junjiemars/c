@@ -5,8 +5,8 @@
 #define SS "enter _start ...\n"
 
 
-void
-_start(void)
+int
+main(void)
 {
     printf(SS);
 
