@@ -18,18 +18,18 @@ ncc_cpu_endian="yes"
 ndef_restrict="yes"
 ndef_static_assert="yes"
 
-nustd_ssize="yes"
-nustd_sleep="yes"
-nustd_getpid="yes"
-
-nio_getdelim="yes"
-nio_fileno="yes"
-
 nstr_strdup="yes"
 
 nint_stdint="yes"
 nint_inttypes="yes"
 nint_stdbool="yes"
+
+nio_getdelim="yes"
+nio_fileno="yes"
+
+nustd_ssize="yes"
+nustd_sleep="yes"
+nustd_getpid="yes"
 
 
 # check for <nustd.h>

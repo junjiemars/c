@@ -41,80 +41,86 @@ fi
 
 # check ssize_t
 #----------------------------------------
-case $CC_NAME in
-  clang|gcc)
-    nm_feature="ssize_t"
-    nm_feature_name="nm_have_ssize_t"
-    nm_feature_run=no
-    nm_feature_h='#include <unistd.h>'
-    nm_feature_flags=
-    nm_feature_test='ssize_t ss = -1;'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  msvc)
-    nm_feature="ssize_t"
-    nm_feature_name="nm_have_ssize_t"
-    nm_feature_run=no
-    nm_feature_h='#include <BaseTsd.h>'
-    nm_feature_flags=
-    nm_feature_test='SSIZE_T ss = -1;'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  *)
-    ;;
-esac                            # ssize_t
+if [ "$nustd_ssize" = "yes" ]; then
+  case $CC_NAME in
+    clang|gcc)
+      nm_feature="ssize_t"
+      nm_feature_name="nm_have_ssize_t"
+      nm_feature_run=no
+      nm_feature_h='#include <unistd.h>'
+      nm_feature_flags=
+      nm_feature_test='ssize_t ss = -1;'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    msvc)
+      nm_feature="ssize_t"
+      nm_feature_name="nm_have_ssize_t"
+      nm_feature_run=no
+      nm_feature_h='#include <BaseTsd.h>'
+      nm_feature_flags=
+      nm_feature_test='SSIZE_T ss = -1;'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    *)
+      ;;
+  esac
+fi
 
 
 # check sleep
 #----------------------------------------
-case $CC_NAME in
-  clang|gcc)
-    nm_feature="sleep"
-    nm_feature_name="nm_have_sleep"
-    nm_feature_run=no
-    nm_feature_h='#include <unistd.h>'
-    nm_feature_flags=
-    nm_feature_test='sleep(1);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  msvc)
-    nm_feature="sleep"
-    nm_feature_name="nm_have_sleep"
-    nm_feature_run=no
-    nm_feature_h='#include <windows.h>'
-    nm_feature_flags=
-    nm_feature_test='Sleep(1*1000);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  *)
-    ;;
-esac                            # end of sleep
+if [ "$nustd_sleep" = "yes" ]; then
+  case $CC_NAME in
+    clang|gcc)
+      nm_feature="sleep"
+      nm_feature_name="nm_have_sleep"
+      nm_feature_run=no
+      nm_feature_h='#include <unistd.h>'
+      nm_feature_flags=
+      nm_feature_test='sleep(1);'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    msvc)
+      nm_feature="sleep"
+      nm_feature_name="nm_have_sleep"
+      nm_feature_run=no
+      nm_feature_h='#include <windows.h>'
+      nm_feature_flags=
+      nm_feature_test='Sleep(1*1000);'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    *)
+      ;;
+  esac
+fi
 
 
 # check getpid
 #----------------------------------------
-case $CC_NAME in
-  clang|gcc)
-    nm_feature="getpid"
-    nm_feature_name="nm_have_getpid"
-    nm_feature_run=no
-    nm_feature_h='#include <unistd.h>'
-    nm_feature_flags=
-    nm_feature_test='getpid();'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  msvc)
-    nm_feature="getpid"
-    nm_feature_name="nm_have_getpid"
-    nm_feature_run=no
-    nm_feature_h='#include <process.h>'
-    nm_feature_flags=
-    nm_feature_test='_getpid();'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  *)
-    ;;
-esac                            # end of getpid
+if [ "$nustd_getpid" = "yes" ]; then
+  case $CC_NAME in
+    clang|gcc)
+      nm_feature="getpid"
+      nm_feature_name="nm_have_getpid"
+      nm_feature_run=no
+      nm_feature_h='#include <unistd.h>'
+      nm_feature_flags=
+      nm_feature_test='getpid();'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    msvc)
+      nm_feature="getpid"
+      nm_feature_name="nm_have_getpid"
+      nm_feature_run=no
+      nm_feature_h='#include <process.h>'
+      nm_feature_flags=
+      nm_feature_test='_getpid();'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    *)
+      ;;
+  esac
+fi
 
 
 fi                              # define_nustd_h

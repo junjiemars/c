@@ -22,7 +22,7 @@ fi
 
 
 if [    "$nio_getdelim" = "yes"                 \
-     -o "$nustd_fileno" = "yes"                 \
+     -o "$nio_fileno" = "yes"                   \
    ]; then
   echo "checking for nio.h ..."
 else
@@ -35,72 +35,76 @@ fi
 
 # check getdelim
 #----------------------------------------
-case $CC_NAME in
-  clang)
-    nm_feature="getdelim"
-    nm_feature_name="nm_have_getdelim"
-    nm_feature_run=no
-    nm_feature_h='#include <stdio.h>'
-    nm_feature_flags=
-    nm_feature_test='getdelim((char**)0,(size_t*)0,0x0a,stdout);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  gcc)
-    nm_feature="getdelim"
-    nm_feature_name="nm_have_getdelim"
-    nm_feature_run=no
-    nm_feature_h='#include <stdio.h>'
-    nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
-    nm_feature_test='getdelim((char**)0,(size_t*)0,0x0a,stdout);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  msvc)
-    nm_feature="getdelim"
-    nm_feature_name="nm_have_getdelim"
-    nm_feature_run=no
-    nm_feature_h='#include <stdio.h>'
-    nm_feature_flags="-D_CRT_SECURE_NO_WARNINGS $CFLAGS"
-    nm_feature_test='getdelim((char**)0,(size_t*)0,0x0a,stdout);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  *)
-    ;;
-esac                            # end of getdelim
+if [ "$nio_getdelim" = "yes" ]; then
+  case $CC_NAME in
+    clang)
+      nm_feature="getdelim"
+      nm_feature_name="nm_have_getdelim"
+      nm_feature_run=no
+      nm_feature_h='#include <stdio.h>'
+      nm_feature_flags=
+      nm_feature_test='getdelim((char**)0,(size_t*)0,0x0a,stdout);'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    gcc)
+      nm_feature="getdelim"
+      nm_feature_name="nm_have_getdelim"
+      nm_feature_run=no
+      nm_feature_h='#include <stdio.h>'
+      nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
+      nm_feature_test='getdelim((char**)0,(size_t*)0,0x0a,stdout);'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    msvc)
+      nm_feature="getdelim"
+      nm_feature_name="nm_have_getdelim"
+      nm_feature_run=no
+      nm_feature_h='#include <stdio.h>'
+      nm_feature_flags="-D_CRT_SECURE_NO_WARNINGS $CFLAGS"
+      nm_feature_test='getdelim((char**)0,(size_t*)0,0x0a,stdout);'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    *)
+      ;;
+  esac
+fi
 
 
 # check fileno
 #----------------------------------------
-case $CC_NAME in
-  clang)
-    nm_feature="fileno"
-    nm_feature_name="nm_have_fileno"
-    nm_feature_run=no
-    nm_feature_h='#include <stdio.h>'
-    nm_feature_flags=
-    nm_feature_test='fileno(stdout);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  gcc)
-    nm_feature="fileno"
-    nm_feature_name="nm_have_fileno"
-    nm_feature_run=no
-    nm_feature_h='#include <stdio.h>'
-    nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
-    nm_feature_test='fileno(stdout);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  msvc)
-    nm_feature="fileno"
-    nm_feature_name="nm_have_fileno"
-    nm_feature_run=no
-    nm_feature_h='#include <stdio.h>'
-    nm_feature_flags="-D_CRT_SECURE_NO_WARNINGS $CFLAGS"
-    nm_feature_test='_fileno(stdout);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  *)
-    ;;
-esac                            # end of fileno
+if [ "$nio_fileno" = "yes" ]; then
+  case $CC_NAME in
+    clang)
+      nm_feature="fileno"
+      nm_feature_name="nm_have_fileno"
+      nm_feature_run=no
+      nm_feature_h='#include <stdio.h>'
+      nm_feature_flags=
+      nm_feature_test='fileno(stdout);'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    gcc)
+      nm_feature="fileno"
+      nm_feature_name="nm_have_fileno"
+      nm_feature_run=no
+      nm_feature_h='#include <stdio.h>'
+      nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
+      nm_feature_test='fileno(stdout);'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    msvc)
+      nm_feature="fileno"
+      nm_feature_name="nm_have_fileno"
+      nm_feature_run=no
+      nm_feature_h='#include <stdio.h>'
+      nm_feature_flags="-D_CRT_SECURE_NO_WARNINGS $CFLAGS"
+      nm_feature_test='_fileno(stdout);'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    *)
+      ;;
+  esac
+fi
 
 
 fi                              # define_nio_h

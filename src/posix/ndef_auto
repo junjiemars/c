@@ -32,45 +32,48 @@ fi
 
 
 
-
 # check restrict keyword
 #----------------------------------------
-nm_feature="restrict"
-nm_feature_name="nm_have_restrict"
-nm_feature_run=
-nm_feature_h=
-nm_feature_flags="$CFLAGS"
-nm_feature_test='int x = 0x11; int *restrict p = &x; (void)sizeof(p);'
-. ${NORE_ROOT}/auto/feature
-if [ "yes" != $nm_found ]; then
-	nm_feature="__restrict keyword"
-	nm_feature_name="nm_have___restrict"
-	nm_feature_run=
-	nm_feature_h=
-	nm_feature_flags="$CFLAGS"
-	nm_feature_test='int x = 0x11; int *__restrict p = &x; (void)sizeof(p);'
-	. ${NORE_ROOT}/auto/feature
-fi                              # end of restrict
+if [ "$ndef_restrict" = "yes" ]; then
+  nm_feature="restrict"
+  nm_feature_name="nm_have_restrict"
+  nm_feature_run=
+  nm_feature_h=
+  nm_feature_flags="$CFLAGS"
+  nm_feature_test='int x = 0x11; int *restrict p = &x; (void)sizeof(p);'
+  . ${NORE_ROOT}/auto/feature
+  if [ "yes" != $nm_found ]; then
+	  nm_feature="__restrict keyword"
+	  nm_feature_name="nm_have___restrict"
+	  nm_feature_run=
+	  nm_feature_h=
+	  nm_feature_flags="$CFLAGS"
+	  nm_feature_test='int x = 0x11; int *__restrict p = &x; (void)sizeof(p);'
+	  . ${NORE_ROOT}/auto/feature
+  fi
+fi
 
 
 # check static_assert
 #----------------------------------------
-nm_feature="static_assert"
-nm_feature_name="nm_have_static_assert"
-nm_feature_run=yes
-nm_feature_h="#include <assert.h>"
-nm_feature_flags="$CFLAGS"
-nm_feature_test='enum {N=5}; static_assert(N==5, "N is not equal 5");'
-. ${NORE_ROOT}/auto/feature     # end of static_assert
-if [ "yes" != $nm_found ]; then
-	nm_feature="_Static_assert"
-	nm_feature_name="nm_have___static_assert"
-	nm_feature_run=
-	nm_feature_h=
-	nm_feature_flags="$CFLAGS"
-	nm_feature_test='enum {N=5}; static_assert(N==5, "N is not equal 5");'
-	. ${NORE_ROOT}/auto/feature
-fi                              # end of _Static_assert
+if [ "$ndef_static_assert" = "yes" ]; then
+  nm_feature="static_assert"
+  nm_feature_name="nm_have_static_assert"
+  nm_feature_run=yes
+  nm_feature_h="#include <assert.h>"
+  nm_feature_flags="$CFLAGS"
+  nm_feature_test='enum {N=5}; static_assert(N==5, "N is not equal 5");'
+  . ${NORE_ROOT}/auto/feature     # end of static_assert
+  if [ "yes" != $nm_found ]; then
+	  nm_feature="_Static_assert"
+	  nm_feature_name="nm_have___static_assert"
+	  nm_feature_run=
+	  nm_feature_h=
+	  nm_feature_flags="$CFLAGS"
+	  nm_feature_test='enum {N=5}; static_assert(N==5, "N is not equal 5");'
+	  . ${NORE_ROOT}/auto/feature
+  fi
+fi
 
 
 
