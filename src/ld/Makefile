@@ -96,7 +96,7 @@ ld_entry_test: ld_entry
 endif
 
 $(ld_entry_binout): $(ld_root)/entry/e.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_entry_opt)_entry
+	$(CC) $(INC) $^ $(bin_out)$@ $(ld_entry_opt)_entry
 
 
 # nostartfiles

@@ -24,10 +24,10 @@ echo "checking for {ld} ..."
 nm_feature="-e"
 nm_feature_name=
 nm_feature_indent=yes
-nm_feature_run=no
+nm_feature_run=yes
 nm_feature_h=
-nm_feature_flags=
-nm_feature_test=
+nm_feature_flags='-e_main'
+nm_feature_test='return 0;'
 . ${NORE_ROOT}/auto/feature
 if [ yes = $nm_found ]; then
   flag="ld_entry_opt" op=":=" value="-e" . ${NORE_ROOT}/auto/make_define
