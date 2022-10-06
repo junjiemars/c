@@ -30,7 +30,8 @@ nm_feature_flags='-e_main'
 nm_feature_test='return 0;'
 . ${NORE_ROOT}/auto/feature
 if [ yes = $nm_found ]; then
-  flag="ld_entry_opt" op=":=" value="-e" . ${NORE_ROOT}/auto/make_define
+  flag="ld_entry_opt" op=":=" value="$nm_feature" \
+    . ${NORE_ROOT}/auto/make_define
 fi
 
 
