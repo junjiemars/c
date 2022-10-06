@@ -22,7 +22,7 @@ fi
 
 
 if [    "$ndef_restrict" = "yes"                \
-     -o "$ncc_static_assert" = "yes"            \
+     -o "$ndef_static_assert" = "yes"            \
    ]; then
   echo "checking for ndef.h ..."
 else
