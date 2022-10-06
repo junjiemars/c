@@ -21,7 +21,16 @@ fi
 . ${POSIX_ROOT}/npstd_auto
 
 
-echo "checking for ndef.h ..."
+if [    "$ndef_restrict" = "yes"                \
+     -o "$ncc_static_assert" = "yes"            \
+   ]; then
+  echo "checking for ndef.h ..."
+else
+  return
+fi
+
+
+
 
 
 # check restrict keyword

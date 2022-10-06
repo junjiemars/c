@@ -20,7 +20,15 @@ fi
 . ${POSIX_ROOT}/npstd_auto
 
 
-echo "checking for nstr.h ..."
+if [    "$nio_strdup" = "yes"                   \
+   ]; then
+  echo "checking for nstr.h ..."
+else
+  return
+fi
+
+
+
 
 
 # check strdup

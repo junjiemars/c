@@ -18,13 +18,31 @@ fi
 . ${POSIX_ROOT}/npstd_auto
 
 
-echo "checking for nint.h ..."
+if [    "$nint_stdint" = "yes"                  \
+     -o "$nint_inttypes" = "yes"                   \
+     -o "$nint_stdbool" = "yes"                 \
+   ]; then
+  echo "checking for nint.h ..."
+else
+  return
+fi
+
+
+
 
 # check header file existing
 #----------------------------------------
-include="stdint.h" . ${NORE_ROOT}/auto/include
-include="inttypes.h" . ${NORE_ROOT}/auto/include
-include="stdbool.h" . ${NORE_ROOT}/auto/include
+if [ "$nint_stdint" = "yes" ]; then
+  include="stdint.h" . ${NORE_ROOT}/auto/include
+fi
+
+if [ "$nint_inttypes" = "yes" ]; then
+  include="inttypes.h" . ${NORE_ROOT}/auto/include
+fi
+
+if [ "$nint_stdbool" = "yes" ]; then
+  include="stdbool.h" . ${NORE_ROOT}/auto/include
+fi
 
 
 fi                              # define_nint_h

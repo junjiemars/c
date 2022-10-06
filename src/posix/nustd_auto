@@ -25,7 +25,17 @@ fi
 . ${POSIX_ROOT}/ncstd_auto
 
 
-echo "checking for nustd.h ..."
+if [    "$nustd_ssize" = "yes"                  \
+     -o "$nustd_sleep" = "yes"                  \
+     -o "$nustd_getpid" = "yes"                 \
+   ]; then
+  echo "checking for nustd.h ..."
+else
+  return
+fi
+
+
+
 
 
 

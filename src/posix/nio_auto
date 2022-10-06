@@ -16,11 +16,21 @@ if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
 
+
 # check for <nustd.h>
 . ${POSIX_ROOT}/nustd_auto
 
 
-echo "checking for nio.h ..."
+if [    "$nio_getdelim" = "yes"                 \
+     -o "$nustd_fileno" = "yes"                 \
+   ]; then
+  echo "checking for nio.h ..."
+else
+  return
+fi
+
+
+
 
 
 # check getdelim
