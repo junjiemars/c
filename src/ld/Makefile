@@ -42,8 +42,12 @@ endif
 
 # asm
 ld_asm_binout := $(bin_path)/$(ld_prefix)_asm$(bin_ext)
-ld_asm_objout := $(bin_path)/$(ld_prefix)_asm$(obj_ext)
 
+ifneq ($(NM_MACHINE),x86_64)
+ld_asm:
+	@echo "#skip ld_asm_test ..."
+ld_asm_test: ld_asm
+else
 ifeq ($(ld_nopie_opt),)
 ld_asm:
 	@echo "#skip ld_asm_test ..."
@@ -53,9 +57,7 @@ ld_asm: $(ld_asm_binout)
 ld_asm_test: ld_asm
 	$(ld_asm_binout)
 endif
-
-# $(ld_asm_binout): $(ld_asm_objout)
-# 	$(LINK) $^ $(bin_out)$@
+endif
 
 $(ld_asm_binout): $(ld_root)/asm/a.s
 	$(CC) $(ld_nopie_opt) $^ $(bin_out)$@
