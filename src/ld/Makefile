@@ -42,23 +42,11 @@ endif
 
 # asm
 ld_asm_binout := $(bin_path)/$(ld_prefix)_asm$(bin_ext)
-ld_asm_asmout := $(tmp_path)/$(ld_prefix)_asm$(asm_ext)
+ld_asm_asmout := $(ld_root)/asm_$(NM_MACHINE)$(asm_ext)
 
-# ifneq ($(NM_MACHINE),x86_64)
-# ld_asm:
-# 	@echo "#skip ld_asm_test ..."
-# ld_asm_test: ld_asm
-# else
-# ifeq ($(ld_nopie_opt),)
-# ld_asm:
-# 	@echo "#skip ld_asm_test ..."
-# ld_asm_test: ld_asm
-# else
 ld_asm: $(ld_asm_binout)
 ld_asm_test: ld_asm
 	$(ld_asm_binout)
-# endif
-# endif
 
 $(ld_asm_binout): $(ld_asm_asmout)
 	$(CC) $^ $(bin_out)$@
