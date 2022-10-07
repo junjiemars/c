@@ -42,7 +42,7 @@ endif
 
 # asm
 ld_asm_binout := $(bin_path)/$(ld_prefix)_asm$(bin_ext)
-ld_asm_asmout := $(ld_root)/asm_$(NM_MACHINE)$(asm_ext)
+ld_asm_asmout := $(ld_root)/asm/asm_$(NM_MACHINE)$(asm_ext)
 
 ld_asm: $(ld_asm_binout)
 ld_asm_test: ld_asm
