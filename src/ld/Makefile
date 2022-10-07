@@ -42,25 +42,29 @@ endif
 
 # asm
 ld_asm_binout := $(bin_path)/$(ld_prefix)_asm$(bin_ext)
+ld_asm_asmout := $(tmp_path)/$(ld_prefix)_asm$(asm_ext)
 
-ifneq ($(NM_MACHINE),x86_64)
-ld_asm:
-	@echo "#skip ld_asm_test ..."
-ld_asm_test: ld_asm
-else
-ifeq ($(ld_nopie_opt),)
-ld_asm:
-	@echo "#skip ld_asm_test ..."
-ld_asm_test: ld_asm
-else
+# ifneq ($(NM_MACHINE),x86_64)
+# ld_asm:
+# 	@echo "#skip ld_asm_test ..."
+# ld_asm_test: ld_asm
+# else
+# ifeq ($(ld_nopie_opt),)
+# ld_asm:
+# 	@echo "#skip ld_asm_test ..."
+# ld_asm_test: ld_asm
+# else
 ld_asm: $(ld_asm_binout)
 ld_asm_test: ld_asm
 	$(ld_asm_binout)
-endif
-endif
+# endif
+# endif
 
-$(ld_asm_binout): $(ld_root)/asm/a.s
-	$(CC) $(ld_nopie_opt) $^ $(bin_out)$@
+$(ld_asm_binout): $(ld_asm_asmout)
+	$(CC) $^ $(bin_out)$@
+
+$(ld_asm_asmout): $(ld_root)/asm/a1.c
+	$(CC) $(INC) $(nm_stage_asm) $^ $(asm_out)$@
 
 # bone
 ld_bone_binout := $(bin_path)/$(ld_prefix)_bone$(bin_ext)
