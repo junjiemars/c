@@ -1,7 +1,7 @@
 #include <_io_.h>
 
 /*
- *
+ * Show st_dev and st_rdev.
  *
  */
 
