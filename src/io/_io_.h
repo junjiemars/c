@@ -4,6 +4,7 @@
 #include <nustd.h>
 
 #include <sys/stat.h>
+#include <sys/sysmacros.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <libgen.h>
