@@ -444,8 +444,8 @@ io_open_test: io_open_at_test                   \
 
 io_open_at_test: $(io_open_at_binout)
 	$< $(io_root)/open/o1.c
-	-ln -s $(tmp_path)/$(io_prefix)/no/such/file $(io_open_file)  \
-     $< $(io_open_file)
+	ln -s $(tmp_path)/$(io_prefix)/no/such/file $(io_open_file)
+	-$< $(io_open_file)
 	mkdir -p $(io_open_dir) && $< $(io_open_dir)
 
 io_open_max_test: $(io_open_max_binout)

@@ -1,5 +1,10 @@
 #include <_io_.h>
 
+/*
+ * same as `create'.
+ *
+ */
+
 int
 main(int argc, char **argv)
 {
