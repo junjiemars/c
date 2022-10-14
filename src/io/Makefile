@@ -776,8 +776,8 @@ io_time_test: io_time_raw_test                  \
               io_time_nac_test
 
 io_time_raw_test: $(io_time_raw_binout)
-	$< $(CURDIR)/$(io_root)/time/t1.c \
-    && $(stat) $(io_root)/time/t1.c
+	$< $(CURDIR)/$(io_root)/time/t1.c
+	$(stat) $(io_root)/time/t1.c
 
 io_time_nac_test: $(io_time_nac_binout)
 	echo "abc" > $(io_time_file)

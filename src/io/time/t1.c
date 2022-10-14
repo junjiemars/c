@@ -3,7 +3,8 @@
 int
 main(int argc, char **argv)
 {
-  struct timespec  ts[2];
+  int              rc;
+  struct timespec  ts[2] = {0};
 
   if (argc < 2)
     {
@@ -15,7 +16,8 @@ main(int argc, char **argv)
   ts[1].tv_sec = 2;
   ts[1].tv_nsec = UTIME_OMIT;
 
-  if (utimensat(AT_FDCWD, argv[1], ts, AT_SYMLINK_NOFOLLOW) == -1)
+  rc = utimensat(AT_FDCWD, argv[1], ts, AT_SYMLINK_NOFOLLOW);
+  if (rc == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
