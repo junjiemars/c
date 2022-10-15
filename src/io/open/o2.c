@@ -18,7 +18,7 @@ main(int argc, char **argv)
   fd = openat(AT_FDCWD, argv[1], O_RDONLY | O_DIRECTORY);
   if (fd == -1)
     {
-      perror("open");
+      perror("openat");
       exit(EXIT_FAILURE);
     }
 
