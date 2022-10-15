@@ -1,16 +1,22 @@
 #include <_io_.h>
 
 /*
- * 1. If the file exists, `creat' diffs with open(path, O_CREAT,...).
+ * A. If the file exists:
+ * 1) `creat' same as open(file, O_RDWR) and then fchmod(fd, mode);
+ * 2) but `creat' doesn't change the final mode of the file.
  *
- * 2. If the file exists you cann't change its mode via `creat'.
+ * B. If the file doesn't exist:
+ * 1) `creat' same as open(file, O_RDWR) and then fchmod(fd, mode);
  *
  */
+
+#define BUF  "abc\n"
+
 
 int
 main(int argc, char **argv)
 {
-  int  fd;
+  int  fd, rc;
 
   if (argc < 2)
     {
@@ -24,6 +30,14 @@ main(int argc, char **argv)
       perror(NULL);
       exit(EXIT_FAILURE);
     }
+
+  rc = write(fd, BUF, sizeof(BUF) - 1);
+  if (rc != sizeof(BUF) - 1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
+
 
   exit(EXIT_SUCCESS);
 }

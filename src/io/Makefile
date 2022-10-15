@@ -459,9 +459,12 @@ io_open_sync_test: $(io_open_sync_binout)
 
 io_open_creat_test: $(io_open_creat_binout)
 	-rm $(io_open_file)
-	$< $(io_open_file) && ls -lh $(io_open_file)
-	chmod a-r $(io_open_file) && ls -lh $(io_open_file)
-	$< $(io_open_file) && ls -lh $(io_open_file)
+	$< $(io_open_file) && ls -lh $(io_open_file) && cat $(io_open_file)
+	echo "ABC" > $(io_open_file) && cat $(io_open_file)       \
+    && chmod a-r $(io_open_file) && ls -lh $(io_open_file)  \
+	  && $< $(io_open_file) && ls -lh $(io_open_file)         \
+    && chmod u+r $(io_open_file) && ls -lh $(io_open_file)  \
+    && cat $(io_open_file)
 
 io_open_creat1_test: $(io_open_creat1_binout)
 	-rm $(io_open_file)
