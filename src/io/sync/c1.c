@@ -1,14 +1,20 @@
 #include <_io_.h>
 
+/*
+ * copy or copy with sync.
+ *
+ */
+
+
 #define BLKSIZ  4096
 
-void copy_block(int, int);
+void copy_block_nsync(int, int);
 void copy_block_sync(int, int);
 
 static char  blk[BLKSIZ];
 
 void
-copy_block(int src, int dst)
+copy_block_nsync(int src, int dst)
 {
   int n;
 
@@ -41,7 +47,7 @@ copy_block_sync(int src, int dst)
       exit(EXIT_FAILURE);
     }
 
-  copy_block(src, dst);
+  copy_block_nsync(src, dst);
 
   if (fsync(dst) == -1)
     {

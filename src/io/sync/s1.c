@@ -10,6 +10,17 @@
  */
 
 extern void copy_block_sync(int, int);
+extern void copy_block_nsync(int, int);
+
+
+#if defined(_SYNC_)
+#  define copy_block  copy_block_sync
+#else
+#  define copy_block  copy_block_nsync
+#endif
+
+
+
 
 int
 main(int argc, char **argv)
@@ -30,16 +41,21 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  fd_dst = open(argv[2], O_WRONLY | O_CREAT, S_IRUSR, S_IWUSR);
+  fd_dst = open(argv[2], O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
   if (fd_dst == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
 
-  _time_(copy_block_sync(fd_src, fd_dst), elapsed);
 
-  printf("elapsed: %16lfs\n", elapsed);
+  _time_(copy_block(fd_src, fd_dst), elapsed);
+
+#if defined(_SYNC_)
+  printf("elapsed(%s): %16lfs\n", "sync", elapsed);
+#else
+  printf("elapsed(%s): %16lfs\n", "non sync", elapsed);
+#endif
 
   exit(EXIT_SUCCESS);
 }

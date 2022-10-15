@@ -753,6 +753,7 @@ io_sync: $(io_sync_binout)                      \
 io_sync_test: $(io_sync_non_binout)             \
               $(io_sync_binout)                 \
               $(io_sync_file)
+	ls -lh $(io_sync_file)
 	$(io_sync_binout) $(io_sync_file) $(io_sync_out_file)
 	$(io_sync_non_binout) $(io_sync_file) $(io_sync_out1_file)
 
@@ -761,9 +762,9 @@ $(io_sync_file):
 
 $(io_sync_binout): $(io_root)/sync/s1.c         \
                    $(io_root)/sync/c1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) -D_SYNC_ $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(io_sync_non_binout): $(io_root)/sync/n1.c     \
+$(io_sync_non_binout): $(io_root)/sync/s1.c     \
                        $(io_root)/sync/c1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 

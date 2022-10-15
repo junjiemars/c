@@ -21,12 +21,12 @@
 #endif
 
 
-#define _time_(E, S)                                \
+#define _time_(E, R)                                \
 do                                                  \
 {                                                   \
   clock_t _epoch_1_ = clock();                      \
   (E);                                              \
-  S = (double)(clock() - _epoch_1_)/CLOCKS_PER_SEC; \
+  R = (double)(clock() - _epoch_1_)/CLOCKS_PER_SEC; \
 } while (0)
 
 

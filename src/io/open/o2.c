@@ -1,5 +1,9 @@
 #include <_io_.h>
 
+/*
+ * `openat'
+ *
+ */
 
 static char  buf[BUFSIZ];
 
