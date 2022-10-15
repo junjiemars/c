@@ -5,6 +5,10 @@
 /*
  * Copy stdin to stdout.
  *
+ * 1. convert file offset to disk block.
+ *
+ * 2. copy data from system buffer to user address.
+ *
  */
 
 int

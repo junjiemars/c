@@ -1,6 +1,16 @@
 #include <_io_.h>
 
 /*
+ * The only way to retrieve fd!?.
+ *
+ * 1. convert file name to inode.
+ *
+ * 2. allocate file table entry for inode, initialize offset.
+ *
+ * 3. allocate an entry in user fd table, set pointer to file table
+ * entry.
+ *
+ * 4. return the index of the entry in user fd table.
  *
  */
 

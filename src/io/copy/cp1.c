@@ -5,7 +5,10 @@
  *
  */
 
+
 static char  buf[BUFSIZ];
+
+
 
 int
 main(int argc, char **argv)
