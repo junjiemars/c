@@ -421,6 +421,7 @@ $(io_name_binout): $(io_root)/name/n.c
 
 # open
 io_open_at_binout := $(bin_path)/$(io_prefix)_open_at$(bin_ext)
+io_open_at_dir_binout := $(bin_path)/$(io_prefix)_open_at_dir$(bin_ext)
 io_open_max_binout := $(bin_path)/$(io_prefix)_open_max$(bin_ext)
 io_open_cloexec_binout := $(bin_path)/$(io_prefix)_open_cloexec$(bin_ext)
 io_open_sync_binout := $(bin_path)/$(io_prefix)_open_sync$(bin_ext)
@@ -430,12 +431,14 @@ io_open_file := $(tmp_path)/$(io_prefix)_open_file
 io_open_dir := $(tmp_path)/$(io_prefix)_open_dir
 
 io_open: $(io_open_at_binout)                   \
+         $(io_open_at_dir_binout)               \
          $(io_open_max_binout)                  \
          $(io_open_cloexec_binout)              \
          $(io_open_sync_binout)                 \
          $(io_open_creat_binout)                \
          $(io_open_creat1_binout)
 io_open_test: io_open_at_test                   \
+              io_open_at_dir_test               \
               io_open_max_test                  \
               io_open_cloexec_test              \
               io_open_sync_test                 \
@@ -447,6 +450,10 @@ io_open_at_test: $(io_open_at_binout)
 	ln -s $(tmp_path)/$(io_prefix)/no/such/file $(io_open_file)
 	-$< $(io_open_file)
 	mkdir -p $(io_open_dir) && $< $(io_open_dir)
+
+io_open_at_dir_test: $(io_open_at_dir_binout)
+	-$< $(io_root)/open
+	-$< $(io_root)/open/o2.c
 
 io_open_max_test: $(io_open_max_binout)
 	-$< $(io_root)/open/256xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -474,6 +481,9 @@ io_open_creat1_test: $(io_open_creat1_binout)
 
 
 $(io_open_at_binout): $(io_root)/open/o1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_open_at_dir_binout): $(io_root)/open/o2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_open_max_binout): $(io_root)/open/max.c
