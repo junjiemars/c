@@ -1,7 +1,5 @@
 #include "_io_.h"
 
-#define BUFSIZE  64
-
 /*
  * Copy stdin to stdout.
  *
@@ -11,13 +9,15 @@
  *
  */
 
+static char  buf[BUFSIZ];
+
+
 int
 main(void)
 {
-  int   n;
-  char  buf[BUFSIZE];
+  ssize_t  n;
 
-  while ((n = read(STDIN_FILENO, buf, BUFSIZE)) > 0)
+  while ((n = read(STDIN_FILENO, buf, BUFSIZ)) > 0)
     {
       if (write(STDOUT_FILENO, buf, n) != n)
         {

@@ -7,7 +7,7 @@
  */
 
 static char  buf[BUFSIZ];
-static int   next_fd  =  3;
+static int   next_fd  =  STDERR_FILENO + 1;
 
 int
 main(void)

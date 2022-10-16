@@ -21,6 +21,7 @@ io: io_access                                   \
     io_name                                     \
     io_open                                     \
     io_own                                      \
+    io_read                                     \
     io_redirect                                 \
     io_rename                                   \
     io_share                                    \
@@ -44,6 +45,7 @@ io_test: io_access_test                         \
          io_name_test                           \
          io_open_test                           \
          io_own_test                            \
+         io_read_test                           \
          io_redirect_test                       \
          io_rename                              \
          io_share_test                          \
@@ -134,7 +136,7 @@ $(io_close_binout): $(io_root)/close/c1.c
 # copy
 io_copy_unbuf_binout := $(bin_path)/$(io_prefix)_copy_unbuf$(bin_ext)
 io_copy_stdbuf_binout := $(bin_path)/$(io_prefix)_copy_stdbuf$(bin_ext)
-io_copy_cp_binout := $(bin_path)/$(io_prefix)_copy_cp$(bin_ext)
+io_copy_hole_binout := $(bin_path)/$(io_prefix)_copy_hole$(bin_ext)
 io_copy_file := $(tmp_path)/$(io_prefix)_copy_file
 
 io_copy: $(io_copy_unbuf_binout)                \
@@ -142,7 +144,7 @@ io_copy: $(io_copy_unbuf_binout)                \
          $(io_copy_cp_binout)
 io_copy_test: io_copy_unbuf_test                \
               io_copy_stdbuf_test               \
-              io_copy_cp_test
+              io_copy_hole_test
 
 io_copy_unbuf_test: $(io_copy_unbuf_binout)
 	echo "abc\ndef" | $<
@@ -152,8 +154,8 @@ io_copy_stdbuf_test: $(io_copy_stdbuf_binout)
 	echo "abc\ndef" | $<
 	$< < $(io_root)/copy/stdbuf.c
 
-io_copy_cp_test: $(io_copy_cp_binout)
-	$< $(CURDIR)/$(io_root)/copy/cp1.c $(CURDIR)/$(io_copy_file) \
+io_copy_hole_test: $(io_copy_hole_binout)
+	$< $(CURDIR)/$(io_root)/copy/hole1.c $(CURDIR)/$(io_copy_file)  \
     && cat $(CURDIR)/$(io_copy_file)
 	$< $(CURDIR)/$(io_root)/copy/hole $(CURDIR)/$(io_copy_file)_X \
     && cat $(CURDIR)/$(io_copy_file)_X
@@ -165,7 +167,7 @@ $(io_copy_stdbuf_binout): $(io_root)/copy/stdbuf.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 	# sudo chown root $@
 
-$(io_copy_cp_binout): $(io_root)/copy/cp1.c
+$(io_copy_hole_binout): $(io_root)/copy/hole1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -512,6 +514,17 @@ io_own_test: io_own
 $(io_own_binout): $(io_root)/own/o1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+# read
+io_read_binout := $(bin_path)/$(io_prefix)_read$(bin_ext)
+
+io_read: $(io_read_binout)
+io_read_test: io_read
+	$(io_read_binout) <$(io_root)/read/r1.c
+	$(io_read_binout) <$(out)/nore.h
+
+$(io_read_binout): $(io_root)/read/r1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # redirect
 io_redirect_binout := $(bin_path)/$(io_prefix)_redirect$(bin_ext)
