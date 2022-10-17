@@ -13,6 +13,7 @@ else
 io: io_access                                   \
     io_close                                    \
     io_copy                                     \
+    io_data                                     \
     io_dir                                      \
     io_dup                                      \
     io_fcntl                                    \
@@ -37,6 +38,7 @@ io: io_access                                   \
 io_test: io_access_test                         \
          io_close_test                          \
          io_copy_test                           \
+         io_data_test                           \
          io_dir_test                            \
          io_dup_test                            \
          io_fcntl_test                          \
@@ -171,6 +173,28 @@ $(io_copy_hole_binout): $(io_root)/copy/hole1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
+# data
+io_data_pwnam_binout := $(bin_path)/$(io_prefix)_pwnam$(bin_ext)
+io_data_pwuid_binout := $(bin_path)/$(io_prefix)_pwuid$(bin_ext)
+
+io_data_pwnam: $(io_data_pwnam_binout)          \
+               $(io_data_pwuid_binout)
+io_data_pwnam_test: io_data_pwnam_test          \
+                    io_data_pwuid_test
+
+io_data_pwnam_test: $(io_data_pwnam_binout)
+	$< junjie
+
+io_data_pwuid_test: $(io_data_pwuid_binout)
+	$< 0
+
+$(io_data_pwnam_binout): $(io_root)/data/pwnam.c  \
+                         $(io_root)/data/ppwd.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_data_pwuid_binout): $(io_root)/data/pwuid.c  \
+                         $(io_root)/data/ppwd.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # dir
 io_dir_raw_binout := $(bin_path)/$(io_prefix)_dir_raw$(bin_ext)
