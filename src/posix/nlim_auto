@@ -21,11 +21,94 @@ fi
 . ${POSIX_ROOT}/nustd_auto
 
 
-if [ -f "$nlim_auto_check" ]; then
+if [ "$nlim_line_max" = "yes"                   \
+   ]; then
   echo "checking for nlim.h ..."
-  . "${nlim_auto_check}"
+else
+  return
 fi
 
+
+# check LINE_MAX
+#----------------------------------------
+if [ "$nlim_line_max" = "yes" ]; then
+  case $NM_SYSTEM in
+    Linux|Darwin)
+      nm_feature="LINE_MAX"
+      nm_feature_name="nm_line_max"
+      nm_feature_run=value
+      nm_feature_h='
+  #include <stdio.h>
+  #include <unistd.h>
+  #include <limits.h>
+  '
+      nm_feature_flags=
+      nm_feature_test='
+  long line_max = 0;
+  #if defined(LINE_MAX) && (LINE_MAX > 0)
+    line_max = LINE_MAX;
+  #else
+    line_max = sysconf(_SC_LINE_MAX);
+    if (line_max <= 0) {
+      line_max = 2048;
+    }
+  #endif
+    printf("%ld\n", line_max);
+    return 0;
+  '
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    WinNT)
+      nm_feature="LINE_MAX"
+      nm_feature_name="nm_line_max"
+      nm_feature_run=value
+      nm_feature_h='
+  #include <stdio.h>
+  #include <limits.h>
+  #include <windows.h>
+  '
+      nm_feature_flags=
+      nm_feature_test='
+  long line_max = 2048;
+  #if defined(LINE_MAX) && (LINE_MAX > 0)
+     line_max = LINE_MAX;
+  #endif
+    printf("%d\n", line_max);
+    return 0;
+  '
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    *)
+      ;;
+  esac                            # end of LINE_MAX
+fi
+
+
+# check CLK_TCK
+#----------------------------------------
+if [ "$nlim_clk_tck" = "yes" ]; then
+  case $NM_SYSTEM in
+    Linux|Darwin)
+      nm_feature="CLK_TCK"
+      nm_feature_name="nm_clk_tck"
+      nm_feature_run=value
+      nm_feature_h='
+  #include <stdio.h>
+  #include <unistd.h>
+  '
+      nm_feature_flags=
+      nm_feature_test='
+  printf("%ld\n", sysconf(_SC_CLK_TCK));
+  return 0;
+  '
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    WinNT)
+      ;;
+    *)
+      ;;
+  esac                            # end of _SC_CLK_TCK
+fi
 
 
 fi                              # define_nlim_h
