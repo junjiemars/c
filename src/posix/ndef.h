@@ -78,7 +78,7 @@
 #    if defined(alignas)
 #      undef alignas
 #    endif
-#    define alignas(x) __attribute__((__aligned__ x))
+#    define alignas(x) __attribute__((aligned(x)))
 #  endif
 #  include <stdalign.h>
 #endif  /* alignas */

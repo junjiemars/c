@@ -92,7 +92,7 @@ void
 test_alignas(void)
 {
   char alignas(double) c1  =  0;
-  assert(((int) &c1 & sizeof(double)) == sizeof(double));
+  assert(((size_t) &c1 & sizeof(double)) == sizeof(double));
 
   struct X  x1 = {0};
   assert(sizeof(x1) == (sizeof(int) * 2));
