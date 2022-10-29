@@ -21,7 +21,8 @@ fi
 . ${POSIX_ROOT}/nustd_auto
 
 
-if [ "$nlim_line_max" = "yes"                   \
+if [    "$nlim_line_max" = "yes"                  \
+     -o "$nlim_clk_tck" = "yes"                   \
    ]; then
   echo "checking for nlim.h ..."
 else

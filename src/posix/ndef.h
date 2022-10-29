@@ -60,6 +60,31 @@
 #endif  /* static_assert */
 
 
+#if !(NM_HAVE_ALIGNOF)
+#  if !(NM_HAVE__ALIGNOF)
+#    if defined(alignof)
+#      undef alignof
+#    endif
+#    define alignof __alignof__
+#  endif
+#else
+#  include <stdalign.h>
+#endif  /* alignof */
+
+
+#if !(NM_HAVE_ALIGNAS)
+#  if !(NM_HAVE__ALIGNAS)
+#  else
+#    if defined(alignas)
+#      undef alignas
+#    endif
+#    define alignas(x) __attribute__((__aligned__ x))
+#  endif
+#  include <stdalign.h>
+#endif  /* alignas */
+
+
+
 
 #if !defined(_isut_)
 #  define _isut_(t)  (((t)~1) > 0)

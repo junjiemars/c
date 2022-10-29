@@ -11,10 +11,17 @@ static void test_fallthrough(int);
 
 static void test_restrict(const int *restrict, const char *restrict);
 static void test_static_assert(void);
+static void test_alignof(void);
+static void test_alignas(void);
 
 static void test_isut(void);
 static void test_nof(void);
 static void test_swp(void);
+
+struct X {
+  char alignas(int) ss[3];
+  int  i;
+};
 
 
 int
@@ -25,6 +32,8 @@ main(int argc, char **argv)
 
   test_restrict((const int *restrict) &argc, (const char *restrict) argv[0]);
   test_static_assert();
+  test_alignof();
+  test_alignas();
 
   test_isut();
   test_nof();
@@ -70,7 +79,23 @@ void
 test_static_assert(void)
 {
   static_assert(sizeof(char) == 1, "sizeof(char) must be 1 byte");
-  printf("%s\n------------\n", __FUNCTION__);
+}
+
+void
+test_alignof(void)
+{
+  size_t s = alignof(short);
+  assert(s == 2);
+}
+
+void
+test_alignas(void)
+{
+  char alignas(double) c1  =  0;
+  assert(((int) &c1 & sizeof(double)) == sizeof(double));
+
+  struct X  x1 = {0};
+  assert(sizeof(x1) == (sizeof(int) * 2));
 }
 
 void

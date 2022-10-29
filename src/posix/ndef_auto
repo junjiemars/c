@@ -22,7 +22,9 @@ fi
 
 
 if [    "$ndef_restrict" = "yes"                \
-     -o "$ndef_static_assert" = "yes"            \
+     -o "$ndef_static_assert" = "yes"           \
+     -o "$ndef_alignof" = "yes"                 \
+     -o "$ndef_alignas" = "yes"                 \
    ]; then
   echo "checking for ndef.h ..."
 else
@@ -71,6 +73,49 @@ if [ "$ndef_static_assert" = "yes" ]; then
 	  nm_feature_h=
 	  nm_feature_flags="$CFLAGS"
 	  nm_feature_test='enum {N=5}; static_assert(N==5, "N is not equal 5");'
+	  . ${NORE_ROOT}/auto/feature
+  fi
+fi
+
+
+# check alignof
+#----------------------------------------
+if [ "$ndef_alignof" = "yes" ]; then
+  nm_feature="alignof"
+  nm_feature_name="nm_have_alignof"
+  nm_feature_run=yes
+  nm_feature_h='#include <stdalign.h>'
+  nm_feature_flags=
+  nm_feature_test='int a = (int) alignof(short);'
+  . ${NORE_ROOT}/auto/feature
+  if [ "yes" != $nm_found ]; then
+	  nm_feature="_Alignof"
+	  nm_feature_name="nm_have__alignof"
+	  nm_feature_run=
+	  nm_feature_h=
+	  nm_feature_flags=
+	  nm_feature_test='int a = (int) _Alignof(short);'
+	  . ${NORE_ROOT}/auto/feature
+  fi
+fi
+
+# check alignas
+#----------------------------------------
+if [ "$ndef_alignas" = "yes" ]; then
+  nm_feature="alignas"
+  nm_feature_name="nm_have_alignas"
+  nm_feature_run=yes
+  nm_feature_h='#include <stdalign.h>'
+  nm_feature_flags=
+  nm_feature_test='int alignas(2) a;'
+  . ${NORE_ROOT}/auto/feature
+  if [ "yes" != $nm_found ]; then
+	  nm_feature="_Alignas"
+	  nm_feature_name="nm_have__alignas"
+	  nm_feature_run=
+	  nm_feature_h=
+	  nm_feature_flags=
+	  nm_feature_test='int alignas(2) a;'
 	  . ${NORE_ROOT}/auto/feature
   fi
 fi
