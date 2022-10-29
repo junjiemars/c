@@ -16,6 +16,7 @@ ld: ld_asm                                      \
     ld_entry                                    \
     ld_nostartfiles                             \
     ld_nostdlib                                 \
+    ld_stage                                    \
     ld_static                                   \
     ld_tiny                                     \
     ld_wrap
@@ -25,6 +26,7 @@ ld_test: ld_asm_test                            \
          ld_entry_test                          \
          ld_nostartfiles_test                   \
          ld_nostdlib_test                       \
+         ld_stage_test                          \
          ld_static_test                         \
          ld_tiny_test                           \
          ld_wrap_test
@@ -107,6 +109,40 @@ endif
 $(ld_nostartfiles_binout): $(ld_root)/nostartfiles/nosfs.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_nostartfiles_opt)
 
+# stage
+ld_stage_binout := $(bin_path)/$(ld_prefix)_stage$(bin_ext)
+ld_stage_objout := $(tmp_path)/$(ld_prefix)_stage$(obj_ext)
+ld_stage_asmout := $(tmp_path)/$(ld_prefix)_stage$(asm_ext)
+ld_stage_cppout := $(tmp_path)/$(ld_prefix)_stage$(cpp_ext)
+ld_stage_f_objout := $(tmp_path)/$(ld_prefix)_stage_f$(obj_ext)
+ld_stage_f_asmout := $(tmp_path)/$(ld_prefix)_stage_f$(asm_ext)
+ld_stage_f_cppout := $(tmp_path)/$(ld_prefix)_stage_f$(cpp_ext)
+
+
+ld_stage: $(ld_stage_binout)
+ld_stage_test: ld_stage
+	$(ld_stage_binout)
+
+$(ld_stage_binout): $(ld_stage_objout) $(ld_stage_f_objout)
+	$(CC) $^ $(bin_out)$@
+
+$(ld_stage_objout): $(ld_stage_asmout)
+	$(CC) $(nm_stage_c) $^ $(obj_out)$@
+
+$(ld_stage_f_objout): $(ld_stage_f_asmout)
+	$(CC) $(nm_stage_c) $^ $(obj_out)$@
+
+$(ld_stage_asmout): $(ld_stage_cppout)
+	$(AS) $(ASFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
+
+$(ld_stage_f_asmout): $(ld_stage_f_cppout)
+	$(AS) $(ASFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
+
+$(ld_stage_cppout): $(ld_root)/stage/s1.c
+	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+$(ld_stage_f_cppout): $(ld_root)/stage/f1.c
+	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # static
 ld_static_binout := $(bin_path)/$(ld_prefix)_static$(bin_ext)
