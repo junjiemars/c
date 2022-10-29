@@ -85,7 +85,7 @@ void
 test_alignof(void)
 {
   size_t s = alignof(short);
-  assert(s == 2);
+  assert(s == sizeof(short));
 }
 
 void
