@@ -91,11 +91,13 @@ test_alignof(void)
 void
 test_alignas(void)
 {
-  char alignas(double) c1  =  0;
-  assert(((size_t) &c1 & sizeof(double)) == sizeof(double));
+#define _m_(x, y)  ((size_t) &(x)) == (((size_t) &(x))/(y))*(y)
+  char alignas(double) c1  =  'A';
+  assert(_m_(c1, sizeof(double)));
 
   struct X  x1 = {0};
-  assert(sizeof(x1) == (sizeof(int) * 2));
+  assert(_m_(x1, sizeof(int) * 2));
+#undef _m_
 }
 
 void
