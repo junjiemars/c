@@ -1,0 +1,71 @@
+# -*- mode:sh -*- vim:ft=sh
+#
+# ./configure --has-std_posix
+#
+
+
+echo "checking POSIX required header files ..."
+#-----------------------------------
+include="aio.h" . ${NORE_ROOT}/auto/include
+include="cpio.h" . ${NORE_ROOT}/auto/include
+include="dirent.h" . ${NORE_ROOT}/auto/include
+include="dlfcn.h" . ${NORE_ROOT}/auto/include
+include="fcntl.h" . ${NORE_ROOT}/auto/include
+include="fnmatch.h" . ${NORE_ROOT}/auto/include
+include="glob.h" . ${NORE_ROOT}/auto/include
+include="grp.h" . ${NORE_ROOT}/auto/include
+include="iconv.h" . ${NORE_ROOT}/auto/include
+include="langinfo.h" . ${NORE_ROOT}/auto/include
+include="monetary.h" . ${NORE_ROOT}/auto/include
+include="netdb.h" . ${NORE_ROOT}/auto/include
+include="nl_types.h" . ${NORE_ROOT}/auto/include
+include="poll.h" . ${NORE_ROOT}/auto/include
+include="pthread.h" . ${NORE_ROOT}/auto/include
+include="pwd.h" . ${NORE_ROOT}/auto/include
+include="regex.h" . ${NORE_ROOT}/auto/include
+include="sched.h" . ${NORE_ROOT}/auto/include
+include="semaphore.h" . ${NORE_ROOT}/auto/include
+include="strings.h" . ${NORE_ROOT}/auto/include
+include="tar.h" . ${NORE_ROOT}/auto/include
+include="termios.h" . ${NORE_ROOT}/auto/include
+include="unistd.h" . ${NORE_ROOT}/auto/include
+include="wordexp.h" . ${NORE_ROOT}/auto/include
+include="arpa/inet.h" . ${NORE_ROOT}/auto/include
+include="net/if.h" . ${NORE_ROOT}/auto/include
+include="netinet/in.h" . ${NORE_ROOT}/auto/include
+include="netinet/tcp.h" . ${NORE_ROOT}/auto/include
+include="sys/mman.h" . ${NORE_ROOT}/auto/include
+include="sys/select.h" . ${NORE_ROOT}/auto/include
+include="sys/socket.h" . ${NORE_ROOT}/auto/include
+include="sys/stat.h" . ${NORE_ROOT}/auto/include
+include="sys/statvfs.h" . ${NORE_ROOT}/auto/include
+include="sys/times.h" . ${NORE_ROOT}/auto/include
+include="sys/types.h" . ${NORE_ROOT}/auto/include
+include="sys/un.h" . ${NORE_ROOT}/auto/include
+include="sys/utsname.h" . ${NORE_ROOT}/auto/include
+include="sys/wait.h" . ${NORE_ROOT}/auto/include
+
+echo "checking POSIX optional header files ..."
+#-----------------------------------
+include="mqueue.h" . ${NORE_ROOT}/auto/include
+include="spawn.h" . ${NORE_ROOT}/auto/include
+
+echo "checking POSIX optional XSI header files ..."
+#-----------------------------------
+include="fmtmsg.h" . ${NORE_ROOT}/auto/include
+include="ftw.h" . ${NORE_ROOT}/auto/include
+include="libgen.h" . ${NORE_ROOT}/auto/include
+include="ndbm.h" . ${NORE_ROOT}/auto/include
+include="search.h" . ${NORE_ROOT}/auto/include
+include="syslog.h" . ${NORE_ROOT}/auto/include
+include="utmpx.h" . ${NORE_ROOT}/auto/include
+include="sys/ipc.h" . ${NORE_ROOT}/auto/include
+include="sys/msg.h" . ${NORE_ROOT}/auto/include
+include="sys/resource.h" . ${NORE_ROOT}/auto/include
+include="sys/sem.h" . ${NORE_ROOT}/auto/include
+include="sys/shm.h" . ${NORE_ROOT}/auto/include
+include="sys/time.h" . ${NORE_ROOT}/auto/include
+include="sys/uio.h" . ${NORE_ROOT}/auto/include
+
+
+# end of file
