@@ -1,11 +1,11 @@
 #include "_ld_.h"
 
 
-#define SS  "enter _start ...\n"
+#define SS  "enter start ...\n"
 
 
 int
-_start(void)
+main(void)
 {
   ssize_t  n;
 
