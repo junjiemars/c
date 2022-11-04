@@ -1,7 +1,9 @@
 #include "_ld_.h"
-#include "f1.h"
+/* #include "f1.h" */
+
 
 extern int n_status;
+extern float add_and_mul(int, int);
 
 int
 main(void)
@@ -11,7 +13,6 @@ main(void)
   float  z;
 
   z = add_and_mul(x, y);
-  n_status = 1;
 
   return 0;
 }

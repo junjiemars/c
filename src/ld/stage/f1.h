@@ -10,4 +10,6 @@
 
 float add_and_mul(float x, float y);
 
-int n_status;
+int n_status = 0;
+
+extern int n_status;            /* legitimate */

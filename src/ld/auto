@@ -12,8 +12,11 @@ if [ -z "$POSIX_ROOT" ]; then
 fi
 
 
+nlim_line_max="yes"
+
 # check posix features
 . src/posix/nustd_auto
+. src/posix/nlim_auto
 
 
 echo "checking for {ld} ..."
@@ -21,12 +24,12 @@ echo "checking for {ld} ..."
 
 # check entry point
 #----------------------------------------
-nm_feature="-e"
+nm_feature="-Wl,-e"
 nm_feature_name=
 nm_feature_indent=yes
 nm_feature_run=yes
 nm_feature_h=
-nm_feature_flags='-e_main'
+nm_feature_flags='-Wl,-e_main'
 nm_feature_test='return 0;'
 . ${NORE_ROOT}/auto/feature
 if [ yes = $nm_found ]; then

@@ -11,8 +11,7 @@ io_test:
 else
 
 
-ld: ld_asm                                      \
-    ld_bone                                     \
+ld: ld_bone                                     \
     ld_entry                                    \
     ld_nostartfiles                             \
     ld_nostdlib                                 \
@@ -21,8 +20,7 @@ ld: ld_asm                                      \
     ld_tiny                                     \
     ld_wrap
 
-ld_test: ld_asm_test                            \
-         ld_bone_test                           \
+ld_test: ld_bone_test                           \
          ld_entry_test                          \
          ld_nostartfiles_test                   \
          ld_nostdlib_test                       \
@@ -41,20 +39,6 @@ ifeq ($(CC_NAME),msvc)
 getopt_c := $(root)/posix/getopt.c
 endif
 
-
-# asm
-ld_asm_binout := $(bin_path)/$(ld_prefix)_asm$(bin_ext)
-ld_asm_asmout := $(ld_root)/asm/asm_$(NM_MACHINE)$(asm_ext)
-
-ld_asm: $(ld_asm_binout)
-ld_asm_test: ld_asm
-	$(ld_asm_binout)
-
-$(ld_asm_binout): $(ld_asm_asmout)
-	$(CC) $^ $(bin_out)$@
-
-$(ld_asm_asmout): $(ld_root)/asm/a1.c
-	$(CC) $(INC) $(nm_stage_asm) $^ $(asm_out)$@
 
 # bone
 ld_bone_binout := $(bin_path)/$(ld_prefix)_bone$(bin_ext)
@@ -78,6 +62,7 @@ $(ld_bone_a_objout): $(ld_root)/bone/a.c
 
 # entry
 ld_entry_binout := $(bin_path)/$(ld_prefix)_entry$(bin_ext)
+ld_entry_objout := $(tmp_path)/$(ld_prefix)_entry$(obj_ext)
 
 ifeq ($(ld_entry_opt),)
 ld_entry:
@@ -90,7 +75,10 @@ ld_entry_test: ld_entry
 endif
 
 $(ld_entry_binout): $(ld_root)/entry/e.c
-	$(CC) $(INC) $^ $(bin_out)$@ $(ld_entry_opt)_entry
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_nostartfiles_opt) $(ld_entry_opt)_main1
+
+$(ld_entry_objout): $(ld_root)/entry/e.c
+	$(CC) $(INC) $^ $(nm_stage_c) $(obj_out)$@
 
 
 # nostartfiles
@@ -107,7 +95,7 @@ ld_nostartfiles_test: ld_nostartfiles
 endif
 
 $(ld_nostartfiles_binout): $(ld_root)/nostartfiles/nosfs.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_nostartfiles_opt)
+	$(CC) $(INC) $^ $(bin_out)$@ $(ld_nostartfiles_opt)
 
 # stage
 ld_stage_binout := $(bin_path)/$(ld_prefix)_stage$(bin_ext)

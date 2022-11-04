@@ -1,26 +1,38 @@
-#include <_ld_.h>
+#include "_ld_.h"
+
+/*
+ * 1. Using `exit' instead of  using `return'.
+ *
+ * 2. Can't get `argc' and `argv' when compile with `-nostartfiles'.
+ *
+ * 3. Can access `environ'.
+ *
+ * 4. Access `fprintf' on Linux failed.
+ *
+ */
+
+extern char  **environ;
+
+static char  BUF[NM_LINE_MAX];
 
 
-extern char **environ;
-
-
-void
-entry(void)
+int
+_main1(void)
 {
-    printf("enter the entry ...\n");
-    /* char **p = environ; */
+  size_t   n;
+  ssize_t  rc;
 
-    /* while (*p) { */
-    /*     printf("%s\n", *p++); */
-    /* } */
+  n = strlen(environ[0]);
+  memcpy(BUF, environ[0], n);
+  BUF[n++] = '\n';
+  BUF[n++] = '\0';
 
-    /* _unused_(envp); */
-    /* if (argc > 1) { */
-    /*     printf("enter the entry: %s\n", argv[1]); */
+  rc = write(STDOUT_FILENO, BUF, n-1);
+  if (rc == -1)
+    {
+      exit(EXIT_FAILURE);
+    }
 
-    /* } else { */
-    /*     printf("enter the entry ...\n"); */
-    /* } */
 
-    exit(0);
+  exit(EXIT_SUCCESS);
 }

@@ -1,14 +1,19 @@
-#include <_ld_.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "_ld_.h"
 
-#define SS "enter _start ...\n"
+
+#define SS  "enter _start ...\n"
 
 
 int
-main(void)
+_start(void)
 {
-    printf(SS);
+  ssize_t  n;
 
-    exit(0);
+  n = write(STDOUT_FILENO, SS, sizeof(SS)-1);
+  if (n == -1)
+    {
+      _exit(EXIT_FAILURE);
+    }
+
+  _exit(EXIT_SUCCESS);
 }

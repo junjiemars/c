@@ -1,11 +1,19 @@
-#include <_ld_.h>
+#include "_ld_.h"
+
+
+#define SS  "abc\n"
+
 
 int
 main(void)
 {
-  int  rc;
+  ssize_t  rc;
 
-  rc = write(STDOUT_FILENO, "abc", sizeof("abc")-1);
+  rc = write(STDOUT_FILENO, SS, sizeof(SS)-1);
+  if (rc == -1)
+    {
+      exit(EXIT_FAILURE);
+    }
 
-  return rc;
+  exit(EXIT_SUCCESS);
 }
