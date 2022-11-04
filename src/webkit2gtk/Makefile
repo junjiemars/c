@@ -7,8 +7,13 @@ ifeq (no, $(has_webkit2gtk))
 	@echo "#skip ..."
 else
 
-webkit2gtk: webkit2gtk_hi
-webkit2gtk_test: webkit2gtk_hi_test
+webkit2gtk: webkit2gtk_gtk                      \
+            webkit2gtk_hi                       \
+            webkit2gtk_punk
+
+webkit2gtk_test: webkit2gtk_gtk_test            \
+                 webkit2gtk_hi_test             \
+                 webkit2gtk_punk_test
 
 endif
 
@@ -25,15 +30,37 @@ getopt_c := $(root)posix/getopt.c
 endif
 
 
+# gtk
+webkit2gtk_gtk_binout := $(bin_path)/$(webkit2gtk_prefix)_gtk$(bin_ext)
+
+webkit2gtk_gtk: $(webkit2gtk_gtk_binout)
+webkit2gtk_gtk_test: webkit2gtk_gtk
+	$(webkit2gtk_gtk_binout) abc 123
+
+$(webkit2gtk_gtk_binout): $(webkit2gtk_root)/gtk/g1.c
+	$(CC) $(CPPFLAGS) $(INC) $(CFLAGS) $^ $(bin_out)$@ $(LDLIBS)
+
+
+
 # hi
 webkit2gtk_hi_binout := $(bin_path)/$(webkit2gtk_prefix)_hi$(bin_ext)
-
 
 webkit2gtk_hi: $(webkit2gtk_hi_binout)
 webkit2gtk_hi_test: webkit2gtk_hi
 	$(webkit2gtk_hi_binout)
 
 $(webkit2gtk_hi_binout): $(webkit2gtk_root)/hi/h.c
+	$(CC) $(CPPFLAGS) $(INC) $(CFLAGS) $^ $(bin_out)$@ $(LDLIBS)
+
+
+# punk
+webkit2gtk_punk_binout := $(bin_path)/$(webkit2gtk_prefix)_punk$(bin_ext)
+
+webkit2gtk_punk: $(webkit2gtk_punk_binout)
+webkit2gtk_punk_test: webkit2gtk_punk
+	$(webkit2gtk_punk_binout)
+
+$(webkit2gtk_punk_binout): $(webkit2gtk_root)/punk/p.c
 	$(CC) $(CPPFLAGS) $(INC) $(CFLAGS) $^ $(bin_out)$@ $(LDLIBS)
 
 
