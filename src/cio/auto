@@ -23,6 +23,10 @@ ndef_static_assert="yes"
 nustd_ssize_t="yes"
 . ${POSIX_ROOT}/nustd_auto
 
+# check nio.h features
+nio_getdelim="yes"
+nio_fileno="yes"
+. ${POSIX_ROOT}/nio_auto
 
 
 echo "checking for {cio} ..."
