@@ -11,10 +11,14 @@ if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
 
-ncc_sanitize_address="yes"
 
-# check posix features
-. src/posix/nustd_auto
+# check ncc.h features
+ncc_sanitize_address="yes"
+. ${POSIX_ROOT}/ncc_auto
+
+# check nustd.h features
+nustd_ssize_t="yes"
+. ${POSIX_ROOT}/nustd_auto
 
 
 echo "checking for {io} ..."

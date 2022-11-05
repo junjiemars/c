@@ -177,10 +177,10 @@ $(io_copy_hole_binout): $(io_root)/copy/hole1.c
 io_data_pwnam_binout := $(bin_path)/$(io_prefix)_pwnam$(bin_ext)
 io_data_pwuid_binout := $(bin_path)/$(io_prefix)_pwuid$(bin_ext)
 
-io_data_pwnam: $(io_data_pwnam_binout)          \
-               $(io_data_pwuid_binout)
-io_data_pwnam_test: io_data_pwnam_test          \
-                    io_data_pwuid_test
+io_data: $(io_data_pwnam_binout)                \
+         $(io_data_pwuid_binout)
+io_data_test: io_data_pwnam_test                \
+              io_data_pwuid_test
 
 io_data_pwnam_test: $(io_data_pwnam_binout)
 	$< junjie
@@ -864,6 +864,7 @@ io_umask_create_binout := $(bin_path)/$(io_prefix)_umask_create$(bin_ext)
 io_umask_change_binout := $(bin_path)/$(io_prefix)_umask_change$(bin_ext)
 io_umask_wrong_binout := $(bin_path)/$(io_prefix)_umask_wrong$(bin_ext)
 io_umask_change_file := $(tmp_path)/$(io_prefix)_umask_change.file
+io_umask_wrong_file := $(tmp_path)/$(io_prefix)_umask_wrong.file
 
 io_umask: $(io_umask_create_binout)             \
           $(io_umask_change_binout)             \
@@ -887,11 +888,15 @@ io_umask_change_test: $(io_umask_change_binout) \
 	ls -lh $(io_umask_change_file)
 
 io_umask_wrong_test: $(io_umask_wrong_binout)   \
-                     $(io_umask_change_file)
-	$< $(io_umask_change_file)
-	ls -lh $(io_umask_change_file)
+                     $(io_umask_wrong_file)
+	ls -lh $(io_umask_wrong_file)
+	$< $(io_umask_wrong_file)
+	ls -lh $(io_umask_wrong_file)
 
 $(io_umask_change_file):
+	touch $@
+
+$(io_umask_wrong_file):
 	touch $@
 
 $(io_umask_create_binout): $(io_root)/umask/u1.c

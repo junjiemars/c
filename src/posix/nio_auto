@@ -18,6 +18,7 @@ fi
 
 
 # check for <nustd.h>
+nustd_ssize_t="yes"
 . ${POSIX_ROOT}/nustd_auto
 
 
