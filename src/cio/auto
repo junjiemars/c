@@ -7,8 +7,25 @@
 ####
 
 
-# check <ncstd.h> features
-. src/posix/ncstd_auto
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+
+# check ncstd.h features
+ncc_sanitize_address="yes"
+ndef_restrict="yes"
+ndef_static_assert="yes"
+. ${POSIX_ROOT}/ncstd_auto
+
+
+# check nustd.h features
+nustd_ssize_t="yes"
+. ${POSIX_ROOT}/nustd_auto
+
+
+
+echo "checking for {cio} ..."
 
 # nlim_auto_check="src/posix/nlim_auto_check"
 # # check <nlim.h> feature
