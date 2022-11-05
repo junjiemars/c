@@ -121,7 +121,7 @@ $(posix_ndef_binout): $(posix_ndef_cppout)
 	$(CC) $(CFLAGS) $< $(bin_out)$@
 
 $(posix_ndef_cppout): $(posix_root)/ndef_test.c
-	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $< $(cpp_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_pre) $< $(cpp_out)$@
 
 
 # nint

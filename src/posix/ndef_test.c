@@ -16,7 +16,7 @@ static void test_alignas(void);
 
 #if (NM_HAVE_GENERIC)
 static void test_generic(void);
-#endif
+#endif  /* generic */
 
 static void test_isut(void);
 static void test_nof(void);
