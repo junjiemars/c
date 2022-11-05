@@ -25,6 +25,7 @@ if [    "$ndef_restrict" = "yes"                \
      -o "$ndef_static_assert" = "yes"           \
      -o "$ndef_alignof" = "yes"                 \
      -o "$ndef_alignas" = "yes"                 \
+     -o "$ndef_generic" = "yes"                 \
    ]; then
   echo "checking for ndef.h ..."
 else
@@ -85,7 +86,7 @@ if [ "$ndef_alignof" = "yes" ]; then
   nm_feature_name="nm_have_alignof"
   nm_feature_run=yes
   nm_feature_h='#include <stdalign.h>'
-  nm_feature_flags=
+  nm_feature_flags="$CFLAGS"
   nm_feature_test='int a = (int) alignof(short);'
   . ${NORE_ROOT}/auto/feature
   if [ "yes" != $nm_found ]; then
@@ -106,7 +107,7 @@ if [ "$ndef_alignas" = "yes" ]; then
   nm_feature_name="nm_have_alignas"
   nm_feature_run=yes
   nm_feature_h='#include <stdalign.h>'
-  nm_feature_flags=
+  nm_feature_flags="$CFLAGS"
   nm_feature_test='int alignas(int) a;'
   . ${NORE_ROOT}/auto/feature
   if [ "yes" != $nm_found ]; then
@@ -118,6 +119,23 @@ if [ "$ndef_alignas" = "yes" ]; then
 	  nm_feature_test='int alignas(int) a;'
 	  . ${NORE_ROOT}/auto/feature
   fi
+fi
+
+
+# check _Generic
+#----------------------------------------
+if [ "$ndef_generic" = "yes" ]; then
+  nm_feature="generic"
+  nm_feature_name="nm_have_generic"
+  nm_feature_run=no
+  nm_feature_h=
+  nm_feature_flags="$CFLAGS"
+  nm_feature_test='
+#define type_name(x) _Generic((x), int:"int", default:"unknown")
+type_name(1);
+type_name(1.0);
+'
+  . ${NORE_ROOT}/auto/feature
 fi
 
 

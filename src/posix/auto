@@ -25,6 +25,7 @@ ndef_restrict="yes"
 ndef_static_assert="yes"
 ndef_alignof="yes"
 ndef_alignas="yes"
+ndef_generic="yes"
 . ${POSIX_ROOT}/ndef_auto
 
 # check for <nstr.h>

@@ -22,21 +22,6 @@ nlim_line_max="yes"
 echo "checking for {ld} ..."
 
 
-# check entry point
-#----------------------------------------
-nm_feature="-Wl,-e"
-nm_feature_name=
-nm_feature_indent=yes
-nm_feature_run=yes
-nm_feature_h=
-nm_feature_flags='-Wl,-e_main'
-nm_feature_test='return 0;'
-. ${NORE_ROOT}/auto/feature
-if [ yes = $nm_found ]; then
-  flag="ld_entry_opt" op=":=" value="$nm_feature" \
-    . ${NORE_ROOT}/auto/make_define
-fi
-
 
 # check static option
 #----------------------------------------
@@ -66,6 +51,18 @@ nm_feature_test=
 if [ yes = $nm_found ]; then
   flag="ld_nostartfiles_opt" op=":=" value="$nm_feature"  \
     . ${NORE_ROOT}/auto/make_define
+  nm_feature="-Wl,-e"
+  nm_feature_name=
+  nm_feature_indent=yes
+  nm_feature_run=yes
+  nm_feature_h=
+  nm_feature_flags='-Wl,-e_main'
+  nm_feature_test='return 0;'
+  . ${NORE_ROOT}/auto/feature
+  if [ yes = $nm_found ]; then
+    flag="ld_entry_opt" op=":=" value="$nm_feature" \
+      . ${NORE_ROOT}/auto/make_define
+  fi
 fi
 
 # check nostdlib option

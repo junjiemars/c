@@ -84,6 +84,13 @@
 #endif  /* alignas */
 
 
+#if (NM_HAVE_GENERIC)
+#  define generic _Generic
+#else
+#  define generic
+#endif  /* generic */
+
+
 
 
 #if !defined(_isut_)
