@@ -1,7 +1,5 @@
-#include <_cio_.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "_cio_.h"
+
 
 void
 test_fgets(const char *filename) {

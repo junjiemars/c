@@ -1,5 +1,5 @@
 #
-# ./configure --has-io
+# ./configure --has-cio
 #
 # standard IO library
 #
@@ -206,20 +206,22 @@ $(cio_flight_select_c_binout): $(cio_root)/flight/select/client.c \
 
 # line
 cio_line_basic_binout := $(bin_path)/$(cio_prefix)_line_basic$(bin_ext)
-cio_line_gets_binout := $(bin_path)/$(cio_prefix)_line_gets$(bin_ext)
 
-cio_line: $(cio_line_basic_binout) $(cio_line_gets_binout)
-cio_line_test: cio_line_basic_test                \
-              cio_line_gets_test
+cio_line: $(cio_line_basic_binout)
+cio_line_test: cio_line_basic_test
+
 cio_line_basic_test: $(cio_line_basic_binout)
 	$(cio_line_basic_binout) $(CURDIR)/src/cio/line/zigzag
+
 cio_line_gets_test: $(cio_line_gets_binout)
 	$(cio_line_gets_binout) $(CURDIR)/src/cio/line/zigzag
 
-$(cio_line_basic_binout): $(cio_root)/line/l.c
+$(cio_line_basic_binout): $(cio_root)/line/l.c  \
+                          $(root)/posix/nio.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(cio_line_gets_binout): $(cio_root)/line/s.c
+$(cio_line_gets_binout): $(cio_root)/line/s.c   \
+                         $(root)/posix/nio.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # reopen
