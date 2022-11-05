@@ -92,7 +92,7 @@ test_static_assert(void)
 void
 test_alignof(void)
 {
-  size_t s = alignof(short);
+  __attribute__((unused)) size_t s = alignof(short);
   assert(s == sizeof(short));
 }
 
@@ -100,10 +100,10 @@ void
 test_alignas(void)
 {
 #define _m_(x, y)  ((size_t) &(x)) == (((size_t) &(x))/(y))*(y)
-  char alignas(double) c1  =  'A';
+  __attribute__((unused)) char alignas(double) c1  =  'A';
   assert(_m_(c1, sizeof(double)));
 
-  struct X  x1 = {0};
+  __attribute__((unused)) struct X  x1 = {0};
   assert(_m_(x1, sizeof(int) * 2));
 #undef _m_
 }
