@@ -1,7 +1,8 @@
 # -*- mode:sh -*- vim:ft=sh
-
-
-# check C compiler features
+#
+# ./configure --has-limit
+#
+#
 
 
 # eof
