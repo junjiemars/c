@@ -80,6 +80,7 @@
 #    endif
 #    define alignas(x) __attribute__((aligned(x)))
 #  endif
+#else
 #  include <stdalign.h>
 #endif  /* alignas */
 
