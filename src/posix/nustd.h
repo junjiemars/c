@@ -55,11 +55,13 @@
 
 
 #if (MSVC)
-#  if !(NM_HAVE_SSIZE_T)
+#  if (NM_HAVE_SSIZE_T)
 typedef SSIZE_T  ssize_t;
-#    if !defined(SSIZE_MAX)
-#      define SSIZE_MAX  ((ssize_t)((size_t)((ssize_t)-1) >> 1))
-#    endif
+#  else
+typedef long long  ssize_t;
+#  endif  /* ssize_t */
+#  if !defined(SSIZE_MAX)
+#    define SSIZE_MAX  ((ssize_t)((size_t)((ssize_t)-1) >> 1))
 #  endif
 #endif  /* ssize_t */
 
