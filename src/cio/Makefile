@@ -138,7 +138,7 @@ cio_format_test: cio_format_in_test             \
 cio_format_in_test: $(cio_format_in_binout)
 	-$(cio_format_in_binout)
 cio_format_out_test: $(cio_format_out_binout)
-	$(cio_format_out_binout)
+	-$(cio_format_out_binout)
 
 $(cio_format_in_binout): $(cio_root)/format/fi.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
