@@ -17,7 +17,7 @@ if [ -z "$POSIX_ROOT" ]; then
 fi
 
 
-# check for <nustd.h>
+# check nustd.h features
 nustd_ssize_t="yes"
 . ${POSIX_ROOT}/nustd_auto
 

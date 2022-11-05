@@ -28,6 +28,10 @@ nio_getdelim="yes"
 nio_fileno="yes"
 . ${POSIX_ROOT}/nio_auto
 
+# check nlim.h features
+nlim_line_max="yes"
+. ${POSIX_ROOT}/nlim_auto
+
 
 echo "checking for {cio} ..."
 

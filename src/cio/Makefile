@@ -77,7 +77,7 @@ $(cio_basic_binout): $(cio_basic_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(cio_basic_cppout): $(cio_root)/basic/b.c
-	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
 # binary I/O

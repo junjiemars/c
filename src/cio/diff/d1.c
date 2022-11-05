@@ -1,16 +1,16 @@
-#include <_cio_.h>
-#include <stdio.h>
-#include <string.h>
+#include "_cio_.h"
 
-#define MAX_PATH 256
-#define MAX_LINE 512
+
+#define _MAX_PATH_  256
+#define _MAX_LINE_  512
+
 
 void diff(const char *src, const char *dst);
 
 void diff(const char *src, const char *dst)
 {
   FILE *fsrc = 0, *fdst = 0;
-  char lsrc[MAX_LINE], ldst[MAX_LINE];
+  char lsrc[_MAX_LINE_], ldst[_MAX_LINE_];
   char *eof_src = 0, *eof_dst = 0;
 
   fsrc = fopen(src, "r");
@@ -33,7 +33,7 @@ void diff(const char *src, const char *dst)
     {
       if (!feof(fsrc))
         {
-          eof_src = fgets(lsrc, MAX_LINE, fsrc);
+          eof_src = fgets(lsrc, _MAX_LINE_, fsrc);
           if (ferror(fsrc))
             {
               perror(src);
@@ -41,7 +41,7 @@ void diff(const char *src, const char *dst)
         }
       if (!feof(fdst))
         {
-          eof_dst = fgets(ldst, MAX_LINE, fdst);
+          eof_dst = fgets(ldst, _MAX_LINE_, fdst);
           if (ferror(fdst))
             {
               perror(dst);
@@ -55,7 +55,7 @@ void diff(const char *src, const char *dst)
 
       if (eof_src != NULL && eof_dst != NULL)
         {
-          if (0 == strncmp(lsrc, ldst, MAX_LINE))
+          if (0 == strncmp(lsrc, ldst, _MAX_LINE_))
             {
               fprintf(stdout, " %s", lsrc);
             }
@@ -96,9 +96,9 @@ main(int argc, char **argv)
       return 1;
     }
 
-  char src[MAX_PATH], dst[MAX_PATH];
-  strncpy(src, argv[1], MAX_PATH-1);
-  strncpy(dst, argv[2], MAX_PATH-1);
+  char src[_MAX_PATH_], dst[_MAX_PATH_];
+  strncpy(src, argv[1], _MAX_PATH_-1);
+  strncpy(dst, argv[2], _MAX_PATH_-1);
 
   diff(src, dst);
 
