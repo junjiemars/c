@@ -13,11 +13,10 @@
 #include <stdio.h>
 
 
-
 #if !(NM_HAVE_GETDELIM)
 
-ssize_t getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
-                 FILE *restrict stream);
+ssize_t getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
+                 FILE * restrict stream);
 
 #  if defined(getline)
 #    undef getline

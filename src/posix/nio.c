@@ -1,5 +1,5 @@
 #include <nio.h>
-#include <limits.h>
+
 
 /*
  * An implementation conform to IEEE Std 1003.1-2017:
@@ -10,7 +10,10 @@
 #if !(NM_HAVE_GETDELIM)
 
 #include <errno.h>
+#include <limits.h>
+#include <stdio.h>
 #include <stdlib.h>
+
 
 ssize_t
 getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
