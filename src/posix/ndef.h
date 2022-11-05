@@ -66,6 +66,8 @@
 #      undef alignof
 #    endif
 #    define alignof __alignof__
+#  else
+#    include <stdalign.h>
 #  endif
 #else
 #  include <stdalign.h>
@@ -74,11 +76,12 @@
 
 #if !(NM_HAVE_ALIGNAS)
 #  if !(NM_HAVE__ALIGNAS)
-#  else
 #    if defined(alignas)
 #      undef alignas
 #    endif
 #    define alignas(x) __attribute__((aligned(x)))
+#  else
+#    include <stdalign.h>
 #  endif
 #else
 #  include <stdalign.h>
