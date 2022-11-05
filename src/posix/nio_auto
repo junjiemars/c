@@ -17,6 +17,10 @@ if [ -z "$POSIX_ROOT" ]; then
 fi
 
 
+# check for <nustd.h>
+. ${POSIX_ROOT}/nustd_auto
+
+
 if [    "$nio_getdelim" = "yes"                 \
      -o "$nio_fileno" = "yes"                   \
    ]; then

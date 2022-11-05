@@ -73,7 +73,7 @@ $(posix_nbits_binout): $(posix_nbits_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(posix_nbits_cppout): $(posix_root)/nbits_test.c
-	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
 # getopt
@@ -136,7 +136,7 @@ $(posix_nint_binout): $(posix_nint_cppout)
 	$(CC) $(CFLAGS) $< $(bin_out)$@
 
 $(posix_nint_cppout): $(posix_root)/nint_test.c
-	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $< $(cpp_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_pre) $< $(cpp_out)$@
 
 
 # nio
@@ -164,7 +164,7 @@ $(posix_nstr_binout): $(posix_nstr_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(posix_nstr_cppout): $(posix_root)/nstr_test.c
-	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
 # mmap
@@ -242,7 +242,7 @@ $(posix_nustd_binout): $(posix_nustd_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(posix_nustd_cppout): $(posix_root)/nustd_test.c
-	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 	# cat $@
 
 
