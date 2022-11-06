@@ -9,9 +9,11 @@ limit_test: limit
 	@echo "#skip ..."
 else
 
-limit: limit_l
+limit: limit_l                                  \
+       limit_name
 
-limit_test: limit_l_test
+limit_test: limit_l_test                        \
+            limit_name
 
 endif
 
@@ -36,6 +38,16 @@ $(limit_l_binout): $(limit_l_source)
 $(limit_l_source): $(limit_l_awk)               \
                    $(limit_l_awk_in)
 	awk -f $^ > $@
+
+# name
+limit_name_binout := $(bin_path)/$(limit_prefix)_name$(bin_ext)
+
+limit_name: $(limit_name_binout)
+limit_name_test: limit_name
+	$(limit_name_binout) / /dev /tmp ~/
+
+$(limit_name_binout): $(limit_root)/name.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # eof
