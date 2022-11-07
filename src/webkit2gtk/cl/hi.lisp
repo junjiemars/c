@@ -8,21 +8,31 @@
 
 (in-package :gtk-tutorial)
 
-(cl-cffi-gtk-build-info)
-
 (defun raw-simple-window ()
   (within-main-loop
-    (let ((window (make-instance 'gtk-window
-                                 :type :toplevel
-                                 :title "B"
-                                 :default-width 250
-                                 :border-width 12)))
+    (let (;; create a toplevel window.
+          (window (gtk-window-new :toplevel)))
+      ;; signal handler for the window to handle the signal "destroy".
       (g-signal-connect window "destroy"
                         (lambda (widget)
                           (declare (ignore widget))
                           (leave-gtk-main)))
+			(gtk-window-title )
+      ;; show the window.
       (gtk-widget-show-all window))))
 
 
-
-;;; eof
+(defun raw-simple-window1 ()
+  (within-main-loop
+    (let (;; create a toplevel window.
+          (window (make-instance 'gtk-window
+																 :type :toplevel
+																 :title "B"
+																 :default-width 800)))
+      ;; signal handler for the window to handle the signal "destroy".
+      (g-signal-connect window "destroy"
+                        (lambda (widget)
+                          (declare (ignore widget))
+                          (leave-gtk-main)))
+      ;; show the window.
+      (gtk-widget-show-all window))))
