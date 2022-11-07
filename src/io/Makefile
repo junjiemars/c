@@ -875,10 +875,10 @@ io_umask_test: io_umask_create_test             \
 
 io_umask_create_test: $(io_umask_create_binout)
 	$< $(CURDIR)/$(tmp_path)
-	touch $(tmp_path)/x
-	mkdir $(tmp_path)/y
 	umask
 	umask -S
+	touch $(tmp_path)/x
+	mkdir $(tmp_path)/y
 	ls -lh $(tmp_path)
 
 io_umask_change_test: $(io_umask_change_binout) \

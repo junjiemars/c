@@ -17,17 +17,24 @@
  *
  */
 
-#define RWRWRW (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)
-#define __RWRW (S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)
 #define RW____ (S_IRUSR | S_IWUSR)
+#define __RW__ (S_IRGRP | S_IWGRP)
+#define ____RW (S_IROTH | S_IWOTH)
+
+#define __RWRW (__RW__ | ____RW)
+#define RWRWRW (RW____ | __RW__ | ____RW)
 
 
+
+static void print_mask(int);
 static int has_mask(int, int);
+
 
 
 int
 main(int argc, char **argv)
 {
+  int   rc;
   int   fd;
   char  path[PATH_MAX];
 
@@ -37,8 +44,19 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
+  sprintf(path, "%s/zoo", argv[1]);
+  fd = creat(path, RWRWRW);
+  if (fd == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
+
+  rc = umask(0);
+  print_mask(rc);
+
   sprintf(path, "%s/foo", argv[1]);
-  umask(0);
+
   fd = creat(path, RWRWRW);
   if (fd == -1)
     {
@@ -60,6 +78,22 @@ main(int argc, char **argv)
 
 
   exit(EXIT_SUCCESS);
+}
+
+void
+print_mask(int m)
+{
+  printf("%c%c%c%c%c%c%c%c%c\n",
+         (m & S_IRUSR) == S_IRUSR ? 'r' : '-',
+         (m & S_IWUSR) == S_IWUSR ? 'w' : '-',
+         (m & S_IXUSR) == S_IXUSR ? 'x' : '-',
+         (m & S_IRGRP) == S_IRGRP ? 'r' : '-',
+         (m & S_IWGRP) == S_IWGRP ? 'w' : '-',
+         (m & S_IXGRP) == S_IXGRP ? 'x' : '-',
+         (m & S_IROTH) == S_IROTH ? 'r' : '-',
+         (m & S_IWOTH) == S_IWOTH ? 'w' : '-',
+         (m & S_IXOTH) == S_IXOTH ? 'x' : '-');
+
 }
 
 
