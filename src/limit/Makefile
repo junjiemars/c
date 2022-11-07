@@ -13,7 +13,7 @@ limit: limit_l                                  \
        limit_path
 
 limit_test: limit_l_test                        \
-            limit_path
+            limit_path_test
 
 endif
 
