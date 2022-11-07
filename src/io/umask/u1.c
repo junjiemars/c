@@ -1,4 +1,4 @@
-#include <_io_.h>
+#include "_io_.h"
 
 
 /*
@@ -26,17 +26,17 @@
 
 
 
-static void print_mask(int);
-static int has_mask(int, int);
+static void print_mask(mode_t);
+static int has_mask(int, mode_t);
 
 
 
 int
 main(int argc, char **argv)
 {
-  int   rc;
-  int   fd;
-  char  path[PATH_MAX];
+  int     fd;
+  mode_t  rc;
+  char    path[PATH_MAX];
 
   if (argc < 2)
     {
@@ -82,7 +82,7 @@ main(int argc, char **argv)
 }
 
 void
-print_mask(int m)
+print_mask(mode_t m)
 {
   printf("%c%c%c%c%c%c%c%c%c\n",
          (m & S_IRUSR) == S_IRUSR ? 'r' : '-',
@@ -99,7 +99,7 @@ print_mask(int m)
 
 
 int
-has_mask(int fd, int mask)
+has_mask(int fd, mode_t mask)
 {
   struct stat  ss;
 
