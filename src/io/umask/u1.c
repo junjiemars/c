@@ -66,8 +66,9 @@ main(int argc, char **argv)
   assert(RWRWRW == has_mask(fd, RWRWRW));
 
 
+  rc = umask(__RWRW);
   sprintf(path, "%s/bar", argv[1]);
-  umask(__RWRW);
+
   fd = creat(path, RWRWRW);
   if (fd == -1)
     {
