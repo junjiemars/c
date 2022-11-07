@@ -7,8 +7,9 @@ static void on_click_button(GtkWidget*, gpointer);
 
 int main(int argc, char **argv)
 {
-  GtkWidget *window;
-  GtkWidget *button;
+  GtkWidget  *window;
+  GtkWidget  *button;
+  GtkWidget  *button_box;
 
   gtk_init(&argc, &argv);
 
@@ -16,11 +17,15 @@ int main(int argc, char **argv)
   g_signal_connect(window, "destroy", G_CALLBACK(on_destroy_window), NULL);
 
   gtk_window_set_title (GTK_WINDOW (window), "B");
-  gtk_container_set_border_width(GTK_CONTAINER(window), 20);
+  /* gtk_container_set_border_width(GTK_CONTAINER(window), 20); */
+
+  button_box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
+  gtk_container_add(GTK_CONTAINER(window), button_box);
 
   button = gtk_button_new_with_label("X");
   g_signal_connect(button, "clicked", G_CALLBACK(on_click_button), "button");
-  gtk_container_add(GTK_CONTAINER(window), button);
+  gtk_container_add(GTK_CONTAINER(button_box), button);
+
 
   gtk_window_set_default_size(GTK_WINDOW(window), 400, 200);
 
