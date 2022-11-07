@@ -256,7 +256,7 @@ if [ "$ncc_cpu_endian" = "yes" ]; then
                  char *p = (char*)&i;
                  int le = (0x44 == *p);
                  printf("%d", le);
-                 return 0'
+                 return 0;'
   . ${NORE_ROOT}/auto/feature
 fi
 

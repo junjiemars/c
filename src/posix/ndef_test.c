@@ -14,6 +14,10 @@ static void test_static_assert(void);
 static void test_alignof(void);
 static void test_alignas(void);
 
+#if (NM_HAVE_GENERIC)
+static void test_generic(void);
+#endif  /* generic */
+
 static void test_isut(void);
 static void test_nof(void);
 static void test_swp(void);
@@ -34,6 +38,10 @@ main(int argc, char **argv)
   test_static_assert();
   test_alignof();
   test_alignas();
+
+#if (NM_HAVE_GENERIC)
+  test_generic();
+#endif
 
   test_isut();
   test_nof();
@@ -84,7 +92,7 @@ test_static_assert(void)
 void
 test_alignof(void)
 {
-  size_t s = alignof(short);
+  __attribute__((unused)) size_t s = alignof(short);
   assert(s == sizeof(short));
 }
 
@@ -92,13 +100,24 @@ void
 test_alignas(void)
 {
 #define _m_(x, y)  ((size_t) &(x)) == (((size_t) &(x))/(y))*(y)
-  char alignas(double) c1  =  'A';
+  __attribute__((unused)) char alignas(double) c1  =  'A';
   assert(_m_(c1, sizeof(double)));
 
-  struct X  x1 = {0};
+  __attribute__((unused)) struct X  x1 = {0};
   assert(_m_(x1, sizeof(int) * 2));
 #undef _m_
 }
+
+#if (NM_HAVE_GENERIC)
+void
+test_generic(void)
+{
+#define _tn_(x)  generic((x), int: 1, double: 2, default: 3)
+  static_assert(1 == _tn_(0), "int");
+  static_assert(2 == _tn_(0.1), "double");
+#undef _tn_
+}
+#endif
 
 void
 test_isut(void)

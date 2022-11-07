@@ -1,5 +1,5 @@
 #
-# ./configure --has-io
+# ./configure --has-cio
 #
 # standard IO library
 #
@@ -77,7 +77,7 @@ $(cio_basic_binout): $(cio_basic_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(cio_basic_cppout): $(cio_root)/basic/b.c
-	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
 # binary I/O
@@ -138,7 +138,7 @@ cio_format_test: cio_format_in_test             \
 cio_format_in_test: $(cio_format_in_binout)
 	-$(cio_format_in_binout)
 cio_format_out_test: $(cio_format_out_binout)
-	$(cio_format_out_binout)
+	-$(cio_format_out_binout)
 
 $(cio_format_in_binout): $(cio_root)/format/fi.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -206,20 +206,22 @@ $(cio_flight_select_c_binout): $(cio_root)/flight/select/client.c \
 
 # line
 cio_line_basic_binout := $(bin_path)/$(cio_prefix)_line_basic$(bin_ext)
-cio_line_gets_binout := $(bin_path)/$(cio_prefix)_line_gets$(bin_ext)
 
-cio_line: $(cio_line_basic_binout) $(cio_line_gets_binout)
-cio_line_test: cio_line_basic_test                \
-              cio_line_gets_test
+cio_line: $(cio_line_basic_binout)
+cio_line_test: cio_line_basic_test
+
 cio_line_basic_test: $(cio_line_basic_binout)
 	$(cio_line_basic_binout) $(CURDIR)/src/cio/line/zigzag
+
 cio_line_gets_test: $(cio_line_gets_binout)
 	$(cio_line_gets_binout) $(CURDIR)/src/cio/line/zigzag
 
-$(cio_line_basic_binout): $(cio_root)/line/l.c
+$(cio_line_basic_binout): $(cio_root)/line/l.c  \
+                          $(root)/posix/nio.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(cio_line_gets_binout): $(cio_root)/line/s.c
+$(cio_line_gets_binout): $(cio_root)/line/s.c   \
+                         $(root)/posix/nio.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # reopen

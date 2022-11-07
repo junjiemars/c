@@ -1,8 +1,5 @@
 #include "_cio_.h"
-#include <nio.h>
 #include <nint.h>
-#include <stdlib.h>
-#include <string.h>
 
 
 #define LINE_LEN_MAX  (sizeof(void*))

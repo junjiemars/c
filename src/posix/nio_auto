@@ -17,7 +17,8 @@ if [ -z "$POSIX_ROOT" ]; then
 fi
 
 
-# check for <nustd.h>
+# check nustd.h features
+nustd_ssize_t="yes"
 . ${POSIX_ROOT}/nustd_auto
 
 
@@ -43,7 +44,7 @@ if [ "$nio_getdelim" = "yes" ]; then
       nm_feature_run=no
       nm_feature_h='#include <stdio.h>'
       nm_feature_flags=
-      nm_feature_test='getdelim((char**)0,(size_t*)0,0x0a,stdout);'
+      nm_feature_test='getdelim((char**) 0,(size_t*) 0, 0x0a, stdout);'
       . ${NORE_ROOT}/auto/feature
       ;;
     gcc)
@@ -52,7 +53,7 @@ if [ "$nio_getdelim" = "yes" ]; then
       nm_feature_run=no
       nm_feature_h='#include <stdio.h>'
       nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
-      nm_feature_test='getdelim((char**)0,(size_t*)0,0x0a,stdout);'
+      nm_feature_test='getdelim((char**) 0,(size_t*) 0, 0x0a, stdout);'
       . ${NORE_ROOT}/auto/feature
       ;;
     msvc)
@@ -61,7 +62,7 @@ if [ "$nio_getdelim" = "yes" ]; then
       nm_feature_run=no
       nm_feature_h='#include <stdio.h>'
       nm_feature_flags="-D_CRT_SECURE_NO_WARNINGS $CFLAGS"
-      nm_feature_test='getdelim((char**)0,(size_t*)0,0x0a,stdout);'
+      nm_feature_test='getdelim((char**) 0, (size_t*) 0, 0x0a, stdout);'
       . ${NORE_ROOT}/auto/feature
       ;;
     *)

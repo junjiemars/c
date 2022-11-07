@@ -1,8 +1,7 @@
 #include "_lang_.h"
-#include <stdio.h>
 
 /* base, row-index, col-index, col-n, width */
-#define Aij(b, r, c, n, w) ((char*)(b) + (r)*(n)*(w) + (c)*(w))
+#define Aij(b, r, c, n, w) ((char*) (b) + (r)*(n)*(w) + (c)*(w))
 
 static void f1(char**);
 static void f2(char*[]);

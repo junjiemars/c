@@ -1,6 +1,9 @@
 #include "nio.h"
 #include <stdlib.h>
 
+extern ssize_t getdelim(char ** restrict lineptr, size_t * restrict n,
+                        int delimiter, FILE * restrict stream);
+
 
 static void test_getline(const char *where);
 static void test_fileno(void);

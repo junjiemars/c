@@ -25,6 +25,7 @@ ndef_restrict="yes"
 ndef_static_assert="yes"
 ndef_alignof="yes"
 ndef_alignas="yes"
+ndef_generic="yes"
 . ${POSIX_ROOT}/ndef_auto
 
 # check for <nstr.h>
@@ -37,23 +38,21 @@ nint_inttypes="yes"
 nint_stdbool="yes"
 . ${POSIX_ROOT}/nint_auto
 
-# check for <nio.h>
-nio_getdelim="yes"
-nio_fileno="yes"
-. ${POSIX_ROOT}/nio_auto
-
 # check for <nustd.h>
-nustd_ssize="yes"
+nustd_ssize_t="yes"
 nustd_sleep="yes"
 nustd_getpid="yes"
 . ${POSIX_ROOT}/nustd_auto
-
 
 # checking for <nlim.h>
 nlim_line_max="yes"
 nlim_clk_tck="yes"
 . ${POSIX_ROOT}/nlim_auto
 
+# check for <nio.h>
+nio_getdelim="yes"
+nio_fileno="yes"
+. ${POSIX_ROOT}/nio_auto
 
 
 # eof

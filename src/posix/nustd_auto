@@ -25,7 +25,7 @@ fi
 . ${POSIX_ROOT}/ncstd_auto
 
 
-if [    "$nustd_ssize" = "yes"                  \
+if [    "$nustd_ssize_t" = "yes"                \
      -o "$nustd_sleep" = "yes"                  \
      -o "$nustd_getpid" = "yes"                 \
    ]; then
@@ -41,7 +41,7 @@ fi
 
 # check ssize_t
 #----------------------------------------
-if [ "$nustd_ssize" = "yes" ]; then
+if [ "$nustd_ssize_t" = "yes" ]; then
   case $CC_NAME in
     clang|gcc)
       nm_feature="ssize_t"
@@ -49,7 +49,7 @@ if [ "$nustd_ssize" = "yes" ]; then
       nm_feature_run=no
       nm_feature_h='#include <unistd.h>'
       nm_feature_flags=
-      nm_feature_test='ssize_t ss = -1;'
+      nm_feature_test='ssize_t ss = -1; (void) sizeof(ss);'
       . ${NORE_ROOT}/auto/feature
       ;;
     msvc)
@@ -58,7 +58,7 @@ if [ "$nustd_ssize" = "yes" ]; then
       nm_feature_run=no
       nm_feature_h='#include <BaseTsd.h>'
       nm_feature_flags=
-      nm_feature_test='SSIZE_T ss = -1;'
+      nm_feature_test='SSIZE_T ss = -1; (void) sizeof(ss);'
       . ${NORE_ROOT}/auto/feature
       ;;
     *)
