@@ -852,10 +852,10 @@ io_trunc: $(io_trunc_binout)
 io_trunc_test: io_trunc
 	echo -n "abc" > $(io_trunc_file)              \
     && $(io_trunc_binout) $(io_trunc_file) 10   \
-    && cat $(io_trunc_file)
+    && cat $(io_trunc_file) && echo
 	echo -n "abcdefghij" > $(io_trunc_file)       \
     && $(io_trunc_binout) $(io_trunc_file) 3    \
-    && cat $(io_trunc_file)
+    && cat $(io_trunc_file) && echo
 
 
 $(io_trunc_binout): $(io_root)/trunc/t1.c
