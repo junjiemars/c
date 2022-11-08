@@ -1,7 +1,7 @@
 #include <_io_.h>
 
 /*
- * copy or copy with sync.
+ * copy with or without sync.
  *
  */
 
@@ -25,6 +25,12 @@ copy_block_nsync(int src, int dst)
           perror(NULL);
           exit(EXIT_FAILURE);
         }
+    }
+
+  if (n == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
     }
 }
 

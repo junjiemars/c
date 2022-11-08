@@ -791,8 +791,8 @@ io_sync_test: $(io_sync_non_binout)             \
               $(io_sync_binout)                 \
               $(io_sync_file)
 	ls -lh $(io_sync_file)
-	$(io_sync_binout) $(io_sync_file) $(io_sync_out_file)
 	$(io_sync_non_binout) $(io_sync_file) $(io_sync_out1_file)
+	$(io_sync_binout) $(io_sync_file) $(io_sync_out_file)
 
 $(io_sync_file):
 	dd if=/dev/zero of=$@ bs=4096 count=51200

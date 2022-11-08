@@ -52,9 +52,9 @@ main(int argc, char **argv)
   _time_(copy_block(fd_src, fd_dst), elapsed);
 
 #if defined(_SYNC_)
-  printf("elapsed(%s): %16lfs\n", "sync", elapsed);
+  printf("elapsed(sync):     %16lfs\n", elapsed);
 #else
-  printf("elapsed(%s): %16lfs\n", "non sync", elapsed);
+  printf("elapsed(non sync): %16lfs\n", elapsed);
 #endif
 
   exit(EXIT_SUCCESS);
