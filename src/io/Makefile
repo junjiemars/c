@@ -864,7 +864,7 @@ io_umask_create_binout := $(bin_path)/$(io_prefix)_umask_create$(bin_ext)
 io_umask_change_binout := $(bin_path)/$(io_prefix)_umask_change$(bin_ext)
 io_umask_fork_binout := $(bin_path)/$(io_prefix)_umask_fork$(bin_ext)
 io_umask_change_file := $(tmp_path)/$(io_prefix)_umask_change.file
-io_umask_fork_file := $(tmp_path)/$(io_prefix)_umask_fork.file
+
 
 io_umask: $(io_umask_create_binout)             \
           $(io_umask_change_binout)             \
@@ -887,16 +887,10 @@ io_umask_change_test: $(io_umask_change_binout) \
 	$< $(io_umask_change_file)
 	ls -lh $(io_umask_change_file)
 
-io_umask_fork_test: $(io_umask_fork_binout)   \
-                     $(io_umask_fork_file)
-	ls -lh $(io_umask_fork_file)
-	$< $(io_umask_fork_file)
-	ls -lh $(io_umask_fork_file)
+io_umask_fork_test: $(io_umask_fork_binout)
+	$<
 
 $(io_umask_change_file):
-	touch $@
-
-$(io_umask_fork_file):
 	touch $@
 
 $(io_umask_create_binout): $(io_root)/umask/u1.c
