@@ -850,8 +850,11 @@ io_trunc_file := $(tmp_path)/$(io_prefix)_trunc_file
 
 io_trunc: $(io_trunc_binout)
 io_trunc_test: io_trunc
-	echo "abc" > $(io_trunc_file)                 \
+	echo -n "abc" > $(io_trunc_file)              \
     && $(io_trunc_binout) $(io_trunc_file) 10   \
+    && cat $(io_trunc_file)
+	echo -n "abcdefghij" > $(io_trunc_file)       \
+    && $(io_trunc_binout) $(io_trunc_file) 3    \
     && cat $(io_trunc_file)
 
 
