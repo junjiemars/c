@@ -666,11 +666,10 @@ io_seek_append_test: $(io_seek_append_binout)
 	cat $(io_seek_append_file)
 
 io_seek_able_test: $(io_seek_able_binout)
-	$< 0
-	$< 1
-	$< 2
+	$< 0 1 2
 	$< 0 < /dev/null
 	$< 0 < $<
+	$< 0 < $(bin_path)
 	cat < $(io_root)/seek/able.c | $< 0
 
 io_seek_hole_test: $(io_seek_hole_binout)
