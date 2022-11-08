@@ -8,9 +8,11 @@
  *
 */
 
+
 #if (LINUX)
 #  include <sys/sysmacros.h>
 #endif
+
 
 static void         pr_stat(const char *, const struct stat *);
 static const char  *file_type(const struct stat *);

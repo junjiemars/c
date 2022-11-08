@@ -735,7 +735,7 @@ io_stat_test: io_stat_ft_test                   \
 
 io_stat_ft_test: $(io_stat_ft_binout)
 	-rm $(io_stat_link) || ln -s $(CURDIR)/$< $(io_stat_link)
-	echo "abc" | $< /dev/fd/0 $< $(bin_path) /dev/zero
+	$< $< $(bin_path) $(io_stat_link) /dev/zero
 
 io_stat_uid_test: $(io_stat_uid_binout)
 	ls -lh $< $(shell command -v passwd)
@@ -745,13 +745,12 @@ io_stat_uid_test: $(io_stat_uid_binout)
 	ls -lh $<
 
 io_stat_stat1_test: $(io_stat_stat1_binout)
-	echo "abc" | $<
 	-rm $(io_stat_link) || ln -s $(CURDIR)/$< $(io_stat_link)
-	$< $< $(io_stat_link) $(bin_path) /dev/null /dev/zero
+	$< $(bin_path) $(io_stat_link) /dev/zero $(shell command -v passwd)
 
 io_stat_dev_test: $(io_stat_dev_binout)
-	-ls -lh $(out)/nore.h /dev/null /dev/zero /dev/tty[01] /dev/ttyv[01]
-	$< $(out)/nore.h /dev/null /dev/zero /dev/tty[01] /dev/ttyv[01]
+	-ls -lh $(out)/nore.h /dev/null /dev/zero /dev/tty[01]
+	$< $(out)/nore.h /dev/null /dev/zero /dev/tty[01]
 
 $(io_stat_ft_binout): $(io_root)/stat/ft.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

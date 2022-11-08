@@ -1,7 +1,7 @@
-#include <_io_.h>
+#include "_io_.h"
 
 /*
- * Show st_dev and st_rdev.
+ * Show the differences between st_dev and st_rdev.
  *
  */
 
@@ -16,7 +16,7 @@ main(int argc, char **argv)
 
       if (lstat(argv[i], &ss) == -1)
         {
-          printf("%s\n", strerror(errno));
+          perror(NULL);
           continue;
         }
 
