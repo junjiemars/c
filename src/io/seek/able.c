@@ -19,18 +19,12 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  for (int i = 0; i < argc; i++)
+  for (int i = 1; i < argc; i++)
     {
       int          fd;
       struct stat  ss;
 
       fd = atoi(argv[i]);
-
-      if (fstat(fd, &ss) == -1)
-        {
-          perror(NULL);
-          exit(EXIT_FAILURE);
-        }
 
       if (fstat(fd, &ss) == -1)
         {
