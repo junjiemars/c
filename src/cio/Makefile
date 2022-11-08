@@ -356,9 +356,9 @@ cio_wc_test: cio_wc
 	echo -n "abc" | $(cio_wc_binout) -c
 	echo -e "a\n b\n c" | $(cio_wc_binout)
 	$(cio_wc_binout) -l -w -m -c -L $(CURDIR)/Makefile $(CURDIR)/src/cio/wc/wc.c
-	echo -n "abc" | \
-    $(cio_wc_binout) -l -w -m -c -L \
-    $(CURDIR)/Makefile $(CURDIR)/src/cio/wc/wc.c -
+	# echo -n "abc" | \
+  #   $(cio_wc_binout) -l -w -m -c -L \
+  #   $(CURDIR)/Makefile $(CURDIR)/src/cio/wc/wc.c -
 cio_wc_valgrind_test: cio_wc
 	valgrind --leak-check=full \
            --track-origins=yes \
