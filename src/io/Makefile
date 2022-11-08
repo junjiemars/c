@@ -832,8 +832,8 @@ io_time_raw_test: $(io_time_raw_binout)
 
 io_time_nac_test: $(io_time_nac_binout)
 	echo "abc" > $(io_time_file)
-	sleep 1
 	$(stat) $(io_time_file)
+	sleep 1
 	$< $(io_time_file)
 	$(stat) $(io_time_file)
 

@@ -1,8 +1,7 @@
 #include <_io_.h>
 
 /*
- * Truncate the file but doesn't changed the access time and change
- * time.
+ * Keep the access/modification time unchanged between system calls;
  *
  */
 
@@ -32,8 +31,8 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  ts[0].tv_sec = ss.st_atime;
-  ts[1].tv_sec = ss.st_mtime;
+  memcpy(&ts[0], &ss.st_atim, sizeof(ts[0]));
+  memcpy(&ts[1], &ss.st_mtim, sizeof(ts[1]));
 
   if (futimens(fd, ts) == -1)
     {
