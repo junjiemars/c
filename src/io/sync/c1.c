@@ -1,4 +1,4 @@
-#include <_io_.h>
+#include "_io_.h"
 
 /*
  * copy with or without sync.
@@ -16,7 +16,7 @@ static char  blk[BLKSIZ];
 void
 copy_block_nsync(int src, int dst)
 {
-  int n;
+  int  n;
 
   while ((n = read(src, blk, BLKSIZ)) > 0)
     {
