@@ -9,11 +9,11 @@
  *
  * 3. device: 0.
  *
- * 4. directory: a multiple bytes of sizeof(short) or sizeof(int).
+ * 4*. directory: a multiple bytes of sizeof(short) or sizeof(int).
  *
  * B) block size: preferred for I/O for the file.
  *
- * C) blocks: 512-byte blocks that are allocated.
+ * C) blocks: 512B blocks that are allocated.
  *
  */
 

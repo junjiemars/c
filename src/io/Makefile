@@ -711,6 +711,7 @@ io_size_test: io_size
 
 $(io_size_file):
 	touch $@
+
 $(io_size_link): $(io_size_file)
 	ln -s $< $@
 
