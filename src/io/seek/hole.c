@@ -1,5 +1,6 @@
 #include "_io_.h"
 
+
 int
 main(int argc, char **argv)
 {
@@ -18,14 +19,14 @@ main(int argc, char **argv)
   fd = open(argv[1], O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR);
   if (fd == -1)
     {
-      perror("!panic");
+      perror(NULL);
       exit(EXIT_FAILURE);
     }
 
   n = write(fd, dbuf, sizeof(dbuf) - 1);
   if (n != sizeof(dbuf) - 1)
     {
-      perror("!panic");
+      perror(NULL);
       exit(EXIT_FAILURE);
     }
 
@@ -36,7 +37,7 @@ main(int argc, char **argv)
       rc = lseek(fd, offset, SEEK_SET);
       if (rc == -1)
         {
-          perror("!panic");
+          perror(NULL);
           exit(EXIT_FAILURE);
         }
     }
@@ -44,7 +45,7 @@ main(int argc, char **argv)
   n = write(fd, ubuf, sizeof(ubuf) - 1);
   if (n != sizeof(ubuf) - 1)
     {
-      perror("!panic");
+      perror(NULL);
       exit(EXIT_FAILURE);
     }
 
