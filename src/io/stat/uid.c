@@ -3,7 +3,7 @@
 
 
 /*
- * check owner/saved uid/gid
+ * check the uid/gid of the owner/saved.
  *
  */
 
@@ -11,8 +11,8 @@
 int
 main(int argc, char **argv)
 {
-  int          i, rc;
-  struct stat  buf;
+  int          rc;
+  struct stat  ss;
 
   if (argc < 2)
     {
@@ -21,18 +21,19 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  for (i = 1; i < argc; i++)
+  for (int i = 1; i < argc; i++)
     {
-      rc = lstat(argv[i], &buf);
+      rc = lstat(argv[i], &ss);
       if (rc == -1)
         {
           perror(argv[i]);
           continue;
         }
 
-      printf("%s: uid(%d)", argv[i], buf.st_uid);
-      printf(",suid(%d)", buf.st_mode & S_ISUID);
-      printf(",sgid(%d)\n", buf.st_mode & S_ISGID);
+      printf("%s: uid(%d)", argv[i], ss.st_uid);
+      printf(",gid(%d)", ss.st_gid);
+      printf(",suid(%c)", ((ss.st_mode & S_ISUID) == S_ISUID) ? '*' : '_');
+      printf(",sgid(%c)\n", ((ss.st_mode & S_ISGID) == S_ISGID) ? '*' : '_');
 
     }
 

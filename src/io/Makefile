@@ -735,13 +735,14 @@ io_stat_test: io_stat_ft_test                   \
 
 io_stat_ft_test: $(io_stat_ft_binout)
 	-rm $(io_stat_link) || ln -s $(CURDIR)/$< $(io_stat_link)
-	$< $(CURDIR)/$(bin_path) $(io_stat_link) /dev/null /dev/zero $<
-	echo "abc" | $< /dev/fd/0
+	echo "abc" | $< /dev/fd/0 $< $(bin_path) /dev/zero
 
 io_stat_uid_test: $(io_stat_uid_binout)
-	$< $<
-	chmod ug+s $<
+	ls -lh $< $(shell command -v passwd)
 	$< $< $(shell command -v passwd)
+	chmod ug+s $<
+	$< $<
+	ls -lh $<
 
 io_stat_stat1_test: $(io_stat_stat1_binout)
 	echo "abc" | $<

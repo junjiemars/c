@@ -10,7 +10,7 @@
 int
 main(int argc, char *argv[])
 {
-  int           i, rc;
+  int           rc;
   char         *s;
   struct stat   buf;
 
@@ -21,7 +21,7 @@ main(int argc, char *argv[])
       exit(EXIT_FAILURE);
     }
 
-  for (i = 1; i < argc; i++)
+  for (int i = 1; i < argc; i++)
     {
       rc = lstat(argv[i], &buf);
       if (rc == -1)
