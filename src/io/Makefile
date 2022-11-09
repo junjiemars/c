@@ -623,28 +623,28 @@ io_share_test: io_share1_test                   \
                io_share3_test
 
 io_share1_test: $(io_share1_binout)
-	$(io_share1_binout) $(io_share1_out)
+	$< $(io_share1_out)
 	sleep 1
 	wc -c $(io_share1_out)
 
 io_share2_test: $(io_share2_binout)
-	$(io_share2_binout) $(io_share2_out)
+	$< $(io_share2_out)
 	sleep 1
 	wc -c $(io_share2_out)
 
 io_share3_test: $(io_share3_binout)
-	$(io_share3_binout) $(io_share3_out)
+	$< $(io_share3_out)
 	sleep 1
 	wc -c $(io_share3_out)
 
 $(io_share1_binout): $(io_root)/share/s1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -DN=1000 $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_N_=1000 $^ $(bin_out)$@
 
 $(io_share2_binout): $(io_root)/share/s2.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -DN=1000 $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_N_=1000 $^ $(bin_out)$@
 
 $(io_share3_binout): $(io_root)/share/s2.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -DN=1000 -D_PWRITE_ $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_N_=1000 -D_PWRITE_ $^ $(bin_out)$@
 
 # seek
 io_seek_append_binout := $(bin_path)/$(io_prefix)_seek_append$(bin_ext)

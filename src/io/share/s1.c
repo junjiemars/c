@@ -1,12 +1,15 @@
 #include "_io_.h"
 
+
 /*
  * Parent process and child process:
- * 1. shared the same file table.
+ *
+ * 1. they shared the same file table.
  *
  */
 
-#define OFLAGS  (O_RDWR | O_CREAT)
+
+#define _OFLAGS_  (O_RDWR | O_CREAT)
 
 
 void out(int fd, char w);
@@ -24,27 +27,41 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  fd = open(argv[1], OFLAGS, S_IRUSR | S_IWUSR);
+  fd = open(argv[1], _OFLAGS_, S_IRUSR | S_IWUSR);
   if (fd == -1)
     {
-      perror("!panic");
+      perror(NULL);
       exit(EXIT_FAILURE);
     }
 
   pid = fork();
   if (pid == -1)
     {
-      perror("!panic");
+      perror(NULL);
       exit(EXIT_FAILURE);
     }
   else if (pid == 0)
     {
       out(fd, '_');
-      exit(EXIT_SUCCESS);
     }
   else
     {
       out(fd, '|');
+      if (waitpid(pid, NULL, 0) == -1)
+        {
+          perror(NULL);
+          exit(EXIT_FAILURE);
+        }
+
+      struct stat  ss;
+      if (fstat(fd, &ss) == -1)
+        {
+          perror(NULL);
+          exit(EXIT_FAILURE);
+        }
+      /* proved 1st. */
+      assert(ss.st_size == (size_t) (_N_ * 2));
+
       exit(EXIT_SUCCESS);
     }
 }
@@ -53,11 +70,11 @@ main(int argc, char **argv)
 void
 out(int fd, char w)
 {
-  for (int i = 0; i < N; i++)
+  for (int i = 0; i < _N_ /* -D_N_ */; i++)
     {
       if ((write(fd, &w, sizeof(char))) == -1)
         {
-          perror("!panic");
+          perror(NULL);
           break;
         }
     }
