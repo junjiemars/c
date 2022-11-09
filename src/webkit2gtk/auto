@@ -31,10 +31,13 @@ else
 fi
 if [ "$has_pkg_config" = "yes" ]; then
   webkit2gtk_ver=$(pkg-config --list-all \
-                     | grep -e 'webkit2gtk[-.0-9]*' \
+                     | grep -e 'webkit2gtk-[.0-9]?*' \
                      | cut -d' ' -f1)
   webkit2gtk_ldlibs=$(pkg-config --libs ${webkit2gtk_ver})
   webkit2gtk_cflags=$(pkg-config --cflags ${webkit2gtk_ver})
+  webkit2gtk_inc_dir=$(pkg-config --cflags-only-I ${webkit2gtk_ver} \
+                         | cut -d' ' -f1 \
+                         | sed -e 's#-I/#/#')
   if [ -n "$webkit2gtk_ldlibs" ]; then
     nm_feature="webkit2gtk"
     nm_feature_name="nm_have_webkit2gtk"
@@ -54,6 +57,8 @@ if [ "$has_pkg_config" = "yes" ]; then
       flag=webkit2gtk_ldlibs op=":=" value="$webkit2gtk_ldlibs" \
           . ${NORE_ROOT}/auto/make_define
       flag=webkit2gtk_cflags op=":=" value="$webkit2gtk_cflags" \
+          . ${NORE_ROOT}/auto/make_define
+      flag=webkit2gtk_inc_dir op=":=" value="$webkit2gtk_inc_dir" \
           . ${NORE_ROOT}/auto/make_define
     fi
   fi

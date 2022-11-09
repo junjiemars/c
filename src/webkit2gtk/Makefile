@@ -24,7 +24,6 @@ INC += $(nm_inc_opt)$(webkit2gtk_root) $(nm_inc_opt)$(root)/posix
 CFLAGS += $(webkit2gtk_cflags)
 LDLIBS += $(webkit2gtk_ldlibs)
 
-
 ifeq (msvc, $(CC_NAME))
 getopt_c := $(root)posix/getopt.c
 endif
