@@ -666,7 +666,7 @@ io_seek_test: io_seek_append_test               \
 
 io_seek_append_test: $(io_seek_append_binout)
 	$< $(io_seek_append_file)
-	cat $(io_seek_append_file)
+	cat $(io_seek_append_file) && echo
 
 io_seek_able_test: $(io_seek_able_binout)
 	$< 0 1 2

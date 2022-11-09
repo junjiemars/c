@@ -2,13 +2,16 @@
 
 /*
  * Q1: If you open a file for read-write with append flag, can you
- * still read from anywhere in the file using lseek?
+ * still read from anywhere in the file using `lseek'?
+ *
  * A1: Yes.
  *
- * Q2: Can you use lseek to replace existing data in the file?
+ * Q2: Can you use `lseek' to replace existing data in the file?
+ *
  * A2: No.
  *
  */
+
 
 #define ALPHA_L  "abcdefghij"
 #define ALPHA_U  "ABCDEFGHIJKLMN"
@@ -19,9 +22,7 @@ main(int argc, char **argv)
   int      fd;
   off_t    cur;
   ssize_t  n;
-  char     buf1[]  =  ALPHA_L;
-  char     buf2[]  =  ALPHA_U;
-  char     rbuf[sizeof(ALPHA_L) * 2];
+  char     rbuf[sizeof(ALPHA_L) + sizeof(ALPHA_U) + 1];
 
   if (argc < 2)
     {
@@ -36,8 +37,8 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  n = write(fd, buf1, _nof_(buf1)-1);
-  if (n != _nof_(buf1)-1)
+  n = write(fd, ALPHA_L, sizeof(ALPHA_L)-1);
+  if (n != sizeof(ALPHA_L)-1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
@@ -66,7 +67,7 @@ main(int argc, char **argv)
       perror(NULL);
       exit(EXIT_FAILURE);
     }
-  assert(n == sizeof(buf1)-1);
+  assert(n == sizeof(ALPHA_L)-1);
 
   /* A2 */
   cur = lseek(fd, 0, SEEK_SET);
@@ -77,8 +78,8 @@ main(int argc, char **argv)
     }
   assert(cur == 0);
 
-  n = write(fd, buf2, sizeof(buf2)-1);
-  if (n != sizeof(buf2)-1)
+  n = write(fd, ALPHA_U, sizeof(ALPHA_U)-1);
+  if (n != sizeof(ALPHA_U)-1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
