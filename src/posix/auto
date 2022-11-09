@@ -23,6 +23,7 @@ ncc_cpu_endian="yes"
 # check for <ndef.h>
 ndef_restrict="yes"
 ndef_static_assert="yes"
+ndef_va_args="yes"
 ndef_alignof="yes"
 ndef_alignas="yes"
 ndef_generic="yes"

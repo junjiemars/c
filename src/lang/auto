@@ -1,5 +1,8 @@
 # -*- mode:sh -*- vim:ft=sh
 #
+# ./configure --has-lang
+#
+#
 
 
 if [ -z "$POSIX_ROOT" ]; then
@@ -8,10 +11,13 @@ fi
 
 ncc_cache_line_size="yes"
 ncc_cpu_endian="yes"
+ndef_va_args="yes"
 
 # check ncstd.h features
 . ${POSIX_ROOT}/ncstd_auto
 
+
+echo "checking for {lang} ..."
 
 
 # check header files
@@ -21,21 +27,6 @@ ncc_cpu_endian="yes"
 include="iso646.h" . ${NORE_ROOT}/auto/include
 # include="wchar.h" . ${NORE_ROOT}/auto/include
 # include="wctype.h" . ${NORE_ROOT}/auto/include
-
-
-# check variadic macro
-#----------------------------------------
-nm_feature="variadic macro"
-nm_feature_name="nm_have_variadic_macro"
-nm_feature_run=yes
-nm_feature_h='
-#include <stdio.h>
-#define vmp(...)  sprintf(__VA_ARGS__)'
-nm_feature_flags=
-nm_feature_test="char buf[sizeof(short)];
-                 vmp(buf, \"%c\", '1');
-                 return (buf[0] != '1');"
-. ${NORE_ROOT}/auto/feature     # end of __VA_ARGS__
 
 
 # check sprintf_s
