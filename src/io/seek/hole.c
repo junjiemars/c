@@ -33,7 +33,7 @@ main(int argc, char **argv)
   /* make hole */
   if (argc > 2)
     {
-      offset = (off_t) atoi(argv[2]);
+      offset = (off_t) atol(argv[2]);
       rc = lseek(fd, offset, SEEK_SET);
       if (rc == -1)
         {

@@ -650,16 +650,19 @@ $(io_share3_binout): $(io_root)/share/s2.c
 io_seek_append_binout := $(bin_path)/$(io_prefix)_seek_append$(bin_ext)
 io_seek_able_binout := $(bin_path)/$(io_prefix)_seek_able$(bin_ext)
 io_seek_hole_binout := $(bin_path)/$(io_prefix)_seek_hole$(bin_ext)
+io_seek_hole_find_binout := $(bin_path)/$(io_prefix)_seek_hole_find$(bin_ext)
 io_seek_append_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_seek_append.file
 io_seek_hole_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_seek_hole.file
 io_seek_hole_non_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_seek_hole_non.file
 
 io_seek: $(io_seek_append_binout)               \
          $(io_seek_able_binout)                 \
-         $(io_seek_hole_binout)
+         $(io_seek_hole_binout)                 \
+         $(io_seek_hole_find_binout)
 io_seek_test: io_seek_append_test               \
               io_seek_able_test                 \
-              io_seek_hole_test
+              io_seek_hole_test                 \
+              io_seek_hole_find_test
 
 io_seek_append_test: $(io_seek_append_binout)
 	$< $(io_seek_append_file)
@@ -674,11 +677,15 @@ io_seek_able_test: $(io_seek_able_binout)
 
 io_seek_hole_test: $(io_seek_hole_binout)
 	$< $(io_seek_hole_non_file)
-	$< $(io_seek_hole_file) 16384
+	$< $(io_seek_hole_file) 40960
 	ls -s $(CURDIR)/$(tmp_path)/$(io_prefix)_seek_hole*
 	du -s $(tmp_path)/$(io_prefix)_seek_hole*
 	wc -c $(tmp_path)/$(io_prefix)_seek_hole*
 	od -c $(io_seek_hole_file)
+
+io_seek_hole_find_test: $(io_seek_hole_find_binout) \
+                        io_seek_hole_test
+	$< $(io_seek_hole_file)
 
 $(io_seek_append_binout): $(io_root)/seek/a.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -687,6 +694,9 @@ $(io_seek_able_binout): $(io_root)/seek/able.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_seek_hole_binout): $(io_root)/seek/hole.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_seek_hole_find_binout): $(io_root)/seek/hf.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # size
