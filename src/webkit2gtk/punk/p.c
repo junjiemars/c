@@ -1,46 +1,122 @@
 #include "_webkit2gtk_.h"
 
 
-static void on_destroy_window(GtkWidget*, GtkWidget*);
-static gboolean on_close_webview(WebKitWebView*, GtkWidget*);
+#define B_NAME  "B"
+#define B_VER   "0.1.0"
+
+
+static void  on_activate(GApplication *, WebKitSettings *);
+/* static WebKitWebView *new_view(WebKitSettings *); */
+static void on_auto_started(WebKitWebContext *,
+                            WebKitAutomationSession *,
+                            GtkApplication *);
+static GtkWidget *on_auto_new_view(WebKitAutomationSession *,
+                                   GtkApplication *);
+
+
 
 int main(int argc, char **argv)
 {
+  g_print("%s@%d\n", __FUNCTION__, __LINE__);
+
   gtk_init(&argc, &argv);
 
-  GtkWidget *main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_default_size(GTK_WINDOW(main_window), 800, 600);
+  WebKitSettings *settings = webkit_settings_new();
 
-  WebKitWebView *webview = WEBKIT_WEB_VIEW(webkit_web_view_new());
+  webkit_settings_set_enable_developer_extras(settings, TRUE);
+  webkit_settings_set_enable_webgl(settings, TRUE);
+  webkit_settings_set_enable_media_stream(settings, TRUE);
 
-  gtk_container_add(GTK_CONTAINER(main_window), GTK_WIDGET(webview));
+  GtkApplication *app
+    = gtk_application_new("rocks.trunk." B_NAME, G_APPLICATION_REPLACE);
 
-  g_signal_connect(main_window, "destroy", G_CALLBACK(on_destroy_window),
-                   NULL);
-  g_signal_connect(webview, "close", G_CALLBACK(on_close_webview),
-                   main_window);
-
-  webkit_web_view_load_uri(webview, "https://www.webkitgtk.org");
-
-  gtk_widget_grab_focus(GTK_WIDGET(webview));
-
-  gtk_widget_show_all(main_window);
-
-  gtk_main();
+  g_signal_connect(app, "activate", G_CALLBACK(on_activate), settings);
+  g_application_run(G_APPLICATION(app), argc, argv);
+  g_object_unref(app);
 
   return 0;
 }
 
 
-static void on_destroy_window(__attribute__((unused)) GtkWidget *widget,
-                              __attribute__((unused)) GtkWidget *window)
+void
+on_activate(GApplication *app, WebKitSettings *settings)
 {
-  gtk_main_quit();
+  g_print("%s@%d\n", __FUNCTION__, __LINE__);
+
+  WebKitWebContext *ctx
+    = g_object_new(WEBKIT_TYPE_WEB_CONTEXT,
+                   "process-swap-on-cross-site-navigation-enabled", TRUE,
+                   NULL);
+  webkit_web_context_set_automation_allowed(ctx, TRUE);
+
+  g_signal_connect(ctx, "automation-started",
+                   G_CALLBACK(on_auto_started), app);
+
+  GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+
+  gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
+  gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
+  /* gtk_window_fullscreen(GTK_WINDOW(window)); */
+
+
+  WebKitWebView *webview
+    = WEBKIT_WEB_VIEW(webkit_web_view_new_with_settings(settings));
+    /* = new_view(settings); */
+
+  gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(webview));
+
+
+  webkit_web_view_load_uri(webview, "https://www.bing.com");
+
+  g_clear_object(&settings);
+  g_object_unref(ctx);
+
+  gtk_widget_grab_focus(GTK_WIDGET(webview));
+  gtk_widget_show_all(GTK_WIDGET(window));
 }
 
-static gboolean on_close_webview(__attribute__((unused)) WebKitWebView *wv,
-                                 GtkWidget *window)
+/* WebKitWebView * */
+/* new_view(WebKitSettings *settings) */
+/* { */
+/*   WebKitWebView *webview */
+/*     = WEBKIT_WEB_VIEW(g_object_new(WEBKIT_TYPE_WEB_VIEW, */
+/*                                    "settings", settings, */
+/*                                    NULL)); */
+
+/*   /\* browser_window_append_view(window, webView); *\/ */
+
+/*   return webview; */
+/* } */
+
+
+void on_auto_started(__attribute__((unused)) WebKitWebContext *ctx,
+                     __attribute__((unused)) WebKitAutomationSession *session,
+                     GtkApplication *app)
 {
-  gtk_widget_destroy(window);
-  return TRUE;
+  g_print("%s@%d\n", __FUNCTION__, __LINE__);
+
+  WebKitApplicationInfo *info = webkit_application_info_new();
+
+  webkit_application_info_set_version(info,
+                                      WEBKIT_MAJOR_VERSION,
+                                      WEBKIT_MINOR_VERSION,
+                                      WEBKIT_MICRO_VERSION);
+  webkit_automation_session_set_application_info(session, info);
+  webkit_application_info_unref(info);
+
+  g_signal_connect(session, "create-web-view::window",
+                   G_CALLBACK(on_auto_new_view),
+                   app);
+}
+
+GtkWidget *
+on_auto_new_view(__attribute__((unused)) WebKitAutomationSession *session,
+                 GtkApplication *app)
+{
+  g_print("%s@%d\n", __FUNCTION__, __LINE__);
+
+  __attribute__((unused)) GtkWindow *window
+    = gtk_application_get_active_window(app);
+
+  return NULL;
 }
