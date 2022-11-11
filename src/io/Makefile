@@ -49,7 +49,7 @@ io_test: io_access_test                         \
          io_own_test                            \
          io_read_test                           \
          io_redirect_test                       \
-         io_rename                              \
+         io_rename_test                         \
          io_share_test                          \
          io_seek_test                           \
          io_size_test                           \
@@ -623,16 +623,19 @@ io_share_test: io_share1_test                   \
                io_share3_test
 
 io_share1_test: $(io_share1_binout)
+	-rm $(io_share1_out)
 	$< $(io_share1_out)
 	sleep 1
 	wc -c $(io_share1_out)
 
 io_share2_test: $(io_share2_binout)
+	-rm $(io_share2_out)
 	$< $(io_share2_out)
 	sleep 1
 	wc -c $(io_share2_out)
 
 io_share3_test: $(io_share3_binout)
+	-rm $(io_share3_out)
 	$< $(io_share3_out)
 	sleep 1
 	wc -c $(io_share3_out)
