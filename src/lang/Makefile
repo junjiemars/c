@@ -602,7 +602,7 @@ lang_sizeof: $(lang_sizeof_binout)
 lang_sizeof_test: lang_sizeof
 	$(lang_sizeof_binout)
 
-$(lang_sizeof_binout): $(lang_root)/sizeof/sizeof.c
+$(lang_sizeof_binout): $(lang_root)/sizeof/s1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # stage
