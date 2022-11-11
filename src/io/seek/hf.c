@@ -18,7 +18,7 @@ main(int argc, char **argv)
     }
 
 #if defined(_PC_MIN_HOLE_SIZE)
-  printf("_PC_MIN_HOLE_SIZE: %li\n", (long long) _PC_MIN_HOLE_SIZE);
+  printf("_PC_MIN_HOLE_SIZE: %lli\n", (long long) _PC_MIN_HOLE_SIZE);
 #else
   printf("_PC_MIN_HOLE_SIZE: (no symbol)\n");
 
@@ -63,11 +63,13 @@ main(int argc, char **argv)
 
     }
 
-  printf("data:  % 16li\n"
-         "hole:  % 16li\n"
+  printf("data:  % 16lli\n"
+         "hole:  % 16lli\n"
          "------------\n"
-         "total: % 16li\n",
-         n_data, n_hole, n_data + n_hole);
+         "total: % 16lli\n",
+         (long long) n_data,
+         (long long) n_hole,
+         (long long) n_data + n_hole);
 
 
 #else

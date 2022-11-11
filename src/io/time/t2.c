@@ -31,8 +31,8 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  memcpy(&ts[0], &ss.st_atim, sizeof(ts[0]));
-  memcpy(&ts[1], &ss.st_mtim, sizeof(ts[1]));
+  memcpy(&ts[0], &ss.st_atime, sizeof(ts[0]));
+  memcpy(&ts[1], &ss.st_mtime, sizeof(ts[1]));
 
   if (futimens(fd, ts) == -1)
     {
