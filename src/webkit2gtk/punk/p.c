@@ -7,11 +7,11 @@
 
 static void  on_activate(GApplication *, WebKitSettings *);
 /* static WebKitWebView *new_view(WebKitSettings *); */
-static void on_auto_started(WebKitWebContext *,
-                            WebKitAutomationSession *,
-                            GtkApplication *);
-static GtkWidget *on_auto_new_view(WebKitAutomationSession *,
-                                   GtkApplication *);
+/* static void on_auto_started(WebKitWebContext *, */
+/*                             WebKitAutomationSession *, */
+/*                             GtkApplication *); */
+/* static GtkWidget *on_auto_new_view(WebKitAutomationSession *, */
+/*                                    GtkApplication *); */
 
 
 
@@ -51,10 +51,10 @@ on_activate(GApplication *app, WebKitSettings *settings)
     = g_object_new(WEBKIT_TYPE_WEB_CONTEXT,
                    "process-swap-on-cross-site-navigation-enabled", TRUE,
                    NULL);
-  webkit_web_context_set_automation_allowed(ctx, TRUE);
+  /* webkit_web_context_set_automation_allowed(ctx, TRUE); */
 
-  g_signal_connect(ctx, "automation-started",
-                   G_CALLBACK(on_auto_started), app);
+  /* g_signal_connect(ctx, "automation-started", */
+  /*                  G_CALLBACK(on_auto_started), app); */
 
   GtkWindow *window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
 
@@ -93,34 +93,34 @@ on_activate(GApplication *app, WebKitSettings *settings)
 /* } */
 
 
-void on_auto_started(__attribute__((unused)) WebKitWebContext *ctx,
-                     __attribute__((unused)) WebKitAutomationSession *session,
-                     GtkApplication *app)
-{
-  g_print("%s@%d\n", __FUNCTION__, __LINE__);
+/* void on_auto_started(__attribute__((unused)) WebKitWebContext *ctx, */
+/*                      __attribute__((unused)) WebKitAutomationSession *session, */
+/*                      GtkApplication *app) */
+/* { */
+/*   g_print("%s@%d\n", __FUNCTION__, __LINE__); */
 
-  WebKitApplicationInfo *info = webkit_application_info_new();
+/*   WebKitApplicationInfo *info = webkit_application_info_new(); */
 
-  webkit_application_info_set_version(info,
-                                      WEBKIT_MAJOR_VERSION,
-                                      WEBKIT_MINOR_VERSION,
-                                      WEBKIT_MICRO_VERSION);
-  webkit_automation_session_set_application_info(session, info);
-  webkit_application_info_unref(info);
+/*   webkit_application_info_set_version(info, */
+/*                                       WEBKIT_MAJOR_VERSION, */
+/*                                       WEBKIT_MINOR_VERSION, */
+/*                                       WEBKIT_MICRO_VERSION); */
+/*   webkit_automation_session_set_application_info(session, info); */
+/*   webkit_application_info_unref(info); */
 
-  g_signal_connect(session, "create-web-view::window",
-                   G_CALLBACK(on_auto_new_view),
-                   app);
-}
+/*   g_signal_connect(session, "create-web-view::window", */
+/*                    G_CALLBACK(on_auto_new_view), */
+/*                    app); */
+/* } */
 
-GtkWidget *
-on_auto_new_view(__attribute__((unused)) WebKitAutomationSession *session,
-                 GtkApplication *app)
-{
-  g_print("%s@%d\n", __FUNCTION__, __LINE__);
+/* GtkWidget * */
+/* on_auto_new_view(__attribute__((unused)) WebKitAutomationSession *session, */
+/*                  GtkApplication *app) */
+/* { */
+/*   g_print("%s@%d\n", __FUNCTION__, __LINE__); */
 
-  __attribute__((unused)) GtkWindow *window
-    = gtk_application_get_active_window(app);
+/*   __attribute__((unused)) GtkWindow *window */
+/*     = gtk_application_get_active_window(app); */
 
-  return NULL;
-}
+/*   return NULL; */
+/* } */
