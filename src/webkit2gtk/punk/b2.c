@@ -5,18 +5,43 @@
 #define B_VER   "0.1.0"
 
 
-static gboolean  opt_ver         =  FALSE;
-static gboolean  opt_ver_config  =  FALSE;
+typedef struct b_opt_s
+{
+  gboolean  ver;
+  gboolean  ver_config;
+
+} b_opt_t;
+
+
+typedef struct b_frame_s
+{
+  GtkWindow      *window;
+  WebKitWebView  *webview;
+
+} b_frame_t;
+
+
+typedef struct b_s
+{
+  b_opt_t     opt;
+  b_frame_t  *frames;
+
+} b_t;
+
+
+
+static b_t  B = {0};
+
 
 static GOptionEntry opts[] =
   {
     {
-      "version", 'v', 0, G_OPTION_ARG_NONE, &opt_ver,
+      "version", 'v', 0, G_OPTION_ARG_NONE, &B.opt.ver,
       "Show version and exit", NULL
     },
 
     {
-      "Version", 'V', 0, G_OPTION_ARG_NONE, &opt_ver_config,
+      "Version", 'V', 0, G_OPTION_ARG_NONE, &B.opt.ver_config,
       "show version and configure options then exit", NULL
     },
 
@@ -28,6 +53,9 @@ int main(int argc, char **argv)
 {
   GError  *err  =  NULL;
 
+  B.opt.ver = FALSE;
+  B.opt.ver_config = FALSE;
+
   /* initialize gtk+ */
   if (!gtk_init_with_args(&argc, &argv, "X", opts, NULL, &err))
     {
@@ -37,13 +65,13 @@ int main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  if (opt_ver)
+  if (B.opt.ver)
     {
       printf("%s version: %s/%s\n", B_NAME, B_NAME, B_VER);
       exit(EXIT_SUCCESS);
     }
 
-  if (opt_ver_config)
+  if (B.opt.ver_config)
     {
       printf("%-16s: %s/%s\n", B_NAME, B_NAME, B_VER);
       printf("%-16s: compile/%d.%d.%d, run/%d.%d.%d\n", "webkit",
@@ -60,7 +88,12 @@ int main(int argc, char **argv)
              gtk_major_version,
              gtk_minor_version,
              gtk_micro_version);
+
+      exit(EXIT_SUCCESS);
     }
+
+
+  gtk_main();
 
   exit(EXIT_SUCCESS);
 }
