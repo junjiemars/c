@@ -48,16 +48,16 @@ on_activate(GApplication *app, WebKitSettings *settings)
                    "process-swap-on-cross-site-navigation-enabled", TRUE,
                    NULL);
 
-  WebKitWebsitePolicies *policies
-    = webkit_website_policies_new_with_policies
-    ("autoplay", WEBKIT_AUTOPLAY_ALLOW_WITHOUT_SOUND, NULL);
+  /* WebKitWebsitePolicies *policies */
+  /*   = webkit_website_policies_new_with_policies */
+  /*   ("autoplay", WEBKIT_AUTOPLAY_ALLOW_WITHOUT_SOUND, NULL); */
 
 
   WebKitWebView *webview
     = WEBKIT_WEB_VIEW(g_object_new(WEBKIT_TYPE_WEB_VIEW,
                                    "web-context", ctx,
                                    "settings", settings,
-                                   "website-policies", policies,
+                                   /* "website-policies", policies, */
                                    NULL));
 
   GtkWindow *window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
