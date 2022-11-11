@@ -17,7 +17,10 @@ static GtkWidget *on_auto_new_view(WebKitAutomationSession *,
 
 int main(int argc, char **argv)
 {
-  g_print("%s@%d\n", __FUNCTION__, __LINE__);
+  g_print("%s@%d, WebKitGtk: %u.%u.%u\n", __FUNCTION__, __LINE__,
+          webkit_get_major_version(),
+          webkit_get_minor_version(),
+          webkit_get_micro_version());
 
   gtk_init(&argc, &argv);
 
@@ -28,7 +31,8 @@ int main(int argc, char **argv)
   webkit_settings_set_enable_media_stream(settings, TRUE);
 
   GtkApplication *app
-    = gtk_application_new("rocks.trunk." B_NAME, G_APPLICATION_REPLACE);
+    = gtk_application_new("rocks.trunk." B_NAME,
+                          G_APPLICATION_NON_UNIQUE);
 
   g_signal_connect(app, "activate", G_CALLBACK(on_activate), settings);
   g_application_run(G_APPLICATION(app), argc, argv);
@@ -52,10 +56,10 @@ on_activate(GApplication *app, WebKitSettings *settings)
   g_signal_connect(ctx, "automation-started",
                    G_CALLBACK(on_auto_started), app);
 
-  GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  GtkWindow *window = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
 
-  gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
-  gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
+  gtk_application_add_window(GTK_APPLICATION(app), window);
+  gtk_window_set_default_size(window, 800, 600);
   /* gtk_window_fullscreen(GTK_WINDOW(window)); */
 
 
@@ -65,14 +69,14 @@ on_activate(GApplication *app, WebKitSettings *settings)
 
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(webview));
 
-
+  gtk_widget_show(GTK_WIDGET(webview));
   webkit_web_view_load_uri(webview, "https://www.bing.com");
 
   g_clear_object(&settings);
   g_object_unref(ctx);
 
   gtk_widget_grab_focus(GTK_WIDGET(webview));
-  gtk_widget_show_all(GTK_WIDGET(window));
+  gtk_widget_show(GTK_WIDGET(window));
 }
 
 /* WebKitWebView * */
