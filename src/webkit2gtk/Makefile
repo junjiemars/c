@@ -53,13 +53,24 @@ $(webkit2gtk_hi_binout): $(webkit2gtk_root)/hi/h.c
 
 
 # punk
-webkit2gtk_punk_binout := $(bin_path)/$(webkit2gtk_prefix)_punk$(bin_ext)
+webkit2gtk_punk_b1_binout := $(bin_path)/$(webkit2gtk_prefix)_punk_b1$(bin_ext)
+webkit2gtk_punk_b2_binout := $(bin_path)/$(webkit2gtk_prefix)_punk_b2$(bin_ext)
 
-webkit2gtk_punk: $(webkit2gtk_punk_binout)
-webkit2gtk_punk_test: webkit2gtk_punk
-	$(webkit2gtk_punk_binout)
+webkit2gtk_punk: $(webkit2gtk_punk_b1_binout)   \
+                 $(webkit2gtk_punk_b2_binout)
+webkit2gtk_punk_test: webkit2gtk_punk_b1_test   \
+                      webkit2gtk_punk_b2_test
 
-$(webkit2gtk_punk_binout): $(webkit2gtk_root)/punk/p.c
+webkit2gtk_punk_b1_test: $(webkit2gtk_punk_b1_binout)
+	$(webkit2gtk_punk_b1_binout)
+
+webkit2gtk_punk_b2_test: $(webkit2gtk_punk_b2_binout)
+	$(webkit2gtk_punk_b2_binout) -V
+
+$(webkit2gtk_punk_b1_binout): $(webkit2gtk_root)/punk/b1.c
+	$(CC) $(CPPFLAGS) $(INC) $(CFLAGS) $^ $(bin_out)$@ $(LDLIBS)
+
+$(webkit2gtk_punk_b2_binout): $(webkit2gtk_root)/punk/b2.c
 	$(CC) $(CPPFLAGS) $(INC) $(CFLAGS) $^ $(bin_out)$@ $(LDLIBS)
 
 
