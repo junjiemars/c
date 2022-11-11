@@ -5,29 +5,37 @@
 #define B_VER   "0.1.0"
 
 
-typedef struct b_opt_s
+struct b_opt_s
 {
   gboolean  ver;
   gboolean  ver_config;
 
-} b_opt_t;
+};
 
 
-typedef struct b_frame_s
+struct b_frame_s
 {
-  GtkWindow      *window;
-  WebKitWebView  *webview;
+  struct b_frame_s  *next;
+  GtkWindow         *window;
+  WebKitWebView     *webview;
 
-} b_frame_t;
+};
 
 
-typedef struct b_s
+struct b_s
 {
-  b_opt_t     opt;
-  b_frame_t  *frames;
+  struct b_opt_s     opt;
+  struct b_frame_s  *frames;
 
-} b_t;
+};
 
+typedef struct b_s        b_t;
+typedef struct b_opt_s    b_opt_t;
+typedef struct b_frame_s  b_frame_t;
+
+
+static b_frame_t *new_frame(WebKitWebView *);
+static WebKitWebView *new_webview(b_frame_t *, WebKitWebView *);
 
 
 static b_t  B = {0};
@@ -92,8 +100,40 @@ int main(int argc, char **argv)
       exit(EXIT_SUCCESS);
     }
 
+  new_frame(NULL);
+
 
   gtk_main();
 
   exit(EXIT_SUCCESS);
+}
+
+
+b_frame_t *
+new_frame(WebKitWebView *webview)
+{
+  b_frame_t  *frame;
+
+  frame = g_slice_new0(b_frame_t);
+
+  frame->webview   = new_webview(frame, webview);
+  /* c->finder    = webkit_web_view_get_find_controller(c->webview); */
+  /* g_signal_connect(c->finder, "counted-matches", G_CALLBACK(on_counted_matches), c); */
+
+  /* c->page_id   = webkit_web_view_get_page_id(c->webview); */
+  /* c->inspector = webkit_web_view_get_inspector(c->webview); */
+
+  return frame;
+}
+
+WebKitWebView *
+new_webview(b_frame_t *frame, WebKitWebView *view)
+{
+  WebKitWebView *new;
+
+  g_assert(frame);
+  g_assert(view);
+  new = NULL;
+
+  return new;
 }
