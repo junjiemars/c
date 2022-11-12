@@ -1,6 +1,11 @@
 #include "_io_.h"
 #include <sys/utsname.h>
 
+/*
+ * uname(2), uname(1).
+ *
+ */
+
 int
 main(void)
 {
