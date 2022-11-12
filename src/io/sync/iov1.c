@@ -2,7 +2,7 @@
 #include <time.h>
 
 /*
- *
+ * readv/writev more faster than read/write.
  *
  */
 
@@ -44,7 +44,7 @@ main(int argc, char **argv)
 
   _time_(copy_block_iov(fd_src, fd_dst), elapsed);
 
-  printf("elapsed(non sync, iov):     %16lfs\n", elapsed);
+  printf("elapsed(non sync, iov): %16lfs\n", elapsed);
 
 
 
