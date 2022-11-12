@@ -804,30 +804,50 @@ $(io_struct_binout): $(io_root)/struct/s1.c
 
 
 # sync
-io_sync_binout := $(bin_path)/$(io_prefix)_sync$(bin_ext)
+io_sync_sync_binout := $(bin_path)/$(io_prefix)_sync_sync$(bin_ext)
 io_sync_non_binout := $(bin_path)/$(io_prefix)_sync_non$(bin_ext)
-io_sync_file := $(CURDIR)/$(io_root)/sync/.$(io_prefix)_sync.file
+io_sync_iov_binout := $(bin_path)/$(io_prefix)_sync_iov$(bin_ext)
+io_sync_in_file := $(CURDIR)/$(io_root)/sync/.$(io_prefix)_sync_in.file
 io_sync_out_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_sync_out.file
-io_sync_out1_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_sync_out1.file
 
-io_sync: $(io_sync_binout)                      \
-         $(io_sync_non_binout)
-io_sync_test: $(io_sync_non_binout)             \
-              $(io_sync_binout)                 \
-              $(io_sync_file)
-	ls -lh $(io_sync_file)
-	$(io_sync_non_binout) $(io_sync_file) $(io_sync_out1_file)
-	$(io_sync_binout) $(io_sync_file) $(io_sync_out_file)
+io_sync: $(io_sync_sync_binout)                 \
+         $(io_sync_non_binout)                  \
+         $(io_sync_iov_binout)
+io_sync_test: io_sync_sync_test                 \
+              io_sync_non_test                  \
+              io_sync_iov_test
 
-$(io_sync_file):
+io_sync_sync_test: $(io_sync_sync_binout)       \
+                   $(io_sync_in_file)
+	-rm $(io_sync_out_file)
+	ls -lh $(io_sync_in_file)
+	$< $(io_sync_in_file) $(io_sync_out_file)
+
+io_sync_non_test: $(io_sync_non_binout)         \
+                  $(io_sync_in_file)
+	-rm $(io_sync_out_file)
+	ls -lh $(io_sync_in_file)
+	$< $(io_sync_in_file) $(io_sync_out_file)
+
+io_sync_iov_test: $(io_sync_iov_binout)         \
+                  $(io_sync_in_file)
+	-rm $(io_sync_out_file)
+	ls -lh $(io_sync_in_file)
+	$< $(io_sync_in_file) $(io_sync_out_file)
+
+
+$(io_sync_in_file):
 	dd if=/dev/zero of=$@ bs=4096 count=51200
 
-$(io_sync_binout): $(io_root)/sync/s1.c         \
-                   $(io_root)/sync/c1.c
+$(io_sync_sync_binout): $(io_root)/sync/s1.c    \
+                        $(io_root)/sync/c1.c
 	$(CC) -D_SYNC_ $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_sync_non_binout): $(io_root)/sync/s1.c     \
                        $(io_root)/sync/c1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_sync_iov_binout): $(io_root)/sync/iov1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
