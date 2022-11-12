@@ -1,4 +1,4 @@
-#include <_io_.h>
+#include "_io_.h"
 #include <pwd.h>
 
 extern void print_passwd(const struct passwd*);
@@ -26,6 +26,8 @@ main(int argc, char **argv)
           perror(NULL);
           exit(EXIT_FAILURE);
         }
+
+      exit(EXIT_SUCCESS);
     }
   print_passwd(pwd);
 

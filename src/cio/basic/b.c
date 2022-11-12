@@ -18,7 +18,7 @@ main(void)
     }
   if (feof(stdin))
     {
-      fprintf(stdout, "/* %s */\n", "end of file");
+      fprintf(stdout, "/* %s */.\n", "end of file");
     }
 
   return 0;

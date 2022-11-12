@@ -1,6 +1,8 @@
 #
 # ./configure --has-data
 #
+# system data
+#
 #
 
 ifeq ($(CC_NAME), msvc)
