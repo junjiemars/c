@@ -73,7 +73,7 @@ copy_block_iov(int src, int dst)
           iov[c-1].iov_len = m;
         }
 
-      while (writev(dst, iov, c) != n)
+      if (writev(dst, iov, c) != n)
         {
           perror(NULL);
           exit(EXIT_FAILURE);
