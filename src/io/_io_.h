@@ -17,5 +17,6 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <sys/wait.h>
+#include <sys/uio.h>
 
 #endif /* end of _IO_H_ */

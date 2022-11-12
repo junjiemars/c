@@ -540,14 +540,26 @@ $(io_own_binout): $(io_root)/own/o1.c
 
 
 # read
-io_read_binout := $(bin_path)/$(io_prefix)_read$(bin_ext)
+io_read_raw_binout := $(bin_path)/$(io_prefix)_read_raw$(bin_ext)
+io_read_iov_binout := $(bin_path)/$(io_prefix)_read_iov$(bin_ext)
 
-io_read: $(io_read_binout)
-io_read_test: io_read
-	$(io_read_binout) <$(io_root)/read/r1.c
-	$(io_read_binout) <$(out)/nore.h
+io_read: $(io_read_raw_binout)                  \
+         $(io_read_iov_binout)
+io_read_test: io_read_raw_test                  \
+              io_read_iov_test
 
-$(io_read_binout): $(io_root)/read/r1.c
+io_read_raw_test: $(io_read_raw_binout)
+	$< <$(io_root)/read/r1.c
+	$< <$(out)/nore.h
+
+io_read_iov_test: $(io_read_iov_binout)
+	$< <$(io_root)/read/r2.c
+	$< <$(out)/nore.h
+
+$(io_read_raw_binout): $(io_root)/read/r1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_read_iov_binout): $(io_root)/read/r2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # redirect

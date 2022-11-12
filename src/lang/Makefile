@@ -596,7 +596,7 @@ $(lang_signal_basic_binout): $(lang_root)/signal/sig.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # sizeof
-lang_sizeof_binout := $(bin_path)/sizeof$(bin_ext)
+lang_sizeof_binout := $(bin_path)/$(lang_prefix)_sizeof$(bin_ext)
 
 lang_sizeof: $(lang_sizeof_binout)
 lang_sizeof_test: lang_sizeof
