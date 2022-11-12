@@ -11,24 +11,28 @@ main(int argc, char **argv)
 
   if (argc < 2)
     {
-      fprintf(stderr, "usage: <login>\n");
+      fprintf(stderr, "usage: <login...>\n");
       exit(EXIT_FAILURE);
     }
 
-  errno = 0;
-  if ((pwd = getpwnam(argv[1])) == NULL)
+  for (int i = 1; i < argc; i++)
     {
-      err = errno;
-      if (err)
+      errno = 0;
+      if ((pwd = getpwnam(argv[i])) == NULL)
         {
-          perror(NULL);
-          exit(EXIT_FAILURE);
+          err = errno;
+          if (err)
+            {
+              perror(NULL);
+              exit(EXIT_FAILURE);
+            }
+
+          exit(EXIT_SUCCESS);
         }
 
-      exit(EXIT_SUCCESS);
+      print_passwd(pwd);
+      printf("------------\n");
     }
-
-  print_passwd(pwd);
 
 
   exit(EXIT_SUCCESS);

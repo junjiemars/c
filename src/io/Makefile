@@ -177,16 +177,20 @@ $(io_copy_hole_binout): $(io_root)/copy/hole1.c
 io_data_pwnam_binout := $(bin_path)/$(io_prefix)_data_pwnam$(bin_ext)
 io_data_pwuid_binout := $(bin_path)/$(io_prefix)_data_pwuid$(bin_ext)
 io_data_login_binout := $(bin_path)/$(io_prefix)_data_login$(bin_ext)
+io_data_unam_binout := $(bin_path)/$(io_prefix)_data_unam$(bin_ext)
 
 io_data: $(io_data_pwnam_binout)                \
          $(io_data_pwuid_binout)                \
-         $(io_data_login_binout)
+         $(io_data_login_binout)                \
+         $(io_data_unam_binout)
 io_data_test: io_data_pwnam_test                \
               io_data_pwuid_test                \
-              io_data_login_test
+              io_data_login_test                \
+              io_data_unam_test
 
 io_data_pwnam_test: $(io_data_pwnam_binout)
-	$< $(LOGNAME)
+	$< nobody $(LOGNAME)
+	command -v && finger $(LOGNAME)
 
 io_data_pwuid_test: $(io_data_pwuid_binout)
 	$< 0
@@ -194,6 +198,9 @@ io_data_pwuid_test: $(io_data_pwuid_binout)
 io_data_login_test: $(io_data_login_binout)
 	$<
 	-$< $(LOGNAME)
+
+io_data_unam_test: $(io_data_unam_binout)
+	$<
 
 $(io_data_pwnam_binout): $(io_root)/data/pwnam.c  \
                          $(io_root)/data/ppwd.c
@@ -204,6 +211,9 @@ $(io_data_pwuid_binout): $(io_root)/data/pwuid.c  \
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_data_login_binout): $(io_root)/data/login.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_data_unam_binout): $(io_root)/data/unam.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
