@@ -35,10 +35,6 @@ nlim_line_max="yes"
 
 echo "checking for {cio} ..."
 
-# nlim_auto_check="src/posix/nlim_auto_check"
-# # check <nlim.h> feature
-# . src/posix/nlim_auto
-
 
 # echo "checking for {cio} ..."
 # #check popen fn

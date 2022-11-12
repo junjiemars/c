@@ -72,6 +72,7 @@ cio_basic_cppout := $(tmp_path)/$(cio_prefix)_basic$(cpp_ext)
 cio_basic: $(cio_basic_binout)
 cio_basic_test: cio_basic
 	echo "Hello, basic CIO" | $(cio_basic_binout)
+	$(cio_basic_binout) < $(cio_root)/basic/b.c
 
 $(cio_basic_binout): $(cio_basic_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@

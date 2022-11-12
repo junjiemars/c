@@ -39,24 +39,24 @@ if [ "$nlim_line_max" = "yes" ]; then
       nm_feature_name="nm_line_max"
       nm_feature_run=value
       nm_feature_h='
-  #include <stdio.h>
-  #include <unistd.h>
-  #include <limits.h>
-  '
-      nm_feature_flags=
-      nm_feature_test='
-  long line_max = 0;
-  #if defined(LINE_MAX) && (LINE_MAX > 0)
-    line_max = LINE_MAX;
-  #else
-    line_max = sysconf(_SC_LINE_MAX);
-    if (line_max <= 0) {
-      line_max = 2048;
-    }
-  #endif
-    printf("%ld\n", line_max);
-    return 0;
-  '
+#include <stdio.h>
+#include <unistd.h>
+#include <limits.h>
+'
+    nm_feature_flags=
+    nm_feature_test='
+long line_max = 0;
+#if defined(LINE_MAX) && (LINE_MAX > 0)
+  line_max = LINE_MAX;
+#else
+  line_max = sysconf(_SC_LINE_MAX);
+  if (line_max <= 0) {
+    line_max = 2048;
+  }
+#endif
+  printf("%ld\n", line_max);
+  return 0;
+'
       . ${NORE_ROOT}/auto/feature
       ;;
     WinNT)
@@ -64,19 +64,19 @@ if [ "$nlim_line_max" = "yes" ]; then
       nm_feature_name="nm_line_max"
       nm_feature_run=value
       nm_feature_h='
-  #include <stdio.h>
-  #include <limits.h>
-  #include <windows.h>
-  '
-      nm_feature_flags=
-      nm_feature_test='
-  long line_max = 2048;
-  #if defined(LINE_MAX) && (LINE_MAX > 0)
-     line_max = LINE_MAX;
-  #endif
-    printf("%d\n", line_max);
-    return 0;
-  '
+#include <stdio.h>
+#include <limits.h>
+#include <windows.h>
+'
+    nm_feature_flags=
+    nm_feature_test='
+long line_max = 2048;
+#if defined(LINE_MAX) && (LINE_MAX > 0)
+   line_max = LINE_MAX;
+#endif
+  printf("%d\n", line_max);
+  return 0;
+'
       . ${NORE_ROOT}/auto/feature
       ;;
     *)
@@ -94,14 +94,14 @@ if [ "$nlim_clk_tck" = "yes" ]; then
       nm_feature_name="nm_clk_tck"
       nm_feature_run=value
       nm_feature_h='
-  #include <stdio.h>
-  #include <unistd.h>
-  '
+#include <stdio.h>
+#include <unistd.h>
+'
       nm_feature_flags=
       nm_feature_test='
-  printf("%ld\n", sysconf(_SC_CLK_TCK));
-  return 0;
-  '
+printf("%ld\n", sysconf(_SC_CLK_TCK));
+return 0;
+'
       . ${NORE_ROOT}/auto/feature
       ;;
     WinNT)

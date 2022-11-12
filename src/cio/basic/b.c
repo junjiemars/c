@@ -13,12 +13,12 @@ main(void)
     }
   if (ferror(stdin))
     {
-      perror("!panic");
+      perror("!stdin");
       return 1;
     }
   if (feof(stdin))
     {
-      fprintf(stdout, "#%s\n", "end of file");
+      fprintf(stdout, "/* %s */\n", "end of file");
     }
 
   return 0;
