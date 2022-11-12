@@ -54,7 +54,7 @@ main(int argc, char **argv)
 void
 copy_block_iov(int src, int dst)
 {
-  ssize_t       r, w;
+  ssize_t       n;
   struct iovec  iov[BUF_FACTOR];
 
   for (int i = 0; i < BUF_FACTOR; i++)
@@ -63,25 +63,24 @@ copy_block_iov(int src, int dst)
       iov[i].iov_len = BLK_SIZE;
     }
 
-  while ((r = readv(src, iov, BUF_FACTOR)) > 0)
+  while ((n = readv(src, iov, BUF_FACTOR)) > 0)
     {
-      int  m  =  (r % BLK_SIZE);
-      int  c  =  (r + BLK_SIZE - 1) / BLK_SIZE;
+      int  m  =  (n % BLK_SIZE);
+      int  c  =  (n + BLK_SIZE - 1) / BLK_SIZE;
 
       if (m > 0)
         {
           iov[c-1].iov_len = m;
         }
 
-      w = writev(dst, iov, c);
-      while (w != r)
+      while (writev(dst, iov, c) != n)
         {
           perror(NULL);
           exit(EXIT_FAILURE);
         }
     }
 
-  if (r == -1)
+  if (n == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
