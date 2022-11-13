@@ -1,36 +1,63 @@
 #include "_io_.h"
 #include <pwd.h>
 
-extern void print_passwd(const struct passwd*);
+/*
+ * getpwuid1 is an emulation of `getpwuid'.
+ *
+ */
+
+extern void  print_passwd(const struct passwd*);
+
+static struct passwd  *getpwuid1(uid_t);
+
 
 int
 main(int argc, char **argv)
 {
-  int             err;
-  uid_t           uid;
-  struct passwd  *pwd  =  NULL;
-
   if (argc < 2)
     {
-      fprintf(stderr, "usage: <login>\n");
+      fprintf(stderr, "usage: <login...>\n");
       exit(EXIT_FAILURE);
     }
-  uid = (uid_t) atol(argv[1]);
 
-  errno = err = 0;
-  if ((pwd = getpwuid(uid)) == NULL)
+  for (int i = 1; i < argc; i++)
     {
-      err = errno;
-      if (err)
+      struct passwd  *pwd;
+
+      errno = 0;
+      if ((pwd = getpwuid1((uid_t) atoi(argv[i]))) == NULL)
         {
-          perror(NULL);
-          exit(EXIT_FAILURE);
+          if (errno)
+            {
+              perror(NULL);
+            }
+
+          continue;
         }
 
-      exit(EXIT_SUCCESS);
+      print_passwd(pwd);
     }
-  print_passwd(pwd);
-
 
   exit(EXIT_SUCCESS);
+}
+
+
+struct passwd *
+getpwuid1(uid_t uid)
+{
+  struct passwd  *p;
+
+  setpwent();
+
+  while ((p = getpwent()) != NULL)
+    {
+      if (uid == p->pw_uid)
+        {
+          break;
+        }
+    }
+
+  endpwent();
+
+  return p;
 }

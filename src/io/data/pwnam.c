@@ -1,14 +1,18 @@
 #include "_io_.h"
 #include <pwd.h>
 
+/*
+ * getpwnam1 is an emulatation of `getpwnam'.
+ *
+ */
+
 extern void print_passwd(const struct passwd*);
+
+static struct passwd *getpwnam1(const char *);
 
 int
 main(int argc, char **argv)
 {
-  int             err;
-  struct passwd  *pwd  =  NULL;
-
   if (argc < 2)
     {
       fprintf(stderr, "usage: <login...>\n");
@@ -17,23 +21,42 @@ main(int argc, char **argv)
 
   for (int i = 1; i < argc; i++)
     {
+      struct passwd  *pwd;
+
       errno = 0;
-      if ((pwd = getpwnam(argv[i])) == NULL)
+      if ((pwd = getpwnam1(argv[i])) == NULL)
         {
-          err = errno;
-          if (err)
+          if (errno)
             {
               perror(NULL);
-              exit(EXIT_FAILURE);
             }
 
-          exit(EXIT_SUCCESS);
+          continue;
         }
 
       print_passwd(pwd);
-      printf("------------\n");
     }
-
 
   exit(EXIT_SUCCESS);
 }
+
+
+struct passwd *
+getpwnam1(const char *name)
+{
+  struct passwd  *p;
+
+  setpwent();
+
+  while ((p = getpwent()) != NULL)
+    {
+      if (strcmp(name, p->pw_name) == 0)
+        {
+          break;
+        }
+    }
+
+  endpwent();
+
+  return p;
+};
