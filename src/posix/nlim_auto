@@ -120,21 +120,13 @@ fi
 # check times
 #----------------------------------------
 if [ "$nlim_times" = "yes" ]; then
-  # case $NM_SYSTEM in
-  #   Linux|Darwin)
-      nm_feature="times"
-      nm_feature_name="nm_have_times"
-      nm_feature_run=no
-      nm_feature_h='#include <sys/times.h>'
-      nm_feature_flags=
-      nm_feature_test='struct tms x; (void)x;'
-      . ${NORE_ROOT}/auto/feature
-  #     ;;
-  #   WinNT)
-  #     ;;
-  #   *)
-  #     ;;
-  # esac                            # end of times
+  nm_feature="times"
+  nm_feature_name="nm_have_times"
+  nm_feature_run=no
+  nm_feature_h='#include <sys/times.h>'
+  nm_feature_flags=
+  nm_feature_test='struct tms x; (void)x;'
+  . ${NORE_ROOT}/auto/feature
 fi                              # end of times
 
 
