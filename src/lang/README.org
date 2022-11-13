@@ -1,6 +1,0 @@
-#+TITLE: C Lessons/Language
-#+AUTHOR: Junjie Mars
-#+STARTUP: overview
-
-
-[[https://github.com/junjiemars/c/blob/master/README.org#language][Language]]

@@ -1,7 +1,5 @@
-#include <_lang_.h>
+#include "_lang_.h"
 #include "macro.h"
-#include <stdio.h>
-#include <string.h>
 
 
 #define double_v1(x)    2*x
