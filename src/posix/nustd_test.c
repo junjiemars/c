@@ -5,6 +5,7 @@
 static void test_ssize_t(void);
 static void test_sleep(void);
 static void test_getpid(void);
+static void test_timed(void);
 
 
 int
@@ -13,6 +14,7 @@ main(void)
   test_ssize_t();
   test_sleep();
   test_getpid();
+  test_timed();
 
   return 0;
 }
@@ -36,4 +38,18 @@ void
 test_getpid(void)
 {
   printf("pid: %d\n", getpid());
+}
+
+void
+test_timed(void)
+{
+#if defined(_timed_)
+#include <sys/time.h>
+  double  elpased;
+
+  _timed_(test_sleep(), elpased);
+
+  printf("_timed_: %04f\n", elpased);
+
+#endif
 }

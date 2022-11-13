@@ -16,7 +16,7 @@ nlim_line_max="yes"
 nlim_clk_tck="yes"
 
 # check posix features
-. src/posix/nlim_auto
+. ${POSIX_ROOT}/nlim_auto
 
 
 

@@ -74,6 +74,18 @@ typedef long long  ssize_t;
 #endif  /* getpid */
 
 
+#if !defined(MSVC)
+#define _timed_(E, R)                                             \
+do                                                                \
+{                                                                 \
+  const long long m = 1000000;                                    \
+  struct timeval s, e;                                            \
+  gettimeofday(&s, NULL);                                         \
+  (E);                                                            \
+  gettimeofday(&e, NULL);                                         \
+  R = (double)(((e.tv_sec-s.tv_sec)*m+(e.tv_usec-s.tv_usec))/m);  \
+} while (0)
+#endif  /* _timed_ */
 
 
 #endif /* _NUSTD_H_ */
