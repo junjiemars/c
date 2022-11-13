@@ -120,8 +120,8 @@ fi
 # check times
 #----------------------------------------
 if [ "$nlim_times" = "yes" ]; then
-  case $NM_SYSTEM in
-    Linux|Darwin)
+  # case $NM_SYSTEM in
+  #   Linux|Darwin)
       nm_feature="times"
       nm_feature_name="nm_have_times"
       nm_feature_run=no
@@ -129,13 +129,13 @@ if [ "$nlim_times" = "yes" ]; then
       nm_feature_flags=
       nm_feature_test='struct tms x; (void)x;'
       . ${NORE_ROOT}/auto/feature
-      ;;
-    WinNT)
-      ;;
-    *)
-      ;;
-  esac                            # end of times
-fi
+  #     ;;
+  #   WinNT)
+  #     ;;
+  #   *)
+  #     ;;
+  # esac                            # end of times
+fi                              # end of times
 
 
 fi                              # define_nlim_h
