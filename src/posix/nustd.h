@@ -74,7 +74,7 @@ typedef long long  ssize_t;
 #endif  /* getpid */
 
 
-#if (MSVC)
+#if (WinNT)
 #include <time.h>
 #  define _timed_(E, R)  _time_(E, R)
 #else
