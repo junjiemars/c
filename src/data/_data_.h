@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <stdio.h>
+#include <errno.h>
 
 
 #endif /* end of _DATA_H_ */
