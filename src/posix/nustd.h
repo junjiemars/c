@@ -74,8 +74,10 @@ typedef long long  ssize_t;
 #endif  /* getpid */
 
 
-#if !defined(MSVC)
-#define _timed_(E, R)                                             \
+#if (MSVC)
+#  define _timed_(E, R)  _time_(E, R)
+#else
+#  define _timed_(E, R)                                           \
 do                                                                \
 {                                                                 \
   const long long m = 1000000;                                    \
