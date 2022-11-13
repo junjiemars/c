@@ -16,9 +16,9 @@ fi
 ncc_sanitize_address="yes"
 . ${POSIX_ROOT}/ncc_auto
 
-# # check nustd.h features
-# nustd_ssize_t="yes"
-# . ${POSIX_ROOT}/nustd_auto
+# check nlim.h features
+nlim_line_max="yes"
+. ${POSIX_ROOT}/nlim_auto
 
 
 echo "checking for {data} ..."

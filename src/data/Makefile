@@ -140,11 +140,14 @@ $(data_pwd_uid_binout): $(data_root)/pwd/uid.c  \
 
 # time
 data_time_conv_binout := $(bin_path)/$(data_prefix)_time_conv$(bin_ext)
+data_time_date_binout := $(bin_path)/$(data_prefix)_time_date$(bin_ext)
 data_time_high_binout := $(bin_path)/$(data_prefix)_time_high$(bin_ext)
 
 data_time: $(data_time_conv_binout)             \
+           $(data_time_date_binout)             \
            $(data_time_high_binout)
 data_time_test: data_time_conv_test             \
+                data_time_date_test             \
                 data_time_high_test
 
 data_time_conv_test: $(data_time_conv_binout)
@@ -152,10 +155,16 @@ data_time_conv_test: $(data_time_conv_binout)
 	TZ='' $(data_time_conv_binout)
 	TZ='GMT' $(data_time_conv_binout)
 
+data_time_date_test: $(data_time_date_binout)
+	$<
+
 data_time_high_test: $(data_time_high_binout)
 	$(data_time_high_binout)
 
 $(data_time_conv_binout): $(data_root)/time/conv.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(data_time_date_binout): $(data_root)/time/d1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(data_time_high_binout): $(data_root)/time/high.c
