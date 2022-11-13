@@ -99,7 +99,11 @@ if [ "$nlim_clk_tck" = "yes" ]; then
 '
       nm_feature_flags=
       nm_feature_test='
-printf("%ld\n", sysconf(_SC_CLK_TCK));
+#if (CLK_TCK)
+  printf("%ld\n", CLK_TCK);
+#else
+  printf("%ld\n", sysconf(_SC_CLK_TCK));
+#endif
 return 0;
 '
       . ${NORE_ROOT}/auto/feature
