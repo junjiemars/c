@@ -16,7 +16,7 @@
 #define _PI_  3.1415926535E0L
 
 #if (__STDC_VERSION__) >= 199901L
-#  define _PI_C99_  0x3.243F6A882P0L
+#  define _PI_C99_  0x1.921fb54442d18p+1L
 #endif
 
 extern char **environ;

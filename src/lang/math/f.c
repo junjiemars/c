@@ -20,17 +20,35 @@
 #  define BIT16_SEP " "
 #endif
 
-unsigned int to_ui(float);
-unsigned long to_ul(double);
+static unsigned int to_ui(float);
+static unsigned long to_ul(double);
 
-void test_cmp_float(void);
-void test_cmp_double(void);
-void test_asm_double(void);
-void test_asm_long_double(void);
-void test_epsilon_double(void);
-void test_double_zero(void);
-void test_double_equal(void);
-void test_double_classify(void);
+static void test_cmp_float(void);
+static void test_cmp_double(void);
+static void test_asm_double(void);
+static void test_asm_long_double(void);
+static void test_epsilon_double(void);
+static void test_double_zero(void);
+static void test_double_equal(void);
+static void test_double_classify(void);
+static void test_double_round(void);
+
+int
+main(void)
+{
+  test_cmp_float();
+  test_cmp_double();
+  test_asm_double();
+  test_asm_long_double();
+  test_epsilon_double();
+  test_double_zero();
+  test_double_equal();
+  test_double_classify();
+  test_double_round();
+
+  return 0;
+}
+
 
 unsigned int
 to_ui(float x)
@@ -220,17 +238,20 @@ test_double_classify(void)
   assert(isnormal(0.1));
 }
 
-int
-main(void)
+void
+test_double_round(void)
 {
-  test_cmp_float();
-  test_cmp_double();
-  test_asm_double();
-  test_asm_long_double();
-  test_epsilon_double();
-  test_double_zero();
-  test_double_equal();
-  test_double_classify();
+  char decimal[][64] =
+    {
+      "3.1415926535897932384626433832795028841971693993751058209749"
+    };
 
-  return 0;
+  printf("round double\n------------\n");
+
+  for (size_t i = 0; i < _nof_(decimal); i++)
+    {
+      printf("decimal:     %s\n", decimal[i]);
+      printf("hexadecimal: %a\n", strtod(decimal[i], NULL));
+    }
+
 }
