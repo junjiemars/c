@@ -21,8 +21,9 @@ fi
 . ${POSIX_ROOT}/nustd_auto
 
 
-if [    "$nlim_line_max" = "yes"                  \
-     -o "$nlim_clk_tck" = "yes"                   \
+if [    "$nlim_line_max" = "yes"                \
+     -o "$nlim_clk_tck" = "yes"                 \
+     -o "$nlim_times" = "yes"                   \
    ]; then
   echo "checking for nlim.h ..."
 else
@@ -113,6 +114,27 @@ return 0;
     *)
       ;;
   esac                            # end of _SC_CLK_TCK
+fi
+
+
+# check times
+#----------------------------------------
+if [ "$nlim_times" = "yes" ]; then
+  case $NM_SYSTEM in
+    Linux|Darwin)
+      nm_feature="times"
+      nm_feature_name="nm_have_times"
+      nm_feature_run=no
+      nm_feature_h='#include <sys/times.h>'
+      nm_feature_flags=
+      nm_feature_test='struct tms x; (void)x;'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    WinNT)
+      ;;
+    *)
+      ;;
+  esac                            # end of times
 fi
 
 

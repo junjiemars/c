@@ -48,6 +48,7 @@ nustd_getpid="yes"
 # checking for <nlim.h>
 nlim_line_max="yes"
 nlim_clk_tck="yes"
+nlim_times="yes"
 . ${POSIX_ROOT}/nlim_auto
 
 # check for <nio.h>

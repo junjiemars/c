@@ -29,7 +29,6 @@ void
 test_times(void)
 {
 #if defined(_times_)
-  CLK_TCK;
   double clock, user, sys;
 
   _times_(sleep(1), clock, user, sys);

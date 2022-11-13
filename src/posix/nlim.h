@@ -13,6 +13,9 @@
 #endif  /* SSIZE_MAX */
 
 
+
+#if (NM_HAVE_TIMES)
+#include <sys/times.h>
 #define _times_(E, R, U, S)                             \
 do                                                      \
 {                                                       \
@@ -25,6 +28,7 @@ do                                                      \
   U = (et.tms_utime-st.tms_utime)/(double) NM_CLK_TCK;  \
   S = (et.tms_stime-st.tms_stime)/(double) NM_CLK_TCK;  \
 } while (0)
+#endif  /* _times_ */
 
 
 
