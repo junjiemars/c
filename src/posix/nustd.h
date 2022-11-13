@@ -75,8 +75,10 @@ typedef long long  ssize_t;
 
 
 #if (MSVC)
+#include <time.h>
 #  define _timed_(E, R)  _time_(E, R)
 #else
+#include <sys/time.h>
 #  define _timed_(E, R)                                           \
 do                                                                \
 {                                                                 \

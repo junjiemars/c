@@ -44,7 +44,6 @@ void
 test_timed(void)
 {
 #if defined(_timed_)
-#include <sys/time.h>
   double  elpased;
 
   _timed_(test_sleep(), elpased);

@@ -20,6 +20,7 @@
 #endif
 
 
+#include <time.h>
 #define _time_(E, R)                                \
 do                                                  \
 {                                                   \
