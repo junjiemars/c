@@ -428,6 +428,7 @@ io_open_cloexec_binout := $(bin_path)/$(io_prefix)_open_cloexec$(bin_ext)
 io_open_sync_binout := $(bin_path)/$(io_prefix)_open_sync$(bin_ext)
 io_open_creat_binout := $(bin_path)/$(io_prefix)_open_creat$(bin_ext)
 io_open_creat1_binout := $(bin_path)/$(io_prefix)_open_creat1$(bin_ext)
+io_open_duff_binout := $(bin_path)/$(io_prefix)_open_duff$(bin_ext)
 io_open_file := $(tmp_path)/$(io_prefix)_open_file
 io_open_dir := $(tmp_path)/$(io_prefix)_open_dir
 
@@ -437,14 +438,16 @@ io_open: $(io_open_at_binout)                   \
          $(io_open_cloexec_binout)              \
          $(io_open_sync_binout)                 \
          $(io_open_creat_binout)                \
-         $(io_open_creat1_binout)
+         $(io_open_creat1_binout)               \
+         $(io_open_duff_bintout)
 io_open_test: io_open_at_test                   \
               io_open_at_dir_test               \
               io_open_max_test                  \
               io_open_cloexec_test              \
               io_open_sync_test                 \
               io_open_creat_test                \
-              io_open_creat1_test
+              io_open_creat1_test               \
+              io_open_duff_test
 
 io_open_at_test: $(io_open_at_binout)
 	$< $(io_root)/open/o1.c
@@ -480,6 +483,10 @@ io_open_creat1_test: $(io_open_creat1_binout)
 	chmod a-r $(io_open_file) && ls -lh $(io_open_file)
 	-$< $(io_open_file) && ls -lh $(io_open_file)
 
+io_open_duff_test: $(io_open_duff_binout)
+	$<
+	$< /dev/fd/1
+
 
 $(io_open_at_binout): $(io_root)/open/o1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -500,6 +507,9 @@ $(io_open_creat_binout): $(io_root)/open/c1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_open_creat1_binout): $(io_root)/open/c2.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_open_duff_binout): $(io_root)/open/duff.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
