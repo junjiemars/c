@@ -29,8 +29,6 @@ void
 test_times(void)
 {
 #if defined(_times_)
-#include <sys/times.h>
-
   CLK_TCK;
   double clock, user, sys;
 
