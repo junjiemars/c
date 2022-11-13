@@ -74,11 +74,8 @@ typedef long long  ssize_t;
 #endif  /* getpid */
 
 
-#if (WINNT)
-#include <time.h>
-#  define _timed_(E, R)  _time_(E, R)
-#else
-#include <sys/time.h>
+#if (NM_HAVE_GETTIMEOFDAY)
+#  include <sys/time.h>
 #  define _timed_(E, R)                                           \
 do                                                                \
 {                                                                 \
@@ -89,6 +86,9 @@ do                                                                \
   gettimeofday(&e, NULL);                                         \
   R = (double)(((e.tv_sec-s.tv_sec)*m+(e.tv_usec-s.tv_usec))/m);  \
 } while (0)
+#else
+#  include <time.h>
+#  define _timed_(E, R)  _time_(E, R)
 #endif  /* _timed_ */
 
 

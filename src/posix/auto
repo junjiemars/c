@@ -43,6 +43,7 @@ nint_stdbool="yes"
 nustd_ssize_t="yes"
 nustd_sleep="yes"
 nustd_getpid="yes"
+nustd_gettimeofday="yes"
 . ${POSIX_ROOT}/nustd_auto
 
 # checking for <nlim.h>

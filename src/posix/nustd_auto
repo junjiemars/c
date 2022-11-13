@@ -28,6 +28,7 @@ fi
 if [    "$nustd_ssize_t" = "yes"                \
      -o "$nustd_sleep" = "yes"                  \
      -o "$nustd_getpid" = "yes"                 \
+     -o "$nustd_gettimeofday" = "yes"           \
    ]; then
   echo "checking for nustd.h ..."
 else
@@ -121,6 +122,28 @@ if [ "$nustd_getpid" = "yes" ]; then
       ;;
   esac
 fi
+
+
+# check gettimeofday
+#----------------------------------------
+if [ "$nustd_gettimeofday" = "yes" ]; then
+  case $NM_SYSTEM in
+    Linux|Darwin)
+      nm_feature="gettimeofday"
+      nm_feature_name="nm_have_gettimeofday"
+      nm_feature_run=no
+      nm_feature_h='#include <sys/time.h>'
+      nm_feature_flags=
+      nm_feature_test='gettimeofday(NULL, NULL);'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    WinNT)
+      ;;
+    *)
+      ;;
+  esac                            # end of gettimeofday
+fi
+
 
 
 fi                              # define_nustd_h
