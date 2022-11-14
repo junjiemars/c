@@ -25,8 +25,8 @@ struct b_frame_s
 struct b_s
 {
   struct b_opt_s     opt;
-  struct b_frame_s  *frames;
-
+  struct b_frame_s  *frame;
+  WebKitWebContext  *webctx;
 };
 
 typedef struct b_s        b_t;
@@ -34,8 +34,9 @@ typedef struct b_opt_s    b_opt_t;
 typedef struct b_frame_s  b_frame_t;
 
 
-static b_frame_t *new_frame(WebKitWebView *);
-static WebKitWebView *new_webview(b_frame_t *, WebKitWebView *);
+static void            setup(void);
+static b_frame_t      *new_frame(WebKitWebView *);
+static WebKitWebView  *new_webview(b_frame_t *, WebKitWebView *);
 
 
 static b_t  B = {0};
@@ -100,12 +101,21 @@ int main(int argc, char **argv)
       exit(EXIT_SUCCESS);
     }
 
+  setup();
+
   new_frame(NULL);
 
 
   gtk_main();
 
   exit(EXIT_SUCCESS);
+}
+
+void
+setup(void)
+{
+  /* !TODO: */
+  B.webctx = NULL;
 }
 
 
@@ -115,6 +125,8 @@ new_frame(WebKitWebView *webview)
   b_frame_t  *frame;
 
   frame = g_slice_new0(b_frame_t);
+  frame->next = B.frame;
+  B.frame = frame;
 
   frame->webview   = new_webview(frame, webview);
   /* c->finder    = webkit_web_view_get_find_controller(c->webview); */
@@ -129,11 +141,32 @@ new_frame(WebKitWebView *webview)
 WebKitWebView *
 new_webview(b_frame_t *frame, WebKitWebView *view)
 {
-  WebKitWebView *new;
+  WebKitWebView             *new;
+  WebKitUserContentManager  *ucm;
+  WebKitWebContext          *ctx;
+
+  ucm = webkit_user_content_manager_new();
+  if (view)
+    {
+      new = WEBKIT_WEB_VIEW
+        (g_object_new(WEBKIT_TYPE_WEB_VIEW,
+                      "user-content-manager", ucm,
+                      "related-view", view,
+                      NULL));
+    }
+  else
+    {
+      new = WEBKIT_WEB_VIEW
+        (g_object_new(WEBKIT_TYPE_WEB_VIEW,
+                      "user-content-manager", ucm,
+                      "web-context", B.webctx,
+                      NULL));
+    }
+
+  ctx = webkit_web_view_get_context(new);
 
   g_assert(frame);
-  g_assert(view);
-  new = NULL;
+  g_assert(ctx);
 
   return new;
 }
