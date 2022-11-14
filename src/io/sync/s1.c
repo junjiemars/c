@@ -15,8 +15,10 @@ extern void copy_block_nsync(int, int);
 
 #if defined(_SYNC_)
 #  define copy_block  copy_block_sync
+#  define ELAPSED  "sync"
 #else
 #  define copy_block  copy_block_nsync
+#  define ELAPSED  "non"
 #endif
 
 
@@ -26,7 +28,6 @@ int
 main(int argc, char **argv)
 {
   int     fd_src, fd_dst;
-  double  elapsed  =  0;
 
   if (argc < 3)
     {
@@ -48,14 +49,21 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
+#if defined(_times_)
+  double rs, us, ss;
+
+  _times_(copy_block(fd_src, fd_dst), rs, us, ss);
+  printf("elapsed(%s) real: %7.2fs, user: %7.2fs, sys: %7.2fs\n",
+         ELAPSED, rs, us, ss);
+
+#else
+  double elapsed;
 
   _time_(copy_block(fd_src, fd_dst), elapsed);
+  printf("elapsed(%s): %16lfs\n", ELAPSED, elapsed);
 
-#if defined(_SYNC_)
-  printf("elapsed(sync):     %16lfs\n", elapsed);
-#else
-  printf("elapsed(non sync): %16lfs\n", elapsed);
 #endif
+
 
   exit(EXIT_SUCCESS);
 }

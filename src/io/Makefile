@@ -794,6 +794,7 @@ io_sync_non_binout := $(bin_path)/$(io_prefix)_sync_non$(bin_ext)
 io_sync_iov_binout := $(bin_path)/$(io_prefix)_sync_iov$(bin_ext)
 io_sync_in_file := $(CURDIR)/$(io_root)/sync/.$(io_prefix)_sync_in.file
 io_sync_out_file := $(CURDIR)/$(tmp_path)/$(io_prefix)_sync_out.file
+io_sync_blk_size := -DBLK_SIZE=4096
 
 io_sync: $(io_sync_sync_binout)                 \
          $(io_sync_non_binout)                  \
@@ -804,19 +805,19 @@ io_sync_test: io_sync_sync_test                 \
 
 io_sync_sync_test: $(io_sync_sync_binout)       \
                    $(io_sync_in_file)
-	-rm $(io_sync_out_file)
+	rm -f $(io_sync_out_file)
 	ls -lh $(io_sync_in_file)
 	$< $(io_sync_in_file) $(io_sync_out_file)
 
 io_sync_non_test: $(io_sync_non_binout)         \
                   $(io_sync_in_file)
-	-rm $(io_sync_out_file)
+	rm -f $(io_sync_out_file)
 	ls -lh $(io_sync_in_file)
 	$< $(io_sync_in_file) $(io_sync_out_file)
 
 io_sync_iov_test: $(io_sync_iov_binout)         \
                   $(io_sync_in_file)
-	-rm $(io_sync_out_file)
+	rm -f $(io_sync_out_file)
 	ls -lh $(io_sync_in_file)
 	$< $(io_sync_in_file) $(io_sync_out_file)
 
@@ -826,14 +827,14 @@ $(io_sync_in_file):
 
 $(io_sync_sync_binout): $(io_root)/sync/s1.c    \
                         $(io_root)/sync/c1.c
-	$(CC) -D_SYNC_ $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) -D_SYNC_ $(io_sync_blk_size) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_sync_non_binout): $(io_root)/sync/s1.c     \
                        $(io_root)/sync/c1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(io_sync_blk_size) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_sync_iov_binout): $(io_root)/sync/iov1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(io_sync_blk_size) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # temp

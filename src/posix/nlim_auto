@@ -25,6 +25,11 @@ if [    "$nlim_line_max" = "yes"                \
      -o "$nlim_clk_tck" = "yes"                 \
      -o "$nlim_times" = "yes"                   \
    ]; then
+
+  if [ "$nlim_times" = "yes" ]; then
+    nlim_clk_tck="yes"
+  fi
+
   echo "checking for nlim.h ..."
 else
   return

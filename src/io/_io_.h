@@ -2,6 +2,7 @@
 #define _IO_H_
 
 #include <nustd.h>
+#include <nlim.h>
 
 #include <sys/stat.h>
 

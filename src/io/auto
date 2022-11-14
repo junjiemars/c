@@ -20,6 +20,10 @@ ncc_sanitize_address="yes"
 nustd_ssize_t="yes"
 . ${POSIX_ROOT}/nustd_auto
 
+# check nlim.h features
+nlim_times="yes"
+. ${POSIX_ROOT}/nlim_auto
+
 
 echo "checking for {io} ..."
 

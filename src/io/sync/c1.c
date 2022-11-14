@@ -6,19 +6,19 @@
  */
 
 
-#define BLKSIZ  4096
+/* #define BLK_SIZE  4096 */
 
 void copy_block_nsync(int, int);
 void copy_block_sync(int, int);
 
-static char  blk[BLKSIZ];
+static char  blk[BLK_SIZE];
 
 void
 copy_block_nsync(int src, int dst)
 {
   int  n;
 
-  while ((n = read(src, blk, BLKSIZ)) > 0)
+  while ((n = read(src, blk, BLK_SIZE)) > 0)
     {
       if (write(dst, blk, n) != n)
         {

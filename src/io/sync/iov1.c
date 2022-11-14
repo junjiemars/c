@@ -7,7 +7,7 @@
  */
 
 #define BUF_FACTOR  4
-#define BLK_SIZE    4096
+/* #define BLK_SIZE    4096 */
 #define BUF_SIZE    (BUF_FACTOR * BLK_SIZE)
 
 
@@ -20,7 +20,6 @@ int
 main(int argc, char **argv)
 {
   int     fd_src, fd_dst;
-  double  elapsed  =  0;
 
   if (argc < 3)
     {
@@ -42,11 +41,20 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
+#if defined(_times_)
+  double rs, us, ss;
+
+  _times_(copy_block_iov(fd_src, fd_dst), rs, us, ss);
+  printf("elapsed(iov) real: %7.2fs, user: %7.2fs, sys: %7.2fs\n",
+         rs, us, ss);
+
+#else
+  double elapsed;
+
   _time_(copy_block_iov(fd_src, fd_dst), elapsed);
+  printf("elapsed(iov): %16lfs\n", elapsed);
 
-  printf("elapsed(non sync, iov): %16lfs\n", elapsed);
-
-
+#endif
 
   exit(EXIT_SUCCESS);
 }
