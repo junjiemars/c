@@ -486,7 +486,7 @@ io_open_creat1_test: $(io_open_creat1_binout)
 io_open_duff_test: $(io_open_duff_binout)
 	$<
 	$< /dev/fd/1
-
+	$< /dev/fd/2
 
 $(io_open_at_binout): $(io_root)/open/o1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
