@@ -132,7 +132,7 @@ if [ "$nustd_gettimeofday" = "yes" ]; then
   nm_feature_run=no
   nm_feature_h='#include <sys/time.h>'
   nm_feature_flags=
-  nm_feature_test='struct timeval tv;gettimeofday(&tv, 0);(void)tv;'
+  nm_feature_test='struct timeval tv; gettimeofday(&tv, 0); (void)tv;'
   . ${NORE_ROOT}/auto/feature
 fi                              # end of gettimeofday
 

@@ -90,7 +90,7 @@ if [ "$ndef_va_args" = "yes" ]; then
   nm_feature_flags=
   nm_feature_test='
 #define _vm_(fmt, ...)  printf(fmt, __VA_ARGS__)
-_vm_("variadic=%s", "a", "b", "c");
+_vm_("variadic=%s", "a");
 '
   . ${NORE_ROOT}/auto/feature     # end of __VA_ARGS__
 fi
