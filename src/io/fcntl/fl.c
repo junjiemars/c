@@ -60,23 +60,23 @@ main(int argc, char **argv)
     }
 
   /* optional */
-  if (fl & O_APPEND)
+  if ((fl & O_APPEND) == O_APPEND)
     {
       printf(", %s: 0x%04x", _str_(O_APPEND), O_APPEND);
     }
 
-  if (fl & O_NONBLOCK)
+  if ((fl & O_NONBLOCK) == O_NONBLOCK)
     {
       printf(", %s: 0x%04x", _str_(O_NONBLOCK), O_NONBLOCK);
     }
 
-  if (fl & O_SYNC)
+  if ((fl & O_SYNC) == O_SYNC)
     {
       printf(", %s: 0x%04x", _str_(O_SYNC), O_SYNC);
     }
 
 #if defined(O_FSYNC) && (O_FSYNC != O_SYNC)
-  if (fl & O_FSYNC)
+  if ((fl & O_FSYNC) == O_FSYNC)
     {
       printf(", %s: 0x%04x", _str_(O_FSYNC), O_FSYNC);
     }

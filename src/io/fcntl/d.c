@@ -5,12 +5,15 @@
  * that is not already open, and that is greater or equal to the third
  * argument.
  *
- * 2. F_DUPFD_CLOEXEC: turns on.
+ * 2. F_DUPFD_CLOEXEC: turns on FD_CLOEXEC.
  *
  */
 
+
+#define BLK_SIZE  4096
+
 static int   next_fd  =  10;
-static char  buf[BUFSIZ];
+static char  buf[BLK_SIZE];
 
 int
 main(void)
@@ -53,7 +56,7 @@ main(void)
   assert((fd_flags & FD_CLOEXEC) == FD_CLOEXEC);
 
 
-  while ((n = read(fd_in, buf, BUFSIZ)) > 0)
+  while ((n = read(fd_in, buf, BLK_SIZE)) > 0)
     {
       if (write(fd_out, buf, n) != n)
         {
