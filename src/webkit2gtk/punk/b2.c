@@ -15,10 +15,11 @@ struct b_opt_s
 
 struct b_frame_s
 {
-  struct b_frame_s  *next;
-  GtkWindow         *window;
-  WebKitWebView     *webview;
-
+  struct b_frame_s    *next;
+  GtkWindow           *window;
+  WebKitWebView       *webview;
+  guint64              page_id;
+  WebKitWebInspector  *inspector;
 };
 
 
@@ -35,8 +36,11 @@ typedef struct b_frame_s  b_frame_t;
 
 
 static void            setup(void);
+static void            show_frame(b_frame_t *, WebKitWebView *);
 static b_frame_t      *new_frame(WebKitWebView *);
+static GtkWindow      *new_window(b_frame_t *);
 static WebKitWebView  *new_webview(b_frame_t *, WebKitWebView *);
+
 
 
 static b_t  B = {0};
@@ -103,7 +107,8 @@ int main(int argc, char **argv)
 
   setup();
 
-  new_frame(NULL);
+  b_frame_t *frame = new_frame(NULL);
+  show_frame(frame, NULL);
 
 
   gtk_main();
@@ -115,9 +120,39 @@ void
 setup(void)
 {
   /* !TODO: */
-  B.webctx = NULL;
+  char *udd = g_build_filename(g_get_user_data_dir(), B_NAME, NULL);
+  if (!g_file_test(udd, G_FILE_TEST_IS_DIR))
+    {
+      g_mkdir_with_parents(udd, 0755);
+    }
+
+  char *ucd = g_build_filename(g_get_user_cache_dir(), B_NAME, NULL);
+  if (!g_file_test(ucd, G_FILE_TEST_IS_DIR))
+    {
+      g_mkdir_with_parents(ucd, 0755);
+    }
+
+  WebKitWebsiteDataManager *wdm = NULL;
+  wdm = webkit_website_data_manager_new
+    ("base-data-directory", udd,
+     "base-cache-directory", ucd,
+     NULL);
+
+  B.webctx = webkit_web_context_new_with_website_data_manager(wdm);
+  webkit_web_context_set_process_model
+    (B.webctx, WEBKIT_PROCESS_MODEL_MULTIPLE_SECONDARY_PROCESSES);
+  webkit_web_context_set_cache_model
+    (B.webctx, WEBKIT_CACHE_MODEL_WEB_BROWSER);
+
 }
 
+void
+show_frame(b_frame_t *frame, WebKitWebView *view)
+{
+  frame->window = GTK_WINDOW(new_window(frame));
+
+  g_assert(view);
+}
 
 b_frame_t *
 new_frame(WebKitWebView *webview)
@@ -129,13 +164,24 @@ new_frame(WebKitWebView *webview)
   B.frame = frame;
 
   frame->webview   = new_webview(frame, webview);
-  /* c->finder    = webkit_web_view_get_find_controller(c->webview); */
-  /* g_signal_connect(c->finder, "counted-matches", G_CALLBACK(on_counted_matches), c); */
-
-  /* c->page_id   = webkit_web_view_get_page_id(c->webview); */
-  /* c->inspector = webkit_web_view_get_inspector(c->webview); */
+  frame->page_id   = webkit_web_view_get_page_id(frame->webview);
+  frame->inspector = webkit_web_view_get_inspector(frame->webview);
 
   return frame;
+}
+
+GtkWindow *
+new_window(b_frame_t *frame)
+{
+  GtkWidget  *new;
+
+  new = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_role(GTK_WINDOW(new), "");
+  gtk_window_set_default_size(GTK_WINDOW(new), 800, 600);
+
+  g_assert(frame);
+
+  return GTK_WINDOW(new);
 }
 
 WebKitWebView *
