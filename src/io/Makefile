@@ -744,7 +744,8 @@ io_stat_test: io_stat_ft_test                   \
               io_stat_dev_test
 
 io_stat_ft_test: $(io_stat_ft_binout)
-	-rm $(io_stat_link) || ln -s $(CURDIR)/$< $(io_stat_link)
+	rm -f $(io_stat_link)
+	ln -s $(CURDIR)/$< $(io_stat_link)
 	$< $< $(bin_path) $(io_stat_link) /dev/zero
 
 io_stat_uid_test: $(io_stat_uid_binout)
@@ -755,7 +756,8 @@ io_stat_uid_test: $(io_stat_uid_binout)
 	ls -lh $<
 
 io_stat_stat1_test: $(io_stat_stat1_binout)
-	-rm $(io_stat_link) || ln -s $(CURDIR)/$< $(io_stat_link)
+	rm -f $(io_stat_link)
+	ln -s $(CURDIR)/$< $(io_stat_link)
 	$< $(bin_path) $(io_stat_link) /dev/zero $(shell command -v passwd)
 
 io_stat_dev_test: $(io_stat_dev_binout)

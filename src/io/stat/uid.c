@@ -16,8 +16,7 @@ main(int argc, char **argv)
 
   if (argc < 2)
     {
-      fprintf(stderr, "usage: %s <pathname> [pathname...]\n",
-              basename(argv[0]));
+      fprintf(stderr, "usage: %s <pathname...>\n", basename(argv[0]));
       exit(EXIT_FAILURE);
     }
 
