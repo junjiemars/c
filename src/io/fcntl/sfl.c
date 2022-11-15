@@ -9,8 +9,8 @@
 #define OFF  0
 
 
-static void print_fl(int);
-static int set_fl(int, int, int);
+static void  print_fl(int);
+static int   set_fl(int, int, int);
 
 
 int
@@ -75,7 +75,7 @@ print_fl(int fd)
       return;
     }
 
-  printf("O_GETFL(0x%04x): ", fl);
+  printf("O_GETFL(0%04o): ", fl);
 
   switch (fl & O_ACCMODE)
     {
@@ -101,7 +101,7 @@ print_fl(int fd)
       break;
 #endif
     default:
-      printf("(0x%04x)", fl & O_ACCMODE);
+      printf("(0%04o)", fl & O_ACCMODE);
       break;
     }
 
