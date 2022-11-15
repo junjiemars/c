@@ -1,6 +1,5 @@
 #include "_process_.h"
-#include <stdio.h>
-#include <stdlib.h>
+
 
 /*
  * 1. `environ' locate at the space between the top of the address

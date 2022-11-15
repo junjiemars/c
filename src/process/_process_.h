@@ -2,6 +2,7 @@
 #define _PROCESS_H_
 
 #include <nustd.h>
+#include <nlim.h>
 
 #include <sys/wait.h>
 #include <signal.h>

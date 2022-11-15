@@ -1,6 +1,5 @@
 #include "_process_.h"
-#include <stdio.h>
-#include <stdlib.h>
+
 
 extern char **environ;
 
