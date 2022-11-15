@@ -60,8 +60,13 @@ pr_stat(const char *name, const struct stat *ss)
 {
   printf("  File: %s\n", name);
 
-  printf("  Size: %-11lld  FileType: %s\n",
-         (long long int) ss->st_size,
+  printf("  Size: %-10zu"
+         " Blocks: %-10zu"
+         " IO Block: %-6zu"
+         " %s\n",
+         (size_t) ss->st_size,
+         (size_t) ss->st_blocks,
+         (size_t) ss->st_blksize,
          file_type(ss->st_mode));
 
   printf("  Mode: (%s)        Uid: (%5d/%8s)  Gid: (%5d/%8s)\n",
@@ -71,11 +76,23 @@ pr_stat(const char *name, const struct stat *ss)
          ss->st_gid,
          str_gid(ss->st_gid));
 
-  printf("Device: %d,%d   Inode: %llu    Links: %lu\n",
+  printf("Device: %d,%d"
+         " Inode: %-11zu"
+         " Links: %-5zu",
          major(ss->st_dev),
          minor(ss->st_dev),
-         (unsigned long long) ss->st_ino,
-         (unsigned long) ss->st_nlink);
+         (size_t) ss->st_ino,
+         (size_t) ss->st_nlink);
+
+  if (S_ISCHR(ss->st_mode) || S_ISBLK(ss->st_mode))
+    {
+      printf(" Device type: %d,%d\n",
+             major(ss->st_rdev), minor(ss->st_rdev));
+    }
+  else
+    {
+      printf("\n");
+    }
 
   printf("Access: %s"
          "Modify: %s"
