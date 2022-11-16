@@ -7,8 +7,13 @@
 ####
 
 
-# check posix features
-. src/posix/auto
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+
+# # check posix features
+# . ${POSIX_ROOT}/ncstd_auto
 
 
 echo "checking for {ds} ..."
