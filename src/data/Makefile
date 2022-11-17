@@ -100,7 +100,7 @@ data_pwd_test: data_pwd_nam_test                \
 
 data_pwd_nam_test: $(data_pwd_nam_binout)
 	$< nobody $(LOGNAME)
-	command -v && finger $(LOGNAME)
+	command -v finger && finger $(LOGNAME) || echo
 
 data_pwd_uid_test: $(data_pwd_uid_binout)
 	$< 0 1
