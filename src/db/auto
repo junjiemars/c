@@ -1,41 +1,24 @@
 # -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## db/auto
+####
 
-# check sanitize feature
-#----------------------------------------
-case "$CC_NAME" in
-   gcc|clang)
-     nm_feature="$CC_NAME -fsanitize=address"
-     nm_feature_name=
-     nm_feature_indent=yes
-     nm_feature_run=no
-     nm_feature_h=
-     nm_feature_flags='-fsanitize=address'
-     nm_feature_test=
-     . ${NORE_ROOT}/auto/feature
-     if [ yes = $nm_found ]; then
-       flag=f_sanitize op="+=" value=$nm_feature_flags \
-           . ${NORE_ROOT}/auto/make_define
-     fi
-     nm_feature="$CC_NAME -fsanitize=leak"
-     nm_feature_name=
-     nm_feature_indent=yes
-     nm_feature_run=no
-     nm_feature_h=
-     nm_feature_flags='-fsanitize=leak'
-     nm_feature_test=
-     . ${NORE_ROOT}/auto/feature
-     if [ yes = $nm_found ]; then
-       flag=f_sanitize op="+=" value=$nm_feature_flags \
-           . ${NORE_ROOT}/auto/make_define
-     fi
-     ;;		 
-   msvc)
-     ;;
-esac
+
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+
+echo "checking for {db} ..."
+
+has_pkg_config=no
+has_mysqlclient=no
 
 # check pkg-config
 #----------------------------------------
-has_pkg_config=no
 echo $echo_n " + checking for pkg-config ... $echo_c"
 if [ 0 -eq $(pkg-config --version 2>&1 1>/dev/null;echo $?) ]; then
   echo "yes"
@@ -49,8 +32,7 @@ fi
 
 # check mysqlclient
 #----------------------------------------
-has_mysqlclient=no
-if [ "yes" = "$has_pkg_config" ]; then
+if [ "$has_pkg_config" = "yes" ]; then
   db_mysql_cflags=$(pkg-config --cflags mysqlclient 2>/dev/null)
   db_mysql_ldlibs=$(pkg-config --libs mysqlclient 2>/dev/null)
   if [ -n "$db_mysql_cflags" ]; then
@@ -73,7 +55,6 @@ if [ "yes" = "$has_pkg_config" ]; then
     fi
   fi
 fi
-
 
 
 # eof

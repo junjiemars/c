@@ -6,21 +6,8 @@
 #include <string.h>
 
 
-#define count_of(s)  sizeof(s)/sizeof(*s)
+static void usage(const char *);
 
-static void
-usage(const char *bin)
-{
-  printf("Usage: %s [OPTION]...", bin);
-  printf("\n");
-  printf("Play with MySQL, %s\n", mysql_get_client_info());
-  printf("  -h, --help             print this message\n");
-  printf("  -H, --host             connect to host\n");
-  printf("  -P, --port             port number of the host\n");
-  printf("  -u, --user             user for login\n");
-  printf("  -p, --password         password for login\n");
-  printf("  -t, --sqltext          sql text to execute\n");
-}
 
 static struct option long_options[] =
   {
@@ -55,19 +42,19 @@ main(int argc, char **argv)
           usage(argv[0]);
           return 0;
         case 'H':
-          strncpy(opt_host, optarg, count_of(opt_host));
+          strncpy(opt_host, optarg, _nof_(opt_host));
           break;
         case 'P':
           opt_port = (uint16_t)atoi(optarg);
           break;
         case 'u':
-          strncpy(opt_user, optarg, count_of(opt_user));
+          strncpy(opt_user, optarg, _nof_(opt_user));
           break;
         case 'p':
-          strncpy(opt_password, optarg, count_of(opt_password));
+          strncpy(opt_password, optarg, _nof_(opt_password));
           break;
         case 't':
-          strncpy(opt_sqltext, optarg, count_of(opt_sqltext));
+          strncpy(opt_sqltext, optarg, _nof_(opt_sqltext));
           break;
         default:
           usage(argv[0]);
@@ -95,4 +82,19 @@ main(int argc, char **argv)
   mysql_close(mysql);
 
   return 0;
+}
+
+
+void
+usage(const char *bin)
+{
+  printf("Usage: %s [OPTION]...", bin);
+  printf("\n");
+  printf("Play with MySQL, %s\n", mysql_get_client_info());
+  printf("  -h, --help             print this message\n");
+  printf("  -H, --host             connect to host\n");
+  printf("  -P, --port             port number of the host\n");
+  printf("  -u, --user             user for login\n");
+  printf("  -p, --password         password for login\n");
+  printf("  -t, --sqltext          sql text to execute\n");
 }
