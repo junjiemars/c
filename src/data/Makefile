@@ -127,16 +127,16 @@ data_time_test: data_time_conv_test             \
                 data_time_high_test
 
 data_time_conv_test: $(data_time_conv_binout)
-	$(data_time_conv_binout)
-	TZ='' $(data_time_conv_binout)
-	TZ='GMT' $(data_time_conv_binout)
+	$<
+	TZ='' $<
+	TZ='GMT' $<
 
 data_time_date_test: $(data_time_date_binout)
 	$<
 	TZ='GMT' $<
 
 data_time_high_test: $(data_time_high_binout)
-	$(data_time_high_binout)
+	$<
 
 $(data_time_conv_binout): $(data_root)/time/conv.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

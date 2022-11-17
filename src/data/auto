@@ -35,5 +35,39 @@ nm_feature_test='setlogin("X");'
 . ${NORE_ROOT}/auto/feature
 
 
+# check asctime_r
+#----------------------------------------
+nm_feature="asctime_r"
+nm_feature_name="nm_have_asctime_r"
+nm_feature_run=no
+nm_feature_h='#include <time.h>'
+nm_feature_flags="-D_POSIX_C_SOURCE=$_POSIX_C_SOURCE"
+nm_feature_test='(void) asctime_r(NULL, NULL);'
+. ${NORE_ROOT}/auto/feature
+
+
+# check ctime_r
+#----------------------------------------
+nm_feature="ctime_r"
+nm_feature_name="nm_have_ctime_r"
+nm_feature_run=no
+nm_feature_h='#include <time.h>'
+nm_feature_flags="-D_POSIX_C_SOURCE=$_POSIX_C_SOURCE"
+nm_feature_test='(void) ctime_r(NULL, NULL);'
+. ${NORE_ROOT}/auto/feature
+
+
+# check localtime_r
+#----------------------------------------
+nm_feature="localtime_r"
+nm_feature_name="nm_have_localtime_r"
+nm_feature_run=no
+nm_feature_h='#include <time.h>'
+nm_feature_flags="-D_POSIX_C_SOURCE=$_POSIX_C_SOURCE"
+nm_feature_test='(void) localtime_r(NULL, NULL);'
+. ${NORE_ROOT}/auto/feature
+
+
+
 
 # eof
