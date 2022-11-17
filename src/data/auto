@@ -57,6 +57,17 @@ nm_feature_test='(void) ctime_r(NULL, NULL);'
 . ${NORE_ROOT}/auto/feature
 
 
+# check gmtime_r
+#----------------------------------------
+nm_feature="gmtime_r"
+nm_feature_name="nm_have_gmtime_r"
+nm_feature_run=no
+nm_feature_h='#include <time.h>'
+nm_feature_flags="-D_POSIX_C_SOURCE=$_POSIX_C_SOURCE"
+nm_feature_test='(void) gmtime_r(NULL, NULL);'
+. ${NORE_ROOT}/auto/feature
+
+
 # check localtime_r
 #----------------------------------------
 nm_feature="localtime_r"
