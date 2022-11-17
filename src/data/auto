@@ -24,4 +24,16 @@ nlim_line_max="yes"
 echo "checking for {data} ..."
 
 
+# check setlogin
+#----------------------------------------
+nm_feature="setlogin"
+nm_feature_name="nm_have_setlogin"
+nm_feature_run=no
+nm_feature_h='#include <unistd.h>'
+nm_feature_flags="$CFLAGS"
+nm_feature_test='setlogin("X");'
+. ${NORE_ROOT}/auto/feature
+
+
+
 # eof

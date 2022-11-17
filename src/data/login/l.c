@@ -1,37 +1,37 @@
 #include "_data_.h"
 
-int
-main(int argc, char *argv[])
-{
-  char     *logname;
-  errno_t   err;
 
+#define BUF_SIZE  NAME_MAX
+
+static char  buf[BUF_SIZE];
+
+
+int
+main(__attribute__((unused)) int argc, __attribute__((unused)) char *argv[])
+{
   if (argc > 1)
     {
+#if (NM_HAVE_SETLOGIN)
       if (setlogin(argv[1]) == -1)
         {
           perror(NULL);
           exit(EXIT_FAILURE);
         }
+#else
+      printf("!panic: setlogin unsupported, ignore '%s'\n", argv[1]);
+
+#endif  /* setlogin */
+
     }
 
-  errno = 0;
 
-  logname = getlogin();
-  err = errno;
-
-  if (logname == NULL)
+  if (getlogin_r(buf, BUF_SIZE) == -1)
     {
-      if (err)
-        {
-          perror(NULL);
-          exit(EXIT_FAILURE);
-        }
-
-      exit(EXIT_SUCCESS);
+      perror(NULL);
+      exit(EXIT_FAILURE);
     }
 
-  printf("LOGNAME=%s\n", logname);
+  printf("LOGNAME=%s\n", buf);
 
   exit(EXIT_SUCCESS);
 }
