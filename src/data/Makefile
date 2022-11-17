@@ -45,8 +45,8 @@ endif
 
 
 # grp
-data_nam_binout := $(bin_path)/$(data_prefix)_nam$(bin_ext)
-data_gid_binout := $(bin_path)/$(data_prefix)_gid$(bin_ext)
+data_nam_binout := $(bin_path)/$(data_prefix)_grp_nam$(bin_ext)
+data_gid_binout := $(bin_path)/$(data_prefix)_grp_gid$(bin_ext)
 
 data_grp: $(data_nam_binout)                    \
           $(data_gid_binout)
@@ -54,7 +54,7 @@ data_grp_test: data_nam_test                    \
                data_gid_test
 
 data_nam_test: $(data_nam_binout)
-	$< nobody daemon
+	$< root daemon
 
 data_gid_test: $(data_gid_binout)
 	$< 0 1
@@ -90,8 +90,8 @@ $(data_login_binout): $(data_root)/login/l.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # pwd
-data_pwd_nam_binout := $(bin_path)/$(data_prefix)_data_nam$(bin_ext)
-data_pwd_uid_binout := $(bin_path)/$(data_prefix)_data_uid$(bin_ext)
+data_pwd_nam_binout := $(bin_path)/$(data_prefix)_data_pwd_nam$(bin_ext)
+data_pwd_uid_binout := $(bin_path)/$(data_prefix)_data_pwd_uid$(bin_ext)
 
 data_pwd: $(data_pwd_nam_binout)                \
           $(data_pwd_uid_binout)
