@@ -6,14 +6,20 @@
 
 
 
-ctl: ctl_vec                                    \
-     ctl_lst                                   \
+ctl: ctl_deq                                    \
+     ctl_lst                                    \
+     ctl_pqu                                    \
+     ctl_que                                    \
+     ctl_vec                                    \
      ctl_prefix                                 \
      ctl_eg_astar                               \
      ctl_eg_json
 
-ctl_test: ctl_vec_test                          \
-          ctl_vec_lst_test                     \
+ctl_test: ctl_deq                               \
+          ctl_lst_test                          \
+          ctl_pqu_test                          \
+          ctl_que_test                          \
+          ctl_vec_test                          \
           ctl_prefix_test                       \
           ctl_eg_astar_test                     \
           ctl_eg_json_test
@@ -44,20 +50,20 @@ clean_ctl_home:
 	-$(RM) -rf $(ctl_home)
 
 
+# deq
+ctl_deq_binout := $(bin_path)/$(ctl_prefix)_deq$(bin_ext)
+ctl_deq_cppout := $(tmp_path)/$(ctl_prefix)_deq$(cpp_ext)
 
-# vec
-ctl_vec_binout := $(bin_path)/$(ctl_prefix)_vec$(bin_ext)
-ctl_vec_cppout := $(tmp_path)/$(ctl_prefix)_vec$(cpp_ext)
+ctl_deq: $(ctl_home) $(ctl_deq_binout)
+ctl_deq_test: ctl_deq
+	$(ctl_deq_binout)
 
-ctl_vec: $(ctl_home) $(ctl_vec_binout)
-ctl_vec_test: ctl_vec
-	$(ctl_vec_binout)
-
-$(ctl_vec_binout): $(ctl_vec_cppout)
+$(ctl_deq_binout): $(ctl_deq_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(ctl_vec_cppout): $(ctl_root)/vec/vec1.c
+$(ctl_deq_cppout): $(ctl_root)/deq/deq1.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
 
 # lst
 ctl_lst_binout := $(bin_path)/$(ctl_prefix)_lst$(bin_ext)
@@ -71,6 +77,51 @@ $(ctl_lst_binout): $(ctl_lst_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(ctl_lst_cppout): $(ctl_root)/lst/lst1.c
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+
+# pqu
+ctl_pqu_binout := $(bin_path)/$(ctl_prefix)_pqu$(bin_ext)
+ctl_pqu_cppout := $(tmp_path)/$(ctl_prefix)_pqu$(cpp_ext)
+
+ctl_pqu: $(ctl_home) $(ctl_pqu_binout)
+ctl_pqu_test: ctl_pqu
+	$(ctl_pqu_binout)
+
+$(ctl_pqu_binout): $(ctl_pqu_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(ctl_pqu_cppout): $(ctl_root)/pqu/pqu1.c
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+
+# que
+ctl_que_binout := $(bin_path)/$(ctl_prefix)_que$(bin_ext)
+ctl_que_cppout := $(tmp_path)/$(ctl_prefix)_que$(cpp_ext)
+
+ctl_que: $(ctl_home) $(ctl_que_binout)
+ctl_que_test: ctl_que
+	$(ctl_que_binout)
+
+$(ctl_que_binout): $(ctl_que_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(ctl_que_cppout): $(ctl_root)/que/que1.c
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+
+# vec
+ctl_vec_binout := $(bin_path)/$(ctl_prefix)_vec$(bin_ext)
+ctl_vec_cppout := $(tmp_path)/$(ctl_prefix)_vec$(cpp_ext)
+
+ctl_vec: $(ctl_home) $(ctl_vec_binout)
+ctl_vec_test: ctl_vec
+	$(ctl_vec_binout)
+
+$(ctl_vec_binout): $(ctl_vec_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(ctl_vec_cppout): $(ctl_root)/vec/vec1.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
