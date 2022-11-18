@@ -11,16 +11,18 @@ ctl: ctl_deq                                    \
      ctl_pqu                                    \
      ctl_que                                    \
      ctl_set                                    \
+     ctl_stk                                    \
      ctl_vec                                    \
      ctl_prefix                                 \
      ctl_eg_astar                               \
      ctl_eg_json
 
-ctl_test: ctl_deq                               \
+ctl_test: ctl_deq_test                          \
           ctl_lst_test                          \
           ctl_pqu_test                          \
           ctl_que_test                          \
           ctl_set_test                          \
+          ctl_stk_test                          \
           ctl_vec_test                          \
           ctl_prefix_test                       \
           ctl_eg_astar_test                     \
@@ -124,6 +126,21 @@ $(ctl_set_binout): $(ctl_set_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(ctl_set_cppout): $(ctl_root)/set/set1.c
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+
+# stk
+ctl_stk_binout := $(bin_path)/$(ctl_prefix)_stk$(bin_ext)
+ctl_stk_cppout := $(tmp_path)/$(ctl_prefix)_stk$(cpp_ext)
+
+ctl_stk: $(ctl_home) $(ctl_stk_binout)
+ctl_stk_test: ctl_stk
+	$(ctl_stk_binout)
+
+$(ctl_stk_binout): $(ctl_stk_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(ctl_stk_cppout): $(ctl_root)/stk/stk1.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 

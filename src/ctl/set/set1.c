@@ -120,13 +120,13 @@ image image_copy(image* self)
 void
 test_set_int(void)
 {
-  int  d[]  =  {9, 1, 8, 3, 4};
+  int  d1[]  =  {9, 1, 8, 3, 4};
 
   set_int a = set_int_init(compare_int);
 
-  for (size_t i = 0; i < _nof_(d); i++)
+  for (size_t i = 0; i < _nof_(d1); i++)
     {
-      set_int_insert(&a, d[i]);
+      set_int_insert(&a, d1[i]);
     }
 
   printf("set<int>\n------------\n");
