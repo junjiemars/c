@@ -11,15 +11,17 @@ main(void)
     {
       fputc(ch, stdout);
     }
+
   if (ferror(stdin))
     {
       perror("!stdin");
-      return 1;
+      exit(EXIT_FAILURE);
     }
+
   if (feof(stdin))
     {
       fprintf(stdout, "/* %s */.\n", "end of file");
     }
 
-  return 0;
+  exit(EXIT_SUCCESS);
 }
