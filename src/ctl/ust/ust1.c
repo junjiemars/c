@@ -17,16 +17,16 @@
 #include <ust.h>
 
 
-/* typedef struct */
-/* { */
-/*   uint8_t*  data; */
-/*   size_t    size; */
-/* } image; */
+typedef struct
+{
+  uint8_t*  data;
+  size_t    size;
+} image;
 
-/* void   image_free(image *); */
-/* image  image_copy(image *); */
-/* #define T image */
-/* #include <ust.h> */
+void   image_free(image *);
+image  image_copy(image *);
+#define T image
+#include <ust.h>
 
 
 static size_t  int_hash(int *);
@@ -38,14 +38,16 @@ static int     double_equal(double *, double *);
 static size_t  str_hash(str *);
 static int     str_equal(str *, str *);
 
+static size_t  image_hash(image *);
+static int     image_equal(image *, image *);
 
-/* static image  image_init(size_t); */
-/* static image  image_read(void); */
+static image  image_init(size_t);
+static image  image_read(void);
 
 static void  test_ust_int(void);
 static void  test_ust_double(void);
 static void  test_ust_str(void);
-/* static void  test_ust_image(void); */
+static void  test_ust_image(void);
 
 
 int
@@ -54,7 +56,7 @@ main(void)
   test_ust_int();
   test_ust_double();
   test_ust_str();
-  /* test_ust_image(); */
+  test_ust_image();
 }
 
 size_t
@@ -100,44 +102,60 @@ str_equal(str *a, str *b)
   return strcmp(str_c_str(a), str_c_str(b));
 }
 
-/* image */
-/* image_init(size_t size) */
-/* { */
-/*   image self = */
-/*     { */
-/*       .data = malloc(sizeof(*self.data) * size), */
-/*       .size = size */
-/*     }; */
-/*   return self; */
-/* } */
+size_t
+image_hash(image *a)
+{
+  return (size_t) (a->data[0] + a->size);
+}
 
-/* image */
-/* image_read(void) */
-/* { */
-/*   image im = image_init(rand() % 65536); */
-/*   for(size_t i = 0; i < im.size; i++) */
-/*     { */
-/*       im.data[i] = rand() % UINT8_MAX; */
-/*     } */
-/*   return im; */
-/* } */
+int
+image_equal(image *a, image *b)
+{
+  while (a->data && (*a->data == *b->data))
+    {
+      a->data++, b->data++;
+    }
+  return *a->data - *b->data;
+}
 
-/* void image_free(image* self) */
-/* { */
-/*   free(self->data); */
-/*   self->data = NULL; */
-/*   self->size = 0; */
-/* } */
+image
+image_init(size_t size)
+{
+  image self =
+    {
+      .data = malloc(sizeof(*self.data) * size),
+      .size = size
+    };
+  return self;
+}
 
-/* image image_copy(image* self) */
-/* { */
-/*   image copy = image_init(self->size); */
-/*   for(size_t i = 0; i < copy.size; i++) */
-/*     { */
-/*       copy.data[i] = self->data[i]; */
-/*     } */
-/*   return copy; */
-/* } */
+image
+image_read(void)
+{
+  image im = image_init(rand() % 65536);
+  for(size_t i = 0; i < im.size; i++)
+    {
+      im.data[i] = rand() % UINT8_MAX;
+    }
+  return im;
+}
+
+void image_free(image* self)
+{
+  free(self->data);
+  self->data = NULL;
+  self->size = 0;
+}
+
+image image_copy(image* self)
+{
+  image copy = image_init(self->size);
+  for(size_t i = 0; i < copy.size; i++)
+    {
+      copy.data[i] = self->data[i];
+    }
+  return copy;
+}
 
 
 void
@@ -206,25 +224,25 @@ test_ust_str(void)
   ust_str_free(&a);
 }
 
-/* void */
-/* test_ust_image(void) */
-/* { */
-/*   ust_image a = ust_image_init(); */
+void
+test_ust_image(void)
+{
+  ust_image a = ust_image_init(image_hash, image_equal);
 
-/*   for(size_t i = 0; i < 5; i++) */
-/*     { */
-/*       ust_image_insert(&a, image_read()); */
-/*     } */
+  for(size_t i = 0; i < 5; i++)
+    {
+      ust_image_insert(&a, image_read());
+    }
 
-/*   printf("ust<image>\n------------\n"); */
+  printf("ust<image>\n------------\n");
 
-/*   foreach(ust_image, &a, it) */
-/*     { */
-/*       printf("\"{ %d, %zu }\"\n", *it.ref->data, it.ref->size); */
-/*     } */
+  foreach(ust_image, &a, it)
+    {
+      printf("\"{ %d, %zu }\"\n", *it.ref->data, it.ref->size);
+    }
 
-/*   ust_image b = ust_image_copy(&a); */
+  ust_image b = ust_image_copy(&a);
 
-/*   ust_image_free(&a); */
-/*   ust_image_free(&b); */
-/* } */
+  ust_image_free(&a);
+  ust_image_free(&b);
+}
