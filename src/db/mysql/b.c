@@ -6,7 +6,8 @@
 #include <string.h>
 
 
-static void usage(const char *);
+static void  usage(const char *);
+static void  query(MYSQL *);
 
 
 static struct option long_options[] =
@@ -16,16 +17,20 @@ static struct option long_options[] =
     {"port",      optional_argument ,   0, 'P'},
     {"user",      required_argument,    0, 'u'},
     {"password",  optional_argument,    0, 'p'},
+    {"database",  required_argument,    0, 'D'},
     {"sqltext",   optional_argument,    0, 't'},
-    {0,         0,                    0,  0 },
+    {"quiet",     no_argument,          0, 'q'},
+    {0,           0,                    0,  0 },
   };
 
 
 static char  opt_host[64];
-static int   opt_port = 3306;
+static int   opt_port   =  3306;
 static char  opt_user[64];
 static char  opt_password[64];
+static char  opt_database[64];
 static char  opt_sqltext[1024];
+static int   opt_quiet  =  0;
 
 
 int
@@ -34,7 +39,7 @@ main(int argc, char **argv)
   int     ch;
   MYSQL  *mysql;
 
-  while (-1 != (ch = getopt_long(argc, argv, "hH:P:u:p:t:", long_options, 0)))
+  while (-1 != (ch = getopt_long(argc, argv, "hH:P:u:p:D:t:q", long_options, 0)))
     {
       switch (ch)
         {
@@ -53,8 +58,14 @@ main(int argc, char **argv)
         case 'p':
           strncpy(opt_password, optarg, _nof_(opt_password));
           break;
+        case 'D':
+          strncpy(opt_database, optarg, _nof_(opt_database));
+          break;
         case 't':
           strncpy(opt_sqltext, optarg, _nof_(opt_sqltext));
+          break;
+        case 'q':
+          opt_quiet = 1;
           break;
         default:
           usage(argv[0]);
@@ -65,18 +76,19 @@ main(int argc, char **argv)
   mysql = mysql_init(NULL);
 
   if(NULL == mysql_real_connect(mysql,
-                        opt_host,
-                        opt_user,
-                        opt_password,
-                        opt_sqltext,
-                        3306,
-                        NULL,
-                        0))
+                                opt_host,
+                                opt_user,
+                                opt_password,
+                                opt_database,
+                                opt_port,
+                                NULL,
+                                0))
     {
       fprintf(stderr, "%s\n", mysql_error(mysql));
       goto clean_exit;
     }
-  fprintf(stderr, "connected.\n");
+
+  query(mysql);
 
  clean_exit:
   mysql_close(mysql);
@@ -97,4 +109,61 @@ usage(const char *bin)
   printf("  -u, --user             user for login\n");
   printf("  -p, --password         password for login\n");
   printf("  -t, --sqltext          sql text to execute\n");
+}
+
+
+void
+query(MYSQL *mysql)
+{
+  int         rc;
+  MYSQL_RES  *res  =  NULL;
+
+  rc = mysql_real_query(mysql, opt_sqltext, _nof_(opt_sqltext));
+  if (rc != 0)
+    {
+      fprintf(stderr, "!panic: %s\n", mysql_error(mysql));
+      return;
+    }
+
+  res = mysql_store_result(mysql);
+  if (res == NULL)
+    {
+      if (mysql_field_count(mysql) != 0)
+        {
+          fprintf(stderr, "!panic: %s\n", mysql_error(mysql));
+          return;
+        }
+
+      uint64_t    n_rows;
+      n_rows = mysql_affected_rows(mysql);
+      fprintf(stdout, PRIu64 "\n", n_rows);
+      return;
+    }
+
+  MYSQL_ROW      row;
+  MYSQL_FIELD   *fields;
+  unsigned int   n_field;
+
+  n_field = mysql_num_fields(res);
+  fields = mysql_fetch_field(res);
+
+  while ((row = mysql_fetch_row(res)) != NULL)
+    {
+      for (unsigned int i = 0; i < n_field; i++)
+        {
+          printf("%s: %.*s\n", fields[i].name, (int) fields[i].length,
+                 row[i] == NULL ? NULL : row[i]);
+        }
+      printf("------------\n");
+    }
+
+  if (!mysql_eof(res))
+    {
+      fprintf(stderr, "!panic: %s\n", mysql_error(mysql));
+      goto clean_exit;
+    }
+
+ clean_exit:
+  mysql_free_result(res);
+
 }
