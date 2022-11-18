@@ -5,10 +5,20 @@
 ####
 ## ctl/auto
 ####
+## ctl: the C template library
+## https://github.com/glouw/ctl.git
+####
 
 
-# check posix features
-. src/posix/auto
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+
+# check ncc.h features
+ncc_sanitize_address="yes"
+. ${POSIX_ROOT}/ncc_auto
+
 
 echo "checking for {ctl} ..."
 
