@@ -5,9 +5,6 @@
 ####
 ## ctl/auto
 ####
-## ctl: the C template library
-## https://github.com/glouw/ctl.git
-####
 
 
 if [ -z "$POSIX_ROOT" ]; then
@@ -17,7 +14,7 @@ fi
 
 # check ncc.h features
 ncc_sanitize_address="yes"
-. ${POSIX_ROOT}/ncc_auto
+. ${POSIX_ROOT}/ncstd_auto
 
 
 echo "checking for {ctl} ..."

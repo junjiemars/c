@@ -1,12 +1,19 @@
 # ./configure --has-ctl
+#
+# ctl: the C template library
+# https://github.com/glouw/ctl.git
+#
+
 
 
 ctl: ctl_vec                                    \
+     ctl_lst                                   \
      ctl_prefix                                 \
      ctl_eg_astar                               \
      ctl_eg_json
 
 ctl_test: ctl_vec_test                          \
+          ctl_vec_lst_test                     \
           ctl_prefix_test                       \
           ctl_eg_astar_test                     \
           ctl_eg_json_test
@@ -33,6 +40,10 @@ endif
 $(ctl_home):
 	git clone --depth=1 --branch=master $(ctl_git_src) $@
 
+clean_ctl_home:
+	-$(RM) -rf $(ctl_home)
+
+
 
 # vec
 ctl_vec_binout := $(bin_path)/$(ctl_prefix)_vec$(bin_ext)
@@ -46,6 +57,20 @@ $(ctl_vec_binout): $(ctl_vec_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(ctl_vec_cppout): $(ctl_root)/vec/vec1.c
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+# lst
+ctl_lst_binout := $(bin_path)/$(ctl_prefix)_lst$(bin_ext)
+ctl_lst_cppout := $(tmp_path)/$(ctl_prefix)_lst$(cpp_ext)
+
+ctl_lst: $(ctl_home) $(ctl_lst_binout)
+ctl_lst_test: ctl_lst
+	$(ctl_lst_binout)
+
+$(ctl_lst_binout): $(ctl_lst_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(ctl_lst_cppout): $(ctl_root)/lst/lst1.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
@@ -81,10 +106,6 @@ ctl_eg_json_test: ctl_eg_json
 $(ctl_eg_json_binout): $(ctl_home)/examples/json.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-
-
-clean_ctl_home:
-	-$(RM) -rf $(ctl_home)
 
 
 .PHONY: clean_ctl_home

@@ -5,17 +5,17 @@
 
 #define P
 #define T int
-#include <vec.h>
+#include <lst.h>
 
 #define P
 #define T double
-#include <vec.h>
+#include <lst.h>
 
 
 #define P
 #include <str.h>
 #define T str
-#include <vec.h>
+#include <lst.h>
 
 
 typedef struct
@@ -27,7 +27,7 @@ typedef struct
 void   image_free(image *);
 image  image_copy(image *);
 #define T image
-#include <vec.h>
+#include <lst.h>
 
 
 static int  compare_int(int *a, int *b);
@@ -38,19 +38,19 @@ static int  compare_image(image *a, image *b);
 static image  image_init(size_t);
 static image  image_read(void);
 
-static void  test_vec_int(void);
-static void  test_vec_double(void);
-static void  test_vec_str(void);
-static void  test_vec_image(void);
+static void  test_lst_int(void);
+static void  test_lst_double(void);
+static void  test_lst_str(void);
+static void  test_lst_image(void);
 
 
 int
 main(void)
 {
-  test_vec_int();
-  test_vec_double();
-  test_vec_str();
-  test_vec_image();
+  test_lst_int();
+  test_lst_double();
+  test_lst_str();
+  test_lst_image();
 }
 
 
@@ -119,92 +119,92 @@ image image_copy(image* self)
 
 
 void
-test_vec_int(void)
+test_lst_int(void)
 {
-  vec_int a = vec_int_init();
+  lst_int a = lst_int_init();
 
-  assert(vec_int_empty(&a));
+  assert(lst_int_empty(&a));
 
-  vec_int_push_back(&a, 9);
-  vec_int_push_back(&a, 1);
-  vec_int_push_back(&a, 8);
-  vec_int_push_back(&a, 3);
-  vec_int_push_back(&a, 4);
+  lst_int_push_back(&a, 9);
+  lst_int_push_back(&a, 1);
+  lst_int_push_back(&a, 8);
+  lst_int_push_back(&a, 3);
+  lst_int_push_back(&a, 4);
 
   assert(a.size == 5);
 
-  vec_int_sort(&a, compare_int);
+  lst_int_sort(&a, compare_int);
 
-  printf("vec<int>\n------------\n");
-  foreach(vec_int, &a, it)
+  printf("lst<int>\n------------\n");
+  foreach(lst_int, &a, it)
     {
       printf("%d\n", *it.ref);
     }
 
-  vec_int_free(&a);
+  lst_int_free(&a);
 }
 
 void
-test_vec_double(void)
+test_lst_double(void)
 {
-  vec_double a = vec_double_init();
+  lst_double a = lst_double_init();
 
-  vec_double_push_back(&a, 9);
-  vec_double_push_back(&a, 1);
-  vec_double_push_back(&a, 8);
-  vec_double_push_back(&a, 3);
-  vec_double_push_back(&a, 4);
+  lst_double_push_back(&a, 9);
+  lst_double_push_back(&a, 1);
+  lst_double_push_back(&a, 8);
+  lst_double_push_back(&a, 3);
+  lst_double_push_back(&a, 4);
 
-  vec_double_sort(&a, compare_double);
+  lst_double_sort(&a, compare_double);
 
-  printf("vec<double>\n------------\n");
-  foreach(vec_double, &a, it)
+  printf("lst<double>\n------------\n");
+  foreach(lst_double, &a, it)
     {
       printf("%lf\n", *it.ref);
     }
 
-  vec_double_free(&a);
+  lst_double_free(&a);
 }
 
 void
-test_vec_str(void)
+test_lst_str(void)
 {
-  vec_str a = vec_str_init();
+  lst_str a = lst_str_init();
 
-  vec_str_push_back(&a, str_init("9aaa"));
-  vec_str_push_back(&a, str_init("1aaa"));
-  vec_str_push_back(&a, str_init("8aaa"));
-  vec_str_push_back(&a, str_init("3aaa"));
-  vec_str_push_back(&a, str_init("4aaa"));
+  lst_str_push_back(&a, str_init("9aaa"));
+  lst_str_push_back(&a, str_init("1aaa"));
+  lst_str_push_back(&a, str_init("8aaa"));
+  lst_str_push_back(&a, str_init("3aaa"));
+  lst_str_push_back(&a, str_init("4aaa"));
 
-  vec_str_sort(&a, compare_str);
+  lst_str_sort(&a, compare_str);
 
-  printf("vec<str>\n------------\n");
-  foreach(vec_str, &a, it)
+  printf("lst<str>\n------------\n");
+  foreach(lst_str, &a, it)
     {
       printf("\"%s\"\n", str_c_str(it.ref));
     }
 
-  vec_str_free(&a);
+  lst_str_free(&a);
 }
 
 void
-test_vec_image(void)
+test_lst_image(void)
 {
-  vec_image a = vec_image_init();
+  lst_image a = lst_image_init();
   for(size_t i = 0; i < 5; i++)
     {
-      vec_image_push_back(&a, image_read());
+      lst_image_push_back(&a, image_read());
     }
-  vec_image_sort(&a, compare_image);
+  lst_image_sort(&a, compare_image);
 
-  printf("vec<image>\n------------\n");
-  foreach(vec_image, &a, it)
+  printf("lst<image>\n------------\n");
+  foreach(lst_image, &a, it)
     {
       printf("\"{ %d, %zu }\"\n", *it.ref->data, it.ref->size);
     }
 
-  vec_image b = vec_image_copy(&a);
-  vec_image_free(&a);
-  vec_image_free(&b);
+  lst_image b = lst_image_copy(&a);
+  lst_image_free(&a);
+  lst_image_free(&b);
 }
