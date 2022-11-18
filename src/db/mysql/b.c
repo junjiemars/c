@@ -74,6 +74,10 @@ main(int argc, char **argv)
     }
 
   mysql = mysql_init(NULL);
+  if (mysql == NULL)
+    {
+      exit(EXIT_FAILURE);
+    }
 
   if(NULL == mysql_real_connect(mysql,
                                 opt_host,
@@ -93,7 +97,7 @@ main(int argc, char **argv)
  clean_exit:
   mysql_close(mysql);
 
-  return 0;
+  exit(EXIT_SUCCESS);
 }
 
 
@@ -134,7 +138,8 @@ query(MYSQL *mysql)
           return;
         }
 
-      uint64_t    n_rows;
+      uint64_t  n_rows;
+
       n_rows = mysql_affected_rows(mysql);
       fprintf(stdout, PRIu64 "\n", n_rows);
       return;
@@ -146,6 +151,12 @@ query(MYSQL *mysql)
 
   n_field = mysql_num_fields(res);
   fields = mysql_fetch_field(res);
+
+  if (fields == NULL)
+    {
+      fprintf(stderr, "!panic: %s\n", mysql_error(mysql));
+      goto clean_exit;
+    }
 
   while ((row = mysql_fetch_row(res)) != NULL)
     {
