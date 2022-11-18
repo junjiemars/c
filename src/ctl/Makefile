@@ -10,6 +10,7 @@ ctl: ctl_deq                                    \
      ctl_lst                                    \
      ctl_pqu                                    \
      ctl_que                                    \
+     ctl_set                                    \
      ctl_vec                                    \
      ctl_prefix                                 \
      ctl_eg_astar                               \
@@ -19,6 +20,7 @@ ctl_test: ctl_deq                               \
           ctl_lst_test                          \
           ctl_pqu_test                          \
           ctl_que_test                          \
+          ctl_set_test                          \
           ctl_vec_test                          \
           ctl_prefix_test                       \
           ctl_eg_astar_test                     \
@@ -107,6 +109,21 @@ $(ctl_que_binout): $(ctl_que_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(ctl_que_cppout): $(ctl_root)/que/que1.c
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+
+# set
+ctl_set_binout := $(bin_path)/$(ctl_prefix)_set$(bin_ext)
+ctl_set_cppout := $(tmp_path)/$(ctl_prefix)_set$(cpp_ext)
+
+ctl_set: $(ctl_home) $(ctl_set_binout)
+ctl_set_test: ctl_set
+	$(ctl_set_binout)
+
+$(ctl_set_binout): $(ctl_set_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(ctl_set_cppout): $(ctl_root)/set/set1.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
