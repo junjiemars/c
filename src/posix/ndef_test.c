@@ -18,6 +18,8 @@ static void test_alignas(void);
 static void test_generic(void);
 #endif  /* generic */
 
+static void test_str(void);
+static void test_cat(void);
 static void test_isut(void);
 static void test_nof(void);
 static void test_swp(void);
@@ -43,6 +45,8 @@ main(int argc, char **argv)
   test_generic();
 #endif
 
+  test_str();
+  test_cat();
   test_isut();
   test_nof();
   test_swp();
@@ -118,6 +122,23 @@ test_generic(void)
 #undef _tn_
 }
 #endif
+
+
+void
+test_str(void)
+{
+#define _ndef_test_str_  0666
+  printf("_str_(%s) = 0%o\n", _str_(_ndef_test_str_), _ndef_test_str_);
+
+#undef _ndef_test_str_
+}
+
+void
+test_cat(void)
+{
+  int _cat_(a, 1) = 1;
+  printf("_cat_(%s, %s) = %d\n", _str_(a), _str_(1), a1);
+}
 
 void
 test_isut(void)

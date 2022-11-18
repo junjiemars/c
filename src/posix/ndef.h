@@ -127,6 +127,10 @@
 #endif  /* _str_ */
 
 
+#if !defined(_cat_)
+#  define _cat_(a, b)  a##b
+#endif  /* _cat_ */
+
 
 #define _swp_(a, b, w)                            \
 do                                                \

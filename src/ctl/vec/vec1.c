@@ -1,6 +1,5 @@
 #include "_ctl_.h"
 #include <stdio.h>
-#include <assert.h>
 
 
 #define P
@@ -123,15 +122,11 @@ test_vec_int(void)
 {
   vec_int a = vec_int_init();
 
-  assert(vec_int_empty(&a));
-
   vec_int_push_back(&a, 9);
   vec_int_push_back(&a, 1);
   vec_int_push_back(&a, 8);
   vec_int_push_back(&a, 3);
   vec_int_push_back(&a, 4);
-
-  assert(a.size == 5);
 
   vec_int_sort(&a, compare_int);
 
