@@ -12,6 +12,7 @@ ctl: ctl_deq                                    \
      ctl_que                                    \
      ctl_set                                    \
      ctl_stk                                    \
+     ctl_ust                                    \
      ctl_vec                                    \
      ctl_prefix                                 \
      ctl_eg_astar                               \
@@ -23,6 +24,7 @@ ctl_test: ctl_deq_test                          \
           ctl_que_test                          \
           ctl_set_test                          \
           ctl_stk_test                          \
+          ctl_ust_test                          \
           ctl_vec_test                          \
           ctl_prefix_test                       \
           ctl_eg_astar_test                     \
@@ -141,6 +143,21 @@ $(ctl_stk_binout): $(ctl_stk_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(ctl_stk_cppout): $(ctl_root)/stk/stk1.c
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+
+# ust
+ctl_ust_binout := $(bin_path)/$(ctl_prefix)_ust$(bin_ext)
+ctl_ust_cppout := $(tmp_path)/$(ctl_prefix)_ust$(cpp_ext)
+
+ctl_ust: $(ctl_home) $(ctl_ust_binout)
+ctl_ust_test: ctl_ust
+	$(ctl_ust_binout)
+
+$(ctl_ust_binout): $(ctl_ust_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(ctl_ust_cppout): $(ctl_root)/ust/ust1.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
