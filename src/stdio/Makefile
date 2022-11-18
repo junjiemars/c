@@ -84,10 +84,10 @@ $(stdio_basic_cppout): $(stdio_root)/basic/b.c
 stdio_binary_basic_binout := $(bin_path)/$(stdio_prefix)_binary_basic$(bin_ext)
 stdio_binary_array_binout := $(bin_path)/$(stdio_prefix)_binary_array$(bin_ext)
 
-stdio_binary: stdio_binary_basic                      \
-           stdio_binary_array
-stdio_binary_test: stdio_binary_basic_test            \
-                stdio_binary_array_test
+stdio_binary: stdio_binary_basic                \
+              stdio_binary_array
+stdio_binary_test: stdio_binary_basic_test      \
+                   stdio_binary_array_test
 
 stdio_binary_basic: $(stdio_binary_basic_binout)
 stdio_binary_basic_test: stdio_binary_basic
