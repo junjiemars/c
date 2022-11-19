@@ -17,32 +17,9 @@
 #include <ust.h>
 
 
-typedef struct
-{
-  uint8_t*  data;
-  size_t    size;
-} image;
-
-void   image_free(image *);
-image  image_copy(image *);
 #define T image
 #include <ust.h>
 
-
-static size_t  int_hash(int *);
-static int     int_equal(int *, int *);
-
-static size_t  double_hash(double *);
-static int     double_equal(double *, double *);
-
-static size_t  str_hash(str *);
-static int     str_equal(str *, str *);
-
-static size_t  image_hash(image *);
-static int     image_equal(image *, image *);
-
-static image  image_init(size_t);
-static image  image_read(void);
 
 static void  test_ust_int(void);
 static void  test_ust_double(void);
@@ -59,111 +36,13 @@ main(void)
   test_ust_image();
 }
 
-size_t
-int_hash(int *a)
-{
-  return (size_t) *a;
-}
-
-int
-int_equal(int *a, int *b)
-{
-  return *a == *b;
-}
-
-size_t
-double_hash(double *a)
-{
-  return (size_t) *a;
-}
-
-int
-double_equal(double *a, double *b)
-{
-  return *a == *b;
-}
-
-size_t
-str_hash(str *a)
-{
-  size_t   h  =  0;
-  char    *s  =  str_c_str(a);
-
-  while (*s)
-    {
-      h += *s++;
-    }
-  return h;
-}
-
-int
-str_equal(str *a, str *b)
-{
-  return strcmp(str_c_str(a), str_c_str(b));
-}
-
-size_t
-image_hash(image *a)
-{
-  return (size_t) (a->data[0] + a->size);
-}
-
-int
-image_equal(image *a, image *b)
-{
-  while (a->data && (*a->data == *b->data))
-    {
-      a->data++, b->data++;
-    }
-  return *a->data - *b->data;
-}
-
-image
-image_init(size_t size)
-{
-  image self =
-    {
-      .data = malloc(sizeof(*self.data) * size),
-      .size = size
-    };
-  return self;
-}
-
-image
-image_read(void)
-{
-  image im = image_init(rand() % 65536);
-  for(size_t i = 0; i < im.size; i++)
-    {
-      im.data[i] = rand() % UINT8_MAX;
-    }
-  return im;
-}
-
-void image_free(image* self)
-{
-  free(self->data);
-  self->data = NULL;
-  self->size = 0;
-}
-
-image image_copy(image* self)
-{
-  image copy = image_init(self->size);
-  for(size_t i = 0; i < copy.size; i++)
-    {
-      copy.data[i] = self->data[i];
-    }
-  return copy;
-}
-
 
 void
 test_ust_int(void)
 {
   int  d1[]  =  {9, 1, 8, 3, 4};
 
-  ust_int a = ust_int_init(int_hash, int_equal);
+  ust_int a = ust_int_init(hash_int, equal_int);
 
   for (size_t i = 0; i < _nof_(d1); i++)
     {
@@ -185,7 +64,7 @@ test_ust_double(void)
 {
   double  d[]  =  {9.0, 1.0, 8.0, 3.0, 4.0};
 
-  ust_double a = ust_double_init(double_hash, double_equal);
+  ust_double a = ust_double_init(hash_double, equal_double);
 
   for (size_t i = 0; i < _nof_(d); i++)
     {
@@ -207,7 +86,7 @@ test_ust_str(void)
 {
   char  *d[]  =  {"9a", "1a", "8a", "3a", "4a"};
 
-  ust_str a = ust_str_init(str_hash, str_equal);
+  ust_str a = ust_str_init(hash_str, equal_str);
 
   for (size_t i = 0; i < _nof_(d); i++)
     {
@@ -227,7 +106,7 @@ test_ust_str(void)
 void
 test_ust_image(void)
 {
-  ust_image a = ust_image_init(image_hash, image_equal);
+  ust_image a = ust_image_init(hash_image, equal_image);
 
   for(size_t i = 0; i < 5; i++)
     {
