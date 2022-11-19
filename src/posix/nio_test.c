@@ -92,8 +92,8 @@ void
 test_dirname(void)
 {
 #if (NM_HAVE_DIRNAME)
-#include <libgen.h>
-#include <string.h>
+#  include <libgen.h>
+#  include <string.h>
 
   char *n = dirname("/a/b/c");
   assert(strcmp(n, "/a/b") == 0);
@@ -105,8 +105,8 @@ void
 test_basename(void)
 {
 #if (NM_HAVE_BASENAME)
-#include <libgen.h>
-#include <string.h>
+#  include <libgen.h>
+#  include <string.h>
 
   char *b = basename("/a/b/c");
   assert(strcmp(b, "c") == 0);
