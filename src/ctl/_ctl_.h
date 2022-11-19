@@ -2,7 +2,10 @@
 #define _CTL_H_
 
 #include <ncstd.h>
+#include <string.h>
+#include <stdio.h>
 #include <str.h>
+#include <assert.h>
 
 
 int     compare_int(int *, int *);
