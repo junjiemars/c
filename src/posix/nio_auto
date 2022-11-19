@@ -169,7 +169,7 @@ if [ "$nio_dirname" = "yes" ]; then
         nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
         nm_feature_test='(void) dirname("/a/b/c");'
         . ${NORE_ROOT}/auto/feature
-        echo "nm_found"
+        echo "$nm_found"
         ;;
       WinNT)
         nm_feature_name="nm_have_dirname_getfullpathname"
@@ -209,7 +209,7 @@ if [ "$nio_basename" = "yes" ]; then
         nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
         nm_feature_test='(void) basename("/a/b/c");'
         . ${NORE_ROOT}/auto/feature
-        echo "nm_found"
+        echo "$nm_found"
         ;;
       WinNT)
         nm_feature_name="nm_have_basename_getfullpathname"
