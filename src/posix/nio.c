@@ -100,7 +100,7 @@ char *
 dirname(char *path)
 {
   static TCHAR d[NM_PATH_MAX + 1], *b;
-  if (0 == GetFullPathName(path, _nof(d), d, &b))
+  if (0 == GetFullPathName(path, _nof_x(d), d, &b))
     {
       return 0;
     }
