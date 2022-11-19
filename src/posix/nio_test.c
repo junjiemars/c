@@ -21,6 +21,7 @@ main(int argc, char **argv)
   test_getline(argv[1]);
 
   test_fileno();
+  test_fdopen();
 
   return 0;
 }
@@ -61,19 +62,23 @@ test_getline(const char *where)
 void
 test_fileno(void)
 {
+#if (NM_HAVE_FILENO)
   printf("stdin=%d, stdout=%d, stderr=%d\n",
          fileno(stdin),
          fileno(stdout),
          fileno(stderr));
 
+#endif  /* fileno */
 }
 
 
 void
 test_fdopen(void)
 {
+#if (NM_HAVE_FDOPEN)
   FILE *f;
   f = fdopen(0, "r");
-
   fclose(f);
+
+#endif  /* fdopen */
 }

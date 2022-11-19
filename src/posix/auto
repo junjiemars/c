@@ -48,6 +48,7 @@ nustd_gettimeofday="yes"
 
 # checking for <nlim.h>
 nlim_line_max="yes"
+nlim_path_max="yes"
 nlim_clk_tck="yes"
 nlim_times="yes"
 . ${POSIX_ROOT}/nlim_auto
@@ -56,6 +57,8 @@ nlim_times="yes"
 nio_getdelim="yes"
 nio_fileno="yes"
 nio_fdopen="yes"
+nio_dirname="yes"
+nio_basename="yes"
 . ${POSIX_ROOT}/nio_auto
 
 

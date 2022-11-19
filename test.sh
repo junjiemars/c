@@ -90,14 +90,14 @@ test_do() {
 # basic test
 if [ "basic" = "$_TEST_" ]; then
   test_do --has-posix
-  test_do --has-algo
+  # test_do --has-algo
   # test_do --has-cpu
-  test_do --has-ctl
+  # test_do --has-ctl
   # test_do --has-data
   # test_do --has-ds
   # test_do --has-ffi
   # test_do --has-flex
-  test_do --has-hi
+  # test_do --has-hi
   # test_do --has-io
   # test_do --has-lang
   # test_do --has-leptonica
@@ -111,7 +111,7 @@ if [ "basic" = "$_TEST_" ]; then
   # test_do --has-parallel
   # test_do --has-redis
   # test_do --has-regexp
-  test_do --has-stdio
+  # test_do --has-stdio
   # test_do --has-unicode
   # test_do --has-uv --with-std=no
   # test_do --has-webassembly --with-std=no

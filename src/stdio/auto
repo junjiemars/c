@@ -26,6 +26,7 @@ nustd_ssize_t="yes"
 # check nio.h features
 nio_getdelim="yes"
 nio_fileno="yes"
+nio_fdopen="yes"
 . ${POSIX_ROOT}/nio_auto
 
 # check nlim.h features

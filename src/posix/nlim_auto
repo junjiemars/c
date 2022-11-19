@@ -22,6 +22,7 @@ fi
 
 
 if [    "$nlim_line_max" = "yes"                \
+     -o "$nlim_path_max" = "yes"                \
      -o "$nlim_clk_tck" = "yes"                 \
      -o "$nlim_times" = "yes"                   \
    ]; then
@@ -88,6 +89,56 @@ long line_max = 2048;
     *)
       ;;
   esac                            # end of LINE_MAX
+fi
+
+
+# check PATH_MAX
+#----------------------------------------
+if [ "$nlim_path_max" = "yes" ]; then
+  case $NM_SYSTEM in
+    Linux|Darwin)
+      nm_feature="PATH_MAX"
+      nm_feature_name="nm_path_max"
+      nm_feature_run=value
+      nm_feature_h='
+#include <stdio.h>
+#include <unistd.h>
+#include <limits.h>
+'
+    nm_feature_flags=
+    nm_feature_test='
+long path_max = 1024;
+#if defined(PATH_MAX) && (PATH_MAX > 0)
+  path_max = PATH_MAX;
+#endif
+  printf("%ld\n", path_max);
+  return 0;
+'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    WinNT)
+      nm_feature="PATH_MAX"
+      nm_feature_name="nm_path_max"
+      nm_feature_run=value
+      nm_feature_h='
+#include <stdio.h>
+#include <limits.h>
+#include <windows.h>
+'
+    nm_feature_flags=
+    nm_feature_test='
+long path_max = 1024;
+#if defined(MAX_PATH) && (MAX_PATH > 0)
+   path_max = MAX_PATH;
+#endif
+  printf("%d\n", path_max);
+  return 0;
+'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    *)
+      ;;
+  esac                            # end of PATH_MAX
 fi
 
 
