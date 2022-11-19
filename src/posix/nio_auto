@@ -172,7 +172,7 @@ if [ "$nio_dirname" = "yes" ]; then
 #include <string.h>
 '
         nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
-        nm_feature_test='char *s="/a/b/c";char *p=strdup(s);(void) dirname(p);'
+        nm_feature_test='char s[]="/a/b/c";(void) dirname(s);'
         . ${NORE_ROOT}/auto/feature
         if [ "$nm_found" = "yes" ]; then
           have=$nm_have_feature . ${NORE_ROOT}/auto/have

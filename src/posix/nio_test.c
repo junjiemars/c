@@ -100,7 +100,7 @@ test_dirname(void)
 
   extern char *dirname(char *);
 
-  char *s = "/a/b/c";
+  char s[] = "/a/b/c";
   char *n = dirname(s);
   printf("dirname(\"%s\") = %s\n", s, n);
 
@@ -115,7 +115,7 @@ test_basename(void)
 
   extern char *basename(char *);
 
-  char *s = "/a/b/c";
+  char s[] = "/a/b/c";
   char *b = basename(s);
   printf("basename(\"%s\") = %s\n", s, b);
 
