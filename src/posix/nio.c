@@ -92,21 +92,40 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
 #endif  /* getdelim */
 
 
-#if (NM_HAVE_DIRNAME_GETFULLPATHNAME)
+#if (NM_HAVE_DIRNAME_GETFULLPATHNAME) || (NM_HAVE_BASENAME_GETFULLPATHNAME)
 #include <windows.h>
 #include <tchar.h>
 
-char *
-dirname(char *path)
+static char *_fullpathname_(char *path, int dir)
 {
   static TCHAR d[NM_PATH_MAX + 1], *b;
+
   if (0 == GetFullPathName(path, _nof_(d), d, &b))
     {
       return 0;
     }
-  printf("b=%s\n,d=%s\n", b, d);
-  b[-1] = 0; /* remove '/basename' part */
-  return d;
+
+  if (dir)
+    {
+      b[-1] = 0; /* remove '/basename' part */
+      return d;
+    }
+  else
+    {
+      return b;
+    }
 }
 
-#endif  /* dirname */
+char *
+dirname(char *path)
+{
+  return _fullpathname_(path, 1);
+}
+
+char *
+basename(char *path)
+{
+  return _fullpathname_(path, 0);
+}
+
+#endif  /* dirname, basename */
