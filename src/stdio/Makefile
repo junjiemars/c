@@ -14,6 +14,7 @@
 
 stdio: stdio_basic                              \
        stdio_binary                             \
+       stdio_buf                                \
 	     stdio_diff                               \
        stdio_error                              \
        stdio_fileno                             \
@@ -21,8 +22,8 @@ stdio: stdio_basic                              \
        stdio_flush                              \
        stdio_format                             \
        stdio_line                               \
+       stdio_open                               \
        stdio_process                            \
-       stdio_reopen                             \
        stdio_scan                               \
        stdio_seek                               \
        stdio_variadic                           \
@@ -32,6 +33,7 @@ stdio: stdio_basic                              \
 
 stdio_test: stdio_basic_test                    \
             stdio_binary_test                   \
+            stdio_buf_test                      \
             stdio_diff_test                     \
             stdio_error_test                    \
             stdio_fileno_test                   \
@@ -39,8 +41,8 @@ stdio_test: stdio_basic_test                    \
             stdio_flush_test                    \
             stdio_format_test                   \
             stdio_line_test                     \
+            stdio_open_test                     \
             stdio_process_test                  \
-            stdio_reopen_test                   \
             stdio_scan_test                     \
             stdio_seek_test                     \
             stdio_variadic_test                 \
@@ -105,6 +107,20 @@ $(stdio_binary_basic_binout): $(stdio_root)/binary/b.c
 
 $(stdio_binary_array_binout): $(stdio_root)/binary/b1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# buf
+stdio_buf_un_binout := $(bin_path)/$(stdio_prefix)_buf_un$(bin_ext)
+stdio_buf_out_file := $(tmp_path)/$(stdio_prefix)_buf_out.file
+
+stdio_buf: $(stdio_buf_un_binout)
+stdio_buf_test: stdio_buf_un_test
+
+stdio_buf_un_test: $(stdio_buf_un_binout)
+	$< < $(out)/nore.h > $(stdio_buf_out_file)
+
+$(stdio_buf_un_binout): $(stdio_root)/buf/ub1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # diff
 stdio_diff_binout := $(bin_path)/$(stdio_prefix)_diff$(bin_ext)
@@ -226,23 +242,34 @@ $(stdio_line_gets_binout): $(stdio_root)/line/s.c   \
                          $(root)/posix/nio.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-# reopen
-stdio_reopen_binout := $(bin_path)/$(stdio_prefix)_reopen$(bin_ext)
-stdio_reopen_file := $(tmp_path)/$(stdio_prefix)_reopen.file
+# open
+stdio_open_re_binout := $(bin_path)/$(stdio_prefix)_open_re$(bin_ext)
+stdio_open_fd_binout := $(bin_path)/$(stdio_prefix)_open_fd$(bin_ext)
+stdio_open_file := $(tmp_path)/$(stdio_prefix)_open.file
 
-stdio_reopen: $(stdio_reopen_binout)
-stdio_reopen_test: stdio_reopen                     \
-                 $(stdio_reopen_file)
-	$(stdio_reopen_binout) $(stdio_reopen_file)
+stdio_open: $(stdio_open_re_binout)
+stdio_open_test: stdio_open_re_test             \
+                 stdio_open_fd_test
 
-$(stdio_reopen_file):
+$(stdio_open_file):
 	echo "abcdef" > $@
 
-$(stdio_reopen_binout): $(stdio_root)/reopen/ro.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+stdio_open_re_test: $(stdio_open_re_binout)     \
+                    $(stdio_open_file)
+	$< $(stdio_open_file)
+
+stdio_open_fd_test: $(stdio_open_fd_binout)
+	$< < $(stdio_root)/open/fd1.c
+
+
+$(stdio_open_re_binout): $(stdio_root)/open/ro1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(stdio_open_fd_binout): $(stdio_root)/open/fd1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # process
-
 stdio_process_binout := $(bin_path)/$(stdio_prefix)_process$(bin_ext)
 
 stdio_process: $(stdio_process_binout)
