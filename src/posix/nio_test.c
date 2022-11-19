@@ -1,5 +1,7 @@
 #include "nio.h"
 #include <stdlib.h>
+#include <assert.h>
+
 
 extern ssize_t getdelim(char ** restrict lineptr, size_t * restrict n,
                         int delimiter, FILE * restrict stream);
