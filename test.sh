@@ -77,13 +77,13 @@ test_do() {
     ${_WIN_ENV_MSVC_} "$_WIN_ENV_" "./configure $cfg" "make test"
   fi
   rc=$?
-  # if [ 0 -ne $rc ]; then
+  if [ 0 -ne $rc ]; then
     echo "------------"
     echo "! $@ <failed>"
     echo "# dump out/auto.err ..."
     cat out/auto.err
     echo "------------"
-  # fi
+  fi
   return $rc
 }
 

@@ -164,6 +164,7 @@ if [ "$nio_dirname" = "yes" ]; then
   else
     case $NM_SYSTEM in
       Linux)
+        nm_feature_name="nm_have_dirname"
         nm_feature_run=dumb
         nm_feature_h='#include <libgen.h>'
         nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
@@ -175,7 +176,14 @@ if [ "$nio_dirname" = "yes" ]; then
         nm_feature_name="nm_have_dirname_getfullpathname"
         nm_feature_run=dumb
         nm_feature_h='#include <windows.h>'
-        nm_feature_flags="-D_CRT_SECURE_NO_WARNINGS $CFLAGS"
+        case $CC_NAME in
+          msvc)
+            nm_feature_flags="-D_CRT_SECURE_NO_WARNINGS $CFLAGS"
+            ;;
+          *)
+            nm_feature_flags=
+            ;;
+        esac
         nm_feature_test='(void) GetFullPathName(NULL, 0, NULL, NULL);'
         . ${NORE_ROOT}/auto/feature
         echo "$nm_found"
@@ -215,7 +223,14 @@ if [ "$nio_basename" = "yes" ]; then
         nm_feature_name="nm_have_basename_getfullpathname"
         nm_feature_run=dumb
         nm_feature_h='#include <windows.h>'
-        nm_feature_flags="-D_CRT_SECURE_NO_WARNINGS $CFLAGS"
+        case $CC_NAME in
+          msvc)
+            nm_feature_flags="-D_CRT_SECURE_NO_WARNINGS $CFLAGS"
+            ;;
+          *)
+            nm_feature_flags=
+            ;;
+        esac
         nm_feature_test='(void) GetFullPathName(NULL, 0, NULL, NULL);'
         . ${NORE_ROOT}/auto/feature
         echo "$nm_found"
