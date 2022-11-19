@@ -41,10 +41,8 @@ ssize_t getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
 
 
 #if (NM_HAVE_DIRNAME_GETFULLPATHNAME) || (NM_HAVE_BASENAME_GETFULLPATHNAME)
-char *_getfullpathname_(char *, int);
-
-#define  dirname(p)   _getfullpathname_((p), 1)
-#define  basename(p)  _getfullpathname_((p), 0)
+char  *dirname(char *path);
+char  *basename(char *path);
 
 #endif  /* dirname, basename */
 

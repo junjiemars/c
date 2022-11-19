@@ -98,6 +98,11 @@ test_dirname(void)
 #    include <libgen.h>
 #  endif
 
+#  if (MSVC)
+#    pragma warning(disable:4210)
+#  endif
+
+
   extern char *dirname(char *);
 
   char s[] = "/a/b/c";
@@ -113,6 +118,10 @@ test_basename(void)
 #if (NM_HAVE_BASENAME) || (NM_HAVE_BASENAME_GETFULLPATHNAME)
 #  if (NM_HAVE_BASENAME)
 #    include <libgen.h>
+#  endif
+
+#  if (MSVC)
+#    pragma warning(disable:4210)
 #  endif
 
   extern char *basename(char *);
