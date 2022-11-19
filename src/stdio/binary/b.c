@@ -1,48 +1,50 @@
 #include "_stdio_.h"
-#include <nstr.h>
-#include <stdlib.h>
 
 
-#ifdef MSVC
-#  include <windows.h>
-#  include <tchar.h>
-#  define PATH_MAX MAX_PATH
-#else
-#  ifdef LINUX
-#    include <linux/limits.h>
-#  else
-#    include <limits.h>
-#  endif
-#  include <libgen.h>
-#endif
+/* #ifdef MSVC */
+/* #  include <windows.h> */
+/* #  include <tchar.h> */
+/* #  define PATH_MAX MAX_PATH */
+/* #else */
+/* #  ifdef LINUX */
+/* #    include <linux/limits.h> */
+/* #  else */
+/* #    include <limits.h> */
+/* #  endif */
+/* #  include <libgen.h> */
+/* #endif */
 
-#define NAME_SIZE 16
+#define NAME_SIZE  16
+
 
 typedef struct rect_s
 {
-  char name[NAME_SIZE];
-  int width;
-  int height;
+  char  name[NAME_SIZE];
+  int   width;
+  int   height;
+
 } rect_s;
 
-char *dirname(char *path);
-void out(const rect_s *rect, const char *where);
-void in(rect_s *rect, const char *where);
+extern char  *dirname(char *path);
+extern char  *basename(char *path);
+
+void  out(const rect_s *rect, const char *where);
+void  in(rect_s *rect, const char *where);
 
 
-#ifdef MSVC
-char*
-dirname(char *path)
-{
-  static TCHAR d[PATH_MAX + 1], *b;
-  if (0 == GetFullPathName(path, _countof(d), d, &b))
-    {
-      return 0;
-    }
-  b[-1] = 0; /* remove '/basename' part */
-  return d;
-}
-#endif /* end of MSVC */
+/* #ifdef MSVC */
+/* char* */
+/* dirname(char *path) */
+/* { */
+/*   static TCHAR d[PATH_MAX + 1], *b; */
+/*   if (0 == GetFullPathName(path, _countof(d), d, &b)) */
+/*     { */
+/*       return 0; */
+/*     } */
+/*   b[-1] = 0; /\* remove '/basename' part *\/ */
+/*   return d; */
+/* } */
+/* #endif /\* end of MSVC *\/ */
 
 void
 out(const rect_s *rect, const char *where)

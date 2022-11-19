@@ -91,12 +91,17 @@ test_fdopen(void)
 void
 test_dirname(void)
 {
+
 #if (NM_HAVE_DIRNAME)
 #  include <libgen.h>
 #  include <string.h>
 
   char *n = dirname("/a/b/c");
   assert(strcmp(n, "/a/b") == 0);
+
+#elif (NM_HAVE_DIRNAME_GETFULLPATHNAME)
+  char *n = dirname("/a/b/c");
+  assert(strcmp(n, "/a/b") == 0;
 
 #endif  /* dirname */
 }

@@ -1,4 +1,4 @@
-#include <_cio_.h>
+#include "_stdio_.h"
 #include <stdio.h>
 
 void

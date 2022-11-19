@@ -1,8 +1,12 @@
-#include <_stdio_.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
+#include "_stdio_.h"
+
+
+/*
+ * 1. Direct IO is supported by `fread(3)' and `fwrite(3)'
+ *
+ *
+ */
+
 
 #define NAME_SIZE 16
 #define MAX 16
@@ -10,17 +14,34 @@
 
 typedef struct sassy_s
 {
-  char name[NAME_SIZE];
-  int age;
-  char gender;
-  double allowance;
+  char    name[NAME_SIZE];
+  int     age;
+  char    gender;
+  double  allowance;
 } sassy_s;
 
-void in(const char *path, sassy_s *ss, size_t *nss, size_t max);
-void out(const char *path, const sassy_s *ss, size_t nss);
+static void in(const char *path, sassy_s *ss, size_t *nss, size_t max);
+static void out(const char *path, const sassy_s *ss, size_t nss);
 
-void test_in(const char *path);
-void test_out(const char *path);
+static void test_in(const char *path);
+static void test_out(const char *path);
+
+
+int
+main(int argc, char **argv)
+{
+  if (argc < 2)
+    {
+      fprintf(stderr, "where the sassy file located?\n");
+      return 1;
+    }
+
+  test_out(argv[1]);
+  test_in(argv[1]);
+
+  return 0;
+}
+
 
 void
 in(const char *path, sassy_s *ss, size_t *nss, size_t max)
@@ -150,19 +171,4 @@ test_in(const char *path)
     }
 
   free(ss);
-}
-
-int
-main(int argc, char **argv)
-{
-  if (argc < 2)
-    {
-      fprintf(stderr, "where the sassy file located?\n");
-      return 1;
-    }
-
-  test_out(argv[1]);
-  test_in(argv[1]);
-
-  return 0;
 }

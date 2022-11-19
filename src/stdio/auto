@@ -27,10 +27,13 @@ nustd_ssize_t="yes"
 nio_getdelim="yes"
 nio_fileno="yes"
 nio_fdopen="yes"
+nio_dirname="yes"
+nio_basename="yes"
 . ${POSIX_ROOT}/nio_auto
 
 # check nlim.h features
 nlim_line_max="yes"
+nlim_path_max="yes"
 . ${POSIX_ROOT}/nlim_auto
 
 

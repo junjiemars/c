@@ -87,6 +87,7 @@ $(stdio_basic_cppout): $(stdio_root)/basic/b.c
 # binary I/O
 stdio_binary_basic_binout := $(bin_path)/$(stdio_prefix)_binary_basic$(bin_ext)
 stdio_binary_array_binout := $(bin_path)/$(stdio_prefix)_binary_array$(bin_ext)
+stdio_binary_sassy_file := $(tmp_path)/$(stdio_prefix)_binary_sassy.file
 
 stdio_binary: stdio_binary_basic                \
               stdio_binary_array
@@ -100,9 +101,10 @@ stdio_binary_basic_test: stdio_binary_basic
 
 stdio_binary_array: $(stdio_binary_array_binout)
 stdio_binary_array_test: stdio_binary_array
-	$(stdio_binary_array_binout) $(tmp_path)/sassy.bin
+	$(stdio_binary_array_binout) $(stdio_binary_sassy_file)
 
-$(stdio_binary_basic_binout): $(stdio_root)/binary/b.c
+$(stdio_binary_basic_binout): $(stdio_root)/binary/b.c  \
+                              $(root)/posix/nio.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(stdio_binary_array_binout): $(stdio_root)/binary/b1.c

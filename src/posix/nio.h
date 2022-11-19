@@ -28,16 +28,22 @@ ssize_t getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
 #endif  /* end of getdelim */
 
 
-#if (MSVC)
-#  if (NM_HAVE_FILENO)
-#    define fileno  _fileno
-#  endif  /* fileno */
+#if (MSVC) && (NM_HAVE_FILENO)
+#  define fileno  _fileno
 #
-#  if (NM_HAVE_FDOPEN)
-#    define fdopen  _fdopen
-#  endif
+#endif  /* fileno */
+
+
+#if (MSVC) && (NM_HAVE_FDOPEN)
+#  define fdopen  _fdopen
 #
-#endif  /* MSVC */
+#endif  /* fdopen */
+
+
+#if (NM_HAVE_DIRNAME_GETFULLPATHNAME)
+#  char *dirname(char *);
+#
+#endif  /* dirname */
 
 
 

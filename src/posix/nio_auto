@@ -160,6 +160,7 @@ if [ "$nio_dirname" = "yes" ]; then
   nm_feature_test='(void) dirname("/a/b/c");'
   . ${NORE_ROOT}/auto/feature
   if [ "$nm_found" = "yes" ]; then
+    have=$nm_have_feature . ${NORE_ROOT}/auto/have
     echo "yes"
   else
     case $NM_SYSTEM in
@@ -170,6 +171,9 @@ if [ "$nio_dirname" = "yes" ]; then
         nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
         nm_feature_test='(void) dirname("/a/b/c");'
         . ${NORE_ROOT}/auto/feature
+        if [ "$nm_found" = "yes" ]; then
+          have=$nm_have_feature . ${NORE_ROOT}/auto/have
+        fi
         echo "$nm_found"
         ;;
       WinNT)
@@ -186,6 +190,9 @@ if [ "$nio_dirname" = "yes" ]; then
         esac
         nm_feature_test='(void) GetFullPathName(NULL, 0, NULL, NULL);'
         . ${NORE_ROOT}/auto/feature
+        if [ "$nm_found" = "yes" ]; then
+          have=$nm_have_feature . ${NORE_ROOT}/auto/have
+        fi
         echo "$nm_found"
         ;;
       *)
@@ -208,15 +215,20 @@ if [ "$nio_basename" = "yes" ]; then
   nm_feature_test='(void) basename("/a/b/c");'
   . ${NORE_ROOT}/auto/feature
   if [ "$nm_found" = "yes" ]; then
+    have=$nm_have_feature . ${NORE_ROOT}/auto/have
     echo "yes"
   else
     case $NM_SYSTEM in
       Linux)
+        nm_feature_name="basename"
         nm_feature_run=dumb
         nm_feature_h='#include <libgen.h>'
         nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
         nm_feature_test='(void) basename("/a/b/c");'
         . ${NORE_ROOT}/auto/feature
+        if [ "$nm_found" = "yes" ]; then
+          have=$nm_have_feature . ${NORE_ROOT}/auto/have
+        fi
         echo "$nm_found"
         ;;
       WinNT)
@@ -233,6 +245,9 @@ if [ "$nio_basename" = "yes" ]; then
         esac
         nm_feature_test='(void) GetFullPathName(NULL, 0, NULL, NULL);'
         . ${NORE_ROOT}/auto/feature
+        if [ "$nm_found" = "yes" ]; then
+          have=$nm_have_feature . ${NORE_ROOT}/auto/have
+        fi
         echo "$nm_found"
         ;;
       *)
