@@ -120,8 +120,4 @@ char *_getfullpathname_(char *path, int dir)
     }
 }
 
-#define  dirname(path)   _getfullpathname_((path), 1)
-#define  basename(path)  _getfullpathname_((path), 0)
-
-
 #endif  /* dirname, basename */
