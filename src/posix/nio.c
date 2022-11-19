@@ -96,7 +96,7 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
 #include <windows.h>
 #include <tchar.h>
 
-static char *_fullpathname_(char *path, int dir)
+char *_getfullpathname_(char *path, int dir)
 {
   static TCHAR d[NM_PATH_MAX + 1], *b;
 
@@ -116,16 +116,8 @@ static char *_fullpathname_(char *path, int dir)
     }
 }
 
-char *
-dirname(char *path)
-{
-  return _fullpathname_(path, 1);
-}
+#define  dirname(path)   _getfullpathname_((path), 1)
+#define  basename(path)  _getfullpathname_((path), 0)
 
-char *
-basename(char *path)
-{
-  return _fullpathname_(path, 0);
-}
 
 #endif  /* dirname, basename */
