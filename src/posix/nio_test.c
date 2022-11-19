@@ -8,6 +8,8 @@ extern ssize_t getdelim(char ** restrict lineptr, size_t * restrict n,
 static void test_getline(const char *where);
 static void test_fileno(void);
 static void test_fdopen(void);
+static void test_dirname(void);
+static void test_basename(void);
 
 
 int
@@ -22,6 +24,9 @@ main(int argc, char **argv)
 
   test_fileno();
   test_fdopen();
+
+  test_dirname();
+  test_basename();
 
   return 0;
 }
@@ -81,4 +86,30 @@ test_fdopen(void)
   fclose(f);
 
 #endif  /* fdopen */
+}
+
+void
+test_dirname(void)
+{
+#if (NM_HAVE_DIRNAME)
+#include <libgen.h>
+#include <string.h>
+
+  char *n = dirname("/a/b/c");
+  assert(strcmp(n, "/a/b") == 0);
+
+#endif  /* dirname */
+}
+
+void
+test_basename(void)
+{
+#if (NM_HAVE_BASENAME)
+#include <libgen.h>
+#include <string.h>
+
+  char *b = basename("/a/b/c");
+  assert(strcmp(b, "c") == 0);
+
+#endif  /* basename */
 }
