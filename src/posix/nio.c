@@ -2,8 +2,12 @@
 
 
 /*
- * An implementation conform to IEEE Std 1003.1-2017:
+ * 1. `getdelim(3)': conform to IEEE Std 1003.1-2017
  * https://pubs.opengroup.org/onlinepubs/9699919799/functions/getdelim.html
+ *
+ * 2. `dirname(3)'.
+ *
+ * 3. `basename(3)'.
  *
 */
 

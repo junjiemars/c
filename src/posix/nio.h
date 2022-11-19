@@ -46,6 +46,12 @@ char *dirname(char *);
 #endif  /* dirname */
 
 
+#if (NM_HAVE_BASENAME_GETFULLPATHNAME)
+char *basename(char *);
+
+#endif  /* basename */
+
+
 
 
 #endif /* end of _NIO_H_ */
