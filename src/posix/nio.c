@@ -104,6 +104,7 @@ dirname(char *path)
     {
       return 0;
     }
+  printf("b=%s\n", b)
   b[-1] = 0; /* remove '/basename' part */
   return d;
 }
