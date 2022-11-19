@@ -110,8 +110,10 @@ test_dirname(void)
 void
 test_basename(void)
 {
-#if (NM_HAVE_BASENAME)
-#  include <libgen.h>
+#if (NM_HAVE_BASENAME) || (NM_HAVE_BASENAME_GETFULLPATHNAME)
+#  if (NM_HAVE_BASENAME)
+#    include <libgen.h>
+#  endif
 
   extern char *basename(char *);
 
