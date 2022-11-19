@@ -7,6 +7,7 @@ extern ssize_t getdelim(char ** restrict lineptr, size_t * restrict n,
 
 static void test_getline(const char *where);
 static void test_fileno(void);
+static void test_fdopen(void);
 
 
 int
@@ -65,4 +66,14 @@ test_fileno(void)
          fileno(stdout),
          fileno(stderr));
 
+}
+
+
+void
+test_fdopen(void)
+{
+  FILE *f;
+  f = fdopen(0, "r");
+
+  fclose(f);
 }

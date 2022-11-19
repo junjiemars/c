@@ -24,6 +24,7 @@ nustd_ssize_t="yes"
 
 if [    "$nio_getdelim" = "yes"                 \
      -o "$nio_fileno" = "yes"                   \
+     -o "$nio_fdopen" = "yes"                   \
    ]; then
   echo "checking for nio.h ..."
 else
@@ -100,6 +101,43 @@ if [ "$nio_fileno" = "yes" ]; then
       nm_feature_h='#include <stdio.h>'
       nm_feature_flags="-D_CRT_SECURE_NO_WARNINGS $CFLAGS"
       nm_feature_test='_fileno(stdout);'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    *)
+      ;;
+  esac
+fi
+
+
+# check fdopen
+#----------------------------------------
+if [ "$nio_fdopen" = "yes" ]; then
+  case $CC_NAME in
+    clang)
+      nm_feature="fdopen"
+      nm_feature_name="nm_have_fdopen"
+      nm_feature_run=no
+      nm_feature_h='#include <stdio.h>'
+      nm_feature_flags=
+      nm_feature_test='fdopen(0, "r");'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    gcc)
+      nm_feature="fdopen"
+      nm_feature_name="nm_have_fdopen"
+      nm_feature_run=no
+      nm_feature_h='#include <stdio.h>'
+      nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
+      nm_feature_test='fdopen(0, "r");'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    msvc)
+      nm_feature="fdopen"
+      nm_feature_name="nm_have_fdopen"
+      nm_feature_run=no
+      nm_feature_h='#include <stdio.h>'
+      nm_feature_flags="-D_CRT_SECURE_NO_WARNINGS $CFLAGS"
+      nm_feature_test='_fdopen(0, "r");'
       . ${NORE_ROOT}/auto/feature
       ;;
     *)

@@ -55,6 +55,7 @@ nlim_times="yes"
 # check for <nio.h>
 nio_getdelim="yes"
 nio_fileno="yes"
+nio_fdopen="yes"
 . ${POSIX_ROOT}/nio_auto
 
 
