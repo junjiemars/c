@@ -1,6 +1,5 @@
 #include "nio.h"
 #include <stdlib.h>
-#include <assert.h>
 
 
 extern ssize_t getdelim(char ** restrict lineptr, size_t * restrict n,
@@ -94,16 +93,16 @@ void
 test_dirname(void)
 {
 
-#if (NM_HAVE_DIRNAME)
-#  include <libgen.h>
-#  include <string.h>
+#if (NM_HAVE_DIRNAME) || (NM_HAVE_DIRNAME_GETFULLPATHNAME)
+#  if (NM_HAVE_DIRNAME)
+#    include <libgen.h>
+#  endif
 
-  char *n = dirname("/a/b/c");
-  assert(strcmp(n, "/a/b") == 0);
+  extern char *dirname(char *);
 
-#elif (NM_HAVE_DIRNAME_GETFULLPATHNAME)
-  char *n = dirname("/a/b/c");
-  assert(strcmp(n, "/a/b") == 0;
+  char *s = "/a/b/c";
+  char *n = dirname(s);
+  printf("dirname(\"%s\") = %s\n", s, n);
 
 #endif  /* dirname */
 }
@@ -113,10 +112,12 @@ test_basename(void)
 {
 #if (NM_HAVE_BASENAME)
 #  include <libgen.h>
-#  include <string.h>
 
-  char *b = basename("/a/b/c");
-  assert(strcmp(b, "c") == 0);
+  extern char *basename(char *);
+
+  char *s = "/a/b/c";
+  char *b = basename(s);
+  printf("basename(\"%s\") = %s\n", s, b);
 
 #endif  /* basename */
 }
