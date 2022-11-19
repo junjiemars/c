@@ -27,6 +27,7 @@ stdio: stdio_basic                              \
        stdio_seek                               \
        stdio_variadic                           \
        stdio_wc                                 \
+       stdio_wide                               \
        stdio_wchar
 
 stdio_test: stdio_basic_test                    \
@@ -44,6 +45,7 @@ stdio_test: stdio_basic_test                    \
             stdio_seek_test                     \
             stdio_variadic_test                 \
             stdio_wc_test                       \
+            stdio_wide_test                     \
             stdio_wchar_test
 
 # endif 													#skip
@@ -320,6 +322,28 @@ stdio_variadic_test: stdio_variadic
 $(stdio_variadic_binout): $(stdio_root)/variadic/v1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+# wc
+stdio_wc_binout := $(bin_path)/$(stdio_prefix)_wc$(bin_ext)
+stdio_wc_cppout := $(tmp_path)/$(stdio_prefix)_wc$(cpp_ext)
+
+stdio_wc: $(stdio_wc_binout)
+stdio_wc_test: stdio_wc
+	$(stdio_wc_binout) --help
+	echo -n "abc" | $(stdio_wc_binout) -c
+	echo -e "a\n b\n c" | $(stdio_wc_binout)
+	$(stdio_wc_binout) -l -w -m -c -L $(CURDIR)/Makefile $(CURDIR)/src/stdio/wc/wc.c
+	# echo -n "abc" | \
+  #   $(stdio_wc_binout) -l -w -m -c -L \
+  #   $(CURDIR)/Makefile $(CURDIR)/src/stdio/wc/wc.c -
+stdio_wc_valgrind_test: stdio_wc
+	valgrind --leak-check=full \
+           --track-origins=yes \
+           $(stdio_wc_binout) $(shell ls $(CURDIR)/src/*.c)
+
+$(stdio_wc_binout): $(stdio_root)/wc/wc.c $(getopt_c)
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 # wchar
 stdio_wchar_ws_binout := $(bin_path)/$(stdio_prefix)_wchar_ws$(bin_ext)
 stdio_wchar_wc_binout := $(bin_path)/$(stdio_prefix)_wchar_wc$(bin_ext)
@@ -346,23 +370,12 @@ $(stdio_wchar_ws_binout): $(stdio_root)/wchar/ws.c
 $(stdio_wchar_wc_binout): $(stdio_root)/wchar/wc.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-# wc
-stdio_wc_binout := $(bin_path)/$(stdio_prefix)_wc$(bin_ext)
-stdio_wc_cppout := $(tmp_path)/$(stdio_prefix)_wc$(cpp_ext)
+# wide
+stdio_wide_binout := $(bin_path)/$(stdio_prefix)_wide$(bin_ext)
 
-stdio_wc: $(stdio_wc_binout)
-stdio_wc_test: stdio_wc
-	$(stdio_wc_binout) --help
-	echo -n "abc" | $(stdio_wc_binout) -c
-	echo -e "a\n b\n c" | $(stdio_wc_binout)
-	$(stdio_wc_binout) -l -w -m -c -L $(CURDIR)/Makefile $(CURDIR)/src/stdio/wc/wc.c
-	# echo -n "abc" | \
-  #   $(stdio_wc_binout) -l -w -m -c -L \
-  #   $(CURDIR)/Makefile $(CURDIR)/src/stdio/wc/wc.c -
-stdio_wc_valgrind_test: stdio_wc
-	valgrind --leak-check=full \
-           --track-origins=yes \
-           $(stdio_wc_binout) $(shell ls $(CURDIR)/src/*.c)
+stdio_wide: $(stdio_wide_binout)
+stdio_wide_test: stdio_wide
+	$(stdio_wide_binout)
 
-$(stdio_wc_binout): $(stdio_root)/wc/wc.c $(getopt_c)
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(stdio_wide_binout): $(stdio_root)/wide/w1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
