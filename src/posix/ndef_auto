@@ -21,7 +21,8 @@ fi
 . ${POSIX_ROOT}/npstd_auto
 
 
-if [    "$ndef_restrict" = "yes"                \
+if [    "$ndef___func__" = "yes"                \
+     -o "$ndef_restrict" = "yes"                \
      -o "$ndef_static_assert" = "yes"           \
      -o "$ndef_va_args" = "yes"                 \
      -o "$ndef_alignof" = "yes"                 \
@@ -34,6 +35,17 @@ else
 fi
 
 
+# check __func__ constant
+#----------------------------------------
+if [ "$ndef___func__" = "yes" ]; then
+  nm_feature="__func__"
+  nm_feature_name="nm_have___func__"
+  nm_feature_run=
+  nm_feature_h='include <stdio.h>'
+  nm_feature_flags="$CFLAGS"
+  nm_feature_test='printf("fn=%s", __func__);'
+  . ${NORE_ROOT}/auto/feature
+fi
 
 
 # check restrict keyword

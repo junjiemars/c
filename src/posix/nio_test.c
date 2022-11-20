@@ -44,13 +44,8 @@ test_getline(FILE *file)
 {
   if (file == NULL)
     {
-      printf("test_getline: invalid `file' argument\n");
+      printf("%s: invalid `file' argument\n", __FUNCTION__);
     }
-
-#if !(NM_HAVE_GETDELIM)
-  printf("test_getline: no `getdelim' found\n");
-
-#else
 
   extern ssize_t getdelim(char ** restrict lineptr, size_t * restrict n,
                           int delimiter, FILE * restrict stream);
@@ -73,9 +68,6 @@ test_getline(FILE *file)
 
   free(line);
   fclose(file);
-
-#endif  /* getdelim */
-
 }
 
 
@@ -83,7 +75,7 @@ void
 test_fileno(void)
 {
 #if !(NM_HAVE_FILENO)
-  printf("test_fileno: no `fileno' found\n");
+  printf("%s: no `fileno' found\n", __FUNCTION__);
 
 #else
 
@@ -101,7 +93,7 @@ void
 test_fdopen(void)
 {
 #if !(NM_HAVE_FDOPEN)
-  printf("test_fdopen: no `fdopen' found\n");
+  printf("%s: no `fdopen' found\n", __FUNCTION__);
 
 #else
 
@@ -116,7 +108,7 @@ void
 test_dirname(void)
 {
 #if !((NM_HAVE_DIRNAME) || (NM_HAVE_DIRNAME_GETFULLPATHNAME))
-  printf("test_dirname: no `dirname' found\n");
+  printf("%s: no `dirname' found\n", __FUNCTION__);
 
 #else
 
@@ -126,8 +118,8 @@ test_dirname(void)
 
   extern char  *_libgen_(char *, int);
 
-  /* char *ss[] = {NULL, "", "/", "a", "a/", "/a/b/c"}; */
-  char *ss[] = {"/a/b/c"};
+  char *ss[] = {NULL, "", "/", "a", "a/", "/a/b/c"};
+  /* char *ss[] = {"/a/b/c"}; */
   for (size_t i = 0; i < _nof_(ss); i++)
     {
       char *s = ss[i] != NULL ? strdup(ss[i]) : NULL;
@@ -144,7 +136,7 @@ void
 test_basename(void)
 {
 #if !(NM_HAVE_BASENAME || NM_HAVE_BASENAME_GETFULLPATHNAME)
-  printf("test_basename: no `basename' found\n");
+  printf("%s: no `basename' found\n", __FUNCTION__);
 
 #else
 

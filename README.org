@@ -273,6 +273,7 @@ purposes. =#pragma= is commonly used to suppress warnings.
   in 24 hour time, =Ddd= is the abbreviated day, =Mmm= is the
   abbreviated month, =Date= is the current day of the month (1-31),
   and =yyyy= is the four digit year, such as "Tue Oct 26 12:42:21 2021"
+- =__func__= expands to the function name as part of C99
 
 ** main
 	 :PROPERTIES:
