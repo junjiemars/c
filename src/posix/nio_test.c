@@ -1,4 +1,5 @@
 #include "nio.h"
+#include "nstr.h"
 #include <stdlib.h>
 #include <string.h>
 
