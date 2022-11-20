@@ -5,9 +5,12 @@
 #  pragma warning(disable: 4456)
 #elif (GCC)
 #  pragma GCC diagnostic ignored "-Wunused-variable"
+#  pragma GCC diagnostic ignored "-Wunused-parameter"
+#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #elif (CLANG)
 #  pragma clang diagnostic ignored "-Wunused-variable"
 #  pragma clang diagnostic ignored "-Wunused-parameter"
+#  pragma clang diagnostic ignored "-Wunused-but-set-variable"
 #endif
 
 
