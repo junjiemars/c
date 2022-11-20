@@ -12,8 +12,10 @@ if [ -z "$POSIX_ROOT" ]; then
 fi
 
 
-# # check posix features
-# . ${POSIX_ROOT}/ncstd_auto
+# check posix features
+ndef_restrict="yes"
+ndef_static_assert="yes"
+. ${POSIX_ROOT}/ncstd_auto
 
 
 echo "checking for {ds} ..."
