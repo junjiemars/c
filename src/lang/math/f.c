@@ -89,7 +89,13 @@ test_cmp_float(void)
   assert(u3 == u12);
   assert(d3 == d1 + d2);
 
-  int less, greater, lessgreater, unordered, lessequal, greaterequal;
+  __attribute__((unused)) int  less;
+  __attribute__((unused)) int  greater;
+  __attribute__((unused)) int  lessgreater;
+  __attribute__((unused)) int  unordered;
+  __attribute__((unused)) int  lessequal;
+  __attribute__((unused)) int  greaterequal;
+
   less = isless(d3, d1+d2);
   greater = isgreater(d3, d1+d2);
   lessgreater = islessgreater(d3, d1+d2);
@@ -104,7 +110,10 @@ test_cmp_float(void)
   assert((less || greater) == lessgreater);
   assert(lessequal && greaterequal);
 
-  int less1, greater1, lessgreater1;
+  __attribute__((unused)) int  less1;
+  __attribute__((unused)) int  greater1;
+  __attribute__((unused)) int  lessgreater1;
+
   float lg1 = 0.1f, lg2 = 0.2f, lg3 = 0.3001f;
   less1 = isless(lg3, lg1+lg2);
   greater1 = isgreater(lg3, lg1+lg2);

@@ -20,7 +20,9 @@ int
 main(int argc, char **argv)
 {
 
-  int  fd1, fd2, fd3;
+  int                          fd1;
+  __attribute__((unused)) int  fd2;
+  __attribute__((unused)) int  fd3;
 
   if (argc < 2)
     {
