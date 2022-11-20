@@ -1,6 +1,6 @@
 #include "nio.h"
+#include "nstr.h"
 #include <stdlib.h>
-#include <string.h>
 
 
 static void test_getline(FILE *);
@@ -107,22 +107,28 @@ test_fdopen(void)
 void
 test_dirname(void)
 {
-#if !((NM_HAVE_DIRNAME) || (NM_HAVE_DIRNAME_GETFULLPATHNAME))
+#if !(NM_HAVE_DIRNAME || NM_HAVE_DIRNAME_GETFULLPATHNAME)
   printf("%s: no `dirname' found\n", __FUNCTION__);
 
 #else
 
-#  if (MSVC)
-#    pragma warning(disable: 4210)
-#  endif
+#if (MSVC)
+#  pragma warning(disable: 4210)
+#endif
 
+#if (NM_HAVE_DIRNAME_GETFULLPATHNAME)
   extern char  *_libgen_(char *, int);
+  char  *ss[]  =  {"/a/b/c"};
+#else
+  char  *ss[]  =  {"/", "a", "a/", "/a/b/c", NULL};
+#endif
 
-  char ss[][64] = {"", "/", "a", "a/", "/a/b/c"};
   for (size_t i = 0; i < _nof_(ss); i++)
     {
+      char *s = (ss[i] == NULL) ? NULL : strdup(ss[i]);
       char *n = dirname(ss[i]);
-      printf("dirname(\"%s\") = \"%s\"\n", ss[i], n);
+      printf("dirname(\"%s\") = \"%s\"\n", s, n);
+      free(s);
     }
 
 #endif  /* dirname */
@@ -137,17 +143,23 @@ test_basename(void)
 
 #else
 
-#  if (MSVC)
-#    pragma warning(disable: 4210)
-#  endif
+#if (MSVC)
+#  pragma warning(disable: 4210)
+#endif
 
+#if (NM_HAVE_BASENAME_GETFULLPATHNAME)
   extern char  *_libgen_(char *, int);
+  char  *ss[]  =  {"/a/b/c"};
+#else
+  char  *ss[]  =  {"/", "a", "a/", "/a/b/c", NULL};
+#endif
 
-  char ss[][64] = {"", "/", "a", "a/", "/a/b/c"};
   for (size_t i = 0; i < _nof_(ss); i++)
     {
-      char *b = basename(ss[i]);
-      printf("basename(\"%s\") = \"%s\"\n", ss[i], b);
+      char *s = (ss[i] == NULL) ? NULL : strdup(ss[i]);
+      char *b = basename(s);
+      printf("basename(\"%s\") = \"%s\"\n", s, b);
+      free(s);
     }
 
 #endif  /* basename */
