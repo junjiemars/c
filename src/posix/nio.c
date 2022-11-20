@@ -104,8 +104,8 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
 #include <tchar.h>
 #include <string.h>
 
-static char *
-_getfullpathname_(char *path, int dir)
+char *
+_libgen_(char *path, int dirname)
 {
   static TCHAR d[NM_PATH_MAX + 1], *b;
 
@@ -121,7 +121,7 @@ _getfullpathname_(char *path, int dir)
       return 0;
     }
 
-  if (dir)
+  if (dirname)
     {
       b[-1] = 0; /* remove '/basename' part */
       return d;
@@ -132,16 +132,5 @@ _getfullpathname_(char *path, int dir)
     }
 }
 
-char *
-dirname(char *path)
-{
-  return _getfullpathname_(path, 1);
-}
 
-char *
-basename(char *path)
-{
-  return _getfullpathname_(path, 0);
-}
-
-#endif  /* dirname, basename */
+#endif  /* _libgen_ */

@@ -44,11 +44,11 @@ test_getline(FILE *file)
 {
   if (file == NULL)
     {
-      printf("%s: invalid `file' argument\n", __FUNCTION__);
+      printf("test_getline: invalid `file' argument\n");
     }
 
 #if !(NM_HAVE_GETDELIM)
-  printf("%s: no `getdelim' found\n", __FUNCTION__);
+  printf("test_getline: no `getdelim' found\n");
 
 #else
 
@@ -83,7 +83,7 @@ void
 test_fileno(void)
 {
 #if !(NM_HAVE_FILENO)
-  printf("%s: no `fileno' found\n", __FUNCTION__);
+  printf("test_fileno: no `fileno' found\n");
 
 #else
 
@@ -101,7 +101,7 @@ void
 test_fdopen(void)
 {
 #if !(NM_HAVE_FDOPEN)
-  printf("%s: no `fdopen' found\n", __FUNCTION__);
+  printf("test_fdopen: no `fdopen' found\n");
 
 #else
 
@@ -116,19 +116,15 @@ void
 test_dirname(void)
 {
 #if !((NM_HAVE_DIRNAME) || (NM_HAVE_DIRNAME_GETFULLPATHNAME))
-  printf("%s: no `dirname' found\n", __FUNCTION__);
+  printf("test_dirname: no `dirname' found\n");
 
 #else
-
-#  if (NM_HAVE_DIRNAME)
-#    include <libgen.h>
-#  endif
 
 #  if (MSVC)
 #    pragma warning(disable: 4210)
 #  endif
 
-  extern char  *dirname(char *);
+  extern char  *_libgen_(char *, int);
 
   char *ss[] = {NULL, "", "/", "a", "a/", "/a/b/c"};
   for (size_t i = 0; i < _nof_(ss); i++)
@@ -146,20 +142,16 @@ test_dirname(void)
 void
 test_basename(void)
 {
-#if !((NM_HAVE_BASENAME) || (NM_HAVE_BASENAME_GETFULLPATHNAME))
-  printf("%s: no `basename' found\n", __FUNCTION__);
+#if !(NM_HAVE_BASENAME || NM_HAVE_BASENAME_GETFULLPATHNAME)
+  printf("test_basename: no `basename' found\n");
 
 #else
-
-#  if (NM_HAVE_BASENAME)
-#    include <libgen.h>
-#  endif
 
 #  if (MSVC)
 #    pragma warning(disable: 4210)
 #  endif
 
-  extern char  *basename(char *);
+  extern char  *_libgen_(char *, int);
 
   char *ss[] = {NULL, "", "/", "a", "a/", "/a/b/c"};
   for (size_t i = 0; i < _nof_(ss); i++)
