@@ -147,7 +147,12 @@ test_cmp_double(void)
   assert(u3 != u12);
   assert(d3 != d1 + d2);
 
-  int less, greater, lessgreater, unordered, lessequal, greaterequal;
+  __attribute__((unused)) int  less;
+  __attribute__((unused)) int  greater;
+  __attribute__((unused)) int  lessgreater;
+  __attribute__((unused)) int  unordered;
+  __attribute__((unused)) int  lessequal;
+  __attribute__((unused)) int  greaterequal;
   less = isless(d3, d1+d2);
   greater = islessgreater(d3, d1+d2);
   lessgreater = islessgreater(d3, d1+d2);
@@ -194,7 +199,7 @@ test_epsilon_double(void)
 {
   double d1 = 0.1, d2 = 0.2, d3 = 0.3;
   double epsilon = DBL_EPSILON;
-  int x = fabs((d1+d2) - d3) < epsilon;
+  __attribute__((unused)) int x = fabs((d1+d2) - d3) < epsilon;
   assert(x);
 }
 
@@ -202,7 +207,8 @@ void
 test_double_zero(void)
 {
   double d1 = 0.0, d2 = 0.0;
-  int le, ge;
+  __attribute__((unused)) int  le;
+  __attribute__((unused)) int  ge;
 
   le = islessequal(d1, d2);
   ge = isgreaterequal(d1, d2);

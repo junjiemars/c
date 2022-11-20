@@ -27,7 +27,7 @@
 
 
 static void print_mask(mode_t);
-static int has_mask(int, mode_t);
+__attribute__((unused)) static int has_mask(int, mode_t);
 
 
 

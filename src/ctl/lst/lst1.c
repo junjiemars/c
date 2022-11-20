@@ -2,6 +2,11 @@
 #include <stdio.h>
 #include <assert.h>
 
+#if (DARWIN && CLANG)
+#  pragma clang diagnostic ignored "-Wunused"
+#endif
+
+
 
 #define P
 #define T int
@@ -113,10 +118,9 @@ test_lst_str(void)
 void
 test_lst_image(void)
 {
-  size_t     i;
   lst_image  a  =  lst_image_init();
 
-  for (i = 0; i < 5; i++)
+  for (int i = 0; i < 5; i++)
     {
       lst_image_push_back(&a, image_read());
     }
