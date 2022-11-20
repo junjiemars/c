@@ -2,8 +2,11 @@
 
 
 #if (MSVC)
-/* C4456: declaration of 'i' hides previous local declaration */
-#  pragma warning(disable:4456)
+#  pragma warning(disable: 4456)
+#elif (GCC)
+#  pragma GCC diagnostic ignored "-Wunused"
+#elif (CLANG)
+#  pragma clang diagnostic ignored "-Wunused"
 #endif
 
 
@@ -46,7 +49,7 @@ main(void)
 void
 automatic_storage_class(void)
 {
-	__attribute__((unused)) auto int x;  /* garbage value */
+	auto int x;  /* garbage value */
 #if (GCC)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wuninitialized"

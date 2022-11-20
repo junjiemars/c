@@ -1,11 +1,13 @@
-/** 
- *   -- An infix to postfix converter -- 
+/**
+ *   -- An infix to postfix converter --
  *
 */
 
+#if (DARWIN && CLANG)
+#  pragma clang diagnostic ignored "-Wunused"
+#endif
 
 #include <stdio.h>
-
 #include <str.h>
 
 /*

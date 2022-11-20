@@ -14,6 +14,8 @@ fi
 
 # check ncc.h features
 ncc_sanitize_address="yes"
+ndef_restrict="yes"
+ndef_static_assert="yes"
 . ${POSIX_ROOT}/ncstd_auto
 
 
