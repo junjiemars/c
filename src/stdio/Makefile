@@ -87,6 +87,7 @@ $(stdio_basic_cppout): $(stdio_root)/basic/b.c
 # binary I/O
 stdio_binary_basic_binout := $(bin_path)/$(stdio_prefix)_binary_basic$(bin_ext)
 stdio_binary_array_binout := $(bin_path)/$(stdio_prefix)_binary_array$(bin_ext)
+stdio_binary_rect_file := $(tmp_path)/$(stdio_prefix)_binary_rect.file
 stdio_binary_sassy_file := $(tmp_path)/$(stdio_prefix)_binary_sassy.file
 
 stdio_binary: stdio_binary_basic                \
@@ -96,8 +97,9 @@ stdio_binary_test: stdio_binary_basic_test      \
 
 stdio_binary_basic: $(stdio_binary_basic_binout)
 stdio_binary_basic_test: stdio_binary_basic
-	$(stdio_binary_basic_binout) "w*h" "0x11220000" "0x00003344"
-	$(stdio_binary_basic_binout)
+	$(stdio_binary_basic_binout) $(stdio_binary_rect_file)  \
+    "w*h" "0x11220000" "0x00003344"
+	$(stdio_binary_basic_binout) $(stdio_binary_rect_file)
 
 stdio_binary_array: $(stdio_binary_array_binout)
 stdio_binary_array_test: stdio_binary_array

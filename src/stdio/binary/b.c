@@ -1,19 +1,5 @@
 #include "_stdio_.h"
 
-
-/* #ifdef MSVC */
-/* #  include <windows.h> */
-/* #  include <tchar.h> */
-/* #  define PATH_MAX MAX_PATH */
-/* #else */
-/* #  ifdef LINUX */
-/* #    include <linux/limits.h> */
-/* #  else */
-/* #    include <limits.h> */
-/* #  endif */
-/* #  include <libgen.h> */
-/* #endif */
-
 #define NAME_SIZE  16
 
 
@@ -25,26 +11,42 @@ typedef struct rect_s
 
 } rect_s;
 
-extern char  *dirname(char *path);
-extern char  *basename(char *path);
 
-void  out(const rect_s *rect, const char *where);
-void  in(rect_s *rect, const char *where);
+static void  out(const rect_s *, const char *);
+static void  in(rect_s *, const char *);
 
 
-/* #ifdef MSVC */
-/* char* */
-/* dirname(char *path) */
-/* { */
-/*   static TCHAR d[PATH_MAX + 1], *b; */
-/*   if (0 == GetFullPathName(path, _countof(d), d, &b)) */
-/*     { */
-/*       return 0; */
-/*     } */
-/*   b[-1] = 0; /\* remove '/basename' part *\/ */
-/*   return d; */
-/* } */
-/* #endif /\* end of MSVC *\/ */
+int
+main(int argc, char **argv)
+{
+  char    *pathname;
+  rect_s   rect  =  {0};
+
+  if (argc < 2)
+    {
+      fprintf(stderr, "usage: <pathname> [name] [width] [height]\n");
+      exit(EXIT_FAILURE);
+    }
+  pathname = argv[1];
+
+  if (argc < 5)
+    {
+      /* read from binary file */
+      in(&rect, pathname);
+    }
+  else
+    {
+      strncpy(rect.name, argv[2], NAME_SIZE-1);
+      rect.width = (int) strtol(argv[3], 0, 16);
+      rect.height = (int) strtol(argv[4], 0, 16);
+
+      /* write to binary file */
+      out(&rect, pathname);
+    }
+
+  exit(EXIT_SUCCESS);
+}
+
 
 void
 out(const rect_s *rect, const char *where)
@@ -56,7 +58,7 @@ out(const rect_s *rect, const char *where)
       return;
     }
 
-  size_t len = fwrite((char*)rect, 1, sizeof(rect_s), f);
+  size_t len = fwrite((char*) rect, 1, sizeof(rect_s), f);
 
   if (ferror(f))
     {
@@ -85,7 +87,7 @@ in(rect_s *rect, const char *where)
       return;
     }
 
-  size_t len = fread((char*)rect, 1, sizeof(rect_s), f);
+  size_t len = fread((char*) rect, 1, sizeof(rect_s), f);
 
   if (ferror(f))
     {
@@ -110,32 +112,4 @@ rect_s:{\n\
 
  clean_exit:
   fclose(f);
-}
-
-int
-main(int argc, char **argv)
-{
-  char filename[PATH_MAX];
-  rect_s rect;
-  memset(&rect, 0, sizeof(rect));
-  char *pathname = dirname(dirname(argv[0]));
-  strcpy(filename, pathname);
-  strcat(filename, "/tmp/rect_s.bin");
-
-  if (argc < 4)
-    {
-      /* read from binary file */
-      in(&rect, filename);
-    }
-  else
-    {
-      /* write to binary file */
-      strncpy(rect.name, argv[1], NAME_SIZE-1);
-      rect.width = (int)strtol(argv[2], 0, 16);
-      rect.height = (int)strtol(argv[3], 0, 16);
-
-      out(&rect, filename);
-    }
-
-  return 0;
 }
