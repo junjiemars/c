@@ -48,9 +48,9 @@
 #endif  /* restrict */
 
 
-#if !(NM_HAVE_STATIC_ASSERT)
+#if !(NM_HAVE_STATIC_ASSERT || NM_HAVE__STATIC_ASSERT)
 #  define static_assert(e, m)  enum {static_assert = 1/!!((e) && (m))}
-#else
+#elif (NM_HAVE__STATIC_ASSERT)
 #  if !defined(static_assert)
 #    define static_assert  _Static_assert
 #  endif

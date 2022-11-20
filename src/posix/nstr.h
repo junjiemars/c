@@ -16,4 +16,12 @@
 #endif  /* strdup */
 
 
+#if (WINNT)
+#  if !defined(strerror_r)
+#    define strerror_r(e, b, s)  strerror_s((b), (s), (e))
+#  endif
+#endif  /* strerror_r */
+
+
+
 #endif /* end of _NSTR_H_ */

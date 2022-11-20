@@ -1,13 +1,5 @@
-#include <_lang_.h>
+#include "_lang_.h"
 
-/* #if (LINUX) */
-/* #  if defined(_GNU_SOURCE) */
-/* #    undef _GNU_SOURCE */
-/* #  endif  /\* _GNU_SOURCE *\/ */
-/* #  include <errno.h> */
-/* #else */
-/* #  include <errno.h> */
-/* #endif  /\* LINUX *\/ */
 
 #define BUF_SIZE  1024
 
