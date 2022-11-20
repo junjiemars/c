@@ -4,7 +4,7 @@
 */
 
 #if (DARWIN && CLANG)
-#  pragma clang diagnostic ignored "-Wunused"
+#  pragma clang diagnostic ignored "-Wunused-variable"
 #endif
 
 #include <stdio.h>

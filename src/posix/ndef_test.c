@@ -112,16 +112,22 @@ test_alignas(void)
 #undef _m_
 }
 
-#if (NM_HAVE_GENERIC)
+
 void
 test_generic(void)
 {
+#if !(NM_HAVE_GENERIC)
+  printf("%s: no `generic' found\n", __FUNCTION__);
+#else
+
 #define _tn_(x)  generic((x), int: 1, double: 2, default: 3)
   static_assert(1 == _tn_(0), "int");
   static_assert(2 == _tn_(0.1), "double");
 #undef _tn_
-}
+
 #endif
+}
+
 
 
 void

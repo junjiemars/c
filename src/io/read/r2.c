@@ -10,9 +10,10 @@ static char  buf_big[BUF_BIG];
 int
 main(void)
 {
-  ssize_t       n, offset;
-  struct stat   ss;
-  struct iovec  iov_small[BUF_FACTOR], iov_big[BUF_FACTOR];
+  ssize_t                         n;
+  __attribute__((unused) ssize_t  offset;
+  struct stat                     ss;
+  struct iovec                    iov_small[BUF_FACTOR], iov_big[BUF_FACTOR];
 
   if (fstat(STDIN_FILENO, &ss) == -1)
     {
