@@ -2,6 +2,7 @@
 
 #if (MSVC)
 #  pragma warning(disable: 4456)
+#  pragma warning(disable: 4189)
 #elif (GCC)
 #  pragma GCC diagnostic ignored "-Wunused-variable"
 #  pragma GCC diagnostic ignored "-Wunused-parameter"
