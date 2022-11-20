@@ -11,7 +11,7 @@ int
 main(void)
 {
   ssize_t                         n;
-  __attribute__((unused) ssize_t  offset;
+  __attribute__((unused)) ssize_t  offset;
   struct stat                     ss;
   struct iovec                    iov_small[BUF_FACTOR], iov_big[BUF_FACTOR];
 

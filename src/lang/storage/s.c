@@ -7,6 +7,7 @@
 #  pragma GCC diagnostic ignored "-Wunused-variable"
 #elif (CLANG)
 #  pragma clang diagnostic ignored "-Wunused-variable"
+#  pragma clang diagnostic ignored "-Wunused-parameter"
 #endif
 
 

@@ -39,15 +39,15 @@ test_open_file(const char *filename)
       snprintf(buf, BUF_SIZE, "!panic, open %s", filename);
       perror(buf);
 
-      int r = strerror_r(e, buf, sizeof(buf));
-      if (0 == r)
-        {
-          fprintf(stderr, "!panic, strerror_r, \"%s\"\n", buf);
-        }
-      else
-        {
-          fprintf(stderr, "#!panic, strerror, \"%s\"\n", strerror(r));
-        }
+      /* int r = strerror_r(e, buf, sizeof(buf)); */
+      /* if (0 == r) */
+      /*   { */
+      /*     fprintf(stderr, "!panic, strerror_r, \"%s\"\n", buf); */
+      /*   } */
+      /* else */
+      /*   { */
+      /*     fprintf(stderr, "#!panic, strerror, \"%s\"\n", strerror(r)); */
+      /*   } */
     }
 
  clean_exit:

@@ -15,7 +15,6 @@ ctl: ctl_deq                                    \
      ctl_str                                    \
      ctl_ust                                    \
      ctl_vec                                    \
-     ctl_prefix                                 \
      ctl_eg_astar                               \
      ctl_eg_json
 
@@ -28,7 +27,6 @@ ctl_test: ctl_deq_test                          \
           ctl_str_test                          \
           ctl_ust_test                          \
           ctl_vec_test                          \
-          ctl_prefix_test                       \
           ctl_eg_astar_test                     \
           ctl_eg_json_test
 
@@ -60,7 +58,7 @@ clean_ctl_home:
 ctl_objout := $(tmp_path)/$(ctl_prefix)$(obj_ext)
 
 $(ctl_objout): $(ctl_root)/_ctl_.c
-	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
 
 # deq
@@ -196,15 +194,19 @@ $(ctl_ust_cppout): $(ctl_root)/ust/ust1.c
 
 # vec
 ctl_vec_binout := $(bin_path)/$(ctl_prefix)_vec$(bin_ext)
+ctl_vec_objout := $(tmp_path)/$(ctl_prefix)_vec$(obj_ext)
 ctl_vec_cppout := $(tmp_path)/$(ctl_prefix)_vec$(cpp_ext)
 
 ctl_vec: $(ctl_home) $(ctl_vec_binout)
 ctl_vec_test: ctl_vec
 	$(ctl_vec_binout)
 
-$(ctl_vec_binout): $(ctl_vec_cppout)            \
+$(ctl_vec_binout): $(ctl_vec_objout)            \
                    $(ctl_objout)
-	$(CC) $(CFLAGS) $^ $(obj_out)$@
+	$(LINK) $(CFLAGS) $^ $(obj_out)$@
+
+$(ctl_vec_objout): $(ctl_vec_cppout)
+	$(CC) $(CFLAGS) $(nm_stage_c) $^ $(obj_out)$@
 
 $(ctl_vec_cppout): $(ctl_root)/vec/vec1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
