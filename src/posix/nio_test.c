@@ -125,15 +125,15 @@ test_dirname(void)
 #if (WINNT)
   char  *ss[]  =  {"/a/b/c"};
 #elif (LINUX)
-  char  *ss[]  =  {"/a/b/c"};
+  char  *ss[]  =  {"a", "a/b", "/a/b/c", NULL};
 #else
-  char  *ss[]  =  {"/", "a", "a/", "/a/b/c", NULL};
+  char  *ss[]  =  {"/", "a", "a/", "a/b", "/a/b/c", NULL};
 #endif
 
   for (size_t i = 0; i < _nof_(ss); i++)
     {
       char *s = (ss[i] == NULL) ? NULL : strdup(ss[i]);
-      char *n = dirname(ss[i]);
+      char *n = dirname(s);
       printf("dirname(\"%s\") = \"%s\"\n", s, n);
       free(s);
     }
@@ -163,7 +163,7 @@ test_basename(void)
 #if (WINNT)
   char  *ss[]  =  {"/a/b/c"};
 #elif (LINUX)
-  char  *ss[]  =  {"/a/b/c"};
+  char  *ss[]  =  {"a", "a/b", "/a/b/c", NULL};
 #else
   char  *ss[]  =  {"/", "a", "a/", "/a/b/c", NULL};
 #endif
