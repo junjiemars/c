@@ -7,10 +7,12 @@
 #  pragma GCC diagnostic ignored "-Wunused-variable"
 #  pragma GCC diagnostic ignored "-Wunused-parameter"
 #  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#  pragma GCC diagnostic ignored "-Wunused-function"
 #elif (CLANG)
 #  pragma clang diagnostic ignored "-Wunused-variable"
 #  pragma clang diagnostic ignored "-Wunused-parameter"
 /* #  pragma clang diagnostic ignored "-Wunused-but-set-variable" */
+#  pragma clang diagnostic ignored "-Wunused-function"
 #endif
 
 
