@@ -87,6 +87,7 @@ register_storage_class(register int x)
 
   i = x;
 	assert(i == x);
+  (void) i;
 
 	/* error: address of register variable requested */
 	/* int *p = &i; */
