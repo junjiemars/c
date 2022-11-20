@@ -4,17 +4,16 @@
 
 #include <nustd.h>
 #include <nlim.h>
-
-
-#if (MSVC)
-#  pragma warning(disable:4996)
-#endif  /* _CRT_SECURE_NO_WARNINGS */
-
-
 #include <stdio.h>
 
 
+#if (MSVC)
+#  pragma warning(disable: 4996)  /* _CRT_SECURE_NO_WARNINGS */
+#endif
+
+
 #if !(NM_HAVE_GETDELIM)
+
 
 ssize_t getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
                  FILE * restrict stream);
@@ -25,7 +24,7 @@ ssize_t getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
 
 #  define getline(lp, n, f)  getdelim((lp), (n), 0x0a, (f))
 
-#endif  /* end of getdelim */
+#endif  /* getdelim */
 
 
 #if (MSVC) && (NM_HAVE_FILENO)
