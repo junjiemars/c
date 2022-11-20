@@ -16,7 +16,7 @@
 
 static void automatic_storage_class(void);
 static void static_storage_class(void);
-static void array_decay(char *);
+static void array_decay(char *restrict);
 static void register_storage_class(register int x);
 static void external_storage_class(void);
 
@@ -72,7 +72,7 @@ automatic_storage_class(void)
 
 
 void
-array_decay(char *a)
+array_decay(char *restrict a)
 {
 	assert(a[0] == 0x11);
 }
@@ -111,6 +111,7 @@ static_storage_class(void)
     f_int = 0;
 
     assert(x == i);
+    (void) x;
 
     f_int++;
     i++;
