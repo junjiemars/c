@@ -1,5 +1,4 @@
 #include "nio.h"
-#include "nstr.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -119,14 +118,11 @@ test_dirname(void)
 
   extern char  *_libgen_(char *, int);
 
-  /* char *ss[] = {NULL, "", "/", "a", "a/", "/a/b/c"}; */
-  char *ss[] = {"a", "a/", "/a/b/c"};
+  char ss[][64] = {"", "/", "a", "a/", "/a/b/c"};
   for (size_t i = 0; i < _nof_(ss); i++)
     {
-      char *s = ss[i] != NULL ? strdup(ss[i]) : NULL;
-      char *n = dirname(s);
-      printf("dirname(\"%s\") = \"%s\"\n", s, n);
-      free(s);
+      char *n = dirname(ss[i]);
+      printf("dirname(\"%s\") = \"%s\"\n", ss[i], n);
     }
 
 #endif  /* dirname */
@@ -147,14 +143,11 @@ test_basename(void)
 
   extern char  *_libgen_(char *, int);
 
-  /* char *ss[] = {NULL, "", "/", "a", "a/", "/a/b/c"}; */
-  char *ss[] = {"/a/b/c"};
+  char ss[][64] = {"", "/", "a", "a/", "/a/b/c"};
   for (size_t i = 0; i < _nof_(ss); i++)
     {
-      char *s = ss[i] != NULL ? strdup(ss[i]) : NULL;
-      char *b = basename(s);
-      printf("basename(\"%s\") = \"%s\"\n", s, b);
-      free(s);
+      char *b = basename(ss[i]);
+      printf("basename(\"%s\") = \"%s\"\n", ss[i], b);
     }
 
 #endif  /* basename */
