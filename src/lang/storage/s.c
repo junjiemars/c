@@ -1,12 +1,12 @@
-#include <_lang_.h>
+#include "_lang_.h"
 
 
 #if (MSVC)
 #  pragma warning(disable: 4456)
 #elif (GCC)
-#  pragma GCC diagnostic ignored "-Wunused"
+#  pragma GCC diagnostic ignored "-Wunused-variable"
 #elif (CLANG)
-#  pragma clang diagnostic ignored "-Wunused"
+#  pragma clang diagnostic ignored "-Wunused-variable"
 #endif
 
 

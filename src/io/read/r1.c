@@ -9,8 +9,9 @@ static char  buf_big[BUF_BIG];
 int
 main(void)
 {
-  ssize_t      n, offset;
-  struct stat  ss;
+  ssize_t                          n;
+  __attribute__((unused)) ssize_t  offset;
+  struct stat                      ss;
 
   if (fstat(STDIN_FILENO, &ss) == -1)
     {

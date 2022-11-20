@@ -14,8 +14,9 @@ ncc_cpu_endian="yes"
 ndef_restrict="yes"
 ndef_static_assert="yes"
 ndef_va_args="yes"
+nustd_ssize_t="yes"
 # check ncstd.h features
-. ${POSIX_ROOT}/ncstd_auto
+. ${POSIX_ROOT}/nustd_auto
 
 
 echo "checking for {lang} ..."
