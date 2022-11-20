@@ -36,17 +36,6 @@
 
 
 
-#if defined(__FUNCTION__)
-#  if !(NM_HAVE___FUNC__)
-#    undef __FUNCTION__
-#  endif
-#  define __FUNCTION__
-#elif (NM_HAVE___FUNC__)
-#  define __FUNCTION__  __func__
-#endif  /* __func__ */
-
-
-
 #if !(NM_HAVE_RESTRICT)
 #  if (NM_HAVE___RESTRICT)
 #    if defined(restrict)
