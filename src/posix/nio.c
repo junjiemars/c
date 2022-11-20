@@ -104,14 +104,16 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
 #include <tchar.h>
 #include <string.h>
 
-static inline char *
+static char *
 _getfullpathname_(char *path, int dir)
 {
   static TCHAR d[NM_PATH_MAX + 1], *b;
 
-  if (path == NULL)
+  if (path == NULL || strcmp(path, "") == 0)
     {
-      return _strdup(".");
+      d[0] = '.';
+      d[1] = 0;
+      return d;
     }
 
   if (0 == GetFullPathName(path, _nof_(d), d, &b))
