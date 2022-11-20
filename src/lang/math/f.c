@@ -162,7 +162,9 @@ test_cmp_double(void)
   assert(lessequal || greaterequal);
   assert(less && greater);
 
-  int less1, greater1, lessgreater1;
+  __attribute__((unused)) int  less1;
+  __attribute__((unused)) int  greater1;
+  __attribute__((unused)) int  lessgreater1;
   double lg1 = 0.1, lg2 = 0.2, lg3 = 0.3001;
   less1 = isless(lg3, lg1+lg2);
   greater1 = isgreater(lg3, lg1+lg2);
@@ -214,7 +216,10 @@ void
 test_double_equal(void)
 {
   double d1 = 0.1, d2 = 0.2, d3 = 0.3;
-  int le, ge, l, g;
+  __attribute__((unused)) int  le;
+  __attribute__((unused)) int  ge;
+  __attribute__((unused)) int  l;
+  __attribute__((unused)) int  g;
 
   le = islessequal(d1+d2, d3);
   ge = isgreaterequal(d1+d2, d3);

@@ -10,7 +10,6 @@ lang: lang_array                                \
       lang_env                                  \
       lang_error                                \
       lang_exit                                 \
-      lang_exec                                 \
       lang_fn                                   \
       lang_goto                                 \
       lang_iso646                               \
@@ -48,7 +47,6 @@ lang_test:  lang_array_test                     \
             lang_env_test                       \
             lang_error_test                     \
             lang_exit_test                      \
-            lang_exec_test                      \
             lang_fn_test                        \
             lang_goto_test                      \
             lang_iso646_test                    \
@@ -229,21 +227,6 @@ $(lang_exit_binout): $(lang_root)/exit/e.c
 $(lang__exit_binout): $(lang_root)/exit/e1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-
-# exec
-lang_exec_binout := $(bin_path)/$(lang_prefix)_exec$(bin_ext)
-lang_exec_target := $(CURDIR)/$(lang_root)/exec/x.sh
-
-ifeq (WinNT, $(NM_SYSTEM))
-lang_exec_target := $(CURDIR)/$(lang_root)/exec/x.bat
-endif # WinNT
-
-lang_exec: $(lang_exec_binout)
-lang_exec_test: lang_exec
-	$(lang_exec_binout) $(lang_exec_target) a bb ccc
-
-$(lang_exec_binout): $(lang_root)/exec/ve.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # fn

@@ -113,8 +113,10 @@ test_lst_str(void)
 void
 test_lst_image(void)
 {
-  lst_image a = lst_image_init();
-  for(size_t i = 0; i < 5; i++)
+  size_t     i;
+  lst_image  a  =  lst_image_init();
+
+  for (i = 0; i < 5; i++)
     {
       lst_image_push_back(&a, image_read());
     }

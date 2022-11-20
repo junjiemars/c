@@ -10,11 +10,11 @@
 #define ON   0
 #define OFF  1
 
-static int turn_fd_flags(int, int, int);
-static int has_fd_flags(int, int);
+__attribute__((unused)) static int turn_fd_flags(int, int, int);
+__attribute__((unused)) static int has_fd_flags(int, int);
 
-static int turn_file_flags(int, int, int);
-static int has_file_flags(int, int);
+__attribute__((unused)) static int turn_file_flags(int, int, int);
+__attribute__((unused)) static int has_file_flags(int, int);
 
 int
 main(int argc, char **argv)
