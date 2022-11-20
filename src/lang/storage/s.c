@@ -93,8 +93,9 @@ register_storage_class(register int x)
   assert(sizeof(a)/sizeof(*a) == 4);
 
 
+#if !(GCC && LINUX)
 	array_decay(a);
-
+#endif  /* error: address of register variable ‘a’ requested */
 }
 
 
