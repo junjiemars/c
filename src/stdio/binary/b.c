@@ -58,7 +58,7 @@ out(const rect_s *rect, const char *where)
       return;
     }
 
-  size_t len = fwrite((char*) rect, 1, sizeof(rect_s), f);
+  size_t len = fwrite(rect, sizeof(*rect), 1, f);
 
   if (ferror(f))
     {
@@ -67,11 +67,7 @@ out(const rect_s *rect, const char *where)
       goto clean_exit;
     }
 
-  if (sizeof(rect_s) != len)
-    {
-      fprintf(stderr, "!panic: write %zu bytes, but expect %zu bytes\n",
-              len, sizeof(rect_s));
-    }
+  assert(len == 1);
 
  clean_exit:
   fclose(f);
@@ -87,7 +83,7 @@ in(rect_s *rect, const char *where)
       return;
     }
 
-  size_t len = fread((char*) rect, 1, sizeof(rect_s), f);
+  size_t len = fread(rect, sizeof(*rect), 1, f);
 
   if (ferror(f))
     {
@@ -96,12 +92,7 @@ in(rect_s *rect, const char *where)
       goto clean_exit;
     }
 
-  if (sizeof(rect_s) != len)
-    {
-      fprintf(stderr, "!panic: read %zu bytes, but expect %zu bytes\n",
-              len, sizeof(rect_s));
-      goto clean_exit;
-    }
+  assert(len == 1);
 
   fprintf(stdout,"\
 rect_s:{\n\
