@@ -6,29 +6,35 @@
 
 
 #if (MSVC)
-#  pragma warning(disable:4996)
+#  pragma warning(disable: 4996)
 #endif
 
 
-static void test_strdup(char*);
+static void test_strdup(void);
 
 
 int
-main(__attribute__((unused)) int argc, char **argv)
+main(void)
 {
-  test_strdup(argv[0]);
+  test_strdup();
 
   return 0;
 }
 
 
 void
-test_strdup(char *s)
+test_strdup(void)
 {
-  char  *ss  =  NULL;
+#if !(NM_HAVE_STRDUP)
+  printf();
 
-  ss = strdup(s);
-  assert(strcmp(s, ss) == 0);
+#else
+  char  *s1  =  "abc";
+  char  *s2;
+  s2 = strdup(s1);
+  assert(strcmp(s1, s2) == 0);
 
-  free(ss);
+  free(s2);
+#endif  /* strdup */
+
 }
