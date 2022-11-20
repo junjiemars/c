@@ -118,8 +118,8 @@ test_dirname(void)
 
   extern char  *_libgen_(char *, int);
 
-  char *ss[] = {NULL, "", "/", "a", "a/", "/a/b/c"};
-  /* char *ss[] = {"/a/b/c"}; */
+  /* char *ss[] = {NULL, "", "/", "a", "a/", "/a/b/c"}; */
+  char *ss[] = {"/a/b/c", "/1/2/3"};
   for (size_t i = 0; i < _nof_(ss); i++)
     {
       char *s = ss[i] != NULL ? strdup(ss[i]) : NULL;
