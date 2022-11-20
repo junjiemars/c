@@ -6,8 +6,11 @@
  * https://pubs.opengroup.org/onlinepubs/9699919799/functions/getdelim.html
  *
  * 2. `dirname(3)'.
+ * https://pubs.opengroup.org/onlinepubs/9699919799/functions/dirname.html
  *
  * 3. `basename(3)'.
+ * https://pubs.opengroup.org/onlinepubs/9699919799/functions/basename.html
+ *
  *
 */
 
@@ -100,7 +103,7 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
 #include <windows.h>
 #include <tchar.h>
 
-static char *
+static inline char *
 _getfullpathname_(char *path, int dir)
 {
   static TCHAR d[NM_PATH_MAX + 1], *b;

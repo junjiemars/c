@@ -1,5 +1,6 @@
 #include "nio.h"
 #include <stdlib.h>
+#include <string.h>
 
 
 static void test_getline(FILE *);
@@ -129,9 +130,14 @@ test_dirname(void)
 
   extern char  *dirname(char *);
 
-  char s[] = "/a/b/c";
-  char *n = dirname(s);
-  printf("dirname(\"%s\") = \"%s\"\n", s, n);
+  char *ss[] = {NULL, "", "/", "a", "a/", "/a/b/c"};
+  for (size_t i = 0; i < _nof_(ss); i++)
+    {
+      char *s = ss[i] != NULL ? strdup(ss[i]) : NULL;
+      char *n = dirname(s);
+      printf("dirname(\"%s\") = \"%s\"\n", s, n);
+      free(s);
+    }
 
 #endif  /* dirname */
 
@@ -155,9 +161,14 @@ test_basename(void)
 
   extern char  *basename(char *);
 
-  char s[] = "/a/b/c";
-  char *b = basename(s);
-  printf("basename(\"%s\") = \"%s\"\n", s, b);
+  char *ss[] = {NULL, "", "/", "a", "a/", "/a/b/c"};
+  for (size_t i = 0; i < _nof_(ss); i++)
+    {
+      char *s = ss[i] != NULL ? strdup(ss[i]) : NULL;
+      char *b = basename(s);
+      printf("basename(\"%s\") = \"%s\"\n", s, b);
+      free(s);
+    }
 
 #endif  /* basename */
 
