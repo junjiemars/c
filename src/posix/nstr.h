@@ -8,6 +8,9 @@
 
 #if (NM_HAVE_STRDUP)
 #  if (MSVC)
+#    if defined(strdup)
+#      undef  strdup
+#    endif
 #    define strdup  _strdup
 #  endif
 #endif  /* strdup */
