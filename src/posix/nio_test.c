@@ -134,7 +134,7 @@ test_dirname(void)
     {
       char *s = (ss[i] == NULL) ? NULL : strdup(ss[i]);
       char *n = dirname(s);
-      printf("dirname(\"%s\") = \"%s\"\n", s, n);
+      printf("dirname(\"%s\") = \"%s\"\n", ss[i], n);
       free(s);
     }
 
@@ -172,7 +172,7 @@ test_basename(void)
     {
       char *s = (ss[i] == NULL) ? NULL : strdup(ss[i]);
       char *b = basename(s);
-      printf("basename(\"%s\") = \"%s\"\n", s, b);
+      printf("basename(\"%s\") = \"%s\"\n", ss[i], b);
       free(s);
     }
 
