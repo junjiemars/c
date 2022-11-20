@@ -4,6 +4,13 @@
 #include <string.h>
 #include <math.h>
 
+#if (GCC && WINNT)
+extern double  trunc(double);
+extern double  floor(double);
+extern double  ceil(double);
+extern double  round(double);
+#endif
+
 int
 main(void)
 {

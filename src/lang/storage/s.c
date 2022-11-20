@@ -10,7 +10,7 @@
 #elif (CLANG)
 #  pragma clang diagnostic ignored "-Wunused-variable"
 #  pragma clang diagnostic ignored "-Wunused-parameter"
-#  pragma clang diagnostic ignored "-Wunused-but-set-variable"
+/* #  pragma clang diagnostic ignored "-Wunused-but-set-variable" */
 #endif
 
 

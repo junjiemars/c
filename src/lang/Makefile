@@ -303,11 +303,19 @@ lang_linkage_lnk_objout := $(tmp_path)/$(lang_prefix)_linkage_lnk$(obj_ext)
 lang_linkage_c_objout := $(tmp_path)/$(lang_prefix)_linkage_c$(obj_ext)
 lang_linkage_whole_binout := $(bin_path)/$(lang_prefix)_linkage_whole$(bin_ext)
 
+
+
+ifeq ($(NM_SYSTEM), WinNT)
+lang_linkage:
+	@echo "skip ..."
+lang_linkage_test: lang_linkage
+else
 # has_sanitize conflict
 lang_linkage: $(lang_linkage_lnkc_binout)       \
               $(lang_linkage_whole_binout)
 lang_linkage_test: lang_linkage_lnkc_test       \
                    lang_linkage_whole_test
+endif
 
 lang_linkage_lnkc_test: $(lang_linkage_lnkc_binout)
 	$(lang_linkage_lnkc_binout)
