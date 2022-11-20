@@ -7,7 +7,7 @@ int cmp_str(const void *a, const void*b);
 
 void print_list_int(list_s *const s);
 void print_list_str(list_s *const s);
- 
+
 int
 cmp_int(const void *a, const void *b)
 {
@@ -66,7 +66,7 @@ test_list_int(void) {
   for (size_t i = 0; i < sizeof(ss)/sizeof(ss[0]); i++) {
     n = list_insert(s, &ss[i]);
     if (!n) {
-      fprintf(stderr, "insert failed\n");
+      fprintf(stderr, "insert wrong\n");
       goto clean_exit;
     }
     printf("%8s %16i  at %p\n", "insert", *(int*)n->data, n->data);
@@ -93,7 +93,7 @@ test_list_int(void) {
   if (list_remove(s, n)) {
     printf("%8s %16i  at %p\n", "remove", f, &f);
   } else {
-    printf("%8s %16i  failed\n", "remove", f);
+    printf("%8s %16i  wrong\n", "remove", f);
   }
 
   f = 1;
@@ -101,10 +101,10 @@ test_list_int(void) {
   if (n) {
     printf("%8s %16i  at %p\n", "insert", *(int*)n->data, n->data);
   } else {
-    printf("%8s %16i  failed\n", "insert", f);
+    printf("%8s %16i  wrong\n", "insert", f);
   }
-  
-  print_list_int(s);  
+
+  print_list_int(s);
 
  clean_exit:
   list_free(s);
@@ -124,13 +124,13 @@ test_list_str(void) {
 
   printf("lists[sort|str]: insert/find/remove\n");
   printf("---------------------\n");
-  
+
   char **p = ss;
   node_s *n;
   while (*p) {
     n = list_insert(s, p++);
     if (!n) {
-      fprintf(stderr, "insert failed\n");
+      fprintf(stderr, "insert wrong\n");
       goto clean_exit;
     }
     printf("%8s %16s  at %p\n", "insert", *(char**)n->data, n->data);
@@ -157,7 +157,7 @@ test_list_str(void) {
   if (list_remove(s, n)) {
     printf("%8s %16s  at %p\n", "remove", f, &f);
   } else {
-    printf("%8s %16s failed\n", "remove", f);
+    printf("%8s %16s wrong\n", "remove", f);
   }
 
   f = "a";
@@ -165,7 +165,7 @@ test_list_str(void) {
   if (n) {
     printf("%8s %16s  at %p\n", "insert", *(char**)n->data, n->data);
   } else {
-    printf("%8s %16s  failed\n", "insert", f);
+    printf("%8s %16s  wrong\n", "insert", f);
   }
 
   print_list_str(s);

@@ -2,6 +2,7 @@
 #define _LANG_H_
 
 #include <ncstd.h>
+#include <nasrt.h>
 
 #include <stdio.h>
 #include <stdlib.h>

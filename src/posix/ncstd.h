@@ -30,4 +30,17 @@ do                                                  \
 } while (0)
 
 
+#if (WINNT)
+#  if defined(setenv)
+#    undef  setenv
+#  endif
+#  define setenv(n, v, _)  _putenv_s((n), (v))
+
+#  if defined(unsetenv)
+#    undef  unsetenv
+#  endif
+#  define unsetenv(n)   _putenv_s((n), "");
+#endif  /* setenv, unsetenv */
+
+
 #endif /* _NCSTD_H_ */

@@ -42,7 +42,7 @@ test_stack_push_pop_int(stack_s *s)
       int *one = stack_push(s, &i);
       if (0 == one)
         {
-          fprintf(stderr, "push failed\n");
+          fprintf(stderr, "push wrong\n");
           break;
         }
       printf("%8s %16i\n", "push", i);
@@ -51,7 +51,7 @@ test_stack_push_pop_int(stack_s *s)
   printf("---------------------\n");
   if (0 == stack_peek(s, &i))
     {
-      fprintf(stderr, "peek failed\n");
+      fprintf(stderr, "peek wrong\n");
     }
   printf("%8s %16i\n", "peek", i);
 
@@ -62,7 +62,7 @@ test_stack_push_pop_int(stack_s *s)
     int *empty = stack_pop(s, &k);
     if (0 == empty)
       {
-        fprintf(stderr, "pop failed, empty\n");
+        fprintf(stderr, "pop wrong, empty\n");
         break;
       }
     printf("%8s %16i\n", "pop", k);
@@ -79,7 +79,7 @@ test_stack_new_free_str()
 
   s2 = stack_new(NULL, 4, sizeof(char*), NULL);
   stack_free(s2);
-  
+
   stack_new(&s1, 4, sizeof(char*), NULL);
   stack_free(&s1);
 }
@@ -94,13 +94,13 @@ test_stack_push_pop_str(stack_s *s)
   stack_new(s, 4, sizeof(char*), NULL);
   printf("stack str push/pop [%zu/%zu]\n", sizeof(ss)/sizeof(*ss), s->n);
   printf("---------------------\n");
-  
+
   for (i = 0; i < sizeof(ss)/sizeof(ss[0]); i++)
     {
       char *one = stack_push(s, &ss[i]);
       if (0 == one)
         {
-          fprintf(stderr, "push failed\n");
+          fprintf(stderr, "push wrong\n");
           break;
         }
       printf("%8s %16s\n", "push", ss[i]);
@@ -109,7 +109,7 @@ test_stack_push_pop_str(stack_s *s)
   printf("---------------------\n");
   if (0 == stack_peek(s, &buf))
     {
-      fprintf(stderr, "peek failed\n");
+      fprintf(stderr, "peek wrong\n");
     }
   printf("%8s %16s\n", "peek", buf);
 
@@ -120,7 +120,7 @@ test_stack_push_pop_str(stack_s *s)
       char *empty = stack_pop(s, &buf);
       if (0 == empty)
         {
-          fprintf(stderr, "pop failed, empty\n");
+          fprintf(stderr, "pop wrong, empty\n");
           break;
         }
       printf("%8s %16s\n", "pop", buf);
@@ -153,7 +153,7 @@ test_stack_push_pop_ptr(stack_s *s)
 
       if (NULL == stack_push(s, &one))
         {
-          fprintf(stderr, "push failed\n");
+          fprintf(stderr, "push wrong\n");
           break;
         }
       printf("%8s %16i\n", "push", i);
@@ -162,7 +162,7 @@ test_stack_push_pop_ptr(stack_s *s)
   printf("---------------------\n");
   if (NULL == stack_peek(s, &k))
     {
-      fprintf(stderr, "peek failed\n");
+      fprintf(stderr, "peek wrong\n");
     }
   printf("%8s %16i\n", "peek", *k);
 
@@ -172,7 +172,7 @@ test_stack_push_pop_ptr(stack_s *s)
     {
       if (NULL == stack_pop(s, &k))
         {
-          fprintf(stderr, "pop failed, empty\n");
+          fprintf(stderr, "pop wrong, empty\n");
           break;
         }
       printf("%8s %16i\n", "pop", *k);

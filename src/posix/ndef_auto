@@ -78,17 +78,8 @@ if [ "$ndef_static_assert" = "yes" ]; then
   nm_feature_run=yes
   nm_feature_h="#include <assert.h>"
   nm_feature_flags="$CFLAGS"
-  nm_feature_test='enum {N=5}; static_assert(N==5, "N is not equal 5");'
+  nm_feature_test='enum {N=5}; _Static_assert(N==5, "N is not equal 5");'
   . ${NORE_ROOT}/auto/feature     # end of static_assert
-  if [ "yes" != $nm_found ]; then
-	  nm_feature="_Static_assert"
-	  nm_feature_name="nm_have___static_assert"
-	  nm_feature_run=
-	  nm_feature_h=
-	  nm_feature_flags="$CFLAGS"
-	  nm_feature_test='enum {N=5}; static_assert(N==5, "N is not equal 5");'
-	  . ${NORE_ROOT}/auto/feature
-  fi
 fi
 
 

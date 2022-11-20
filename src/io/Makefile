@@ -3,7 +3,7 @@
 #
 #
 
-ifeq ($(CC_NAME), msvc)
+ifeq ($(NM_SYSTEM), WinNT)
 io:
 	@echo "#skip ..."
 io_test:

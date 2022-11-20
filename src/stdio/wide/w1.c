@@ -4,10 +4,10 @@
 int
 main(void)
 {
-  char   *ss[]  =  {_str_(stdin), _str_(stdout), _str_(stderr)};
-  FILE   *fs[]  =  {stdin, stdout, stderr};
-  char  **ps    =  NULL;
-  FILE  **pf    =  NULL;
+  char   *ss[]  =  {_str_(stdin), _str_(stdout), _str_(stderr), NULL};
+  FILE   *fs[]  =  {stdin, stdout, stderr, NULL};
+  char  **ps;
+  FILE  **pf;
 
   for (ps = ss, pf = fs; *ps && *pf; ps++, pf++)
     {

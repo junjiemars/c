@@ -53,7 +53,7 @@ test_queue_new_free_int(void)
   ints_len = 3;
   ints = malloc(sizeof(int*) * ints_len);
   assert(ints);
-  
+
   queue_new(&q, 4, sizeof(int*), free_int_ptr);
 
   for (i = 0; i < ints_len; i++)
@@ -91,7 +91,7 @@ test_queue_enq_deq_int(queue_s *const q)
       one = queue_enq(q, &i);
       if (0 == one)
         {
-          fprintf(stderr, "enq failed\n");
+          fprintf(stderr, "enq wrong\n");
           break;
         }
       printf("%8s %16i\n", "enq", *one);
@@ -101,7 +101,7 @@ test_queue_enq_deq_int(queue_s *const q)
   k = 0;
   if (0 == queue_peek(q, &k))
     {
-      fprintf(stderr, "peek failed, empty\n");
+      fprintf(stderr, "peek wrong, empty\n");
     }
   printf("%8s %16i\n", "peek", k);
 
@@ -113,7 +113,7 @@ test_queue_enq_deq_int(queue_s *const q)
       one = queue_deq(q, &k);
       if (!one)
         {
-          fprintf(stderr, "deq failed, empty\n");
+          fprintf(stderr, "deq wrong, empty\n");
           break;
         }
       printf("%8s %16i\n", "deq", k);
@@ -130,7 +130,7 @@ test_queue_new_free_str(void)
 
   q1 = queue_new(NULL, 4, sizeof(char*), NULL);
   queue_free(q1);
-  
+
   queue_new(&q2, 4, sizeof(char*), NULL);
   queue_free(&q2);
 }
@@ -145,12 +145,12 @@ test_queue_enq_deq_str(queue_s *const q)
   queue_new(q, 4, sizeof(char *), NULL);
   printf("queue str enq/deq [%zu/%zu]\n", q->n, sizeof(ss)/sizeof(*ss));
   printf("---------------------\n");
-  
+
   for (i = 0; i < sizeof(ss)/sizeof(*ss); i++)
     {
       if (NULL == queue_enq(q, &ss[i]))
         {
-          fprintf(stderr, "enq failed\n");
+          fprintf(stderr, "enq wrong\n");
           break;
         }
       printf("%8s %16s\n", "enq", ss[i]);
@@ -159,7 +159,7 @@ test_queue_enq_deq_str(queue_s *const q)
   printf("---------------------\n");
   if (NULL == queue_peek(q, &buf))
     {
-      fprintf(stderr, "peek failed\n");
+      fprintf(stderr, "peek wrong\n");
     }
   printf("%8s %16s\n", "peek", buf);
 
@@ -169,7 +169,7 @@ test_queue_enq_deq_str(queue_s *const q)
       buf = 0;
       if (NULL == queue_deq(q, &buf))
         {
-          fprintf(stderr, "deq failed, empty\n");
+          fprintf(stderr, "deq wrong, empty\n");
           break;
         }
       printf("%8s %16s\n", "deq", buf);
@@ -195,7 +195,7 @@ test_queue_realloc(queue_s *const q)
       k = 0;
       if (NULL == queue_enq(q, &k))
         {
-          fprintf(stderr, "enq failed\n");
+          fprintf(stderr, "enq wrong\n");
           break;
         }
       printf("%8s %16i\n", "enq", k);
@@ -256,7 +256,7 @@ test_queue_realloc(queue_s *const q)
       printf("%8s %16i\n", "enq", k);
     }
   print_queue(q);
-  
+
   queue_free(q);
 }
 
@@ -273,6 +273,6 @@ main(void)
   test_queue_enq_deq_str(&q);
 
   test_queue_realloc(&q);
-  
+
   return 0;
 }

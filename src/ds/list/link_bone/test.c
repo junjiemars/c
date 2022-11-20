@@ -7,7 +7,7 @@ int cmp_str(const void *a, const void*b);
 
 void print_list_int(list_s *const s);
 void print_list_str(list_s *const s);
- 
+
 int
 cmp_int(const void *a, const void *b)
 {
@@ -73,7 +73,7 @@ test_list_int(void)
       n = list_append(s, &i);
       if (!n)
         {
-          fprintf(stderr, "append failed\n");
+          fprintf(stderr, "append wrong\n");
           goto clean_exit;
         }
       printf("%8s %16i  at %p\n", "append", *(int*) n->data, (int*) n->data);
@@ -114,7 +114,7 @@ test_list_int(void)
     }
   else
     {
-      printf("%8s %16i  failed\n", "prepend", f);
+      printf("%8s %16i  wrong\n", "prepend", f);
     }
   print_list_int(s);
 
@@ -148,7 +148,7 @@ test_list_str(void)
       n = list_append(s, p++);
       if (!n)
         {
-          fprintf(stderr, "append failed\n");
+          fprintf(stderr, "append wrong\n");
           goto clean_exit;
         }
       printf("%8s %16s  at %p\n", "append", *(char**) n->data, n->data);
@@ -190,7 +190,7 @@ test_list_str(void)
     }
   else
     {
-      fprintf(stderr, "prepend failed\n");
+      fprintf(stderr, "prepend wrong\n");
     }
   print_list_str(s);
 

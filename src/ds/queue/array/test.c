@@ -35,7 +35,7 @@ test_queue_realloc(void) {
   while (i++ < n) {
     int *one = queue_enq(s, &i);
     if (0 == one) {
-      fprintf(stderr, "enq failed\n");
+      fprintf(stderr, "enq wrong\n");
       break;
     }
     printf("%8s %16i\n", "enq", i);
@@ -86,7 +86,7 @@ test_queue_realloc(void) {
     printf("%8s %16i\n", "enq", i);
   }
   print_queue(s);
-  
+
   queue_free(s);
 }
 
@@ -101,7 +101,7 @@ test_queue_enq_deq_int(void) {
   while (i++ < n) {
     int *one = queue_enq(s, &i);
     if (0 == one) {
-      fprintf(stderr, "enq failed\n");
+      fprintf(stderr, "enq wrong\n");
       break;
     }
     printf("%8s %16i\n", "enq", i);
@@ -109,7 +109,7 @@ test_queue_enq_deq_int(void) {
 
   printf("---------------------\n");
   if (0 == queue_peek(s, &i)) {
-    fprintf(stderr, "peek failed, empty\n");
+    fprintf(stderr, "peek wrong, empty\n");
   }
   printf("%8s %16i\n", "peek", i);
 
@@ -119,7 +119,7 @@ test_queue_enq_deq_int(void) {
     int k = 0;
     int *empty = queue_deq(s, &k);
     if (0 == empty) {
-      fprintf(stderr, "deq failed, empty\n");
+      fprintf(stderr, "deq wrong, empty\n");
       break;
     }
     printf("%8s %16i\n", "deq", k);
@@ -142,11 +142,11 @@ test_queue_enq_deq_str(void) {
 
   printf("queue str enq/deq [%zu/%zu]\n", s->n, sizeof(ss)/sizeof(ss[0]));
   printf("---------------------\n");
-  
+
   for (size_t i = 0; i < sizeof(ss)/sizeof(ss[0]); i++) {
     char *one = queue_enq(s, &ss[i]);
     if (0 == one) {
-      fprintf(stderr, "enq failed\n");
+      fprintf(stderr, "enq wrong\n");
       break;
     }
     printf("%8s %16s\n", "enq", ss[i]);
@@ -154,7 +154,7 @@ test_queue_enq_deq_str(void) {
 
   printf("---------------------\n");
   if (0 == queue_peek(s, &buf)) {
-    fprintf(stderr, "peek failed\n");
+    fprintf(stderr, "peek wrong\n");
   }
   printf("%8s %16s\n", "peek", buf);
 
@@ -163,7 +163,7 @@ test_queue_enq_deq_str(void) {
     buf = 0;
     char *empty = queue_deq(s, &buf);
     if (0 == empty) {
-      fprintf(stderr, "deq failed, empty\n");
+      fprintf(stderr, "deq wrong, empty\n");
       break;
     }
     printf("%8s %16s\n", "deq", buf);
@@ -178,9 +178,9 @@ main(void) {
   test_queue_new_free_int();
   test_queue_enq_deq_int();
   test_queue_realloc();
-  
+
   test_queue_new_free_str();
   test_queue_enq_deq_str();
-  
+
   return 0;
 }

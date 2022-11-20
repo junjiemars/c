@@ -39,7 +39,7 @@
 #if !(NM_HAVE_RESTRICT)
 #  if (NM_HAVE___RESTRICT)
 #    if defined(restrict)
-#      undef restrict
+#      undef  restrict
 #    endif
 #    define restrict  __restrict
 #  else
@@ -49,12 +49,9 @@
 
 
 #if !(NM_HAVE_STATIC_ASSERT)
-#  if !(NM_HAVE___STATIC_ASSERT)
-#    define static_assert(e, m)  enum {static_assert = 1/!!((e) && (m))}
-#  else
-#    if defined(static_accsert)
-#      undef static_assert
-#    endif
+#  define static_assert(e, m)  enum {static_assert = 1/!!((e) && (m))}
+#else
+#  if !defined(static_assert)
 #    define static_assert  _Static_assert
 #  endif
 #endif  /* static_assert */
@@ -89,7 +86,10 @@
 
 
 #if (NM_HAVE_GENERIC)
-#  define generic _Generic
+#  if defined(generic)
+#    undef  generic
+#  endif
+#  define generic  _Generic
 #else
 #  define generic
 #endif  /* generic */
