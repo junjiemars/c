@@ -92,10 +92,9 @@ register_storage_class(register int x)
 	register char  a[]  =  { 0x11, 0x22, 0x33, 0x44, };
   assert(sizeof(a)/sizeof(*a) == 4);
 
+  /* error: address of register variable ‘a’ requested */
+	/* array_decay(a); */
 
-#if !(GCC && LINUX)
-	array_decay(a);
-#endif  /* error: address of register variable ‘a’ requested */
 }
 
 
