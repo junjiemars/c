@@ -119,6 +119,8 @@ test_dirname(void)
 #if (NM_HAVE_DIRNAME_GETFULLPATHNAME)
   extern char  *_libgen_(char *, int);
   char  *ss[]  =  {"/a/b/c"};
+#elif (LINUX)
+  char  *ss[]  =  {"/a/b/c"};
 #else
   char  *ss[]  =  {"/", "a", "a/", "/a/b/c", NULL};
 #endif
@@ -149,6 +151,8 @@ test_basename(void)
 
 #if (NM_HAVE_BASENAME_GETFULLPATHNAME)
   extern char  *_libgen_(char *, int);
+  char  *ss[]  =  {"/a/b/c"};
+#elif (LINUX)
   char  *ss[]  =  {"/a/b/c"};
 #else
   char  *ss[]  =  {"/", "a", "a/", "/a/b/c", NULL};
