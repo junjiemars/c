@@ -122,13 +122,13 @@ test_dirname(void)
   extern char  *dirname(char *);
 #endif
 
-#if (WINNT)
-  char  *ss[]  =  {"/a/b/c"};
-#elif (LINUX)
-  char  *ss[]  =  {"a", "a/b", "/a/b/c", NULL};
-#else
+/* #if (WINNT) */
+/*   char  *ss[]  =  {"/a/b/c"}; */
+/* #elif (LINUX) */
+/*   char  *ss[]  =  {"a", "a/b", "/a/b/c", NULL}; */
+/* #else */
   char  *ss[]  =  {"/", "a", "a/", "a/b", "/a/b/c", NULL};
-#endif
+/* #endif */
 
   for (size_t i = 0; i < _nof_(ss); i++)
     {
@@ -160,13 +160,13 @@ test_basename(void)
   extern char *basename(char *);
 #endif
 
-#if (WINNT)
-  char  *ss[]  =  {"/a/b/c"};
-#elif (LINUX)
-  char  *ss[]  =  {"a", "a/b", "/a/b/c", NULL};
-#else
+/* #if (WINNT) */
+/*   char  *ss[]  =  {"/a/b/c"}; */
+/* #elif (LINUX) */
+/*   char  *ss[]  =  {"a", "a/b", "/a/b/c", NULL}; */
+/* #else */
   char  *ss[]  =  {"/", "a", "a/", "/a/b/c", NULL};
-#endif
+/* #endif */
 
   for (size_t i = 0; i < _nof_(ss); i++)
     {
