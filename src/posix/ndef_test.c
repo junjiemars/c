@@ -13,10 +13,7 @@ static void test_restrict(const int *restrict, const char *restrict);
 static void test_static_assert(void);
 static void test_alignof(void);
 static void test_alignas(void);
-
-#if (NM_HAVE_GENERIC)
 static void test_generic(void);
-#endif  /* generic */
 
 static void test_str(void);
 static void test_cat(void);
@@ -40,10 +37,7 @@ main(int argc, char **argv)
   test_static_assert();
   test_alignof();
   test_alignas();
-
-#if (NM_HAVE_GENERIC)
   test_generic();
-#endif
 
   test_str();
   test_cat();
@@ -84,7 +78,7 @@ test_fallthrough(int a)
 void
 test_restrict(const int *restrict ii, const char *restrict ss)
 {
-  printf("%s(%i, %s)\n", __FUNCTION__, *ii, ss);
+  assert(*ii > 0 && ss != NULL);
 }
 
 void
