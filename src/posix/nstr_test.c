@@ -29,11 +29,12 @@ void
 test_strdup(void)
 {
 #if !(NM_HAVE_STRDUP)
-  printf();
+  printf("%s: no `strdup' found\n", __FUNCTION__);
 
 #else
-  char  *s1  =  "abc";
-  char  *s2;
+  const char  *s1  =  "abc";
+  char        *s2;
+
   s2 = strdup(s1);
   assert(strcmp(s1, s2) == 0);
 

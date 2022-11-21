@@ -6,13 +6,11 @@
 #include <string.h>
 
 
-#if (NM_HAVE_STRDUP)
-#  if (MSVC)
-#    if defined(strdup)
-#      undef  strdup
-#    endif
-#    define strdup  _strdup
+#if (WINNT && NM_HAVE_STRDUP)
+#  if defined(strdup)
+#    undef  strdup
 #  endif
+#  define strdup  _strdup
 #endif  /* strdup */
 
 
