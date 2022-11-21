@@ -32,6 +32,7 @@ ndef_generic="yes"
 
 # check for <nstr.h>
 nstr_strdup="yes"
+nstr_strerror_r="yes"
 . ${POSIX_ROOT}/nstr_auto
 
 # check for <nint.h>

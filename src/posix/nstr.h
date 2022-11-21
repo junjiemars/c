@@ -16,10 +16,11 @@
 #endif  /* strdup */
 
 
-#if (WINNT)
-#  if !defined(strerror_r)
-#    define strerror_r(e, b, s)  strerror_s((b), (s), (e))
+#if (WINNT && NM_HAVE_STRERROR_R)
+#  if defined(strerror_r)
+#    undef  strerror_r
 #  endif
+#  define strerror_r(e, b, s)  ((int) strerror_s((b), (s), (e)))
 #endif  /* strerror_r */
 
 

@@ -20,14 +20,13 @@ fi
 . ${POSIX_ROOT}/npstd_auto
 
 
-if [    "$nstr_strdup" = "yes"                   \
+if [    "$nstr_strdup" = "yes"                  \
+     -o "$nstr_strerror_r" = "yes"              \
    ]; then
   echo "checking for nstr.h ..."
 else
   return
 fi
-
-
 
 
 
@@ -66,6 +65,41 @@ if [ "$nstr_strdup" = "yes" ]; then
       ;;
   esac
 fi
+
+
+# check strerror_r
+#----------------------------------------
+if [ "$nstr_strerror_r" = "yes" ]; then
+  case $NM_SYSTEM in
+    Linux)
+      nm_feature="strerror_r"
+      nm_feature_name="nm_have_strerror_r"
+      nm_feature_run=no
+      nm_feature_h='#include <string.h>'
+      nm_feature_flags="-D_POSIX_C_SOURCE=$_POSIX_C_SOURCE"
+      nm_feature_test='int r = strerror_r(1,0,0); (void)r;'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    WinNT)
+      nm_feature="strerror_r"
+      nm_feature_name="nm_have_strerror_r"
+      nm_feature_run=no
+      nm_feature_h='#include <string.h>'
+      nm_feature_flags=
+      nm_feature_test='int r = strerror_s(0,0,1); (void)r;'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    *)
+      nm_feature="strerror_r"
+      nm_feature_name="nm_have_strerror_r"
+      nm_feature_run=no
+      nm_feature_h='#include <string.h>'
+      nm_feature_flags=
+      nm_feature_test='int r = strerror_r(1,0,0); (void)r;'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+  esac
+fi                              # strerror_r
 
 
 fi                              # define_nstr_h
