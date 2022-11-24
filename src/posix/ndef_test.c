@@ -76,7 +76,8 @@ test_fallthrough(int a)
 }
 
 void
-test_restrict(const int *restrict ii, const char *restrict ss)
+test_restrict(__attribute__((unused)) const int *restrict ii,
+              __attribute__((unused)) const char *restrict ss)
 {
   assert(*ii > 0 && ss != NULL);
 }
