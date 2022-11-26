@@ -112,6 +112,7 @@ if [ "basic" = "$_TEST_" ]; then
   # test_do --has-redis
   # test_do --has-regexp
   test_do --has-stdio
+  test_do --has-stdio1
   # test_do --has-unicode
   # test_do --has-uv --with-std=no
   # test_do --has-webassembly --with-std=no
