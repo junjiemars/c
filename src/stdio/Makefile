@@ -5,9 +5,9 @@
 
 
 # ifeq ($(CC_NAME), msvc)
-# process:
+# stdio:
 # 	@echo "#skip ..."
-# process_test: process
+# stdio_test: stdio
 # 	@echo "#skip ..."
 # else
 
@@ -15,6 +15,7 @@
 stdio: stdio_basic                              \
        stdio_binary                             \
        stdio_buf                                \
+       stdio_char                               \
 	     stdio_diff                               \
        stdio_error                              \
        stdio_fileno                             \
@@ -34,6 +35,7 @@ stdio: stdio_basic                              \
 stdio_test: stdio_basic_test                    \
             stdio_binary_test                   \
             stdio_buf_test                      \
+            stdio_char_test                     \
             stdio_diff_test                     \
             stdio_error_test                    \
             stdio_fileno_test                   \
@@ -45,6 +47,7 @@ stdio_test: stdio_basic_test                    \
             stdio_process_test                  \
             stdio_scan_test                     \
             stdio_seek_test                     \
+            stdio_unget_test                    \
             stdio_variadic_test                 \
             stdio_wc_test                       \
             stdio_wide_test                     \
@@ -123,6 +126,16 @@ stdio_buf_un_test: $(stdio_buf_un_binout)
 	$< < $(out)/nore.h > $(stdio_buf_out_file)
 
 $(stdio_buf_un_binout): $(stdio_root)/buf/ub1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# char
+stdio_char_binout := $(bin_path)/$(stdio_prefix)_char$(bin_ext)
+
+stdio_char: $(stdio_char_binout)
+stdio_char_test: stdio_char
+	-$(stdio_char_binout) 0 < $(stdio_root)/char/c1.c
+
+$(stdio_char_binout): $(stdio_root)/char/c1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

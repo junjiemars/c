@@ -1,32 +1,26 @@
-#include <_stdio_.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include "_stdio_.h"
+
 
 int
 main(int argc, char **argv)
 {
-  char  *path;
   FILE  *file;
 
   if (argc < 2)
     {
-      fprintf(stderr, "where the where.c locate?\n");
+      fprintf(stderr, "usage: <pathname>\n");
       return 0;
     }
-  path = argv[1];
 
-  file = fopen(path, "r");
+  file = fopen(argv[1], "r");
   if (0 == file)
     {
-      int errnum = errno;
-      fprintf(stdout, "!panic1: %s\n", strerror(errnum));
-      perror("!panic2");
+      perror(NULL);
     }
   else
     {
       int  ch;
-      fprintf(stdout, "%s found\n", path);
+      fprintf(stdout, "%s found\n", argv[1]);
 
       while (EOF != (ch = fgetc(file)))
         {
@@ -37,6 +31,11 @@ main(int argc, char **argv)
         {
           perror(NULL);
           clearerr(file);
+        }
+
+      if (feof(file))
+        {
+          fprintf(stdout, "end of %s\n", argv[1]);
         }
 
       fclose(file);

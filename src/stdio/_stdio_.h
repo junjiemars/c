@@ -7,8 +7,8 @@
 #include <nlim.h>
 #include <nasrt.h>
 #include <wchar.h>
-#include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 
 
 

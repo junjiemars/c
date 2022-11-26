@@ -1,0 +1,72 @@
+#### -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## stdio1/auto
+####
+
+
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+# check nustd.h features
+ncc_sanitize_address="yes"
+ndef_restrict="yes"
+ndef_static_assert="yes"
+
+nustd_ssize_t="yes"
+. ${POSIX_ROOT}/nustd_auto
+
+# check nlim.h features
+nlim_line_max="yes"
+nlim_path_max="yes"
+. ${POSIX_ROOT}/nlim_auto
+
+
+echo "checking for {stdio1} ..."
+
+
+case "$CC_NAME" in
+  clang)
+    nm_feature="-nolibc"
+    nm_feature_name=
+    nm_feature_indent=
+    nm_feature_run=yes
+    nm_feature_h=
+    nm_feature_flags='-nolibc -lSystem'
+    nm_feature_test='return 0;'
+    . ${NORE_ROOT}/auto/feature
+    if [ yes = $nm_found ]; then
+      flag=cflags_nolibc                        \
+        op=":="                                 \
+        value="$(nm_feature_flags)"             \
+        . ${NORE_ROOT}/auto/make_define
+    fi
+    ;;
+  gcc)
+    nm_feature="-nolibc"
+    nm_feature_name=
+    nm_feature_indent=
+    nm_feature_run=yes
+    nm_feature_h=
+    nm_feature_flags='-nolibc'
+    nm_feature_test='return 0;'
+    . ${NORE_ROOT}/auto/feature
+    if [ yes = $nm_found ]; then
+      flag=cflags_nolibc                        \
+        op=":="                                 \
+        value="$(nm_feature_flags)"             \
+        . ${NORE_ROOT}/auto/make_define
+    fi
+    ;;
+  *)
+    ;;
+esac
+
+
+
+
+
+# eof

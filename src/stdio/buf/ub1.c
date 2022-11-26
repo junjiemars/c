@@ -15,7 +15,7 @@ main(int argc, char *argv[])
     {
       imode = mode(argv[1]);
     }
-  if (argc > 2)
+  else if (argc > 2)
     {
       omode = mode(argv[2]);
     }
