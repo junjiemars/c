@@ -1,4 +1,4 @@
-# ./configure --has-cio
+# ./configure --has-stdio1
 #
 # An emulation of standard IO library
 #
