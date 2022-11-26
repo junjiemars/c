@@ -4,21 +4,23 @@
 static  char  _stdin_buf_[BUFSIZ];
 static  char  _stdout_buf_[BUFSIZ];
 
-FILE  _stdin_   =
+static FILE  _stdin_  =
   {
     .fd        =  STDIN_FILENO,
     .buf_type  =  _IOLBF,
     .buf_read  =  _stdin_buf_,
     .buf_size  =  BUFSIZ
   };
-FILE  _stdout_  =
+
+static FILE  _stdout_  =
   {
     .fd         =  STDOUT_FILENO,
     .buf_type   =  _IOLBF,
     .buf_write  =  _stdout_buf_,
     .buf_size   =  BUFSIZ
   };
-FILE  _stderr_  =
+
+static FILE  _stderr_  =
   {
     .fd        =  STDERR_FILENO,
     .buf_type  =  _IONBF,

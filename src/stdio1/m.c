@@ -27,27 +27,28 @@ main(int argc, char *argv[])
 
 
 void
-test(FILE *ss)
+test(FILE *in)
 {
   int  r;
 
-  while ((r = fgetc(ss)) != EOF)
+  while ((r = fgetc(in)) != EOF)
     {
       if (fputc(r, stdout) == EOF)
         {
           if (ferror(stdout))
             {
+              char  *s  =  strerror(stdout->err);
+              fwrite(s, sizeof(*s), strlen(s), stderr);
               break;
             }
         }
     }
 
-  if (ferror(ss))
+  if (ferror(in))
     {
-    }
-  if (feof(ss))
-    {
+      char  *s  =  strerror(in->err);
+      fwrite(s, sizeof(*s), strlen(s), stderr);
     }
 
-  fclose(ss);
+  fclose(in);
 }
