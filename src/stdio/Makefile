@@ -1,4 +1,4 @@
-# ./configure --has-cio
+# ./configure --has-stdio
 #
 # standard IO library
 #
