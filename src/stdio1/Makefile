@@ -18,8 +18,6 @@ ifeq ($(shell test $(_MEMORY_) -gt 0; echo $$?),0)
 CFLAGS += $(f_sanitize)
 endif
 
-CFLAGS += $(cflags_nostdlib)
-
 stdio1_bin_binout := $(bin_path)/$(stdio1_prefix)_bin$(bin_ext)
 stdio1_lib_objout := $(tmp_path)/$(stdio1_prefix)_lib$(obj_ext)
 stdio1_bin_objout := $(tmp_path)/$(stdio1_prefix)_bin$(obj_ext)
