@@ -245,8 +245,6 @@ fputc(int c, FILE *stream)
 
   if (stream->ptr_write == stream->buf_size)
     {
-      stream->ptr_write = 0;
-
       n = write(stream->fd, stream->buf_write, stream->buf_size);
 
       if (n == -1)
@@ -254,6 +252,8 @@ fputc(int c, FILE *stream)
           stream->err = errno;
           return EOF;
         }
+
+      stream->ptr_write = 0;
     }
 
   stream->buf_write[stream->ptr_write++] = c;
