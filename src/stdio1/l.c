@@ -283,31 +283,54 @@ fputc(int c, FILE *stream)
 size_t
 fread(void *restrict ptr, size_t size, size_t nitems, FILE *restrict stream)
 {
-  size_t  n  =  0;
+  size_t   n, sum;
+  char    *dst;
 
   if (size == 0 || nitems == 0)
     {
       return 0;
     }
 
-  for (size_t i = 0; i < nitems; i++)
+  n = (size * nitems + stream->buf_size - 1) / stream->buf_size;
+  sum = 0;
+  dst = (char *) ptr;
+
+
+  for (size_t i = 0; i < n; i++)
     {
-      n++;
+      ssize_t  r;
 
-      for (size_t j = 0; j < size; j++)
+      r = read(stream->fd, stream->buf_read, stream->buf_size);
+      if (r == -1)
         {
-          int  c  =  fgetc(stream);
+          stream->err = errno;
+          return 0;
+        }
+      if (r == 0)
+        {
+          break;
+        }
 
-          if (stream->err || stream->eof)
-            {
-              return 0;
-            }
+      sum += r;
 
-          ((char *) ptr) [i * size + j] = c;
+      char     *src  =  (char *) stream->buf_read;
+      ssize_t   m    =  (r + 7) / 8;
+
+      switch (r % 8)
+        {
+        case 0: do { *dst++ = *src++;
+        case 7:      *dst++ = *src++;
+        case 6:      *dst++ = *src++;
+        case 5:      *dst++ = *src++;
+        case 4:      *dst++ = *src++;
+        case 3:      *dst++ = *src++;
+        case 2:      *dst++ = *src++;
+        case 1:      *dst++ = *src++;
+          } while (--m > 0);
         }
     }
 
-  return n;
+  return (sum / size);
 }
 
 
