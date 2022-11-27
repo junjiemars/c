@@ -154,7 +154,7 @@ fopen(const char *restrict path, const char *restrict mode)
     }
   else if (strcmp("a", path) == 0)
     {
-      ss->fd = open(path, O_WRONLY | O_CREAT | O_APPEND);
+      ss->fd = open(path, O_WRONLY | O_CREAT | O_APPEND, 0666);
     }
   else if (strcmp("a+", path) == 0 || strcmp("ab+", path) == 0
            || strcmp("a+b", path) == 0)
