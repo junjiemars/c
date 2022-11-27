@@ -283,24 +283,40 @@ fputc(int c, FILE *stream)
 size_t
 fread(void *restrict ptr, size_t size, size_t nitems, FILE *restrict stream)
 {
-  size_t   n, sum;
-  char    *dst;
+  size_t    n, m, sum;
+  ssize_t   r;
+  char     *cur;
 
   if (size == 0 || nitems == 0)
     {
       return 0;
     }
 
-  n = (size * nitems + stream->buf_size - 1) / stream->buf_size;
+  n = (size * nitems) / stream->buf_size;
+  m = (size * nitems) % stream->buf_size;
   sum = 0;
-  dst = (char *) ptr;
+  cur = (char *) ptr;
 
+  if (m > 0)
+    {
+      r = read(stream->fd, cur, m);
+      if (r == -1)
+        {
+          stream->err = errno;
+          return 0;
+        }
+      if (r == 0)
+        {
+          return 0;
+        }
+
+      sum += r;
+      cur += r;
+    }
 
   for (size_t i = 0; i < n; i++)
     {
-      ssize_t  r;
-
-      r = read(stream->fd, stream->buf_read, stream->buf_size);
+      r = read(stream->fd, cur, stream->buf_size);
       if (r == -1)
         {
           stream->err = errno;
@@ -312,22 +328,7 @@ fread(void *restrict ptr, size_t size, size_t nitems, FILE *restrict stream)
         }
 
       sum += r;
-
-      char     *src  =  (char *) stream->buf_read;
-      ssize_t   m    =  (r + 7) / 8;
-
-      switch (r % 8)
-        {
-        case 0: do { *dst++ = *src++;
-        case 7:      *dst++ = *src++;
-        case 6:      *dst++ = *src++;
-        case 5:      *dst++ = *src++;
-        case 4:      *dst++ = *src++;
-        case 3:      *dst++ = *src++;
-        case 2:      *dst++ = *src++;
-        case 1:      *dst++ = *src++;
-          } while (--m > 0);
-        }
+      cur += r;
     }
 
   return (sum / size);
@@ -338,22 +339,49 @@ size_t
 fwrite(const void *restrict ptr, size_t size, size_t nitems,
        FILE *restrict stream)
 {
-  size_t  n  =  0;
+  size_t    n, m, sum;
+  ssize_t   w;
+  char     *cur;
 
-  for (size_t i = 0; i < nitems; i++)
+  n = (size * nitems) / stream->buf_size;
+  m = (size * nitems) % stream->buf_size;
+  sum = 0;
+  cur = (char *) ptr;
+
+  if (m > 0)
     {
-      n++;
-
-      for (size_t j = 0; j < size; j++)
+      w = write(stream->fd, cur, m);
+      if (w == -1)
         {
-          int  c  =  fputc(((char *) ptr) [i * size + j], stream);
-
-          if (c == EOF)
-            {
-              return 0;
-            }
+          stream->err = errno;
+          return 0;
         }
+      if (w == 0)
+        {
+          return 0;
+        }
+
+      sum += w;
+      cur += w;
     }
 
-  return n;
+
+  for (size_t i = 0; i < n; i++)
+    {
+      w = write(stream->fd, cur, stream->buf_size);
+      if (w == -1)
+        {
+          stream->err = errno;
+          return 0;
+        }
+      if (w == 0)
+        {
+          return 0;
+        }
+
+      cur += w;
+      sum += w;
+    }
+
+  return (sum / size);
 }
