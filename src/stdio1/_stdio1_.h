@@ -48,8 +48,9 @@ typedef struct file_s
 extern FILE  *stdin, *stdout, *stderr;
 
 
-int    feof(FILE *);
-int    ferror(FILE *);
+int   feof(FILE *);
+int   ferror(FILE *);
+void  clearerr(FILE *);
 
 int    fileno(FILE *);
 int    fclose(FILE *);

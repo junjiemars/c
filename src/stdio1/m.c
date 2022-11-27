@@ -4,13 +4,24 @@
 extern FILE  *stdin, *stdout, *stderr;
 
 
-__attribute__((unused)) static void test_c(FILE *, FILE *);
-static void test_b(FILE *, FILE *);
+static void test_c(int argc, char *argv[]);
+static void test_b(int argc, char *argv[]);
 
 int
 main(int argc, char *argv[])
 {
+  test_c(argc, argv);
+  test_b(argc, argv);
+
+  return 0;
+}
+
+
+void
+test_c(int argc, char *argv[])
+{
   FILE  *in, *out;
+  int    r;
 
   if (argc > 2)
     {
@@ -27,18 +38,6 @@ main(int argc, char *argv[])
       in = stdin;
       out = stdout;
     }
-
-  /* test_c(in, out); */
-  test_b(in, out);
-
-  return 0;
-}
-
-
-void
-test_c(FILE *in, FILE *out)
-{
-  int  r;
 
   while ((r = fgetc(in)) != EOF)
     {
@@ -59,17 +58,35 @@ test_c(FILE *in, FILE *out)
       fwrite(s, sizeof(*s), strlen(s), stderr);
     }
 
-  fclose(out);
   fclose(in);
+  fclose(out);
 }
 
-void
-test_b(FILE *in, FILE *out)
-{
-  int   r, w;
-  char  buf[BUFSIZ];
 
-  while ((r = fread(buf, sizeof(*buf), sizeof(buf), in)) > 0)
+void
+test_b(int argc, char *argv[])
+{
+  FILE  *in, *out;
+  int    r, w;
+  char   buf[BUFSIZ];
+
+  if (argc > 2)
+    {
+      in = fopen(argv[1], "r");
+      out = fopen(argv[2], "w");
+    }
+  else if (argc > 1)
+    {
+      in = fopen(argv[1], "r");
+      out = stdout;
+    }
+  else
+    {
+      in = stdin;
+      out = stdout;
+    }
+
+  while ((r = fread(buf, sizeof(*buf), _nof_(buf), in)) > 0)
     {
       if ((w = fwrite(buf, sizeof(*buf), r, out)) != r)
         {
@@ -88,6 +105,6 @@ test_b(FILE *in, FILE *out)
       fwrite(s, sizeof(*s), strlen(s), stderr);
     }
 
-  fclose(out);
   fclose(in);
+  fclose(out);
 }

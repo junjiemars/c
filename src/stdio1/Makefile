@@ -50,6 +50,7 @@ stdio1: $(stdio1_bin_binout)
 
 stdio1_test: stdio1
 	$(stdio1_bin_binout) 0< $(out)/nore.h
+	$(stdio1_bin_binout) $(out)/nore.h
 	$(stdio1_bin_binout) $(stdio1_root)/l.c $(stdio1_out_file)
 
 

@@ -49,6 +49,13 @@ ferror(FILE *stream)
 }
 
 
+void
+clearerr(FILE *stream)
+{
+  stream->err = stream->eof = 0;
+}
+
+
 int
 fileno(FILE *stream)
 {
