@@ -4,8 +4,8 @@
 extern char  *strerror(int);
 
 
-static  char  _stdin_buf_[BUFSIZ];
-static  char  _stdout_buf_[BUFSIZ];
+static  unsigned char  _stdin_buf_[BUFSIZ];
+static  unsigned char  _stdout_buf_[BUFSIZ];
 
 static FILE  _stdin_  =
   {
@@ -213,6 +213,10 @@ fgetc(FILE *stream)
 {
   ssize_t  n;
 
+  if (stream->eof)
+    {                                                                                return stream->eof;
+    }
+
   if (stream->ptr_read < stream->n_read)
     {
       return stream->buf_read[stream->ptr_read++];
@@ -255,7 +259,7 @@ fputc(int c, FILE *stream)
       stream->ptr_write = 0;
     }
 
-  stream->buf_write[stream->ptr_write++] = c;
+  stream->buf_write[stream->ptr_write++] = (unsigned char ) c;
 
   switch (stream->buf_type)
     {
@@ -290,9 +294,9 @@ fputc(int c, FILE *stream)
 size_t
 fread(void *restrict ptr, size_t size, size_t nitems, FILE *restrict stream)
 {
-  size_t    n, m, sum;
-  ssize_t   r;
-  char     *cur;
+  size_t          n, m, sum;
+  ssize_t         r;
+  unsigned char  *cur;
 
   if (size == 0 || nitems == 0)
     {
@@ -302,7 +306,7 @@ fread(void *restrict ptr, size_t size, size_t nitems, FILE *restrict stream)
   n = (size * nitems) / stream->buf_size;
   m = (size * nitems) % stream->buf_size;
   sum = 0;
-  cur = (char *) ptr;
+  cur = (unsigned char *) ptr;
 
   if (m > 0)
     {
@@ -346,14 +350,14 @@ size_t
 fwrite(const void *restrict ptr, size_t size, size_t nitems,
        FILE *restrict stream)
 {
-  size_t    n, m, sum;
-  ssize_t   w;
-  char     *cur;
+  size_t          n, m, sum;
+  ssize_t         w;
+  unsigned char  *cur;
 
   n = (size * nitems) / stream->buf_size;
   m = (size * nitems) % stream->buf_size;
   sum = 0;
-  cur = (char *) ptr;
+  cur = (unsigned char *) ptr;
 
   if (m > 0)
     {

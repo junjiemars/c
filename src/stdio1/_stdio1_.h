@@ -30,16 +30,17 @@
 
 typedef struct file_s
 {
-  int           fd;
-  int           err;
-  int           eof;
-  char         *buf_read;
-  char         *buf_write;
-  size_t        ptr_read;
-  size_t        ptr_write;
-  size_t        buf_size;
-  size_t        n_read;
-  int           buf_type;
+  int             fd;
+  int             err;
+  int             eof;
+  int             buf_type;
+  size_t          ptr_read;
+  size_t          ptr_write;
+  size_t          buf_size;
+  size_t          n_read;
+  unsigned char  *buf_read;
+  unsigned char  *buf_write;
+
   struct stat  *stat;
 
 } FILE;

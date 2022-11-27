@@ -3,17 +3,46 @@
 
 extern FILE  *stdin, *stdout, *stderr;
 
-
+static void test_u(int argc, char *argv[]);
 static void test_c(int argc, char *argv[]);
 static void test_b(int argc, char *argv[]);
 
 int
 main(int argc, char *argv[])
 {
+  test_u(argc, argv);
   test_c(argc, argv);
   test_b(argc, argv);
 
   return 0;
+}
+
+void
+test_u(int argc, char *argv[])
+{
+  FILE  *in, *out;
+
+  if (argc > 2)
+    {
+      in = fopen(argv[1], "r");
+      out = fopen(argv[2], "w");
+    }
+  else if (argc > 1)
+    {
+      in = fopen(argv[1], "r");
+      out = stdout;
+    }
+  else
+    {
+      in = stdin;
+      out = stdout;
+    }
+
+  fputc(UCHAR_MAX, out);
+  fputc('\n', out);
+
+  fclose(in);
+  fclose(out);
 }
 
 
