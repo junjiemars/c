@@ -164,7 +164,7 @@ fopen(const char *restrict path, const char *restrict mode)
       goto clean_exit;
     }
 
-  ss->stat = calloc(1, sizeof(ss->stat));
+  ss->stat = calloc(1, sizeof(*ss->stat));
   if (ss->stat == NULL)
     {
       ss->err = errno;
