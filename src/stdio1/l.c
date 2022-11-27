@@ -179,14 +179,14 @@ fopen(const char *restrict path, const char *restrict mode)
 
   ss->buf_size = ss->stat->st_blksize;
 
-  ss->buf_read = calloc(1, sizeof(ss->buf_size));
+  ss->buf_read = calloc(1, ss->buf_size);
   if (ss->buf_read == NULL)
     {
       ss->err = errno;
       goto clean_exit;
     }
 
-  ss->buf_write = calloc(1, sizeof(ss->buf_size));
+  ss->buf_write = calloc(1, ss->buf_size);
   if (ss->buf_write == NULL)
     {
       ss->err = errno;
