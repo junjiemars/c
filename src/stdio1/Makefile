@@ -22,6 +22,7 @@ stdio1_bin_binout := $(bin_path)/$(stdio1_prefix)_bin$(bin_ext)
 stdio1_lib_objout := $(tmp_path)/$(stdio1_prefix)_lib$(obj_ext)
 stdio1_bin_objout := $(tmp_path)/$(stdio1_prefix)_bin$(obj_ext)
 stdio1_bin_cppout := $(tmp_path)/$(stdio1_prefix)_lib$(cpp_ext)
+stdio1_out_file := $(tmp_path)/$(stdio1_prefix)_out.file
 
 $(stdio1_bin_binout): $(stdio1_lib_objout)      \
                       $(stdio1_bin_objout)
@@ -49,7 +50,7 @@ stdio1: $(stdio1_bin_binout)
 
 stdio1_test: stdio1
 	$(stdio1_bin_binout) 0< $(out)/nore.h
-	$(stdio1_bin_binout) $(out)/nore.h
+	$(stdio1_bin_binout) $(out)/nore.h $(stdio1_out_file)
 
 
 endif 													#skip

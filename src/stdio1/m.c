@@ -4,40 +4,47 @@
 extern FILE  *stdin, *stdout, *stderr;
 
 
-static void test(FILE *);
+static void test(FILE *, FILE *);
 
 int
 main(int argc, char *argv[])
 {
-  FILE  *ss  =  NULL;
+  FILE  *in, *out;
 
-  if (argc > 1)
+  if (argc > 2)
     {
-      ss = fopen(argv[1], "r");
+      in = fopen(argv[1], "r");
+      out = fopen(argv[2], "w");
+    }
+  else if (argc > 1)
+    {
+      in = fopen(argv[1], "r");
+      out = stdout;
     }
   else
     {
-      ss = stdin;
+      in = stdin;
+      out = stdout;
     }
 
-  test(ss);
+  test(in, out);
 
   return 0;
 }
 
 
 void
-test(FILE *in)
+test(FILE *in, FILE *out)
 {
   int  r;
 
   while ((r = fgetc(in)) != EOF)
     {
-      if (fputc(r, stdout) == EOF)
+      if (fputc(r, out) == EOF)
         {
-          if (ferror(stdout))
+          if (ferror(out))
             {
-              char  *s  =  strerror(stdout->err);
+              char  *s  =  strerror(out->err);
               fwrite(s, sizeof(*s), strlen(s), stderr);
               break;
             }
