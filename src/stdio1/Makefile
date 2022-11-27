@@ -37,7 +37,7 @@ $(stdio1_bin_cppout): $(stdio1_root)/m.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 
-ifeq ($(CC_NAME),msvc)
+ifeq ($(NM_SYSTEM),WinNT)
 stdio1:
 	@echo "#skip ..."
 stdio1_test: stdio1
