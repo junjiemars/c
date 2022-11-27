@@ -1,6 +1,9 @@
 #include "_stdio1_.h"
 
 
+extern char  *strerror(int);
+
+
 static  char  _stdin_buf_[BUFSIZ];
 static  char  _stdout_buf_[BUFSIZ];
 
@@ -43,17 +46,6 @@ int
 ferror(FILE *stream)
 {
   return stream->err;
-}
-
-char *
-strerror(int errnum)
-{
-  if (errnum < 0 || errnum >= sys_nerr)
-    {
-      return NULL;
-    }
-
-  return (char *) sys_errlist[errnum];
 }
 
 

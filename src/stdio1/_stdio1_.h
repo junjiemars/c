@@ -18,9 +18,6 @@
 
 
 
-extern const char * const  sys_errlist[];
-extern const int           sys_nerr;
-
 
 #define	_IOFBF	0               /* setvbuf should set fully buffered */
 #define	_IOLBF	1               /* setvbuf should set line buffered */
@@ -53,7 +50,6 @@ extern FILE  *stdin, *stdout, *stderr;
 
 int    feof(FILE *);
 int    ferror(FILE *);
-char  *strerror(int);
 
 int    fileno(FILE *);
 int    fclose(FILE *);
