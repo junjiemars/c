@@ -57,5 +57,6 @@ test(FILE *in, FILE *out)
       fwrite(s, sizeof(*s), strlen(s), stderr);
     }
 
+  fclose(out);
   fclose(in);
 }
