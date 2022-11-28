@@ -214,7 +214,8 @@ fgetc(FILE *stream)
   ssize_t  n;
 
   if (stream->eof)
-    {                                                                                return stream->eof;
+    {
+      return stream->eof;
     }
 
   if (stream->ptr_read < stream->n_read)
@@ -401,9 +402,9 @@ fwrite(const void *restrict ptr, size_t size, size_t nitems,
 int
 vsnprintf(char *restrict s, size_t n, const char *restrict format, va_list ap)
 {
-  char           *ps;
-  __attribute__((unused)) unsigned char   zero;
-  unsigned int    width;
+  char                          *ps;
+  __attribute__((unused)) char   zero;
+  unsigned int                   width;
 
   ps = s;
 
@@ -411,7 +412,7 @@ vsnprintf(char *restrict s, size_t n, const char *restrict format, va_list ap)
     {
       if (*format == '%')
         {
-          zero = (unsigned char) ((*++format == '0') ? '0' : ' ');
+          zero = *++format == '0' ? '0' : ' ';
           width = 0;
 
           while (*format >= '0' && *format <= '9')
@@ -421,6 +422,8 @@ vsnprintf(char *restrict s, size_t n, const char *restrict format, va_list ap)
 
           switch (*format)
             {
+            /* case 'i': */
+
             case 's':
               {
                 char *s1 = va_arg(ap, char *);
@@ -428,11 +431,43 @@ vsnprintf(char *restrict s, size_t n, const char *restrict format, va_list ap)
                   {
                     *ps++ = *s1++;
                   }
+                format++;
+                continue;
               }
-              continue;
+
+            default:
+              {
+                *ps++ = *format++;
+                continue;
+              }
             }
+
+          format++;
+        }
+      else
+        {
+          *ps++ = *format++;
         }
     }
 
   return (int) (ps - s);
+}
+
+
+int
+fprintf(FILE * restrict stream, const char * restrict format, ...)
+{
+  static char  buf[NM_LINE_MAX];
+  int          len;
+  size_t       n;
+
+  va_list ap;
+  va_start(ap, format);
+
+  len = vsnprintf(buf, NM_LINE_MAX-1, format, ap);
+  va_end(ap);
+
+  n = fwrite(buf, sizeof(*buf), len, stream);
+
+  return n;
 }

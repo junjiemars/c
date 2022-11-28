@@ -67,6 +67,7 @@ size_t  fwrite(const void *restrict, size_t, size_t, FILE *restrict);
 size_t  fread(void *restrict, size_t, size_t, FILE *restrict);
 
 int  vsnprintf(char *restrict, size_t, const char *restrict, va_list);
+int  fprintf(FILE * restrict, const char * restrict, ...);
 
 
 

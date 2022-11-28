@@ -3,9 +3,12 @@
 
 extern FILE  *stdin, *stdout, *stderr;
 
+
 static void test_u(int argc, char *argv[]);
 static void test_c(int argc, char *argv[]);
 static void test_b(int argc, char *argv[]);
+static void test_p(int argc, char *argv[]);
+
 
 int
 main(int argc, char *argv[])
@@ -13,9 +16,11 @@ main(int argc, char *argv[])
   test_u(argc, argv);
   test_c(argc, argv);
   test_b(argc, argv);
+  test_p(argc, argv);
 
   return 0;
 }
+
 
 void
 test_u(int argc, char *argv[])
@@ -136,4 +141,13 @@ test_b(int argc, char *argv[])
 
   fclose(in);
   fclose(out);
+}
+
+void
+test_p(int argc, char *argv[])
+{
+  for (int i = 0; i < argc; i++)
+    {
+      fprintf(stdout, "%s\n", argv[i]);
+    }
 }
