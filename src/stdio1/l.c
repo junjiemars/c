@@ -396,3 +396,43 @@ fwrite(const void *restrict ptr, size_t size, size_t nitems,
 
   return (sum / size);
 }
+
+
+int
+vsnprintf(char *restrict s, size_t n, const char *restrict format, va_list ap)
+{
+  char           *ps;
+  __attribute__((unused)) unsigned char   zero;
+  unsigned int    width;
+
+  ps = s;
+
+  while (*format && (size_t) (ps - s) < n)
+    {
+      if (*format == '%')
+        {
+          zero = (unsigned char) ((*++format == '0') ? '0' : ' ');
+          width = 0;
+
+          while (*format >= '0' && *format <= '9')
+            {
+              width = width * 10 + (*format++ - '0');
+            }
+
+          switch (*format)
+            {
+            case 's':
+              {
+                char *s1 = va_arg(ap, char *);
+                while (*s1)
+                  {
+                    *ps++ = *s1++;
+                  }
+              }
+              continue;
+            }
+        }
+    }
+
+  return (int) (ps - s);
+}
