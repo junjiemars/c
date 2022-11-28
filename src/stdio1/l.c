@@ -402,14 +402,15 @@ fwrite(const void *restrict ptr, size_t size, size_t nitems,
 int
 vsnprintf(char *restrict s, size_t n, const char *restrict format, va_list ap)
 {
-  char                          *ps;
-  __attribute__((unused)) char   zero;
-  unsigned int                   width;
-
-  ps = s;
+  char  *ps  =  s;
 
   while (*format && (size_t) (ps - s) < n)
     {
+      char                zero;
+      unsigned int        width, sign, hex;
+      long long           ll;
+      unsigned long long  ull;
+
       if (*format == '%')
         {
           zero = *++format == '0' ? '0' : ' ';
@@ -420,10 +421,45 @@ vsnprintf(char *restrict s, size_t n, const char *restrict format, va_list ap)
               width = width * 10 + (*format++ - '0');
             }
 
+          for (;;)
+            {
+              switch (*format)
+                {
+                case 'u':
+                  {
+                    sign = 0;
+                    format++;
+                    continue;
+                  }
+                case 'x':
+                  {
+                    hex = 1;
+                    sign = 0;
+                    format++;
+                    continue;
+                  }
+                default:
+                  {
+                    break;
+                  }
+                }
+              break;
+            }
+
           switch (*format)
             {
-            /* case 'i': */
-
+            case 'd':
+              {
+                if (sign)
+                  {
+                    ll = (long long) va_arg(ap, int);
+                  }
+                else
+                  {
+                    ull = (unsigned long long) va_arg(ap, unsigned int);
+                  }
+                break;
+              }
             case 's':
               {
                 char *s1 = va_arg(ap, char *);
@@ -434,13 +470,27 @@ vsnprintf(char *restrict s, size_t n, const char *restrict format, va_list ap)
                 format++;
                 continue;
               }
-
             default:
               {
                 *ps++ = *format++;
                 continue;
               }
             }
+
+          if (sign)
+            {
+              if (ll < 0)
+                {
+                  *ps++ = '-';
+                  ull = (unsigned long long) -ll;
+                }
+              else
+                {
+                  ull = (unsigned long long) ll;
+                }
+            }
+
+          /*!TODO:  print number */
 
           format++;
         }
