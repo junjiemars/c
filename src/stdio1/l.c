@@ -34,6 +34,10 @@ FILE  *stdin   =  &_stdin_;
 FILE  *stdout  =  &_stdout_;
 FILE  *stderr  =  &_stderr_;
 
+static unsigned char *_vsnprint_num_(unsigned char *, unsigned char *,
+                                     unsigned long long, unsigned char,
+                                     unsigned int, unsigned int);
+
 
 
 int
@@ -407,7 +411,7 @@ vsnprintf(char *restrict s, size_t n, const char *restrict format, va_list ap)
   while (*format && (size_t) (ps - s) < n)
     {
       char                zero;
-      unsigned int        width, sign, hex;
+      unsigned int        width, sign, ratio;
       long long           ll;
       unsigned long long  ull;
 
@@ -433,7 +437,7 @@ vsnprintf(char *restrict s, size_t n, const char *restrict format, va_list ap)
                   }
                 case 'x':
                   {
-                    hex = 1;
+                    ratio = 1;
                     sign = 0;
                     format++;
                     continue;
@@ -490,7 +494,7 @@ vsnprintf(char *restrict s, size_t n, const char *restrict format, va_list ap)
                 }
             }
 
-          /*!TODO:  print number */
+          _vsnprint_num_((unsigned char*) s, (unsigned char *) (s+n), ull, zero, ratio, width);
 
           format++;
         }
@@ -498,6 +502,12 @@ vsnprintf(char *restrict s, size_t n, const char *restrict format, va_list ap)
         {
           *ps++ = *format++;
         }
+
+
+      (void) zero;
+      (void) ratio;
+      (void) ull;
+
     }
 
   return (int) (ps - s);
@@ -520,4 +530,63 @@ fprintf(FILE * restrict stream, const char * restrict format, ...)
   n = fwrite(buf, sizeof(*buf), len, stream);
 
   return n;
+}
+
+unsigned char *
+_vsnprint_num_(unsigned char *buf, unsigned char *last,
+               unsigned long long ull, unsigned char zero,
+               unsigned int ratio, unsigned int width)
+{
+  unsigned int           len;
+  unsigned char         *p, b[sizeof(long long)+1];
+  static unsigned char   hex[]  =  "0123456789abcdef";
+  static unsigned char   HEX[]  =  "0123456789ABCDEF";
+
+  p = b + sizeof(long long);
+
+  if (ratio == 0)
+    {
+      do
+        {
+          *--p = (unsigned char) (ull % 10 + '0');
+        }
+      while (ull /= 10);
+    }
+  else if (ratio == 1)
+    {
+      do
+        {
+          *--p = (unsigned char) (hex[ull & 0xf]);
+        }
+      while (ull >>= 4);
+    }
+  else
+    {
+      do
+        {
+          *--p = (unsigned char) (HEX[ull & 0xf]);
+        }
+      while (ull >>= 4);
+    }
+
+  len = (b + sizeof(long long)) - p;
+
+  while (len++ < width && buf < last)
+    {
+      *buf++ = zero;
+    }
+
+  len = (b + sizeof(long long)) - p;
+
+  if (buf + len > last)
+    {
+      len = last - buf;
+    }
+
+  while (len-- > 0)
+    {
+      *buf++ = *p++;
+    }
+
+  return buf;
 }
