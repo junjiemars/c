@@ -464,6 +464,13 @@ vsnprintf(char *restrict s, size_t n, const char *restrict format, va_list ap)
                   }
                 break;
               }
+            case 'i':
+              if (sign) {
+                ll = (long long) va_arg(ap, int);
+              } else {
+                ull = (unsigned long long) va_arg(ap, unsigned int);
+              }
+              break;
             case 's':
               {
                 char *s1 = va_arg(ap, char *);
@@ -494,7 +501,7 @@ vsnprintf(char *restrict s, size_t n, const char *restrict format, va_list ap)
                 }
             }
 
-          _vsnprint_num_(ps, s+n, ull, zero, ratio, width);
+          ps = _vsnprint_num_(ps, s+n, ull, zero, ratio, width);
 
           format++;
         }
