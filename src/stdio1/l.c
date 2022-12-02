@@ -1,41 +1,34 @@
 #include "_stdio1_.h"
+#include <termios.h>
 
 
 extern char  *strerror(int);
 
+#define _IO_INIT_  0001
 
-static  unsigned char  _stdin_buf_[BUFSIZ];
-static  unsigned char  _stdout_buf_[BUFSIZ];
 
 static FILE  _stdin_  =
   {
     .fd        =  STDIN_FILENO,
-    .buf_type  =  _IOLBF,
-    .buf_read  =  _stdin_buf_,
-    .buf_size  =  BUFSIZ
   };
 
 static FILE  _stdout_  =
   {
-    .fd         =  STDOUT_FILENO,
-    .buf_type   =  _IOLBF,
-    .buf_write  =  _stdout_buf_,
-    .buf_size   =  BUFSIZ
+    .fd        =  STDOUT_FILENO,
   };
 
 static FILE  _stderr_  =
   {
     .fd        =  STDERR_FILENO,
-    .buf_type  =  _IONBF,
-    .buf_size  =  0
   };
 
 FILE  *stdin   =  &_stdin_;
 FILE  *stdout  =  &_stdout_;
 FILE  *stderr  =  &_stderr_;
 
-static  char *_vsnprint_num_(char *, char *, unsigned long long,
-                             char, unsigned int, unsigned int);
+static int  _file_init_(FILE *);
+static char *_vsnprint_num_(char *, char *, unsigned long long,
+                            char, unsigned int, unsigned int);
 
 
 int
@@ -80,22 +73,10 @@ fclose(FILE *stream)
       return 0;
     }
 
-  if (stream->buf_read != NULL)
+  if (stream->buf != NULL)
     {
-      free(stream->buf_read);
-      stream->buf_read = NULL;
-    }
-
-  if (stream->buf_write != NULL)
-    {
-      free(stream->buf_write);
-      stream->buf_write = NULL;
-    }
-
-  if (stream->stat != NULL)
-    {
-      free(stream->stat);
-      stream->stat = NULL;
+      free(stream->buf);
+      stream->buf = NULL;
     }
 
   if (close(stream->fd) == -1)
@@ -111,13 +92,19 @@ fclose(FILE *stream)
 int
 fflush(FILE *stream)
 {
-  if (stream->ptr_write > 0)
+  if (stream->buf_type == _IONBF)
     {
-      if (write(stream->fd, stream->buf_write, stream->ptr_write) == -1)
+      return 0;
+    }
+
+  if (stream->offset > 0)
+    {
+      if (write(stream->fd, stream->buf, stream->offset) == -1)
         {
           stream->err = errno;
           return EOF;
         }
+      stream->offset = 0;
     }
 
   return 0;
@@ -173,32 +160,8 @@ fopen(const char *restrict path, const char *restrict mode)
       goto clean_exit;
     }
 
-  ss->stat = calloc(1, sizeof(*ss->stat));
-  if (ss->stat == NULL)
+  if (_file_init_(ss) == EOF)
     {
-      ss->err = errno;
-      goto clean_exit;
-    }
-
-  if (fstat(ss->fd, ss->stat) == -1)
-    {
-      ss->err = errno;
-      goto clean_exit;
-    }
-
-  ss->buf_size = ss->stat->st_blksize;
-
-  ss->buf_read = calloc(1, ss->buf_size);
-  if (ss->buf_read == NULL)
-    {
-      ss->err = errno;
-      goto clean_exit;
-    }
-
-  ss->buf_write = calloc(1, ss->buf_size);
-  if (ss->buf_write == NULL)
-    {
-      ss->err = errno;
       goto clean_exit;
     }
 
@@ -220,12 +183,32 @@ fgetc(FILE *stream)
       return stream->eof;
     }
 
-  if (stream->ptr_read < stream->n_read)
+  if ((stream->flags & _IO_INIT_) != _IO_INIT_)
     {
-      return stream->buf_read[stream->ptr_read++];
+      if (_file_init_(stream) == EOF)
+        {
+          return EOF;
+        }
     }
 
-  n = read(stream->fd, stream->buf_read, stream->buf_size);
+  if (stream->buf_type == _IONBF)
+    {
+      int  c;
+
+      if (read(stream->fd, &c, sizeof(unsigned char)) == -1)
+        {
+          stream->err = errno;
+          return EOF;
+        }
+      return c;
+    }
+
+  if ((stream->buf + stream->offset) < stream->last)
+    {
+      return stream->buf[stream->offset++];
+    }
+
+  n = read(stream->fd, stream->buf, stream->buf_size);
 
   if (n == -1)
     {
@@ -238,56 +221,55 @@ fgetc(FILE *stream)
       return stream->eof = EOF;
     }
 
-  stream->n_read = n;
-  stream->ptr_read = 0;
+  stream->last = stream->buf + n;
+  stream->offset = 0;
 
-  return stream->buf_read[stream->ptr_read++];
+  return stream->buf[stream->offset++];
 }
 
 int
 fputc(int c, FILE *stream)
 {
-  ssize_t  n;
-
-  if (stream->ptr_write == stream->buf_size)
+  if ((stream->flags & _IO_INIT_) != _IO_INIT_)
     {
-      n = write(stream->fd, stream->buf_write, stream->buf_size);
-
-      if (n == -1)
+      if (_file_init_(stream) == EOF)
         {
-          stream->err = errno;
           return EOF;
         }
-
-      stream->ptr_write = 0;
     }
 
-  stream->buf_write[stream->ptr_write++] = (unsigned char ) c;
-
-  switch (stream->buf_type)
+  if (stream->buf_type == _IONBF)
     {
-    case _IOLBF:
-      if (c == '\n')
-        {
-          n = write(stream->fd, stream->buf_write, stream->ptr_write);
-          if (n == -1)
-            {
-              stream->err = errno;
-              return EOF;
-            }
-          stream->ptr_write = 0;
-        }
-      break;
-
-    case _IONBF:
-      n = write(stream->fd, stream->buf_write, 1);
-      if (n == -1)
+      if (write(stream->fd, (unsigned char*) &c, sizeof(unsigned char)) == -1)
         {
           stream->err = errno;
           return EOF;
         }
-      stream->ptr_write = 0;
-      break;
+      return c;
+    }
+
+  if ((size_t) stream->offset == stream->buf_size)
+    {
+      if (write(stream->fd, stream->buf, stream->buf_size) == -1)
+        {
+          stream->err = errno;
+          return EOF;
+        }
+
+      stream->offset = 0;
+    }
+
+  stream->buf[stream->offset++] = (unsigned char ) c;
+
+  if (stream->buf_type == _IOLBF && c == '\n')
+    {
+      if (write(stream->fd, stream->buf, stream->offset) == -1)
+        {
+          stream->err = errno;
+          return EOF;
+        }
+
+      stream->offset = 0;
     }
 
   return c;
@@ -531,6 +513,79 @@ fprintf(FILE * restrict stream, const char * restrict format, ...)
   n = fwrite(buf, sizeof(*buf), len, stream);
 
   return n;
+}
+
+int
+_file_init_(FILE *stream)
+{
+  struct stat  ss;
+
+  if ((stream->flags & _IO_INIT_) == _IO_INIT_)
+    {
+      return 0;
+    }
+
+  if (stream == stdin || stream == stdout || stream == stderr)
+    {
+      if (stream == stderr)
+        {
+          stream->buf_type = _IONBF;
+          stream->buf_size = 0;
+          stream->buf = NULL;
+        }
+      else if (isatty(stream->fd))
+        {
+          stream->buf_type = _IOLBF;
+          stream->buf_size = NM_LINE_MAX;
+
+          stream->buf = malloc(stream->buf_size);
+          if (stream->buf == NULL)
+            {
+              stream->err = errno;
+              return EOF;
+            }
+        }
+      else
+        {
+          if (fstat(stream->fd, &ss) == -1)
+            {
+              stream->err = errno;
+              return EOF;
+            }
+
+          stream->buf_type = _IOFBF;
+          stream->buf_size = ss.st_blksize;
+
+          stream->buf = malloc(stream->buf_size);
+          if (stream->buf == NULL)
+            {
+              stream->err = errno;
+              return EOF;
+            }
+        }
+    }
+  else
+    {
+      if (fstat(stream->fd, &ss) == -1)
+        {
+          stream->err = errno;
+          return EOF;
+        }
+
+      stream->buf_type = _IOFBF;
+      stream->buf_size = ss.st_blksize;
+
+      stream->buf = malloc(stream->buf_size);
+      if (stream->buf == NULL)
+        {
+          stream->err = errno;
+          return EOF;
+        }
+    }
+
+  stream->flags |= _IO_INIT_;
+
+  return 0;
 }
 
 char *

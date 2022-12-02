@@ -46,8 +46,12 @@ test_u(int argc, char *argv[])
   fputc(UCHAR_MAX, out);
   fputc('\n', out);
 
-  fclose(in);
-  fclose(out);
+  fputc('A', stderr);
+  fputc('\n', stderr);
+
+  /* fclose(in); */
+  /* fclose(out); */
+  /* fclose(stderr); */
 }
 
 

@@ -34,15 +34,12 @@ typedef struct file_s
   int             fd;
   int             err;
   int             eof;
+  int             flags;
   int             buf_type;
-  size_t          ptr_read;
-  size_t          ptr_write;
+  off_t           offset;
   size_t          buf_size;
-  size_t          n_read;
-  unsigned char  *buf_read;
-  unsigned char  *buf_write;
-
-  struct stat  *stat;
+  unsigned char  *last;
+  unsigned char  *buf;
 
 } FILE;
 
