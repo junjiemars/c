@@ -55,6 +55,8 @@ int    fclose(FILE *);
 int    fflush(FILE *);
 FILE  *fopen(const char *restrict, const char *restrict);
 
+void  setbuf(FILE *restrict, char *restrict);
+int   setvbuf(FILE *restrict, char *restrict, int, size_t);
 
 int  fgetc(FILE *);
 int  fputc(int, FILE *);
