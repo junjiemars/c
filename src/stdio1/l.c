@@ -31,7 +31,7 @@ FILE  *stdout  =  &_stdout_;
 FILE  *stderr  =  &_stderr_;
 
 static int   _file_init_(FILE *);
-static void  _file_close_(void);
+static void  _std_close_(void);
 
 static char *_vsnprint_num_(char *, char *, unsigned long long,
                             char, unsigned int, unsigned int);
@@ -79,9 +79,13 @@ fclose(FILE *stream)
 
   if (stream == stdin || stream == stdout || stream == stderr)
     {
+      /*
+        fclose() should not be used on stdin, stdout, or stderr except
+         immediately before process termination.
+      */
       if (!has_close)
         {
-          if (atexit(_file_close_) == -1)
+          if (atexit(_std_close_) == -1)
             {
               stream->err = errno;
               return EOF;
@@ -626,21 +630,21 @@ _file_init_(FILE *stream)
 }
 
 void
-_file_close_(void)
+_std_close_(void)
 {
-  if (stdin != NULL && stdin->buf != NULL)
+  if (stdin->buf != NULL)
     {
       free(stdin->buf);
       stdin->buf = NULL;
     }
 
-  if (stdout != NULL && stdout->buf != NULL)
+  if (stdout->buf != NULL)
     {
       free(stdout->buf);
       stdout->buf = NULL;
     }
 
-  if (stderr != NULL && stderr->buf != NULL)
+  if (stderr->buf != NULL)
     {
       free(stderr->buf);
       stderr->buf = NULL;
