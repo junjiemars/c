@@ -4,7 +4,6 @@
 
 extern char  *strerror(int);
 
-#define _IO_ALLOC_U_  0x0000
 #define _IO_ALLOC_D_  0x0001
 #define _IO_ALLOC_V_  0x0002
 #define _IO_ALLOC_    0x0003
