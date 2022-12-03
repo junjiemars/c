@@ -74,39 +74,38 @@ fclose(FILE *stream)
       /* !TODO: should flush and close all opened fd; */
       return 0;
     }
-  else
+
+  fflush(stream);
+
+  if (stream == stdin || stream == stdout || stream == stderr)
     {
-      fflush(stream);
-
-      if (stream == stdin || stream == stdout || stream == stderr)
+      if (!has_close)
         {
-          if (!has_close)
+          if (atexit(_file_close_) == -1)
             {
-              if (atexit(_file_close_) == -1)
-                {
-                  stream->err = errno;
-                  return EOF;
-                }
-              has_close = 1;
+              stream->err = errno;
+              return EOF;
             }
-          return 0;
+          has_close = 1;
         }
-
-      if (stream->buf != NULL)
-        {
-          free(stream->buf);
-          stream->buf = NULL;
-        }
-
-      if (close(stream->fd) == -1)
-        {
-          return EOF;
-        }
-
-      free(stream);
-
       return 0;
     }
+
+  if (stream->buf != NULL)
+    {
+      free(stream->buf);
+      stream->buf = NULL;
+    }
+
+  if (close(stream->fd) == -1)
+    {
+      return EOF;
+    }
+
+  free(stream);
+
+  return 0;
+
 }
 
 int
