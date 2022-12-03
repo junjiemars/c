@@ -30,8 +30,8 @@ FILE  *stdin   =  &_stdin_;
 FILE  *stdout  =  &_stdout_;
 FILE  *stderr  =  &_stderr_;
 
-static int   _file_init_(FILE *);
-static void  _std_close_(void);
+
+static int  _file_init_(FILE *);
 
 static char *_vsnprint_num_(char *, char *, unsigned long long,
                             char, unsigned int, unsigned int);
@@ -67,8 +67,6 @@ fileno(FILE *stream)
 int
 fclose(FILE *stream)
 {
-  static int  has_close  =  0;
-
   if (stream == NULL)
     {
       /* !TODO: should flush and close all opened fd; */
@@ -80,18 +78,11 @@ fclose(FILE *stream)
   if (stream == stdin || stream == stdout || stream == stderr)
     {
       /*
-        fclose() should not be used on stdin, stdout, or stderr except
-         immediately before process termination.
+        There are no ways to reopen stdin, stdout, or stderr and keep
+        the same previous fileno, so fclose() should not be used on
+        stdin, stdout, or stderr except immediately before process
+        termination.
       */
-      if (!has_close)
-        {
-          if (atexit(_std_close_) == -1)
-            {
-              stream->err = errno;
-              return EOF;
-            }
-          has_close = 1;
-        }
       return 0;
     }
 
@@ -311,6 +302,14 @@ fread(void *restrict ptr, size_t size, size_t nitems, FILE *restrict stream)
       return 0;
     }
 
+  if (!_io_is_init_(stream->flags))
+    {
+      if (_file_init_(stream) == EOF)
+        {
+          return 0;
+        }
+    }
+
   n = (size * nitems) / stream->buf_size;
   m = (size * nitems) % stream->buf_size;
   sum = 0;
@@ -365,6 +364,14 @@ fwrite(const void *restrict ptr, size_t size, size_t nitems,
   if (size * nitems == 0)
     {
       return 0;
+    }
+
+  if (!_io_is_init_(stream->flags))
+    {
+      if (_file_init_(stream) == EOF)
+        {
+          return 0;
+        }
     }
 
   if (stream->buf_type == _IONBF)
@@ -629,27 +636,6 @@ _file_init_(FILE *stream)
   return 0;
 }
 
-void
-_std_close_(void)
-{
-  if (stdin->buf != NULL)
-    {
-      free(stdin->buf);
-      stdin->buf = NULL;
-    }
-
-  if (stdout->buf != NULL)
-    {
-      free(stdout->buf);
-      stdout->buf = NULL;
-    }
-
-  if (stderr->buf != NULL)
-    {
-      free(stderr->buf);
-      stderr->buf = NULL;
-    }
-}
 
 char *
 _vsnprint_num_(char *buf, char *last, unsigned long long ull,
