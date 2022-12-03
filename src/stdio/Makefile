@@ -71,19 +71,30 @@ endif
 
 
 # basic I/O
-stdio_basic_binout := $(bin_path)/$(stdio_prefix)_basic$(bin_ext)
-stdio_basic_cppout := $(tmp_path)/$(stdio_prefix)_basic$(cpp_ext)
+stdio_basic_raw_binout := $(bin_path)/$(stdio_prefix)_basic_raw$(bin_ext)
+stdio_basic_raw_cppout := $(tmp_path)/$(stdio_prefix)_basic_raw$(cpp_ext)
+stdio_basic_err_binout := $(bin_path)/$(stdio_prefix)_basic_err$(bin_ext)
 
-stdio_basic: $(stdio_basic_binout)
-stdio_basic_test: stdio_basic
-	echo "Hello, basic STDIO" | $(stdio_basic_binout)
-	$(stdio_basic_binout) < $(stdio_root)/basic/b.c
+stdio_basic: $(stdio_basic_raw_binout)          \
+             $(stdio_basic_err_binout)
+stdio_basic_test: stdio_basic_raw_test          \
+                  stdio_basic_err_test
 
-$(stdio_basic_binout): $(stdio_basic_cppout)
+stdio_basic_raw_test: $(stdio_basic_raw_binout)
+	echo "Hello, basic STDIO" | $<
+	$< < $(stdio_root)/basic/b.c
+
+stdio_basic_err_test: $(stdio_basic_err_binout)
+	$< 0< $(out)/nore.h
+
+$(stdio_basic_raw_binout): $(stdio_basic_raw_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(stdio_basic_cppout): $(stdio_root)/basic/b.c
+$(stdio_basic_raw_cppout): $(stdio_root)/basic/b.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+$(stdio_basic_err_binout): $(stdio_root)/basic/b1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(cpp_out)$@
 
 
 # binary I/O
@@ -415,10 +426,14 @@ $(stdio_wchar_wc_binout): $(stdio_root)/wchar/wc.c
 
 # wide
 stdio_wide_binout := $(bin_path)/$(stdio_prefix)_wide$(bin_ext)
+stdio_wide_file := $(tmp_path)$(stdio_prefix)_wide.file
 
 stdio_wide: $(stdio_wide_binout)
 stdio_wide_test: stdio_wide
 	$(stdio_wide_binout)
+	$(stdio_wide_binout) 1
+	$(stdio_wide_binout) -1
+	$(stdio_wide_binout) 1 >$(stdio_wide_file) && cat $(stdio_wide_file)
 
 $(stdio_wide_binout): $(stdio_root)/wide/w1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
