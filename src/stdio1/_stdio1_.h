@@ -19,7 +19,6 @@
 
 
 
-
 #define	_IOFBF	0               /* setvbuf should set fully buffered */
 #define	_IOLBF	1               /* setvbuf should set line buffered */
 #define	_IONBF	2               /* setvbuf should set unbuffered */

@@ -4,7 +4,11 @@
 
 extern char  *strerror(int);
 
-#define _IO_INIT_  0001
+#define _IO_INIT_   0x0001
+
+
+
+#define _io_is_init_(x)   (((x) & _IO_INIT_) == _IO_INIT_)
 
 
 static FILE  _stdin_  =
@@ -26,7 +30,9 @@ FILE  *stdin   =  &_stdin_;
 FILE  *stdout  =  &_stdout_;
 FILE  *stderr  =  &_stderr_;
 
-static int  _file_init_(FILE *);
+static int   _file_init_(FILE *);
+static void  _file_close_(void);
+
 static char *_vsnprint_num_(char *, char *, unsigned long long,
                             char, unsigned int, unsigned int);
 
@@ -61,32 +67,46 @@ fileno(FILE *stream)
 int
 fclose(FILE *stream)
 {
+  static int  has_close  =  0;
+
   if (stream == NULL)
     {
+      /* !TODO: should flush and close all opened fd; */
       return 0;
     }
-
-  fflush(stream);
-
-  if (stream == stdin || stream == stdout || stream == stderr)
+  else
     {
+      fflush(stream);
+
+      if (stream == stdin || stream == stdout || stream == stderr)
+        {
+          if (!has_close)
+            {
+              if (atexit(_file_close_) == -1)
+                {
+                  stream->err = errno;
+                  return EOF;
+                }
+              has_close = 1;
+            }
+          return 0;
+        }
+
+      if (stream->buf != NULL)
+        {
+          free(stream->buf);
+          stream->buf = NULL;
+        }
+
+      if (close(stream->fd) == -1)
+        {
+          return EOF;
+        }
+
+      free(stream);
+
       return 0;
     }
-
-  if (stream->buf != NULL)
-    {
-      free(stream->buf);
-      stream->buf = NULL;
-    }
-
-  if (close(stream->fd) == -1)
-    {
-      return EOF;
-    }
-
-  free(stream);
-
-  return 0;
 }
 
 int
@@ -183,7 +203,7 @@ fgetc(FILE *stream)
       return stream->eof;
     }
 
-  if ((stream->flags & _IO_INIT_) != _IO_INIT_)
+  if (!_io_is_init_(stream->flags))
     {
       if (_file_init_(stream) == EOF)
         {
@@ -230,7 +250,7 @@ fgetc(FILE *stream)
 int
 fputc(int c, FILE *stream)
 {
-  if ((stream->flags & _IO_INIT_) != _IO_INIT_)
+  if (!_io_is_init_(stream->flags))
     {
       if (_file_init_(stream) == EOF)
         {
@@ -338,6 +358,24 @@ fwrite(const void *restrict ptr, size_t size, size_t nitems,
   size_t          n, m, sum;
   ssize_t         w;
   unsigned char  *cur;
+
+  if (size * nitems == 0)
+    {
+      return 0;
+    }
+
+  if (stream->buf_type == _IONBF)
+    {
+      n = size * nitems;
+      w = write(stream->fd, (unsigned char *) ptr, n);
+      if (w == -1)
+        {
+          stream->err = errno;
+          return 0;
+        }
+
+      return w / size;
+    }
 
   n = (size * nitems) / stream->buf_size;
   m = (size * nitems) % stream->buf_size;
@@ -520,7 +558,7 @@ _file_init_(FILE *stream)
 {
   struct stat  ss;
 
-  if ((stream->flags & _IO_INIT_) == _IO_INIT_)
+  if (_io_is_init_(stream->flags))
     {
       return 0;
     }
@@ -586,6 +624,28 @@ _file_init_(FILE *stream)
   stream->flags |= _IO_INIT_;
 
   return 0;
+}
+
+void
+_file_close_(void)
+{
+  if (stdin != NULL && stdin->buf != NULL)
+    {
+      free(stdin->buf);
+      stdin->buf = NULL;
+    }
+
+  if (stdout != NULL && stdout->buf != NULL)
+    {
+      free(stdout->buf);
+      stdout->buf = NULL;
+    }
+
+  if (stderr != NULL && stderr->buf != NULL)
+    {
+      free(stderr->buf);
+      stderr->buf = NULL;
+    }
 }
 
 char *

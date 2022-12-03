@@ -49,9 +49,9 @@ test_u(int argc, char *argv[])
   fputc('A', stderr);
   fputc('\n', stderr);
 
-  /* fclose(in); */
-  /* fclose(out); */
-  /* fclose(stderr); */
+  fclose(in);
+  fclose(out);
+  fclose(stderr);
 }
 
 
