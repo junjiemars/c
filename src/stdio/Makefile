@@ -47,7 +47,6 @@ stdio_test: stdio_basic_test                    \
             stdio_process_test                  \
             stdio_scan_test                     \
             stdio_seek_test                     \
-            stdio_unget_test                    \
             stdio_variadic_test                 \
             stdio_wc_test                       \
             stdio_wide_test                     \
