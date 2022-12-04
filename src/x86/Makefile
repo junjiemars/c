@@ -138,7 +138,7 @@ $(x86_call_objout): $(x86_call_asmout)
 	$(CC) $(CFLAGS) $(nm_stage_c) $^ $(obj_out)$@
 
 $(x86_call_asmout): $(x86_call_cppout)
-	$(AS) $(ASFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
+	$(ASM) $(ASFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
 
 $(x86_call_cppout): $(x86_root)/call/call.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
@@ -183,7 +183,7 @@ $(x86_pointer_objout): $(x86_pointer_asmout)
 	$(CC) $(CFLAGS) $(nm_stage_c) $^ $(bin_out)$@
 
 $(x86_pointer_asmout): $(x86_pointer_cppout)
-	$(AS) $(ASFLAGS) $(nm_stage_asm) $^ $(bin_out)$@
+	$(ASM) $(ASFLAGS) $(nm_stage_asm) $^ $(bin_out)$@
 
 $(x86_pointer_cppout): $(x86_root)/pointer/pointer.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(bin_out)$@
@@ -205,7 +205,7 @@ $(x86_retval_objout): $(x86_retval_asmout)
 	$(CC) $(CFLAGS) $(nm_stage_c) $^ $(obj_out)$@
 
 $(x86_retval_asmout): $(x86_retval_cppout)
-	$(AS) $(ASFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
+	$(ASM) $(ASFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
 
 $(x86_retval_cppout): $(x86_root)/retval/retval.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
@@ -228,7 +228,7 @@ $(x86_structure_objout): $(x86_structure_asmout)
 	$(CC) $(CFLAGS) $(nm_stage_c) $^ $(obj_out)$@
 
 $(x86_structure_asmout): $(x86_structure_cppout)
-	$(AS) $(ASFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
+	$(ASM) $(ASFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
 
 $(x86_structure_cppout): $(x86_root)/structure/structure.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@

@@ -1733,6 +1733,8 @@ RFLAGS Register
 - [[https://software.intel.com/content/www/us/en/develop/articles/introduction-to-x64-assembly.html][Introduction to x64 Assembly]]
 - [[https://www.amd.com/system/files/TechDocs/24594.pdf][AMD64 Architecutre Programmer's Manual]]
 - [[https://www.csee.umbc.edu/~chang/cs313.s02/stack.shtml][C Function Call Conventions and the Stack]]
+- [[https://cs61.seas.harvard.edu/site/2019/Asm/][Harvard CS 61-2019]]	
+- [[https://wiki.osdev.org/Calling_Conventions#:~:text=The%20System%20V%20ABI%20is%20one%20of%20the,C%2C%20it%20must%20have%20a%20correct%20C%20prototype.][System V ABI Calling Conventions]]	
 
 * Memory
 	:PROPERTIES:

@@ -3,7 +3,7 @@
 
 #include <nore.h>
 
-#define _unused_(x) (void)(x)
+#define _unused_(x)  ((void) (x))
 
 
 #ifdef MSVC
@@ -20,15 +20,17 @@
 #endif
 
 
-struct binky {
-  int a;
-  char b, c, d, e;
-  short f;
+struct binky
+{
+  int    a;
+  char   b, c, d, e;
+  short  f;
 };
 
-struct fraction {
-	int numerator;
-	int denominator;
+struct fraction
+{
+	int  numerator;
+	int  denominator;
 };
 
 

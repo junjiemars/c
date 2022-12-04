@@ -1,35 +1,39 @@
-#include <_x86_.h>
+#include "_x86_.h"
 
 void B(void);
 void C(void);
 
 void A(void)
 {
-	int x;
-	short y;
-	_unused_(x);
-	_unused_(y);
+	int    x;
+	short  y;
+
+  (void) (x);
+  (void) (y);
 }
 
 void B(void)
 {
-	long x, z;
-	int y;
-	_unused_(x);
-	_unused_(y);
-  _unused_(z);
+	long  x, z;
+	int   y;
+
+	(void) (x);
+	(void) (y);
+  (void) (z);
+
 	C();
 }
 
 void C(void)
 {
-	double x;
-	long y;
-	_unused_(x);
-	_unused_(y);
+	double  x;
+	long    y;
+
+	(void) (x);
+	(void) (y);
 }
 
-int 
+int
 main(void)
 {
 	A();

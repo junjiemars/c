@@ -2,10 +2,38 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+static int   adder(int, int);
+static int   fact(int);
+
+static void  caller(void);
+static void  ptr_callee_p(int *);
+static void  ptr_caller_p(void);
+static void  ptr_callee_pp(int **);
+static void  ptr_caller_pp(void);
+static void  struct_callee(struct fraction);
+static void  struct_caller(void);
+
+
+int
+main(void)
+{
+  adder(0x1100, 0x22);
+  caller();
+
+  ptr_caller_p();
+  ptr_caller_pp();
+
+  struct_caller();
+
+  fact(3);
+}
+
+
 static int
 adder(int one, int two)
 {
-  int sum;
+  int  sum;
+
   sum = one + two;
   return sum;
 }
@@ -13,7 +41,8 @@ adder(int one, int two)
 static void
 caller(void)
 {
-  int n = 0x22;
+  int  n  =  0x22;
+
   n = adder(n, 0x1100);
   n = 0x1f;
 }
@@ -27,7 +56,8 @@ ptr_callee_p(int *p)
 static void
 ptr_caller_p(void)
 {
-  int i;
+  int  i;
+
   i = 0x22;
   ptr_callee_p(&i);
   i += 1;
@@ -43,8 +73,8 @@ ptr_callee_pp(int **pp)
 static void
 ptr_caller_pp(void)
 {
-  int i;
-  int *p;
+  int   i;
+  int  *p;
 
   i = 0x22;
   p = &i;
@@ -74,18 +104,4 @@ fact(int n)
 {
   if (0 == n) return 1;
   return n * fact(n-1);
-}
-
-int
-main(void)
-{
-  adder(0x1100, 0x22);
-  caller();
-
-  ptr_caller_p();
-  ptr_caller_pp();
-
-  struct_caller();
-
-  fact(3);
 }

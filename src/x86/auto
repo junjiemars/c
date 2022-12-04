@@ -11,7 +11,7 @@
 #----------------------------------------
 case "$CC_NAME" in
    clang|gcc)
-     nm_feature="$CC_NAME -fomit-frame-pointer"
+     nm_feature="-fomit-frame-pointer"
      nm_feature_name=
      nm_feature_indent=yes
      nm_feature_run=no
@@ -25,7 +25,7 @@ case "$CC_NAME" in
      fi
      ;;
    msvc)
-     nm_feature="$CC_NAME -Oy"
+     nm_feature="-Oy"
      nm_feature_name=
      nm_feature_indent=yes
      nm_feature_run=no
@@ -45,7 +45,7 @@ esac
 #----------------------------------------
 case "$CC_NAME" in
    clang|gcc)
-     nm_feature="$CC_NAME -fno-omit-frame-pointer"
+     nm_feature="-fno-omit-frame-pointer"
      nm_feature_name=
      nm_feature_indent=yes
      nm_feature_run=no
@@ -59,7 +59,7 @@ case "$CC_NAME" in
      fi
      ;;
    msvc)
-     nm_feature="$CC_NAME -Oy-"
+     nm_feature="-Oy-"
      nm_feature_name=
      nm_feature_indent=yes
      nm_feature_run=no
