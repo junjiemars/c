@@ -1,28 +1,16 @@
 #include "_lang_.h"
 
-#if (MSVC)
-#  pragma warning(disable: 4456)
-#  pragma warning(disable: 4189)
-#elif (GCC)
-#  pragma GCC diagnostic ignored "-Wunused-variable"
-#  pragma GCC diagnostic ignored "-Wunused-parameter"
-#  pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#elif (CLANG)
-#  pragma clang diagnostic ignored "-Wunused-but-set-variable"
-#  pragma clang diagnostic ignored "-Wunused-variable"
-#  pragma clang diagnostic ignored "-Wunused-parameter"
-#endif
-
 
 /* base, row-index, col-index, col-n, width */
-#define Aij(b, r, c, n, w) ((char*) (b) + (r)*(n)*(w) + (c)*(w))
+#define Aij(b, r, c, n, w)  ((char*) (b) + (r)*(n)*(w) + (c)*(w))
 
-static void f1(char**);
-static void f2(char*[]);
-static void g1(char (*)[3][4], int);
-static void g2(char [][3][4], int);
-static void h1(int (*)[4], int);
-static void h2(int (*)[3][4]);
+static void  f1(char **);
+static void  f2(char *[]);
+static void  f3(char *[], size_t);
+static void  g1(char (*)[3][4], size_t);
+static void  g2(char [][3][4], size_t);
+static void  m1(int (*)[3], int (*)[2]);
+
 
 char *s1[] =
   {
@@ -36,16 +24,17 @@ char s2[][3][4] =
     { "aaa", "bbb", "ccc" },
   };
 
-int i1[][4] =
+int a1[2][3]  =
   {
-    { 0x11, 0x22, 0x33, 0x44, },
-    { 0x44, 0x33, 0x22, 0x11, },
+    { 1, 2, 3 },
+    { 4, 5, 6 },
   };
 
-int i2[][3][4] =
+int b1[3][2]  =
   {
-    { {1,2,3,4}, {5,6,7,8}, {9,10,11,12}, },
-    { {21,22,23,24}, {25,26,27,28}, {29,30,31,32}, },
+    {  7,  8 },
+    {  9, 10 },
+    { 11, 12 },
   };
 
 
@@ -53,11 +42,11 @@ int
 main(void)
 {
 	f1(s1);
-	f2(s1);
-	g1(s2, 3);
-	g2(s2, 3);
-  h1(i1, sizeof(i1)/sizeof(i1[0]));
-	h2(i2);
+  f2(s1);
+	f3(s1, sizeof(s1)/sizeof(*s1));
+	g1(s2, sizeof(s2)/sizeof(*s2));
+	g2(s2, sizeof(s2)/sizeof(*s2));
+  m1(a1, b1);
 
 	return 0;
 }
@@ -65,38 +54,54 @@ main(void)
 void
 f1(char **args)
 {
-	char  x  =  args[1][2];
-
   printf("char **args\n------------\n");
+
   while (*args)
     {
       printf("%s,", *args);
       args++;
     }
+
   printf("\n\n");
 }
 
 void
 f2(char *args[])
 {
-  char x = args[1][2];
-
   printf("char *args[]\n------------\n");
-  while (*args)
+
+  for (size_t i = 0; args[i]; i++)
     {
-      printf("%s,", *args);
-      args++;
+      for (size_t j = 0; args[i][j]; j++)
+        {
+          putchar(args[i][j]);
+        }
+      putchar(',');
     }
+
   printf("\n\n");
 }
 
 void
-g1(char (*args)[3][4], int n)
+f3(char *args[], size_t n)
 {
-  char x = args[1][2][3];
+  printf("char *args[]\n------------\n");
 
+  for (size_t i = 0; i < (n-1); i++)
+    {
+      printf("%s,", args[i]);
+    }
+
+  printf("\n\n");
+}
+
+
+void
+g1(char (*args)[3][4], size_t n)
+{
   printf("char (*args)[3][4]\n------------\n");
-  for (int i = 0; i < n; i++)
+
+  for (size_t i = 0; i < n; i++)
     {
       for (int j = 0; j < 3; j++)
         {
@@ -104,46 +109,55 @@ g1(char (*args)[3][4], int n)
         }
       printf("\n");
     }
+
   printf("\n");
 }
 
 void
-g2(char args[][3][4], int n)
+g2(char args[][3][4], size_t n)
 {
-  char x = args[1][2][3];
-
   printf("char args[][3][4]\n------------\n");
-  for (int i = 0; i < n; i++)
+
+  for (size_t i = 0; i < n; i++)
     {
       for (int j = 0; j < 3; j++)
         {
-          char *ss = (char*)&args[0] + i*3*4 + j*4;
-          printf("%4s, ", ss);
+          printf("%4s, ", args[i][j]);
         }
       printf("\n");
     }
+
   printf("\n");
 }
 
 void
-h1(int (*i)[4], int n)
+m1(int a[2][3], int b[3][2])
 {
-  int x = i[1][2];
+  int  c[2][2];
 
-  printf("int (*i)[4]\n------------\n");
-  for (int j = 0; j < n; j++)
+  printf("A[2,3] x B[3,2] = M\n------------\n");
+
+  for (int i = 0; i < 2; i++)
     {
-      for (int k = 0; k < 4; k++)
+      for (int j = 0; j < 3; j++)
         {
-          printf("0x%02x, ", *(int*)Aij(i, j, k, 4, sizeof(int)));
-        }
-      printf("\n");
-    }
-  printf("\n");
-}
+          int  p  =  0;
 
-void
-h2(int (*i)[3][4])
-{
-  int x = i[0][1][2];
+          for (int k = 0; k < 3; k++)
+            {
+              p += a[i][k] * b[k][j];
+            }
+
+          c[i][j] = p;
+        }
+    }
+
+  for (int i = 0; i < 2; i++)
+    {
+      for (int j = 0; j < 2; j++)
+        {
+          printf("%4d ", c[i][j]);
+        }
+      putchar('\n');
+    }
 }
