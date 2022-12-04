@@ -33,5 +33,12 @@ struct fraction
 	int  denominator;
 };
 
+struct fraction2
+{
+  long long  numerator;
+  long long  denominator;
+};
+
+
 
 #endif /* _X86_H_ */
