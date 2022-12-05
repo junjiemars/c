@@ -9,7 +9,7 @@ extern char  *strerror(int);
 #define _IO_ALLOC_    0x0003
 
 
-#define _io_has_alloc_(x)  (((x) & _IO_ALLOC_) == _IO_ALLOC_)
+#define _io_has_alloc_(x)  (((x) & _IO_ALLOC_) == _IO_ALLOC_D_)
 #define _io_has_alloc_d_(x)  (((x) & _IO_ALLOC_D_) == _IO_ALLOC_D_)
 
 
