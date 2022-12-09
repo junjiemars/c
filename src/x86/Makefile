@@ -68,8 +68,12 @@ CFLAGS += -fno-stack-protector
 endif
 endif
 
-ifdef NO_FRAME_POINTER
+ifeq ($(NO_FRAME_POINTER),1)
+ifeq ($(CC_NAME), msvc)
+ASFLAGS += -Oy
+else
 ASFLAGS += -fomit-frame-pointer
+endif
 endif
 
 ifdef NO_INT_TO_POINTER_WARN
