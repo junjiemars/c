@@ -11,6 +11,7 @@ io_test:
 else
 
 io: io_access                                   \
+    io_adv                                      \
     io_close                                    \
     io_copy                                     \
     io_dir                                      \
@@ -35,6 +36,7 @@ io: io_access                                   \
     io_umask
 
 io_test: io_access_test                         \
+         io_adv_test                            \
          io_close_test                          \
          io_copy_test                           \
          io_dir_test                            \
@@ -119,6 +121,24 @@ $(io_access_open_binout): $(io_root)/access/a.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_access_at_binout): $(io_root)/access/aat.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# adv
+io_adv_nonblk_binout := $(bin_path)/$(io_prefix)_adv_nonblk$(bin_ext)
+io_adv_out_file := $(tmp_path)/$(io_prefix)_adv_out.file
+
+io_adv: $(io_adv_nonblk_binout)
+io_adv_test: io_adv_nonblk_test
+
+io_adv_nonblk_test: $(io_adv_nonblk_binout)
+	ls -lh $(out)/Makefile
+	$< </etc/services >$(io_adv_out_file)
+	ls -l $(io_adv_out_file)
+	$< </etc/services 2>$(io_adv_out_file)
+	ls -l $(io_adv_out_file)
+
+$(io_adv_nonblk_binout): $(io_root)/adv/nonblk1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
