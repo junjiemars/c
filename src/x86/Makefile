@@ -118,12 +118,20 @@ $(bone_binout): $(x86_root)/bone/bone.c
 
 # branch
 branch_binout := $(bin_path)/x86_branch$(bin_ext)
+branch_objout := $(tmp_path)/x86_branch$(obj_ext)
+branch_asmout := $(tmp_path)/x86_branch$(asm_ext)
 
 x86_branch: $(branch_binout)
 x86_branch_test: x86_branch
 
-$(branch_binout): $(x86_root)/branch/branch.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(branch_binout): $(branch_objout)
+	$(LINK) $(LDFLAGS) $^ $(bin_out)$@
+
+$(branch_objout): $(branch_asmout)
+	$(CC) $(CFLAGS) $(nm_stage_c) $^ $(obj_out)$@
+
+$(branch_asmout): $(x86_root)/branch/branch.c
+	$(ASM) $(ASFLAGS) $(INC) $(nm_stage_asm) $^ $(asm_out)$@
 
 
 # call
