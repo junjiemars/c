@@ -13,6 +13,7 @@ x86: x86_array                                  \
      x86_pointer                                \
      x86_retval                                 \
      x86_structure                              \
+     x86_tail                                   \
      x86_typecast                               \
      x86_var
 
@@ -26,6 +27,7 @@ x86_test: x86_array_test                        \
           x86_pointer_test                      \
           x86_retval_test                       \
           x86_structure_test                    \
+          x86_tail                              \
           x86_typecast_test                     \
           x86_var_test
 
@@ -273,6 +275,25 @@ $(x86_structure_asmout): $(x86_structure_cppout)
 $(x86_structure_cppout): $(x86_root)/structure/structure.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
+# tail call
+x86_tail_binout := $(bin_path)/$(x86_prefix)_tail$(bin_ext)
+x86_tail_objout := $(tmp_path)/$(x86_prefix)_tail$(obj_ext)
+x86_tail_asmout := $(tmp_path)/$(x86_prefix)_tail$(asm_ext)
+
+x86_tail_asflags := $(ASFLAGS) $(nm_optimize_opt)
+
+x86_tail: $(x86_tail_binout)
+x86_tail_test: x86_tail
+	$(x86_tail_binout) 1
+
+$(x86_tail_binout): $(x86_tail_objout)
+	$(LINK) $(LDFLAGS) $^ $(bin_out)$@
+
+$(x86_tail_objout): $(x86_tail_asmout)
+	$(CC) $(CFLAGS) $(nm_stage_c) $^ $(obj_out)$@
+
+$(x86_tail_asmout): $(x86_root)/tail/tail.c
+	$(ASM) $(x86_tail_asflags) $(INC) $(nm_stage_asm) $^ $(asm_out)$@
 
 # typecast
 typecast_binout := $(bin_path)/x86_typecast$(bin_ext)
