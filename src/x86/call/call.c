@@ -21,11 +21,8 @@ int
 main(void)
 {
   caller();
-
   ptr_caller();
-
   struct_caller();
-
   float_caller();
 
 }

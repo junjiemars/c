@@ -8,6 +8,7 @@ x86: x86_array                                  \
      x86_branch                                 \
      x86_call                                   \
      x86_convert                                \
+     x86_inline                                 \
      x86_loop                                   \
      x86_pointer                                \
      x86_retval                                 \
@@ -20,6 +21,7 @@ x86_test: x86_array_test                        \
           x86_branch_test                       \
           x86_call_test                         \
           x86_convert_test                      \
+          x86_inline                            \
           x86_loop                              \
           x86_pointer_test                      \
           x86_retval_test                       \
@@ -42,6 +44,7 @@ NO_FRAME_POINTER = 1
 NO_RED_ZONE=1
 NO_INT_TO_POINTER_WARN = 1
 NO_POINTER_TO_INT_WARN = 1
+NO_INLINE = 1
 endif
 
 ifdef NO_STRUCT_ALIGN
@@ -92,6 +95,12 @@ CFLAGS += -wd4311
 else
 CFLAGS += -Wno-pointer-to-int-cast
 endif
+endif
+
+ifdef NO_INLINE
+ifeq ($(CC_NAME, msvc)
+endif
+else
 endif
 
 
@@ -166,6 +175,24 @@ x86_convert_test: x86_convert
 
 $(convert_binout): $(x86_root)/convert/convert.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# inline
+x86_inline_binout := $(bin_path)/$(x86_prefix)_inline$(bin_ext)
+x86_inline_objout := $(tmp_path)/$(x86_prefix)_inline$(obj_ext)
+x86_inline_asmout := $(tmp_path)/$(x86_prefix)_inline$(asm_ext)
+
+x86_inline: $(x86_inline_binout)
+x86_inline_test: x86_inline
+	$(x86_inline_binout)
+
+$(x86_inline_binout): $(x86_inline_objout)
+	$(LINK) $(LDFLAGS) $^ $(bin_out)$@
+
+$(x86_inline_objout): $(x86_inline_asmout)
+	$(CC) $(CFLAGS) $(nm_stage_c) $^ $(obj_out)$@
+
+$(x86_inline_asmout): $(x86_root)/inline/inline.c
+	$(ASM) $(ASFLAGS) $(INC) $(nm_stage_asm) $^ $(asm_out)$@
 
 
 # loop

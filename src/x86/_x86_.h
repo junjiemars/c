@@ -2,6 +2,7 @@
 #define _X86_H_
 
 #include <nore.h>
+#include <nio.h>
 
 #define _unused_(x)  ((void) (x))
 
