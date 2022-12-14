@@ -126,19 +126,29 @@ $(io_access_at_binout): $(io_root)/access/aat.c
 
 # adv
 io_adv_nonblk_binout := $(bin_path)/$(io_prefix)_adv_nonblk$(bin_ext)
-io_adv_out_file := $(tmp_path)/$(io_prefix)_adv_out.file
+io_adv_lock_binout := $(bin_path)/$(io_prefix)_adv_lock$(bin_ext)
+io_adv_out_file1 := $(tmp_path)/$(io_prefix)_adv_out.file1
+io_adv_out_file2 := $(tmp_path)/$(io_prefix)_adv_out.file2
 
-io_adv: $(io_adv_nonblk_binout)
-io_adv_test: io_adv_nonblk_test
+io_adv: $(io_adv_nonblk_binout)                 \
+        $(io_adv_lock_binout)
+io_adv_test: io_adv_nonblk_test                 \
+             io_adv_lock_test
 
 io_adv_nonblk_test: $(io_adv_nonblk_binout)
-	ls -lh $(out)/Makefile
-	$< </etc/services >$(io_adv_out_file)
-	ls -l $(io_adv_out_file)
-	$< </etc/services 2>$(io_adv_out_file)
-	ls -l $(io_adv_out_file)
+	ls -lh /etc/services
+	$< </etc/services >$(io_adv_out_file1)
+	ls -l $(io_adv_out_file1)
+	$< </etc/services 2>$(io_adv_out_file2)
+	ls -l $(io_adv_out_file2)
+
+io_adv_lock_test: $(io_adv_lock_binout)
+	$< <$(out)/Makefile
 
 $(io_adv_nonblk_binout): $(io_root)/adv/nonblk1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_adv_lock_binout): $(io_root)/adv/lock.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

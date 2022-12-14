@@ -42,7 +42,6 @@ main(void)
   while (nr > 0)
     {
       errno = 0;
-
       nw = write(STDOUT_FILENO, pbuf, nr);
 
       fprintf(stderr, "wrote = %zd, errno = %d\n", nw, errno);
