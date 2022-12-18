@@ -1,4 +1,4 @@
-#include <_lang_.h>
+#include "_lang_.h"
 #include <setjmp.h>
 
 /*
@@ -14,12 +14,13 @@
 #endif
 
 
-static void f1(int, int, int, int);
-static void f2(int);
-static void print_var(int, int, int, int);
+static void  f1(int, int, int, int);
+static void  f2(int);
+static void  print_var(int, int, int, int);
 
 static jmp_buf  jmpenv;
 static int      g_var;
+
 
 int
 main(void)
@@ -44,8 +45,6 @@ main(void)
   g_var = 11, a_var = 12, r_var = 13, s_var = 14, v_var = 15;
 
   f1(a_var, r_var, s_var, v_var);
-
-  return 0;
 }
 
 void

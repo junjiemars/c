@@ -1,32 +1,31 @@
-#include <_lang_.h>
+#include "_lang_.h"
 #include <setjmp.h>
 
 
-#define INDENT_0 ""
-#define INDENT_1 "  "
-#define INDENT_2 INDENT_1 INDENT_1
+#define INDENT_0  ""
+#define INDENT_1  "  "
+#define INDENT_2  INDENT_1 INDENT_1
 
 
 
-static void throw(jmp_buf*);
-static void f(void);
-static void g(jmp_buf*);
+static void  throw(jmp_buf*);
+static void  f(void);
+static void  g(jmp_buf*);
 
-static volatile int exception_type;
+static volatile int  exception_type;
 
 
 
 int main(void)
 {
 	f();
-
-	return 0;
 }
 
 
 void f(void)
 {
-	jmp_buf exception_env;
+	jmp_buf  exception_env;
+
 	exception_type = 0;
 
 	switch (setjmp(exception_env))
@@ -45,7 +44,8 @@ void f(void)
 
 void g(jmp_buf *env)
 {
-	jmp_buf local_env;
+	jmp_buf  local_env;
+
 	printf("%s g()\n", INDENT_1);
 
 	switch (setjmp(local_env))

@@ -1,13 +1,20 @@
-#include <_lang_.h>
+#include "_lang_.h"
 #include <setjmp.h>
 #include <stdio.h>
 
-jmp_buf env;
-volatile int flag = 0x11223344;
+/*
+ * 1. demonstrates the basis usage of `setjmp' and `longjmp'.
+ *
+ * 2. signal processing discussed in src/signal.
+ *
+ */
 
-static void a(void);
-static void b(volatile int*);
-static void c(volatile int*);
+static jmp_buf       env;
+static volatile int  flag  =  0x11223344;
+
+static void  a(void);
+static void  b(volatile int*);
+static void  c(volatile int*);
 
 int
 main(void)
@@ -18,8 +25,8 @@ main(void)
 void
 a(void)
 {
-	int val;
-	volatile int flag_in_stack = flag;
+	int           val;
+	volatile int  flag_in_stack  =  flag;
 
 	printf("> setjmp()\n[flag=0x%x, flag_in_stack=0x%x]\n=> ",
 				 flag, flag_in_stack);
