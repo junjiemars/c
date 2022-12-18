@@ -124,7 +124,7 @@ if [ "$ndef_alignof" = "yes" ]; then
 	  nm_feature="_Alignof"
 	  nm_feature_name="nm_have__alignof"
 	  nm_feature_run=
-	  nm_feature_h=
+	  nm_feature_h='#include <stdalign.h>'
 	  nm_feature_flags=
 	  nm_feature_test='int a = (int) _Alignof(short); (void) sizeof(a);'
 	  . ${NORE_ROOT}/auto/feature
@@ -145,7 +145,7 @@ if [ "$ndef_alignas" = "yes" ]; then
 	  nm_feature="_Alignas"
 	  nm_feature_name="nm_have__alignas"
 	  nm_feature_run=
-	  nm_feature_h=
+	  nm_feature_h='#include <stdalign.h>'
 	  nm_feature_flags=
 	  nm_feature_test='int alignas(int) a; (void) sizeof(a);'
 	  . ${NORE_ROOT}/auto/feature

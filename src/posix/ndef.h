@@ -62,7 +62,11 @@
 #    if defined(alignof)
 #      undef alignof
 #    endif
-#    define alignof __alignof__
+#    if (MSVC)
+#      define alignof  __alignof
+#    else
+#      define alignof __alignof__
+#    endif
 #  else
 #    include <stdalign.h>
 #  endif
@@ -76,7 +80,11 @@
 #    if defined(alignas)
 #      undef alignas
 #    endif
-#    define alignas(x) __attribute__((aligned(x)))
+#    if (MSVC)
+#      define alignas(x)
+#    else
+#      define alignas(x)  __attribute__((aligned(x)))
+#    endif
 #  else
 #    include <stdalign.h>
 #  endif

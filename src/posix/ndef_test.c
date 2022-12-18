@@ -22,7 +22,7 @@ static void test_nof(void);
 static void test_swp(void);
 
 struct X {
-  char alignas(int) ss[3];
+  alignas(int) char ss[3];
   int  i;
 };
 
