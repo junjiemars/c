@@ -19,6 +19,12 @@ main(void)
   printf("%s=(no symbol)\n", _str_(NM_CLK_TCK));
 #endif
 
+#if defined(NM_PAGESIZE)
+  printf("%s=%d\n", _str_(NM_PAGESIZE), NM_PAGESIZE);
+#else
+  printf("%s=(no symbol)\n", _str_(NM_PAGESIZE));
+#endif
+
   test_times();
 
 

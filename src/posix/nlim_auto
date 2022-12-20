@@ -21,9 +21,10 @@ fi
 . ${POSIX_ROOT}/nustd_auto
 
 
-if [    "$nlim_line_max" = "yes"                \
+if [    "$nlim_clk_tck" = "yes"                 \
+     -o "$nlim_line_max" = "yes"                \
+     -o "$nlim_pagesize" = "yes"                \
      -o "$nlim_path_max" = "yes"                \
-     -o "$nlim_clk_tck" = "yes"                 \
      -o "$nlim_times" = "yes"                   \
    ]; then
 
@@ -34,6 +35,37 @@ if [    "$nlim_line_max" = "yes"                \
   echo "checking for nlim.h ..."
 else
   return
+fi
+
+
+# check CLK_TCK
+#----------------------------------------
+if [ "$nlim_clk_tck" = "yes" ]; then
+  case $NM_SYSTEM in
+    Linux|Darwin)
+      nm_feature="CLK_TCK"
+      nm_feature_name="nm_clk_tck"
+      nm_feature_run=value
+      nm_feature_h='
+#include <stdio.h>
+#include <unistd.h>
+'
+      nm_feature_flags=
+      nm_feature_test='
+#if (CLK_TCK)
+  printf("%ld\n", CLK_TCK);
+#else
+  printf("%ld\n", sysconf(_SC_CLK_TCK));
+#endif
+return 0;
+'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    WinNT)
+      ;;
+    *)
+      ;;
+  esac                            # end of _SC_CLK_TCK
 fi
 
 
@@ -92,6 +124,54 @@ long line_max = 2048;
 fi
 
 
+# check PAGESIZE
+#----------------------------------------
+if [ "$nlim_pagesize" = "yes" ]; then
+  case $NM_SYSTEM in
+    Linux|Darwin)
+      nm_feature="PAGESIZE"
+      nm_feature_name="nm_pagesize"
+      nm_feature_run=value
+      nm_feature_h='
+#include <stdio.h>
+#include <unistd.h>
+#include <limits.h>
+'
+    nm_feature_flags=
+    nm_feature_test='
+int pagesize;
+pagesize = sysconf(_SC_PAGESIZE);
+printf("%ld\n", pagesize);
+return 0;
+'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    WinNT)
+      nm_feature="PAGESIZE"
+      nm_feature_name="nm_pagesize"
+      nm_feature_run=value
+      nm_feature_h='
+#include <stdio.h>
+#include <limits.h>
+#include <windows.h>
+'
+    nm_feature_flags=
+    nm_feature_test='
+int pagesize;
+SYSTEM_INFO sysinfo;
+GetSystemInfo(&sysinfo);
+pagesize = sysinfo.dwPageSize;
+printf("%d\n", pagesize);
+return 0;
+'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    *)
+      ;;
+  esac                            # end of PAGESIZE
+fi
+
+
 # check PATH_MAX
 #----------------------------------------
 if [ "$nlim_path_max" = "yes" ]; then
@@ -139,37 +219,6 @@ long path_max = 1024;
     *)
       ;;
   esac                            # end of PATH_MAX
-fi
-
-
-# check CLK_TCK
-#----------------------------------------
-if [ "$nlim_clk_tck" = "yes" ]; then
-  case $NM_SYSTEM in
-    Linux|Darwin)
-      nm_feature="CLK_TCK"
-      nm_feature_name="nm_clk_tck"
-      nm_feature_run=value
-      nm_feature_h='
-#include <stdio.h>
-#include <unistd.h>
-'
-      nm_feature_flags=
-      nm_feature_test='
-#if (CLK_TCK)
-  printf("%ld\n", CLK_TCK);
-#else
-  printf("%ld\n", sysconf(_SC_CLK_TCK));
-#endif
-return 0;
-'
-      . ${NORE_ROOT}/auto/feature
-      ;;
-    WinNT)
-      ;;
-    *)
-      ;;
-  esac                            # end of _SC_CLK_TCK
 fi
 
 

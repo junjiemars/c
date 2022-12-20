@@ -48,9 +48,10 @@ nustd_gettimeofday="yes"
 . ${POSIX_ROOT}/nustd_auto
 
 # checking for <nlim.h>
-nlim_line_max="yes"
-nlim_path_max="yes"
 nlim_clk_tck="yes"
+nlim_line_max="yes"
+nlim_pagesize="yes"
+nlim_path_max="yes"
 nlim_times="yes"
 . ${POSIX_ROOT}/nlim_auto
 
