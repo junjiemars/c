@@ -127,13 +127,16 @@ $(io_access_at_binout): $(io_root)/access/aat.c
 # adv
 io_adv_nonblk_binout := $(bin_path)/$(io_prefix)_adv_nonblk$(bin_ext)
 io_adv_lock_binout := $(bin_path)/$(io_prefix)_adv_lock$(bin_ext)
+io_adv_mmap_binout := $(bin_path)/$(io_prefix)_adv_mmap$(bin_ext)
 io_adv_out_file1 := $(tmp_path)/$(io_prefix)_adv_out.file1
 io_adv_out_file2 := $(tmp_path)/$(io_prefix)_adv_out.file2
 
 io_adv: $(io_adv_nonblk_binout)                 \
-        $(io_adv_lock_binout)
+        $(io_adv_lock_binout)                   \
+        $(io_adv_mmap_binout)
 io_adv_test: io_adv_nonblk_test                 \
-             io_adv_lock_test
+             io_adv_lock_test                   \
+             io_adv_mmap_test
 
 io_adv_nonblk_test: $(io_adv_nonblk_binout)
 	ls -lh /etc/services
@@ -145,10 +148,16 @@ io_adv_nonblk_test: $(io_adv_nonblk_binout)
 io_adv_lock_test: $(io_adv_lock_binout)
 	$< <$(out)/Makefile
 
+io_adv_mmap_test: $(io_adv_mmap_binout)
+	$< $(io_root)/adv/m1.c $(io_adv_out_file1);
+
 $(io_adv_nonblk_binout): $(io_root)/adv/nonblk1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_adv_lock_binout): $(io_root)/adv/lock.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_adv_mmap_binout): $(io_root)/adv/m1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
