@@ -4,9 +4,10 @@
 int
 main(int argc, char **argv)
 {
+  int           fdin, fdout;
   char         *src, *dst;
-  int           rfd, wfd;
-  char         *rptr, *wptr;
+  off_t         fsz;
+  size_t        bsz;
   struct stat   ss;
 
   if (argc < 3)
@@ -14,62 +15,65 @@ main(int argc, char **argv)
       fprintf(stderr, "usage: <src> <dst>\n");
       exit(EXIT_FAILURE);
     }
-  src = argv[1];
-  dst = argv[2];
 
-  rfd = open(src, O_RDONLY);
-  if (rfd == -1)
+  if ((fdin = open(argv[1], O_RDONLY)) == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
 
-  if (fstat(rfd, &ss) == -1)
+  if (fstat(fdin, &ss) == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
 
-  wfd = open(dst, O_RDWR | O_CREAT | O_TRUNC, 0666);
-  if (wfd == -1)
+  if ((fdout = open(argv[2], O_RDWR | O_CREAT | O_TRUNC, 0666)) == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
 
-  rptr = NULL;
-  wptr = NULL;
-
-  rptr = mmap(0, ss.st_size, PROT_READ, MAP_SHARED, rfd, 0);
-  if (rptr == MAP_FAILED)
+  if (ftruncate(fdout, ss.st_size) == -1)
     {
       perror(NULL);
-      goto clean_exit;
+      exit(EXIT_FAILURE);
     }
 
-  wptr = mmap(0, ss.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, wfd, 0);
-  if (wptr == MAP_FAILED)
-    {
-      perror(NULL);
-      goto clean_exit;
-    }
+  fsz = 0;
+  src = NULL;
+  dst = NULL;
 
-  /* memcpy(wptr, rptr, ss.st_size); */
-
- clean_exit:
-  if (wptr != NULL && wptr != MAP_FAILED)
+  while (fsz < ss.st_size)
     {
-      if (munmap(wptr, ss.st_size) == -1)
+      if ((ss.st_size - fsz) > NM_PAGESIZE)
+        {
+          bsz = NM_PAGESIZE;
+        }
+      else
+        {
+          bsz = ss.st_size - fsz;
+        }
+
+      src = mmap(0, bsz, PROT_READ, MAP_SHARED, fdin, fsz);
+      if (src == MAP_FAILED)
         {
           perror(NULL);
+          exit(EXIT_FAILURE);
         }
-    }
-  if (rptr != NULL && rptr != MAP_FAILED)
-    {
-      if (munmap(rptr, ss.st_size) == -1)
+
+      dst = mmap(0, bsz, PROT_READ | PROT_WRITE, MAP_SHARED, fdout, fsz);
+      if (dst == MAP_FAILED)
         {
           perror(NULL);
+          exit(EXIT_FAILURE);
         }
+
+      memcpy(dst, src, bsz);
+      munmap(src, bsz);
+      munmap(dst, bsz);
+
+      fsz += bsz;
     }
 
   exit(EXIT_SUCCESS);
