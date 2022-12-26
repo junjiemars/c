@@ -24,15 +24,13 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  fd = creat(argv[1], 0644);
-  if (fd == -1)
+  if ((fd = creat(argv[1], 0644)) == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
 
-  rc = write(fd, BUF, sizeof(BUF) - 1);
-  if (rc != sizeof(BUF) - 1)
+  if ((rc = write(fd, BUF, sizeof(BUF) - 1)) == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);

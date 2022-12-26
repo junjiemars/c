@@ -28,7 +28,7 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  if ((fdout = open(argv[2], O_RDWR | O_CREAT | O_TRUNC, 0666)) == -1)
+  if ((fdout = open(argv[2], O_RDWR | O_CREAT | O_TRUNC, 0644)) == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);

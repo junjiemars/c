@@ -4,10 +4,18 @@
 /*
  * readv/writev more faster than read/write.
  *
+ * Reason:
+ * 1. less system calls;
+ * 2. less data copying.
+ *
  */
 
 #define BUF_FACTOR  4
-/* #define BLK_SIZE    4096 */
+
+#if !defined(BLK_SIZE)
+#  define BLK_SIZE  NM_PAGESIZE
+#endif
+
 #define BUF_SIZE    (BUF_FACTOR * BLK_SIZE)
 
 
