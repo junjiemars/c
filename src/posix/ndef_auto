@@ -41,7 +41,7 @@ if [ "$ndef___func__" = "yes" ]; then
   nm_feature="__func__"
   nm_feature_name="nm_have___func__"
   nm_feature_run=
-  nm_feature_h='include <stdio.h>'
+  nm_feature_h='#include <stdio.h>'
   nm_feature_flags="$CFLAGS"
   nm_feature_test='printf("fn=%s", __func__);'
   . ${NORE_ROOT}/auto/feature
