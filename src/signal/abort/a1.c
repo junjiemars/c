@@ -1,7 +1,11 @@
-#include <_signal_.h>
+#include "_signal_.h"
 
 
-/* a POSIX implementation of abort function */
+/*
+ * elmulate `abort(3)'.
+ *
+ */
+
 static void abort1(void);
 
 static void on_sig_abrt(int);

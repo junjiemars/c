@@ -1,10 +1,42 @@
 # -*- mode:sh -*- vim:ft=sh
 
 
-# check posix features
-. src/posix/auto
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+
+# check ncc.h features
+ncc_sanitize_address="yes"
+. ${POSIX_ROOT}/ncc_auto
 
 
 echo "checking for {signal} ..."
+
+
+# check GETPW_R_SIZE_MAX
+#----------------------------------------
+case $NM_SYSTEM in
+  Linux|Darwin)
+    nm_feature="GETPW_R_SIZE_MAX"
+    nm_feature_name="nm_getpw_r_size_max"
+    nm_feature_run=value
+    nm_feature_h='
+#include <stdio.h>
+#include <unistd.h>
+'
+  nm_feature_flags=
+  nm_feature_test='
+long getpw_r_size_max = sysconf(_SC_GETPW_R_SIZE_MAX);
+printf("%ld\n", getpw_r_size_max);
+return 0;
+'
+  . ${NORE_ROOT}/auto/feature
+    ;;
+  *)
+    ;;
+esac                            # end of GETPW_R_SIZE_MAX
+
+
 
 # eof

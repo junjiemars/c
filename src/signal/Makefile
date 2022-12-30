@@ -356,11 +356,13 @@ signal_system_test: signal_system_dri_test      \
 
 signal_system_dri_test: $(signal_system_dri_binout)
 	# $< "/bin/ed"
+	$< "date"
 	@echo "#skip ..."
 
 signal_system_art_test: $(signal_system_art_binout)
 	# $< "/bin/ed"
-	@echo "#skip ..."
+	$< "date"
+	# @echo "#skip ..."
 
 $(signal_system_dri_binout): $(signal_root)/system/d.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

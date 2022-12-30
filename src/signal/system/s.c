@@ -1,10 +1,11 @@
-#include <_signal_.h>
+#include "_signal_.h"
 
 /*
- * 1. this implementation of system function from APUE.
+ * emulate `system(3)'.
  *
  *
  */
+
 
 int
 system(const char *command)

@@ -1,12 +1,9 @@
 #include "_signal_.h"
 #include <stdio.h>
-#include <pwd.h>
-#include <string.h>
-#include <stdlib.h>
 #include <sys/time.h>
 
 /*
- * alarm recursively
+ * alarm recursively via `setitimer(2)'.
  *
  */
 
@@ -74,7 +71,7 @@ alarm_1s(void)
 {
   int               rc;
   struct itimerval  old;
-  struct itimerval itv  =
+  struct itimerval  itv  =
     {
       .it_interval      =  { 0 },
       .it_value         =  { 1, 0 }

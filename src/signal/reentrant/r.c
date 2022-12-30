@@ -4,12 +4,13 @@
 #include <string.h>
 #include <stdlib.h>
 
+
 /*
- * 1. getpwnam is nonreentrant function because which using static
- * data struct inside.
+ * 1. `getpwnam(3)' is nonreentrant function because which using
+ * static data struct inside.
  *
- * 2. getpwnam should be blocked in on_sig_alrm after first call if
- * there no printf ___ statement above the comment.
+ * 2. `getpwnam(3)' should be blocked in on_sig_alrm after first call
+ * if there no printf ___ statement above the comment.
  *
  */
 

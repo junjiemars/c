@@ -1,8 +1,5 @@
 #include "_signal_.h"
 #include <stdio.h>
-#include <pwd.h>
-#include <string.h>
-#include <stdlib.h>
 
 /*
  * alarm recursively
