@@ -1,0 +1,51 @@
+# -*- mode:sh -*- vim:ft=sh
+
+
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+
+# check ncc.h features
+ncc_sanitize_address="yes"
+. ${POSIX_ROOT}/ncc_auto
+
+
+echo "checking for {mix} ..."
+
+has_mix="no"
+
+has_mixasm="no"
+echo ${echo_n} " + checking for mixasm ... " ${echo_c}
+mixasm=`command -v mixasm 2>/dev/null`
+if [ -n "$mixasm" ]; then
+  has_mixasm="yes"
+  flag=mixasm op=":=" value="$mixasm" . ${NORE_ROOT}/auto/make_define
+  echo "yes"
+else
+  echo "no"
+fi
+flag=has_mixasm op=":=" value="$has_mixasm" . ${NORE_ROOT}/auto/make_define
+
+
+has_mixvm="no"
+echo ${echo_n} " + checking for mixvm ... " ${echo_c}
+mixvm=`command -v mixvm 2>/dev/null`
+if [ -n "$mixvm" ]; then
+  has_mixvm="yes"
+  flag=mixvm op=":=" value="$mixvm" . ${NORE_ROOT}/auto/make_define
+  echo "yes"
+else
+  echo "no"
+fi
+flag=has_mixvm op=":=" value="$has_mixvm" . ${NORE_ROOT}/auto/make_define
+
+
+
+if [ -n "$has_mixasm" -a -n "$has_mixvm" ]; then
+  has_mix="yes"
+fi
+flag=has_mix op=":=" value="$has_mix" . ${NORE_ROOT}/auto/make_define
+
+
+# eof
