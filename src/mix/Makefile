@@ -3,7 +3,7 @@
 #
 
 
-ifeq ($(has_mix), yes)
+ifeq ($(has_mix),no)
 mix:
 	@echo "#skip ..."
 mix_test:
@@ -11,9 +11,8 @@ mix_test:
 else
 
 
-mix: mix_bone                            \
-
-mix_test: mix_bone_test                  \
+mix: mix_bone
+mix_test: mix_bone_test
 
 endif														# mix
 
