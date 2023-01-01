@@ -65,7 +65,7 @@ process_argv_binout := $(bin_path)/$(process_prefix)_argv$(bin_ext)
 process_argv: $(process_argv_binout)
 process_argv_test: process_argv
 	$(process_argv_binout)
-	$(process_argv_binout) a b c
+	$(process_argv_binout) a bb ccc
 
 $(process_argv_binout): $(process_root)/argv/clargv.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -73,15 +73,15 @@ $(process_argv_binout): $(process_root)/argv/clargv.c
 # env
 process_env_raw_binout := $(bin_path)/$(process_prefix)_env_raw$(bin_ext)
 process_env_mov_binout := $(bin_path)/$(process_prefix)_env_mov$(bin_ext)
-process_env_child_binout := $(bin_path)/$(process_prefix)_env_child$(bin_ext)
+process_env_chld_binout := $(bin_path)/$(process_prefix)_env_chld$(bin_ext)
 
 process_env: $(process_env_raw_binout)          \
              $(process_env_mov_binout)          \
-             $(process_env_child_binout)
+             $(process_env_chld_binout)
 process_env_test: process_env
 	$(process_env_raw_binout)
 	$(process_env_mov_binout)
-	$(process_env_child_binout)
+	$(process_env_chld_binout)
 
 process_env_raw_test: $(process_env_raw_binout)
 	$(process_env_raw_binout)
@@ -89,8 +89,8 @@ process_env_raw_test: $(process_env_raw_binout)
 process_env_mov_test: $(process_env_mov_binout)
 	$(process_env_mov_binout)
 
-process_env_child_test: $(process_env_child_binout)
-	$(process_env_child_binout)
+process_env_chld_test: $(process_env_chld_binout)
+	$(process_env_chld_binout)
 
 $(process_env_raw_binout): $(process_root)/env/raw.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $^ $(bin_out)$@
@@ -98,7 +98,7 @@ $(process_env_raw_binout): $(process_root)/env/raw.c
 $(process_env_mov_binout): $(process_root)/env/mov.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(process_env_child_binout): $(process_root)/env/child.c
+$(process_env_chld_binout): $(process_root)/env/chld.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -202,21 +202,16 @@ $(process_io_sync_binout): $(process_root)/io/c.c
 
 # layout
 process_layout_raw_binout := $(bin_path)/$(process_prefix)_layout_raw$(bin_ext)
-process_layout_asmout := $(tmp_path)/$(process_prefix)_layout_raw$(asm_ext)
-process_layout_static_binout := $(bin_path)/$(process_prefix)_layout_static$(bin_ext)
+process_layout_raw_asmout := $(tmp_path)/$(process_prefix)_layout_raw$(asm_ext)
 process_layout_brk_binout := $(bin_path)/$(process_prefix)_layout_brk$(bin_ext)
 
 ifeq ($(NM_SYSTEM), Darwin)
-process_layout:
-	@echo "#skip ..."
-process_layout_test: process_layout
-	@echo "#skip ..."
+process_layout: $(process_layout_raw_binout)
+process_layout_test: process_layout_raw_test
 else
 process_layout: $(process_layout_raw_binout)    \
-                $(process_layout_static_binout) \
                 $(process_layout_brk_binout)
 process_layout_test: process_layout_raw_test    \
-                     process_layout_static_test \
                      process_layout_brk_test
 endif
 
@@ -225,22 +220,15 @@ process_layout_raw_test: $(process_layout_raw_binout)
 	size $<
 	nm $<
 
-process_layout_static_test: $(process_layout_static_binout)
-	$<
-	size $<
-
 process_layout_brk_test: $(process_layout_brk_binout)
 	$<
 	size $<
 
-$(process_layout_raw_binout): $(process_layout_asmout)
+$(process_layout_raw_binout): $(process_layout_raw_asmout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(process_layout_asmout): $(process_root)/layout/m.c
-	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_asm) $^ $(asm_out)$@
-
-$(process_layout_static_binout): $(process_root)/layout/m.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(cflags_static_opt) $^ $(bin_out)$@
+$(process_layout_raw_asmout): $(process_root)/layout/m.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_asm) $^ $(asm_out)$@
 
 $(process_layout_brk_binout): $(process_root)/layout/b.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

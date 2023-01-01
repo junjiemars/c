@@ -29,7 +29,7 @@ mix_bone: $(mix_bone_hi_binout)
 mix_bone_test: mix_bone_hi_test
 
 mix_bone_hi_test: $(mix_bone_hi_binout)
-	$(mixvm) --run $< --dump
+	$(mixvm) -t -r -d $<
 
 
 $(mix_bone_hi_binout): $(mix_root)/bone/b1.mixal
