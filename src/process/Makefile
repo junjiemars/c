@@ -74,23 +74,29 @@ $(process_argv_binout): $(process_root)/argv/clargv.c
 process_env_raw_binout := $(bin_path)/$(process_prefix)_env_raw$(bin_ext)
 process_env_mov_binout := $(bin_path)/$(process_prefix)_env_mov$(bin_ext)
 process_env_chld_binout := $(bin_path)/$(process_prefix)_env_chld$(bin_ext)
+process_env_xsi_binout := $(bin_path)/$(process_prefix)_env_xsi$(bin_ext)
+process_env_xsi_c := $(tmp_path)/$(process_prefix)_env_xsi.c
 
 process_env: $(process_env_raw_binout)          \
              $(process_env_mov_binout)          \
-             $(process_env_chld_binout)
-process_env_test: process_env
-	$(process_env_raw_binout)
-	$(process_env_mov_binout)
-	$(process_env_chld_binout)
+             $(process_env_chld_binout)         \
+             $(process_env_xsi_binout)
+process_env_test: process_env_raw_test          \
+                  process_env_mov_test          \
+                  process_env_chld_test         \
+                  process_env_xsi_test
 
 process_env_raw_test: $(process_env_raw_binout)
-	$(process_env_raw_binout)
+	$<
 
 process_env_mov_test: $(process_env_mov_binout)
-	$(process_env_mov_binout)
+	$<
 
 process_env_chld_test: $(process_env_chld_binout)
-	$(process_env_chld_binout)
+	$<
+
+process_env_xsi_test: $(process_env_xsi_binout)
+	$<
 
 $(process_env_raw_binout): $(process_root)/env/raw.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $^ $(bin_out)$@
@@ -100,6 +106,13 @@ $(process_env_mov_binout): $(process_root)/env/mov.c
 
 $(process_env_chld_binout): $(process_root)/env/chld.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(process_env_xsi_binout): $(process_env_xsi_c)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(process_env_xsi_c): $(process_root)/env/env.awk.in  \
+                      $(process_root)/env/env.awk
+	awk -f $(process_root)/env/env.awk $(process_root)/env/env.awk.in >$@
 
 
 # exec
