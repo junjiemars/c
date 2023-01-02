@@ -30,7 +30,7 @@ main(void)
       pid_t  pp  =  getpid();
       printf("parent id = %i\n", pp);
 
-      waitpid(pp, NULL, 0);
+      waitpid(pid, NULL, 0);
 
       print_env("X1", pp);
       print_env("X2", pp);

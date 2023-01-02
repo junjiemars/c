@@ -1,7 +1,7 @@
 #include "_algo_.h"
 
-int ecluid(int a, int b);
-int ecluid_tr(int a, int b);
+int  ecluid(int a, int b);
+int  ecluid_tr(int a, int b);
 
 
 int
@@ -32,9 +32,8 @@ ecluid(int a, int b)
 {
 	while (b)
     {
-      int m = a % b;
       a = b;
-      b = m;
+      b = a % b;
     }
 	return a;
 }

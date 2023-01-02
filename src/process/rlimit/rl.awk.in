@@ -1,10 +1,10 @@
-RLIMIT_AS
-RLIMIT_CORE
-RLIMIT_CPU
-RLIMIT_DATA
-RLIMIT_FSIZE
-RLIMIT_MEMLOCK
-RLIMIT_NOFILE
-RLIMIT_NPROC
-RLIMIT_RSS
-RLIMIT_STACK
+RLIMIT_AS,"address space (RSS)"
+RLIMIT_CORE,"core file size"
+RLIMIT_CPU,"cpu time per process"
+RLIMIT_DATA,"data segment size"
+RLIMIT_FSIZE,"file size"
+RLIMIT_MEMLOCK,"locked-in-memory address space"
+RLIMIT_NOFILE,"number of open files"
+RLIMIT_NPROC,"number of processes"
+RLIMIT_RSS,"source compatibility alias"
+RLIMIT_STACK,"stack size"

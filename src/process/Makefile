@@ -13,6 +13,7 @@ process: process_main                           \
          process_argv                           \
          process_env                            \
          process_exec                           \
+         process_exit                           \
          process_id                             \
          process_io                             \
          process_layout                         \
@@ -24,6 +25,7 @@ process_test: process_main_test                 \
               process_argv_test                 \
               process_env_test                  \
               process_exec_test                 \
+              process_exit_test                 \
               process_id_test                   \
               process_io_test                   \
               process_layout_test               \
@@ -49,7 +51,7 @@ _WITH_EXIT_ ?= 0
 
 process_main: $(process_main_binout)
 process_main_test: process_main
-	-$(process_main_binout)
+	-$(process_main_binout); echo $$?
 
 $(process_main_binout): $(process_root)/main/m99.c
 	$(CC) $(CFLAGS) $(INC)                        \
@@ -161,6 +163,19 @@ $(process_exec_child_binout): $(process_root)/exec/child.c
     -D_FILE_NAME_=\"$(process_prefix)_exec_echo$(bin_ext)\" \
     -D_WAIT_=0                                              \
     $^ $(bin_out)$@
+
+# exit
+process_exit_at_binout := $(bin_path)/$(process_prefix)_exit_at$(bin_ext)
+process_exit_file := $(tmp_path)/$(process_prefix)_exit.file
+
+process_exit: $(process_exit_at_binout)
+process_exit_test: process_exit_at_test
+
+process_exit_at_test: $(process_exit_at_binout)
+	$<
+
+$(process_exit_at_binout): $(process_root)/exit/at1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # id
 process_id_binout := $(bin_path)/$(process_prefix)_id$(bin_ext)

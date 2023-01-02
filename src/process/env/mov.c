@@ -11,9 +11,9 @@
  *
  */
 
-extern char **environ;
+extern char  **environ;
 
-static void print_environ(void);
+static void  print_environ(void);
 
 
 int
