@@ -5,35 +5,14 @@ static void  print_id3(uid_t, uid_t, pid_t);
 
 
 int
-main(int argc, char *argv[])
+main(void)
 {
   pid_t         pid;
   uid_t         suid, seuid;
-  char         *filename;
-  struct stat   ss;
-
-  filename = NULL;
-  if (argc > 1)
-    {
-      filename = argv[1];
-    }
 
   pid = getpid();
   suid = getuid();
   seuid = geteuid();
-
-  print_id3(suid, seuid, pid);
-
-  if (!filename)
-    {
-      exit(EXIT_SUCCESS);
-    }
-
-  if (stat(filename, &ss) < 0)
-    {
-      perror(NULL);
-      exit(EXIT_FAILURE);
-    }
 
   print_id3(suid, seuid, pid);
 
