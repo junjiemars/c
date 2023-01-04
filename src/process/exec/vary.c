@@ -1,6 +1,8 @@
 #include "_process_.h"
 
 /*
+ * Exhabit how `exec' sequence functions been called.
+ *
  * `l': passing argument as List.
  * `p': using PATH environment variable.
  * `e': passing Environment vector.
@@ -48,7 +50,11 @@ main(int argc, char * argv[])
       rc = execvp(_FILE_NAME_, vargv);
 
     }
+  else if (0 == strcmp("execve", argv[1]))
+    {
+      rc = execve(_PATH_NAME_, vargv, env);
 
+    }
   else
     {
       printf("!panic: unknown exec fn\n");

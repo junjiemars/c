@@ -1,5 +1,12 @@
 #include "_process_.h"
 
+/*
+ * 1. Parent process and child process had different address space.
+ *
+ * 2. Child process will copy the `environ' from parent process.
+ *
+ */
+
 
 extern char  **environ;
 
@@ -30,11 +37,11 @@ main(void)
       pid_t  pp  =  getpid();
       printf("parent id = %i\n", pp);
 
-      waitpid(pid, NULL, 0);
-
       print_env("X1", pp);
       print_env("X2", pp);
       printf("[pid=%i] environ at %8p\n", pp, environ);
+
+      waitpid(pid, NULL, 0);
     }
 
   exit(EXIT_SUCCESS);
