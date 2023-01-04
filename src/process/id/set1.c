@@ -10,6 +10,10 @@ main(void)
   pid_t         pid;
   uid_t         suid, seuid;
 
+#if defined(_POSIX_SAVED_IDS)
+  printf("%s=%d\n", _str_(_POSIX_SAVED_IDS), _POSIX_SAVED_IDS);
+#endif
+
   pid = getpid();
   suid = getuid();
   seuid = geteuid();
