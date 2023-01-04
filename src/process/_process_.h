@@ -4,6 +4,7 @@
 #include <nustd.h>
 #include <nlim.h>
 
+#include <sys/stat.h>
 #include <sys/wait.h>
 #include <signal.h>
 #include <errno.h>
