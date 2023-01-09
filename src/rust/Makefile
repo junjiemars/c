@@ -69,11 +69,12 @@ $(rust_fmt_file):
 	$(RUSTFMT) --print-config default \
     | sed -e 's#max_width = .*#max_width = 79#g' > $@
 
-rust_lldb_source_map:
-	echo "settings set target.source-map XXX $(rust_src_dir)"
 
+rust_dbg_dummy_dir="XXX"
+rust_lldb_source_map:
+	echo "settings set target.source-map $(rust_dbg_dummy_dir) $(rust_src_dir)"
 rust_gdb_source_map:
-	echo "? XXX $(rust_src_dir)"
+	echo "set substitute-path $(rust_dbg_dummy_dir) $(rust_src_dir)"
 
 
 # hi
