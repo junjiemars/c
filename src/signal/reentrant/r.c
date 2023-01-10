@@ -15,17 +15,16 @@
  */
 
 
-#if (_REENTRANT_)
 #define ALRM_N  16
-static int   count  =  ALRM_N;
-#endif
 
 
 static void on_sig_segv(int sig);
 static void on_sig_alrm(int sig);
 
-const char  *username1;
-const char  *username2;
+static const char  *username1;
+static const char  *username2;
+
+static volatile int  alrm_count  =  ALRM_N;
 
 
 int
@@ -53,15 +52,12 @@ main(int argc, char **argv)
       struct passwd  *p  =  NULL;
 
 #if (_REENTRANT_)
-      char           *buf;
-      struct passwd   pwd;
-
-      buf = malloc(NM_GETPW_R_SIZE_MAX);
+      struct passwd  pwd;
+      char           buf[NM_GETPW_R_SIZE_MAX];
 
       if (getpwnam_r(username1, &pwd, buf, NM_GETPW_R_SIZE_MAX, &p))
         {
           perror(NULL);
-          free(buf);
           continue;
         }
 #else
@@ -73,11 +69,12 @@ main(int argc, char **argv)
         }
       if (NULL == p)
         {
+          printf("getpwnam(...) = NULL at @ %s\n", __FUNCTION__);
           continue;
         }
       /* printf("# ___\n"); */
 
-#endif
+#endif  /* _REENTRANT_ */
 
       /* may be interrupted by signal at here */
 
@@ -87,12 +84,6 @@ main(int argc, char **argv)
                  username1, p->pw_name);
           break;
         }
-
-#if (_REENTRANT_)
-      free(buf);
-
-#endif
-
     }
 
   exit(EXIT_SUCCESS);
@@ -115,39 +106,55 @@ on_sig_alrm(int sig)
 {
   if (SIGALRM == sig)
     {
-      __attribute__((unused)) struct passwd  *p  =  0;
-      printf("# %s\n", _str_(SIGALRM));
+      printf("# %s at %s\n", _str_(SIGALRM), __FUNCTION__);
 
       /* wipped out the result of previous getpwnam call */
 
-#if (_REENTRANT_)
-
-      if (--count < 1)
+      if (--alrm_count < 1)
         {
           printf("# exceed %s=%d\n", _str_(ALRM_N), ALRM_N);
           exit(EXIT_SUCCESS);
         }
 
-      char           *buf;
-      struct passwd   pwd;
+#if (_REENTRANT_)
 
-      buf = malloc(NM_GETPW_R_SIZE_MAX);
+      struct passwd  pwd, *p = NULL;
+      static char    buf[NM_GETPW_R_SIZE_MAX];
 
       if (getpwnam_r(username2, &pwd, buf, NM_GETPW_R_SIZE_MAX, &p))
         {
           perror(NULL);
         }
 
-      free(buf);
-
 #else
+      struct passwd  *p;
+      sigset_t        oset;
+
+      if (sigprocmask(SIG_BLOCK, NULL, &oset) < 0)
+        {
+          perror(NULL);
+        }
+      else
+        {
+          if (sigismember(&oset, SIGALRM) == 1)
+            {
+              printf("blocked %s at %s, so we cannot go anymore\n",
+                     _str_(SIGALRM), __FUNCTION__);
+              exit(EXIT_SUCCESS);
+            }
+        }
+
       p = getpwnam(username2);
       if (errno)
         {
           perror(NULL);
         }
+      if (p == NULL)
+        {
+          printf("getpwnam(...) = NULL at %s\n", __FUNCTION__);
+        }
 
-#endif
+#endif  /* _REENTRANT_ */
 
     }
 

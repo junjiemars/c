@@ -1,9 +1,13 @@
-#include <_signal_.h>
+#include "_signal_.h"
 
 /*
- * 1. raise function was defined by ISO C.
+ * 1. `raise(3)' function was defined by ISO C, sends a signal to the
+ * calling process.
  *
- * 2. kill is a system call.
+ * 2. `raise(3)' equals `kill(getpid(), signo)`.
+ *
+ * 3. `kill(2)' is a system call, sends a signal to process or process
+ * group.
  *
  */
 

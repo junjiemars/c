@@ -1,4 +1,5 @@
-#include <_signal_.h>
+#include "_signal_.h"
+
 
 /*
  * 1. the first sleep be protected by block SIGQUIT.
@@ -11,6 +12,7 @@
 static void on_sig_quit(int);
 
 static unsigned int  N  =  3;
+
 
 int
 main(int argc, char **argv)
@@ -58,7 +60,6 @@ main(int argc, char **argv)
       perror(NULL);
       exit(EXIT_FAILURE);
     }
-
   printf("! %s unblocked\n", _str_(SIGQUIT));
 
   sleep(N);

@@ -1,7 +1,7 @@
 #include "_signal_.h"
 
 
-void race(long);
+void  race(long);
 
 void
 race(long n)

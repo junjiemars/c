@@ -69,10 +69,10 @@ signal_alarm_r_test: $(signal_alarm_r_binout)
 signal_alarm_t_test: $(signal_alarm_t_binout)
 	$<
 
-$(signal_alarm_r_binout): $(signal_root)/alarm/r.c
+$(signal_alarm_r_binout): $(signal_root)/alarm/r1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(signal_alarm_t_binout): $(signal_root)/alarm/t.c
+$(signal_alarm_t_binout): $(signal_root)/alarm/t1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # kill
@@ -98,12 +98,10 @@ signal_reentrant_test: signal_reentrant_n_test  \
                        signal_reentrant_r_test
 
 signal_reentrant_n_test: $(signal_reentrant_n_binout)
-	@echo "skip..."
-	# $< root daemon
+	$< root daemon
 
 signal_reentrant_r_test: $(signal_reentrant_r_binout)
-	@echo "skip..."
-	# $< root daemon
+	$< root daemon
 
 $(signal_reentrant_n_binout): $(signal_reentrant_n_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
@@ -165,12 +163,12 @@ $(signal_sleep_raw_binout): $(signal_root)/sleep/d.c  \
 
 $(signal_sleep_1_binout): $(signal_root)/sleep/d.c  \
                           $(signal_root)/sleep/r.c  \
-                          $(signal_root)/sleep/s1.c
+                          $(signal_root)/sleep/sleep1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(signal_sleep_2_binout): $(signal_root)/sleep/d.c  \
                           $(signal_root)/sleep/r.c  \
-                          $(signal_root)/sleep/s2.c
+                          $(signal_root)/sleep/sleep2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

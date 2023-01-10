@@ -2,15 +2,17 @@
 
 
 /*
- * a sleep function implementation.
+ * Emulates `sleep(3)'.
  *
  */
 
 
-unsigned sleep(unsigned);
+unsigned  sleep(unsigned);
 
-extern void race(long);
+extern void  race(long);
+
 extern unsigned  N;
+
 
 unsigned
 sleep(unsigned nsecs)

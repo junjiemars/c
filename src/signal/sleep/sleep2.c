@@ -9,12 +9,14 @@
  */
 
 
-unsigned sleep(unsigned);
+unsigned  sleep(unsigned);
 
-extern void race(long);
+extern void  race(long);
+
 extern unsigned  N;
 
 static jmp_buf  env_alrm;
+
 
 unsigned
 sleep(unsigned nsecs)

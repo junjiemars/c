@@ -8,12 +8,13 @@
  *
  */
 
-static void test_sleep(unsigned int);
-static void on_sig_alrm(int signo);
+static void  test_sleep(unsigned int);
+static void  on_sig_alrm(int signo);
 
-extern unsigned sleep(unsigned);
+extern unsigned  sleep(unsigned);
 
 unsigned  N  =  1;
+
 
 int
 main(int argc, char **argv)
@@ -42,6 +43,7 @@ void
 test_sleep(unsigned nsecs)
 {
   unsigned  rc;
+  double    elapsed;
 
   if (SIG_ERR == signal(SIGALRM, on_sig_alrm))
     {
@@ -49,8 +51,8 @@ test_sleep(unsigned nsecs)
       return;
     }
 
-  rc = sleep(nsecs);
+  _time_(rc = sleep(nsecs), elapsed);
 
-  printf("sleep(%d) return %d\n", nsecs, rc);
+  printf("sleep(%d) return %d, elapsed %04f\n", nsecs, rc, elapsed);
 
 }

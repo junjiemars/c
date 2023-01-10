@@ -1,11 +1,13 @@
-#include <_signal_.h>
+#include "_signal_.h"
+
+
 
 int
 main(void)
 {
   sigset_t  oset;
 
-  if (-1 == sigprocmask(SIG_BLOCK, NULL, &oset))
+  if (sigprocmask(SIG_BLOCK, NULL, &oset) < 0)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
