@@ -236,33 +236,15 @@ $(signal_child_chld_binout): $(signal_root)/child/c1.c
 
 # info
 signal_info_name1_binout := $(bin_path)/$(signal_prefix)_name1$(bin_ext)
-signal_info_awk_out := $(tmp_path)/$(signal_prefix)_strsig.c
-signal_info_awk_source := $(signal_root)/info/n1.awk
 
-ifeq ($(NM_SYSTEM), Darwin)
-signal_info_awk_in := $(signal_root)/info/n1.awk.darwin.in
-else
-signal_info_awk_in := $(signal_root)/info/n1.awk.linux.in
-endif
+signal_info: $(signal_info_name1_binout)
 
-signal_info: $(signal_info_awk_out)             \
-             $(signal_info_name1_binout)
-
-signal_info_test: signal_info_awk_test      \
-                  signal_info_name1_test
-
-signal_info_awk_test: $(signal_info_awk_out)
-	cat $<
+signal_info_test: signal_info_name1_test
 
 signal_info_name1_test: $(signal_info_name1_binout)
 	$<
 
-$(signal_info_awk_out): $(signal_info_awk_source) \
-                        $(signal_info_awk_in)
-	awk -f $^ > $@
-
-$(signal_info_name1_binout): $(signal_root)/info/n1.c \
-                             $(signal_info_awk_out)
+$(signal_info_name1_binout): $(signal_root)/info/n1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
