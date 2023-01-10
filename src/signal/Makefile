@@ -52,27 +52,27 @@ INC += $(nm_inc_opt)$(signal_root) $(nm_inc_opt)$(root)/posix
 
 
 # alarm
-signal_alarm_o_binout := $(bin_path)/$(signal_prefix)_alarm_a$(bin_ext)
-signal_alarm_n_binout := $(bin_path)/$(signal_prefix)_alarm_n$(bin_ext)
+signal_alarm_r_binout := $(bin_path)/$(signal_prefix)_alarm_r$(bin_ext)
+signal_alarm_t_binout := $(bin_path)/$(signal_prefix)_alarm_t$(bin_ext)
 
-signal_alarm: $(signal_alarm_n_binout)          \
-              $(signal_alarm_n_binout)
-
-
-signal_alarm_test: signal_alarm_o_test          \
-                   signal_alarm_n_test
+signal_alarm: $(signal_alarm_t_binout)          \
+              $(signal_alarm_t_binout)
 
 
-signal_alarm_o_test: $(signal_alarm_o_binout)
+signal_alarm_test: signal_alarm_r_test          \
+                   signal_alarm_t_test
+
+
+signal_alarm_r_test: $(signal_alarm_r_binout)
 	$<
 
-signal_alarm_n_test: $(signal_alarm_n_binout)
+signal_alarm_t_test: $(signal_alarm_t_binout)
 	$<
 
-$(signal_alarm_o_binout): $(signal_root)/alarm/o.c
+$(signal_alarm_r_binout): $(signal_root)/alarm/r.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(signal_alarm_n_binout): $(signal_root)/alarm/n.c
+$(signal_alarm_t_binout): $(signal_root)/alarm/t.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # kill

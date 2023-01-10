@@ -1,4 +1,6 @@
 #include "_signal_.h"
+#include "_alrm_.h"
+
 #include <stdio.h>
 #include <sys/time.h>
 
@@ -8,8 +10,7 @@
  */
 
 
-#define ALRM_N  8
-static volatile int  count  =  ALRM_N;
+extern volatile int  alrm_count;
 
 
 static void on_sig_segv(int sig);
@@ -57,7 +58,7 @@ on_sig_alrm(int sig)
     {
       printf("# %s\n", _str_(SIGALRM));
 
-      if (--count < 1)
+      if (--alrm_count < 1)
         {
           exit(EXIT_SUCCESS);
         }
