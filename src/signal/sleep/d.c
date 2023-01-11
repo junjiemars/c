@@ -8,12 +8,14 @@
  *
  */
 
+extern unsigned int  sleep(unsigned);
+
+
 static void  test_sleep(unsigned int);
 static void  on_sig_alrm(int signo);
 
-extern unsigned  sleep(unsigned);
 
-unsigned  N  =  1;
+unsigned int  N  =  1;
 
 
 int
@@ -21,7 +23,7 @@ main(int argc, char **argv)
 {
   if (argc > 1)
     {
-      N = (unsigned) atol(argv[1]);
+      N = (unsigned int) atol(argv[1]);
     }
   printf("%d\n", getpid());
 
@@ -29,6 +31,7 @@ main(int argc, char **argv)
 
   return 0;
 }
+
 
 void
 on_sig_alrm(int signo)

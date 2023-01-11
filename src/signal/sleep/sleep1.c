@@ -7,15 +7,15 @@
  */
 
 
-unsigned  sleep(unsigned);
+unsigned int  sleep(unsigned int);
 
 extern void  race(long);
 
-extern unsigned  N;
+extern unsigned int  N;
 
 
-unsigned
-sleep(unsigned nsecs)
+unsigned int
+sleep(unsigned int nsecs)
 {
   alarm(nsecs);
 

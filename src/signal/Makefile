@@ -140,6 +140,7 @@ $(signal_set2_binout): $(signal_root)/set/s2.c
 signal_sleep_raw_binout := $(bin_path)/$(signal_prefix)_sleep_raw$(bin_ext)
 signal_sleep_1_binout := $(bin_path)/$(signal_prefix)_sleep_1$(bin_ext)
 signal_sleep_2_binout := $(bin_path)/$(signal_prefix)_sleep_2$(bin_ext)
+signal_sleep_signal :=
 
 signal_sleep: $(signal_sleep_raw_binout)        \
               $(singal_sleep_1_binout)           \
