@@ -180,8 +180,7 @@ signal_timeout: $(signal_timeout1_binout)
 signal_timeout_test: signal_timeout1_test
 
 signal_timeout1_test: $(signal_timeout1_binout)
-	# $<
-	echo "a" | $<
+	-echo "a" | $< 0
 
 $(signal_timeout1_binout): $(signal_root)/timeout/t1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
