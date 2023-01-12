@@ -15,12 +15,12 @@ BEGIN {
 
     print "typedef struct signo_s"
     print "{"
-    print "  unsigned int  signo;"
-    print "  char *        name;"
+    print "  unsigned int   signo;"
+    print "  char          *name;"
     print "} signo_s;"
     print ""
 
-    print "signo_s sys_signame[] = "
+    print "static signo_s sys_signame[] = "
     print "  {"
     print "    {.signo = 0, .name = \"Null\"},"
 }
