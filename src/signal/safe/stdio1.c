@@ -10,7 +10,7 @@
  */
 
 
-static void  on_sig(int);
+static void  on_sig(int, siginfo_t*, void*);
 
 static volatile int  count  =  8;
 
@@ -21,7 +21,17 @@ static char  digit[]   =  "0123456789";
 int
 main(void)
 {
-  signal(SIGALRM, on_sig);
+  struct sigaction  act, oact;
+
+  act.sa_sigaction = on_sig;
+  act.sa_flags = SA_SIGINFO;
+
+  if (sigaction(SIGALRM, &act, &oact) == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
+  (void) oact;
 
   alarm(1);
 
@@ -37,9 +47,11 @@ main(void)
 
 
 void
-on_sig(int signo)
+on_sig(int signo, siginfo_t *info, void *ctx)
 {
   (void) signo;
+  (void) info;
+  (void) ctx;
 
   if (--count < 1)
     {

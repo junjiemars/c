@@ -87,38 +87,34 @@ $(signal_kill_binout): $(signal_root)/kill/k1.c
 
 # safe
 signal_safe_stdio_binout := $(bin_path)/$(signal_prefix)_safe_stdio$(bin_ext)
-signal_safe_n_binout := $(bin_path)/$(signal_prefix)_safe_n$(bin_ext)
-signal_safe_n_cppout := $(tmp_path)/$(signal_prefix)_safe_n$(cpp_ext)
-signal_safe_r_binout := $(bin_path)/$(signal_prefix)_safe_r$(bin_ext)
+signal_safe_nre_binout := $(bin_path)/$(signal_prefix)_safe_nre$(bin_ext)
+signal_safe_re_binout := $(bin_path)/$(signal_prefix)_safe_re$(bin_ext)
 
 
 signal_safe: $(signal_safe_stdio_binout)        \
-             $(signal_safe_n_binout)            \
-             $(signal_safe_r_binout)
+             $(signal_safe_nre_binout)          \
+             $(signal_safe_re_binout)
 
 signal_safe_test: signal_safe_stdio_test        \
-                  signal_safe_n_test            \
-                  signal_safe_r_test
+                  signal_safe_nre_test          \
+                  signal_safe_re_test
 
 signal_safe_stdio_test: $(signal_safe_stdio_binout)
 	$<
 
-signal_safe_n_test: $(signal_safe_n_binout)
-	$< root daemon
+signal_safe_nre_test: $(signal_safe_nre_binout)
+	-$< root daemon
 
-signal_safe_r_test: $(signal_safe_r_binout)
+signal_safe_re_test: $(signal_safe_re_binout)
 	$< root daemon
 
 $(signal_safe_stdio_binout): $(signal_root)/safe/stdio1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(signal_safe_n_binout): $(signal_safe_n_cppout)
-	$(CC) $(CFLAGS) $^ $(bin_out)$@
+$(signal_safe_nre_binout): $(signal_root)/safe/re1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(signal_safe_n_cppout): $(signal_root)/safe/r.c
-	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
-
-$(signal_safe_r_binout): $(signal_root)/safe/r.c
+$(signal_safe_re_binout): $(signal_root)/safe/re1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_REENTRANT_=1 $^ $(bin_out)$@
 
 
@@ -241,18 +237,27 @@ $(signal_child_chld_binout): $(signal_root)/child/c1.c
 
 # info
 signal_info_lst_binout := $(bin_path)/$(signal_prefix)_lst$(bin_ext)
+signal_info_dfl_binout := $(bin_path)/$(signal_prefix)_dfl$(bin_ext)
 signal_info_lst_h := $(inc_path)/sys_signame.h
 signal_info_lst_awk_in := $(signal_root)/info/lst.awk.$(NM_SYSTEM).in
 
-signal_info: $(signal_info_lst_binout)
+signal_info: $(signal_info_lst_binout)          \
+             $(signal_info_dfl_binout)
 
-signal_info_test: signal_info_lst_test
+signal_info_test: signal_info_lst_test          \
+                  signal_info_dfl_test
 
 signal_info_lst_test: $(signal_info_lst_binout)
 	$<
 
+signal_info_dfl_test: $(signal_info_dfl_binout)
+	$<
+
 $(signal_info_lst_binout): $(signal_root)/info/lst1.c \
                            $(signal_info_lst_h)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(signal_info_dfl_binout): $(signal_root)/info/dfl1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(signal_info_lst_h): $(signal_root)/info/lst.awk     \
