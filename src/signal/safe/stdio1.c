@@ -14,8 +14,8 @@ static void  on_sig(int);
 
 static volatile int  count  =  8;
 
-static char  alphabet[]  =  "abcdefghijklmnopqrstuvwxyz";
-static char  digital[]   =  "0123456789";
+static char  alpha[]  =  "abcdefghijklmnopqrstuvwxyz";
+static char  digit[]   =  "0123456789";
 
 
 int
@@ -27,7 +27,7 @@ main(void)
 
   for (;;)
     {
-      printf("%c", alphabet[count % _nof_(alphabet)]);
+      printf("%c", alpha[count % _nof_(alpha)]);
       pause();
     }
   printf("\n");
@@ -47,7 +47,7 @@ on_sig(int signo)
       exit(EXIT_SUCCESS);
     }
 
-  printf("%c\n", digital[count % _nof_(digital)]);
+  printf("%c\n", digit[count % _nof_(digit)]);
 
   alarm(1);
 }

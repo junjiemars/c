@@ -1,12 +1,12 @@
 #include "_signal_.h"
-#include <ctype.h>
+
 
 /*
  * 1. `sys_signame' is not portable.
- * 2. prefer `strsignal(3)' than sys_siglist.
- * 3. `strsigno' is portable implementation in n1.awk.linux/darwin.in.
- * 4. `NSIG` symbol defined in <signal.h>.
- * 5. 0 signal be called null signal.
+ * 2. `sys_siglist' is nonstandard.
+ * 3. prefer `strsignal(3)' than sys_siglist.
+ * 5. `NSIG` symbol defined in <signal.h>.
+ * 6. 0 signal be called null signal.
  *
  */
 
