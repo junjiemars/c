@@ -239,19 +239,17 @@ $(signal_child_proc_binout): $(signal_root)/child/p1.c
 $(signal_child_chld_binout): $(signal_root)/child/c1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-
-
 # info
-signal_info_name1_binout := $(bin_path)/$(signal_prefix)_name1$(bin_ext)
+signal_info_list_binout := $(bin_path)/$(signal_prefix)_list$(bin_ext)
 
-signal_info: $(signal_info_name1_binout)
+signal_info: $(signal_info_list_binout)
 
-signal_info_test: signal_info_name1_test
+signal_info_test: signal_info_list_test
 
-signal_info_name1_test: $(signal_info_name1_binout)
+signal_info_list_test: $(signal_info_list_binout)
 	$<
 
-$(signal_info_name1_binout): $(signal_root)/info/n1.c
+$(signal_info_list_binout): $(signal_root)/info/lst1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
