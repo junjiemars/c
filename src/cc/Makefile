@@ -2,28 +2,18 @@
 # ./configure --has-cc
 #
 
-cc: cc_recursive_descent                        \
-    cc_cdecl                                    \
-    cc_lexer
+cc: cc_cdecl                                    \
+    cc_lexer                                    \
+    cc_recursive_descent
 
 
-cc_test: cc_recursive_descent_test              \
-         cc_cdecl_test                          \
-         cc_lexer_test
+cc_test: cc_cdecl_test                          \
+         cc_lexer_test                          \
+         cc_recursive_descent_test
 
 
 cc_prefix := cc
-INC += -I$(cc_root)
-
-# recursive descent
-cc_rdp_binout := $(bin_path)$(cc_prefix)_rdp$(bin_ext)
-
-cc_recursive_descent: $(cc_rdp_binout)
-cc_recursive_descent_test: cc_recursive_descent
-	$(cc_rdp_binout)
-
-$(cc_rdp_binout): $(cc_root)/recursive_descent/rdp.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+INC += $(nm_inc_opt)$(cc_root) $(nm_inc_opt)$(root)/posix
 
 # cdecl
 cc_cdecl_binout := $(bin_path)$(cc_prefix)_cdecl$(bin_ext)
@@ -48,3 +38,16 @@ cc_lexer_test: cc_lexer
 
 $(cc_lexer_binout): $(cc_root)/lexer/lexer.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# recursive descent
+cc_rdp_binout := $(bin_path)$(cc_prefix)_rdp$(bin_ext)
+
+cc_recursive_descent: $(cc_rdp_binout)
+cc_recursive_descent_test: cc_recursive_descent
+	$(cc_rdp_binout)
+
+$(cc_rdp_binout): $(cc_root)/recursive_descent/rdp.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+# eof

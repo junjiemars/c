@@ -2,8 +2,8 @@
 #define _CC_H_
 
 #include <nore.h>
+#include <ncstd.h>
 
-#define _unused_(x) ((void)(x))
 
 #if MSVC
 #  pragma warning(disable:4996)

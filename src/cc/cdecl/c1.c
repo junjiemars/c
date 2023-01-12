@@ -1,4 +1,4 @@
-#include <_cc_.h>
+#include "_cc_.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
@@ -55,7 +55,7 @@ lookahead(void) {
 	return *inptr++;
 }
 
-void 
+void
 pushback(void) {
 	if (inbuf < inptr) {
 		inptr--;
@@ -94,7 +94,7 @@ get_token(void) {
 	return;
 }
 
-enum token_t 
+enum token_t
 classify_string(void) {
 	char *s = token.string;
 	if (0 == strcmp(s, "const")) return QUALIFIER;
