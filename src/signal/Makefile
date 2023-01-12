@@ -240,17 +240,23 @@ $(signal_child_chld_binout): $(signal_root)/child/c1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # info
-signal_info_list_binout := $(bin_path)/$(signal_prefix)_list$(bin_ext)
+signal_info_lst_binout := $(bin_path)/$(signal_prefix)_lst$(bin_ext)
+signal_info_lst_h := $(inc_path)/sys_signame.h
 
-signal_info: $(signal_info_list_binout)
+signal_info: $(signal_info_lst_binout)
 
-signal_info_test: signal_info_list_test
+signal_info_test: signal_info_lst_test
 
-signal_info_list_test: $(signal_info_list_binout)
+signal_info_lst_test: $(signal_info_lst_binout)
 	$<
 
-$(signal_info_list_binout): $(signal_root)/info/lst1.c
+$(signal_info_lst_binout): $(signal_root)/info/lst1.c \
+                           $(signal_info_lst_h)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(signal_info_lst_h): $(signal_root)/info/lst.awk     \
+                      $(signal_root)/info/lst.awk.in
+	awk -f $^ > $@
 
 
 # suspend
