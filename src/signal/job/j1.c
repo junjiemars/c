@@ -1,8 +1,9 @@
-#include <_signal_.h>
+#include "_signal_.h"
+
 
 #define BUF_SIZE  512
 
-static void on_sig_tstp(int);
+static void  on_sig_tstp(int);
 
 
 int

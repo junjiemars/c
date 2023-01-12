@@ -1,7 +1,7 @@
 #include "_signal_.h"
 
 /*
- * emulate `system(3)'.
+ * emulates `system(3)'.
  *
  *
  */

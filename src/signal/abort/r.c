@@ -1,14 +1,15 @@
-#include <_signal_.h>
+#include "_signal_.h"
 
 /*
- * 1. abort never return to its caller.
+ * 1. `abort(3)' never return to its caller.
  *
  * 2. output streams are flushed and closed is implementation defined.
  *
  */
 
 
-static void on_sig_abrt(int);
+static void  on_sig_abrt(int);
+
 
 int
 main(void)

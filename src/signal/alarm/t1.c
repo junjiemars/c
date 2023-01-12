@@ -70,7 +70,6 @@ on_sig_alrm(int sig)
 void
 alarm_1s(void)
 {
-  int               rc;
   struct itimerval  old;
   struct itimerval  itv  =
     {
@@ -78,8 +77,7 @@ alarm_1s(void)
       .it_value         =  { 1, 0 }
     };
 
-  rc = setitimer(ITIMER_REAL, &itv, &old);
-  if (-1 == rc)
+  if (setitimer(ITIMER_REAL, &itv, &old) == -1)
     {
       perror(NULL);
     }

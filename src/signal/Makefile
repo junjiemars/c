@@ -11,37 +11,37 @@ signal_test:
 else
 
 
-signal: signal_alarm                            \
+signal: signal_abort                            \
+        signal_alarm                            \
+        signal_child                            \
+        signal_info                             \
+        signal_job                              \
         signal_kill                             \
-        signal_reentrant                        \
+        signal_pause                            \
+        singal_safe                             \
         signal_set                              \
         signal_sleep                            \
-        signal_timeout                          \
-        signal_wait                             \
-        signal_pause                            \
-        sigal_child                             \
-        signal_info                             \
         signal_suspend                          \
         signal_sync                             \
-        signal_abort                            \
         signal_system                           \
-        signal_job
+        signal_timeout                          \
+        signal_wait
 
-signal_test: signal_alarm_test                  \
-             signal_kill_test                   \
-             signal_reentrant_test              \
-             signal_set_test                    \
-             signal_sleep_test                  \
-             signal_timeout_test                \
-             signal_wait_test                   \
-             signal_pause_test                  \
+signal_test: signal_abort_test                  \
+             signal_alarm_test                  \
              signal_child_test                  \
              signal_info_test                   \
+             signal_job_test                    \
+             signal_kill_test                   \
+             signal_pause_test                  \
+             signal_safe_test                   \
+             signal_set_test                    \
+             signal_sleep_test                  \
              signal_suspend_test                \
              signal_sync_test                   \
-             signal_abort_test                  \
              signal_system_test                 \
-             signal_job_test
+             signal_timeout_test                \
+             signal_wait_test
 
 endif														# msvc
 
@@ -85,31 +85,40 @@ signal_kill_test: signal_kill
 $(signal_kill_binout): $(signal_root)/kill/k1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-# reentrant
-signal_reentrant_n_binout := $(bin_path)/$(signal_prefix)_reentrant_n$(bin_ext)
-signal_reentrant_n_cppout := $(tmp_path)/$(signal_prefix)_reentrant_n$(cpp_ext)
-signal_reentrant_r_binout := $(bin_path)/$(signal_prefix)_reentrant_r$(bin_ext)
+# safe
+signal_safe_stdio_binout := $(bin_path)/$(signal_prefix)_safe_stdio$(bin_ext)
+signal_safe_n_binout := $(bin_path)/$(signal_prefix)_safe_n$(bin_ext)
+signal_safe_n_cppout := $(tmp_path)/$(signal_prefix)_safe_n$(cpp_ext)
+signal_safe_r_binout := $(bin_path)/$(signal_prefix)_safe_r$(bin_ext)
 
 
-signal_reentrant: $(signal_reentrant_n_binout)  \
-                  $(signal_reentrant_r_binout)
+signal_safe: $(signal_safe_stdio_binout)        \
+             $(signal_safe_n_binout)            \
+             $(signal_safe_r_binout)
 
-signal_reentrant_test: signal_reentrant_n_test  \
-                       signal_reentrant_r_test
+signal_safe_test: signal_safe_stdio_test        \
+                  signal_safe_n_test            \
+                  signal_safe_r_test
 
-signal_reentrant_n_test: $(signal_reentrant_n_binout)
+signal_safe_stdio_test: $(signal_safe_stdio_binout)
+	$<
+
+signal_safe_n_test: $(signal_safe_n_binout)
 	$< root daemon
 
-signal_reentrant_r_test: $(signal_reentrant_r_binout)
+signal_safe_r_test: $(signal_safe_r_binout)
 	$< root daemon
 
-$(signal_reentrant_n_binout): $(signal_reentrant_n_cppout)
+$(signal_safe_stdio_binout): $(signal_root)/safe/stdio1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(signal_safe_n_binout): $(signal_safe_n_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(signal_reentrant_n_cppout): $(signal_root)/reentrant/r.c
+$(signal_safe_n_cppout): $(signal_root)/safe/r.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
-$(signal_reentrant_r_binout): $(signal_root)/reentrant/r.c
+$(signal_safe_r_binout): $(signal_root)/safe/r.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_REENTRANT_=1 $^ $(bin_out)$@
 
 
