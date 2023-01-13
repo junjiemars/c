@@ -13,11 +13,11 @@
  *
  * 5. 0 signal be called null signal.
  *
- * 6. `signo_s sys_signame' is portable implementation.
+ * 6. `signo_s sys_signame1' is portable implementation.
  *
  */
 
-extern signo_s  sys_signame[];
+extern signo_s  sys_signame1[];
 
 /* extern const char * const  sys_siglist[]; */
 /* extern const char * const  sys_signame[]; */
@@ -31,7 +31,7 @@ main(void)
 
   for (int i = 1; i < nsig; i++)
     {
-      s = sys_signame[i].name;
+      s = sys_signame1[i].name;
       d = strsignal(i);
 
       printf("%-16s: [%02i] %s\n", s, i, d);

@@ -20,7 +20,7 @@ BEGIN {
     print "} signo_s;"
     print ""
 
-    print "static signo_s sys_signame[] = "
+    print "static signo_s sys_signame1[] = "
     print "  {"
     print "    {.signo = 0, .name = \"Null\"},"
 }

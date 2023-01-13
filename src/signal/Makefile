@@ -255,7 +255,7 @@ signal_info_dfl_test: $(signal_info_dfl_binout)
 
 $(signal_info_lst_binout): $(signal_root)/info/lst1.c \
                            $(signal_info_lst_h)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $< $(bin_out)$@
 
 $(signal_info_dfl_binout): $(signal_root)/info/dfl1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
