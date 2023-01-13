@@ -18,7 +18,7 @@
 #define ALRM_N  16
 
 
-static void  on_sig_alrm(int, siginfo_t*, void*);
+static void  on_sig_alrm(int);
 
 static const char  *username1;
 static const char  *username2;
@@ -29,7 +29,6 @@ static volatile int  alrm_count  =  ALRM_N;
 int
 main(int argc, char **argv)
 {
-  sigset_t          nset;
   struct sigaction  act, oact;
 
   if (argc < 3)
@@ -43,16 +42,10 @@ main(int argc, char **argv)
   setvbuf(stdout, NULL, _IONBF, 0);
   printf("%d\n", getpid());
 
-  sigemptyset(&nset);
-  sigaddset(&nset, SIGALRM);
-  if (sigprocmask(SIG_UNBLOCK, &nset, NULL) == -1)
-    {
-      perror(NULL);
-      exit(EXIT_FAILURE);
-    }
-
-  act.sa_sigaction = on_sig_alrm;
-  act.sa_flags = SA_SIGINFO;
+  act.sa_handler = on_sig_alrm;
+  sigemptyset(&act.sa_mask);
+  sigaddset(&act.sa_mask, SIGALRM);
+  act.sa_flags = 0;
 
   if (sigaction(SIGALRM, &act, &oact) == -1)
     {
@@ -107,13 +100,9 @@ main(int argc, char **argv)
 
 
 void
-on_sig_alrm(int signo, siginfo_t *info, void *ctx)
+on_sig_alrm(int signo)
 {
-  (void) signo;
-  (void) info;
-  (void) ctx;
-
-  printf("# %s at %s\n", _str_(SIGALRM), __FUNCTION__);
+  printf("# %d) %s at %s\n", signo, _str_(SIGALRM), __FUNCTION__);
 
   /* wipped out the result of previous getpwnam call */
 
@@ -143,18 +132,11 @@ on_sig_alrm(int signo, siginfo_t *info, void *ctx)
     }
   else
     {
-      if (sigismember(&mset, SIGALRM) == 1)
+      if (sigismember(&mset, signo) == 1)
         {
-
-          sigemptyset(&mset);
-          sigaddset(&mset, SIGALRM);
-
-          if (sigprocmask(SIG_UNBLOCK, &mset, NULL) == -1)
-            {
-              perror(NULL);
-              exit(EXIT_FAILURE);
-            }
-          alarm(1);
+          printf("# %d) %s had been blocked at %s, we cannot go anymore\n",
+                 signo, _str_(SIGALRM), __FUNCTION__);
+          exit(EXIT_SUCCESS);
         }
     }
 
