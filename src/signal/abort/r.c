@@ -5,8 +5,11 @@
  *
  * 2. output streams are flushed and closed is implementation defined.
  *
+ * 3. if `on_sig_abrt' returns, `abort(3)' terminates the process.
+ *
  */
 
+extern void  abort(void);
 
 static void  on_sig_abrt(int);
 
@@ -14,24 +17,23 @@ static void  on_sig_abrt(int);
 int
 main(void)
 {
+  setvbuf(stdout, NULL, _IOFBF, 0);
+
   printf("%d\n", getpid());
 
   signal(SIGABRT, on_sig_abrt);
 
   abort();
 
-  printf("! never go here\n");
-
-  exit(EXIT_SUCCESS);
+  /* never go here; */
 }
 
 void
 on_sig_abrt(int signo)
 {
-  if (SIGABRT == signo)
-    {
-      printf("# %s\n", _str_(SIGABRT));
+  printf("# %s(%d)\n", _str_(SIGABRT), signo);
 
-      /* cleanup then exit*/
-    }
+  /* cleanup then exit*/
+
+  exit(EXIT_SUCCESS);
 }

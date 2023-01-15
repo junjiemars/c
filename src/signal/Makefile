@@ -325,23 +325,24 @@ $(signal_sync_child_binout): $(signal_root)/sync/s1.c
 
 # abort
 signal_abort_raw_binout := $(bin_path)/$(signal_prefix)_abort_raw$(bin_ext)
-signal_abort_posix_binout := $(bin_path)/$(signal_prefix)_abort_posix$(bin_ext)
+signal_abort_a1_binout := $(bin_path)/$(signal_prefix)_abort_a1$(bin_ext)
 
 signal_abort: $(signal_abort_raw_binout)        \
-              $(signal_abort_posix_binout)
+              $(signal_abort_a1_binout)
 signal_abort_test: signal_abort_raw_test        \
-                   signal_abort_posix_test
+                   signal_abort_a1_test
 
 signal_abort_raw_test: $(signal_abort_raw_binout)
 	-$<
 
-signal_abort_posix_test: $(signal_abort_posix_binout)
+signal_abort_a1_test: $(signal_abort_a1_binout)
 	-$<
 
 $(signal_abort_raw_binout): $(signal_root)/abort/r.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(signal_abort_posix_binout): $(signal_root)/abort/a1.c
+$(signal_abort_a1_binout): $(signal_root)/abort/r.c   \
+                           $(signal_root)/abort/a1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # system

@@ -1,36 +1,27 @@
 #include "_signal_.h"
+#include <stdio.h>
 
 
 /*
  * elmulates `abort(3)'.
  *
+ * https://pubs.opengroup.org/onlinepubs/9699919799/functions/abort.html
+ *
  */
 
-static void  abort1(void);
-static void  on_sig_abrt(int);
-
-
-int
-main(void)
-{
-  printf("%d\n", getpid());
-
-  signal(SIGABRT, on_sig_abrt);
-
-  abort1();
-
-  printf("! never go here\n");
-
-  exit(EXIT_SUCCESS);
-}
 
 void
-abort1(void)
+abort(void)
 {
   sigset_t          set;
   struct sigaction  act;
 
-  sigaction(SIGABRT, NULL, &act);
+  if (sigaction(SIGABRT, NULL, &act) == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
+
   if (act.sa_handler == SIG_IGN)
     {
       act.sa_handler = SIG_DFL;
@@ -56,15 +47,4 @@ abort1(void)
   kill(getpid(), SIGABRT);
 
   exit(EXIT_FAILURE);
-}
-
-void
-on_sig_abrt(int signo)
-{
-  if (signo == SIGABRT)
-    {
-      printf("# %s\n", _str_(SIGABRT));
-
-      /* cleanup then exit */
-    }
 }
