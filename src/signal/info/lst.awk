@@ -31,5 +31,6 @@ BEGIN {
 
 END {
     print "  };"
+    print ""
     print "#endif"
 }

@@ -9,13 +9,14 @@
  * 1. `getpwnam(3)' is nonreentrant function because which using
  * static data struct inside.
  *
- * 2. `getpwnam(3)' should be blocked in on_sig_alrm after first call
- * if there no printf ___ statement above the comment.
+ * 2. `getpwnam(3)' may be blocked in on_sig_alrm after first call.
+ *
+ * 3. `getpwnam_r(3)' is reentrant function.
  *
  */
 
 
-#define ALRM_N  16
+#define ALRM_N  8
 
 
 static void  on_sig_alrm(int);
@@ -29,8 +30,6 @@ static volatile int  alrm_count  =  ALRM_N;
 int
 main(int argc, char **argv)
 {
-  struct sigaction  act, oact;
-
   if (argc < 3)
     {
       printf("usage: %s <username1> <username2>\n", argv[0]);
@@ -42,12 +41,7 @@ main(int argc, char **argv)
   setvbuf(stdout, NULL, _IONBF, 0);
   printf("%d\n", getpid());
 
-  act.sa_handler = on_sig_alrm;
-  sigemptyset(&act.sa_mask);
-  sigaddset(&act.sa_mask, SIGALRM);
-  act.sa_flags = 0;
-
-  if (sigaction(SIGALRM, &act, &oact) == -1)
+  if (signal(SIGALRM, on_sig_alrm) == SIG_ERR)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
@@ -65,29 +59,23 @@ main(int argc, char **argv)
 
       if (getpwnam_r(username1, &pwd, buf, NM_GETPW_R_SIZE_MAX, &p))
         {
-          perror(NULL);
+          printf("getpwnam_r(%s) = NULL at @ %s\n", username1, __FUNCTION__);
           continue;
         }
 #else
-      p = getpwnam(username1);
-      if (errno)
+      if ((p = getpwnam(username1)) == NULL)
         {
-          perror(NULL);
+          printf("getpwnam(%s) = NULL at @ %s\n", username1, __FUNCTION__);
           continue;
         }
-      if (NULL == p)
-        {
-          printf("getpwnam(...) = NULL at @ %s\n", __FUNCTION__);
-          continue;
-        }
-
-      /* printf("# ___\n"); */
 
 #endif  /* _REENTRANT_ */
 
+      pause();
+
       /* may be interrupted by signal at here */
 
-      if (0 != strcmp(p->pw_name, username1))
+      if (strcmp(p->pw_name, username1) != 0)
         {
           printf("! corrupted: expect <%s> but got <%s>\n",
                  username1, p->pw_name);
@@ -102,7 +90,9 @@ main(int argc, char **argv)
 void
 on_sig_alrm(int signo)
 {
-  printf("# %d) %s at %s\n", signo, _str_(SIGALRM), __FUNCTION__);
+  errno_t  saved_errno  =  errno;
+
+  printf("# %s(%d) at %s\n", _str_(SIGALRM), signo, __FUNCTION__);
 
   /* wipped out the result of previous getpwnam call */
 
@@ -119,42 +109,22 @@ on_sig_alrm(int signo)
 
   if (getpwnam_r(username2, &pwd, buf, NM_GETPW_R_SIZE_MAX, &p))
     {
-      perror(NULL);
+      printf("getpwnam_r(%s) = NULL at %s\n", username2, __FUNCTION__);
     }
 
 #else
   struct passwd  *p;
-  sigset_t        mset;
-
-  if (sigprocmask(SIG_BLOCK, NULL, &mset) == -1)
-    {
-      perror(NULL);
-    }
-  else
-    {
-      if (sigismember(&mset, signo) == 1)
-        {
-          printf("# %d) %s had been blocked at %s, we cannot go anymore\n",
-                 signo, _str_(SIGALRM), __FUNCTION__);
-          exit(EXIT_SUCCESS);
-        }
-    }
 
   errno = 0;
-  p = getpwnam(username2);
-  if (errno)
+  if ((p = getpwnam(username2)) == NULL)
     {
-      perror(NULL);
+      printf("getpwnam(%s) = NULL at %s\n", username2, __FUNCTION__);
     }
-  if (p == NULL)
-    {
-      printf("getpwnam(...) = NULL at %s\n", __FUNCTION__);
-    }
-
 
 #endif  /* _REENTRANT_ */
 
 
-
   alarm(1);
+
+  errno = saved_errno;
 }

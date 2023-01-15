@@ -28,7 +28,7 @@ main(int argc, char **argv)
 
   printf("%d\n", getpid());
 
-  if (SIG_ERR == signal(SIGQUIT, on_sig_quit))
+  if (signal(SIGQUIT, on_sig_quit) == SIG_ERR)
     {
       perror(NULL);
       exit(EXIT_FAILURE);

@@ -5,7 +5,7 @@ main(void)
 {
   struct sigaction  oact;
 
-  if (sigaction(SIGKILL, NULL, &oact) == -1)
+  if (sigaction(SIG_BLOCK, NULL, &oact) == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);

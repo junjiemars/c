@@ -196,7 +196,7 @@ signal_wait1_binout := $(bin_path)/$(signal_prefix)_wait1$(bin_ext)
 
 signal_wait: $(signal_wait1_binout)
 signal_wait_test: signal_wait
-	@echo "#skip ..."
+	$(signal_wait1_binout)
 
 $(signal_wait1_binout): $(signal_root)/wait/w1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

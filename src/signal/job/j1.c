@@ -1,8 +1,6 @@
 #include "_signal_.h"
 
 
-#define BUF_SIZE  512
-
 static void  on_sig_tstp(int);
 
 
@@ -10,17 +8,17 @@ int
 main(void)
 {
   int   n;
-  char  buf[BUF_SIZE];
+  char  buf[BUFSIZ];
 
   printf("%d\n", getpid());
 
-  if (SIG_DFL == signal(SIGTSTP, on_sig_tstp))
+  if (signal(SIGTSTP, SIG_IGN) == SIG_DFL)
     {
       printf("# %s catching...\n", _str_(SIGTSTP));
       signal(SIGTSTP, on_sig_tstp);
     }
 
-  while ((n = read(STDIN_FILENO, buf, BUF_SIZE)) > 0)
+  while ((n = read(STDIN_FILENO, buf, BUFSIZ)) > 0)
     {
       if (write(STDOUT_FILENO, buf, n) != n)
         {
@@ -49,7 +47,7 @@ on_sig_tstp(int signo)
 
   sigemptyset(&set);
   sigaddset(&set, SIGTSTP);
-  if (-1 == sigprocmask(SIG_UNBLOCK, &set, NULL))
+  if (sigprocmask(SIG_UNBLOCK, &set, NULL) == -1)
     {
       perror(NULL);
     }
@@ -58,7 +56,7 @@ on_sig_tstp(int signo)
       printf("! %s unblocked\n", _str_(SIGTSTP));
     }
 
-  if (SIG_ERR == signal(SIGTSTP, SIG_DFL))
+  if (signal(SIGTSTP, SIG_DFL) == SIG_ERR)
     {
       perror(NULL);
     }
@@ -70,7 +68,7 @@ on_sig_tstp(int signo)
   printf("! %s rasing...\n", _str_(SIGTSTP));
   kill(getpid(), SIGTSTP);
 
-  if (SIG_ERR == signal(SIGTSTP, on_sig_tstp))
+  if (signal(SIGTSTP, on_sig_tstp) == SIG_ERR)
     {
       perror(NULL);
     }
