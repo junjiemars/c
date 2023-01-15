@@ -3,13 +3,13 @@
 int
 main(void)
 {
-  struct sigaction  oact;
+  /* struct sigaction  oact; */
 
-  if (sigaction(SIG_BLOCK, NULL, &oact) == -1)
-    {
-      perror(NULL);
-      exit(EXIT_FAILURE);
-    }
+  /* if (sigaction(SIG_BLOCK, NULL, &oact) == -1) */
+  /*   { */
+  /*     perror(NULL); */
+  /*     exit(EXIT_FAILURE); */
+  /*   } */
 
   exit(EXIT_SUCCESS);
 }

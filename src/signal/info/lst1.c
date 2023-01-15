@@ -27,7 +27,7 @@ int
 main(void)
 {
   char  *s, *d;
-  int    nsig  =  (int) _nof_(sys_signame);
+  int    nsig  =  (int) _nof_(sys_signame1);
 
   for (int i = 1; i < nsig; i++)
     {

@@ -90,7 +90,7 @@ main(int argc, char **argv)
 void
 on_sig_alrm(int signo)
 {
-  errno_t  saved_errno  =  errno;
+  int  saved_errno  =  errno;
 
   printf("# %s(%d) at %s\n", _str_(SIGALRM), signo, __FUNCTION__);
 
