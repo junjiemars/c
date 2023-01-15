@@ -1,5 +1,5 @@
 #include "_signal_.h"
-#include <sys_signame.h>
+#include "sig2str.h"
 
 
 /*
@@ -13,11 +13,10 @@
  *
  * 5. 0 signal be called null signal.
  *
- * 6. `signo_s sys_signame1' is portable implementation.
+ * 6. `sig2str' is nonstandard and is a Solaris implementation.
  *
  */
 
-extern signo_s  sys_signame1[];
 
 /* extern const char * const  sys_siglist[]; */
 /* extern const char * const  sys_signame[]; */
@@ -26,15 +25,20 @@ extern signo_s  sys_signame1[];
 int
 main(void)
 {
-  char  *s, *d;
-  int    nsig  =  (int) _nof_(sys_signame1);
+  char  *d;
+  char   s[SIG2STR_MAX];
+  int    nsig  =  N_SIG2STR;    /* NSIG */
 
   for (int i = 1; i < nsig; i++)
     {
-      s = sys_signame1[i].name;
-      d = strsignal(i);
+      if (sig2str(i, &s[0]) == -1)
+        {
+          perror(NULL);
+          exit(EXIT_FAILURE);
+        }
 
-      printf("%-16s: [%02i] %s\n", s, i, d);
+      d = strsignal(i);
+      printf("SIG%-16s: [%02i] %s\n", s, i, d);
     }
 
   exit(EXIT_SUCCESS);

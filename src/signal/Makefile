@@ -237,9 +237,9 @@ $(signal_child_chld_binout): $(signal_root)/child/c1.c
 
 # info
 signal_info_lst_binout := $(bin_path)/$(signal_prefix)_lst$(bin_ext)
-signal_info_dfl_binout := $(bin_path)/$(signal_prefix)_dfl$(bin_ext)
-signal_info_lst_h := $(inc_path)/sys_signame.h
-signal_info_lst_awk_in := $(signal_root)/info/lst.awk.$(NM_SYSTEM).in
+signal_info_sig2str_h := $(inc_path)/sig2str.h
+signal_info_sig2str_c := $(tmp_path)/sig2str.c
+signal_info_lst_awk_in := $(signal_root)/info/sig2str.awk.$(NM_SYSTEM).in
 
 signal_info: $(signal_info_lst_binout)          \
              $(signal_info_dfl_binout)
@@ -254,14 +254,14 @@ signal_info_dfl_test: $(signal_info_dfl_binout)
 	$<
 
 $(signal_info_lst_binout): $(signal_root)/info/lst1.c \
-                           $(signal_info_lst_h)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $< $(bin_out)$@
+                           $(signal_info_sig2str_c)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -I$(signal_root)/info $^ $(bin_out)$@
 
 $(signal_info_dfl_binout): $(signal_root)/info/dfl1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(signal_info_lst_h): $(signal_root)/info/lst.awk     \
-                      $(signal_info_lst_awk_in)
+$(signal_info_sig2str_c): $(signal_root)/info/sig2str.awk \
+                          $(signal_info_lst_awk_in)
 	awk -f $^ > $@
 
 
