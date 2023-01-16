@@ -17,27 +17,31 @@ __attribute__((unused)) static void  on_sig_abrt(int);
 int
 main(void)
 {
-  setvbuf(stdout, NULL, _IOFBF, 0);
-
-  printf("%d\n", getpid());
-
-#if (_IGNORE_SIG_ABRT_)
   struct sigaction  act;
+
+  setvbuf(stdout, NULL, _IOFBF, 0);
+  printf("%d\n", getpid());
 
   if (sigaction(SIGABRT, NULL, &act) == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
+
+#if defined(_IGN_SIG_ABRT_) && (_IGN_SIG_ABRT_ > 0)
   if (act.sa_handler != SIG_IGN)
     {
       act.sa_handler = SIG_IGN;
     }
 
+#elif defined(_IGN_SIG_ABRT_) && (_IGN_SIG_ABRT_ == 0)
+  /* SIG_DFL*/
+
 #else
   signal(SIGABRT, on_sig_abrt);
 
-#endif
+#endif  /* _IGN_SIG_ABRT_ */
+
 
   abort();
 

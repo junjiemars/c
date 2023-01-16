@@ -326,7 +326,7 @@ $(signal_sync_child_binout): $(signal_root)/sync/s1.c
 # abort
 signal_abort_raw_binout := $(bin_path)/$(signal_prefix)_abort_raw$(bin_ext)
 signal_abort_a1_binout := $(bin_path)/$(signal_prefix)_abort_a1$(bin_ext)
-signal_abort_cflags ?= -D_IGNORE_SIG_ABRT_=0 -D_EXIT_SIG_HANDLER_=1
+signal_abort_cflags ?= -D_IGN_SIG_ABRT_=-1 -D_EXIT_SIG_HANDLER_=1
 
 signal_abort: $(signal_abort_raw_binout)        \
               $(signal_abort_a1_binout)
