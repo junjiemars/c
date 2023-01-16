@@ -11,8 +11,9 @@ static int      timeout  =  1;
 int
 main(int argc, char **argv)
 {
-  int   rc;
-  char  buf[sizeof(int)];
+  int      rc;
+  char     buf[sizeof(int)];
+  ssize_t  n;
 
   if (argc > 1)
     {
@@ -35,7 +36,11 @@ main(int argc, char **argv)
     }
   alarm(0);
 
-  write(STDOUT_FILENO, buf, rc);
+  if ((n = write(STDOUT_FILENO, buf, rc)) == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
 
   exit(EXIT_SUCCESS);
 }

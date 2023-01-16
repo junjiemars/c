@@ -52,26 +52,26 @@ INC += $(nm_inc_opt)$(signal_root) $(nm_inc_opt)$(root)/posix
 
 
 # abort
-signal_abort_raw_binout := $(bin_path)/$(signal_prefix)_abort_raw$(bin_ext)
+signal_abort_d_binout := $(bin_path)/$(signal_prefix)_abort_d$(bin_ext)
 signal_abort_a1_binout := $(bin_path)/$(signal_prefix)_abort_a1$(bin_ext)
 signal_abort_cflags ?= -D_IGN_SIG_ABRT_=-1 -D_EXIT_SIG_HANDLER_=1
 
-signal_abort: $(signal_abort_raw_binout)        \
+signal_abort: $(signal_abort_d_binout)        \
               $(signal_abort_a1_binout)
-signal_abort_test: signal_abort_raw_test        \
+signal_abort_test: signal_abort_d_test        \
                    signal_abort_a1_test
 
-signal_abort_raw_test: $(signal_abort_raw_binout)
+signal_abort_d_test: $(signal_abort_d_binout)
 	-$<
 
 signal_abort_a1_test: $(signal_abort_a1_binout)
 	-$<
 
-$(signal_abort_raw_binout): $(signal_root)/abort/r.c
+$(signal_abort_d_binout): $(signal_root)/abort/d1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(signal_abort_cflags) \
     $^ $(bin_out)$@
 
-$(signal_abort_a1_binout): $(signal_root)/abort/r.c   \
+$(signal_abort_a1_binout): $(signal_root)/abort/d1.c    \
                            $(signal_root)/abort/abrt1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(signal_abort_cflags) \
     $^ $(bin_out)$@ 
@@ -209,15 +209,15 @@ $(signal_sleep_2_binout): $(signal_root)/sleep/d.c  \
 
 
 # timeout
-signal_timeout1_binout := $(bin_path)/$(signal_prefix)_timeout1$(bin_ext)
+signal_timeout_d_binout := $(bin_path)/$(signal_prefix)_timeout_d$(bin_ext)
 
-signal_timeout: $(signal_timeout1_binout)
-signal_timeout_test: signal_timeout1_test
+signal_timeout: $(signal_timeout_d_binout)
+signal_timeout_test: signal_timeout_d_test
 
-signal_timeout1_test: $(signal_timeout1_binout)
+signal_timeout_d_test: $(signal_timeout_d_binout)
 	-echo "a" | $< 0
 
-$(signal_timeout1_binout): $(signal_root)/timeout/t1.c
+$(signal_timeout_d_binout): $(signal_root)/timeout/t1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
