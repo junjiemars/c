@@ -3,9 +3,12 @@
 
 
 /*
- * elmulates `abort(3)'.
+ * elmulates POSIX `abort(3)'.
  *
  * https://pubs.opengroup.org/onlinepubs/9699919799/functions/abort.html
+ *
+ * on Linux: since glibc 2.27, `abort(3)' terminates the process
+ * without flushing streams.
  *
  */
 
@@ -40,10 +43,11 @@ abort(void)
   raise(SIGABRT);
 
   fflush(NULL);
+
   act.sa_handler = SIG_DFL;
   sigaction(SIGABRT, &act, NULL);
-
   sigprocmask(SIG_SETMASK, &set, NULL);
+
   raise(SIGABRT);
 
   exit(EXIT_FAILURE);
