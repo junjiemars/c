@@ -72,34 +72,38 @@ $(signal_abort_raw_binout): $(signal_root)/abort/r.c
     $^ $(bin_out)$@
 
 $(signal_abort_a1_binout): $(signal_root)/abort/r.c   \
-                           $(signal_root)/abort/a1.c
+                           $(signal_root)/abort/abrt1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(signal_abort_cflags) \
     $^ $(bin_out)$@ 
 
 
 # alarm
-signal_alarm_r_binout := $(bin_path)/$(signal_prefix)_alarm_r$(bin_ext)
-signal_alarm_t_binout := $(bin_path)/$(signal_prefix)_alarm_t$(bin_ext)
+signal_alarm_d_binout := $(bin_path)/$(signal_prefix)_alarm_d$(bin_ext)
+signal_alarm_a1_binout := $(bin_path)/$(signal_prefix)_alarm_a1$(bin_ext)
+signal_alarm_cflags ?= -D_ALRM_N_=4
 
-signal_alarm: $(signal_alarm_t_binout)          \
-              $(signal_alarm_t_binout)
-
-
-signal_alarm_test: signal_alarm_r_test          \
-                   signal_alarm_t_test
+signal_alarm: $(signal_alarm_d_binout)        \
+              $(signal_alarm_a1_binout)
 
 
-signal_alarm_r_test: $(signal_alarm_r_binout)
+signal_alarm_test: signal_alarm_d_test          \
+                   signal_alarm_a1_test
+
+
+signal_alarm_d_test: $(signal_alarm_d_binout)
 	$<
 
-signal_alarm_t_test: $(signal_alarm_t_binout)
+signal_alarm_a1_test: $(signal_alarm_a1_binout)
 	$<
 
-$(signal_alarm_r_binout): $(signal_root)/alarm/r1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(signal_alarm_d_binout): $(signal_root)/alarm/d1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@  \
+    $(signal_alarm_cflags)
 
-$(signal_alarm_t_binout): $(signal_root)/alarm/t1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(signal_alarm_a1_binout): $(signal_root)/alarm/d1.c  \
+                           $(signal_root)/alarm/alrm1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@  \
+    $(signal_alarm_cflags)
 
 # kill
 signal_kill_binout := $(bin_path)/$(signal_prefix)_kill$(bin_ext)

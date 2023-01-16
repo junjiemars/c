@@ -2,7 +2,8 @@
 #define _SIGNAL_H_
 
 #include <nustd.h>
-#include <limits.h>
+#include <nasrt.h>
+#include <nlim.h>
 
 #include <signal.h>
 #include <errno.h>
