@@ -112,7 +112,7 @@ ld_stage_test: ld_stage
 	$(ld_stage_binout)
 
 $(ld_stage_binout): $(ld_stage_objout) $(ld_stage_f_objout)
-	$(CC) $^ $(bin_out)$@
+	$(LINK) $^ $(bin_out)$@
 
 $(ld_stage_objout): $(ld_stage_asmout)
 	$(CC) $(nm_stage_c) $^ $(obj_out)$@
@@ -121,10 +121,10 @@ $(ld_stage_f_objout): $(ld_stage_f_asmout)
 	$(CC) $(nm_stage_c) $^ $(obj_out)$@
 
 $(ld_stage_asmout): $(ld_stage_cppout)
-	$(AS) $(ASFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
+	$(ASM) $(ASFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
 
 $(ld_stage_f_asmout): $(ld_stage_f_cppout)
-	$(AS) $(ASFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
+	$(ASM) $(ASFLAGS) $(nm_stage_asm) $^ $(asm_out)$@
 
 $(ld_stage_cppout): $(ld_root)/stage/s1.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
