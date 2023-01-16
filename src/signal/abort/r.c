@@ -11,7 +11,7 @@
 
 extern void  abort(void);
 
-static void  on_sig_abrt(int);
+__attribute__((unused)) static void  on_sig_abrt(int);
 
 
 int
@@ -21,7 +21,23 @@ main(void)
 
   printf("%d\n", getpid());
 
+#if (_IGNORE_SIG_ABRT_)
+  struct sigaction  act;
+
+  if (sigaction(SIGABRT, NULL, &act) == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
+  if (act.sa_handler != SIG_IGN)
+    {
+      act.sa_handler = SIG_IGN;
+    }
+
+#else
   signal(SIGABRT, on_sig_abrt);
+
+#endif
 
   abort();
 
@@ -35,5 +51,8 @@ on_sig_abrt(int signo)
 
   /* cleanup then exit*/
 
+#if (_EXIT_SIG_HANDLER_)
   exit(EXIT_SUCCESS);
+
+#endif
 }

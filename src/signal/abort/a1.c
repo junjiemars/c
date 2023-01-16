@@ -37,14 +37,14 @@ abort(void)
   sigdelset(&set, SIGABRT);
   sigprocmask(SIG_SETMASK, &set, NULL);
 
-  kill(getpid(), SIGABRT);
+  raise(SIGABRT);
 
   fflush(NULL);
   act.sa_handler = SIG_DFL;
   sigaction(SIGABRT, &act, NULL);
 
   sigprocmask(SIG_SETMASK, &set, NULL);
-  kill(getpid(), SIGABRT);
+  raise(SIGABRT);
 
   exit(EXIT_FAILURE);
 }

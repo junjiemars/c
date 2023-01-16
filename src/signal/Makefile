@@ -326,6 +326,7 @@ $(signal_sync_child_binout): $(signal_root)/sync/s1.c
 # abort
 signal_abort_raw_binout := $(bin_path)/$(signal_prefix)_abort_raw$(bin_ext)
 signal_abort_a1_binout := $(bin_path)/$(signal_prefix)_abort_a1$(bin_ext)
+signal_abort_cflags ?= -D_IGNORE_SIG_ABRT_=0 -D_EXIT_SIG_HANDLER_=0
 
 signal_abort: $(signal_abort_raw_binout)        \
               $(signal_abort_a1_binout)
@@ -339,11 +340,13 @@ signal_abort_a1_test: $(signal_abort_a1_binout)
 	-$<
 
 $(signal_abort_raw_binout): $(signal_root)/abort/r.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(signal_abort_cflags) \
+    $^ $(bin_out)$@
 
 $(signal_abort_a1_binout): $(signal_root)/abort/r.c   \
                            $(signal_root)/abort/a1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(signal_abort_cflags) \
+    $^ $(bin_out)$@ 
 
 # system
 signal_system_dri_binout := $(bin_path)/$(signal_prefix)_system_dri$(bin_ext)
