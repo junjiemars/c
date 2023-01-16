@@ -51,6 +51,32 @@ signal_prefix := signal
 INC += $(nm_inc_opt)$(signal_root) $(nm_inc_opt)$(root)/posix
 
 
+# abort
+signal_abort_raw_binout := $(bin_path)/$(signal_prefix)_abort_raw$(bin_ext)
+signal_abort_a1_binout := $(bin_path)/$(signal_prefix)_abort_a1$(bin_ext)
+signal_abort_cflags ?= -D_IGN_SIG_ABRT_=-1 -D_EXIT_SIG_HANDLER_=1
+
+signal_abort: $(signal_abort_raw_binout)        \
+              $(signal_abort_a1_binout)
+signal_abort_test: signal_abort_raw_test        \
+                   signal_abort_a1_test
+
+signal_abort_raw_test: $(signal_abort_raw_binout)
+	-$<
+
+signal_abort_a1_test: $(signal_abort_a1_binout)
+	-$<
+
+$(signal_abort_raw_binout): $(signal_root)/abort/r.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(signal_abort_cflags) \
+    $^ $(bin_out)$@
+
+$(signal_abort_a1_binout): $(signal_root)/abort/r.c   \
+                           $(signal_root)/abort/a1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(signal_abort_cflags) \
+    $^ $(bin_out)$@ 
+
+
 # alarm
 signal_alarm_r_binout := $(bin_path)/$(signal_prefix)_alarm_r$(bin_ext)
 signal_alarm_t_binout := $(bin_path)/$(signal_prefix)_alarm_t$(bin_ext)
@@ -323,30 +349,6 @@ signal_sync_child_test: $(signal_sync_child_binout)
 $(signal_sync_child_binout): $(signal_root)/sync/s1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-# abort
-signal_abort_raw_binout := $(bin_path)/$(signal_prefix)_abort_raw$(bin_ext)
-signal_abort_a1_binout := $(bin_path)/$(signal_prefix)_abort_a1$(bin_ext)
-signal_abort_cflags ?= -D_IGN_SIG_ABRT_=-1 -D_EXIT_SIG_HANDLER_=1
-
-signal_abort: $(signal_abort_raw_binout)        \
-              $(signal_abort_a1_binout)
-signal_abort_test: signal_abort_raw_test        \
-                   signal_abort_a1_test
-
-signal_abort_raw_test: $(signal_abort_raw_binout)
-	-$<
-
-signal_abort_a1_test: $(signal_abort_a1_binout)
-	-$<
-
-$(signal_abort_raw_binout): $(signal_root)/abort/r.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(signal_abort_cflags) \
-    $^ $(bin_out)$@
-
-$(signal_abort_a1_binout): $(signal_root)/abort/r.c   \
-                           $(signal_root)/abort/a1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(signal_abort_cflags) \
-    $^ $(bin_out)$@ 
 
 # system
 signal_system_dri_binout := $(bin_path)/$(signal_prefix)_system_dri$(bin_ext)
