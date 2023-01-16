@@ -52,7 +52,7 @@ END {
 
     print "int str2sig(const char *str, int *signo)"
     print "{"
-    print "  if (0 <= signo && (size_t) signo < _nof_(ss))"
+    print "  if (str != NULL)"
     print "    {"
     print "      for (size_t i = 0; i < _nof_(ss); i++)"
     print "        {"
