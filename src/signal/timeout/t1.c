@@ -29,7 +29,6 @@ read1(int fd, void *buf, size_t count, int timeout)
 
   sigfillset(&nact.sa_mask);
   sigdelset(&nact.sa_mask, SIGALRM);
-  sigemptyset(&nact.sa_mask);
   nact.sa_flags = 0;
   nact.sa_handler = on_sig_alrm;
 
