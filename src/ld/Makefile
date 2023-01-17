@@ -51,7 +51,7 @@ ld_bone_test: ld_bone
 
 $(ld_bone_binout): $(ld_bone_m_objout)          \
                    $(ld_bone_a_objout)
-	$(LD) $^ $(bin_out) $@ $(nm_lib_opt)c
+	$(LINK) $^ $(bin_out) $@ $(nm_lib_opt)c
 
 $(ld_bone_m_objout): $(ld_root)/bone/m.c
 	$(CC) $(INC) $(nm_stage_c) $^ $(obj_out)$@
