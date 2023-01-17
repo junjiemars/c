@@ -11,7 +11,12 @@
 
 extern void  abort(void);
 
-__attribute__((unused)) static void  on_sig_abrt(int);
+#if !defined(_IGN_SIG_ABRT_) || (_IGN_SIG_ABRT_ < 0)
+static void  on_sig_abrt(int);
+static void  on_abrt_exit(void);
+
+#endif
+
 
 
 int
@@ -21,6 +26,8 @@ main(void)
 
   setvbuf(stdout, NULL, _IOFBF, 0);
   printf("%d\n", getpid());
+
+  atexit(on_abrt_exit);
 
   if (sigaction(SIGABRT, NULL, &act) == -1)
     {
@@ -48,6 +55,8 @@ main(void)
   /* never go here; */
 }
 
+#if !defined(_IGN_SIG_ABRT_) || (_IGN_SIG_ABRT_ < 0)
+
 void
 on_sig_abrt(int signo)
 {
@@ -60,3 +69,11 @@ on_sig_abrt(int signo)
 
 #endif
 }
+
+void
+on_abrt_exit(void)
+{
+  printf("# exiting ...\n");
+}
+
+#endif
