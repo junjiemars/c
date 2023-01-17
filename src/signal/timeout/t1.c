@@ -7,7 +7,7 @@
  *
  * 1. same as `read(2)' excepts
  *
- * 2. `errno(3)' be set to `ETIME' if the `timeout' expires.
+ * 2. `errno(3)' be set to `EINTR' if the `timeout' expires.
  *
  */
 
@@ -35,7 +35,7 @@ read1(int fd, void *buf, size_t count, int timeout)
 
   if (sigsetjmp(env_alrm, 1) == SIGALRM)
     {
-      errno = ETIME;
+      errno = EINTR;
       return -1;
     }
 
