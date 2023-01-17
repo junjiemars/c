@@ -1,8 +1,9 @@
 #include "_signal_.h"
 
 /*
- * emulates `system(3)'.
+ * emulates POSIX `system(3)'.
  *
+ * https://pubs.opengroup.org/onlinepubs/9699919799/functions/system.html
  *
  */
 
@@ -13,9 +14,9 @@ system(const char *command)
   int               status;
   pid_t             pid;
   sigset_t          chldmask, savemask;
-  struct sigaction  ignore, saveintr, savequit;
+  struct sigaction  ignore, intr, quit;
 
-  if (NULL == command)
+  if (command == NULL)
     {
       return 1;
     }
@@ -24,12 +25,12 @@ system(const char *command)
   sigemptyset(&ignore.sa_mask);
   ignore.sa_flags = 0;
 
-  if (-1 == sigaction(SIGINT, &ignore, &saveintr))
+  if (-1 == sigaction(SIGINT, &ignore, &intr))
     {
       return -1;
     }
 
-  if (-1 == sigaction(SIGQUIT, &ignore, &savequit))
+  if (-1 == sigaction(SIGQUIT, &ignore, &quit))
     {
       return -1;
     }
@@ -49,8 +50,8 @@ system(const char *command)
     }
   else if (0 == pid)
     {
-      sigaction(SIGINT, &saveintr, NULL);
-      sigaction(SIGQUIT, &savequit, NULL);
+      sigaction(SIGINT, &intr, NULL);
+      sigaction(SIGQUIT, &quit, NULL);
       sigprocmask(SIG_SETMASK, &savemask, NULL);
 
       execl("/bin/sh", "sh", "-c", command, (char *) 0);
@@ -68,12 +69,12 @@ system(const char *command)
         }
     }
 
-  if (-1 == sigaction(SIGINT, &saveintr, NULL))
+  if (-1 == sigaction(SIGINT, &intr, NULL))
     {
       return -1;
     }
 
-  if (-1 == sigaction(SIGQUIT, &savequit, NULL))
+  if (-1 == sigaction(SIGQUIT, &quit, NULL))
     {
       return -1;
     }

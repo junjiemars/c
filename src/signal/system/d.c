@@ -1,11 +1,17 @@
 #include "_signal_.h"
 
-extern int system(const char *);
+/*
+ * `system(3)' driver.
+ *
+ */
 
-static void on_sig_int(int);
-static void on_sig_chld(int);
 
-static char  cmd[PATH_MAX];
+extern int  system(const char *);
+
+static void  on_sig_int(int);
+static void  on_sig_chld(int);
+
+static char  command[PATH_MAX];
 
 int
 main(int argc, char **argv)
@@ -14,7 +20,7 @@ main(int argc, char **argv)
 
   if (argc > 1)
     {
-      strcpy(cmd, argv[1]);
+      strcpy(command, argv[1]);
     }
 
   printf("%d\n", getpid());
@@ -22,7 +28,10 @@ main(int argc, char **argv)
   signal(SIGINT, on_sig_int);
   signal(SIGCHLD, on_sig_chld);
 
-  rc = system(cmd);
+  printf("! system(\"%s\")\n", command);
+
+  rc = system(command);
+
   printf("! return %d\n", rc);
 
   exit(rc);
@@ -31,17 +40,11 @@ main(int argc, char **argv)
 void
 on_sig_int(int signo)
 {
-  if (SIGINT == signo)
-    {
-      printf("# %s\n", _str_(SIGINT));
-    }
+  printf("# %s(%d)\n", _str_(SIGINT), signo);
 }
 
 void
 on_sig_chld(int signo)
 {
-  if (SIGCHLD == signo)
-    {
-      printf("# %s\n", _str_(SIGCHLD));
-    }
+  printf("# %s(%d)\n", _str_(SIGCHLD), signo);
 }

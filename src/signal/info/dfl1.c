@@ -10,7 +10,7 @@ main(void)
 {
   sigset_t  oset;
 
-  if (sigprocmask(SIG_BLOCK, NULL, &oset) < 0)
+  if (sigprocmask(SIG_BLOCK, NULL, &oset) == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
@@ -20,7 +20,11 @@ main(void)
   print_sigset(&oset);
 
   sigfillset(&oset);
-  sigprocmask(SIG_SETMASK, &oset, NULL);
+  if (sigprocmask(SIG_SETMASK, &oset, NULL) == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
 
   printf("fillset blocked signals:\n------------\n");
   print_sigset(&oset);
@@ -35,8 +39,6 @@ print_sigset(const sigset_t *set)
   int  n  =  0;
 
   setvbuf(stdout, NULL, _IOFBF, 0);
-
-
 
   for (int i = 1; i < N_SIG2STR; i++)
     {

@@ -72,7 +72,7 @@ $(signal_abort_d_binout): $(signal_root)/abort/d1.c
 $(signal_abort_a1_binout): $(signal_root)/abort/d1.c    \
                            $(signal_root)/abort/abrt1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(signal_abort_cflags) \
-    $^ $(bin_out)$@ 
+    $^ $(bin_out)$@
 
 
 # alarm
@@ -267,16 +267,17 @@ $(signal_sleep_s1_binout): $(signal_root)/sleep/d.c  \
 
 # suspend
 signal_suspend_raw_binout := $(bin_path)/$(signal_prefix)_suspend_raw$(bin_ext)
-signal_suspend_wrong_binout := $(bin_path)/$(signal_prefix)_suspend_wrong$(bin_ext)
+signal_suspend_wait_binout := $(bin_path)/$(signal_prefix)_suspend_wait$(bin_ext)
 signal_suspend_flag_binout := $(bin_path)/$(signal_prefix)_suspend_flag$(bin_ext)
 signal_suspend_stage_binout := $(bin_path)/$(signal_prefix)_suspend_stage$(bin_ext)
+signal_suspend_n ?= 1
 
 signal_suspend: $(signal_suspend_raw_binout)    \
-                $(signal_suspend_wrong_binout)  \
+                $(signal_suspend_wait_binout)  \
                 $(signal_suspend_flag_binout)   \
-                signal_suspend_stage
+                $(signal_suspend_stage_binout)
 signal_suspend_test: signal_suspend_raw_test    \
-                     signal_suspend_wrong_test  \
+                     signal_suspend_wait_test  \
                      signal_suspend_flag_test   \
                      signal_suspend_stage_test
 
@@ -286,22 +287,20 @@ signal_suspend_raw_test: $(signal_suspend_raw_binout)
 	# $<
 	@echo "#skip ..."
 
-signal_suspend_wrong_test: $(signal_suspend_wrong_binout)
-	# $<
-	@echo "#skip ..."
+signal_suspend_wait_test: $(signal_suspend_wait_binout)
+	-$< $(signal_suspend_n)
 
 signal_suspend_flag_test: $(signal_suspend_flag_binout)
 	# $<
 	@echo "#skip ..."
 
 signal_suspend_stage_test: $(signal_suspend_stage_binout)
-	# $<
-	@echo "#skip ..."
+	-$< $(signal_suspend_n)
 
 $(signal_suspend_raw_binout): $(signal_root)/suspend/r.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(signal_suspend_wrong_binout): $(signal_root)/suspend/w.c
+$(signal_suspend_wait_binout): $(signal_root)/suspend/w.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(signal_suspend_flag_binout): $(signal_root)/suspend/f.c
@@ -325,29 +324,27 @@ $(signal_sync_child_binout): $(signal_root)/sync/s1.c
 
 
 # system
-signal_system_dri_binout := $(bin_path)/$(signal_prefix)_system_dri$(bin_ext)
-signal_system_art_binout := $(bin_path)/$(signal_prefix)_system_art$(bin_ext)
+signal_system_d_binout := $(bin_path)/$(signal_prefix)_system_d$(bin_ext)
+signal_system_s1_binout := $(bin_path)/$(signal_prefix)_system_s1$(bin_ext)
 
-signal_system: $(signal_system_dri_binout)      \
-               $(signal_system_art_binout)
-signal_system_test: signal_system_dri_test      \
-                    signal_system_art_test
+signal_system: $(signal_system_d_binout)      \
+               $(signal_system_s1_binout)
+signal_system_test: signal_system_d_test      \
+                    signal_system_s1_test
 
-signal_system_dri_test: $(signal_system_dri_binout)
-	# $< "/bin/ed"
+signal_system_d_test: $(signal_system_d_binout)
 	$< "date"
-	@echo "#skip ..."
-
-signal_system_art_test: $(signal_system_art_binout)
 	# $< "/bin/ed"
-	$< "date"
-	# @echo "#skip ..."
 
-$(signal_system_dri_binout): $(signal_root)/system/d.c
+signal_system_s1_test: $(signal_system_s1_binout)
+	$< "date"
+	# $< "/bin/ed"
+
+$(signal_system_d_binout): $(signal_root)/system/d.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(signal_system_art_binout): $(signal_root)/system/d.c   \
-                             $(signal_root)/system/s.c
+$(signal_system_s1_binout): $(signal_root)/system/d.c   \
+                            $(signal_root)/system/s1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # timeout

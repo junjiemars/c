@@ -1,7 +1,7 @@
 #include <_signal_.h>
 
 /*
- * on sigsuspend return the previous set of masked signals is
+ * on `sigsuspend(2)' return the previous set of masked signals is
  * restored.
  *
  */

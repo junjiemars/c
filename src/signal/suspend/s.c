@@ -1,8 +1,8 @@
-#include <_signal_.h>
+#include "_signal_.h"
 
-static void on_sig_quit(int);
+static void  on_sig_quit(int);
 
-static int  N  =  5;
+static int  N  =  1;
 
 
 int
@@ -15,28 +15,46 @@ main(int argc, char **argv)
       N = atoi(argv[1]);
     }
 
-  signal(SIGQUIT, on_sig_quit);
+  setvbuf(stdout, NULL, _IONBF, 0);
+  printf("%d\n", getpid());
+
+  if (signal(SIGQUIT, on_sig_quit) == SIG_ERR)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
 
   sigemptyset(&nmask);
   sigaddset(&nmask, SIGQUIT);
 
-  sigprocmask(SIG_BLOCK, &nmask, &omask);
-  printf("! %s blocked\n", _str_(SIGQUIT));
+  if (sigprocmask(SIG_BLOCK, &nmask, &omask) == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
+  printf("! %s(%d) blocked\n", _str_(SIGQUIT), SIGQUIT);
 
   sleep(N);
 
-  sigpending(&pmask);
-  if (sigismember(&pmask, SIGQUIT))
+  if (sigpending(&pmask) == -1)
     {
-      printf("# %s pending\n", _str_(SIGQUIT));
+      perror(NULL);
+      exit(EXIT_FAILURE);
     }
 
-  sigprocmask(SIG_SETMASK, &omask, NULL);
-  printf("! %s unblocked\n", _str_(SIGQUIT));
+  if (sigismember(&pmask, SIGQUIT))
+    {
+      printf("# %s(%d) pending\n", _str_(SIGQUIT), SIGQUIT);
+    }
+
+  if (sigprocmask(SIG_SETMASK, &omask, NULL) == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
+  printf("! %s(%d) unblocked\n", _str_(SIGQUIT), SIGQUIT);
 
   sleep(N);
-
-
 
   exit(EXIT_SUCCESS);
 }
@@ -44,10 +62,6 @@ main(int argc, char **argv)
 void
 on_sig_quit(int signo)
 {
-  if (SIGQUIT == signo)
-    {
-      printf("# %s\n", _str_(SIGQUIT));
-
-      signal(SIGQUIT, on_sig_quit);
-    }
+  printf("# %s(%d) caught\n", _str_(SIGQUIT), signo);
+  signal(SIGQUIT, SIG_DFL);
 }

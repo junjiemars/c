@@ -4,7 +4,9 @@
  * expect:
  *
  * 1. block specified signal before enter critical section.
+ *
  * 2. unblock the signal after leaving critical section.
+ *
  * 3. pause and wait the deferred signal.
  *
  */
@@ -28,7 +30,7 @@ main(int argc, char **argv)
   setvbuf(stdout, NULL, _IONBF, 0);
   printf("%d\n", getpid());
 
-  if (SIG_ERR == signal(SIGINT, on_sig_int))
+  if (signal(SIGINT, on_sig_int) == SIG_ERR)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
@@ -37,9 +39,9 @@ main(int argc, char **argv)
   sigemptyset(&nset);
   sigaddset(&nset, SIGINT);
 
-  printf("! %s blocked\n", _str_(SIGINT));
+  printf("! %s blocked(%d)\n", _str_(SIGINT), SIGINT);
 
-  if (sigprocmask(SIG_BLOCK, &nset, &oset))
+  if (sigprocmask(SIG_SETMASK, &nset, &oset) == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
@@ -51,17 +53,15 @@ main(int argc, char **argv)
 
   printf("! leaved\n");
 
-  if (sigprocmask(SIG_SETMASK, &oset, NULL))
+  if (sigprocmask(SIG_SETMASK, &oset, NULL) == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
-  printf("! %s unblocked\n", _str_(SIGINT));
-
-  /* race condition here */
-  pause();
+  printf("! %s(%d) unblocked\n", _str_(SIGINT), SIGINT);
 
   printf("# exit\n");
+
   exit(EXIT_SUCCESS);
 }
 
@@ -69,8 +69,5 @@ main(int argc, char **argv)
 void
 on_sig_int(int signo)
 {
-  if (SIGINT == signo)
-    {
-      printf("# %s\n", _str_(SIGINT));
-    }
+  printf("# %s(%d) caught\n", _str_(SIGINT), signo);
 }
