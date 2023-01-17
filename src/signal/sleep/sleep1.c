@@ -1,17 +1,14 @@
 #include "_signal_.h"
+#include <sys/time.h>
 
 
 /*
- * Emulates `sleep(3)'.
+ * emulates POSIX `sleep(3)'.
  *
  */
 
 
 unsigned int  sleep(unsigned int);
-
-extern void  race(long);
-
-extern unsigned int  N;
 
 
 unsigned int
@@ -19,10 +16,10 @@ sleep(unsigned int nsecs)
 {
   alarm(nsecs);
 
-  /* race condition: between alarm and pause */
-  race(N);
-
-  pause();
+  if (nsecs > 0)
+    {
+      pause();
+    }
 
   return alarm(0);
 }

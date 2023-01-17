@@ -1,55 +1,61 @@
 #include "_signal_.h"
 #include <setjmp.h>
+#include <errno.h>
+
+/*
+ * extends `read(2)' to support `timeout'.
+ *
+ * 1. same as `read(2)' excepts
+ *
+ * 2. `errno(3)' be set to `ETIME' if the `timeout' expires.
+ *
+ */
+
+
+ssize_t  read1(int, void*, size_t, int timeout);
 
 
 static void on_sig_alrm(int signo);
 
-static jmp_buf  env_alrm;
-static int      timeout  =  1;
+static sigjmp_buf  env_alrm;
 
 
-int
-main(int argc, char **argv)
+ssize_t
+read1(int fd, void *buf, size_t count, int timeout)
 {
-  int      rc;
-  char     buf[sizeof(int)];
-  ssize_t  n;
+  struct sigaction  nact;
 
-  if (argc > 1)
-    {
-      timeout = atoi(argv[1]);
-    }
-
-  signal(SIGALRM, on_sig_alrm);
-
-  if (setjmp(env_alrm) == timeout)
-    {
-      printf("! timeout\n");
-      exit(EXIT_FAILURE);
-    }
-
-  alarm(timeout);
-  rc = read(STDIN_FILENO, buf, sizeof(buf));
-  if (-1 == rc)
-    {
-      perror(NULL);
-    }
   alarm(0);
 
-  if ((n = write(STDOUT_FILENO, buf, rc)) == -1)
+  sigfillset(&nact.sa_mask);
+  sigdelset(&nact.sa_mask, SIGALRM);
+  sigemptyset(&nact.sa_mask);
+  nact.sa_flags = 0;
+  nact.sa_handler = on_sig_alrm;
+
+  if (sigsetjmp(env_alrm, 1) == SIGALRM)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      errno = ETIME;
+      return -1;
     }
 
-  exit(EXIT_SUCCESS);
+  if (timeout > 0)
+    {
+      if (sigaction(SIGALRM, &nact, NULL) == -1)
+        {
+          return -1;
+        }
+      alarm(timeout);
+    }
+
+  return read(fd, buf, count);
 }
 
 void
 on_sig_alrm(int signo)
 {
-  if (SIGALRM == signo)
+  if (signo == SIGALRM)
     {
-      longjmp(env_alrm, timeout);
+      siglongjmp(env_alrm, signo);
     }
 }

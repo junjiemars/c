@@ -172,52 +172,41 @@ $(signal_set2_binout): $(signal_root)/set/s2.c
 
 
 # sleep
-signal_sleep_raw_binout := $(bin_path)/$(signal_prefix)_sleep_raw$(bin_ext)
-signal_sleep_1_binout := $(bin_path)/$(signal_prefix)_sleep_1$(bin_ext)
-signal_sleep_2_binout := $(bin_path)/$(signal_prefix)_sleep_2$(bin_ext)
-signal_sleep_signal :=
+signal_sleep_d_binout := $(bin_path)/$(signal_prefix)_sleep_d$(bin_ext)
+signal_sleep_s1_binout := $(bin_path)/$(signal_prefix)_sleep_s1$(bin_ext)
+signal_sleep_nsecs ?= 1
 
-signal_sleep: $(signal_sleep_raw_binout)        \
-              $(singal_sleep_1_binout)           \
-              $(signal_sleep_2_binout)
-signal_sleep_test: signal_sleep_raw_test        \
-                   signal_sleep_1_test           \
-                   signal_sleep_2_test
+signal_sleep: $(signal_sleep_d_binout)          \
+              $(singal_sleep_s1_binout)
+signal_sleep_test: signal_sleep_d_test          \
+                   signal_sleep_s1_test
 
-signal_sleep_raw_test: $(signal_sleep_raw_binout)
+signal_sleep_d_test: $(signal_sleep_d_binout)
 	$< 1
 
-signal_sleep_1_test: $(signal_sleep_1_binout)
-	$< 1
+signal_sleep_s1_test: $(signal_sleep_s1_binout)
+	$< $(signal_sleep_nsecs)
 
-signal_sleep_2_test: $(signal_sleep_2_binout)
-	$< 1
-
-$(signal_sleep_raw_binout): $(signal_root)/sleep/d.c  \
-                            $(signal_root)/sleep/r.c
+$(signal_sleep_d_binout): $(signal_root)/sleep/d.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(signal_sleep_1_binout): $(signal_root)/sleep/d.c  \
-                          $(signal_root)/sleep/r.c  \
-                          $(signal_root)/sleep/sleep1.c
+$(signal_sleep_s1_binout): $(signal_root)/sleep/d.c  \
+                           $(signal_root)/sleep/sleep1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-$(signal_sleep_2_binout): $(signal_root)/sleep/d.c  \
-                          $(signal_root)/sleep/r.c  \
-                          $(signal_root)/sleep/sleep2.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
 
 # timeout
-signal_timeout_d_binout := $(bin_path)/$(signal_prefix)_timeout_d$(bin_ext)
+signal_timeout_t1_binout := $(bin_path)/$(signal_prefix)_timeout_t1$(bin_ext)
+signal_timeout_nsecs ?= 2
 
-signal_timeout: $(signal_timeout_d_binout)
-signal_timeout_test: signal_timeout_d_test
+signal_timeout: $(signal_timeout_t1_binout)
+signal_timeout_test: signal_timeout_t1_test
 
-signal_timeout_d_test: $(signal_timeout_d_binout)
-	-echo "a" | $< 0
+signal_timeout_t1_test: $(signal_timeout_t1_binout)
+	-echo "abc" | $< $(signal_timeout_nsecs)
+	-$< $(signal_timeout_nsecs)
 
-$(signal_timeout_d_binout): $(signal_root)/timeout/t1.c
+$(signal_timeout_t1_binout): $(signal_root)/timeout/d.c   \
+                             $(signal_root)/timeout/t1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
