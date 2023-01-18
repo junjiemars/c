@@ -1,0 +1,19 @@
+#### -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## posix/qemu_auto
+####
+
+
+echo ${echo_n} " + checking for qemu_x86-64 ... " ${echo_c}
+has_qemu_x86_64="`command -v qemu-x86_64`"
+if [ -x "$has_qemu_x86_64" ]; then
+  flag=has_qemu_x86_64 value="${has_qemu_x86_64}" . ${NORE_ROOT}/auto/make_define
+  echo "yes"
+else
+  echo "no"
+fi
+
+# eof
