@@ -9,6 +9,9 @@ edition = "2021"
 
 [profile.dev]
 opt-level = 0
+debug = true
 
 [profile.release]
-opt-level = 0
+opt-level = 3
+debug = 0
+strip = "symbols"

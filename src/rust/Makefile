@@ -53,9 +53,9 @@ rust_tags_sub_file := $(rust_root)/TAGS
 rust_src_dir := $(has_rust_src)
 rust_fmt_file := $(rust_root)/rustfmt.toml
 
-rust_release_opt :=
-ifeq ($(NM_BUILD), YES)
-rust_release_opt := --release
+rust_build_opt :=
+ifeq ($(NM_OPTIMIZE), YES)
+rust_build_opt := --release --profile=release
 endif
 
 
@@ -92,10 +92,10 @@ $(rust_hi_cargo):
 
 $(rust_hi_binout): $(rust_hi_cargo)             \
                    $(rust_root)/hi/src/main.rs
-	$(CARGO) build $(rust_release_opt)            \
+	$(CARGO) build $(rust_build_opt)              \
 		--manifest-path $<                          \
-		-Z unstable-options                         \
     --target-dir $(cargo_target_dir)            \
+		-Z unstable-options                         \
     --out-dir $(bin_path)
 
 # libc
@@ -456,7 +456,7 @@ rust_ws_unit_test: $(rust_ws_cargo)             \
 
 
 $(rust_ws_binout): $(rust_ws_cargo)
-	$(CARGO) build $(rust_release_opt)            \
+	$(CARGO) build $(rust_build_opt)              \
 		--manifest-path $<                          \
 		-Z unstable-options                         \
     --target-dir $(cargo_target_dir)            \
