@@ -3,7 +3,7 @@
 
 
 /*
- * emulates POSIX `sleep(3)'.
+ * 1st: emulates POSIX `sleep(3)'.
  *
  */
 

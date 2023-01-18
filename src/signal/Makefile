@@ -261,8 +261,8 @@ signal_sleep_s1_test: $(signal_sleep_s1_binout)
 $(signal_sleep_d_binout): $(signal_root)/sleep/d.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(signal_sleep_s1_binout): $(signal_root)/sleep/d.c  \
-                           $(signal_root)/sleep/sleep1.c
+$(signal_sleep_s1_binout): $(signal_root)/sleep/d.c   \
+                           $(signal_root)/sleep/s1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # suspend

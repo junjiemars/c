@@ -33,6 +33,9 @@ main(int argc, char **argv)
   n = sleep(0);
   printf("%u = sleep(%u)\n", n, 0);
 
+  n = sleep(N+10);
+  printf("%u = sleep(%u)\n", n, N+10);
+
   n = sleep(N);
   printf("%u = sleep(%u)\n", n, N);
 
