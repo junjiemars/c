@@ -333,10 +333,12 @@ signal_system_test: signal_system_d_test      \
                     signal_system_s1_test
 
 signal_system_d_test: $(signal_system_d_binout)
+	$< || test $$? -eq 1
 	$< "date"
 	# $< "/bin/ed"
 
 signal_system_s1_test: $(signal_system_s1_binout)
+	-$< || test $$? -eq 1
 	$< "date"
 	# $< "/bin/ed"
 

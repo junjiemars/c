@@ -7,77 +7,90 @@
  *
  */
 
+#define CMD_PROC  "/bin/sh"
+
 
 int
 system(const char *command)
 {
-  int               status;
+  int               stat;
   pid_t             pid;
-  sigset_t          chldmask, savemask;
+  sigset_t          nset, oset;
   struct sigaction  ignore, intr, quit;
 
   if (command == NULL)
     {
-      return 1;
+      return !access(CMD_PROC, X_OK);
     }
 
   ignore.sa_handler = SIG_IGN;
   sigemptyset(&ignore.sa_mask);
   ignore.sa_flags = 0;
 
-  if (-1 == sigaction(SIGINT, &ignore, &intr))
+  if (sigaction(SIGINT, &ignore, &intr) == -1)
     {
       return -1;
     }
 
-  if (-1 == sigaction(SIGQUIT, &ignore, &quit))
+  if (sigaction(SIGQUIT, &ignore, &quit) == -1)
     {
       return -1;
     }
 
-  sigemptyset(&chldmask);
-  sigaddset(&chldmask, SIGCHLD);
+  sigemptyset(&nset);
+  sigaddset(&nset, SIGCHLD);
 
-  if (-1 == sigprocmask(SIG_BLOCK, &chldmask, &savemask))
+  if (sigprocmask(SIG_BLOCK, &nset, &oset) == -1)
     {
       return -1;
     }
 
-  pid = fork();
-  if (-1 == pid)
+  if ((pid = fork()) == -1)
     {
-      status = -1;
+      stat = -1;
     }
-  else if (0 == pid)
+  else if (pid == 0)
     {
-      sigaction(SIGINT, &intr, NULL);
-      sigaction(SIGQUIT, &quit, NULL);
-      sigprocmask(SIG_SETMASK, &savemask, NULL);
+      if (sigaction(SIGINT, &intr, NULL) == -1)
+        {
+          return -1;
+        }
+      if (sigaction(SIGQUIT, &quit, NULL) == -1)
+        {
+          return 1;
+        }
+      if (sigprocmask(SIG_SETMASK, &oset, NULL) == -1)
+        {
+          return 1;
+        }
 
-      execl("/bin/sh", "sh", "-c", command, (char *) 0);
+      execl(CMD_PROC, "sh", "-c", command, NULL);
       _exit(127);
     }
   else
     {
-      while (-1 == waitpid(pid, &status, 0))
+      while (waitpid(pid, &stat, 0) == -1)
         {
           if (errno != EINTR)
             {
-              status = -1;
+              stat = -1;
               break;
             }
         }
+
+      if (sigaction(SIGINT, &intr, NULL) == -1)
+        {
+          return -1;
+        }
+      if (sigaction(SIGQUIT, &quit, NULL) == -1)
+        {
+          return -1;
+        }
+      if (sigprocmask(SIG_SETMASK, &oset, NULL) == -1)
+        {
+          return -1;
+        }
     }
 
-  if (-1 == sigaction(SIGINT, &intr, NULL))
-    {
-      return -1;
-    }
-
-  if (-1 == sigaction(SIGQUIT, &quit, NULL))
-    {
-      return -1;
-    }
-
-  return status;
+  return stat;
 }

@@ -10,6 +10,10 @@ fi
 ncc_sanitize_address="yes"
 . ${POSIX_ROOT}/ncc_auto
 
+# check nlim.h features
+nlim_path_max="yes"
+. ${POSIX_ROOT}/nlim_auto
+
 
 echo "checking for {signal} ..."
 

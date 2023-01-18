@@ -11,15 +11,21 @@ extern int  system(const char *);
 static void  on_sig_int(int);
 static void  on_sig_chld(int);
 
-static char  command[PATH_MAX];
 
 int
 main(int argc, char **argv)
 {
-  int  rc;
+  int    rc;
+  char  *command  =  NULL;
 
   if (argc > 1)
     {
+      command = malloc(NM_PATH_MAX);
+      if (!command)
+        {
+          perror(NULL);
+          exit(EXIT_FAILURE);
+        }
       strcpy(command, argv[1]);
     }
 
@@ -33,6 +39,11 @@ main(int argc, char **argv)
   rc = system(command);
 
   printf("! return %d\n", rc);
+
+  if (command != NULL)
+    {
+      free(command);
+    }
 
   exit(rc);
 }
