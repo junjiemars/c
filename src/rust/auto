@@ -64,6 +64,7 @@ case $NM_SYSTEM in
                         . ${NORE_ROOT}/auto/make_define
       echo "yes"
     else
+      has_gdb=""
       has_rust_gdb=""
       echo "no"
     fi
@@ -75,19 +76,22 @@ esac
 #----------------------------------------
 if [ -n "$has_rustc" ]; then
   echo ${echo_n} " + checking for rust src ... " ${echo_c}
-  has_rust_src="$(rustc --print sysroot)/lib/rustlib/src/rust"
+  rust_src_dir="/lib/rustlib/src/rust"
+  has_rust_src="$(rustc --print sysroot)${rust_src_dir}"
 
-  if [ -d "$has_rust_src" ]; then
+  if [ "$has_rust_src" != "$rust_src_dir" -a -d "$has_rust_src" ]; then
     flag=has_rust_src value="${has_rust_src}" . ${NORE_ROOT}/auto/make_define
     echo "yes"
 
     echo ${echo_n} " + checking for ctags.rust ... " ${echo_c}
-    has_rust_ctags="${has_rust_src}/src/etc/ctags.rust"
-    if [ -r "$has_rust_ctags" ]; then
+    rust_ctags_dir="/src/etc/ctags.rust"
+    has_rust_ctags="${has_rust_src}${rust_ctags_dir}"
+    if [ "$has_rust_ctags" != "$rust_ctags_dir" -a -r "$has_rust_ctags" ]; then
       flag=has_rust_ctags value="${has_rust_ctags}" \
                           . ${NORE_ROOT}/auto/make_define
       echo "yes"
     else
+      rust_ctags_dir=""
       echo "no"
     fi
 
@@ -97,8 +101,9 @@ if [ -n "$has_rustc" ]; then
   fi
 
   echo ${echo_n} " + checking for rust etc ... " ${echo_c}
-  has_rust_etc="$(rustc --print sysroot)/lib/rustlib/etc"
-  if [ -d "$has_rust_etc" ]; then
+  rust_etc_dir="/lib/rustlib/etc"
+  has_rust_etc="$(rustc --print sysroot)${rust_etc_dir}"
+  if [ "$has_rust_etc" != "$rust_etc_dir" -a -d "$has_rust_etc" ]; then
     flag=has_rust_etc value="${has_rust_etc}" . ${NORE_ROOT}/auto/make_define
     echo "yes"
   else

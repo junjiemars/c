@@ -38,9 +38,6 @@ main(int argc, char **argv)
       exit(EXIT_FAILURE);
     }
 
-  sigemptyset(&wset);
-  sigaddset(&wset, SIGINT);
-
   sigemptyset(&nset);
   sigaddset(&nset, SIGINT);
 
@@ -57,18 +54,21 @@ main(int argc, char **argv)
 
   printf("! leaved\n");
 
-  printf("# %s(%d) unblock ...\n", _str_(SIGINT), SIGINT);
+  if (sigpending(&wset) == 0)
+    {
+      if (sigismember(&wset, SIGINT))
+        {
+          printf("# %s(%d) pending\n", _str_(SIGINT), SIGINT);
+          sigsuspend(&oset);
+        }
+    }
 
   if (sigprocmask(SIG_SETMASK, &oset, NULL))
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
-
-  signal(SIGINT, on_sig_int);
-  printf("# %s(%d) supsend ...\n", _str_(SIGINT), SIGINT);
-
-  sigsuspend(&wset);
+  printf("# %s(%d) unblocked\n", _str_(SIGINT), SIGINT);
 
   printf("# exit\n");
 
