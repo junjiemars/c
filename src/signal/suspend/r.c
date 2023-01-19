@@ -1,8 +1,16 @@
 #include <_signal_.h>
 
 /*
- * on `sigsuspend(2)' return the previous set of masked signals is
- * restored.
+ * POSIX `sigsuspend(2)':
+ * https://pubs.opengroup.org/onlinepubs/9699919799/functions/sigsuspend.html#tag_16_555
+ *
+ * expect:
+ *
+ * 1. block specified signal before enter critical section.
+ *
+ * 2. unblock the signal after leaving critical section.
+ *
+ * 3. pause and wait the deferred signal.
  *
  */
 
@@ -24,57 +32,52 @@ main(int argc, char **argv)
   setvbuf(stdout, NULL, _IONBF, 0);
   printf("%d\n", getpid());
 
-  if (SIG_ERR == signal(SIGINT, on_sig_int))
+  if (signal(SIGINT, on_sig_int) == SIG_ERR)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
 
   sigemptyset(&wset);
-  sigaddset(&wset, SIGUSR1);
+  sigaddset(&wset, SIGINT);
+
   sigemptyset(&nset);
   sigaddset(&nset, SIGINT);
-
-
-  printf("! %s blocked\n", _str_(SIGINT));
 
   if (sigprocmask(SIG_BLOCK, &nset, &oset))
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
+  printf("# %s(%d) blocked\n", _str_(SIGINT), SIGINT);
 
-  printf("! enter...\n");
+  printf("! enter ...\n");
 
   sleep(N);
 
   printf("! leaved\n");
 
-  if (-1 == sigsuspend(&wset))
-    {
-      if (errno)
-        {
-          perror(NULL);
-        }
-    }
+  printf("# %s(%d) unblock ...\n", _str_(SIGINT), SIGINT);
 
   if (sigprocmask(SIG_SETMASK, &oset, NULL))
     {
       perror(NULL);
       exit(EXIT_FAILURE);
     }
-  printf("! %s unblocked\n", _str_(SIGINT));
 
+  signal(SIGINT, on_sig_int);
+  printf("# %s(%d) supsend ...\n", _str_(SIGINT), SIGINT);
+
+  sigsuspend(&wset);
 
   printf("# exit\n");
+
   exit(EXIT_SUCCESS);
 }
 
 void
 on_sig_int(int signo)
 {
-  if (SIGINT == signo)
-    {
-      printf("# %s\n", _str_(SIGINT));
-    }
+  printf("# %s(%d) at %s\n", _str_(SIGINT), signo, __FUNCTION__);
+
 }

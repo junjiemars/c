@@ -16,6 +16,8 @@ main(void)
 {
   pid_t  pid;
 
+  setvbuf(stdout, NULL, _IONBF, 0);
+
   pid = getpid();
   signal(SIGUSR1, on_sig_usr1);
   signal(SIGTERM, on_sig_term);
@@ -33,18 +35,12 @@ main(void)
 void
 on_sig_usr1(int signo)
 {
-  if (SIGUSR1 == signo)
-    {
-      printf("! %s\n", _str_(SIGUSR1));
-    }
+  printf("! %s(%d)\n", _str_(SIGUSR1), signo);
 }
 
 void
 on_sig_term(int signo)
 {
-  if (SIGTERM == signo)
-    {
-      printf("! %s\n", _str_(SIGTERM));
-      exit(EXIT_SUCCESS);
-    }
+  printf("! %s(%d)\n", _str_(SIGTERM), signo);
+  exit(EXIT_SUCCESS);
 }

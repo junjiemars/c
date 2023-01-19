@@ -190,6 +190,7 @@ signal_pause_pid := $(tmp_path)/$(signal_prefix)_pause.pid
 
 signal_pause: $(signal_pause_binout)
 signal_pause_test: signal_pause
+	# $(signal_pause_binout)
 	@echo "#skip ..."
 
 $(signal_pause_binout): $(signal_root)/pause/p1.c
@@ -284,7 +285,7 @@ signal_suspend_test: signal_suspend_raw_test    \
 signal_suspend_stage: $(signal_suspend_stage_binout)
 
 signal_suspend_raw_test: $(signal_suspend_raw_binout)
-	# $<
+	# $< $(signal_suspend_n)
 	@echo "#skip ..."
 
 signal_suspend_wait_test: $(signal_suspend_wait_binout)
