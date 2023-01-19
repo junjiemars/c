@@ -49,7 +49,7 @@ RUSTFMT := $(has_rustfmt)
 cargo_target_dir := $(CURDIR)/$(tmp_path)
 rust_tags_opt := $(has_rust_ctags)
 rust_tags_file := $(CURDIR)/.rust.tags
-rust_tags_sub_file := $(rust_root)/TAGS
+rust_tags_sub_file := $(rust_root)/.rust.sub.tags
 rust_src_dir := $(has_rust_src)
 rust_fmt_file := $(rust_root)/rustfmt.toml
 
@@ -58,20 +58,26 @@ ifeq ($(NM_OPTIMIZE), YES)
 rust_build_opt := --release --profile=release
 endif
 
+rust_dbg_dummy_dir := "/build/rustc-ZOqcvC/rustc-1.61.0+dfsg1"
+ifeq ($(NM_SYSTEM), Darwin)
+rust_dbg_dummy_dir := "XXX"
+endif
 
-$(rust_tags_file): $(rust_tags_opt)
+rust_tags: $(rust_tags_file)
+rust_sub_tags: $(rust_tags_sub_file)
+rust_fmt: $(rust_fmt_file)
+
+$(rust_tags_file): $(rust_tags_opt) $(rust_src_dir)
 	ctags -R -e -a -o $@ --options="$<" $(rust_src_dir)
 
 $(rust_tags_sub_file): $(rust_tags_opt)
 	ctags -R -e -a -o $@ --options="$<" $(CURDIR)/$(rust_root)
 
-$(rust_fmt_file):
+$(rust_fmt_file): $(RUSTFMT)
 	$(RUSTFMT) --print-config default \
     | sed -e 's#max_width = .*#max_width = 79#g' > $@
 
-
-rust_dbg_dummy_dir="XXX"
-rust_lldb_source_map:
+rust_lldb_source_map: $(rust_src_dir)
 	echo "settings set target.source-map $(rust_dbg_dummy_dir) $(rust_src_dir)"
 rust_gdb_source_map:
 	echo "set substitute-path $(rust_dbg_dummy_dir) $(rust_src_dir)"
