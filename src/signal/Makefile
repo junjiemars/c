@@ -246,18 +246,39 @@ $(signal_safe_re_binout): $(signal_root)/safe/re1.c
 # sleep
 signal_sleep_d_binout := $(bin_path)/$(signal_prefix)_sleep_d$(bin_ext)
 signal_sleep_s1_binout := $(bin_path)/$(signal_prefix)_sleep_s1$(bin_ext)
-signal_sleep_nsecs ?= 1
+signal_sleep_s2_binout := $(bin_path)/$(signal_prefix)_sleep_s2$(bin_ext)
+signal_sleep_s3_binout := $(bin_path)/$(signal_prefix)_sleep_s3$(bin_ext)
+signal_sleep_n ?= 1
 
+ifeq ($(has_nanosleep), yes)
 signal_sleep: $(signal_sleep_d_binout)          \
-              $(singal_sleep_s1_binout)
+              $(signal_sleep_s1_binout)         \
+              $(signal_sleep_s2_binout)         \
+              $(signal_sleep_s3_binout)
 signal_sleep_test: signal_sleep_d_test          \
-                   signal_sleep_s1_test
+                   signal_sleep_s1_test         \
+                   signal_sleep_s2_test         \
+                   signal_sleep_s3_test
+else
+signal_sleep: $(signal_sleep_d_binout)          \
+              $(signal_sleep_s1_binout)         \
+              $(signal_sleep_s2_binout)
+signal_sleep_test: signal_sleep_d_test          \
+                   signal_sleep_s1_test         \
+                   signal_sleep_s2_test
+endif
 
 signal_sleep_d_test: $(signal_sleep_d_binout)
 	$< 1
 
 signal_sleep_s1_test: $(signal_sleep_s1_binout)
-	$< $(signal_sleep_nsecs)
+	$< $(signal_sleep_n)
+
+signal_sleep_s2_test: $(signal_sleep_s2_binout)
+	$< $(signal_sleep_n)
+
+signal_sleep_s3_test: $(signal_sleep_s3_binout)
+	$< $(signal_sleep_n)
 
 $(signal_sleep_d_binout): $(signal_root)/sleep/d.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -265,6 +286,15 @@ $(signal_sleep_d_binout): $(signal_root)/sleep/d.c
 $(signal_sleep_s1_binout): $(signal_root)/sleep/d.c   \
                            $(signal_root)/sleep/s1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(signal_sleep_s2_binout): $(signal_root)/sleep/d.c   \
+                           $(signal_root)/sleep/s2.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(signal_sleep_s3_binout): $(signal_root)/sleep/d.c   \
+                           $(signal_root)/sleep/s3.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # suspend
 signal_suspend_raw_binout := $(bin_path)/$(signal_prefix)_suspend_raw$(bin_ext)

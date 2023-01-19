@@ -42,5 +42,30 @@ return 0;
 esac                            # end of GETPW_R_SIZE_MAX
 
 
+# check nanosleep
+#----------------------------------------
+nm_feature="nanosleep"
+nm_feature_name="nm_nanosleep"
+nm_feature_run=no
+nm_feature_h='
+#include <time.h>
+'
+nm_feature_flags=
+nm_feature_test='
+struct timespec req, cur;
+nanosleep(&req, &cur);
+return 0;
+'
+. ${NORE_ROOT}/auto/feature
+if [ "yes" = $nm_found ]; then
+  flag="has_nanosleep" op=":=" value="yes" . ${NORE_ROOT}/auto/make_define
+else
+  flag="has_nanosleep" op=":=" value="no" . ${NORE_ROOT}/auto/make_define
+fi
+
+
+# EOF
+
+
 
 # eof

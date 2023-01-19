@@ -11,10 +11,14 @@
 unsigned int  sleep(unsigned int);
 
 
+static void  on_sig_alrm(int);
+
+
 unsigned int
 sleep(unsigned int nsecs)
 {
-  sigset_t          nset, oset, sset;
+  int               unslept;
+  sigset_t          nset, oset, wset;
   struct sigaction  nact, oact;
 
   sigemptyset(&nact.sa_mask);
@@ -26,11 +30,15 @@ sleep(unsigned int nsecs)
   sigaddset(&nset, SIGALRM);
   sigprocmask(SIG_BLOCK, &nset, &oset);
 
-  alarm(nsecs);
-  sset = oset;
-  sigdelset(&sset, SIGALRM);
+  if (nsecs > 0)
+    {
+      alarm(nsecs);
 
-  sigsuspend(&sset);
+      wset = oset;
+      sigdelset(&wset, SIGALRM);
+
+      sigsuspend(&wset);
+    }
 
   unslept = alarm(0);
 
@@ -38,4 +46,10 @@ sleep(unsigned int nsecs)
   sigprocmask(SIG_SETMASK, &oset, NULL);
 
   return unslept;
+}
+
+void
+on_sig_alrm(int signo)
+{
+  (void) signo;
 }

@@ -3,7 +3,7 @@
 
 
 /*
- * 3th: emulates POSIX `sleep(3)'.
+ * 2nd: emulates POSIX `sleep(3)'.
  *
  */
 
@@ -14,28 +14,16 @@ unsigned int  sleep(unsigned int);
 unsigned int
 sleep(unsigned int nsecs)
 {
-  sigset_t          nset, oset, sset;
-  struct sigaction  nact, oact;
+  struct timespec  unslept = { 0 };
+  struct timespec  req  =  { .tv_sec = nsecs, 0 };
 
-  sigemptyset(&nact.sa_mask);
-  nact.sa_handler = on_sig_alrm;
-  nact.sa_flags = 0;
-  sigaction(SIGALRM, &nact, &oact);
+  if (nanosleep(&req, &unslept) == -1)
+    {
+      if (errno == EINTR)
+        {
+          return (unsigned int) (unslept.tv_sec + unslept.tv_nsec/1000000000);
+        }
+    }
 
-  sigemptyset(&nset);
-  sigaddset(&nset, SIGALRM);
-  sigprocmask(SIG_BLOCK, &nset, &oset);
-
-  alarm(nsecs);
-  sset = oset;
-  sigdelset(&sset, SIGALRM);
-
-  sigsuspend(&sset);
-
-  unslept = alarm(0);
-
-  sigaction(SIGALRM, &oact, NULL);
-  sigprocmask(SIG_SETMASK, &oset, NULL);
-
-  return unslept;
+  return 0;
 }
