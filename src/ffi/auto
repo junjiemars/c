@@ -7,6 +7,26 @@
 ####
 
 
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+
+# check ncc.h features
+ncc_sanitize_address="yes"
+ncc_pic="yes"
+. ${POSIX_ROOT}/ncc_auto
+
+# check nustd.h features
+nustd_ssize_t="yes"
+. ${POSIX_ROOT}/nustd_auto
+
+# check nlim.h features
+nlim_pagesize="yes"
+nlim_times="yes"
+. ${POSIX_ROOT}/nlim_auto
+
+
 echo "checking for {ffi} ..."
 
 nt_to_posix_path() {
@@ -97,29 +117,6 @@ check_java_env () {
 }
 
 
-# check compiler features
-#----------------------------------------
-case $CC_NAME in
-	clang|gcc)
-		nm_feature="$CC_NAME -fPIC"
-		nm_feature_name=
-    nm_feature_indent=yes
-		nm_feature_run=no
-		nm_feature_h=
-		nm_feature_flags=-fPIC
-		nm_feature_test=
-		. ${NORE_ROOT}/auto/feature
-		if [ yes = $nm_found ]; then
-			flag=CFLAGS op='+=' value='-fPIC' \
-          . ${NORE_ROOT}/auto/make_define
-		fi
-	  ;;
-	msvc)
-    # msvc do not use position independent code
-    ;;
-esac
-
-
 check_nodejs () {
   local has_nodejs=NO
   local nodejs_ver=
@@ -143,6 +140,35 @@ check_nodejs () {
   echo "yes"
 }
 
+check_python () {
+  local python_ver="`python3 -c'import sys;print("%s.%s"%(sys.version_info.major,sys.version_info.minor))' 2>/dev/null`"
+  local python_inc="/usr/include/python${python_ver}"
+
+  echo ${echo_n} " + checking for python ... " ${echo_c}
+
+  if [ -z "$python_ver" ]; then
+    echo "no"
+    return
+  fi
+
+  nm_feature=
+  nm_feature_name=
+  nm_feature_run=dumb
+  nm_feature_h='#include <Python.h>'
+  nm_feature_flags="$CFLAGS ${nm_inc_opt}${python_inc}"
+  nm_feature_test='PyObject *o1 = NULL; (void)o1;'
+  . ${NORE_ROOT}/auto/feature
+
+  if [ "$nm_found" != "yes" ]; then
+    echo "no"
+    return
+  fi
+
+  flag=has_python op=":=" value="yes" . ${NORE_ROOT}/auto/make_define
+  flag=python_inc op=":=" value="$python_inc" . ${NORE_ROOT}/auto/make_define
+  echo "yes"
+}
+
 
 # check java
 #----------------------------------------
@@ -151,6 +177,10 @@ check_java_env
 # check nodejs
 #----------------------------------------
 check_nodejs
+
+# check python
+#----------------------------------------
+check_python
 
 
 # eof
