@@ -76,15 +76,15 @@ typedef long long  ssize_t;
 
 #if (NM_HAVE_GETTIMEOFDAY)
 #  include <sys/time.h>
-#  define _timed_(E, R)                                           \
-do                                                                \
-{                                                                 \
-  const long long m = 1000000;                                    \
-  struct timeval s, e;                                            \
-  gettimeofday(&s, NULL);                                         \
-  (E);                                                            \
-  gettimeofday(&e, NULL);                                         \
-  R = (double)(((e.tv_sec-s.tv_sec)*m+(e.tv_usec-s.tv_usec))/m);  \
+#  define _timed_(E, R)                                         \
+do                                                              \
+{                                                               \
+  const long long m = 1000000;                                  \
+  struct timeval s, e;                                          \
+  gettimeofday(&s, NULL);                                       \
+  (E);                                                          \
+  gettimeofday(&e, NULL);                                       \
+  R = ((e.tv_sec-s.tv_sec)*m+(e.tv_usec-s.tv_usec))/(double)m;  \
 } while (0)
 #else
 #  include <time.h>

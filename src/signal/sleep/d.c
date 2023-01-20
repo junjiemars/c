@@ -19,6 +19,7 @@ int
 main(int argc, char **argv)
 {
   unsigned int  n;
+  double        elapsed;
 
   if (argc > 1)
     {
@@ -30,14 +31,14 @@ main(int argc, char **argv)
 
   signal(SIGALRM, on_sig_alrm);
 
-  n = sleep(0);
-  printf("%u = sleep(%u)\n", n, 0);
+  _time_(n = sleep(0), elapsed);
+  printf("%u = sleep(%02u), elapsed = %04f\n", n, 0, elapsed);
 
-  n = sleep(N+10);
-  printf("%u = sleep(%u)\n", n, N+10);
+  _time_(n = sleep(N+10), elapsed);
+  printf("%u = sleep(%02u), elapsed = %04f\n", n, N+10, elapsed);
 
-  n = sleep(N);
-  printf("%u = sleep(%u)\n", n, N);
+  _time_(n = sleep(N), elapsed);
+  printf("%u = sleep(%02u), elapsed = %04f\n", n, N, elapsed);
 
   return 0;
 }

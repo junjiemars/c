@@ -269,7 +269,7 @@ signal_sleep_test: signal_sleep_d_test          \
 endif
 
 signal_sleep_d_test: $(signal_sleep_d_binout)
-	$< 1
+	$< $(signal_sleep_n)
 
 signal_sleep_s1_test: $(signal_sleep_s1_binout)
 	$< $(signal_sleep_n)

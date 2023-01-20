@@ -21,12 +21,14 @@
 
 
 #include <time.h>
-#define _time_(E, R)                              \
-do                                                \
-{                                                 \
-  clock_t _epoch_1_ = clock();                    \
-  (E);                                            \
-  R = (double)(clock()-_epoch_1_)/CLOCKS_PER_SEC; \
+#define _time_(E, R)                            \
+do                                              \
+{                                               \
+  clock_t s, e;                                 \
+  s = clock();                                  \
+  (E);                                          \
+  e = clock();                                  \
+  R = (e-s)/(double)CLOCKS_PER_SEC;             \
 } while (0)
 
 
