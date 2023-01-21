@@ -1,8 +1,25 @@
 # -*- mode:sh -*- vim:ft=sh
-#
-# ./configure --has-limit
-#
-#
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## io/auto
+####
+
+
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+# check nustd.h features
+. ${POSIX_ROOT}/nustd_auto
+
+# check nlim.h features
+. ${POSIX_ROOT}/nlim_auto
+
+
+echo "checking for {limit} ..."
+
 
 
 # eof

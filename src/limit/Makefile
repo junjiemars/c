@@ -1,5 +1,5 @@
 #
-# ./configure --has-limit --with-std=no
+# ./configure --has-limit
 #
 
 ifeq ($(CC_NAME), msvc)
