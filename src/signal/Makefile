@@ -24,6 +24,7 @@ signal: signal_abort                            \
         signal_sync                             \
         signal_system                           \
         signal_timeout                          \
+        signal_timer                            \
         signal_wait
 
 signal_test: signal_abort_test                  \
@@ -39,6 +40,7 @@ signal_test: signal_abort_test                  \
              signal_sync_test                   \
              signal_system_test                 \
              signal_timeout_test                \
+             signal_timer_test                  \
              signal_wait_test
 
 endif														# msvc
@@ -382,18 +384,31 @@ $(signal_system_s1_binout): $(signal_root)/system/d.c   \
 
 # timeout
 signal_timeout_t1_binout := $(bin_path)/$(signal_prefix)_timeout_t1$(bin_ext)
-signal_timeout_nsecs ?= 2
+signal_timeout_n ?= 2
+
 
 signal_timeout: $(signal_timeout_t1_binout)
 signal_timeout_test: signal_timeout_t1_test
 
 signal_timeout_t1_test: $(signal_timeout_t1_binout)
-	-echo "abc" | $< $(signal_timeout_nsecs)
-	-$< $(signal_timeout_nsecs)
+	-echo "abc" | $< ${signal_timeout_n}
+	-$< $(signal_timeout_n)
 
 $(signal_timeout_t1_binout): $(signal_root)/timeout/d.c   \
                              $(signal_root)/timeout/t1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# timer
+signal_timer_libes_binout := $(bin_path)/$(signal_prefix)_timer_libes$(bin_ext)
+
+signal_timer: $(signal_timer_libes_binout)
+signal_timer_test: signal_timer_libes_test
+
+signal_timer_libes_test: $(signal_timer_libes_binout)
+	$<
+
+$(signal_timer_libes_binout): $(signal_root)/timer/t1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 # wait

@@ -19,7 +19,6 @@ int
 main(int argc, char **argv)
 {
   unsigned int  n;
-  double        elapsed;
 
   if (argc > 1)
     {
@@ -27,18 +26,23 @@ main(int argc, char **argv)
     }
 
   setvbuf(stdout, NULL, _IONBF, 0);
-  printf("%d\n", getpid());
+  printf("%d, %u\n", getpid(), N);
 
   signal(SIGALRM, on_sig_alrm);
 
-  _time_(n = sleep(0), elapsed);
-  printf("%u = sleep(%02u), elapsed = %04f\n", n, 0, elapsed);
+  n = sleep(0);
+  printf("%u = sleep(%u)\n", n, 0);
 
-  _time_(n = sleep(N+10), elapsed);
-  printf("%u = sleep(%02u), elapsed = %04f\n", n, N+10, elapsed);
+  n = sleep(N);
+  printf("%u = sleep(%u)\n", n, N);
 
-  _time_(n = sleep(N), elapsed);
-  printf("%u = sleep(%02u), elapsed = %04f\n", n, N, elapsed);
+  alarm(N+N/2);
+  n = sleep(N);
+  printf("alarm(%u), %u = sleep(%u)\n", N+N/2, n, N);
+
+  alarm(N/2);
+  n = sleep(N);
+  printf("alarm(%u), %u = sleep(%u)\n", N/2, n, N);
 
   return 0;
 }

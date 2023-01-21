@@ -16,7 +16,7 @@ main(int argc, char **argv)
     {
       timeout = atoi(argv[1]);
     }
-  printf("%d\n", getpid());
+  printf("%d, %d\n", getpid(), timeout);
 
   alarm(2);
 
