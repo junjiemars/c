@@ -15,6 +15,7 @@ signal: signal_abort                            \
         signal_alarm                            \
         signal_child                            \
         signal_info                             \
+        signal_io                               \
         signal_job                              \
         signal_kill                             \
         signal_pause                            \
@@ -31,6 +32,7 @@ signal_test: signal_abort_test                  \
              signal_alarm_test                  \
              signal_child_test                  \
              signal_info_test                   \
+             signal_io_test                     \
              signal_job_test                    \
              signal_kill_test                   \
              signal_pause_test                  \
@@ -159,6 +161,22 @@ $(signal_info_dfl_binout): $(signal_root)/info/dfl1.c \
 $(signal_info_sig2str_c): $(signal_root)/info/sig2str.awk \
                           $(signal_info_lst_awk_in)
 	awk -f $^ > $@
+
+# io
+signal_io_xfsz_binout := $(bin_path)/$(signal_prefix)_xfsz$(bin_ext)
+signal_io_xfsz_n ?= 100
+signal_io_xfsz_rl ?= 10
+
+signal_io: $(signal_io_xfsz_binout)
+signal_io_test: signal_io_xfsz_test
+
+signal_io_xfsz_test: $(signal_io_xfsz_binout)
+	$< 0<$(signal_root)/io/x1.c
+
+$(signal_io_xfsz_binout): $(signal_root)/io/x1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC)                                \
+    -DBUF_SIZE=$(signal_io_xfsz_n) -DRL_FSIZE=$(signal_io_xfsz_rl)  \
+    $^ $(bin_out)$@
 
 # job
 signal_job_tstp_binout := $(bin_path)/$(signal_prefix)_job_tstp$(bin_ext)
