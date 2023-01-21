@@ -3,11 +3,10 @@
 
 static void  on_sig_xfsz(int);
 
-
 int
 main(void)
 {
-  int               n;
+  ssize_t           r, w;
   char              buf[BUF_SIZE];
   struct sigaction  nset;
   struct rlimit     fsz;
@@ -20,7 +19,7 @@ main(void)
       exit(EXIT_FAILURE);
     }
 
-  fsz.rlim_cur = RL_FSIZE;
+  fsz.rlim_max = fsz.rlim_cur = RL_FSIZE;
 
   if (setrlimit(RLIMIT_FSIZE, &fsz) == -1)
     {
@@ -43,16 +42,21 @@ main(void)
       exit(EXIT_FAILURE);
     }
 
-  while ((n = read(STDIN_FILENO, buf, BUF_SIZE)) > 0)
+  while ((r = read(STDIN_FILENO, buf, BUF_SIZE)) > 0)
     {
-      if (write(STDOUT_FILENO, buf, n) != n)
+      errno = 0;
+      if ((w = write(STDOUT_FILENO, buf, r)) != r)
         {
-          perror(NULL);
+          if (errno)
+            {
+              perror("! write");
+            }
+          fprintf(stderr, "r(%zd), w(%zd)\n", r, w);
           exit(EXIT_FAILURE);
         }
     }
 
-  if (n < 0)
+  if (r < 0)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
