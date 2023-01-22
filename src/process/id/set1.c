@@ -11,7 +11,7 @@ main(void)
   uid_t         suid, seuid;
 
 #if defined(_POSIX_SAVED_IDS)
-  printf("%s=%d\n", _str_(_POSIX_SAVED_IDS), _POSIX_SAVED_IDS);
+  printf("%s=%ld\n", _str_(_POSIX_SAVED_IDS), (long) _POSIX_SAVED_IDS);
 #endif
 
   pid = getpid();
