@@ -237,7 +237,7 @@ $(process_io_async_binout): $(process_root)/io/c.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(process_io_sync_binout): $(process_root)/io/c.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_SYNC_=1 $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_WITH_SYNC_=1 $^ $(bin_out)$@
 
 # layout
 process_layout_raw_binout := $(bin_path)/$(process_prefix)_layout_raw$(bin_ext)

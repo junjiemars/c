@@ -1,8 +1,7 @@
 #include "_process_.h"
-#include <stdio.h>
 
 
-#if (_SYNC_)
+#if (_WITH_SYNC_)
 
 static volatile sig_atomic_t  sflag;
 static sigset_t               nmask, omask, zmask;
@@ -12,7 +11,7 @@ static void need_wait(void);
 static void tell_parent(pid_t pid);
 static void wait_child(void);
 
-#endif  /* _SYNC_ */
+#endif  /* _WITH_SYNC_ */
 
 
 static void out(const char *ss);
@@ -23,10 +22,10 @@ main(void)
 {
   pid_t  pid;
 
-#if (_SYNC_)
+#if (_WITH_SYNC_)
   need_wait();
 
-#endif  /* _SYNC_ */
+#endif  /* _WITH_SYNC_ */
 
 
   pid = fork();
@@ -39,19 +38,19 @@ main(void)
     {
       out("# output from child\n");
 
-#if (_SYNC_)
+#if (_WITH_SYNC_)
       tell_parent(getppid());
 
-#endif  /* _SYNC_ */
+#endif  /* _WITH_SYNC_ */
 
     }
   else
     {
 
-#if (_SYNC_)
+#if (_WITH_SYNC_)
       wait_child();
 
-#endif  /* _SYNC_ */
+#endif  /* _WITH_SYNC_ */
 
       out("# output from parent\n");
     }
@@ -60,7 +59,7 @@ main(void)
 }
 
 
-#if (_SYNC_)
+#if (_WITH_SYNC_)
 
 static void
 on_sig_usr(__attribute__((unused)) int sig)
@@ -103,7 +102,7 @@ wait_child(void)
 }
 
 
-#endif  /* _SYNC_ */
+#endif  /* _WITH_SYNC_ */
 
 
 static void
