@@ -42,10 +42,10 @@ main(void)
 
 
 void
-on_sig_alrm(int signo, siginfo_t *info, void *data)
+on_sig_alrm(int signo, siginfo_t *info, void *uctx)
 {
-  (void) info;
-  (void) data;
+  (void) uctx;
 
-  fprintf(stderr, "# %s(%d) caught\n", _str_(SIGALRM), signo);
+  fprintf(stderr, "# %s(%d) caught, 0x%x\n", _str_(SIGALRM), signo,
+          info->si_value.sival_int);
 }
