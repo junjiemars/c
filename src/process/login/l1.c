@@ -28,6 +28,7 @@ main(int argc, char *argv[])
   code = getpass("X> ");
 
   ciphered = crypt(code, "_0002abcd");
+  (void) ciphered;
 
   /* compare passwod */
 
