@@ -30,7 +30,7 @@ main(void)
       exit(EXIT_FAILURE);
     }
 
-  fsz.rlim_max = fsz.rlim_cur = RL_FSIZE;
+  fsz.rlim_cur = RL_FSIZE;
 
   if (setrlimit(RLIMIT_FSIZE, &fsz) == -1)
     {

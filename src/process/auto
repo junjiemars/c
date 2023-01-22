@@ -11,11 +11,19 @@ if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
 
+
+# check ncc.h features
 ncc_sanitize_address="yes"
+
+
+# check nustd.h features
+nustd_ssize_t="yes"
+. ${POSIX_ROOT}/nustd_auto
+
+
+# check nlim.h features
 nlim_line_max="yes"
 nlim_clk_tck="yes"
-
-# check posix features
 . ${POSIX_ROOT}/nlim_auto
 
 

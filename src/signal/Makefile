@@ -167,7 +167,7 @@ $(signal_info_sig2str_c): $(signal_root)/info/sig2str.awk \
 # io
 signal_io_xfsz_binout := $(bin_path)/$(signal_prefix)_xfsz$(bin_ext)
 signal_io_xfsz_n ?= 100
-signal_io_xfsz_rl ?= 1800
+signal_io_xfsz_rl ?= 2000
 signal_io_file := $(tmp_path)/$(signal_prefix)_xfsz.file
 
 signal_io: $(signal_io_xfsz_binout)

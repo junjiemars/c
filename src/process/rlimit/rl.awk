@@ -19,11 +19,11 @@ BEGIN {
 }
 
 {
-    printf("#if defined(%s)\n", $1)
-    printf("  print_rlimit(STR(%s), %s, %s);\n", $1, $1, $2)
-    printf("#else\n")
-    printf("  printf(FMT_SYM, STR(%s));\n", $1)
-    printf("#endif\n\n")
+    printf "#if defined(%s)\n", $1
+    printf "  print_rlimit(STR(%s), %s, %s);\n", $1, $1, $2
+    printf "#else\n"
+    printf "  printf(FMT_SYM, STR(%s));\n", $1
+    printf "#endif\n\n"
 };
 
 END {
@@ -42,7 +42,7 @@ END {
     print "      exit(EXIT_FAILURE);"
     print "    }"
     print ""
-    print "  printf(\"%-14s  \", name);"
+    print "  printf(\"%-18s  \", name);"
     print "  if (r.rlim_cur == RLIM_INFINITY)"
     print "    {"
     print "      printf(\"(infinite) \");"
