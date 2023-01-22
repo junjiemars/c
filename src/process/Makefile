@@ -277,6 +277,11 @@ $(process_layout_brk_binout): $(process_root)/layout/b.c
 # login
 process_login_raw_binout := $(bin_path)/$(process_prefix)_login_raw$(bin_ext)
 process_login_name ?= abc
+process_login_ldlibs =
+
+ifeq ($(NM_SYSTEM), Linux)
+process_login_ldlibs = $(nm_lib_opt)crypt
+endif
 
 process_login: $(process_login_raw_binout)
 process_login_test: process_login_raw_test
@@ -286,7 +291,7 @@ process_login_raw_test: $(process_login_raw_binout)
 	echo "#skip ..."
 
 $(process_login_raw_binout): $(process_root)/login/l1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(process_login_ldlibs)
 
 
 # rlimit
