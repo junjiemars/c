@@ -38,6 +38,8 @@ main(int argc, char *argv[])
   /* login correctly */
 
 
+  /* setuid(passwd->pw_uid); */
+
   /* chdir(passwd->pw_dir); */
 
   /* chown("/what/terminal", passwd->pw_uid, passwd->pw_gid); */
