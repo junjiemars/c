@@ -63,15 +63,27 @@ nanosleep(&req, &cur);
 return 0;
 '
 . ${NORE_ROOT}/auto/feature
-if [ "yes" = $nm_found ]; then
-  flag="has_nanosleep" op=":=" value="yes" . ${NORE_ROOT}/auto/make_define
-else
-  flag="has_nanosleep" op=":=" value="no" . ${NORE_ROOT}/auto/make_define
-fi
+flag="has_nanosleep" op=":=" value="$nm_found" . ${NORE_ROOT}/auto/make_define
+
+
+
+# check sigqueue
+#----------------------------------------
+nm_feature="sigqueue"
+nm_feature_name="nm_sigqueue"
+nm_feature_run=no
+nm_feature_h='
+#include <signal.h>
+#include <unistd.h>
+'
+nm_feature_flags="-D_POSIX_C_SOURCE=$_POSIX_C_SOURCE"
+nm_feature_test='
+union sigval v = { .sival_int = 0x11223344 };
+(void) sigqueue(getpid(), SIGALRM, v);
+'
+. ${NORE_ROOT}/auto/feature
+flag="has_sigqueue" op=":=" value="$nm_found" . ${NORE_ROOT}/auto/make_define
+
 
 
 # EOF
-
-
-
-# eof

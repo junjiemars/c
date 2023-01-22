@@ -1,4 +1,6 @@
 #include "_signal_.h"
+#include <sys/stat.h>
+#include <sys/resource.h>
 
 
 static void  on_sig_xfsz(int);
@@ -8,10 +10,19 @@ main(void)
 {
   ssize_t           r, w;
   char              buf[BUF_SIZE];
-  struct sigaction  nset;
+  struct stat       ss;
   struct rlimit     fsz;
+  struct sigaction  nset;
 
-  printf("|> %d, %i\n", getpid(), BUF_SIZE);
+  fprintf(stderr, "|> %d, BUF_SIZE=%i, RL_FSIZE=%i\n",
+          getpid(), BUF_SIZE, RL_FSIZE);
+
+  if (fstat(STDIN_FILENO, &ss) == -1)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
+  fprintf(stderr, "|> in file size %zu bytes\n", (size_t) ss.st_size);
 
   if (getrlimit(RLIMIT_FSIZE, &fsz) == -1)
     {
@@ -27,10 +38,10 @@ main(void)
       exit(EXIT_FAILURE);
     }
 
-  printf("|> %s = { .rlim_cur = %llu, .rlim_max = %llu }\n",
-         _str_(RLIMIT_FSIZE),
-         (unsigned long long) fsz.rlim_cur,
-         (unsigned long long) fsz.rlim_cur);
+  fprintf(stderr, "|> setrlmit %s = { .rlim_cur = %llu, .rlim_max = %llu }\n",
+          _str_(RLIMIT_FSIZE),
+          (unsigned long long) fsz.rlim_cur,
+          (unsigned long long) fsz.rlim_cur);
 
   sigemptyset(&nset.sa_mask);
   nset.sa_flags = 0;
@@ -68,5 +79,5 @@ main(void)
 void
 on_sig_xfsz(int signo)
 {
-  printf("|> %s(%d) caught\n", _str_(SIGXFSZ), signo);
+  fprintf(stderr, "|> %s(%d) caught\n", _str_(SIGXFSZ), signo);
 }

@@ -19,6 +19,7 @@ signal: signal_abort                            \
         signal_job                              \
         signal_kill                             \
         signal_pause                            \
+        signal_queue                            \
         singal_safe                             \
         signal_sleep                            \
         signal_suspend                          \
@@ -36,6 +37,7 @@ signal_test: signal_abort_test                  \
              signal_job_test                    \
              signal_kill_test                   \
              signal_pause_test                  \
+             signal_queue_test                  \
              signal_safe_test                   \
              signal_sleep_test                  \
              signal_suspend_test                \
@@ -165,7 +167,7 @@ $(signal_info_sig2str_c): $(signal_root)/info/sig2str.awk \
 # io
 signal_io_xfsz_binout := $(bin_path)/$(signal_prefix)_xfsz$(bin_ext)
 signal_io_xfsz_n ?= 100
-signal_io_xfsz_rl ?= 99
+signal_io_xfsz_rl ?= 1800
 signal_io_file := $(tmp_path)/$(signal_prefix)_xfsz.file
 
 signal_io: $(signal_io_xfsz_binout)
@@ -189,7 +191,7 @@ signal_job_tstp: $(signal_job_tstp_binout)
 
 signal_job_tstp_test: $(signal_job_tstp_binout)
 	# $<
-	@echo "#skip ..."
+	@echo "#skip ... (C-z emit SIGTSTP)"
 
 $(signal_job_tstp_binout): $(signal_root)/job/j1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -218,16 +220,32 @@ $(signal_pause_binout): $(signal_root)/pause/p1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # queue
-signal_queue1_binout := $(bin_path)/$(signal_prefix)_queue1$(bin_ext)
+signal_queue_q1_binout := $(bin_path)/$(signal_prefix)_queue_q1$(bin_ext)
+signal_queue_q2_binout := $(bin_path)/$(signal_prefix)_queue_q2$(bin_ext)
+signal_queue_n ?= 1
+signal_queue_deps = $(signal_queue_q1_binout)
+signal_queue_test_deps = signal_queue_q1_test
 
-signal_queue: $(signal_queue1_binout)
-signal_queue_test: signal_queue1_test
+ifeq ($(has_sigqueue), yes)
+signal_queue_deps += $(signal_queue_q2_binout)
+signal_queue_test_deps += signal_queue_q2_test
+endif
 
-signal_queue1_test: $(signal_queue1_binout)
-	$< | cat -
-	# press  or kill -QUIT to generate SIGQUIT
+signal_queue: $(signal_queue_deps)
+signal_queue_test: $(signal_queue_test_deps)
 
-$(signal_queue1_binout): $(signal_root)/queue/q1.c
+signal_queue_q1_test: $(signal_queue_q1_binout)
+	$< ${signal_queue_n} | cat -
+	# echo "#skip ... (C-\ emit SIGQUIT)"
+
+signal_queue_q2_test: $(signal_queue_q2_binout)
+	$< ${signal_queue_n} | cat -
+	# echo "#skip ... (C-\ emit SIGQUIT)"
+
+$(signal_queue_q1_binout): $(signal_root)/queue/q1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(signal_queue_q2_binout): $(signal_root)/queue/q2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -270,24 +288,20 @@ signal_sleep_s1_binout := $(bin_path)/$(signal_prefix)_sleep_s1$(bin_ext)
 signal_sleep_s2_binout := $(bin_path)/$(signal_prefix)_sleep_s2$(bin_ext)
 signal_sleep_s3_binout := $(bin_path)/$(signal_prefix)_sleep_s3$(bin_ext)
 signal_sleep_n ?= 1
+signal_sleep_deps = $(signal_sleep_d_binout)
+signal_sleep_deps += $(signal_sleep_s1_binout)
+signal_sleep_deps += $(signal_sleep_s2_binout)
+signal_sleep_test_deps = signal_sleep_d_test
+signal_sleep_test_deps += signal_sleep_s1_test
+signal_sleep_test_deps += signal_sleep_s2_test
 
 ifeq ($(has_nanosleep), yes)
-signal_sleep: $(signal_sleep_d_binout)          \
-              $(signal_sleep_s1_binout)         \
-              $(signal_sleep_s2_binout)         \
-              $(signal_sleep_s3_binout)
-signal_sleep_test: signal_sleep_d_test          \
-                   signal_sleep_s1_test         \
-                   signal_sleep_s2_test         \
-                   signal_sleep_s3_test
-else
-signal_sleep: $(signal_sleep_d_binout)          \
-              $(signal_sleep_s1_binout)         \
-              $(signal_sleep_s2_binout)
-signal_sleep_test: signal_sleep_d_test          \
-                   signal_sleep_s1_test         \
-                   signal_sleep_s2_test
+signal_sleep_deps += $(signal_sleep_s3_binout)
+signal_sleep_test_deps += signal_sleep_s3_test
 endif
+
+signal_sleep: $(signal_sleep_deps)
+signal_sleep_test: $(signal_sleep_test_deps)
 
 signal_sleep_d_test: $(signal_sleep_d_binout)
 	$< $(signal_sleep_n)

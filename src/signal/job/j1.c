@@ -7,8 +7,8 @@ static void  on_sig_tstp(int);
 int
 main(void)
 {
-  int   n;
-  char  buf[BUFSIZ];
+  ssize_t  n;
+  char     buf[BUFSIZ];
 
   printf("%d\n", getpid());
 
@@ -25,6 +25,7 @@ main(void)
           printf("! write error\n");
         }
     }
+
   if (n < 0)
     {
       perror(NULL);
@@ -38,7 +39,7 @@ on_sig_tstp(int signo)
 {
   sigset_t  set;
 
-  if (SIGTSTP != signo)
+  if (signo != SIGTSTP)
     {
       printf("# %d skip\n", signo);
       return;
@@ -65,8 +66,11 @@ on_sig_tstp(int signo)
       printf("! %s restore to default\n", _str_(SIGTSTP));
     }
 
-  printf("! %s rasing...\n", _str_(SIGTSTP));
+  printf("! %s(DFL) raising...\n", _str_(SIGTSTP));
+
   kill(getpid(), SIGTSTP);
+
+  printf("! %s(DFL) raised...\n", _str_(SIGTSTP));
 
   if (signal(SIGTSTP, on_sig_tstp) == SIG_ERR)
     {
