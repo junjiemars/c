@@ -17,6 +17,7 @@ process: process_main                           \
          process_id                             \
          process_io                             \
          process_layout                         \
+         process_login                          \
          process_rlimit                         \
          process_time                           \
          process_zombie
@@ -29,6 +30,7 @@ process_test: process_main_test                 \
               process_id_test                   \
               process_io_test                   \
               process_layout_test               \
+              process_login_test                \
               process_rlimit_test               \
               process_time_test                 \
               process_zombie_test
@@ -270,6 +272,20 @@ $(process_layout_raw_asmout): $(process_root)/layout/m.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_asm) $^ $(asm_out)$@
 
 $(process_layout_brk_binout): $(process_root)/layout/b.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# login
+process_login_raw_binout := $(bin_path)/$(process_prefix)_login_raw$(bin_ext)
+process_login_name ?= abc
+
+process_login: $(process_login_raw_binout)
+process_login_test: process_login_raw_test
+
+process_login_raw_test: $(process_login_raw_binout)
+	# $< ${process_login_name}
+	echo "#skip ..."
+
+$(process_login_raw_binout): $(process_root)/login/l1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

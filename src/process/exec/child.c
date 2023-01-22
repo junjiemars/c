@@ -9,8 +9,7 @@ main(void)
   pid_t        pid;
   char *const  env[]  =  { "XXX=xxx", 0 };
 
-  pid = fork();
-  if (pid == -1)
+  if ((pid = fork()) == -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
