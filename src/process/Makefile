@@ -18,6 +18,7 @@ process: process_main                           \
          process_io                             \
          process_layout                         \
          process_login                          \
+         process_orphan                         \
          process_rlimit                         \
          process_time                           \
          process_zombie
@@ -31,6 +32,7 @@ process_test: process_main_test                 \
               process_io_test                   \
               process_layout_test               \
               process_login_test                \
+              process_orphan_test               \
               process_rlimit_test               \
               process_time_test                 \
               process_zombie_test
@@ -275,7 +277,7 @@ $(process_layout_brk_binout): $(process_root)/layout/b.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # login
-process_login_raw_binout := $(bin_path)/$(process_prefix)_login_raw$(bin_ext)
+process_login_proc_binout := $(bin_path)/$(process_prefix)_login_proc$(bin_ext)
 process_login_name ?= abc
 process_login_ldlibs =
 
@@ -283,15 +285,28 @@ ifeq ($(NM_SYSTEM), Linux)
 process_login_ldlibs = $(nm_lib_opt)crypt
 endif
 
-process_login: $(process_login_raw_binout)
-process_login_test: process_login_raw_test
+process_login: $(process_login_proc_binout)
+process_login_test: process_login_proc_test
 
-process_login_raw_test: $(process_login_raw_binout)
+process_login_proc_test: $(process_login_proc_binout)
 	# $< ${process_login_name}
 	echo "#skip ..."
 
-$(process_login_raw_binout): $(process_root)/login/l1.c
+$(process_login_proc_binout): $(process_root)/login/proc1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(process_login_ldlibs)
+
+
+# orphan
+process_orphan_binout := $(bin_path)/$(process_prefix)_orphan$(bin_ext)
+process_orphan_n ?= 3
+
+process_orphan: $(process_orphan_binout)
+process_orphan_test: process_orphan
+	$(process_orphan_binout) ${process_orphan_n}
+
+$(process_orphan_binout): $(process_root)/orphan/o.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 
 # rlimit
