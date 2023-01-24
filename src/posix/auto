@@ -21,12 +21,12 @@ ncc_sanitize_address="yes"
 
 # check for <ndef.h>
 ndef___func__="yes"
-ndef_restrict="yes"
-ndef_static_assert="yes"
-ndef_va_args="yes"
 ndef_alignof="yes"
 ndef_alignas="yes"
 ndef_generic="yes"
+ndef_restrict="yes"
+ndef_static_assert="yes"
+ndef_va_args="yes"
 . ${POSIX_ROOT}/ndef_auto
 
 # check for <nstr.h>

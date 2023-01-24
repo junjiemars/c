@@ -39,11 +39,11 @@ process_test: process_main_test                 \
 
 endif
 
-# process env
+# env
 process_prefix := process
 INC += $(nm_inc_opt)$(process_root) $(nm_inc_opt)$(root)/posix
 
-ifeq ($(NM_SYSTEM), Linux)
+ifeq ($(NM_SYSTEM),Linux)
 	cflags_static_opt := -static
 endif
 

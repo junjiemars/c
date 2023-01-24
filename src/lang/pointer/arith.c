@@ -70,9 +70,8 @@ test_arr_tail(void)
 void
 test_diff(int *a)
 {
-  int *p0, *p1;
-  ptrdiff_t one;
-  ssize_t offset;
+  int        *p0, *p1;
+  ptrdiff_t   one, offset;
 
   p0 = &a[0];
   p1 = &a[1];

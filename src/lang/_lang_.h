@@ -1,8 +1,7 @@
 #ifndef _LANG_H_
 #define _LANG_H_
 
-#include <nustd.h>
-#include <nasrt.h>
+#include <ncstd.h>
 
 #include <stdio.h>
 #include <stdlib.h>

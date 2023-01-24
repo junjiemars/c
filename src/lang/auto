@@ -1,22 +1,25 @@
 # -*- mode:sh -*- vim:ft=sh
-#
-# ./configure --has-lang
-#
-#
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## lang/auto
+####
 
 
 if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
 
+
+# check ncstd.h features
 ncc_cache_line_size="yes"
 ncc_cpu_endian="yes"
 ndef_restrict="yes"
 ndef_static_assert="yes"
 ndef_va_args="yes"
-nustd_ssize_t="yes"
-# check ncstd.h features
-. ${POSIX_ROOT}/nustd_auto
+nstr_strdup="yes"
+. ${POSIX_ROOT}/ncstd_auto
 
 
 echo "checking for {lang} ..."
@@ -195,4 +198,4 @@ case "$CC_NAME" in
 esac
 
 
-# eof
+# EOF

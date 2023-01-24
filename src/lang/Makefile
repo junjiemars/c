@@ -1,6 +1,7 @@
 #
 # ./configure --has-lang
 #
+#
 
 
 lang: lang_array                                \
@@ -84,7 +85,7 @@ INC += $(nm_inc_opt)$(root) $(nm_inc_opt)$(lang_root) $(nm_inc_opt)$(root)/posix
 _ERROR_ ?= 0
 
 
-ifeq (1, $(_MEMORY_))
+ifeq ($(_MEMORY_),1)
 ifeq (YES, $(has_sanitize))
 CFLAGS += $(cflags_sanitize)
 endif # end of has_sanitize
