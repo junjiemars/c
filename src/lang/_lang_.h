@@ -9,6 +9,9 @@
 #include <math.h>
 #include <errno.h>
 #include <assert.h>
+#include <limits.h>
+#include <ctype.h>
+#include <wchar.h>
 
 
 

@@ -1,7 +1,5 @@
-#include <_lang_.h>
-#include <ctype.h>
-#include <string.h>
-#include <stdio.h>
+#include "_lang_.h"
+
 
 #if (MSVC)
 #  pragma warning(disable: 4244)
