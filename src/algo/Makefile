@@ -6,6 +6,7 @@
 
 algo: _algo_                                    \
       algo_compress                             \
+      algo_coroutine                            \
       algo_duff_device                          \
       algo_dynamic_array                        \
       algo_fibonacci                            \
@@ -29,6 +30,7 @@ algo: _algo_                                    \
 
 algo_test: _algo_test                           \
            algo_compress_test                   \
+           algo_coroutine_test                  \
            algo_duff_device_test                \
            algo_dynamic_array_test              \
            algo_fibonacci_test                  \
@@ -84,6 +86,16 @@ algo_compress_test: algo_compress
 
 $(algo_compress_binout): $(algo_root)/compress/c1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# coroutine
+algo_coroutine_binout := $(bin_path)/$(algo_prefix)_coroutine$(bin_ext)
+
+algo_coroutine: $(algo_coroutine_binout)
+algo_coroutine_test: algo_coroutine
+	$(algo_coroutine_binout)
+
+$(algo_coroutine_binout): $(algo_root)/coroutine/cr1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # duff device
 algo_duff_device_binout := $(bin_path)/$(algo_prefix)_duff_device$(bin_ext)
