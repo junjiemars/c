@@ -17,6 +17,7 @@ ncc_cpu_endian="yes"
 . ${POSIX_ROOT}/ncc_auto
 
 # check ndef.h features
+ndef___func__="yes"
 ndef_restrict="yes"
 ndef_static_assert="yes"
 . ${POSIX_ROOT}/ndef_auto
