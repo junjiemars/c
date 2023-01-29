@@ -21,7 +21,7 @@ lang: lang_array                                \
       lang_main                                 \
       lang_math                                 \
       lang_pointer                              \
-      lang_preprocessor                         \
+      lang_preprocess                         \
       lang_random                               \
       lang_restrict                             \
       lang_scope                                \
@@ -58,7 +58,7 @@ lang_test:  lang_array_test                     \
             lang_main_test                      \
             lang_math_test                      \
             lang_pointer_test                   \
-            lang_preprocessor_test              \
+            lang_preprocess_test              \
             lang_random_test                    \
             lang_restrict_test                  \
             lang_scope_test                     \
@@ -81,8 +81,6 @@ lang_test:  lang_array_test                     \
 lang_prefix := lang
 
 INC += $(nm_inc_opt)$(root) $(nm_inc_opt)$(lang_root) $(nm_inc_opt)$(root)/posix
-
-_ERROR_ ?= 0
 
 
 ifeq ($(_MEMORY_),1)
@@ -544,26 +542,26 @@ $(lang_ptr_lvalue_binout): $(lang_root)/pointer/lvalue.c
 $(lang_ptr_arith_binout): $(lang_root)/pointer/arith.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-# preprocessor
-lang_preprocessor_binout := $(bin_path)/$(lang_prefix)_preprocessor$(bin_ext)
-lang_preprocessor_cppout := $(tmp_path)/$(lang_prefix)_preprocessor$(cpp_ext)
-lang_preprocessor_flags =
+# preprocess
+lang_preprocess_binout := $(bin_path)/$(lang_prefix)_preprocess$(bin_ext)
+lang_preprocess_cppout := $(tmp_path)/$(lang_prefix)_preprocess$(cpp_ext)
+lang_preprocess_flags =
 ifneq ($(_ERROR_),)
-lang_preprocessor_flags += -D_ERROR_=$(_ERROR_)
+lang_preprocess_flags += -D_ERROR_=$(_ERROR_)
 endif
 ifneq ($(_WARNING_),)
-lang_preprocessor_flags += -D_WARNING_=$(_WARNING_)
+lang_preprocess_flags += -D_WARNING_=$(_WARNING_)
 endif
 
-lang_preprocessor: $(lang_preprocessor_binout)
-lang_preprocessor_test: lang_preprocessor
-	$(lang_preprocessor_binout)
+lang_preprocess: $(lang_preprocess_binout)
+lang_preprocess_test: lang_preprocess
+	$(lang_preprocess_binout)
 
-$(lang_preprocessor_binout): $(lang_preprocessor_cppout)
+$(lang_preprocess_binout): $(lang_preprocess_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
-$(lang_preprocessor_cppout): $(lang_root)/preprocessor/p.c
-	$(CPP) $(CPPFLAGS) $(INC) ${lang_preprocessor_flags} $(nm_stage_pre) $^ $(cpp_out)$@
+$(lang_preprocess_cppout): $(lang_root)/preprocess/p.c
+	$(CPP) $(CPPFLAGS) $(INC) ${lang_preprocess_flags} $(nm_stage_pre) $^ $(cpp_out)$@
 
 # scope
 lang_scope_binout := $(bin_path)/$(lang_prefix)_scope$(bin_ext)
