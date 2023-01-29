@@ -1,7 +1,10 @@
 #ident "(#) Identity, some compiler ignore it."
 
 #include "_lang_.h"
-#include <stdio.h>
+
+#
+#                               /* null directive */
+#
 
 #ifdef max
 #  undef max
@@ -22,8 +25,17 @@ double e_squared = E * E;
 #undef E
 
 
-#if defined( _ERROR_ ) && ( 1 == _ERROR_ )
+#if defined(_ERROR_) && (_ERROR_ == 1)
 #  error "compile failed: because _ERROR_==1 is true"
+#endif
+
+#if (_WARNING_)
+#  warning "compile warning: because _WARNING_!=0 is true"
+#endif
+
+
+#if 0
+static  im_alway_be_kept_like_a_comment  =  0x12345;
 #endif
 
 
@@ -65,25 +77,27 @@ main(void)
 {
 	char *platform =
 #if defined(LINUX)
-    "Linux";
+    "Linux"
 #elif defined(DARWIN)
-	"Darwin";
+	"Darwin"
 #elif defined(WINNT)
-  "WinNT";
+  "WinNT"
 #else
-	"unknown platform";
+	"(unknown platform)"
 #endif
+    ;
 
   char *compiler =
 #if (CLANG)
-    "clang";
+    "clang"
 #elif (GCC)
-  "gcc";
+  "gcc"
 #elif (MSVC)
-  "msvc";
+  "msvc"
 #else
-  "unknown compiler";
+  "(unknown compiler)"
 #endif
+    ;
 
 	printf("platform: %s\n", platform);
   printf("compiler: %s\n", compiler);
@@ -93,11 +107,7 @@ main(void)
 	printf("E^2: %f\n", e_squared);
 
 	log("__FILE__", __FILE__);
-
-  /* char s[8] = {0}; */
-	/* snprintf(s, sizeof(s), "%i", __LINE__); */
 	log("__LINE__", __LINE__);
-
 	log("__DATE__", __DATE__);
 	log("__TIME__", __TIME__);
 	log("__TIMESTAMP__", __TIMESTAMP__);
