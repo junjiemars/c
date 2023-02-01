@@ -4,7 +4,8 @@
 #
 
 
-rust: rust_hi                                   \
+rust: rust_attr                                 \
+      rust_hi                                   \
       rust_enum                                 \
       rust_libc                                 \
       rust_game                                 \
@@ -22,7 +23,8 @@ rust: rust_hi                                   \
       rust_box                                  \
       rust_websrv                               \
       rust_ws
-rust_test: rust_hi_test                         \
+rust_test: rust_attr_test                       \
+           rust_hi_test                         \
            rust_enum_test                       \
            rust_libc_test                       \
            rust_game_test                       \
@@ -84,6 +86,26 @@ rust_lldb_source_map: $(rust_src_dir)
 rust_gdb_source_map:
 	echo "set substitute-path $(rust_dbg_dummy_dir) $(rust_src_dir)"
 
+# attr
+rust_attr_cargo := $(rust_root)/attr/Cargo.toml
+rust_attr_binout := $(bin_path)/$(rust_prefix)_attr$(bin_ext)
+
+
+rust_attr: $(rust_attr_binout)
+rust_attr_test: rust_attr
+	size $(rust_attr_binout)
+	$(rust_attr_binout)
+
+$(rust_attr_cargo):
+	$(CARGO) new --bin --vcs=none --name=$(rust_prefix)_attr $(rust_root)/attr
+
+$(rust_attr_binout): $(rust_attr_cargo)             \
+                     $(rust_root)/attr/src/main.rs
+	$(CARGO) build $(rust_build_opt)              \
+		--manifest-path $<                          \
+    --target-dir $(cargo_target_dir)            \
+		-Z unstable-options                         \
+    --out-dir $(bin_path)
 
 # hi
 rust_hi_cargo := $(rust_root)/hi/Cargo.toml
@@ -346,8 +368,8 @@ $(rust_macro_binout): $(rust_macro_cargo)             \
                       $(rust_root)/macro/src/main.rs
 	$(CARGO) build                                \
     --manifest-path $<                          \
-    -Z unstable-options                         \
     --target-dir $(cargo_target_dir)            \
+    -Z unstable-options                         \
     --out-dir $(bin_path)
 
 
