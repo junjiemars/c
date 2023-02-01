@@ -5,6 +5,7 @@
 
 
 rust: rust_hi                                   \
+      rust_enum                                 \
       rust_libc                                 \
       rust_game                                 \
       rust_owner                                \
@@ -22,6 +23,7 @@ rust: rust_hi                                   \
       rust_websrv                               \
       rust_ws
 rust_test: rust_hi_test                         \
+           rust_enum_test                       \
            rust_libc_test                       \
            rust_game_test                       \
            rust_owner_test                      \
@@ -104,6 +106,26 @@ $(rust_hi_binout): $(rust_hi_cargo)             \
 		-Z unstable-options                         \
     --out-dir $(bin_path)
 
+# enum
+rust_enum_cargo := $(rust_root)/enum/Cargo.toml
+rust_enum_binout := $(bin_path)/$(rust_prefix)_enum$(bin_ext)
+
+rust_enum: $(rust_enum_binout)
+rust_enum_test: rust_enum
+	echo "Q" | $(rust_enum_binout)
+
+$(rust_enum_cargo):
+	$(CARGO) new --bin --vcs=none --name=$(rust_prefix)_enum $(rust_root)/enum
+
+$(rust_enum_binout): $(rust_enum_cargo)             \
+                     $(rust_root)/enum/src/main.rs
+	$(CARGO) build                                \
+    --manifest-path $<                          \
+    --target-dir $(cargo_target_dir)            \
+    -Z unstable-options                         \
+    --out-dir $(bin_path)
+
+
 # libc
 rust_libc_cargo := $(rust_root)/libc/Cargo.toml
 rust_libc_binout := $(bin_path)/$(rust_prefix)_libc$(bin_ext)
@@ -124,7 +146,6 @@ $(rust_libc_binout): $(rust_libc_cargo)             \
     -Z unstable-options                         \
     --out-dir $(bin_path)                       \
     --target-dir $(cargo_target_dir)
-
 
 # game
 rust_game_cargo := $(rust_root)/game/Cargo.toml
