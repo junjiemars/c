@@ -14,6 +14,12 @@ mod macos1;
 mod os1;
 
 fn main() {
+    if cfg!(unix) {
+        println!("UNIX");
+    } else {
+        println!("not UNIX");
+    }
+
     say();
 }
 
