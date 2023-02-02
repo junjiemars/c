@@ -16,9 +16,10 @@ rust: rust_attr                                 \
       rust_io                                   \
       rust_iter                                 \
       rust_lib                                  \
-      rust_module                               \
-      rust_min                                  \
       rust_macro                                \
+      rust_mem                                  \
+      rust_min                                  \
+      rust_module                               \
       rust_unsafe                               \
       rust_box                                  \
       rust_websrv                               \
@@ -35,9 +36,10 @@ rust_test: rust_attr_test                       \
            rust_io_test                         \
            rust_iter_test                       \
            rust_lib_test                        \
-           rust_module_test                     \
-           rust_min_test                        \
            rust_macro_test                      \
+           rust_mem_test                        \
+           rust_min_test                        \
+           rust_module_test                     \
            rust_unsafe_test                     \
            rust_box_test                        \
            rust_websrv_test                     \
@@ -372,28 +374,30 @@ $(rust_macro_binout): $(rust_macro_cargo)             \
     -Z unstable-options                         \
     --out-dir $(bin_path)
 
+
 
+# mem
+rust_mem_cargo := $(rust_root)/mem/Cargo.toml
+rust_mem_binout := $(bin_path)/$(rust_prefix)_mem$(bin_ext)
 
-# module
-rust_module_cargo := $(rust_root)/module/Cargo.toml
-rust_module_binout := $(bin_path)/$(rust_prefix)_module$(bin_ext)
-
-rust_module: $(rust_module_binout)
-rust_module_doc: $(rust_module_cargo)
+rust_mem: $(rust_mem_binout)
+rust_mem_doc: $(rust_mem_cargo)
 	-$(CARGO) doc --open --manifest-path $<
-rust_module_test: rust_module
-	$(rust_module_binout)
+rust_mem_test: rust_mem
+	$(rust_mem_binout)
 
-$(rust_module_cargo):
-	$(CARGO) new --bin --name=$(rust_prefix)_module $(rust_root)/module
+$(rust_mem_cargo):
+	$(CARGO) new --bin --name=$(rust_prefix)_mem $(rust_root)/mem
 
-$(rust_module_binout): $(rust_module_cargo)             \
-                       $(rust_root)/module/src/main.rs
+$(rust_mem_binout): $(rust_mem_cargo)             \
+                      $(rust_root)/mem/src/main.rs
 	$(CARGO) build                                \
     --manifest-path $<                          \
-    -Z unstable-options                         \
     --target-dir $(cargo_target_dir)            \
+    -Z unstable-options                         \
     --out-dir $(bin_path)
+
+
 
 # min
 rust_min_cargo := $(rust_root)/min/Cargo.toml
@@ -413,6 +417,29 @@ $(rust_min_binout): $(rust_min_cargo)             \
 	$(CARGO) build                                \
     --manifest-path $<                          \
     --profile $(rust_min_profile)               \
+    -Z unstable-options                         \
+    --target-dir $(cargo_target_dir)            \
+    --out-dir $(bin_path)
+
+
+
+# module
+rust_module_cargo := $(rust_root)/module/Cargo.toml
+rust_module_binout := $(bin_path)/$(rust_prefix)_module$(bin_ext)
+
+rust_module: $(rust_module_binout)
+rust_module_doc: $(rust_module_cargo)
+	-$(CARGO) doc --open --manifest-path $<
+rust_module_test: rust_module
+	$(rust_module_binout)
+
+$(rust_module_cargo):
+	$(CARGO) new --bin --name=$(rust_prefix)_module $(rust_root)/module
+
+$(rust_module_binout): $(rust_module_cargo)             \
+                       $(rust_root)/module/src/main.rs
+	$(CARGO) build                                \
+    --manifest-path $<                          \
     -Z unstable-options                         \
     --target-dir $(cargo_target_dir)            \
     --out-dir $(bin_path)
