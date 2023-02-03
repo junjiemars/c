@@ -15,9 +15,10 @@ fn main() {
         init_should_be = ();
     }
 
-    println!("{:?}", init_should_be);
+    assert_eq!(init_should_be, ());
+
     // `E0381' use of possibly-uninitialized `init_may_be`
-    // println!("{:?}", init_may_be);
+    // assert_eq!(init_may_be, ());
 }
 
 fn random_bool() -> bool {

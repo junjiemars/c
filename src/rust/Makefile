@@ -5,43 +5,46 @@
 
 
 rust: rust_attr                                 \
-      rust_hi                                   \
+      rust_box                                  \
       rust_enum                                 \
-      rust_libc                                 \
-      rust_game                                 \
-      rust_owner                                \
-      rust_generic                              \
       rust_error                                \
+      rust_game                                 \
+      rust_generic                              \
       rust_grep                                 \
+      rust_hi                                   \
       rust_io                                   \
       rust_iter                                 \
+      rust_lang                                 \
       rust_lib                                  \
+      rust_libc                                 \
       rust_macro                                \
       rust_mem                                  \
       rust_min                                  \
       rust_module                               \
+      rust_owner                                \
       rust_unsafe                               \
-      rust_box                                  \
       rust_websrv                               \
       rust_ws
+
 rust_test: rust_attr_test                       \
-           rust_hi_test                         \
+           rust_box_test                        \
            rust_enum_test                       \
-           rust_libc_test                       \
-           rust_game_test                       \
-           rust_owner_test                      \
-           rust_generic_test                    \
            rust_error_test                      \
+           rust_game_test                       \
+           rust_generic_test                    \
            rust_grep_test                       \
+           rust_hi_test                         \
            rust_io_test                         \
            rust_iter_test                       \
+           rust_lang_test                       \
            rust_lib_test                        \
+           rust_libc_test                       \
            rust_macro_test                      \
            rust_mem_test                        \
            rust_min_test                        \
            rust_module_test                     \
+           rust_owner_test                      \
            rust_unsafe_test                     \
-           rust_box_test                        \
            rust_websrv_test                     \
            rust_ws_test
 
@@ -109,6 +112,9 @@ $(rust_attr_binout): $(rust_attr_cargo)             \
 		-Z unstable-options                         \
     --out-dir $(bin_path)
 
+
+
+
 # hi
 rust_hi_cargo := $(rust_root)/hi/Cargo.toml
 rust_hi_binout := $(bin_path)/$(rust_prefix)_hi$(bin_ext)
@@ -149,27 +155,8 @@ $(rust_enum_binout): $(rust_enum_cargo)             \
     -Z unstable-options                         \
     --out-dir $(bin_path)
 
+
 
-# libc
-rust_libc_cargo := $(rust_root)/libc/Cargo.toml
-rust_libc_binout := $(bin_path)/$(rust_prefix)_libc$(bin_ext)
-
-rust_libc: $(rust_libc_binout)
-rust_libc_doc: $(rust_libc_cargo)
-	-$(CARGO) doc --open --manifest-path $<
-rust_libc_tree: $(rust_libc_cargo)
-	$(CARGO) tree --manifest-path $<
-
-rust_libc_test: rust_libc
-	$(rust_libc_binout)
-
-$(rust_libc_binout): $(rust_libc_cargo)             \
-                     $(rust_root)/libc/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    -Z unstable-options                         \
-    --out-dir $(bin_path)                       \
-    --target-dir $(cargo_target_dir)
 
 # game
 rust_game_cargo := $(rust_root)/game/Cargo.toml
@@ -328,6 +315,31 @@ $(rust_iter_binout): $(rust_iter_cargo)             \
     --target-dir $(cargo_target_dir)            \
     --out-dir $(bin_path)
 
+
+
+
+# lang
+rust_lang_cargo := $(rust_root)/lang/Cargo.toml
+rust_lang_binout := $(bin_path)/$(rust_prefix)_lang$(bin_ext)
+
+rust_lang: $(rust_lang_binout)
+rust_lang_doc: $(rust_lang_cargo)
+	-$(CARGO) doc --open --manifest-path $<
+rust_lang_test: rust_lang
+	$(rust_lang_binout)
+
+$(rust_lang_cargo):
+	$(CARGO) new --bin --name=$(rust_prefix)_lang $(rust_root)/lang
+
+$(rust_lang_binout): $(rust_lang_cargo)             \
+                     $(rust_root)/lang/src/main.rs
+	$(CARGO) build                                \
+    --manifest-path $<                          \
+    --target-dir $(cargo_target_dir)            \
+    -Z unstable-options                         \
+    --out-dir $(bin_path)
+
+
 
 # lib
 rust_lib_cargo := $(rust_root)/lib/Cargo.toml
@@ -352,6 +364,30 @@ $(rust_lib_binout): $(rust_lib_cargo)             \
     --out-dir $(bin_path)
 	@cp $(cargo_target_dir)/debug/$(rust_lib_rlib) $@
 
+
+
+# libc
+rust_libc_cargo := $(rust_root)/libc/Cargo.toml
+rust_libc_binout := $(bin_path)/$(rust_prefix)_libc$(bin_ext)
+
+rust_libc: $(rust_libc_binout)
+rust_libc_doc: $(rust_libc_cargo)
+	-$(CARGO) doc --open --manifest-path $<
+rust_libc_tree: $(rust_libc_cargo)
+	$(CARGO) tree --manifest-path $<
+
+rust_libc_test: rust_libc
+	$(rust_libc_binout)
+
+$(rust_libc_binout): $(rust_libc_cargo)             \
+                     $(rust_root)/libc/src/main.rs
+	$(CARGO) build                                \
+    --manifest-path $<                          \
+    --target-dir $(cargo_target_dir)            \
+    -Z unstable-options                         \
+    --out-dir $(bin_path)                       \
+
+
 
 # macro
 rust_macro_cargo := $(rust_root)/macro/Cargo.toml
@@ -538,6 +574,6 @@ $(rust_ws_binout): $(rust_ws_cargo)
     --target-dir $(cargo_target_dir)            \
     --out-dir $(bin_path)
 
-
+
 
 # eof
