@@ -39,7 +39,7 @@ main(int argc, char **argv)
   int     ch;
   MYSQL  *mysql;
 
-  while (-1 != (ch = getopt_long(argc, argv, "hH:P:u:p:D:t:q", long_options, 0)))
+  while ((ch = getopt_long(argc, argv, "hH:P:u:p:D:t:q", long_options, 0)) != -1)
     {
       switch (ch)
         {
@@ -50,7 +50,7 @@ main(int argc, char **argv)
           strncpy(opt_host, optarg, _nof_(opt_host));
           break;
         case 'P':
-          opt_port = (uint16_t)atoi(optarg);
+          opt_port = (uint16_t) atoi(optarg);
           break;
         case 'u':
           strncpy(opt_user, optarg, _nof_(opt_user));
@@ -73,20 +73,20 @@ main(int argc, char **argv)
         }
     }
 
-  mysql = mysql_init(NULL);
-  if (mysql == NULL)
+  if ((mysql = mysql_init(NULL))  == NULL)
     {
+      perror(NULL);
       exit(EXIT_FAILURE);
     }
 
-  if(NULL == mysql_real_connect(mysql,
-                                opt_host,
-                                opt_user,
-                                opt_password,
-                                opt_database,
-                                opt_port,
-                                NULL,
-                                0))
+  if(mysql_real_connect(mysql,
+                        opt_host,
+                        opt_user,
+                        opt_password,
+                        opt_database,
+                        opt_port,
+                        NULL,
+                        0) == NULL)
     {
       fprintf(stderr, "%s\n", mysql_error(mysql));
       goto clean_exit;
@@ -112,6 +112,7 @@ usage(const char *bin)
   printf("  -P, --port             port number of the host\n");
   printf("  -u, --user             user for login\n");
   printf("  -p, --password         password for login\n");
+  printf("  -D, --database         database to use\n");
   printf("  -t, --sqltext          sql text to execute\n");
 }
 
@@ -119,18 +120,19 @@ usage(const char *bin)
 void
 query(MYSQL *mysql)
 {
-  int         rc;
-  MYSQL_RES  *res  =  NULL;
+  uint64_t       n_rows;
+  unsigned int   n_field;
+  MYSQL_RES     *res;
+  MYSQL_ROW      row;
+  MYSQL_FIELD   *fields;
 
-  rc = mysql_real_query(mysql, opt_sqltext, _nof_(opt_sqltext));
-  if (rc != 0)
+  if (mysql_real_query(mysql, opt_sqltext, _nof_(opt_sqltext)))
     {
       fprintf(stderr, "!panic: %s\n", mysql_error(mysql));
       return;
     }
 
-  res = mysql_store_result(mysql);
-  if (res == NULL)
+  if ((res = mysql_store_result(mysql)) == NULL)
     {
       if (mysql_field_count(mysql) != 0)
         {
@@ -138,25 +140,18 @@ query(MYSQL *mysql)
           return;
         }
 
-      uint64_t  n_rows;
-
       n_rows = mysql_affected_rows(mysql);
       fprintf(stdout, PRIu64 "\n", n_rows);
       return;
     }
 
-  MYSQL_ROW      row;
-  MYSQL_FIELD   *fields;
-  unsigned int   n_field;
-
-  n_field = mysql_num_fields(res);
-  fields = mysql_fetch_field(res);
-
-  if (fields == NULL)
+  if ((fields = mysql_fetch_field(res)) == NULL)
     {
       fprintf(stderr, "!panic: %s\n", mysql_error(mysql));
       goto clean_exit;
     }
+
+  n_field = mysql_num_fields(res);
 
   while ((row = mysql_fetch_row(res)) != NULL)
     {
