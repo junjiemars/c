@@ -94,15 +94,14 @@ if [ "$nlim_line_max" = "yes" ]; then
 '
     nm_feature_flags=
     nm_feature_test='
-long line_max = 0;
+long line_max = 0, max;
 #if defined(LINE_MAX) && (LINE_MAX > 0)
   line_max = LINE_MAX;
-#else
-  line_max = sysconf(_SC_LINE_MAX);
-  if (line_max <= 0) {
-    line_max = 2048;
-  }
 #endif
+  max = sysconf(_SC_LINE_MAX);
+  if (max > 0) {
+    line_max = max;
+  }
   printf("%ld\n", line_max);
   return 0;
 '

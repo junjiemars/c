@@ -2,15 +2,14 @@
 # ./configure --has-process
 #
 
-ifeq ($(NM_SYSTEM), WinNT)
+ifeq ($(NM_SYSTEM),WinNT)
 process:
 	@echo "#skip ..."
 process_test: process
 	@echo "#skip ..."
 else
 
-process: process_main                           \
-         process_argv                           \
+process: process_argv                           \
          process_env                            \
          process_exec                           \
          process_exit                           \
@@ -18,13 +17,13 @@ process: process_main                           \
          process_io                             \
          process_layout                         \
          process_login                          \
+         process_main                           \
          process_orphan                         \
          process_rlimit                         \
          process_time                           \
          process_zombie
 
-process_test: process_main_test                 \
-              process_argv_test                 \
+process_test: process_argv_test                 \
               process_env_test                  \
               process_exec_test                 \
               process_exit_test                 \
@@ -32,6 +31,7 @@ process_test: process_main_test                 \
               process_io_test                   \
               process_layout_test               \
               process_login_test                \
+              process_main_test                 \
               process_orphan_test               \
               process_rlimit_test               \
               process_time_test                 \
@@ -39,7 +39,8 @@ process_test: process_main_test                 \
 
 endif
 
-# env
+
+
 process_prefix := process
 INC += $(nm_inc_opt)$(process_root) $(nm_inc_opt)$(root)/posix
 
@@ -47,23 +48,7 @@ ifeq ($(NM_SYSTEM),Linux)
 	cflags_static_opt := -static
 endif
 
-# main
-process_main_binout := $(bin_path)/$(process_prefix)_main$(bin_ext)
-_RETURN_INT_ ?= 1
-_WITH_RETURN_ ?= 1
-_WITH_EXIT_ ?= 0
-
-process_main: $(process_main_binout)
-process_main_test: process_main
-	-$(process_main_binout); echo $$?
-
-$(process_main_binout): $(process_root)/main/m99.c
-	$(CC) $(CFLAGS) $(INC)                        \
-    -D_RETURN_INT_=$(_RETURN_INT_)              \
-    -D_WITH_RETURN_=$(_WITH_RETURN_)            \
-    -D_WITH_EXIT_=$(_WITH_EXIT_)                \
-    $^ $(bin_out)$@
-
+
 
 # argv
 process_argv_binout := $(bin_path)/$(process_prefix)_argv$(bin_ext)
@@ -75,6 +60,8 @@ process_argv_test: process_argv
 
 $(process_argv_binout): $(process_root)/argv/clargv.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 
 # env
 process_env_raw_binout := $(bin_path)/$(process_prefix)_env_raw$(bin_ext)
@@ -120,6 +107,7 @@ $(process_env_xsi_c): $(process_root)/env/env.awk.in  \
                       $(process_root)/env/env.awk
 	awk -f $(process_root)/env/env.awk $(process_root)/env/env.awk.in >$@
 
+
 
 # exec
 process_exec_echo_binout := $(bin_path)/$(process_prefix)_exec_echo$(bin_ext)
@@ -168,6 +156,8 @@ $(process_exec_child_binout): $(process_root)/exec/child.c
     -D_WAIT_=0                                              \
     $^ $(bin_out)$@
 
+
+
 # exit
 process_exit_at_binout := $(bin_path)/$(process_prefix)_exit_at$(bin_ext)
 process_exit_file := $(tmp_path)/$(process_prefix)_exit.file
@@ -180,6 +170,8 @@ process_exit_at_test: $(process_exit_at_binout)
 
 $(process_exit_at_binout): $(process_root)/exit/at1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 
 # id
 process_id_get_binout := $(bin_path)/$(process_prefix)_id_get$(bin_ext)
@@ -209,7 +201,7 @@ $(process_id_get_binout): $(process_root)/id/id1.c
 $(process_id_set_binout): $(process_root)/id/set1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-
+
 
 # io
 process_io_buf_binout := $(bin_path)/$(process_prefix)_io_buf$(bin_ext)
@@ -242,6 +234,8 @@ $(process_io_async_binout): $(process_root)/io/c.c
 
 $(process_io_sync_binout): $(process_root)/io/c.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_WITH_SYNC_=1 $^ $(bin_out)$@
+
+
 
 # layout
 process_layout_raw_binout := $(bin_path)/$(process_prefix)_layout_raw$(bin_ext)
@@ -276,6 +270,8 @@ $(process_layout_raw_asmout): $(process_root)/layout/m.c
 $(process_layout_brk_binout): $(process_root)/layout/b.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+
 # login
 process_login_proc_binout := $(bin_path)/$(process_prefix)_login_proc$(bin_ext)
 process_login_name ?= abc
@@ -295,6 +291,26 @@ process_login_proc_test: $(process_login_proc_binout)
 $(process_login_proc_binout): $(process_root)/login/proc1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(process_login_ldlibs)
 
+
+
+# main
+process_main_binout := $(bin_path)/$(process_prefix)_main$(bin_ext)
+_RETURN_INT_ ?= 1
+_WITH_RETURN_ ?= 1
+_WITH_EXIT_ ?= 0
+
+process_main: $(process_main_binout)
+process_main_test: process_main
+	-$(process_main_binout); echo $$?
+
+$(process_main_binout): $(process_root)/main/m99.c
+	$(CC) $(CFLAGS) $(INC)                        \
+    -D_RETURN_INT_=$(_RETURN_INT_)              \
+    -D_WITH_RETURN_=$(_WITH_RETURN_)            \
+    -D_WITH_EXIT_=$(_WITH_EXIT_)                \
+    $^ $(bin_out)$@
+
+
 
 # orphan
 process_orphan_binout := $(bin_path)/$(process_prefix)_orphan$(bin_ext)
@@ -307,7 +323,7 @@ process_orphan_test: process_orphan
 $(process_orphan_binout): $(process_root)/orphan/o.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-
+
 
 # rlimit
 process_rlimit_binout := $(bin_path)/$(process_prefix)_rlimit$(bin_ext)
@@ -327,6 +343,7 @@ $(process_rlimit_c): $(process_rlimit_awk)      \
                      $(process_rlimit_awk_in)
 	awk -f $^ > $@
 
+
 
 # time
 process_time1_binout := $(bin_path)/$(process_prefix)_time1$(bin_ext)
@@ -350,6 +367,7 @@ $(process_time1_binout): $(process_root)/time/t1.c
 $(process_time2_binout): $(process_root)/time/t2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 
 # zombie
 process_zombie_binout := $(bin_path)/$(process_prefix)_zombie$(bin_ext)
@@ -361,5 +379,6 @@ process_zombie_test: process_zombie
 $(process_zombie_binout): $(process_root)/zombie/z.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 
 # eof

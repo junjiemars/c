@@ -22,12 +22,12 @@ main(void)
     }
   else if (pid > 0)
     {
-      close(fd[0]);
+      close(fd[0]);             /* close read */
       write(fd[1], _TXT_, sizeof(_TXT_)-1);
     }
   else
     {
-      close(fd[1]);
+      close(fd[1]);             /* close write */
       n = read(fd[0], line, NM_LINE_MAX);
       write(STDOUT_FILENO, line, n);
     }
