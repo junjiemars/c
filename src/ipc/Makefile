@@ -10,9 +10,9 @@ ipc_test:
 	@echo "#skip ..."
 else
 
-ipc: ipc_access
+ipc: ipc_bone
 
-ipc_test: ipc_access_test
+ipc_test: ipc_bone_test
 
 endif
 
@@ -37,45 +37,14 @@ endif
 
 
 
-# access
-ipc_access_open_binout := $(bin_path)/$(ipc_prefix)_access_open$(bin_ext)
-ipc_access_at_binout := $(bin_path)/$(ipc_prefix)_access_at$(bin_ext)
+# bone
+ipc_bone_binout := $(bin_path)/$(ipc_prefix)_bone$(bin_ext)
 
-ipc_access_open_file := $(tmp_path)/$(ipc_prefix)_access_open_file
-ipc_access_open_link := $(tmp_path)/$(ipc_prefix)_access_open_link
+ipc_bone: $(ipc_bone_binout)
+ipc_bone_test: ipc_bone
+	$(ipc_bone_binout)
 
-ipc_access: $(ipc_access_open_binout)             \
-           $(ipc_access_at_binout)
-ipc_access_test: ipc_access_open_test             \
-                ipc_access_at_test
-
-ipc_access_open_test: $(ipc_access_open_binout)   \
-                     $(ipc_access_open_file)     \
-                     $(ipc_access_open_link)
-	ls -lh $(shell which passwd)
-	$< $(ipc_access_open_file)
-	# sudo chown root:root $(ipc_access_open_file)
-	# sudo chown root $(ipc_access_open_binout) && sudo chmod u+s $<
-	# $< $(ipc_access_open_file)
-
-ipc_access_at_test: $(ipc_access_at_binout)       \
-                   $(ipc_access_open_file)       \
-                   $(ipc_access_open_link)
-	ls -lh $(shell which passwd)
-	$< $(ipc_access_open_file)
-
-$(ipc_access_open_file):
-	echo "#!/bin/sh\necho abc" > $@
-	chmod 400 $@
-	ls -lh $@
-
-$(ipc_access_open_link): $(ipc_access_open_file)
-	ln -s $(CURDIR)/$< $@
-
-$(ipc_access_open_binout): $(ipc_root)/access/a.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-$(ipc_access_at_binout): $(ipc_root)/access/aat.c
+$(ipc_bone_binout): $(ipc_root)/bone/b1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

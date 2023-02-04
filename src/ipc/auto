@@ -20,6 +20,7 @@ ncc_sanitize_address="yes"
 . ${POSIX_ROOT}/nustd_auto
 
 # check nlim.h features
+nlim_line_max="yes"
 . ${POSIX_ROOT}/nlim_auto
 
 
