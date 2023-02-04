@@ -28,24 +28,26 @@ if [    "$nlim_clk_tck" = "yes"                 \
      -o "$nlim_times" = "yes"                   \
    ]; then
 
-  if [ "$nlim_times" = "yes" ]; then
-    nlim_clk_tck="yes"
-  fi
-
   echo "checking for nlim.h ..."
 else
   return
 fi
 
 
+
 # check CLK_TCK
 #----------------------------------------
-if [ "$nlim_clk_tck" = "yes" ]; then
+function check_clk_tck() {
+  local run="$1"
+  if [ -z "$run" ]; then
+    run="value"
+  fi
+
   case $NM_SYSTEM in
     Linux|Darwin)
       nm_feature="CLK_TCK"
       nm_feature_name="nm_clk_tck"
-      nm_feature_run=value
+      nm_feature_run="$run"
       nm_feature_h='
 #include <stdio.h>
 #include <unistd.h>
@@ -60,13 +62,21 @@ if [ "$nlim_clk_tck" = "yes" ]; then
 return 0;
 '
       . ${NORE_ROOT}/auto/feature
+      return `test "$nm_found" = "yes"`
       ;;
     WinNT)
+      return 1
       ;;
     *)
+      return 1
       ;;
   esac                            # end of _SC_CLK_TCK
+}
+
+if [ "$nlim_clk_tck" = "yes" ]; then
+  check_clk_tck "value";
 fi
+
 
 
 # check LINE_MAX
@@ -141,7 +151,7 @@ if [ "$nlim_pagesize" = "yes" ]; then
     nm_feature_test='
 int pagesize;
 pagesize = sysconf(_SC_PAGESIZE);
-printf("%ld\n", pagesize);
+printf("%ld\n", (long)pagesize);
 return 0;
 '
       . ${NORE_ROOT}/auto/feature
@@ -225,13 +235,15 @@ fi
 # check times
 #----------------------------------------
 if [ "$nlim_times" = "yes" ]; then
-  nm_feature="times"
-  nm_feature_name="nm_have_times"
-  nm_feature_run=no
-  nm_feature_h='#include <sys/times.h>'
-  nm_feature_flags=
-  nm_feature_test='struct tms x; (void)x;'
-  . ${NORE_ROOT}/auto/feature
+  if `check_clk_tck "dumb"`; then
+    nm_feature="times"
+    nm_feature_name="nm_have_times"
+    nm_feature_run=no
+    nm_feature_h='#include <sys/times.h>'
+    nm_feature_flags=
+    nm_feature_test='struct tms x; (void)x;'
+    . ${NORE_ROOT}/auto/feature
+  fi
 fi                              # end of times
 
 
