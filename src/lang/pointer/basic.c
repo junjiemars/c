@@ -13,6 +13,6 @@ main(void)
 
   i += 0x10;
 
-	printf("ppi@%p=%i, ii[1]=0x%x, iip[0]=0x%x\n",
-         ppi, **ppi, (*pii)[1], *(iip[0]));
+	printf("pi@%p=%i, ppi@%p=%i, ii[1]=0x%x, iip[0]=0x%x\n",
+         pi, *pi, ppi, **ppi, (*pii)[1], *(iip[0]));
 }

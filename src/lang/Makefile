@@ -21,7 +21,7 @@ lang: lang_array                                \
       lang_main                                 \
       lang_math                                 \
       lang_pointer                              \
-      lang_preprocess                         \
+      lang_preprocess                           \
       lang_random                               \
       lang_restrict                             \
       lang_scope                                \
@@ -98,8 +98,9 @@ lang_array_test: lang_array
 	$(lang_array_binout)
 
 $(lang_array_binout): $(lang_root)/array/a1.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 
 # assert
 lang_assert_binout := $(bin_path)/$(lang_prefix)_assert$(bin_ext)
@@ -353,6 +354,8 @@ lang_locale_test: lang_locale
 $(lang_locale_binout): $(lang_root)/locale/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+
 # macro
 lang_macro_binout := $(bin_path)/$(lang_prefix)_macro$(bin_ext)
 lang_macro_cppout := $(tmp_path)/$(lang_prefix)_macro$(cpp_ext)
@@ -367,6 +370,7 @@ $(lang_macro_binout): $(lang_macro_cppout)
 $(lang_macro_cppout): $(lang_root)/macro/macro.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
+
 
 # main
 lang_main_raw_binout := $(bin_path)/$(lang_prefix)_main_raw$(bin_ext)
@@ -468,6 +472,8 @@ lang_restrict_test: lang_restrict
 $(lang_restrict_binout): $(lang_root)/restrict/r1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+
 # pointer
 lang_ptr_basic_binout := $(bin_path)/$(lang_prefix)_ptr_basic$(bin_ext)
 lang_ptr_const_binout := $(bin_path)/$(lang_prefix)_ptr_const$(bin_ext)
@@ -522,7 +528,7 @@ lang_ptr_arith_test: lang_ptr_arith
 	$(lang_ptr_arith_binout)
 
 $(lang_ptr_basic_binout): $(lang_root)/pointer/basic.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_ptr_const_binout): $(lang_root)/pointer/const.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -541,6 +547,8 @@ $(lang_ptr_lvalue_binout): $(lang_root)/pointer/lvalue.c
 
 $(lang_ptr_arith_binout): $(lang_root)/pointer/arith.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 
 # preprocess
 lang_preprocess_binout := $(bin_path)/$(lang_prefix)_preprocess$(bin_ext)
@@ -811,6 +819,7 @@ lang_trigraphs_test: lang_trigraphs
 $(lang_trigraphs_binout): $(lang_root)/trigraphs/tri.c
 	$(CC) $(CFLAGS) $(nm_trigraphs_opt) $(INC) $^ $(bin_out)$@
 
+
 
 # type
 lang_type_int_binout := $(bin_path)/$(lang_prefix)_type_int$(bin_ext)
@@ -856,6 +865,7 @@ $(lang_type_float_binout): $(lang_root)/type/float.c
 $(lang_type_size_binout): $(lang_root)/type/sz.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 
 # typedef
 lang_typedef_binout := $(bin_path)/$(lang_prefix)_typedef$(bin_ext)
