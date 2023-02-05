@@ -1,5 +1,10 @@
 #include "_ipc_.h"
 
+
+extern FILE  *popen(const char*, const char*);
+extern int    pclose(FILE *stream);
+
+
 int
 paging(const char *pathname, const char *pager)
 {
