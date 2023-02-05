@@ -1,24 +1,14 @@
 #include "_ipc_.h"
 
-#if !defined(DEF_PAGER)
-#  define DEF_PAGER  "/usr/bin/more"
-#endif  /* DEF_PAGER */
-
 
 int
-main(int argc, char *argv[])
+paging(const char *pathname, const char *pager)
 {
   FILE   *fp;
   int     fd[2];
   pid_t   pid;
 
-  if (argc < 2)
-    {
-      fprintf(stderr, "usage: %s <pathname>\n", argv[0]);
-      exit(EXIT_FAILURE);
-    }
-
-  if ((fp = fopen(argv[1], "r")) == NULL)
+  if ((fp = fopen(pathname, "r")) == NULL)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
@@ -73,7 +63,6 @@ main(int argc, char *argv[])
     }
   else
     {
-      char  *pager;
       char  *pager_name;
 
       close(fd[1]);
@@ -88,11 +77,6 @@ main(int argc, char *argv[])
           close(fd[0]);
         }
 
-      if ((pager = getenv("PAGER")) == NULL)
-        {
-          pager = DEF_PAGER;
-        }
-
       if ((pager_name = strrchr(pager, '/')) != NULL)
         {
           pager_name++;
@@ -105,5 +89,5 @@ main(int argc, char *argv[])
         }
     }
 
-  exit(EXIT_SUCCESS);
+  return 0;
 }

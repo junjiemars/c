@@ -53,17 +53,30 @@ $(ipc_bone_binout): $(ipc_root)/bone/b1.c
 
 # pager
 ipc_pager_raw_binout := $(bin_path)/$(ipc_prefix)_pager_raw$(bin_ext)
+ipc_pager_std_binout := $(bin_path)/$(ipc_prefix)_pager_std$(bin_ext)
 ipc_pager_more_bin = $(shell command -v more)
 
-ipc_pager: $(ipc_pager_raw_binout)
-ipc_pager_test: ipc_pager_raw_test
-	ipc_pager_raw_test
+ipc_pager: $(ipc_pager_raw_binout)              \
+           $(ipc_pager_std_binout)
+ipc_pager_test: ipc_pager_raw_test              \
+                ipc_pager_std_test
 
 ipc_pager_raw_test: $(ipc_pager_raw_binout)
 	# $< $(CURDIR)/$(ipc_root)/pager/r1.c
 	-$<
 
-$(ipc_pager_raw_binout): $(ipc_root)/pager/r1.c
+ipc_pager_std_test: $(ipc_pager_std_binout)
+	# $< $(CURDIR)/$(ipc_root)/pager/s1.c
+	-$<
+
+$(ipc_pager_raw_binout): $(ipc_root)/pager/p1.c \
+                         $(ipc_root)/pager/r1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC)                    \
+    $(nm_def_opt)DEF_PAGER="\"${ipc_pager_more_bin}\""  \
+    $^ $(bin_out)$@
+
+$(ipc_pager_std_binout): $(ipc_root)/pager/p1.c \
+                         $(ipc_root)/pager/s1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC)                    \
     $(nm_def_opt)DEF_PAGER="\"${ipc_pager_more_bin}\""  \
     $^ $(bin_out)$@
