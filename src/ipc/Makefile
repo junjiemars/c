@@ -10,9 +10,11 @@ ipc_test:
 	@echo "#skip ..."
 else
 
-ipc: ipc_bone
+ipc: ipc_bone                                   \
+     ipc_pager
 
-ipc_test: ipc_bone_test
+ipc_test: ipc_bone_test                         \
+          ipc_pager_test
 
 endif
 
@@ -46,6 +48,25 @@ ipc_bone_test: ipc_bone
 
 $(ipc_bone_binout): $(ipc_root)/bone/b1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+
+# pager
+ipc_pager_raw_binout := $(bin_path)/$(ipc_prefix)_pager_raw$(bin_ext)
+ipc_pager_more_bin = $(shell command -v more)
+
+ipc_pager: $(ipc_pager_raw_binout)
+ipc_pager_test: ipc_pager_raw_test
+	ipc_pager_raw_test
+
+ipc_pager_raw_test: $(ipc_pager_raw_binout)
+	# $< $(CURDIR)/$(ipc_root)/pager/r1.c
+	-$<
+
+$(ipc_pager_raw_binout): $(ipc_root)/pager/r1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC)                    \
+    $(nm_def_opt)DEF_PAGER="\"${ipc_pager_more_bin}\""  \
+    $^ $(bin_out)$@
 
 
 

@@ -17,7 +17,15 @@ ncc_sanitize_address="yes"
 . ${POSIX_ROOT}/ncc_auto
 
 # check nustd.h features
+nustd_ssize_t="yes"
 . ${POSIX_ROOT}/nustd_auto
+
+# check nio.h features
+nio_getdelim="yes"
+. ${POSIX_ROOT}/nio_auto
+
+# check nstr.h features
+. ${POSIX_ROOT}/nstr_auto
 
 # check nlim.h features
 nlim_line_max="yes"
