@@ -37,7 +37,7 @@ fi
 
 # check CLK_TCK
 #----------------------------------------
-function check_clk_tck() {
+check_clk_tck() {
   local run="$1"
   if [ -z "$run" ]; then
     run="value"

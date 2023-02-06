@@ -8,4 +8,8 @@
 #include <errno.h>
 #include <stdlib.h>
 
+#if (LINUX)
+#  include <sys/wait.h>
+#endif
+
 #endif  /* _IPC_H_ */
