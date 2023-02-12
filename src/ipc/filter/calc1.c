@@ -7,6 +7,9 @@ main(void)
   char  op;
   char  line[NM_LINE_MAX];
 
+  setvbuf(stdin, NULL, _IOLBF, 0);
+  setvbuf(stdout, NULL, _IOLBF, 0);
+
   while (fgets(line, NM_LINE_MAX, stdin) != NULL)
     {
       if (sscanf(line, "%d %c %d", &left, &op, &right) == 3)
