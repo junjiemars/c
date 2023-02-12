@@ -11,9 +11,11 @@ ipc_test:
 else
 
 ipc: ipc_bone                                   \
+     ipc_filter                                 \
      ipc_pager
 
 ipc_test: ipc_bone_test                         \
+          ipc_filter_test                       \
           ipc_pager_test
 
 endif
@@ -47,6 +49,22 @@ ipc_bone_test: ipc_bone
 	$(ipc_bone_binout)
 
 $(ipc_bone_binout): $(ipc_root)/bone/b1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+
+# filter
+ipc_filter_calc_binout := $(bin_path)/$(ipc_prefix)_filter_calc$(bin_ext)
+ipc_filter_file := $(tmp_path)/$(ipc_prefix)_filter.file
+
+ipc_filter: $(ipc_filter_calc_binout)
+ipc_filter_test: ipc_filter_calc_test
+
+ipc_filter_calc_test: $(ipc_filter_calc_binout)
+	echo "3 + 5" | $<
+	echo "3 * 5" >$(ipc_filter_file) && $< 0<$(ipc_filter_file)
+
+$(ipc_filter_calc_binout): $(ipc_root)/filter/calc1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
