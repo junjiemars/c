@@ -20,6 +20,7 @@ algo: _algo_                                    \
       algo_num                                  \
       algo_permute                              \
       algo_prime                                \
+      algo_real                                 \
       algo_reverse                              \
       algo_search                               \
       algo_sizeof                               \
@@ -44,6 +45,7 @@ algo_test: _algo_test                           \
            algo_num_test                        \
            algo_permute_test                    \
            algo_prime                           \
+           algo_real_test                       \
            algo_reverse_test                    \
            algo_search_test                     \
            algo_sizeof_test                     \
@@ -323,6 +325,22 @@ algo_prime_test: algo_prime
 $(algo_prime_binout): $(algo_root)/prime/p1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(LDLIBS)
 
+
+
+# real
+algo_real_binout := $(bin_path)/$(algo_prefix)_real$(bin_ext)
+
+algo_reverse: $(algo_real_binout)
+algo_reverse_test: algo_real_test
+
+algo_real_test: $(algo_real_binout)
+	$<
+
+$(algo_real_binout): $(algo_root)/real/r1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+
 # reverse
 algo_reverse_string_binout := $(bin_path)/$(algo_prefix)_reverse_string$(bin_ext)
 algo_reverse_linked_list_binout := $(bin_path)/$(algo_prefix)_reverse_linked_list$(bin_ext)
@@ -342,6 +360,8 @@ $(algo_reverse_string_binout): $(algo_root)/reverse/rev_str.c
 
 $(algo_reverse_linked_list_binout): $(algo_root)/reverse/rev_linked_list.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 
 # sizeof
 algo_sizeof_binout := $(bin_path)/$(algo_prefix)_sizeof$(bin_ext)
