@@ -6,14 +6,18 @@
  */
 
 
+#define R_FIX_N  8
+#define R_VAL_N  24
+
+
 typedef struct real_s
 {
 #if (NM_HAVE_LITTLE_ENDIAN)
-  unsigned int val : 28;
-  unsigned int fix : 4;
+  uint32_t val : R_VAL_N;
+  uint32_t fix : R_FIX_N;
 #else
-  unsigned int fix : 4;
-  unsigned int val : 28;
+  uint32_t fix : R_FIX_N;
+  uint32_t val : R_VAL_N;
 #endif
 } real_t;
 
@@ -24,7 +28,7 @@ int      real_eq(real_t, real_t);
 real_t   real_add(real_t, real_t);
 real_t   real_mul(real_t, real_t);
 real_t   real_div(real_t, real_t);
-char    *rtos(const real_t*, char*, size_t);
+char    *rtos(real_t, char*, size_t);
 
 
 int
@@ -44,33 +48,42 @@ main(void)
   assert(real_eq(r52, real_mul(r26, r2)));
   assert(real_eq(r53, real_mul(q26, r2)));
 
-  char ss[16];
-  printf("%s\n", rtos(&q26, ss, _nof_(ss)));
+  real_t r3 = real_from_int(3);
+  real_t r78 = real_from_int(78);
+  assert(real_eq(r78, real_mul(r26, r3)));
 
-  /* real_t r3 = real_from_int(3); */
-  /* real_t q17 = real_div(r53, r3); */
-  /* printf("%s\n", rtos(&q17, ss, _nof_(ss))); */
+  char ss[16];
+
+  for (int i = 1; i < 10; i++)
+    {
+      real_t ri = real_from_int(i);
+      real_t qi = real_div(r52, ri);
+      printf("52/%d = %16s\n", i, rtos(qi, ss, _nof_(ss)));
+    }
 
   return 0;
 }
 
 
 char*
-rtos(const real_t *r, char *str, size_t size)
+rtos(real_t r, char *str, size_t size)
 {
-  int                  i;
-  unsigned int         x = 0, y;
-  static unsigned int  fix[]  =  { 0625, 1250, 2500, 5000 };
-
-
-  for (y = r->fix, i = 0; y; y >>= 1, i++)
+  int    i;
+  uint32_t  x             =  0, y;
+  static uint32_t  fix[]  =
     {
-      if (r->fix & (1 << i))
+        390625,   781250,  1562500,  3125000,
+       6250000, 12500000, 25000000, 50000000
+    };
+
+  for (y = r.fix, i = 0; y; y >>= 1, i++)
+    {
+      if (r.fix & (1 << i))
         {
           x += fix[i];
         }
     }
-  snprintf(str, size, "%u.%u", r->val, x);
+  snprintf(str, size, "%u.%u", r.val, x);
 
   return str;
 }
@@ -79,53 +92,50 @@ rtos(const real_t *r, char *str, size_t size)
 real_t
 real_from_int(int a)
 {
-  unsigned int  i  =  a << 4;
-  real_t        r  =  *(real_t*)(unsigned int*) &i;
+  uint32_t   x  =  a << R_FIX_N;
+  real_t  r  =  *(real_t*)((uint32_t*) &x);
   return r;
 }
 
 int
 real_to_int(real_t r)
 {
-  unsigned int  i  =  *(unsigned int*)((real_t*) &r);
-  return i >> 4;
+  uint32_t  x  =  *(uint32_t*)((real_t*) &r);
+  return x >> R_FIX_N;
 }
 
 int
 real_eq(real_t a, real_t b)
 {
-  return *(unsigned int*)((real_t*) &a) == *(unsigned int*)((real_t*) &b);
+  uint32_t  x  =  *(uint32_t*)((real_t*) &a);
+  uint32_t  y  =  *(uint32_t*)((real_t*) &b);
+  return x == y;
 }
 
 real_t
 real_add(real_t a, real_t b)
 {
-  unsigned int x  =  *(unsigned int*)((real_t*) &a)
-    + *(unsigned int*)((real_t*) &b);
-  return *(real_t*) &x;
+  uint32_t  x  =  *(uint32_t*)((real_t*) &a);
+  uint32_t  y  =  *(uint32_t*)((real_t*) &b);
+  uint32_t  r  =  x + y;
+  return *(real_t*) &r;
 }
 
 real_t
 real_mul(real_t a, real_t b)
 {
-  unsigned int  r  =  *(unsigned int*)((real_t*) &a)
-    * *(unsigned int*)((real_t*) &b);
-  return real_from_int(r >> 8);
+  uint32_t  x  =  *(uint32_t*)((real_t*) &a);
+  uint32_t  y  =  *(uint32_t*)((real_t*) &b);
+  uint32_t  r  =  x * y;
+  r >>= R_FIX_N;
+  return *((real_t*) &r);
 }
 
 real_t
 real_div(real_t a, real_t b)
 {
-  unsigned int  x;
-  unsigned int  r  =  *(unsigned int*)((real_t*) &a);
-
-  for (x = b.val >> 1; x; x >>= 1)
-    {
-      r >>= 1;
-    }
-  for (x = b.fix >> 1; x; x >>= 1)
-    {
-      r <<= 1;
-    }
-  return *(real_t*)((int*) &r);
+  uint32_t  x  =  *(uint32_t*)((real_t*) &a);
+  uint32_t  y  =  *(uint32_t*)((real_t*) &b);
+  uint32_t  r  =  (x << R_FIX_N) / y;
+  return *(real_t*)((uint32_t*) &r);
 }
