@@ -14,8 +14,9 @@ ncc_sanitize_address="yes"
 echo "checking for {mix} ..."
 
 has_mix="no"
-
 has_mixasm="no"
+has_mixvm="no"
+
 echo ${echo_n} " + checking for mixasm ... " ${echo_c}
 mixasm=`command -v mixasm 2>/dev/null`
 if [ -n "$mixasm" ]; then
@@ -28,7 +29,6 @@ fi
 flag=has_mixasm op=":=" value="$has_mixasm" . ${NORE_ROOT}/auto/make_define
 
 
-has_mixvm="no"
 echo ${echo_n} " + checking for mixvm ... " ${echo_c}
 mixvm=`command -v mixvm 2>/dev/null`
 if [ -n "$mixvm" ]; then
@@ -39,7 +39,6 @@ else
   echo "no"
 fi
 flag=has_mixvm op=":=" value="$has_mixvm" . ${NORE_ROOT}/auto/make_define
-
 
 
 if [ -n "$has_mixasm" -a -n "$has_mixvm" ]; then

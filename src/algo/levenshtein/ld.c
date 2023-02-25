@@ -1,13 +1,20 @@
-#include <_algo_.h>
+#include "_algo_.h"
+
+/*
+ * https://people.cs.pitt.edu/~kirk/cs1501/Pruhs/Spring2006/assignments/editdistance/Levenshtein%20Distance.htm
+ *
+ */
 
 #define Mij(M, i, j, n) ((M) + (i) + ((j) * ((n)+1)))
 
-inline int min_ld(int a, int b, int c);
 typedef void (*dump_fn)(int *M, const char *s, const char *t, int n, int m);
 
-int ld1(const char *s, const char *t, dump_fn dump);
-void dump_Mij(int *M, const char *s, const char *t, int n, int m);
-void test_ld1(const char *s, const char *t);
+
+int   min_ld(int, int, int);
+int   ld1(const char*, const char*, dump_fn);
+void  dump_Mij(int*, const char*, const char*, int, int);
+
+void  test_ld1(const char*, const char*);
 
 
 int
@@ -15,7 +22,7 @@ main(int argc, char **argv)
 {
   if (argc < 3)
     {
-      printf("please, input source and target\n");
+      fprintf(stderr, "usage: <source> <target>\n");
       return 0;
     }
 
@@ -24,18 +31,25 @@ main(int argc, char **argv)
   return 0;
 }
 
+void
+test_ld1(const char *s, const char *t)
+{
+  printf("s=%s, t=%s\n", s, t);
+  printf("ld=%04i\n", ld1(s, t, dump_Mij));
+}
+
 
 int
 ld1(const char *s, const char *t, dump_fn dump)
 {
-  int n, m;
-  int si, tj;
-  int cost;
-  int *d;
-  int above, left, diag, x;
+  int   n, m;
+  int   si, tj;
+  int   cost;
+  int  *d;
+  int   above, left, diag, x;
 
-  n = (int)strlen(s);
-  m = (int)strlen(t);
+  n = (int) strlen(s);
+  m = (int) strlen(t);
 
   if (n == 0)
     {
@@ -94,10 +108,11 @@ ld1(const char *s, const char *t, dump_fn dump)
   return x;
 }
 
-int
+inline int
 min_ld(int a, int b, int c)
 {
-  int m = a;
+  int  m  =  a;
+
   if (b < m)
     {
       m = b;
@@ -106,6 +121,7 @@ min_ld(int a, int b, int c)
     {
       m = c;
     }
+
   return m;
 }
 
@@ -139,11 +155,4 @@ dump_Mij(int *M, const char *s, const char *t, int n, int m)
         }
       printf("\n");
     }
-}
-
-void
-test_ld1(const char *s, const char *t)
-{
-  printf("s=%s, t=%s\n", s, t);
-  printf("ld=%04i\n", ld1(s, t, dump_Mij));
 }
