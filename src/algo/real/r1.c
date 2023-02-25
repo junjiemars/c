@@ -105,6 +105,7 @@ rtos(real_t r, char *str, size_t size)
 
   if (fix[0] == 0)
     {
+      /* $\sum_{i=1}^{P} 5^i \cdot 10^{P-i}$ */
       for (R_FIX_T i = 0; i < R_FIX_N; i++)
         {
           R_FIX_T  p5   =  1;
