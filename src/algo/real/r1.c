@@ -143,30 +143,29 @@ real_t
 real_from_int(int a)
 {
   R_VAL_T  x  =  a << R_FIX_N;
-  real_t   r  =  *(real_t*)((R_VAL_T*) &x);
-  return r;
+  return *((real_t*) &x);
 }
 
 int
 real_to_int(real_t r)
 {
-  R_VAL_T  x  =  *(R_VAL_T*)((real_t*) &r);
-  return x >> R_FIX_N;
+  R_VAL_T  x  =  *((R_VAL_T*) &r);
+  return (int) (x >> R_FIX_N);
 }
 
 int
 real_eq(real_t a, real_t b)
 {
-  R_VAL_T  x  =  *(R_VAL_T*)((real_t*) &a);
-  R_VAL_T  y  =  *(R_VAL_T*)((real_t*) &b);
+  R_VAL_T  x  =  *((R_VAL_T*) &a);
+  R_VAL_T  y  =  *((R_VAL_T*) &b);
   return x == y;
 }
 
 real_t
 real_add(real_t a, real_t b)
 {
-  R_VAL_T  x  =  *(R_VAL_T*)((real_t*) &a);
-  R_VAL_T  y  =  *(R_VAL_T*)((real_t*) &b);
+  R_VAL_T  x  =  *((R_VAL_T*) &a);
+  R_VAL_T  y  =  *((R_VAL_T*) &b);
   R_VAL_T  r  =  x + y;
   return *(real_t*) &r;
 }
@@ -174,8 +173,8 @@ real_add(real_t a, real_t b)
 real_t
 real_mul(real_t a, real_t b)
 {
-  R_VAL_T  x  =  *(R_VAL_T*)((real_t*) &a);
-  R_VAL_T  y  =  *(R_VAL_T*)((real_t*) &b);
+  R_VAL_T  x  =  *((R_VAL_T*) &a);
+  R_VAL_T  y  =  *((R_VAL_T*) &b);
   R_VAL_T  r  =  x * y;
   r >>= R_FIX_N;
   return *((real_t*) &r);
@@ -184,8 +183,8 @@ real_mul(real_t a, real_t b)
 real_t
 real_div(real_t a, real_t b)
 {
-  R_VAL_T  x  =  *(R_VAL_T*)((real_t*) &a);
-  R_VAL_T  y  =  *(R_VAL_T*)((real_t*) &b);
+  R_VAL_T  x  =  *((R_VAL_T*) &a);
+  R_VAL_T  y  =  *((R_VAL_T*) &b);
   R_VAL_T  r  =  (x << R_FIX_N) / y;
-  return *(real_t*)((R_VAL_T*) &r);
+  return *((real_t*) &r);
 }
