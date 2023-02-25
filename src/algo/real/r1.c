@@ -5,10 +5,14 @@
  *
  */
 
+
 #define R_FIX_T  uint32_t
 #define R_VAL_T  int32_t
 #define R_FIX_N  8
 #define R_VAL_N  24
+#define R_FIX_F  PRIu32
+#define R_VAL_F  PRIi32
+
 
 
 typedef struct real_s
@@ -38,6 +42,9 @@ static void  test_arith(void);
 int
 main(void)
 {
+  printf("precision: 0b%d/0d%d, width: %zuB\n------------\n",
+         R_FIX_N, R_FIX_N/4, sizeof(real_t));
+
   test_literal();
   test_arith();
 
@@ -54,14 +61,14 @@ test_literal(void)
 
   assert(real_eq(r53, r53));
   assert(53 == real_to_int(r53));
-  printf("%s = %16s\n", _str_(52), rtos(r53, ss, _nof_(ss)));
+  printf("%d = %16s\n", real_to_int(r53), rtos(r53, ss, _nof_(ss)));
 
   assert(real_eq(r1n, r1n));
   assert(-1 == real_to_int(r1n));
-  printf("%s = %16s\n", _str_(-1), rtos(r1n, ss, _nof_(ss)));
+  printf("%d = %16s\n", real_to_int(r1n), rtos(r1n, ss, _nof_(ss)));
 
   assert(-2 == real_to_int(r2n));
-  printf("%s = %16s\n", _str_(-2), rtos(r2n, ss, _nof_(ss)));
+  printf("%d = %16s\n", real_to_int(r2n), rtos(r2n, ss, _nof_(ss)));
 }
 
 void
@@ -85,7 +92,7 @@ test_arith(void)
       char *qs = rtos(q, ss1, _nof_(ss1));
       char *ps = rtos(p, ss2, _nof_(ss2));
 
-      printf("%d / %03d = %16s    %16s * %03d = %16s\n",
+      printf("%02d/%03d = %20s %20s*%03d = %20s\n",
              real_to_int(r53), i, qs, qs, i, ps);
     }
 }
@@ -125,7 +132,7 @@ rtos(real_t r, char *str, size_t size)
         }
     }
 
-  snprintf(str, size, "%d.%u", r.val, sum);
+  snprintf(str, size, "%"R_VAL_F".%"R_FIX_F, r.val, sum);
 
   return str;
 }
