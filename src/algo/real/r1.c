@@ -133,7 +133,7 @@ rtos(real_t r, char *str, size_t size)
         }
     }
 
-  snprintf(str, size, "%"R_VAL_F".%"R_FIX_F, r.val, sum);
+  snprintf(str, size, "%"R_VAL_F".%"R_FIX_F, (R_VAL_T) r.val, (R_FIX_T) sum);
 
   return str;
 }
