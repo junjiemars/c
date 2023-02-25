@@ -6,12 +6,12 @@
  */
 
 
-#define R_FIX_T  uint32_t
-#define R_VAL_T  int32_t
-#define R_FIX_N  8
-#define R_VAL_N  24
-#define R_FIX_F  PRIu32
-#define R_VAL_F  PRIi32
+#define R_FIX_T  uint64_t
+#define R_VAL_T  int64_t
+#define R_FIX_N  16
+#define R_VAL_N  48
+#define R_FIX_F  PRIu64
+#define R_VAL_F  PRIi64
 
 
 
