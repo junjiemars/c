@@ -5,7 +5,8 @@
  *
  */
 
-
+#define R_FIX_T  uint32_t
+#define R_VAL_T  int32_t
 #define R_FIX_N  8
 #define R_VAL_N  24
 
@@ -13,11 +14,11 @@
 typedef struct real_s
 {
 #if (NM_HAVE_LITTLE_ENDIAN)
-  int32_t  val : R_VAL_N;
-  uint32_t fix : R_FIX_N;
+  R_VAL_T val : R_VAL_N;
+  R_FIX_T fix : R_FIX_N;
 #else
-  uint32_t fix : R_FIX_N;
-  int32_t  val : R_VAL_N;
+  R_FIX_T fix : R_FIX_N;
+  R_VAL_T val : R_VAL_N;
 #endif
 } real_t;
 
@@ -92,22 +93,39 @@ test_arith(void)
 char*
 rtos(real_t r, char *str, size_t size)
 {
-  uint32_t  i;
-  uint32_t  x             =  0, y;
-  static uint32_t  fix[]  =
-    {
-        390625,   781250,  1562500,  3125000,
-       6250000, 12500000, 25000000, 50000000
-    };
+  R_FIX_T         sum           =  0;
+  static R_FIX_T  fix[R_FIX_N]  =  {0};
 
-  for (y = r.fix, i = 0; y; y >>= 1, i++)
+  if (fix[0] == 0)
     {
-      if (r.fix & (1 << i))
+      for (R_FIX_T i = 0; i < R_FIX_N; i++)
         {
-          x += fix[i];
+          R_FIX_T  p5   =  1;
+          R_FIX_T  p10  =  1;
+
+          for (R_FIX_T j = 0; j < (R_FIX_N - i - 1); j++)
+            {
+              p10 *= 10;
+            }
+
+          for (R_FIX_T k = 0; k <= i; k++)
+            {
+              p5 *= 5;
+            }
+
+          fix[i] = p5 * p10;
         }
     }
-  snprintf(str, size, "%d.%u", r.val, x);
+
+  for (R_FIX_T i = 0; i < R_FIX_N; i++)
+    {
+      if (r.fix & (1 << (R_FIX_N - i - 1)))
+        {
+          sum += fix[i];
+        }
+    }
+
+  snprintf(str, size, "%d.%u", r.val, sum);
 
   return str;
 }
@@ -116,41 +134,41 @@ rtos(real_t r, char *str, size_t size)
 real_t
 real_from_int(int a)
 {
-  int32_t  x  =  a << R_FIX_N;
-  real_t   r  =  *(real_t*)((int32_t*) &x);
+  R_VAL_T  x  =  a << R_FIX_N;
+  real_t   r  =  *(real_t*)((R_VAL_T*) &x);
   return r;
 }
 
 int
 real_to_int(real_t r)
 {
-  int32_t  x  =  *(int32_t*)((real_t*) &r);
+  R_VAL_T  x  =  *(R_VAL_T*)((real_t*) &r);
   return x >> R_FIX_N;
 }
 
 int
 real_eq(real_t a, real_t b)
 {
-  int32_t  x  =  *(int32_t*)((real_t*) &a);
-  int32_t  y  =  *(int32_t*)((real_t*) &b);
+  R_VAL_T  x  =  *(R_VAL_T*)((real_t*) &a);
+  R_VAL_T  y  =  *(R_VAL_T*)((real_t*) &b);
   return x == y;
 }
 
 real_t
 real_add(real_t a, real_t b)
 {
-  int32_t  x  =  *(int32_t*)((real_t*) &a);
-  int32_t  y  =  *(int32_t*)((real_t*) &b);
-  int32_t  r  =  x + y;
+  R_VAL_T  x  =  *(R_VAL_T*)((real_t*) &a);
+  R_VAL_T  y  =  *(R_VAL_T*)((real_t*) &b);
+  R_VAL_T  r  =  x + y;
   return *(real_t*) &r;
 }
 
 real_t
 real_mul(real_t a, real_t b)
 {
-  int32_t  x  =  *(int32_t*)((real_t*) &a);
-  int32_t  y  =  *(int32_t*)((real_t*) &b);
-  int32_t  r  =  x * y;
+  R_VAL_T  x  =  *(R_VAL_T*)((real_t*) &a);
+  R_VAL_T  y  =  *(R_VAL_T*)((real_t*) &b);
+  R_VAL_T  r  =  x * y;
   r >>= R_FIX_N;
   return *((real_t*) &r);
 }
@@ -158,8 +176,8 @@ real_mul(real_t a, real_t b)
 real_t
 real_div(real_t a, real_t b)
 {
-  int32_t  x  =  *(int32_t*)((real_t*) &a);
-  int32_t  y  =  *(int32_t*)((real_t*) &b);
-  int32_t  r  =  (x << R_FIX_N) / y;
-  return *(real_t*)((int32_t*) &r);
+  R_VAL_T  x  =  *(R_VAL_T*)((real_t*) &a);
+  R_VAL_T  y  =  *(R_VAL_T*)((real_t*) &b);
+  R_VAL_T  r  =  (x << R_FIX_N) / y;
+  return *(real_t*)((R_VAL_T*) &r);
 }
