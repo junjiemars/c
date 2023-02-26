@@ -244,6 +244,7 @@ algo_levenshtein_test: algo_levenshtein
 	$(algo_levenshtein_binout) "abc" "abc"
 	$(algo_levenshtein_binout) "AB" "ABCDEF"
 	$(algo_levenshtein_binout) "GUMBO" "GAMBOL"
+	$(algo_levenshtein_binout) "GAMBOL" "GUMBO"
 
 $(algo_levenshtein_binout): $(algo_root)/levenshtein/ld.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@

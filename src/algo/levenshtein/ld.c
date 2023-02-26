@@ -3,6 +3,8 @@
 /*
  * https://people.cs.pitt.edu/~kirk/cs1501/Pruhs/Spring2006/assignments/editdistance/Levenshtein%20Distance.htm
  *
+ * http://www-igm.univ-mlv.fr/~lecroq/seqcomp/node2.html
+ *
  */
 
 #define Mij(M, i, j, n) ((M) + (i) + ((j) * ((n)+1)))
@@ -42,11 +44,10 @@ test_ld1(const char *s, const char *t)
 int
 ld1(const char *s, const char *t, dump_fn dump)
 {
+  int  *aa;
   int   n, m;
   int   si, tj;
-  int   cost;
-  int  *d;
-  int   above, left, diag, x;
+  int   a, b, d, x;
 
   n = (int) strlen(s);
   m = (int) strlen(t);
@@ -60,16 +61,16 @@ ld1(const char *s, const char *t, dump_fn dump)
       return n;
     }
 
-  d = malloc(sizeof(*d) * (n+1) * (m+1));
+  aa = malloc(sizeof(*aa) * (n+1) * (m+1));
 
   for (int i = 0; i <= n; i++)
     {
-      *Mij(d, i, 0, n) = i;
+      *Mij(aa, i, 0, n) = i;
     }
 
   for (int j = 0; j <= m; j++)
     {
-      *Mij(d, 0, j, n) = j;
+      *Mij(aa, 0, j, n) = j;
     }
 
   for (int i = 1; i <= n; i++)
@@ -80,32 +81,23 @@ ld1(const char *s, const char *t, dump_fn dump)
         {
           tj = t[j-1];
 
-          if (si == tj)
-            {
-              cost = 0;
-            }
-          else
-            {
-              cost = 1;
-            }
+          a  =  *Mij(aa, i-1, j, n) + 1;
+          b  =  *Mij(aa, i, j-1, n) + 1;
+          d  =  *Mij(aa, i-1, j-1, n) + (si == tj ? 0 : 1);
 
-          above  =  *Mij(d, i-1, j, n) + 1;
-          left   =  *Mij(d, i, j-1, n) + 1;
-          diag   =  *Mij(d, i-1, j-1, n) + cost;
+          x  =  min_ld(a, b, d);
 
-          x  =  min_ld(above, left, diag);
-
-          *Mij(d, i, j, n) = x;
+          *Mij(aa, i, j, n) = x;
         }
     }
 
-  x = *Mij(d, n, m, n);
+  x = *Mij(aa, n, m, n);
 
   if (dump)
     {
-      dump(d, s, t, n, m);
+      dump(aa, s, t, n, m);
     }
-  free(d);
+  free(aa);
 
   return x;
 }
