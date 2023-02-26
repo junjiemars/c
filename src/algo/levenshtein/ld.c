@@ -7,14 +7,14 @@
 
 #define Mij(M, i, j, n) ((M) + (i) + ((j) * ((n)+1)))
 
-typedef void (*dump_fn)(int *M, const char *s, const char *t, int n, int m);
+typedef void (*dump_fn)(int*, const char*, const char*, int, int);
 
 
-int   min_ld(int, int, int);
 int   ld1(const char*, const char*, dump_fn);
 void  dump_Mij(int*, const char*, const char*, int, int);
 
-void  test_ld1(const char*, const char*);
+static int   min_ld(int, int, int);
+static void  test_ld1(const char*, const char*);
 
 
 int
@@ -89,16 +89,18 @@ ld1(const char *s, const char *t, dump_fn dump)
               cost = 1;
             }
 
-          above = *Mij(d, i, j-1, n) + 1;
-          left = *Mij(d, i-1, j, n) + 1;
-          diag = *Mij(d, i-1, j-1, n) + cost;
+          above  =  *Mij(d, i-1, j, n) + 1;
+          left   =  *Mij(d, i, j-1, n) + 1;
+          diag   =  *Mij(d, i-1, j-1, n) + cost;
 
-          x = min_ld(above, left, diag);
+          x  =  min_ld(above, left, diag);
+
           *Mij(d, i, j, n) = x;
         }
     }
 
   x = *Mij(d, n, m, n);
+
   if (dump)
     {
       dump(d, s, t, n, m);
@@ -153,6 +155,7 @@ dump_Mij(int *M, const char *s, const char *t, int n, int m)
         {
           printf("%04i ", *Mij(M, i, j, n));
         }
+
       printf("\n");
     }
 }
