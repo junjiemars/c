@@ -1,10 +1,7 @@
 #include "_lang_.h"
 
-
-#define BUF_SIZE  1024
-
-static void test_open_file(const char*);
-static void test_sqrt(double);
+static void  test_open_file(const char*);
+static void  test_sqrt(double);
 
 int
 main(int argc, char **argv)
@@ -28,26 +25,14 @@ test_open_file(const char *filename)
   FILE *out = fopen(filename, "r");
   if (out)
     {
-      fprintf(stderr, "#open %s success\n", filename);
+      fprintf(stdout, "#open %s success\n", filename);
       goto clean_exit;
     }
 
   int e = errno;
   if (e)
     {
-      char buf[BUF_SIZE];
-      snprintf(buf, BUF_SIZE, "!panic, open %s", filename);
-      perror(buf);
-
-      /* int r = strerror_r(e, buf, sizeof(buf)); */
-      /* if (0 == r) */
-      /*   { */
-      /*     fprintf(stderr, "!panic, strerror_r, \"%s\"\n", buf); */
-      /*   } */
-      /* else */
-      /*   { */
-      /*     fprintf(stderr, "#!panic, strerror, \"%s\"\n", strerror(r)); */
-      /*   } */
+      perror("!panic");
     }
 
  clean_exit:
@@ -60,6 +45,12 @@ test_open_file(const char *filename)
 void
 test_sqrt(double x)
 {
-  double d = sqrt(x);
+  double  d    =  sqrt(x);
+  int     err  =  errno;
+
+  if (err)
+    {
+      fprintf(stderr, "!panic: %s\n", strerror(err));
+    }
   printf("%f\n", d);
 }
