@@ -1,22 +1,25 @@
 #include "_process_.h"
 
 /*
- * `user id', `effective user id', `saved user id'.
+ * `user/group id', `effective user/group id'
  *
  */
 
 int
 main(void)
 {
-  uid_t  uid, euid;
   pid_t  pid;
-
-  uid = getuid();
-  euid = geteuid();
+  uid_t  uid, euid, gid, egid;
 
   pid = getpid();
 
-  printf("uid=%d, euid=%d, pid=%d\n", uid, euid, pid);
+  uid = getuid();
+  euid = geteuid();
+  gid = getgid();
+  egid = getegid();
+
+  printf("uid=%d, euid=%d, gid=%d, egid=%d, pid=%d\n",
+         uid, euid, gid, egid, pid);
 
   exit(EXIT_SUCCESS);
 }

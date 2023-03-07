@@ -185,6 +185,7 @@ process_id_test: process_id_get_test            \
 
 process_id_get_test: $(process_id_get_binout)
 	$<
+	id
 	# sudo chown root $<
 	# sudo chmod u+s $<
 	# $<
