@@ -2693,8 +2693,8 @@ table in a executable.
 | *example*                  | *command*                                         |
 |----------------------------+---------------------------------------------------|
 | run /process/              | *(lldb)* process launch                           |
-|                            | *(ldb)* r                                         |
-|                            | *(gdb)                                            |
+|                            | *(gdb)* r                                         |
+|                            | *0:000>* g                                        |
 |                            |                                                   |
 | attach /process/ with pid  | *(lldb)* =process attach --pid 123=               |
 |                            | *(gdb)* =attach 123=                              |
