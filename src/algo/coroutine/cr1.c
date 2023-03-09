@@ -108,8 +108,8 @@ test_r(int (*fn)(int, int, struct ccr_ctx_s*), int a, int b)
 
 #define _ccr_begin_(ctx)  switch(ctx->state) { case 0:
 #define _ccr_set_(ctx, x)  ctx->val = (x)
-#define _ccr_get_(_)  ctx->val
-#define _ccr_inc_(_)  ctx->val += 1
+#define _ccr_get_(ctx)  ctx->val
+#define _ccr_inc_(ctx)  ctx->val += 1
 #define _ccr_return_(ctx)                                               \
 do { ctx->state = __LINE__; return (ctx->val); case __LINE__:; } while (0)
 #define _ccr_finish_(ctx, z)  } ctx->state = 0; return (z)
@@ -119,7 +119,7 @@ range3_r(int a, int b, struct ccr_ctx_s *ctx)
 {
   _ccr_begin_(ctx);
 
-  for (_ccr_set_(ctx, a); _ccr_get_() < b; _ccr_inc_())
+  for (_ccr_set_(ctx, a); _ccr_get_(ctx) < b; _ccr_inc_(ctx))
     {
       _ccr_return_(ctx);
     }

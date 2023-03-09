@@ -6,13 +6,18 @@
  */
 
 
+#if (MSVC)
+/* nonstandard extension used: bit field types other than int */
+#  pragma warning(disable:4214)
+#endif
+
+
 #define R_FIX_T  uint64_t
 #define R_VAL_T  int64_t
 #define R_FIX_N  16
 #define R_VAL_N  48
 #define R_FIX_F  PRIu64
 #define R_VAL_F  PRIi64
-
 
 
 typedef struct real_s
@@ -127,7 +132,7 @@ rtos(real_t r, char *str, size_t size)
 
   for (R_FIX_T i = 0; i < R_FIX_N; i++)
     {
-      if (r.fix & (1 << (R_FIX_N - i - 1)))
+      if (r.fix & (R_FIX_T) (1 << (R_FIX_N - i - 1)))
         {
           sum += fix[i];
         }
