@@ -7,8 +7,8 @@ static void  print_id3(uid_t, uid_t, pid_t);
 int
 main(void)
 {
-  pid_t         pid;
-  uid_t         suid, seuid;
+  pid_t  pid;
+  uid_t  suid, seuid;
 
 #if defined(_POSIX_SAVED_IDS)
   printf("%s=%ld\n", _str_(_POSIX_SAVED_IDS), (long) _POSIX_SAVED_IDS);
@@ -28,6 +28,13 @@ main(void)
   print_id3(suid, seuid, pid);
 
   if (setuid(suid) < 0)
+    {
+      perror(NULL);
+      exit(EXIT_FAILURE);
+    }
+  print_id3(suid, seuid, pid);
+
+  if (setuid(seuid) < 0)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
