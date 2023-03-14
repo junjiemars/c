@@ -7,13 +7,17 @@ static void  on_sigusr1(int);
 int
 main(void)
 {
-  pid_t  tid;
+  pid_t  pid, tid;
 
   signal(SIGUSR1, on_sigusr1);
 
+  pid = getpid();
+
   tid = syscall(SYS_gettid);
 
-  syscall(SYS_tgkill, getpid(), tid, SIGUSR1);
+  assert(pid == tid);
+
+  syscall(SYS_tgkill, pid, tid, SIGUSR1);
 }
 
 void
