@@ -192,9 +192,7 @@ process_id_get_test: $(process_id_get_binout)
 
 process_id_set_test: $(process_id_set_binout)
 	$<
-	# touch $(process_id_file) && sudo chown root $(process_id_file)
-	# sudo chown root $< && sudo chmod u+s $<
-	# $< $(process_id_file)
+	# -sudo chown root $< && sudo chmod u+s $< && $<
 
 $(process_id_get_binout): $(process_root)/id/id1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

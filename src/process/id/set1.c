@@ -22,21 +22,21 @@ main(void)
 
   if (setuid(seuid) < 0)
     {
-      perror(NULL);
+      perror(_str_(seuid));
       exit(EXIT_FAILURE);
     }
   print_id3(suid, seuid, pid);
 
   if (setuid(suid) < 0)
     {
-      perror(NULL);
+      perror(_str_(suid));
       exit(EXIT_FAILURE);
     }
   print_id3(suid, seuid, pid);
 
   if (setuid(seuid) < 0)
     {
-      perror(NULL);
+      perror(_str_(seuid));
       exit(EXIT_FAILURE);
     }
   print_id3(suid, seuid, pid);
@@ -49,11 +49,12 @@ main(void)
 void
 print_id3(uid_t suid, uid_t seuid, pid_t pid)
 {
+  static int i = 0;
   uid_t  uid, euid;
 
   uid = getuid();
   euid = geteuid();
 
-  printf("uid=%d, euid=%d, suid=%d, seuid=%d, pid=%d\n",
-         uid, euid, suid, seuid, pid);
+  printf("%2d. uid=%d, euid=%d, suid=%d, seuid=%d, pid=%d\n",
+         i++, uid, euid, suid, seuid, pid);
 }
