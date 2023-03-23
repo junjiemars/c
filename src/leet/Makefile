@@ -6,11 +6,13 @@
 
 leet: leet_int_to_words                         \
       leet_longest_common_prefix                \
-      leet_roman_number
+      leet_roman_number                         \
+      leet_sum3
 
 leet_test: leet_int_to_words                    \
            long_longest_common_prefix           \
-           leet_roman_number
+           leet_roman_number                    \
+           leet_sum3_test
 
 
 # env
@@ -79,5 +81,19 @@ $(leet_roman_number_r1_binout): $(leet_root)/roman_number/d.c   \
                                 $(leet_root)/roman_number/r1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+# sum3
+leet_sum3_b1_binout := $(bin_path)/$(leet_prefix)_sum3_b1$(bin_ext)
+
+leet_sum3: $(leet_sum3_b1_binout)
+leet_sum3_test: leet_sum3_b1_test
+
+leet_sum3_b1_test: $(leet_sum3_b1_binout)
+	$< 1
+	$< -1 0 1 2 -1 -4
+
+$(leet_sum3_b1_binout): $(leet_root)/sum3/d.c   \
+                        $(leet_root)/sum3/b1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # eof
