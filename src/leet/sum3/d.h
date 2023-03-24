@@ -3,6 +3,7 @@
 
 #include <nore.h>
 #include <stdlib.h>
+#include <stddef.h>
 
 
 int  **sum3(int*, int, int*, int**);

@@ -15,9 +15,9 @@ main(int argc, char *argv[])
   int nums_size = argc - 1;
   int *nums = calloc(nums_size, sizeof(int));
 
-  for (int i = 1; i < argc - 1; i++)
+  for (int i = 1; i < argc; i++)
     {
-      nums[i] = atoi(argv[i]);
+      nums[i-1] = atoi(argv[i]);
     }
 
   int return_size = 0;

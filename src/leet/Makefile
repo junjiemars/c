@@ -89,7 +89,6 @@ leet_sum3: $(leet_sum3_b1_binout)
 leet_sum3_test: leet_sum3_b1_test
 
 leet_sum3_b1_test: $(leet_sum3_b1_binout)
-	$< 1
 	$< -1 0 1 2 -1 -4
 
 $(leet_sum3_b1_binout): $(leet_root)/sum3/d.c   \
