@@ -2,6 +2,7 @@
 
 
 static void  print_ids(uid_t, uid_t);
+static void  print_err(char *, uid_t, int);
 
 
 int
@@ -19,25 +20,27 @@ main(void)
 
   if (setuid(seuid) < 0)
     {
-      perror(_str_(seuid));
-      exit(EXIT_FAILURE);
+      print_err("setuid", seuid, errno);
     }
   print_ids(suid, seuid);
 
   if (setuid(suid) < 0)
     {
-      perror(_str_(suid));
-      exit(EXIT_FAILURE);
+      print_err("setuid", suid, errno);
     }
   print_ids(suid, seuid);
 
   if (setuid(seuid) < 0)
     {
-      perror(_str_(seuid));
-      exit(EXIT_FAILURE);
+      print_err("setuid", seuid, errno);
     }
   print_ids(suid, seuid);
 
+  if (seteuid(seuid) < 0)
+    {
+      print_err("seteuid", seuid, errno);
+    }
+  print_ids(suid, seuid);
 
   exit(EXIT_SUCCESS);
 }
@@ -54,7 +57,13 @@ print_ids(uid_t suid, uid_t seuid)
   uid = getuid();
   euid = geteuid();
 
-  printf("No%1d. pid=%8d: "
+  printf("%1d. pid=%8d: "
          "uid=%6d, euid=%6d, saved-uid=%6d, saved-euid=%6d\n",
          i++, pid, uid, euid, suid, seuid);
+}
+
+void
+print_err(char *fn, uid_t uid, int err)
+{
+  printf("!%s(%d): %s\n", fn, uid, strerror(err));
 }
