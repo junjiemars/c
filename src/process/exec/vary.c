@@ -1,7 +1,7 @@
 #include "_process_.h"
 
 /*
- * Exhabit how `exec' sequence functions been called.
+ * Exhibit how `exec' sequence functions been called.
  *
  * `l': passing argument as List.
  * `p': using PATH environment variable.
@@ -12,7 +12,7 @@
 
 
 int
-main(int argc, char * argv[])
+main(int argc, char *argv[])
 {
   int           rc       =  0;
   char         *env[]    =  { "XXX=xxx", 0 };
