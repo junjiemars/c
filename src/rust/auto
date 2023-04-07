@@ -6,6 +6,15 @@
 ## posix/rust_auto
 ####
 
+has_rustc=""
+has_cargo=""
+has_rust_fmt=""
+has_rust_lldb=""
+has_rust_gdb=""
+has_rust_src=""
+has_rust_etc=""
+has_pkg_config="${has_pkg_config:-no}"
+has_gtk_ver=""
 
 echo ${echo_n} " + checking for rustc ... " ${echo_c}
 has_rustc="`command -v rustc`"
@@ -13,6 +22,7 @@ if [ -x "$has_rustc" ]; then
   flag=has_rustc value="${has_rustc}" . ${NORE_ROOT}/auto/make_define
   echo "yes"
 else
+  has_rustc=""
   echo "no"
 fi
 
@@ -51,6 +61,7 @@ case $NM_SYSTEM in
                          . ${NORE_ROOT}/auto/make_define
       echo "yes"
     else
+      has_lldb=""
       has_rust_lldb=""
       echo "no"
     fi
@@ -112,5 +123,23 @@ if [ -n "$has_rustc" ]; then
   fi
 
 fi
+
+# check gtk4-rs: https://gtk-rs.org
+#----------------------------------------
+echo $echo_n " + checking for pkg-config ... $echo_c"
+if [ -z "has_pkg_config" ] || [ 0 -eq $(pkg-config --version 2>&1 1>/dev/null;echo $?) ]; then
+  echo "yes"
+  has_pkg_config=yes
+  flag=has_pkg_config op=":=" value="$has_pkg_config" . ${NORE_ROOT}/auto/make_define
+  pkg_config_gtk4="`pkg-config --modversion gtk4 2>/dev/null`"
+  if [ -n "$pkg_config_gtk4" ]; then
+    has_gtk_ver="v`echo $pkg_config_gtk4|cut -d'.' -f1`_`echo $pkg_config_gtk4|cut -d'.' -f2`"
+    flag=has_gtk_ver op=":=" value="$has_gtk_ver" . ${NORE_ROOT}/auto/make_define
+  fi
+else
+  has_pkg_config=no
+  echo "no"
+fi
+
 
 # eof

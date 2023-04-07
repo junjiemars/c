@@ -12,6 +12,7 @@ rust: rust_attr                                 \
       rust_generic                              \
       rust_grep                                 \
       rust_hi                                   \
+      rust_gtk                                  \
       rust_io                                   \
       rust_iter                                 \
       rust_lang                                 \
@@ -34,6 +35,7 @@ rust_test: rust_attr_test                       \
            rust_generic_test                    \
            rust_grep_test                       \
            rust_hi_test                         \
+           rust_gtk_test                        \
            rust_io_test                         \
            rust_iter_test                       \
            rust_lang_test                       \
@@ -273,6 +275,36 @@ $(rust_grep_binout): $(rust_grep_cargo)             \
     --out-dir $(bin_path)
 
 
+# gtk
+rust_gtk_cargo := $(rust_root)/gtk/Cargo.toml
+rust_gtk_binout := $(bin_path)/$(rust_prefix)_gtk$(bin_ext)
+
+ifneq ($(has_gtk_ver),)
+rust_gtk: $(rust_gtk_binout)
+rust_gtk_test: rust_gtk
+	$(rust_gtk_binout)
+else
+rust_gtk:
+	echo "#skip ..."
+rust_gtk_test: rust_gtk
+	echo "#skip ..."
+endif
+
+$(rust_gtk_cargo): $(CARGO)
+	$< new --bin --name $(rust_prefix)_gtk $(rust_root)/gtk
+	$< tree --manifest-path $@ --prune gtk4                                 \
+    $< add gtk4 --manifest-path $@ --rename gtk --features $(has_gtk_ver)
+
+
+$(rust_gtk_binout): $(rust_gtk_cargo)             \
+                    $(rust_root)/gtk/src/main.rs
+	$(CARGO) build                                \
+    --manifest-path $<                          \
+    -Z unstable-options                         \
+    --target-dir $(cargo_target_dir)            \
+    --out-dir $(bin_path)
+
+
 # io
 rust_io_cargo := $(rust_root)/io/Cargo.toml
 rust_io_binout := $(bin_path)/$(rust_prefix)_io$(bin_ext)
@@ -351,7 +383,6 @@ rust_lib_doc: $(rust_lib_cargo)
 	-$(CARGO) doc --open --manifest-path $<
 rust_lib_test: rust_lib
 	size $(rust_lib_binout)
-
 $(rust_lib_cargo):
 	$(CARGO) new --lib --name $(rust_prefix)_lib $(rust_root)/lib
 
