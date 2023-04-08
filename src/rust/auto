@@ -124,21 +124,34 @@ if [ -n "$has_rustc" ]; then
 
 fi
 
-# check gtk4-rs: https://gtk-rs.org
+# check pkg-config
 #----------------------------------------
 echo $echo_n " + checking for pkg-config ... $echo_c"
 if [ -z "has_pkg_config" ] || [ 0 -eq $(pkg-config --version 2>&1 1>/dev/null;echo $?) ]; then
   echo "yes"
   has_pkg_config=yes
-  flag=has_pkg_config op=":=" value="$has_pkg_config" . ${NORE_ROOT}/auto/make_define
-  pkg_config_gtk4="`pkg-config --modversion gtk4 2>/dev/null`"
-  if [ -n "$pkg_config_gtk4" ]; then
-    has_gtk_ver="v`echo $pkg_config_gtk4|cut -d'.' -f1`_`echo $pkg_config_gtk4|cut -d'.' -f2`"
-    flag=has_gtk_ver op=":=" value="$has_gtk_ver" . ${NORE_ROOT}/auto/make_define
-  fi
+  flag=has_pkg_config op=":=" value="$has_pkg_config" \
+                      . ${NORE_ROOT}/auto/make_define
 else
   has_pkg_config=no
   echo "no"
+fi
+
+# check gtk4-rs: https://gtk-rs.org
+#----------------------------------------
+echo $echo_n " + checking for gtk4 ... $echo_c"
+if [ -n "$has_pkg_config" ]; then
+  pkg_config_gtk4="`pkg-config --modversion gtk4 2>/dev/null`"
+  if [ -n "$pkg_config_gtk4" ]; then
+    has_gtk_ver="v`echo $pkg_config_gtk4|cut -d'.' -f1`_`echo $pkg_config_gtk4|cut -d'.' -f2`"
+    flag=has_gtk_ver op=":=" value="$has_gtk_ver" \
+                     . ${NORE_ROOT}/auto/make_define
+    echo "yes"
+  else
+    echo "no"
+  fi
+else
+    echo "no"
 fi
 
 
