@@ -140,7 +140,7 @@ process_exec_child_test: $(process_exec_echo_binout)  \
 	PATH="$(PATH):$(CURDIR)/$(bin_path)" $(process_exec_child_binout)
 
 process_exec_sh_test: $(process_exec_sh)
-	$< 1 2 3
+	XXX=zZzz $< 1 2
 
 $(process_exec_echo_binout): $(process_root)/exec/echo.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
