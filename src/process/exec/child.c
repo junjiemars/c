@@ -1,5 +1,10 @@
 #include "_process_.h"
 
+/*
+ * How the pathname, the filename and environment passed to `execve'?
+ *
+ */
+
 
 int
 main(void)
@@ -22,6 +27,7 @@ main(void)
           perror(NULL);
           exit(EXIT_FAILURE);
         }
+
       exit(EXIT_SUCCESS);
     }
 
