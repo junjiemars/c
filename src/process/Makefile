@@ -149,6 +149,7 @@ process_exec_ve_test: $(process_exec_ve_binout)   \
                       $(process_exec_echo_binout)
 	$< execl
 	$< execle
+	$< execlp
 
 $(process_exec_echo_binout): $(process_root)/exec/echo.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
