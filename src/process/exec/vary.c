@@ -10,6 +10,8 @@
  *
  */
 
+extern int execl(const char*, const char*arg0, ...);
+
 
 int
 main(int argc, char *argv[])
