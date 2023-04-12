@@ -1,7 +1,7 @@
 #include "_process_.h"
 
 /*
- * How the pathname, the filename and environment passed to `execve'?
+ * How the pathname, filename and environment passed to `execve'?
  *
  */
 
@@ -10,7 +10,6 @@ int
 main(void)
 {
   int          rc     =  0;
-  int          stat;
   pid_t        pid;
   char *const  env[]  =  { "XXX=xxx", 0 };
 
@@ -31,7 +30,7 @@ main(void)
       exit(EXIT_SUCCESS);
     }
 
-  pid = waitpid(pid, &stat, 0);
+  pid = waitpid(pid, NULL, 0);
   if (pid == -1)
     {
       perror(NULL);

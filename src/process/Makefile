@@ -116,7 +116,7 @@ process_exec_vary_binout := $(bin_path)/$(process_prefix)_exec_vary$(bin_ext)
 process_exec_vary_cppout := $(tmp_path)/$(process_prefix)_exec_vary$(cpp_ext)
 process_exec_child_binout := $(bin_path)/$(process_prefix)_exec_child$(bin_ext)
 process_exec_ve_binout := $(bin_path)/$(process_prefix)_exec_ve$(bin_ext)
-process_exec_sh  := $(bin_path)/$(process_prefix)_exec_echo.sh
+process_exec_sh  := $(CURDIR)/$(bin_path)/$(process_prefix)_exec_echo.sh
 
 process_exec: $(process_exec_echo_binout)       \
               $(process_exec_vary_binout)       \
@@ -142,7 +142,7 @@ process_exec_vary_test: $(process_exec_vary_binout)   \
 
 process_exec_child_test: $(process_exec_echo_binout)  \
                          $(process_exec_child_binout)
-	PATH="$(PATH):$(CURDIR)/$(bin_path)" $(process_exec_child_binout)
+	PATH="$(CURDIR)/$(bin_path)" $(process_exec_child_binout)
 
 process_exec_sh_test: $(process_exec_sh)
 	XXX=zZzz $< 1 2
@@ -165,12 +165,12 @@ $(process_exec_vary_binout): $(process_root)/exec/vary.c
 $(process_exec_child_binout): $(process_root)/exec/child.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC)                        \
     -D_PATH_NAME_=\"$(CURDIR)/$(process_exec_echo_binout)\" \
-    -D_FILE_NAME_=\"$(process_prefix)_exec_echo$(bin_ext)\" \
+    -D_FILE_NAME_=\"$(process_exec_echo)\"                  \
     -D_WAIT_=0                                              \
     $^ $(bin_out)$@
 
 $(process_exec_sh): $(process_exec_echo_binout)
-	echo "#! $< a b c\nexport XXX=123\n" > $@ && chmod u+x $@
+	echo "#! $(CURDIR)/$< a b c\n\necho void\n" > $@ && chmod u+x $@
 
 $(process_exec_ve_binout): $(process_root)/exec/vary.c  \
                            $(process_root)/exec/ve1.c
