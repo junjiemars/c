@@ -133,12 +133,12 @@ process_exec_echo_test: $(process_exec_echo_binout)
 
 process_exec_vary_test: $(process_exec_vary_binout)   \
                         $(process_exec_echo_binout)
-	# $< "execl"
+	$< "execl"
 	PATH="$(CURDIR)/$(bin_path)" $< "execlp"
-	# XXX=zZZz $< "execle"
-	# $< "execv"
-	# PATH="$(CURDIR)/$(bin_path)" $< "execvp"
-	# XXX=zZZz $< "execve"
+	XXX=zZZz $< "execle"
+	$< "execv"
+	PATH="$(CURDIR)/$(bin_path)" $< "execvp"
+	XXX=zZZz $< "execve"
 
 process_exec_child_test: $(process_exec_echo_binout)  \
                          $(process_exec_child_binout)
@@ -149,9 +149,9 @@ process_exec_sh_test: $(process_exec_sh)
 
 process_exec_ve_test: $(process_exec_ve_binout)   \
                       $(process_exec_echo_binout)
-	# $< execl
-	# $< execle
-	PATH="$(CURDIR)/$(bin_path)" $< execlp
+	$< "execl"
+	XXX=zZZz $< "execle"
+	PATH="$(CURDIR)/$(bin_path)" $< "execlp"
 
 $(process_exec_echo_binout): $(process_root)/exec/echo.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

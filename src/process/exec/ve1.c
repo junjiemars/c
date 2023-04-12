@@ -2,6 +2,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 /*
  * Emulate `execl' function;
@@ -62,10 +63,11 @@ execle(const char *file, const char *arg0, ...)
 int
 execlp(const char *file, const char *arg0, ...)
 {
-  va_list					args;
-  char					 *s;
-  int							argc      =  0;
-  const char		 *argv[64]  =  {0};
+  va_list				 args;
+  char					*s;
+  int						 argc				=  0;
+  const char		*argv[64]		=  {0};
+	char					 path[255]	=	 {0};
 
   argv[argc++] = arg0;
 
@@ -76,7 +78,9 @@ execlp(const char *file, const char *arg0, ...)
     }
   va_end(args);
 
-  int rc = execve(file, (char *const *) argv, 0);
+	sprintf(path, "%s/%s", getenv("PATH"), file);
+
+  int rc = execve(path, (char *const *) argv, 0);
 	if (rc < 0)
 		{
 			perror(0);
