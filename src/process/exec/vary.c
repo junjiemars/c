@@ -10,15 +10,17 @@
  *
  */
 
-extern int execl(const char*, const char*arg0, ...);
+extern int  execl(const char*, const char *arg0, ...);
+extern int  execlp(const char*, const char *arg0, ...);
+extern int  execle(const char*, const char *arg0, ...);
 
 
 int
 main(int argc, char *argv[])
 {
-  int           rc       =  0;
-  char         *env[]    =  { "XXX=xxx", 0 };
-  char *const   vargv[]  =  { _FILE_NAME_, "a", "b", "c", 0 };
+  int            rc       =  0;
+  char *const    vargv[]  =  { _FILE_NAME_, "a", "b", "c", 0 };
+  extern char  **environ;
 
   if (argc < 2)
     {
@@ -39,7 +41,7 @@ main(int argc, char *argv[])
     }
   else if (0 == strcmp("execle", argv[1]))
     {
-      rc = execle(_PATH_NAME_, _FILE_NAME_, "a", "b", "c", (char *) 0, env);
+      rc = execle(_PATH_NAME_, _FILE_NAME_, "a", "b", "c", (char *) 0, environ);
 
     }
   else if (0 == strcmp("execv", argv[1]))
@@ -54,7 +56,7 @@ main(int argc, char *argv[])
     }
   else if (0 == strcmp("execve", argv[1]))
     {
-      rc = execve(_PATH_NAME_, vargv, env);
+      rc = execve(_PATH_NAME_, vargv, environ);
 
     }
   else
