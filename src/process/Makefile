@@ -140,9 +140,9 @@ process_exec_vary_test: $(process_exec_vary_binout)   \
 	PATH="$(CURDIR)/$(bin_path)" $< "execvp"
 	XXX=zZZz $< "execve"
 
-process_exec_child_test: $(process_exec_echo_binout)  \
-                         $(process_exec_child_binout)
-	PATH="$(CURDIR)/$(bin_path)" $(process_exec_child_binout)
+process_exec_child_test: $(process_exec_child_binout) \
+                         $(process_exec_echo_binout)
+	PATH="$(CURDIR)/$(bin_path)" $<
 
 process_exec_sh_test: $(process_exec_sh)
 	XXX=zZzz $< 1 2
