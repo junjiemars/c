@@ -115,8 +115,8 @@ process_exec_echo_binout := $(bin_path)/$(process_exec_echo)
 process_exec_vary_binout := $(bin_path)/$(process_prefix)_exec_vary$(bin_ext)
 process_exec_vary_cppout := $(tmp_path)/$(process_prefix)_exec_vary$(cpp_ext)
 process_exec_child_binout := $(bin_path)/$(process_prefix)_exec_child$(bin_ext)
-process_exec_sh  := $(bin_path)/$(process_prefix)_exec_echo.sh
 process_exec_ve_binout := $(bin_path)/$(process_prefix)_exec_ve$(bin_ext)
+process_exec_sh  := $(bin_path)/$(process_prefix)_exec_echo.sh
 
 process_exec: $(process_exec_echo_binout)       \
               $(process_exec_vary_binout)       \
