@@ -55,10 +55,9 @@ process_argv_binout := $(bin_path)/$(process_prefix)_argv$(bin_ext)
 
 process_argv: $(process_argv_binout)
 process_argv_test: process_argv
-	$(process_argv_binout)
-	$(process_argv_binout) a bb ccc
+	XXX=zZZz $(process_argv_binout) a bb ccc
 
-$(process_argv_binout): $(process_root)/argv/clargv.c
+$(process_argv_binout): $(process_root)/argv/a.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -142,7 +141,7 @@ process_exec_vary_test: $(process_exec_vary_binout)   \
 
 process_exec_child_test: $(process_exec_child_binout) \
                          $(process_exec_echo_binout)
-	PATH="$(CURDIR)/$(bin_path)" $<
+	$<
 
 process_exec_sh_test: $(process_exec_sh)
 	XXX=zZzz $< 1 2
