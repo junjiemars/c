@@ -116,6 +116,7 @@ process_exec_vary_cppout := $(tmp_path)/$(process_prefix)_exec_vary$(cpp_ext)
 process_exec_child_binout := $(bin_path)/$(process_prefix)_exec_child$(bin_ext)
 process_exec_ve_binout := $(bin_path)/$(process_prefix)_exec_ve$(bin_ext)
 process_exec_sh  := $(CURDIR)/$(bin_path)/$(process_prefix)_exec_echo.sh
+process_exec_awk := $(CURDIR)/$(process_root)/exec/awki.sh
 
 process_exec: $(process_exec_echo_binout)       \
               $(process_exec_vary_binout)       \
@@ -143,14 +144,17 @@ process_exec_child_test: $(process_exec_child_binout) \
                          $(process_exec_echo_binout)
 	$<
 
-process_exec_sh_test: $(process_exec_sh)
-	XXX=zZzz $< 1 2
-
 process_exec_ve_test: $(process_exec_ve_binout)   \
                       $(process_exec_echo_binout)
 	$< "execl"
 	XXX=zZZz $< "execle"
 	PATH="$(CURDIR)/$(bin_path)" $< "execlp"
+
+process_exec_sh_test: $(process_exec_sh)
+	XXX=zZzz $< 1 2
+
+process_exec_awk_test: $(process_exec_awk)
+	$< a1 a2 a3
 
 $(process_exec_echo_binout): $(process_root)/exec/echo.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

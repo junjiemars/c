@@ -15,7 +15,8 @@ main(void)
 void
 on_exit1(void)
 {
-  printf("first exit\n");
+  static int  i  =  0;
+  printf("%d. first exit\n", i++);
 }
 
 void
