@@ -186,15 +186,24 @@ $(process_exec_ve_binout): $(process_root)/exec/vary.c  \
 
 # exit
 process_exit_at_binout := $(bin_path)/$(process_prefix)_exit_at$(bin_ext)
+process_exit_status_binout := $(bin_path)/$(process_prefix)_exit_status$(bin_ext)
 process_exit_file := $(tmp_path)/$(process_prefix)_exit.file
 
-process_exit: $(process_exit_at_binout)
-process_exit_test: process_exit_at_test
+process_exit: $(process_exit_at_binout)         \
+              $(process_exit_status_binout)
+process_exit_test: process_exit_at_test         \
+                   process_exit_status_test
 
 process_exit_at_test: $(process_exit_at_binout)
 	$<
 
+process_exit_status_test: $(process_exit_status_binout)
+	$< 0x1122
+
 $(process_exit_at_binout): $(process_root)/exit/at1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(process_exit_status_binout): $(process_root)/exit/x1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

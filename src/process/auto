@@ -31,6 +31,21 @@ nlim_clk_tck="yes"
 echo "checking for {process} ..."
 
 
+# check wait4
+#----------------------------------------
+nm_feature="wait4"
+nm_feature_name="have_wait4"
+nm_feature_run=
+nm_feature_h='
+#include <sys/types.h>
+#include <sys/wait.h>
+'
+nm_feature_flags=
+nm_feature_test='
+(void) wait4(-1, 0, 0, 0);
+  return 0;
+'
+. ${NORE_ROOT}/auto/feature
 
 
 # eof
