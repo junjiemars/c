@@ -13,6 +13,7 @@ process: process_argv                           \
          process_env                            \
          process_exec                           \
          process_exit                           \
+         process_group                          \
          process_id                             \
          process_io                             \
          process_layout                         \
@@ -27,6 +28,7 @@ process_test: process_argv_test                 \
               process_env_test                  \
               process_exec_test                 \
               process_exit_test                 \
+              process_group_test                \
               process_id_test                   \
               process_io_test                   \
               process_layout_test               \
@@ -204,6 +206,30 @@ $(process_exit_at_binout): $(process_root)/exit/at1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(process_exit_status_binout): $(process_root)/exit/x1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+
+# group
+process_group_id_binout := $(bin_path)/$(process_prefix)_group_id$(bin_ext)
+process_group_child_binout := $(bin_path)/$(process_prefix)_group_child$(bin_ext)
+
+process_group: $(process_group_id_binout)       \
+               $(process_group_child_binout)
+process_group_test: $(process_group_id_test)    \
+                    $(process_group_child_test)
+
+process_group_id_test: $(process_group_id_binout)
+	echo "make pid=$$PPID"
+	$<
+
+process_group_child_test: $(process_group_child_binout)
+	$<
+
+$(process_group_id_binout): $(process_root)/group/g1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(process_group_child_binout): $(process_root)/group/child.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
