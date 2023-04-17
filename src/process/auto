@@ -34,7 +34,7 @@ echo "checking for {process} ..."
 # check wait4
 #----------------------------------------
 nm_feature="wait4"
-nm_feature_name="have_wait4"
+nm_feature_name="nm_have_wait4"
 nm_feature_run=
 nm_feature_h='
 #include <sys/types.h>
