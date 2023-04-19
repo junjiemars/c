@@ -230,6 +230,7 @@ process_group_child_test: $(process_group_child_binout)
 	$<
 
 process_group_ss_test: $(process_group_ss_binout)
+	echo "make pid=$$PPID"
 	$<
 
 $(process_group_id_binout): $(process_root)/group/g1.c
