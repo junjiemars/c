@@ -1,6 +1,6 @@
 #include "_process_.h"
 
-#define print_ids(h, s, p, g, pp)                                       \
+#define print_id(h, s, p, g, pp)                                        \
   do                                                                    \
     {                                                                   \
       printf("%s: sid=%d, pid=%d, pgid=%d, ppid=%d\n", h, s, p, g, pp); \
@@ -17,7 +17,7 @@ main(void)
   ppid = getppid();
   sid = getsid(0);
 
-  print_ids(">", sid, pid, pgid, ppid);
+  print_id(">", sid, pid, pgid, ppid);
 
   if ((sid = setsid()) == -1)
     {
@@ -28,7 +28,7 @@ main(void)
     {
       sid = getsid(0);
       pgid = getpgid(0);
-      print_ids("setsid()", sid, pid, pgid, ppid);
+      print_id("setsid()", sid, pid, pgid, ppid);
     }
 
   if ((pid = fork()) == -1)
@@ -38,11 +38,13 @@ main(void)
   else if (pid == 0)
     {
       pid_t  cid  =  getpid();
+
+      assert(pgid == getpgid(0));
+
       sid = getsid(0);
-      pgid = getpgid(0);
       ppid = getppid();
 
-      print_ids(">", sid, cid, pgid, ppid);
+      print_id(">", sid, cid, pgid, ppid);
 
       if ((sid = setsid()) == -1)
         {
@@ -52,8 +54,12 @@ main(void)
         {
           sid = getsid(0);
           pgid = getpgid(0);
-          print_ids("setsid()", sid, cid, pgid, ppid);
+
+          assert(sid == pgid);
+
+          print_id("setsid()", sid, cid, pgid, ppid);
         }
+
       exit(0);
     }
 
