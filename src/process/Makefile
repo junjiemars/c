@@ -218,9 +218,9 @@ process_group_ss_binout := $(bin_path)/$(process_prefix)_group_ss$(bin_ext)
 process_group: $(process_group_id_binout)       \
                $(process_group_child_binout)    \
                $(process_group_ss_binout)
-process_group_test: $(process_group_id_test)    \
-                    $(process_group_child_test) \
-                    $(process_group_ss_test)
+process_group_test: process_group_id_test       \
+                    process_group_child_test    \
+                    process_group_ss_test
 
 process_group_id_test: $(process_group_id_binout)
 	echo "make pid=$$PPID"

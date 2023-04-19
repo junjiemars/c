@@ -14,13 +14,15 @@ main(void)
 
   if ((sid = setsid()) == -1)
     {
-      perror(NULL);
-      exit(1);
+      perror("pid == pgid");
+      assert(pid == pgid);
     }
-  sid = getsid(0);
-  pgid = getpgid(0);
-  printf("setsid() -> sid=%d, pid=%d, pgid=%d, ppid=%d\n",
-         sid, pid, pgid, ppid);
+  else
+    {
+      pgid = getpgid(0);
+      printf("setsid() -> sid=%d, pid=%d, pgid=%d, ppid=%d\n",
+             sid, pid, pgid, ppid);
+    }
 
   exit(0);
 }
