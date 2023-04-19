@@ -19,7 +19,6 @@ process: process_argv                           \
          process_layout                         \
          process_login                          \
          process_main                           \
-         process_orphan                         \
          process_rlimit                         \
          process_time                           \
          process_zombie
@@ -34,7 +33,6 @@ process_test: process_argv_test                 \
               process_layout_test               \
               process_login_test                \
               process_main_test                 \
-              process_orphan_test               \
               process_rlimit_test               \
               process_time_test                 \
               process_zombie_test
@@ -189,12 +187,16 @@ $(process_exec_ve_binout): $(process_root)/exec/vary.c  \
 # exit
 process_exit_at_binout := $(bin_path)/$(process_prefix)_exit_at$(bin_ext)
 process_exit_status_binout := $(bin_path)/$(process_prefix)_exit_status$(bin_ext)
+process_exit_orphan_binout := $(bin_path)/$(process_prefix)_exit_orphan$(bin_ext)
 process_exit_file := $(tmp_path)/$(process_prefix)_exit.file
+process_exit_orphan_n ?= 3
 
 process_exit: $(process_exit_at_binout)         \
-              $(process_exit_status_binout)
+              $(process_exit_status_binout)     \
+              $(process_exit_orphan_binout)
 process_exit_test: process_exit_at_test         \
-                   process_exit_status_test
+                   process_exit_status_test     \
+                   process_exit_orphan_test
 
 process_exit_at_test: $(process_exit_at_binout)
 	$<
@@ -202,10 +204,16 @@ process_exit_at_test: $(process_exit_at_binout)
 process_exit_status_test: $(process_exit_status_binout)
 	$< 0x1122
 
+process_exit_orphan_test: $(process_exit_orphan_binout)
+	$< ${process_exit_orphan_n}
+
 $(process_exit_at_binout): $(process_root)/exit/at1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(process_exit_status_binout): $(process_root)/exit/x1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(process_exit_orphan_binout): $(process_root)/exit/o1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -379,19 +387,6 @@ $(process_main_binout): $(process_root)/main/m99.c
     -D_WITH_RETURN_=$(_WITH_RETURN_)            \
     -D_WITH_EXIT_=$(_WITH_EXIT_)                \
     $^ $(bin_out)$@
-
-
-
-# orphan
-process_orphan_binout := $(bin_path)/$(process_prefix)_orphan$(bin_ext)
-process_orphan_n ?= 3
-
-process_orphan: $(process_orphan_binout)
-process_orphan_test: process_orphan
-	$(process_orphan_binout) ${process_orphan_n}
-
-$(process_orphan_binout): $(process_root)/orphan/o.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 
