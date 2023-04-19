@@ -213,11 +213,14 @@ $(process_exit_status_binout): $(process_root)/exit/x1.c
 # group
 process_group_id_binout := $(bin_path)/$(process_prefix)_group_id$(bin_ext)
 process_group_child_binout := $(bin_path)/$(process_prefix)_group_child$(bin_ext)
+process_group_ss_binout := $(bin_path)/$(process_prefix)_group_ss$(bin_ext)
 
 process_group: $(process_group_id_binout)       \
-               $(process_group_child_binout)
+               $(process_group_child_binout)    \
+               $(process_group_ss_binout)
 process_group_test: $(process_group_id_test)    \
-                    $(process_group_child_test)
+                    $(process_group_child_test) \
+                    $(process_group_ss_test)
 
 process_group_id_test: $(process_group_id_binout)
 	echo "make pid=$$PPID"
@@ -226,10 +229,16 @@ process_group_id_test: $(process_group_id_binout)
 process_group_child_test: $(process_group_child_binout)
 	$<
 
+process_group_ss_test: $(process_group_ss_binout)
+	$<
+
 $(process_group_id_binout): $(process_root)/group/g1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(process_group_child_binout): $(process_root)/group/child.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(process_group_ss_binout): $(process_root)/group/ss1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
