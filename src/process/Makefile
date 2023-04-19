@@ -21,6 +21,7 @@ process: process_argv                           \
          process_main                           \
          process_rlimit                         \
          process_time                           \
+         process_tty                            \
          process_zombie
 
 process_test: process_argv_test                 \
@@ -35,6 +36,7 @@ process_test: process_argv_test                 \
               process_main_test                 \
               process_rlimit_test               \
               process_time_test                 \
+              process_tty_test                  \
               process_zombie_test
 
 endif
@@ -430,6 +432,20 @@ $(process_time1_binout): $(process_root)/time/t1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(process_time2_binout): $(process_root)/time/t2.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+
+# tty
+process_tty_pass_binout := $(bin_path)/$(process_prefix)_tty_pass$(bin_ext)
+
+process_tty: $(process_tty_pass_binout)
+process_tty_test: process_tty_pass_test
+
+process_tty_pass_test: $(process_tty_pass_binout)
+	$<
+
+$(process_tty_pass_binout): $(process_root)/tty/p1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
