@@ -147,3 +147,7 @@ src/gnucm/c-3
 
 # uemacs
 src/uemacs/uemacs_home
+
+# clangd
+.cache
+compile_commands.json
