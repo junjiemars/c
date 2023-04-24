@@ -66,10 +66,10 @@ rust_fmt_file := $(rust_root)/rustfmt.toml
 cargo_target_dir := $(CURDIR)/$(tmp_path)
 
 rust_build_opt :=
-rust_target_dir := "$(cargo_target_dir)/debug"
+cargo_out_dir := "$(cargo_target_dir)/debug"
 ifeq ($(NM_BUILD), YES)
 rust_build_opt := --release --profile=release
-rust_target_dir := "$(cargo_target_dir)/release"
+cargo_out_dir := "$(cargo_target_dir)/release"
 endif
 
 rust_dbg_dummy_dir :=
@@ -98,8 +98,8 @@ rust_gdb_source_map:
 
 # attr
 rust_attr_cargo := $(rust_root)/attr/Cargo.toml
-rust_attr_binout := $(bin_path)/$(rust_prefix)_attr$(bin_ext)
-
+rust_attr_name := $(rust_prefix)_attr$(bin_ext)
+rust_attr_binout := $(bin_path)/$(rust_attr_name)
 
 rust_attr: $(rust_attr_binout)
 rust_attr_test: rust_attr
@@ -107,16 +107,14 @@ rust_attr_test: rust_attr
 	$(rust_attr_binout)
 
 $(rust_attr_cargo):
-	$(CARGO) new --bin --vcs=none --name=$(rust_prefix)_attr $(rust_root)/attr
+	$(CARGO) new --bin --vcs=none --name=$(rust_attr_name) $(rust_root)/attr
 
 $(rust_attr_binout): $(rust_attr_cargo)             \
                      $(rust_root)/attr/src/main.rs
-	$(CARGO) build $(rust_build_opt)              \
-		--manifest-path $<                          \
-    --target-dir $(cargo_target_dir)            \
-		-Z unstable-options                         \
-    --out-dir $(bin_path)
-
+	$(CARGO) build $(rust_build_opt)                      \
+		--manifest-path $<                                  \
+    --target-dir $(cargo_target_dir)                    \
+	&& cp $(cargo_out_dir)/$(rust_attr_name) $(bin_path)
 
 
 
@@ -135,10 +133,10 @@ $(rust_hi_cargo):
 
 $(rust_hi_binout): $(rust_hi_cargo)             \
                    $(rust_root)/hi/src/main.rs
-	$(CARGO) build $(rust_build_opt)                      \
-		--manifest-path $<                                  \
-    --target-dir $(cargo_target_dir)                    \
-	&& cp $(rust_target_dir)/$(rust_hi_name) $(bin_path)
+	$(CARGO) build $(rust_build_opt)                    \
+		--manifest-path $<                                \
+    --target-dir $(cargo_target_dir)                  \
+	&& cp $(cargo_out_dir)/$(rust_hi_name) $(bin_path)
 
 # enum
 rust_enum_cargo := $(rust_root)/enum/Cargo.toml
