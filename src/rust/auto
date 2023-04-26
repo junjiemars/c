@@ -93,19 +93,16 @@ if [ -n "$has_rustc" ]; then
   if [ "$has_rust_src" != "$rust_src_dir" -a -d "$has_rust_src" ]; then
     flag=has_rust_src value="${has_rust_src}" . ${NORE_ROOT}/auto/make_define
     echo "yes"
-
     echo ${echo_n} " + checking for ctags.rust ... " ${echo_c}
     rust_ctags_dir="/src/etc/ctags.rust"
     has_rust_ctags="${has_rust_src}${rust_ctags_dir}"
     if [ "$has_rust_ctags" != "$rust_ctags_dir" -a -r "$has_rust_ctags" ]; then
-      flag=has_rust_ctags value="${has_rust_ctags}" \
-                          . ${NORE_ROOT}/auto/make_define
+      flag=has_rust_ctags value="${has_rust_ctags}" . ${NORE_ROOT}/auto/make_define
       echo "yes"
     else
       rust_ctags_dir=""
       echo "no"
     fi
-
   else
     has_rust_src=""
     echo "no"
@@ -122,6 +119,15 @@ if [ -n "$has_rustc" ]; then
     echo "no"
   fi
 
+  echo ${echo_n} " + checking for rust commit-hash ... " ${echo_c}
+  has_rust_hash="$(rustc -vV|grep -e '^commit-hash'|sed -e 's#^commit-hash: \(.*\)$#\1#g') "
+  if [ -n "$has_rust_hash" ]; then
+    flag=has_rust_hash value="${has_rust_hash}" . ${NORE_ROOT}/auto/make_define
+    echo "yes"
+  else
+    has_rust_hash=""
+    echo "no"
+  fi
 fi
 
 # check pkg-config

@@ -57,21 +57,24 @@ RUSTC := $(has_rustc)
 CARGO := $(has_cargo)
 RUSTFMT := $(has_rustfmt)
 
-cargo_target_dir := $(CURDIR)/$(tmp_path)
+
 rust_tags_opt := $(has_rust_ctags)
 rust_tags_file := $(CURDIR)/.rust.tags
 rust_tags_sub_file := $(rust_root)/.rust.sub.tags
 rust_src_dir := $(has_rust_src)
 rust_fmt_file := $(rust_root)/rustfmt.toml
+cargo_target_dir := $(CURDIR)/$(tmp_path)
 
 rust_build_opt :=
-ifeq ($(NM_OPTIMIZE), YES)
+cargo_out_dir := "$(cargo_target_dir)/debug"
+ifeq ($(NM_BUILD), YES)
 rust_build_opt := --release --profile=release
+cargo_out_dir := "$(cargo_target_dir)/release"
 endif
 
-rust_dbg_dummy_dir := "/build/rustc-ZOqcvC/rustc-1.61.0+dfsg1"
-ifeq ($(NM_SYSTEM), Darwin)
-rust_dbg_dummy_dir := "XXX"
+rust_dbg_dummy_dir :=
+ifneq ($(has_rust_hash),)
+rust_dbg_dummy_dir := "/build/$(has_rust_hash)"
 endif
 
 rust_tags: $(rust_tags_file)
@@ -95,8 +98,8 @@ rust_gdb_source_map:
 
 # attr
 rust_attr_cargo := $(rust_root)/attr/Cargo.toml
-rust_attr_binout := $(bin_path)/$(rust_prefix)_attr$(bin_ext)
-
+rust_attr_name := $(rust_prefix)_attr$(bin_ext)
+rust_attr_binout := $(bin_path)/$(rust_attr_name)
 
 rust_attr: $(rust_attr_binout)
 rust_attr_test: rust_attr
@@ -104,23 +107,21 @@ rust_attr_test: rust_attr
 	$(rust_attr_binout)
 
 $(rust_attr_cargo):
-	$(CARGO) new --bin --vcs=none --name=$(rust_prefix)_attr $(rust_root)/attr
+	$(CARGO) new --bin --vcs=none --name=$(rust_attr_name) $(rust_root)/attr
 
 $(rust_attr_binout): $(rust_attr_cargo)             \
                      $(rust_root)/attr/src/main.rs
-	$(CARGO) build $(rust_build_opt)              \
-		--manifest-path $<                          \
-    --target-dir $(cargo_target_dir)            \
-		-Z unstable-options                         \
-    --out-dir $(bin_path)
-
+	$(CARGO) build $(rust_build_opt)                      \
+		--manifest-path $<                                  \
+    --target-dir $(cargo_target_dir)                    \
+	&& cp $(cargo_out_dir)/$(rust_attr_name) $(bin_path)
 
 
 
 # hi
 rust_hi_cargo := $(rust_root)/hi/Cargo.toml
-rust_hi_binout := $(bin_path)/$(rust_prefix)_hi$(bin_ext)
-
+rust_hi_name := $(rust_prefix)_hi$(bin_ext)
+rust_hi_binout := $(bin_path)/$(rust_hi_name)
 
 rust_hi: $(rust_hi_binout)
 rust_hi_test: rust_hi
@@ -128,15 +129,14 @@ rust_hi_test: rust_hi
 	$(rust_hi_binout)
 
 $(rust_hi_cargo):
-	$(CARGO) new --bin --vcs=none --name=$(rust_prefix)_hi $(rust_root)/hi
+	$(CARGO) new --bin --vcs=none --name=$(rust_hi_name) $(rust_root)/hi
 
 $(rust_hi_binout): $(rust_hi_cargo)             \
                    $(rust_root)/hi/src/main.rs
-	$(CARGO) build $(rust_build_opt)              \
-		--manifest-path $<                          \
-    --target-dir $(cargo_target_dir)            \
-		-Z unstable-options                         \
-    --out-dir $(bin_path)
+	$(CARGO) build $(rust_build_opt)                    \
+		--manifest-path $<                                \
+    --target-dir $(cargo_target_dir)                  \
+	&& cp $(cargo_out_dir)/$(rust_hi_name) $(bin_path)
 
 # enum
 rust_enum_cargo := $(rust_root)/enum/Cargo.toml
