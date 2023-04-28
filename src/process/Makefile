@@ -459,6 +459,8 @@ process_tty_test: process_tty_pass_test
 
 process_tty_pass_test: $(process_tty_pass_binout)
 	$<
+	$< 3
+	$< 3 <$(process_root)/Makefile
 
 $(process_tty_pass_binout): $(process_root)/tty/p1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

@@ -1,32 +1,37 @@
 #include "_process_.h"
 
 int
-main(void)
+main(int argc, char *argv[])
 {
-  int    err;
+  int    fd;
   char  *name;
 
-  err = 0;
-  if (isatty(STDIN_FILENO) == 0)
+  if (argc < 2)
     {
-      if (err)
-        {
-          perror("isatty");
-        }
-      else
-        {
-          name = ttyname(STDIN_FILENO);
-          if (name == NULL)
-            {
-              perror("ttyname");
-              exit(1);
-            }
-          printf("stdin is a tty: %s\n", name);
-        }
+      fd = STDIN_FILENO;
     }
   else
     {
-      printf("stdin is not a tty\n");
+      fd = atoi(argv[1]);
+    }
+
+  if (isatty(fd) == 1)
+    {
+      name = ttyname(fd);
+      if (name == NULL)
+        {
+          perror("ttyname");
+          exit(1);
+        }
+      printf("%d is a tty: %s\n", fd, name);
+    }
+  else
+    {
+      if (errno)
+        {
+          perror(NULL);
+        }
+      printf("%d is not a tty\n", fd);
     }
 
   exit(0);
