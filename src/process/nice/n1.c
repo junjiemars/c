@@ -64,6 +64,11 @@ main(int argc, char *argv[])
     }
   else
     {
+      if (waitpid(pid, NULL, 0) < 0)
+        {
+          perror(NULL);
+        }
+
       errno = 0;
       n2 = getpriority(PRIO_PROCESS, 0);
       if (errno)
