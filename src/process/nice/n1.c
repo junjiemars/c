@@ -3,11 +3,11 @@
 int
 main(int argc, char *argv[])
 {
-  id_t  nice  =  -20, old;
+  id_t  nice, old;
 
   if (argc < 2)
     {
-      fprintf(stdout, "usage: [nice]\n");
+      nice = -20;
     }
   else
     {
@@ -28,6 +28,13 @@ main(int argc, char *argv[])
       exit(1);
     }
 
+  errno = 0;
+  nice = getpriority(PRIO_PROCESS, 0);
+  if (errno)
+    {
+      perror(NULL);
+      exit(1);
+    }
   printf("nice from %d to %d\n", old, nice);
 
   exit(0);
