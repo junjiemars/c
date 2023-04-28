@@ -19,6 +19,7 @@ process: process_argv                           \
          process_layout                         \
          process_login                          \
          process_main                           \
+         process_nice                           \
          process_rlimit                         \
          process_time                           \
          process_tty                            \
@@ -34,6 +35,7 @@ process_test: process_argv_test                 \
               process_layout_test               \
               process_login_test                \
               process_main_test                 \
+              process_nice_test                 \
               process_rlimit_test               \
               process_time_test                 \
               process_tty_test                  \
@@ -389,6 +391,19 @@ $(process_main_binout): $(process_root)/main/m99.c
     -D_WITH_RETURN_=$(_WITH_RETURN_)            \
     -D_WITH_EXIT_=$(_WITH_EXIT_)                \
     $^ $(bin_out)$@
+
+
+
+# nice
+process_nice_binout := $(bin_path)/$(process_prefix)_nice$(bin_ext)
+
+process_nice: $(process_nice_binout)
+process_nice_test: process_nice
+	echo "# skip process_nice_test ..."
+	# sudo $(process_nice_binout)
+
+$(process_nice_binout): $(process_root)/nice/n1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 
