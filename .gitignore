@@ -153,4 +153,5 @@ src/uemacs/uemacs_home
 compile_commands.json
 
 # rust-analyzer
-rust-project.json
+**/rust-project.json
+**/.project.el

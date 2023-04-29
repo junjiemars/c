@@ -99,9 +99,6 @@ rust_lldb_source_map: $(rust_src_dir)
 rust_gdb_source_map:
 	echo "set substitute-path $(rust_dbg_dummy_dir) $(rust_src_dir)"
 
-$(analyzer_project_json):
-	echo "{\"sysroot_src\":\"$(rust_src_dir)/library\",\"crates\":[{\"display_name\":\"hi\",\"root_module\":\"src/rust/hi/src/main.rs\",\"edition\":\"2021\",\"deps\":[]},{\"display_name\":\"rest\",\"root_module\":\"src/rust/rest/src/main.rs\",\"edition\":\"2021\",\"deps\":[]}]}" >$@
-
 
 
 
