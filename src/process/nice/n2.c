@@ -59,15 +59,11 @@ main(int argc, char *argv[])
       printf("%6s nice = %2d\n", s, nice(0) + NZERO);
     }
 
-  for (;;)
+  for (++count; count != 0; count++)
     {
-      if (++count == 0)
-        {
-          printf("!%s count out\n", s);
-          exit(0);
-        }
       check_time(s, &end, count);
     }
+  printf("!%s count out\n", s);
 
   exit(0);
 }
