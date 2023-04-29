@@ -45,7 +45,7 @@ main(int argc, char *argv[])
   else if (pid == 0)
     {
       s = "child";
-      printf("child nice = %d, adjusting by %d\n", nice(0), n);
+      printf("%6s nice = %d, adjusting by %2d\n", s, nice(0) + NZERO, n);
       errno = 0;
       if (nice(n) == -1 && errno != 0)
         {
@@ -56,7 +56,7 @@ main(int argc, char *argv[])
   else
     {
       s = "parent";
-      printf("parent nice = %d\n", nice(0) + NZERO);
+      printf("%6s nice = %2d\n", s, nice(0) + NZERO);
     }
 
   for (;;)
@@ -85,7 +85,8 @@ check_time(const char *s, struct timeval *end, unsigned long long count)
 
   if (cur.tv_sec >= end->tv_sec && cur.tv_usec >= end->tv_usec)
     {
-      printf("!%6s timeout: count = %016llu\n", s, count);
+      printf("!%6s timeout: count = %020llu, nice = %2d\n",
+             s, count, nice(0) + NZERO);
       exit(0);
     }
 }
