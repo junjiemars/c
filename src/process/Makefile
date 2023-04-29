@@ -395,14 +395,27 @@ $(process_main_binout): $(process_root)/main/m99.c
 
 
 # nice
-process_nice_binout := $(bin_path)/$(process_prefix)_nice$(bin_ext)
+process_nice_raw_binout := $(bin_path)/$(process_prefix)_nice_raw$(bin_ext)
+process_nice_diff_binout := $(bin_path)/$(process_prefix)_nice_diff$(bin_ext)
 
-process_nice: $(process_nice_binout)
-process_nice_test: process_nice
-	echo "# skip process_nice_test ..."
-	# sudo $(process_nice_binout)
+process_nice: $(process_nice_raw_binout)
+process_nice_test: process_nice_raw_test        \
+                   process_nice_diff_test
 
-$(process_nice_binout): $(process_root)/nice/n1.c
+process_nice_raw_test: $(process_nice_raw_binout)
+	echo "# skip process_nice_raw_test ..."
+	# sudo $<
+
+process_nice_diff_test: $(process_nice_diff_binout)
+	echo "# skip process_nice_diff_test ..."
+	# sudo $< 0
+	# sudo $< 20
+	# sudo $< -20
+
+$(process_nice_raw_binout): $(process_root)/nice/n1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(process_nice_diff_binout): $(process_root)/nice/n2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

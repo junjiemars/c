@@ -15,6 +15,7 @@ main(int argc, char *argv[])
   if (argc < 2)
     {
       n2 = -NZERO;
+      printf("no specified nice value, default is %d\n", n2);
     }
   else
     {
