@@ -151,3 +151,6 @@ src/uemacs/uemacs_home
 # clangd
 .cache
 compile_commands.json
+
+# rust-analyzer
+rust-project.json

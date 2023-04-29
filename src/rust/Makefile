@@ -23,6 +23,7 @@ rust: rust_attr                                 \
       rust_min                                  \
       rust_module                               \
       rust_owner                                \
+      rust_rest                                 \
       rust_unsafe                               \
       rust_websrv                               \
       rust_ws
@@ -46,6 +47,7 @@ rust_test: rust_attr_test                       \
            rust_min_test                        \
            rust_module_test                     \
            rust_owner_test                      \
+           rust_rest_test                       \
            rust_unsafe_test                     \
            rust_websrv_test                     \
            rust_ws_test
@@ -64,6 +66,7 @@ rust_tags_sub_file := $(rust_root)/.rust.sub.tags
 rust_src_dir := $(has_rust_src)
 rust_fmt_file := $(rust_root)/rustfmt.toml
 cargo_target_dir := $(CURDIR)/$(tmp_path)
+analyzer_project_json := $(CURDIR)/rust-project.json
 
 rust_build_opt :=
 cargo_out_dir := "$(cargo_target_dir)/debug"
@@ -95,6 +98,12 @@ rust_lldb_source_map: $(rust_src_dir)
 	echo "settings set target.source-map $(rust_dbg_dummy_dir) $(rust_src_dir)"
 rust_gdb_source_map:
 	echo "set substitute-path $(rust_dbg_dummy_dir) $(rust_src_dir)"
+
+$(analyzer_project_json):
+	echo "{\"sysroot_src\":\"$(rust_src_dir)/library\",\"crates\":[{\"display_name\":\"hi\",\"root_module\":\"src/rust/hi/src/main.rs\",\"edition\":\"2021\",\"deps\":[]},{\"display_name\":\"rest\",\"root_module\":\"src/rust/rest/src/main.rs\",\"edition\":\"2021\",\"deps\":[]}]}" >$@
+
+
+
 
 # attr
 rust_attr_cargo := $(rust_root)/attr/Cargo.toml
@@ -199,6 +208,29 @@ $(rust_owner_binout): $(rust_owner_cargo)             \
     --target-dir $(cargo_target_dir)            \
     --out-dir $(bin_path)
 
+
+
+# rest
+rust_rest_name := $(rust_prefix)_rest$(bin_ext)
+rust_rest_cargo := $(rust_root)/rest/Cargo.toml
+rust_rest_binout := $(bin_path)/$(rust_rest_name)
+
+rust_rest: $(rust_rest_binout)
+rust_rest_test: rust_rest
+	$(rust_rest_binout)
+
+$(rust_rest_cargo):
+	$(CARGO) new --bin --vcs=none --name $(rust_prefix)_rest $(rust_root)/rest
+	$(CARGO) add --manifest-path=$@ serde serde_json tokio warp uuid
+
+$(rust_rest_binout): $(rust_rest_cargo)         \
+                     $(rust_rest_binout)
+	$(CARGO) build                                          \
+		--manifest-path $<                                    \
+    --target-dir $(cargo_target_dir)                      \
+    && cp $(cargo_out_dir)/$(rust_rest_name) $(bin_path)
+
+
 
 # generic
 rust_generic_cargo := $(rust_root)/generic/Cargo.toml

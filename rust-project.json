@@ -1,0 +1,18 @@
+{
+	"sysroot_src":"/Users/junjie/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library",
+	"crates":
+	[
+		{
+			"display_name": "hi",
+			"root_module":"src/rust/hi/src/main.rs",
+			"edition":"2021",
+			"deps":[]
+		},
+		{
+			"display_name": "rest",
+			"root_module":"src/rust/rest/src/main.rs",
+			"edition":"2021",
+			"deps":[]
+		}
+	]
+}
