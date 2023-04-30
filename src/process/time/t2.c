@@ -1,6 +1,4 @@
 #include "_process_.h"
-#include "nore.h"
-#include <stdio.h>
 
 /*
  * simulate time(1)
