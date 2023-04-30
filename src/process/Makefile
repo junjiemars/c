@@ -453,8 +453,8 @@ process_time1_test: $(process_time1_binout)
 	$<
 
 process_time2_test: $(process_time2_binout)
-	$< sleep 1
-	$< grep NM_CLK_TCK -r $(process_root) > /dev/null
+	$< "sleep 1"
+	$< "date" "grep NM_CLK_TCK -r $(process_root) > /dev/null" "man sh >/dev/null"
 
 $(process_time1_binout): $(process_root)/time/t1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

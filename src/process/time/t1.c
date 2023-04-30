@@ -1,5 +1,5 @@
 #include "_process_.h"
-#include <sys/times.h>
+
 
 int
 main(void)
@@ -7,8 +7,7 @@ main(void)
   clock_t     rc;
   struct tms  buf;
 
-  rc = times(&buf);
-  if ((clock_t) -1 == rc)
+  if ((rc = times(&buf)) == (clock_t) -1)
     {
       perror(NULL);
       exit(EXIT_FAILURE);
