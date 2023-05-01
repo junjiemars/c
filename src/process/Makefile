@@ -20,6 +20,7 @@ process: process_argv                           \
          process_login                          \
          process_main                           \
          process_nice                           \
+         process_orphan                         \
          process_rlimit                         \
          process_time                           \
          process_tty                            \
@@ -36,6 +37,7 @@ process_test: process_argv_test                 \
               process_login_test                \
               process_main_test                 \
               process_nice_test                 \
+              process_orphan_test               \
               process_rlimit_test               \
               process_time_test                 \
               process_tty_test                  \
@@ -202,35 +204,26 @@ $(process_exec_path_binout): $(process_root)/exec/path1.c
 
 # exit
 process_exit_at_binout := $(bin_path)/$(process_prefix)_exit_at$(bin_ext)
-process_exit_status_binout := $(bin_path)/$(process_prefix)_exit_status$(bin_ext)
-process_exit_orphan_binout := $(bin_path)/$(process_prefix)_exit_orphan$(bin_ext)
+process_exit_state_binout := $(bin_path)/$(process_prefix)_exit_state$(bin_ext)
 process_exit_file := $(tmp_path)/$(process_prefix)_exit.file
-process_exit_orphan_n ?= 3
+
 
 process_exit: $(process_exit_at_binout)         \
-              $(process_exit_status_binout)     \
-              $(process_exit_orphan_binout)
+              $(process_exit_state_binout)
 process_exit_test: process_exit_at_test         \
-                   process_exit_status_test     \
-                   process_exit_orphan_test
+                   process_exit_state_test
 
 process_exit_at_test: $(process_exit_at_binout)
 	$<
 
-process_exit_status_test: $(process_exit_status_binout)
+process_exit_state_test: $(process_exit_state_binout)
 	$< 0x11223344
 	$< 0x11223344 2
-
-process_exit_orphan_test: $(process_exit_orphan_binout)
-	$< ${process_exit_orphan_n}
 
 $(process_exit_at_binout): $(process_root)/exit/at1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(process_exit_status_binout): $(process_root)/exit/x1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-$(process_exit_orphan_binout): $(process_root)/exit/o1.c
+$(process_exit_state_binout): $(process_root)/exit/x1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -432,6 +425,20 @@ $(process_nice_diff_binout): $(process_root)/nice/n2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
+
+# orphan
+process_orphan_binout := $(bin_path)/$(process_prefix)_orphan$(bin_ext)
+process_orphan_n ?= 3
+
+process_orphan: $(process_orphan_binout)
+process_orphan_test: process_orphan_test
+
+process_orphan_test: $(process_orphan_binout)
+	$< ${process_orphan_n}
+
+$(process_orphan_binout): $(process_root)/orphan/o1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # rlimit
 process_rlimit_binout := $(bin_path)/$(process_prefix)_rlimit$(bin_ext)
