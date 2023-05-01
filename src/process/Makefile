@@ -119,17 +119,21 @@ process_exec_vary_binout := $(bin_path)/$(process_prefix)_exec_vary$(bin_ext)
 process_exec_vary_cppout := $(tmp_path)/$(process_prefix)_exec_vary$(cpp_ext)
 process_exec_child_binout := $(bin_path)/$(process_prefix)_exec_child$(bin_ext)
 process_exec_ve_binout := $(bin_path)/$(process_prefix)_exec_ve$(bin_ext)
+process_exec_path_binout := $(bin_path)/$(process_prefix)_exec_path$(bin_ext)
 process_exec_sh  := $(CURDIR)/$(bin_path)/$(process_prefix)_exec_echo.sh
 process_exec_awk := $(CURDIR)/$(process_root)/exec/awki.sh
 
 process_exec: $(process_exec_echo_binout)       \
               $(process_exec_vary_binout)       \
               $(process_exec_child_binout)      \
-              $(process_exec_ve_binout)
+              $(process_exec_ve_binout)         \
+              $(process_exec_path_binout)
+
 process_exec_test: process_exec_echo_test       \
                    process_exec_vary_test       \
                    process_exec_child_test      \
-                   process_exec_ve_test
+                   process_exec_ve_test         \
+                   process_exec_path_test
 
 process_exec_echo_test: $(process_exec_echo_binout)
 	$<
@@ -160,6 +164,11 @@ process_exec_sh_test: $(process_exec_sh)
 process_exec_awk_test: $(process_exec_awk)
 	$< a1 a2 a3
 
+process_exec_path_test: $(process_exec_path_binout) \
+                        $(process_exec_sh)
+	$< $(process_exec_sh) execl
+	PATH=$(CURDIR)/$(bin_path) $< $(process_exec_sh) execlp
+
 $(process_exec_echo_binout): $(process_root)/exec/echo.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
@@ -186,6 +195,9 @@ $(process_exec_ve_binout): $(process_root)/exec/vary.c  \
     -D_FILE_NAME_=\"$(process_exec_echo)\"                  \
     $^ $(bin_out)$@
 
+$(process_exec_path_binout): $(process_root)/exec/path1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 
 # exit
@@ -206,7 +218,8 @@ process_exit_at_test: $(process_exit_at_binout)
 	$<
 
 process_exit_status_test: $(process_exit_status_binout)
-	$< 0x1122
+	$< 0x11223344
+	$< 0x11223344 2
 
 process_exit_orphan_test: $(process_exit_orphan_binout)
 	$< ${process_exit_orphan_n}
@@ -315,7 +328,7 @@ $(process_io_async_binout): $(process_root)/io/c.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(process_io_sync_binout): $(process_root)/io/c.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_WITH_SYNC_=1 $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_SYNC_=1 $^ $(bin_out)$@
 
 
 
@@ -484,10 +497,12 @@ $(process_tty_pass_binout): $(process_root)/tty/p1.c
 process_zombie_binout := $(bin_path)/$(process_prefix)_zombie$(bin_ext)
 
 process_zombie: $(process_zombie_binout)
-process_zombie_test: process_zombie
-	$(process_zombie_binout)
+process_zombie_test: process_zombie_test
 
-$(process_zombie_binout): $(process_root)/zombie/z.c
+process_zombie_test: $(process_zombie_binout)
+	$<
+
+$(process_zombie_binout): $(process_root)/zombie/z1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
