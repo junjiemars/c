@@ -42,16 +42,14 @@ main (int argc, char *argv[])
           exit (EXIT_SUCCESS);
         }
 
+      snprintf (cmd, NM_LINE_MAX, PS_CMD " -p %d", pid);
+      system (cmd);
+
       /* only wait odd ones, the even ones should be zombies */
       if ((pid & 1) == 1)
         {
           waitpid (pid, &stat, 0);
           printf ("# child pid=%d exit(%d)\n", pid, stat);
-        }
-      else
-        {
-          snprintf (cmd, NM_LINE_MAX, PS_CMD " -p %d", pid);
-          system (cmd);
         }
     }
 

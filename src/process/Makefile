@@ -48,7 +48,8 @@ endif
 
 
 process_prefix := process
-INC += $(nm_inc_opt)$(process_root) $(nm_inc_opt)$(root)/posix
+posix_root ?= $(root)/posix
+INC += $(nm_inc_opt)$(process_root) $(nm_inc_opt)$(posix_root)
 
 ifeq ($(NM_SYSTEM),Linux)
 	cflags_static_opt := -static
@@ -320,8 +321,9 @@ $(process_io_buf_binout): $(process_root)/io/b.c
 $(process_io_async_binout): $(process_root)/io/c.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(process_io_sync_binout): $(process_root)/io/c.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_SYNC_=1 $^ $(bin_out)$@
+$(process_io_sync_binout): $(process_root)/io/c.c \
+                           $(posix_root)/npsyns.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_SYN_=1 $^ $(bin_out)$@
 
 
 
