@@ -7,18 +7,9 @@
 ####
 
 
-if [ -z "$define_nlim_h" ]; then
-
-define_nlim_h="nlim.h"
-
-
 if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
-
-
-# check for <nustd.h>
-. ${POSIX_ROOT}/nustd_auto
 
 
 if [    "$nlim_clk_tck" = "yes"                 \
@@ -27,7 +18,6 @@ if [    "$nlim_clk_tck" = "yes"                 \
      -o "$nlim_path_max" = "yes"                \
      -o "$nlim_times" = "yes"                   \
    ]; then
-
   echo "checking for nlim.h ..."
 else
   return
@@ -37,17 +27,12 @@ fi
 
 # check CLK_TCK
 #----------------------------------------
-check_clk_tck() {
-  local run="$1"
-  if [ -z "$run" ]; then
-    run="value"
-  fi
-
+if [ "$nlim_clk_tck" = "yes" -a -z "$nlim_clk_tck_done" ]; then
   case $NM_SYSTEM in
     Linux|Darwin)
       nm_feature="CLK_TCK"
       nm_feature_name="nm_clk_tck"
-      nm_feature_run="$run"
+      nm_feature_run="value"
       nm_feature_h='
 #include <stdio.h>
 #include <unistd.h>
@@ -62,26 +47,19 @@ check_clk_tck() {
 return 0;
 '
       . ${NORE_ROOT}/auto/feature
-      return `test "$nm_found" = "yes"`
       ;;
     WinNT)
-      return 1
       ;;
     *)
-      return 1
       ;;
-  esac                            # end of _SC_CLK_TCK
-}
-
-if [ "$nlim_clk_tck" = "yes" ]; then
-  check_clk_tck "value";
-fi
-
+  esac
+  nlim_clk_tck_done="yes"
+fi                            # end of _SC_CLK_TCK
 
 
 # check LINE_MAX
 #----------------------------------------
-if [ "$nlim_line_max" = "yes" ]; then
+if [ "$nlim_line_max" = "yes" -a -z "$nlim_line_max_done" ]; then
   case $NM_SYSTEM in
     Linux|Darwin)
       nm_feature="LINE_MAX"
@@ -130,12 +108,13 @@ long line_max = 2048;
     *)
       ;;
   esac                            # end of LINE_MAX
+  nlim_line_max_done="yes"
 fi
 
 
 # check PAGESIZE
 #----------------------------------------
-if [ "$nlim_pagesize" = "yes" ]; then
+if [ "$nlim_pagesize" = "yes" -a -z "$nlim_pagesize_done" ]; then
   case $NM_SYSTEM in
     Linux|Darwin)
       nm_feature="PAGESIZE"
@@ -178,12 +157,13 @@ return 0;
     *)
       ;;
   esac                            # end of PAGESIZE
+  nlim_pagesize_done="yes"
 fi
 
 
 # check PATH_MAX
 #----------------------------------------
-if [ "$nlim_path_max" = "yes" ]; then
+if [ "$nlim_path_max" = "yes" -a -z "$nlim_path_max_done" ]; then
   case $NM_SYSTEM in
     Linux|Darwin)
       nm_feature="PATH_MAX"
@@ -228,12 +208,13 @@ long path_max = 1024;
     *)
       ;;
   esac                            # end of PATH_MAX
+  nlim_path_max_done="yes"
 fi
 
 
 # check times
 #----------------------------------------
-if [ "$nlim_times" = "yes" ]; then
+if [ "$nlim_times" = "yes" -a -z "nlim_times_done" ]; then
   if `check_clk_tck "dumb"`; then
     nm_feature="times"
     nm_feature_name="nm_have_times"
@@ -243,10 +224,8 @@ if [ "$nlim_times" = "yes" ]; then
     nm_feature_test='struct tms x; (void)x;'
     . ${NORE_ROOT}/auto/feature
   fi
+  nlim_times_done="yes"
 fi                              # end of times
-
-
-fi                              # define_nlim_h
 
 
 # eof

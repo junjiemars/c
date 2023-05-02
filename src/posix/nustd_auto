@@ -7,11 +7,6 @@
 ####
 
 
-if [ -z "$define_nustd_h" ]; then
-
-define_nustd_h="nustd.h"
-
-
 if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
@@ -42,7 +37,7 @@ fi
 
 # check ssize_t
 #----------------------------------------
-if [ "$nustd_ssize_t" = "yes" ]; then
+if [ "$nustd_ssize_t" = "yes" -a -z "$nustd_ssize_t_done" ]; then
   case $CC_NAME in
     clang|gcc)
       nm_feature="ssize_t"
@@ -65,12 +60,13 @@ if [ "$nustd_ssize_t" = "yes" ]; then
     *)
       ;;
   esac
+  nustd_ssize_t_done="yes"
 fi
 
 
 # check sleep
 #----------------------------------------
-if [ "$nustd_sleep" = "yes" ]; then
+if [ "$nustd_sleep" = "yes" -a -z "$nustd_sleep_done" ]; then
   case $CC_NAME in
     clang|gcc)
       nm_feature="sleep"
@@ -93,12 +89,13 @@ if [ "$nustd_sleep" = "yes" ]; then
     *)
       ;;
   esac
+  nustd_sleep_done="yes"
 fi
 
 
 # check getpid
 #----------------------------------------
-if [ "$nustd_getpid" = "yes" ]; then
+if [ "$nustd_getpid" = "yes" -a -z "$nustd_getpid_done" ]; then
   case $CC_NAME in
     clang|gcc)
       nm_feature="getpid"
@@ -121,12 +118,13 @@ if [ "$nustd_getpid" = "yes" ]; then
     *)
       ;;
   esac
+  nustd_getpid_done="yes"
 fi
 
 
 # check gettimeofday
 #----------------------------------------
-if [ "$nustd_gettimeofday" = "yes" ]; then
+if [ "$nustd_gettimeofday" = "yes" -a -z "$nustd_gettimeofday_done" ]; then
   nm_feature="gettimeofday"
   nm_feature_name="nm_have_gettimeofday"
   nm_feature_run=no
@@ -134,6 +132,7 @@ if [ "$nustd_gettimeofday" = "yes" ]; then
   nm_feature_flags=
   nm_feature_test='struct timeval tv; gettimeofday(&tv, 0); (void)tv;'
   . ${NORE_ROOT}/auto/feature
+  nustd_gettimeofday_done="yes"
 fi                              # end of gettimeofday
 
 
