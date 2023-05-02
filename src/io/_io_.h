@@ -19,5 +19,7 @@
 #include <errno.h>
 #include <sys/wait.h>
 #include <sys/uio.h>
+#include <dirent.h>
+#include <sys/mman.h>
 
 #endif /* end of _IO_H_ */
