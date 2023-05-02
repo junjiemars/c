@@ -32,9 +32,6 @@ fi
 
 
 
-
-
-
 # check ssize_t
 #----------------------------------------
 if [ "$nustd_ssize_t" = "yes" -a -z "$nustd_ssize_t_done" ]; then
@@ -134,10 +131,6 @@ if [ "$nustd_gettimeofday" = "yes" -a -z "$nustd_gettimeofday_done" ]; then
   . ${NORE_ROOT}/auto/feature
   nustd_gettimeofday_done="yes"
 fi                              # end of gettimeofday
-
-
-
-fi                              # define_nustd_h
 
 
 # eof
