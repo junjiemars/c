@@ -1,5 +1,6 @@
 #include "_process_.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 /*
  * 1. stdout is line buffered in terminal.
@@ -7,43 +8,34 @@
  *
  */
 
-
-int  g_var  =  1;
-char ss[]   =  "# into stdout\n";
+int g_var = 1;
+char ss[] = "# into stdout\n";
 
 int
-main()
+main (void)
 {
-  int    rc;
-  pid_t  pid;
-  int    a_var  =  1;
+  pid_t pid;
+  int a_var = 2;
 
-  rc = write(STDOUT_FILENO, ss, sizeof(ss)-1);
-  if (rc == -1)
+  printf ("# before fork\n");
+
+  if ((pid = fork ()) == -1)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
-    }
-
-  printf("# before fork\n");
-
-  pid = fork();
-  if (pid == -1)
-    {
-      perror(NULL);
-      exit(1);
+      perror (NULL);
+      exit (1);
     }
   else if (pid == 0)
     {
       g_var++;
       a_var++;
+      printf ("child: pid=%d\n", getpid ());
+      _exit (EXIT_SUCCESS);
     }
   else
     {
-      waitpid(pid, (int *) 0, 0);
+      waitpid (pid, NULL, 0);
+      printf ("parent: pid=%d, g_var=%d, a_var=%d\n", getpid (), g_var, a_var);
     }
 
-  printf("[pid:%08d]: g_var=%d, a_var=%d\n", getpid(), g_var, a_var);
-
-  exit(EXIT_SUCCESS);
+  exit (EXIT_SUCCESS);
 }

@@ -306,8 +306,7 @@ process_io_test: process_io_buf_test            \
 
 process_io_buf_test: $(process_io_buf_binout)
 	$<
-	$< > $(tmp_path)/$(process_prefix)_io_buf.txt
-	cat $(tmp_path)/$(process_prefix)_io_buf.txt
+	$< >$(tmp_path)/process_io_buf.txt && cat $(tmp_path)/process_io_buf.txt
 
 process_io_async_test: $(process_io_async_binout)
 	$<
@@ -318,10 +317,10 @@ process_io_sync_test: $(process_io_sync_binout)
 $(process_io_buf_binout): $(process_root)/io/b.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(process_io_async_binout): $(process_root)/io/c.c
+$(process_io_async_binout): $(process_root)/io/syn1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(process_io_sync_binout): $(process_root)/io/c.c \
+$(process_io_sync_binout): $(process_root)/io/syn1.c \
                            $(posix_root)/npsyns.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_SYN_=1 $^ $(bin_out)$@
 
