@@ -1,4 +1,6 @@
 #include "_process_.h"
+#include "nore.h"
+#include <stdlib.h>
 
 /*
  * 1. a process whose parent terminates is called an orphan and is
@@ -9,22 +11,17 @@
  *
  */
 
-static void on_sig_hup (int);
-static void pr_ids (const char *);
+#define PS_CMD_FMT "ps -opid,ppid,state,command -p%d"
 
-static int N = 0;
+static char ps_cmd[NM_LINE_MAX];
 
 int
-main (int argc, char *argv[])
+main (void)
 {
   pid_t pid;
 
-  if (argc > 1)
-    {
-      N = atoi (argv[1]);
-    }
-
-  pr_ids ("parent");
+  setbuf (stdout, NULL);
+  printf ("parent: pid=%d enter ...\n", getpid ());
 
   if ((pid = fork ()) < 0)
     {
@@ -33,49 +30,23 @@ main (int argc, char *argv[])
     }
   else if (pid == 0)
     {
-      char c;
-      pid_t cid;
 
-      pr_ids ("child");
-      cid = getpid ();
+      printf ("child: pid=%d enter ...\n", getpid ());
 
-      if (signal (SIGHUP, on_sig_hup) == SIG_ERR)
+      snprintf (ps_cmd, NM_LINE_MAX, PS_CMD_FMT, getpid ());
+      putchar ('\n');
+
+      if (system (ps_cmd) == -1)
         {
           perror (NULL);
           exit (EXIT_FAILURE);
         }
-      kill (cid, SIGTSTP);
 
-      pr_ids ("child");
+      printf ("\nchild: pid=%d exit ...\n", getpid ());
+      exit (EXIT_SUCCESS);
+    }
 
-      if (read (STDIN_FILENO, &c, 1) != 1)
-        {
-          int err = errno;
-          fprintf (stderr, "# %d read failed(%d): %s\n", cid, (int)err,
-                   strerror (err));
-        }
-    }
-  else
-    {
-      sleep (N);
-    }
+  printf ("parent: pid=%d exit ...\n", pid);
 
   exit (EXIT_SUCCESS);
-}
-
-void
-on_sig_hup (int signo)
-{
-  if (signo == SIGHUP)
-    {
-      fprintf (stderr, "# %d caught(%s(%d))\n", getpid (), _str_ (SIGHUP),
-               signo);
-    }
-}
-
-void
-pr_ids (const char *who)
-{
-  fprintf (stderr, "%-10s: pid=%d, ppid=%d, pgrp=%d, tpgrp=%d\n", who,
-           getpid (), getppid (), getpgrp (), tcgetpgrp (STDIN_FILENO));
 }

@@ -427,16 +427,27 @@ $(process_nice_diff_binout): $(process_root)/nice/n2.c
 
 
 # orphan
-process_orphan_binout := $(bin_path)/$(process_prefix)_orphan$(bin_ext)
+process_orphan_raw_binout := $(bin_path)/$(process_prefix)_orphan_raw$(bin_ext)
+process_orphan_grp_binout := $(bin_path)/$(process_prefix)_orphan_grp$(bin_ext)
 process_orphan_n ?= 3
 
-process_orphan: $(process_orphan_binout)
-process_orphan_test: process_orphan_test
+process_orphan: $(process_orphan_raw_binout)    \
+                $(process_orphan_grp_binout)
 
-process_orphan_test: $(process_orphan_binout)
-	$< ${process_orphan_n}
+process_orphan_test: process_orphan_raw_test    \
+                     process_orphan_grp_test
 
-$(process_orphan_binout): $(process_root)/orphan/o1.c
+process_orphan_raw_test: $(process_orphan_raw_binout)
+	$<
+
+process_orphan_grp_test: $(process_orphan_grp_binout)
+	echo "make pid=$$PPID"
+	$< $(process_orphan_n)
+
+$(process_orphan_raw_binout): $(process_root)/orphan/o1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(process_orphan_grp_binout): $(process_root)/orphan/g1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
