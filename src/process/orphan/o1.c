@@ -11,7 +11,7 @@
  *
  */
 
-#define PS_CMD_FMT "ps -opid,ppid,state,command -p%d"
+#define PS_CMD_FMT "ps -opid,ppid,state,tty,command -p%d"
 
 static char ps_cmd[NM_LINE_MAX];
 
