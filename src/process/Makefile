@@ -24,6 +24,7 @@ process: process_argv                           \
          process_rlimit                         \
          process_time                           \
          process_tty                            \
+         process_wait                           \
          process_zombie
 
 process_test: process_argv_test                 \
@@ -41,6 +42,7 @@ process_test: process_argv_test                 \
               process_rlimit_test               \
               process_time_test                 \
               process_tty_test                  \
+              process_wait_test                 \
               process_zombie_test
 
 endif
@@ -508,6 +510,30 @@ process_tty_pass_test: $(process_tty_pass_binout)
 	$< 3 <$(process_root)/Makefile
 
 $(process_tty_pass_binout): $(process_root)/tty/p1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+
+# wait
+process_wait_4_binout := $(bin_path)/$(process_prefix)_wait_4$(bin_ext)
+process_wait_sig_binout := $(bin_path)/$(process_prefix)_wait_sig$(bin_ext)
+
+process_wait: $(process_wait_4_binout)          \
+              $(process_wait_sig_binout)
+
+process_wait_test: process_wait_4_test          \
+                   process_wait_sig_test
+
+process_wait_4_test: $(process_wait_4_binout)
+	$<
+
+process_wait_sig_test: $(process_wait_sig_binout)
+	$<
+
+$(process_wait_4_binout): $(process_root)/wait/w4.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(process_wait_sig_binout): $(process_root)/wait/w0.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

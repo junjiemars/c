@@ -62,6 +62,10 @@ main (int argc, char *argv[])
     {
       printf ("child stopped by %d\n", WSTOPSIG (status));
     }
+  else if (WIFCONTINUED (status))
+    {
+      printf ("child continued by %d\n", WSTOPSIG (status));
+    }
 
   exit (EXIT_SUCCESS);
 }
