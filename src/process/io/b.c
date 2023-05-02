@@ -5,11 +5,11 @@
 /*
  * 1. stdout is line buffered in terminal.
  * 2. stdout is fully buffered in file.
+ * 3. vfork(2) had been deprecated on macOS.
  *
  */
 
-int g_var = 1;
-char ss[] = "# into stdout\n";
+static int g_var = 1;
 
 int
 main (void)
@@ -26,9 +26,11 @@ main (void)
     }
   else if (pid == 0)
     {
-      g_var++;
-      a_var++;
+      ++g_var;
+      ++a_var;
+
       printf ("child: pid=%d\n", getpid ());
+      /* exit(3) -> fclose (stdout); */
       _exit (EXIT_SUCCESS);
     }
   else

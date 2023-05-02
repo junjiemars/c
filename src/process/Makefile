@@ -306,7 +306,7 @@ process_io_test: process_io_buf_test            \
 
 process_io_buf_test: $(process_io_buf_binout)
 	$<
-	$< >$(tmp_path)/process_io_buf.txt && cat $(tmp_path)/process_io_buf.txt
+	$< >$(tmp_path)/process_io_buf.out && cat $(tmp_path)/process_io_buf.out
 
 process_io_async_test: $(process_io_async_binout)
 	$<
