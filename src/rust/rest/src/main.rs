@@ -1,19 +1,36 @@
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::f64;
-use warp::Filter;
+use warp::{
+    http::{Response, StatusCode},
+    Filter,
+};
 
 #[tokio::main]
 async fn main() {
     let root = warp::path::end().map(|| "Welcome to RESTFull World!");
 
     let math_root = warp::path("math");
-    let math_sqrt = warp::path!("sqrt" / f64).map(|x: f64| format!("sqrt({}) = {}", x, x.sqrt()));
-    let math_expt = warp::path!("expt" / f64).map(|x: f64| format!("expt({} = {})", x, x.exp2()));
-    let math_log = warp::path!("log" / f64).map(|x: f64| format!("log({}) = {}", x, x.log2()));
-    let math_help = math_root
+    let math_sqrt = warp::get()
+        .and(math_root)
+        .and(warp::path("sqrt"))
+        .and(warp::path::param::<f64>())
+        .map(|x: f64| format!("sqrt({}) = {}", x, x.sqrt()));
+    let math_expt = warp::get()
+        .and(math_root)
+        .and(warp::path("expt"))
+        .and(warp::path::param::<f64>())
+        .map(|x: f64| format!("expt({} = {})", x, x.exp2()));
+    let math_log = warp::get()
+        .and(math_root)
+        .and(warp::path("log"))
+        .and(warp::path::param::<f64>())
+        .map(|x: f64| format!("log({}) = {}", x, x.log2()));
+    let math_help = warp::get()
+        .and(math_root)
         .and(warp::path::end())
-        .map(|| "The Math API: /math/sqrt/:f64, /math/expt/:f64");
-    let math = math_help.or(math_root.and(math_sqrt.or(math_expt).or(math_log)));
+        .map(|| "The Math API:\n1. /math/sqrt/:f64\n2. /math/expt/:f64\n3. /math/log/:f64");
+    let math = math_help.or(math_sqrt.or(math_expt).or(math_log));
 
     let class_root = warp::path("class");
     let class_verify = warp::post()
@@ -26,11 +43,21 @@ async fn main() {
             stu.no = 100 + no;
             warp::reply::json(&stu)
         });
+    let class_query = warp::get()
+        .and(class_root)
+        .and(warp::path("get"))
+        .and(warp::query::<HashMap<String, String>>())
+        .map(|m: HashMap<String, String>| match m.get("no") {
+            Some(k) => Response::builder().body(format!("{}: {}", k, "Apple")),
+            None => Response::builder()
+                .status(StatusCode::BAD_REQUEST)
+                .body(String::from("No found.")),
+        });
     let class_help = class_root
         .and(warp::get())
         .and(warp::path::end())
-        .map(|| "The Class API: /class/verify/:u32");
-    let class = class_help.or(class_verify);
+        .map(|| "The Class API:\n1. /class/verify/:u32\n2. /class/get?no=");
+    let class = class_help.or(class_verify).or(class_query);
 
     // GET /
     // GET /math
