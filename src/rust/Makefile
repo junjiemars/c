@@ -211,6 +211,7 @@ $(rust_owner_binout): $(rust_owner_cargo)             \
 rust_rest_name := $(rust_prefix)_rest$(bin_ext)
 rust_rest_cargo := $(rust_root)/rest/Cargo.toml
 rust_rest_binout := $(bin_path)/$(rust_rest_name)
+# https://github.com/seanmonstar/warp/tree/master/examples
 
 rust_rest: $(rust_rest_binout)
 rust_rest_test: rust_rest
