@@ -52,7 +52,9 @@ endif														# msvc
 
 # env
 signal_prefix := signal
-INC += $(nm_inc_opt)$(signal_root) $(nm_inc_opt)$(root)/posix
+posix_root := $(root)/posix
+
+INC += $(nm_inc_opt)$(signal_root) $(nm_inc_opt)$(posix_root)
 
 
 # abort

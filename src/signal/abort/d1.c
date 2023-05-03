@@ -9,30 +9,28 @@
  *
  */
 
-extern void  abort(void);
+extern void abort (void);
 
 #if !defined(_IGN_SIG_ABRT_) || (_IGN_SIG_ABRT_ < 0)
-static void  on_sig_abrt(int);
-static void  on_abrt_exit(void);
+static void on_sig_abrt (int);
+static void on_abrt_exit (void);
 
 #endif
 
-
-
 int
-main(void)
+main (void)
 {
-  struct sigaction  act;
+  struct sigaction act;
 
-  setvbuf(stdout, NULL, _IOFBF, 0);
-  printf("%d\n", getpid());
+  setvbuf (stdout, NULL, _IOFBF, 0);
+  printf ("%d\n", getpid ());
 
-  atexit(on_abrt_exit);
+  atexit (on_abrt_exit);
 
-  if (sigaction(SIGABRT, NULL, &act) == -1)
+  if (sigaction (SIGABRT, NULL, &act) == -1)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
 
 #if defined(_IGN_SIG_ABRT_) && (_IGN_SIG_ABRT_ > 0)
@@ -42,15 +40,14 @@ main(void)
     }
 
 #elif defined(_IGN_SIG_ABRT_) && (_IGN_SIG_ABRT_ == 0)
-  /* SIG_DFL*/
+    /* SIG_DFL*/
 
 #else
-  signal(SIGABRT, on_sig_abrt);
+  signal (SIGABRT, on_sig_abrt);
 
-#endif  /* _IGN_SIG_ABRT_ */
+#endif /* _IGN_SIG_ABRT_ */
 
-
-  abort();
+  abort ();
 
   /* never go here; */
 }
@@ -58,22 +55,22 @@ main(void)
 #if !defined(_IGN_SIG_ABRT_) || (_IGN_SIG_ABRT_ < 0)
 
 void
-on_sig_abrt(int signo)
+on_sig_abrt (int signo)
 {
-  printf("# %s(%d)\n", _str_(SIGABRT), signo);
+  printf ("# %s(%d)\n", _str_ (SIGABRT), signo);
 
   /* cleanup then exit*/
 
 #if (_EXIT_SIG_HANDLER_)
-  exit(EXIT_SUCCESS);
+  exit (EXIT_SUCCESS);
 
 #endif
 }
 
 void
-on_abrt_exit(void)
+on_abrt_exit (void)
 {
-  printf("# exiting ...\n");
+  printf ("# exiting ...\n");
 }
 
 #endif
