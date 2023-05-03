@@ -7,11 +7,6 @@
 ####
 
 
-if [ -z "$define_ncc_auto" ]; then
-
-define_ncc_auto="ncc_auto"
-
-
 if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
@@ -34,7 +29,7 @@ fi
 
 # check endian features
 #----------------------------------------
-if [ "$ncc_cpu_endian" = "yes" ]; then
+if [ "$ncc_cpu_endian" = "yes" -a -z "$ncc_cpu_endian_done" ]; then
   nm_feature="cpu endian"
   nm_feature_name="nm_cpu_little_endian"
   nm_feature_indent=yes
@@ -47,6 +42,7 @@ if [ "$ncc_cpu_endian" = "yes" ]; then
                  printf("%d", le);
                  return 0;'
   . ${NORE_ROOT}/auto/feature
+  ncc_cpu_endian_done="yes"
 fi
 
 
@@ -229,7 +225,8 @@ esac
 #----------------------------------------
 case "$CC_NAME" in
    gcc|clang)
-     if [ "$ncc_sanitize_address" = "yes" ]; then
+     if [ "$ncc_sanitize_address" = "yes" ] \
+        && [ -z "$ncc_sanitize_address_done" ]; then
        nm_feature="-fsanitize=address"
        nm_feature_name=
        nm_feature_indent=yes
@@ -243,8 +240,10 @@ case "$CC_NAME" in
            op="+=" value=$nm_feature_flags      \
            . ${NORE_ROOT}/auto/make_define
        fi
+       ncc_sanitize_address_done="yes"
      fi
-     if [ "$ncc_sanitize_leak" = "yes" ]; then
+     if [ "$ncc_sanitize_leak" = "yes" ] \
+        && [ -z "$ncc_sanitize_leak_done" ]; then
        nm_feature="-fsanitize=leak"
        nm_feature_name=
        nm_feature_indent=yes
@@ -258,6 +257,7 @@ case "$CC_NAME" in
            op="+=" value=$nm_feature_flags      \
            . ${NORE_ROOT}/auto/make_define
        fi
+       ncc_sanitize_leak_done="yes"
      fi
      ;;
    msvc)
@@ -267,7 +267,7 @@ esac
 
 # check -fPIC
 #----------------------------------------
-if [ "$ncc_pic" = "yes" ]; then
+if [ "$ncc_pic" = "yes" -a -z "$ncc_pic_done" ]; then
   case $CC_NAME in
   	clang|gcc)
   		nm_feature="-fPIC"
@@ -283,8 +283,8 @@ if [ "$ncc_pic" = "yes" ]; then
           op='+=' value='-fPIC'                   \
           . ${NORE_ROOT}/auto/make_define
   		fi
+      ncc_pic_done="yes"
   	;;
-
   	msvc)
       # msvc do not use position independent code
     ;;
@@ -292,6 +292,4 @@ if [ "$ncc_pic" = "yes" ]; then
 fi
 
 
-
-fi                              # define_ncc_auto
 # eof

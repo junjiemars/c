@@ -97,7 +97,6 @@ io_access_test: io_access_open_test             \
 io_access_open_test: $(io_access_open_binout)   \
                      $(io_access_open_file)     \
                      $(io_access_open_link)
-	ls -lh $(shell which passwd)
 	$< $(io_access_open_file)
 	# sudo chown root:root $(io_access_open_file)
 	# sudo chown root $(io_access_open_binout) && sudo chmod u+s $<
