@@ -8,7 +8,7 @@ use warp::{
 
 #[tokio::main]
 async fn main() {
-    let root = warp::path::end().map(|| "Welcome to RESTFull World!");
+    let root = warp::path::end().map(|| "Welcome to RESTFull World!\n");
 
     let math_root = warp::path("math");
     let math_sqrt = warp::get()
@@ -29,7 +29,7 @@ async fn main() {
     let math_help = warp::get()
         .and(math_root)
         .and(warp::path::end())
-        .map(|| "The Math API:\n1. /math/sqrt/:f64\n2. /math/expt/:f64\n3. /math/log/:f64");
+        .map(|| "The Math API:\n1. /math/sqrt/:f64\n2. /math/expt/:f64\n3. /math/log/:f64\n");
     let math = math_help.or(math_sqrt.or(math_expt).or(math_log));
 
     let class_root = warp::path("class");
@@ -56,7 +56,7 @@ async fn main() {
     let class_help = class_root
         .and(warp::get())
         .and(warp::path::end())
-        .map(|| "The Class API:\n1. /class/verify/:u32\n2. /class/get?no=");
+        .map(|| "The Class API:\n1. /class/verify/:u32\n2. /class/get?no=\n");
     let class = class_help.or(class_verify).or(class_query);
 
     // GET /
