@@ -306,8 +306,9 @@ $(rust_grep_binout): $(rust_grep_cargo)             \
 
 
 # gtk
+rust_gtk_name := $(rust_prefix)_gtk$(bin_ext)
 rust_gtk_cargo := $(rust_root)/gtk/Cargo.toml
-rust_gtk_binout := $(bin_path)/$(rust_prefix)_gtk$(bin_ext)
+rust_gtk_binout := $(bin_path)/$(rust_gtk_name)
 
 ifneq ($(has_gtk_ver),)
 rust_gtk: $(rust_gtk_binout)
@@ -320,19 +321,18 @@ rust_gtk_test: rust_gtk
 	echo "#skip ..."
 endif
 
-$(rust_gtk_cargo): $(CARGO)
-	$< new --bin --name $(rust_prefix)_gtk $(rust_root)/gtk
-	$< tree --manifest-path $@ --prune gtk4                                 \
-    $< add gtk4 --manifest-path $@ --rename gtk --features $(has_gtk_ver)
+$(rust_gtk_cargo):
+	$(CARGO) new --bin --name $(rust_prefix)_gtk $(rust_root)/gtk
+	$(CARGO) tree --manifest-path $@ --prune gtk4                                 \
+    $(CARGO) add gtk4 --manifest-path $@ --rename gtk --features $(has_gtk_ver)
 
 
 $(rust_gtk_binout): $(rust_gtk_cargo)             \
                     $(rust_root)/gtk/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    -Z unstable-options                         \
-    --target-dir $(cargo_target_dir)            \
-    --out-dir $(bin_path)
+	$(CARGO) build                                        \
+    --manifest-path $<                                  \
+    --target-dir $(cargo_target_dir)                    \
+    && cp $(cargo_out_dir)/$(rust_gtk_name) $(bin_path)
 
 
 # io
