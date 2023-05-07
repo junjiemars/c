@@ -13,6 +13,7 @@ rust: rust_attr                                 \
       rust_grep                                 \
       rust_hi                                   \
       rust_gtk                                  \
+      rust_iced                                 \
       rust_io                                   \
       rust_iter                                 \
       rust_lang                                 \
@@ -37,6 +38,7 @@ rust_test: rust_attr_test                       \
            rust_grep_test                       \
            rust_hi_test                         \
            rust_gtk_test                        \
+           rust_iced_test                       \
            rust_io_test                         \
            rust_iter_test                       \
            rust_lang_test                       \
@@ -334,6 +336,28 @@ $(rust_gtk_binout): $(rust_gtk_cargo)             \
     --target-dir $(cargo_target_dir)                    \
     && cp $(cargo_out_dir)/$(rust_gtk_name) $(bin_path)
 
+# iced
+rust_iced_name := $(root_prefix)_iced
+rust_iced_cargo := $(rust_root)/iced/Cargo.toml
+rust_iced_binout := $(bin_path)/$(rust_iced_name)$(bin_ext)
+# https://github.com/iced-rs/iced
+
+rust_iced: $(rust_iced_binout)
+rust_iced_test: rust_iced
+	$(rust_iced_binout)
+
+$(rust_iced_cargo):
+	$(CARGO) new --bin --vcs=none --name $(rust_iced_name) $(rust_root)/iced
+	$(CARGO) add --manifest-path=$@ iced
+
+$(rust_iced_binout): $(rust_iced_cargo)         \
+                     $(rust_iced_binout)
+	$(CARGO) build                                                    \
+    --manifest-path $<                                              \
+    --target-dir $(cargo_target_dir)                                \
+    && cp $(cargo_out_dir)/$(rust_iced_name)$(bin_ext) $@
+
+
 
 # io
 rust_io_cargo := $(rust_root)/io/Cargo.toml
