@@ -210,9 +210,9 @@ $(rust_owner_binout): $(rust_owner_cargo)             \
 
 
 # rest
-rust_rest_name := $(rust_prefix)_rest$(bin_ext)
+rust_rest_name := $(rust_prefix)_rest
 rust_rest_cargo := $(rust_root)/rest/Cargo.toml
-rust_rest_binout := $(bin_path)/$(rust_rest_name)
+rust_rest_binout := $(bin_path)/$(rust_rest_name)$(bin_ext)
 # https://github.com/seanmonstar/warp/tree/master/examples
 
 rust_rest: $(rust_rest_binout)
@@ -223,12 +223,11 @@ $(rust_rest_cargo):
 	$(CARGO) new --bin --vcs=none --name $(rust_prefix)_rest $(rust_root)/rest
 	$(CARGO) add --manifest-path=$@ serde serde_json tokio warp uuid
 
-$(rust_rest_binout): $(rust_rest_cargo)         \
-                     $(rust_rest_binout)
+$(rust_rest_binout): $(rust_rest_cargo)
 	$(CARGO) build                                          \
 		--manifest-path $<                                    \
     --target-dir $(cargo_target_dir)                      \
-    && cp $(cargo_out_dir)/$(rust_rest_name) $(bin_path)
+    && cp $(cargo_out_dir)/$(rust_rest_name)$(bin_ext) $@
 
 
 
@@ -308,9 +307,9 @@ $(rust_grep_binout): $(rust_grep_cargo)             \
 
 
 # gtk
-rust_gtk_name := $(rust_prefix)_gtk$(bin_ext)
+rust_gtk_name := $(rust_prefix)_gtk
 rust_gtk_cargo := $(rust_root)/gtk/Cargo.toml
-rust_gtk_binout := $(bin_path)/$(rust_gtk_name)
+rust_gtk_binout := $(bin_path)/$(rust_gtk_name)$(bin_ext)
 
 ifneq ($(has_gtk_ver),)
 rust_gtk: $(rust_gtk_binout)
@@ -331,13 +330,13 @@ $(rust_gtk_cargo):
 
 $(rust_gtk_binout): $(rust_gtk_cargo)             \
                     $(rust_root)/gtk/src/main.rs
-	$(CARGO) build                                        \
-    --manifest-path $<                                  \
-    --target-dir $(cargo_target_dir)                    \
-    && cp $(cargo_out_dir)/$(rust_gtk_name) $(bin_path)
+	$(CARGO) build                                          \
+    --manifest-path $<                                    \
+    --target-dir $(cargo_target_dir)                      \
+    && cp $(cargo_out_dir)/$(rust_gtk_name)$(bin_ext) $@
 
 # iced
-rust_iced_name := $(root_prefix)_iced
+rust_iced_name := $(rust_prefix)_iced
 rust_iced_cargo := $(rust_root)/iced/Cargo.toml
 rust_iced_binout := $(bin_path)/$(rust_iced_name)$(bin_ext)
 # https://github.com/iced-rs/iced
@@ -350,8 +349,7 @@ $(rust_iced_cargo):
 	$(CARGO) new --bin --vcs=none --name $(rust_iced_name) $(rust_root)/iced
 	$(CARGO) add --manifest-path=$@ iced
 
-$(rust_iced_binout): $(rust_iced_cargo)         \
-                     $(rust_iced_binout)
+$(rust_iced_binout): $(rust_iced_cargo)
 	$(CARGO) build                                                    \
     --manifest-path $<                                              \
     --target-dir $(cargo_target_dir)                                \
