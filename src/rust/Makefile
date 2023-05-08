@@ -72,7 +72,7 @@ analyzer_project_json := $(CURDIR)/rust-project.json
 
 rust_build_opt :=
 cargo_out_dir := "$(cargo_target_dir)/debug"
-ifeq ($(NM_BUILD), YES)
+ifeq ($(NM_BUILD),YES)
 rust_build_opt := --release --profile=release
 cargo_out_dir := "$(cargo_target_dir)/release"
 endif
@@ -350,9 +350,9 @@ $(rust_iced_cargo):
 	$(CARGO) add --manifest-path=$@ iced
 
 $(rust_iced_binout): $(rust_iced_cargo)
-	$(CARGO) build                                                    \
-    --manifest-path $<                                              \
-    --target-dir $(cargo_target_dir)                                \
+	$(CARGO) build $(rust_build_opt)                        \
+    --manifest-path $<                                    \
+    --target-dir $(cargo_target_dir)                      \
     && cp $(cargo_out_dir)/$(rust_iced_name)$(bin_ext) $@
 
 

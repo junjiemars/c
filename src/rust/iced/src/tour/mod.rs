@@ -1,13 +1,16 @@
 use iced::alignment;
 use iced::theme;
 use iced::widget::{
-    checkbox, column, container, horizontal_space, image, radio, row,
-    scrollable, slider, text, text_input, toggler, vertical_space,
+    checkbox, column, container, horizontal_space, image, radio, row, scrollable, slider, text,
+    text_input, toggler, vertical_space,
 };
 use iced::widget::{Button, Column, Container, Slider};
+use iced::Application;
 use iced::{Color, Element, Font, Length, Renderer, Sandbox, Settings};
 
-
+pub fn run() -> iced::Result {
+    <Tour as Application>::run(Settings::default())
+}
 
 pub struct Tour {
     steps: Steps,
@@ -16,13 +19,6 @@ pub struct Tour {
 
 impl Sandbox for Tour {
     type Message = Message;
-
-		fn run(settings: Settings<()>) -> Result<(), Error>
-    where
-        Self: 'static + Sized,
-    {
-        <Self as Application>::run(settings)
-    }
 
     fn new() -> Tour {
         Tour {
@@ -72,14 +68,12 @@ impl Sandbox for Tour {
             );
         }
 
-        let content: Element<_> = column![
-            steps.view(self.debug).map(Message::StepMessage),
-            controls,
-        ]
-        .max_width(540)
-        .spacing(20)
-        .padding(20)
-        .into();
+        let content: Element<_> =
+            column![steps.view(self.debug).map(Message::StepMessage), controls,]
+                .max_width(540)
+                .spacing(20)
+                .padding(20)
+                .into();
 
         let scrollable = scrollable(
             container(if self.debug {
@@ -164,8 +158,7 @@ impl Steps {
     }
 
     fn can_continue(&self) -> bool {
-        self.current + 1 < self.steps.len()
-            && self.steps[self.current].can_continue()
+        self.current + 1 < self.steps.len() && self.steps[self.current].can_continue()
     }
 
     fn title(&self) -> &str {
@@ -330,9 +323,7 @@ impl<'a> Step {
             Step::Slider { value } => Self::slider(*value),
             Step::Text { size, color } => Self::text(*size, *color),
             Step::Image { width } => Self::image(*width),
-            Step::RowsAndColumns { layout, spacing } => {
-                Self::rows_and_columns(*layout, *spacing)
-            }
+            Step::RowsAndColumns { layout, spacing } => Self::rows_and_columns(*layout, *spacing),
             Step::Scrollable => Self::scrollable(),
             Step::TextInput {
                 value,
@@ -396,12 +387,8 @@ impl<'a> Step {
             )
     }
 
-    fn rows_and_columns(
-        layout: Layout,
-        spacing: u16,
-    ) -> Column<'a, StepMessage> {
-        let row_radio =
-            radio("Row", Layout::Row, Some(layout), StepMessage::LayoutChanged);
+    fn rows_and_columns(layout: Layout, spacing: u16) -> Column<'a, StepMessage> {
+        let row_radio = radio("Row", Layout::Row, Some(layout), StepMessage::LayoutChanged);
 
         let column_radio = radio(
             "Column",
@@ -411,12 +398,8 @@ impl<'a> Step {
         );
 
         let layout_section: Element<_> = match layout {
-            Layout::Row => {
-                row![row_radio, column_radio].spacing(spacing).into()
-            }
-            Layout::Column => {
-                column![row_radio, column_radio].spacing(spacing).into()
-            }
+            Layout::Row => row![row_radio, column_radio].spacing(spacing).into(),
+            Layout::Column => column![row_radio, column_radio].spacing(spacing).into(),
         };
 
         let spacing_section = column![
@@ -483,12 +466,7 @@ impl<'a> Step {
                     .iter()
                     .cloned()
                     .map(|language| {
-                        radio(
-                            language,
-                            language,
-                            selection,
-                            StepMessage::LanguageSelected,
-                        )
+                        radio(language, language, selection, StepMessage::LanguageSelected)
                     })
                     .map(Element::from)
                     .collect()
@@ -542,10 +520,7 @@ impl<'a> Step {
                 "Iced supports scrollable content. Try it out! Find the \
                  button further below.",
             )
-            .push(
-                text("Tip: You can use the scrollbar to scroll down faster!")
-                    .size(16),
-            )
+            .push(text("Tip: You can use the scrollbar to scroll down faster!").size(16))
             .push(vertical_space(4096))
             .push(
                 text("You are halfway there!")
@@ -563,11 +538,7 @@ impl<'a> Step {
             )
     }
 
-    fn text_input(
-        value: &str,
-        is_secure: bool,
-        is_showing_icon: bool,
-    ) -> Column<'a, StepMessage> {
+    fn text_input(value: &str, is_secure: bool, is_showing_icon: bool) -> Column<'a, StepMessage> {
         const ICON_FONT: Font = Font::External {
             name: "Icons",
             bytes: include_bytes!("../fonts/icons.ttf"),
@@ -637,8 +608,7 @@ impl<'a> Step {
                         .horizontal_alignment(alignment::Horizontal::Center),
                 )
             } else {
-                checkbox("Explain layout", debug, StepMessage::DebugToggled)
-                    .into()
+                checkbox("Explain layout", debug, StepMessage::DebugToggled).into()
             })
             .push("Feel free to go back and take a look.")
     }
@@ -654,24 +624,21 @@ fn ferris<'a>(width: u16) -> Container<'a, StepMessage> {
     container(
         // This should go away once we unify resource loading on native
         // platforms
-        if cfg!(target_arch = "wasm32") {
-            image("../images/ferris-wasm32.png")
-        } else {
-            // image(format!("{}/images/ferris.png", env!("CARGO_MANIFEST_DIR")))
-						image("../images/ferris-wasm32.png")
-        }
-        .width(width),
+        // if cfg!(target_arch = "wasm32") {
+        //     image("../images/ferris-wasm32.png")
+        // } else {
+        // image(format!("{}/images/ferris.png", env!("CARGO_MANIFEST_DIR")))
+        // }
+        image("../images/ferris.png").width(width),
     )
     .width(Length::Fill)
     .center_x()
 }
 
 fn button<'a, Message: Clone>(label: &str) -> Button<'a, Message> {
-    iced::widget::button(
-        text(label).horizontal_alignment(alignment::Horizontal::Center),
-    )
-    .padding(12)
-    .width(100)
+    iced::widget::button(text(label).horizontal_alignment(alignment::Horizontal::Center))
+        .padding(12)
+        .width(100)
 }
 
 fn color_slider<'a>(
