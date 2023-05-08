@@ -6,7 +6,7 @@
 
 rust: rust_attr                                 \
       rust_box                                  \
-      rust_egui                                 \
+      rust_eframe                                 \
       rust_enum                                 \
       rust_error                                \
       rust_game                                 \
@@ -32,7 +32,7 @@ rust: rust_attr                                 \
 
 rust_test: rust_attr_test                       \
            rust_box_test                        \
-           rust_egui_test                       \
+           rust_eframe_test                       \
            rust_enum_test                       \
            rust_error_test                      \
            rust_game_test                       \
@@ -148,25 +148,25 @@ $(rust_hi_binout): $(rust_hi_cargo)             \
     --target-dir $(cargo_target_dir)                  \
 	&& cp $(cargo_out_dir)/$(rust_hi_name) $(bin_path)
 
-# egui
-rust_egui_name := $(rust_prefix)_egui
-rust_egui_cargo := $(rust_root)/egui/Cargo.toml
-rust_egui_binout := $(bin_path)/$(rust_egui_name)$(bin_ext)
+# eframe
+rust_eframe_name := $(rust_prefix)_eframe
+rust_eframe_cargo := $(rust_root)/eframe/Cargo.toml
+rust_eframe_binout := $(bin_path)/$(rust_eframe_name)$(bin_ext)
 
-rust_egui: $(rust_egui_binout)
-rust_egui_test: rust_egui
-	$(rust_egui_binout)
+rust_eframe: $(rust_eframe_binout)
+rust_eframe_test: rust_eframe
+	$(rust_eframe_binout)
 
-$(rust_egui_cargo):
-	$(CARGO) new --bin --vcs=none --name $(rust_egui_name) $(rust_root)/egui
-	$(CARGO) add --manifest-path=$@ egui
+$(rust_eframe_cargo):
+	$(CARGO) new --bin --vcs=none --name $(rust_eframe_name) $(rust_root)/eframe
+	$(CARGO) add --manifest-path=$@ eframe --features __screenshot
 	$(CARGO) add --manifest-path=$@ env_logger
 
-$(rust_egui_binout): $(rust_egui_cargo)
+$(rust_eframe_binout): $(rust_eframe_cargo)
 	$(CARGO) build $(rust_build_opt)                      \
     --manifest-path $<                                  \
     --target-dir $(cargo_target_dir)                    \
-    && cp $(cargo_out_dir)/$(rust_egui_name)$(bin_ext) $@
+    && cp $(cargo_out_dir)/$(rust_eframe_name)$(bin_ext) $@
 
 
 
