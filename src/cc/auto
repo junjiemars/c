@@ -18,4 +18,24 @@ ncc_sanitize_address="yes"
 # check ncstd.h features
 . ${POSIX_ROOT}/ncstd_auto
 
+
+echo "checking for {cc} ..."
+
+has_yacc=no
+has_lex=no
+
+echo ${echo_n} " + checking for yacc ... " ${echo_c}
+if `yacc --version &>/dev/null`; then
+  has_yacc=yes
+  flag=has_yacc op=":=" value="$has_yacc" . ${NORE_ROOT}/auto/make_define
+fi
+echo "$has_yacc"
+
+echo ${echo_n} " + checking for lex ... " ${echo_c}
+if `lex --version &>/dev/null`; then
+  has_lex=yes
+  flag=has_lex op=":=" value="$has_lex" . ${NORE_ROOT}/auto/make_define
+fi
+echo "$has_lex"
+
 # eof
