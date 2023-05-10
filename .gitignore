@@ -156,3 +156,7 @@ compile_commands.json
 # rust-analyzer
 **/rust-project.json
 **/.project.el
+
+# cc
+**/*.tab.c
+**/*.tab.h

@@ -19,16 +19,31 @@ INC += $(nm_inc_opt)$(cc_root) $(nm_inc_opt)$(root)/posix
 
 
 # calc
-cc_calc_raw_binout := $(bin_path)$(cc_prefix)_calc_raw$(bin_ext)
+cc_calc_raw_binout := $(bin_path)/$(cc_prefix)_calc_raw$(bin_ext)
+cc_calc_bison_binout := $(bin_path)/$(cc_prefix)_calc_bison$(bin_ext)
+cc_calc_bison_c_out := $(tmp_path)/$(cc_prefix)_calc_b1.c
+cc_calc_bison_h_out := $(inc_path)/$(cc_prefix)_calc_b1.h
 
-cc_calc: $(cc_calc_raw_binout)
-cc_calc_test: cc_calc_raw_test
+cc_calc: $(cc_calc_raw_binout)                  \
+         $(cc_calc_bison_binout)
+cc_calc_test: cc_calc_raw_test                  \
+              cc_calc_bison_test
 
 cc_calc_raw_test: $(cc_calc_raw_binout)
 	$< "123 + 345 - 100 * 2 / 4"
 
+cc_calc_bison_test: $(cc_calc_bison_binout)
+	$< "123 + 345 - 100 * 2 / 4"
+
 $(cc_calc_raw_binout): $(cc_root)/calc/r1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(cc_calc_bison_binout): $(cc_calc_bison_c_out) \
+                         $(cc_root)/calc/b1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(cc_calc_bison_c_out): $(cc_root)/calc/b1.y
+	bison -H$(cc_calc_bison_h_out) -o$@ $^
 
 
 
@@ -49,7 +64,7 @@ $(cc_cdecl_cppout): $(cc_root)/cdecl/c1.c
 
 
 # recursive descent
-cc_rdp_binout := $(bin_path)$(cc_prefix)_rdp$(bin_ext)
+cc_rdp_binout := $(bin_path)/$(cc_prefix)_rdp$(bin_ext)
 
 cc_recursive_descent: $(cc_rdp_binout)
 cc_recursive_descent_test: cc_recursive_descent
