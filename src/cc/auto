@@ -15,5 +15,7 @@ fi
 ncc_sanitize_address="yes"
 . ${POSIX_ROOT}/ncc_auto
 
+# check ncstd.h features
+. ${POSIX_ROOT}/ncstd_auto
 
 # eof

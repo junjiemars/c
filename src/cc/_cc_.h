@@ -3,6 +3,12 @@
 
 #include <nore.h>
 #include <ncstd.h>
+#include <nasrt.h>
+#include <nio.h>
+
+#include <stdarg.h>
+#include <stdlib.h>
+#include <ctype.h>
 
 
 #if MSVC

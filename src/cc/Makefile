@@ -2,19 +2,30 @@
 # ./configure --has-cc
 #
 
-cc: cc_cdecl                                    \
-    cc_lexer                                    \
+cc: cc_calc                                     \
+	  cc_cdecl                                    \
     cc_recursive_descent
 
 
-cc_test: cc_cdecl_test                          \
-         cc_lexer_test                          \
+cc_test: cc_calc_test                           \
+         cc_cdecl_test                          \
          cc_recursive_descent_test
 
 
 # env
 cc_prefix := cc
 INC += $(nm_inc_opt)$(cc_root) $(nm_inc_opt)$(root)/posix
+
+# calc
+cc_calc_binout := $(bin_path)$(cc_prefix)_calc$(bin_ext)
+
+cc_calc: $(cc_calc_binout)
+cc_calc_test: cc_calc
+	$(cc_calc_binout) "123 + 345 - 100 * 2 / 4"
+
+$(cc_calc_binout): $(cc_root)/calc/calc.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
 
 # cdecl
 cc_cdecl_binout := $(bin_path)$(cc_prefix)_cdecl$(bin_ext)
@@ -29,16 +40,6 @@ $(cc_cdecl_binout): $(cc_cdecl_cppout)
 
 $(cc_cdecl_cppout): $(cc_root)/cdecl/c1.c
 	$(CC) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
-
-# lexer
-cc_lexer_binout := $(bin_path)$(cc_prefix)_lexer$(bin_ext)
-
-cc_lexer: $(cc_lexer_binout)
-cc_lexer_test: cc_lexer
-	$(cc_lexer_binout) "123 + 345 - 100 * 2 / 4"
-
-$(cc_lexer_binout): $(cc_root)/lexer/lexer.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # recursive descent
 cc_rdp_binout := $(bin_path)$(cc_prefix)_rdp$(bin_ext)
