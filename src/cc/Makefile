@@ -12,6 +12,7 @@ cc_test: cc_cdecl_test                          \
          cc_recursive_descent_test
 
 
+# env
 cc_prefix := cc
 INC += $(nm_inc_opt)$(cc_root) $(nm_inc_opt)$(root)/posix
 
