@@ -1,5 +1,5 @@
 #
-# ./configure --has-cc
+# ./configure --has-cc --with-error=no
 #
 
 cc: cc_calc                                     \
@@ -80,12 +80,20 @@ $(cc_rdp_binout): $(cc_root)/recursive_descent/rdp.c
 # tutor
 cc_tutor1_binout := $(bin_path)/$(cc_prefix)_tutor1$(bin_ext)
 cc_tutor1_lexout := $(cc_root)/tutor/t1_lex.yy.c
+cc_tutor2_binout := $(bin_path)/$(cc_prefix)_tutor2$(bin_ext)
+cc_tutor2_lexout := $(cc_root)/tutor/t2_lex.yy.c
 
-cc_tutor: $(cc_tutor1_binout)
-cc_tutor_test: cc_tutor1_test
+cc_tutor: $(cc_tutor1_binout)                   \
+          $(cc_tutor2_binout)
+
+cc_tutor_test: cc_tutor1_test                   \
+               cc_tutor2_test
 
 cc_tutor1_test: $(cc_tutor1_binout)
 	$< <$(cc_root)/tutor/t1.lex
+
+cc_tutor2_test: $(cc_tutor2_binout)
+	$< <$(cc_root)/tutor/t2.lex
 
 $(cc_tutor1_binout): $(cc_tutor1_lexout)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -93,8 +101,11 @@ $(cc_tutor1_binout): $(cc_tutor1_lexout)
 $(cc_tutor1_lexout): $(cc_root)/tutor/t1.lex
 	lex -o $@ $<
 
-# $(cc_tutor_binout): $(cc_root)/tutor/t1.c
-# 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(cc_tutor2_binout): $(cc_tutor2_lexout)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(cc_tutor2_lexout): $(cc_root)/tutor/t2.lex
+	lex -o $@ $<
 
 
 
