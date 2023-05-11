@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <ctype.h>
+#include "_cc_.h"
 #include "cc_calc_b1.h"
 
 extern int yylex (void);

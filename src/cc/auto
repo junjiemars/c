@@ -24,6 +24,7 @@ echo "checking for {cc} ..."
 has_yacc=no
 has_lex=no
 has_bison=no
+has_bison_gnu=no
 
 echo ${echo_n} " + checking for yacc ... " ${echo_c}
 if `yacc --version &>/dev/null`; then
@@ -45,5 +46,13 @@ if `bison --version &>/dev/null`; then
   flag=has_bison op=":=" value="$has_bison" . ${NORE_ROOT}/auto/make_define
 fi
 echo "$has_bison"
+
+echo ${echo_n} " + checking for bison (GNU) ... " ${echo_c}
+if `bison --version|grep 'bison (GNU Bison)' &>/dev/null`; then
+  has_gnu_bison=yes
+  flag=has_gnu_bison op=":=" value="$has_gnu_bison" \
+                     . ${NORE_ROOT}/auto/make_define
+fi
+echo "$has_gnu_bison"
 
 # eof
