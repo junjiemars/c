@@ -157,6 +157,4 @@ compile_commands.json
 **/rust-project.json
 **/.project.el
 
-# cc
-**/*.tab.c
-**/*.tab.h
+# lex, yacc

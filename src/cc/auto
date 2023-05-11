@@ -21,17 +21,11 @@ ncc_sanitize_address="yes"
 
 echo "checking for {cc} ..."
 
-has_yacc=no
 has_lex=no
+has_flex=no
 has_bison=no
 has_bison_gnu=no
-
-echo ${echo_n} " + checking for yacc ... " ${echo_c}
-if `yacc --version &>/dev/null`; then
-  has_yacc=yes
-  flag=has_yacc op=":=" value="$has_yacc" . ${NORE_ROOT}/auto/make_define
-fi
-echo "$has_yacc"
+has_yacc=no
 
 echo ${echo_n} " + checking for lex ... " ${echo_c}
 if `lex --version &>/dev/null`; then
@@ -39,6 +33,13 @@ if `lex --version &>/dev/null`; then
   flag=has_lex op=":=" value="$has_lex" . ${NORE_ROOT}/auto/make_define
 fi
 echo "$has_lex"
+
+echo ${echo_n} " + checking for flex ... " ${echo_c}
+if `flex --version &>/dev/null`; then
+  has_flex=yes
+  flag=has_flex op=":=" value="$has_flex" . ${NORE_ROOT}/auto/make_define
+fi
+echo "$has_flex"
 
 echo ${echo_n} " + checking for bison ... " ${echo_c}
 if `bison --version &>/dev/null`; then
@@ -54,5 +55,14 @@ if `bison --version|grep 'bison (GNU Bison)' &>/dev/null`; then
                      . ${NORE_ROOT}/auto/make_define
 fi
 echo "$has_gnu_bison"
+
+echo ${echo_n} " + checking for yacc ... " ${echo_c}
+if `yacc --version &>/dev/null`; then
+  has_yacc=yes
+  flag=has_yacc op=":=" value="$has_yacc" . ${NORE_ROOT}/auto/make_define
+fi
+echo "$has_yacc"
+
+
 
 # eof

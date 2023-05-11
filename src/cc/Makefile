@@ -4,12 +4,14 @@
 
 cc: cc_calc                                     \
 	  cc_cdecl                                    \
-    cc_recursive_descent
+    cc_recursive_descent                        \
+    cc_tutor
 
 
 cc_test: cc_calc_test                           \
          cc_cdecl_test                          \
-         cc_recursive_descent_test
+         cc_recursive_descent_test              \
+         cc_tutor_test
 
 
 # env
@@ -74,5 +76,28 @@ $(cc_rdp_binout): $(cc_root)/recursive_descent/rdp.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
+
+# tutor
+cc_tutor1_binout := $(bin_path)/$(cc_prefix)_tutor1$(bin_ext)
+cc_tutor1_lexout := $(cc_root)/tutor/t1_lex.yy.c
+
+cc_tutor: $(cc_tutor1_binout)
+cc_tutor_test: cc_tutor1_test
+
+cc_tutor1_test: $(cc_tutor1_binout)
+	$< <$(cc_root)/tutor/t1.lex
+
+$(cc_tutor1_binout): $(cc_tutor1_lexout)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(cc_tutor1_lexout): $(cc_root)/tutor/t1.lex
+	lex -o $@ $<
+
+# $(cc_tutor_binout): $(cc_root)/tutor/t1.c
+# 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+
+.PHONY: cc_tutor_test cc_tutor1_test
 
 # eof
