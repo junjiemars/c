@@ -1,5 +1,7 @@
 %{
+
   int nchar, nword, nline;
+
 %}
 
 %%

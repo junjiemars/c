@@ -448,8 +448,10 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "src/cc/tutor/t2.lex"
 #line 2 "src/cc/tutor/t2.lex"
+
   int nchar, nword, nline;
-#line 453 "src/cc/tutor/t2_lex.yy.c"
+
+#line 455 "src/cc/tutor/t2_lex.yy.c"
 
 #define INITIAL 0
 
@@ -631,10 +633,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 5 "src/cc/tutor/t2.lex"
+#line 7 "src/cc/tutor/t2.lex"
 
 
-#line 638 "src/cc/tutor/t2_lex.yy.c"
+#line 640 "src/cc/tutor/t2_lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -720,25 +722,25 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 7 "src/cc/tutor/t2.lex"
+#line 9 "src/cc/tutor/t2.lex"
 { nline++; nchar++; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 8 "src/cc/tutor/t2.lex"
+#line 10 "src/cc/tutor/t2.lex"
 { nword++, nchar += yyleng; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 9 "src/cc/tutor/t2.lex"
+#line 11 "src/cc/tutor/t2.lex"
 { nchar++; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 12 "src/cc/tutor/t2.lex"
+#line 14 "src/cc/tutor/t2.lex"
 ECHO;
 	YY_BREAK
-#line 742 "src/cc/tutor/t2_lex.yy.c"
+#line 744 "src/cc/tutor/t2_lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1735,7 +1737,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 12 "src/cc/tutor/t2.lex"
+#line 14 "src/cc/tutor/t2.lex"
 
 
 
