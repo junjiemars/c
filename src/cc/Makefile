@@ -82,18 +82,26 @@ cc_tutor1_binout := $(bin_path)/$(cc_prefix)_tutor1$(bin_ext)
 cc_tutor1_lexout := $(cc_root)/tutor/t1_lex.yy.c
 cc_tutor2_binout := $(bin_path)/$(cc_prefix)_tutor2$(bin_ext)
 cc_tutor2_lexout := $(cc_root)/tutor/t2_lex.yy.c
+cc_tutor3_binout := $(bin_path)/$(cc_prefix)_tutor3$(bin_ext)
+cc_tutor3_lexout := $(cc_root)/tutor/t3_lex.yy.c
+cc_tutor3_yaccout := $(cc_root)/tutor/t3_yacc.tab.c
 
 cc_tutor: $(cc_tutor1_binout)                   \
-          $(cc_tutor2_binout)
+          $(cc_tutor2_binout)                   \
+          $(cc_tutor3_binout)
 
 cc_tutor_test: cc_tutor1_test                   \
-               cc_tutor2_test
+               cc_tutor2_test                   \
+               cc_tutor3_test
 
 cc_tutor1_test: $(cc_tutor1_binout)
 	$< <$(cc_root)/tutor/t1.lex
 
 cc_tutor2_test: $(cc_tutor2_binout)
 	$< <$(cc_root)/tutor/t2.lex
+
+cc_tutor3_test: $(cc_tutor3_binout)
+	echo "3 + 5 - 1" | $<
 
 $(cc_tutor1_binout): $(cc_tutor1_lexout)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -107,8 +115,18 @@ $(cc_tutor2_binout): $(cc_tutor2_lexout)
 $(cc_tutor2_lexout): $(cc_root)/tutor/t2.lex
 	lex -o $@ $<
 
+$(cc_tutor3_binout): $(cc_tutor3_yaccout)       \
+                     $(cc_tutor3_lexout)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(cc_tutor3_lexout): $(cc_root)/tutor/t3.lex
+	lex -o $@ $<
+
+$(cc_tutor3_yaccout): $(cc_root)/tutor/t3.yacc
+	yacc -H$(cc_root)/tutor/t3_yacc.tab.h -o$@ $<
+
 
 
-.PHONY: cc_tutor_test cc_tutor1_test
+.PHONY: cc_tutor_test cc_tutor1_test cc_tutor2_test cc_tutor3_test
 
 # eof
