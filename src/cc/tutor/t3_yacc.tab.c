@@ -69,7 +69,7 @@
 /* First part of user prologue.  */
 #line 1 "src/cc/tutor/t3.yacc"
 
-
+#include "_cc_.h"
 #include <stdio.h>
 
 /* #ifndef YYSTYPE */
@@ -449,7 +449,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   10
+#define YYLAST   7
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  7
@@ -534,7 +534,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-5)
+#define YYPACT_NINF (-3)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -548,7 +548,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -5,     0,    -5,    -5,     1,    -5,     7,     7,    -4,    -4
+      -3,     0,    -3,    -3,     1,    -3,    -2,    -1,    -3,    -3
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -562,7 +562,7 @@ static const yytype_int8 yydefact[] =
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -5,    -5,     2
+      -3,    -3,    -3
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
@@ -576,21 +576,19 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       2,     6,     7,     3,     0,     5,     6,     7,     8,     9,
-       3
+       2,     8,     9,     3,     0,     5,     6,     7
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,     5,     6,     3,    -1,     4,     5,     6,     6,     7,
-       3
+       0,     3,     3,     3,    -1,     4,     5,     6
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     8,     0,     3,     9,     4,     5,     6,     9,     9
+       0,     8,     0,     3,     9,     4,     5,     6,     3,     3
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
@@ -1068,29 +1066,29 @@ yyreduce:
   case 2: /* program: program expr '\n'  */
 #line 23 "src/cc/tutor/t3.yacc"
                                   { printf ("%d\n", yyvsp[-1]); }
-#line 1072 "src/cc/tutor/t3_yacc.tab.c"
+#line 1070 "src/cc/tutor/t3_yacc.tab.c"
     break;
 
   case 4: /* expr: INTEGER  */
 #line 28 "src/cc/tutor/t3.yacc"
                                   { yyval = yyvsp[0]; }
-#line 1078 "src/cc/tutor/t3_yacc.tab.c"
+#line 1076 "src/cc/tutor/t3_yacc.tab.c"
     break;
 
-  case 5: /* expr: expr '+' expr  */
+  case 5: /* expr: expr '+' INTEGER  */
 #line 29 "src/cc/tutor/t3.yacc"
                                   { yyval = yyvsp[-2] + yyvsp[0]; }
-#line 1084 "src/cc/tutor/t3_yacc.tab.c"
+#line 1082 "src/cc/tutor/t3_yacc.tab.c"
     break;
 
-  case 6: /* expr: expr '-' expr  */
+  case 6: /* expr: expr '-' INTEGER  */
 #line 30 "src/cc/tutor/t3.yacc"
                                   { yyval = yyvsp[-2] - yyvsp[0]; }
-#line 1090 "src/cc/tutor/t3_yacc.tab.c"
+#line 1088 "src/cc/tutor/t3_yacc.tab.c"
     break;
 
 
-#line 1094 "src/cc/tutor/t3_yacc.tab.c"
+#line 1092 "src/cc/tutor/t3_yacc.tab.c"
 
       default: break;
     }

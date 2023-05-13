@@ -1,5 +1,5 @@
 %{
-
+#include "_cc_.h"
 #include <stdlib.h>
 #include "t3_yacc.tab.h"
 
@@ -17,9 +17,9 @@ void yyerror (char *);
 
 [-+\n]           return *yytext;
 
-[ \t]            ;
+[ \t]            ;              /* ignore whitespace */
 
-.                yyerror ("invalid character");
+.                yyerror ("!panic: invalid character");
 
 %%
 

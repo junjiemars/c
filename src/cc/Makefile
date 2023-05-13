@@ -96,12 +96,19 @@ cc_tutor_test: cc_tutor1_test                   \
 
 cc_tutor1_test: $(cc_tutor1_binout)
 	$< <$(cc_root)/tutor/t1.lex
+cc_tutor1_clean:
+	-rm $(cc_tutor1_lexout)
 
 cc_tutor2_test: $(cc_tutor2_binout)
 	$< <$(cc_root)/tutor/t2.lex
+cc_tutor2_clean:
+	-rm $(cc_tutor2_lexout)
 
 cc_tutor3_test: $(cc_tutor3_binout)
-	echo "3 + 5 - 1" | $<
+	echo "3 + 4 + 5 - 1 + 5 - 2 - 3 - 4 + 5" | $<
+cc_tutor3_clean:
+	-rm $(cc_tutor3_yaccout) $(cc_tutor3_lexout)
+
 
 $(cc_tutor1_binout): $(cc_tutor1_lexout)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -127,6 +134,7 @@ $(cc_tutor3_yaccout): $(cc_root)/tutor/t3.yacc
 
 
 
-.PHONY: cc_tutor_test cc_tutor1_test cc_tutor2_test cc_tutor3_test
+.PHONY: cc_tutor_test cc_tutor1_test cc_tutor2_test cc_tutor3_test \
+        cc_tutor1_clean cc_tutor2_clean cc_tutor3_clean
 
 # eof

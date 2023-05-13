@@ -1,5 +1,5 @@
 %{
-
+#include "_cc_.h"
 #include <stdio.h>
 
 /* #ifndef YYSTYPE */
@@ -26,8 +26,8 @@ program:
 
 expr:
          INTEGER                  { $$ = $1; }
-         | expr '+' expr          { $$ = $1 + $3; }
-         | expr '-' expr          { $$ = $1 - $3; }
+         | expr '+' INTEGER       { $$ = $1 + $3; }
+         | expr '-' INTEGER       { $$ = $1 - $3; }
          ;
 
 

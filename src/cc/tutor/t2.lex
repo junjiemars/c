@@ -1,4 +1,5 @@
 %{
+#include "_cc_.h"
 
   int nchar, nword, nline;
 

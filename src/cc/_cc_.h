@@ -15,4 +15,13 @@
 #  pragma warning(disable:4996)
 #endif
 
+#if GCC
+#  pragma GCC diagnostic ignored "-Wunused-function"
+#endif
+
+#if CLANG
+#  pragma clang diagnostic ignored "-Wunused-function"
+#  pragma clang diagnostic ignored "-Wsign-compare"
+#endif
+
 #endif /* end of _CC_H_ */
