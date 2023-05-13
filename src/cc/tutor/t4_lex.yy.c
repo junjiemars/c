@@ -760,14 +760,18 @@ YY_RULE_SETUP
 case 5:
 YY_RULE_SETUP
 #line 28 "src/cc/tutor/t4.lex"
-{ yyerror ("!panic: invalid character"); }
+{
+                   char ss[64];
+                   sprintf (ss, "!panic: invalid character '%c'", *yytext);
+                   yyerror (ss);
+                 }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 30 "src/cc/tutor/t4.lex"
+#line 34 "src/cc/tutor/t4.lex"
 ECHO;
 	YY_BREAK
-#line 770 "src/cc/tutor/t4_lex.yy.c"
+#line 774 "src/cc/tutor/t4_lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1772,7 +1776,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 30 "src/cc/tutor/t4.lex"
+#line 34 "src/cc/tutor/t4.lex"
 
 
 

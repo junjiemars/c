@@ -552,7 +552,7 @@ static const yytype_int8 yypact[] =
 {
       -7,     0,    -7,    -7,    -5,    14,    -2,    23,    14,    -7,
       15,    -7,    14,    14,    14,    14,    23,    -7,    -6,    -6,
-      -6,    -6
+      -7,    -7
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.

@@ -25,7 +25,11 @@
 
 [ \t]            ;
 
-.                { yyerror ("!panic: invalid character"); }
+.                {
+                   char ss[64];
+                   sprintf (ss, "!panic: invalid character '%c'", *yytext);
+                   yyerror (ss);
+                 }
 
 %%
 
