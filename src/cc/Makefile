@@ -18,6 +18,13 @@ cc_test: cc_calc_test                           \
 cc_prefix := cc
 INC += $(nm_inc_opt)$(cc_root) $(nm_inc_opt)$(root)/posix
 
+cc_debug_lex :=
+cc_debug_yacc :=
+ifeq ($(NM_DEBUG),)
+cc_debug_lex := -d
+cc_debug_yacc := -t
+endif
+
 
 
 # calc
@@ -142,9 +149,9 @@ $(cc_tutor3_yaccout): $(cc_root)/tutor/t3.yacc
 $(cc_tutor4_binout): $(cc_tutor4_yaccout) $(cc_tutor4_lexout)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 $(cc_tutor4_lexout): $(cc_root)/tutor/t4.lex
-	lex -o $@ $<
+	lex $(cc_debug_lex) -o $@ $<
 $(cc_tutor4_yaccout): $(cc_root)/tutor/t4.yacc
-	yacc -H$(cc_root)/tutor/t4_yacc.tab.h -o$@ $<
+	yacc $(cc_debug_yacc) -H$(cc_root)/tutor/t4_yacc.tab.h -o$@ $<
 
 
 
