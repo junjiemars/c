@@ -2,14 +2,6 @@
 #include "_cc_.h"
 #include <stdio.h>
 
-/* #ifndef YYSTYPE */
-/* #define YYSTYPE int */
-/* #endif */
-
-/* #define INTEGER 258 */
-/* extern YYSTYPE yylval; */
-
-
   int yylex (void);
   void yyerror (char *);
 

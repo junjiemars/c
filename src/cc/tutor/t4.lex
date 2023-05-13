@@ -1,27 +1,34 @@
 %{
-#include "_cc_.h"
-#include <stdlib.h>
-#include "t3_yacc.tab.h"
 
-void yyerror (char *);
+#include "_cc_.h"
+#include "t4_yacc.tab.h"
+
+  void yyerror (char *);
+
 
 %}
 
-
 %%
+
+[a-z]            {
+                   yylval = *yytext - 'a';
+                   return VARIABLE;
+                 }
+
 
 [0-9]+           {
                    yylval = atoi (yytext);
                    return INTEGER;
                  }
 
-[-+\n]           { return *yytext; }
+[-+()=*/\n]      {  return *yytext; }
 
-[ \t]            ; /* skip whitespace */
+[ \t]            ;
 
 .                { yyerror ("!panic: invalid character"); }
 
 %%
+
 
 int
 yywrap (void)

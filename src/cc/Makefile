@@ -85,14 +85,19 @@ cc_tutor2_lexout := $(cc_root)/tutor/t2_lex.yy.c
 cc_tutor3_binout := $(bin_path)/$(cc_prefix)_tutor3$(bin_ext)
 cc_tutor3_lexout := $(cc_root)/tutor/t3_lex.yy.c
 cc_tutor3_yaccout := $(cc_root)/tutor/t3_yacc.tab.c
+cc_tutor4_binout := $(bin_path)/$(cc_prefix)_tutor4$(bin_ext)
+cc_tutor4_lexout := $(cc_root)/tutor/t4_lex.yy.c
+cc_tutor4_yaccout := $(cc_root)/tutor/t4_yacc.tab.c
 
 cc_tutor: $(cc_tutor1_binout)                   \
           $(cc_tutor2_binout)                   \
-          $(cc_tutor3_binout)
+          $(cc_tutor3_binout)                   \
+          $(cc_tutor4_binout)
 
 cc_tutor_test: cc_tutor1_test                   \
                cc_tutor2_test                   \
-               cc_tutor3_test
+               cc_tutor3_test                   \
+               cc_tutor4_test
 
 cc_tutor1_test: $(cc_tutor1_binout)
 	$< <$(cc_root)/tutor/t1.lex
@@ -109,6 +114,11 @@ cc_tutor3_test: $(cc_tutor3_binout)
 cc_tutor3_clean:
 	-rm $(cc_tutor3_yaccout) $(cc_tutor3_lexout)
 
+cc_tutor4_test: $(cc_tutor4_binout)
+	echo "x = 3*(4+5)\ny = 5\n x + 2*y" | $<
+cc_tutor4_clean:
+	-rm $(cc_tutor4_yaccout) $(cc_tutor4_lexout)
+
 
 $(cc_tutor1_binout): $(cc_tutor1_lexout)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -122,15 +132,19 @@ $(cc_tutor2_binout): $(cc_tutor2_lexout)
 $(cc_tutor2_lexout): $(cc_root)/tutor/t2.lex
 	lex -o $@ $<
 
-$(cc_tutor3_binout): $(cc_tutor3_yaccout)       \
-                     $(cc_tutor3_lexout)
+$(cc_tutor3_binout): $(cc_tutor3_yaccout) $(cc_tutor3_lexout)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
 $(cc_tutor3_lexout): $(cc_root)/tutor/t3.lex
 	lex -o $@ $<
-
 $(cc_tutor3_yaccout): $(cc_root)/tutor/t3.yacc
 	yacc -H$(cc_root)/tutor/t3_yacc.tab.h -o$@ $<
+
+$(cc_tutor4_binout): $(cc_tutor4_yaccout) $(cc_tutor4_lexout)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(cc_tutor4_lexout): $(cc_root)/tutor/t4.lex
+	lex -o $@ $<
+$(cc_tutor4_yaccout): $(cc_root)/tutor/t4.yacc
+	yacc -H$(cc_root)/tutor/t4_yacc.tab.h -o$@ $<
 
 
 

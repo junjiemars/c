@@ -23,9 +23,8 @@ echo "checking for {cc} ..."
 
 has_lex=no
 has_flex=no
-has_bison=no
-has_bison_gnu=no
 has_yacc=no
+has_bison=no
 
 echo ${echo_n} " + checking for lex ... " ${echo_c}
 if `lex --version &>/dev/null`; then
@@ -41,27 +40,19 @@ if `flex --version &>/dev/null`; then
 fi
 echo "$has_flex"
 
-echo ${echo_n} " + checking for bison ... " ${echo_c}
-if `bison --version &>/dev/null`; then
-  has_bison=yes
-  flag=has_bison op=":=" value="$has_bison" . ${NORE_ROOT}/auto/make_define
-fi
-echo "$has_bison"
-
-echo ${echo_n} " + checking for bison (GNU) ... " ${echo_c}
-if `bison --version|grep 'bison (GNU Bison)' &>/dev/null`; then
-  has_gnu_bison=yes
-  flag=has_gnu_bison op=":=" value="$has_gnu_bison" \
-                     . ${NORE_ROOT}/auto/make_define
-fi
-echo "$has_gnu_bison"
-
 echo ${echo_n} " + checking for yacc ... " ${echo_c}
 if `yacc --version &>/dev/null`; then
   has_yacc=yes
   flag=has_yacc op=":=" value="$has_yacc" . ${NORE_ROOT}/auto/make_define
 fi
 echo "$has_yacc"
+
+echo ${echo_n} " + checking for bison ... " ${echo_c}
+if `bison --version &>/dev/null`; then
+  has_bison=yes
+  flag=has_bison op=":=" value="$has_bison" . ${NORE_ROOT}/auto/make_define
+fi
+echo "$has_bison"
 
 
 
