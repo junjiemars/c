@@ -29,30 +29,15 @@ endif
 
 # calc
 cc_calc_raw_binout := $(bin_path)/$(cc_prefix)_calc_raw$(bin_ext)
-cc_calc_bison_binout := $(bin_path)/$(cc_prefix)_calc_bison$(bin_ext)
-cc_calc_bison_c_out := $(tmp_path)/$(cc_prefix)_calc_b1.c
-cc_calc_bison_h_out := $(inc_path)/$(cc_prefix)_calc_b1.h
 
-cc_calc: $(cc_calc_raw_binout)                  \
-         $(cc_calc_bison_binout)
-cc_calc_test: cc_calc_raw_test                  \
-              cc_calc_bison_test
+cc_calc: $(cc_calc_raw_binout)
+cc_calc_test: cc_calc_raw_test
 
 cc_calc_raw_test: $(cc_calc_raw_binout)
 	$< "123 + 345 - 100 * 2 / 4"
 
-cc_calc_bison_test: $(cc_calc_bison_binout)
-	$< "123 + 345 - 100 * 2 / 4"
-
 $(cc_calc_raw_binout): $(cc_root)/calc/r1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-$(cc_calc_bison_binout): $(cc_calc_bison_c_out) \
-                         $(cc_root)/calc/b1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-$(cc_calc_bison_c_out): $(cc_root)/calc/b1.y
-	bison -H$(cc_calc_bison_h_out) -o$@ $^
 
 
 
@@ -155,7 +140,8 @@ $(cc_tutor4_yaccout): $(cc_root)/tutor/t4.yacc
 
 
 
-.PHONY: cc_tutor_test cc_tutor1_test cc_tutor2_test cc_tutor3_test \
-        cc_tutor1_clean cc_tutor2_clean cc_tutor3_clean
+.PHONY: cc cc_test cc_tutor_test \
+        cc_tutor1_test cc_tutor2_test cc_tutor3_test cc_tutor4_test \
+        cc_tutor1_clean cc_tutor2_clean cc_tutor3_clean cc_tutor4_clean
 
 # eof
