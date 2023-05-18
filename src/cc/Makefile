@@ -29,15 +29,32 @@ endif
 
 # calc
 cc_calc_raw_binout := $(bin_path)/$(cc_prefix)_calc_raw$(bin_ext)
+cc_calc_yl_binout := $(bin_path)/$(cc_prefix)_calc_yl$(bin_ext)
+cc_calc_yl_lexout := $(cc_root)/calc/b1_lex.yy.c
+cc_calc_yl_yaccout := $(cc_root)/calc/b1_yacc.tab.c
 
-cc_calc: $(cc_calc_raw_binout)
-cc_calc_test: cc_calc_raw_test
+cc_calc: $(cc_calc_raw_binout)                  \
+         $(cc_calc_yl_binout)
+cc_calc_test: cc_calc_raw_test                  \
+              cc_calc_yl_test
 
 cc_calc_raw_test: $(cc_calc_raw_binout)
 	$< "123 + 345 - 100 * 2 / 4"
 
+cc_calc_yl_test: $(cc_calc_yl_binout)
+	$< "x = 0;"
+
 $(cc_calc_raw_binout): $(cc_root)/calc/r1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+cc_calc_yl_clean:
+	-rm $(cc_calc_yl_yaccout) $(cc_calc_yl_lexout)
+$(cc_calc_yl_binout): $(cc_calc_yl_yaccout) $(cc_calc_yl_lexout)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(cc_calc_yl_lexout): $(cc_root)/calc/b1.lex
+	lex -o $@ $<
+$(cc_calc_yl_yaccout): $(cc_root)/calc/b1.yacc
+	yacc -H$(cc_root)/calc/b1_yacc.tab.h -o$@ $<
 
 
 
