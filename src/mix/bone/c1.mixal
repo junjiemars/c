@@ -1,0 +1,11 @@
+*
+* caluate
+*
+
+TERM    EQU     19
+        ORIG    3000
+START   ADD     20
+        STA     2000
+        OUT     2000(TERM)
+        HLT     0
+        END     START

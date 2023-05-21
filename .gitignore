@@ -158,3 +158,6 @@ compile_commands.json
 **/.project.el
 
 # lex, yacc
+
+# mix
+**/*.mix
