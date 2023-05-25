@@ -41,11 +41,11 @@ START    IOC     0(TERM)
          ORIG    PRIME+1
          CON     2
          ORIG    BUF0-5
-TITLE    ALF     "FIRST"
-         ALF     " FIVE"
-         ALF     " HUND"
-         ALF     "RED P"
-         ALF     "RIMES"
+TITLE    ALF     FIRST
+         ALF      FIVE
+         ALF      HUND
+         ALF     RED P
+         ALF     RIMES
          ORIG    BUF0+24
          CON     BUF1+10
          ORIG    BUF1+24
