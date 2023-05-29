@@ -1,0 +1,9 @@
+L         EQU     0000
+          ORIG    3000
+START     STZ     L,1
+          INC1    1
+          CMP1    C
+          JL      3000
+          HLT
+C         CON     100
+          END     START

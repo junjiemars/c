@@ -31,7 +31,6 @@ mix_bone_test: mix_bone_hi_test
 mix_bone_hi_test: $(mix_bone_hi_binout)
 	$(mixvm) -t -r -d $<
 
-
 $(mix_bone_hi_binout): $(mix_root)/bone/b1.mixal
 	$(mixasm) -o$@ $^
 
