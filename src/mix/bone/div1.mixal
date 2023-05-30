@@ -1,0 +1,11 @@
+Q           EQU       1000
+R           EQU       1200
+            ORIG      3000
+START       LDX       D
+            DIV       DD
+            STA       Q
+            STX       R
+            HLT
+D           CON       16
+DD          CON       -3
+            END       START

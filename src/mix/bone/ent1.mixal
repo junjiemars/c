@@ -1,0 +1,7 @@
+R         EQU       1000
+          ORIG      3000
+START     ENTA      M
+          STA       R
+          HLT
+M         CON       +1(0:0),5(5:5)
+          END       START
