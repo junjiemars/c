@@ -1,0 +1,11 @@
+L       EQU       1000
+        ORIG      3000
+START   LD1       M1
+        LD2       M2
+        INC2      -1
+        ST1       L
+        ST1       L+1
+        HLT
+M1      CON       -66
+M2      CON       -4095
+        END       START
