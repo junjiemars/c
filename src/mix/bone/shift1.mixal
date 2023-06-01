@@ -1,0 +1,7 @@
+L       EQU       1000
+        ORIG      3000
+START   LDA       M
+        SLA       3
+        HLT
+M       CON       1
+        END       START

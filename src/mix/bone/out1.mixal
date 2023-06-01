@@ -1,0 +1,9 @@
+L       EQU       1000
+TERM    EQU       19
+        ORIG      3000
+START   IOC       TERM
+        OUT       M(TERM)
+        HLT
+M       ALF       "ABCDE"
+        ALF       "12300"
+        END       START

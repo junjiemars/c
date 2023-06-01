@@ -1,0 +1,11 @@
+L       EQU       1000
+        ORIG      3000
+START   LDA       A
+        CMPA      Z
+        CMPA      A
+        CMPA      T
+        HLT
+Z       CON       0
+A       CON       1
+T       CON       2
+        END       START

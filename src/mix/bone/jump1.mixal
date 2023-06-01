@@ -1,0 +1,8 @@
+L       EQU       1000
+        ORIG      3000
+START   JMP       M
+        STJ       L
+        HLT
+M       CON       +0(0:0),46(1:1),57(2:2),3(3:3),4(0:0),39(5:5)
+        HLT
+        END       START
