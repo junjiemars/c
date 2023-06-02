@@ -1,0 +1,10 @@
+L         EQU     0000
+          ORIG    3000
+START     ENT1    0                   time=1
+          STZ     L,1                 time=2
+          INC1    1                   time=1
+          CMP1    C                   time=2
+          JL      3001                time=1
+          HLT
+C         CON     100
+          END     START

@@ -1,0 +1,10 @@
+L         EQU     0000
+          ORIG    3000
+START     ENT1    1
+          ENT2    9
+          ST1     L,2
+          DEC2    1
+          CMP2    0
+          JGE     3002
+          HLT
+          END     START
