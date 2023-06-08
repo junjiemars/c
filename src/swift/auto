@@ -1,0 +1,35 @@
+#### -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## posix/swift_auto
+####
+
+has_swiftc=""
+has_swift=""
+
+echo ${echo_n} " + checking for swiftc ... " ${echo_c}
+has_swiftc="`command -v swiftc`"
+if [ -x "$has_swiftc" ]; then
+  flag=has_swiftc value="${has_swiftc}" . ${NORE_ROOT}/auto/make_define
+  echo "yes"
+else
+  has_swiftc=""
+  echo "no"
+fi
+
+
+echo ${echo_n} " + checking for swift ... " ${echo_c}
+has_swift="`command -v swift`"
+if [ -x "$has_swift" ]; then
+  flag=has_swift value="${has_swift}" . ${NORE_ROOT}/auto/make_define
+  echo "yes"
+else
+  has_swift=""
+  echo "no"
+fi
+
+
+
+# eof
