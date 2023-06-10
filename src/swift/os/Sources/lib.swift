@@ -1,0 +1,3 @@
+func list() {
+    print("XXX")
+}

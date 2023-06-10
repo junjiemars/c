@@ -5,9 +5,11 @@
 
 
 swift: swift_hi                                 \
+       swift_lang                               \
        swift_os
 
 swift_test: swift_hi_test                       \
+            swift_lang_test                     \
             swift_os_test
 
 # env
@@ -38,6 +40,26 @@ $(swift_hi_package):
 $(swift_hi_binout): $(swift_hi_package)                 \
                     $(swift_root)/hi/Sources/main.swift
 	$(SWIFT) build --package-path=$(swift_root)/hi $(swift_build_opt)
+
+
+
+# lang
+swift_lang_package := $(swift_root)/lang/Package.swift
+swift_lang_binout := $(swift_root)/lang/debug/lang
+
+swift_lang: $(swift_lang_binout)
+swift_lang_test: swift_lang
+	$(SWIFT) run --package-path=$(swift_root)/lang
+swift_lang_clean:
+	$(SWIFT) run --package-path=$(swift_root)/lang
+
+$(swift_lang_package):
+	$(SWIFT) package --package-path=$(swift_root)/lang  \
+		init --type=executable --name=lang
+
+$(swift_lang_binout): $(swift_lang_package)                 \
+                      $(swift_root)/lang/Sources/main.swift
+	$(SWIFT) build --package-path=$(swift_root)/lang $(swift_build_opt)
 
 
 
