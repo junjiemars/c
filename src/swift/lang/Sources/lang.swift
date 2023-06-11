@@ -179,7 +179,19 @@ func concurrency() async {
 }
 
 func protocolsAndExtensions() {
+    let c1 = SimpleClassExample()
+    c1.adjust()
+    assert(c1.desc.count > 0)
+
+    var s1 = SimpleStructExample()
+    s1.adjust()
+    assert(s1.desc.count > 0)
+
+    var i1 = 0
+    i1.adjust()
+    assert(i1 == 1)
 }
+
 
 func errorHandling() {
     do {
@@ -201,6 +213,7 @@ func errorHandling() {
     }
 }
 
+
 func generics() {
     let a1 = makeArray(repeating: "A", numberOfTimes: 3)
     assert(a1.count == 3 && a1[0] == "A")
@@ -212,6 +225,9 @@ func generics() {
     assert(anyOverlapped(["A","B","C"], ["B"]))
 }
 
+
+
+// functions
 func functionReturnTuple(a: Int) -> (name: String, value: Int) {
     return (name: "Integer", value: a)
 }
@@ -238,6 +254,9 @@ func greatThan20(n: Int) -> Bool {
     return n > 20
 }
 
+
+
+// objects & classes
 
 class Shape  {
     var name: String
@@ -302,6 +321,10 @@ class SquareAndTriangle {
     }
 }
 
+
+
+// enumerations & structures
+
 enum Rank: Int {
     case ace = 1
     case two, three, four, five, six, seven, eight, nine, teen
@@ -325,7 +348,10 @@ struct Card {
     var suit: Suit
 }
 
+
+
 // concurrency
+
 func slowFetch(from server: String) async -> Int {
     if server == "primary" {
         return 200
@@ -373,4 +399,37 @@ func anyOverlapped<T: Sequence, U: Sequence>(_ lhs: T, _ rhs: U) -> Bool
         }
     }
     return false
+}
+
+// protocols
+protocol ExampleProtocol {
+    var desc: String { get }
+    mutating func adjust()
+    // mutating func newFeature(a: Int) -> Int
+}
+
+class SimpleClassExample: ExampleProtocol {
+    var desc = "A simple class example."
+    func adjust() {
+        desc += " Now adjusted."
+    }
+}
+
+struct SimpleStructExample: ExampleProtocol {
+    var desc = "A simple struct example."
+    mutating func adjust() {
+        desc += " Now it doesn't look like ancient."
+    }
+}
+
+
+
+// extensions
+extension Int: ExampleProtocol {
+    var desc: String {
+        return "The number \(self)."
+    }
+    mutating func adjust() {
+        self += 1
+    }
 }

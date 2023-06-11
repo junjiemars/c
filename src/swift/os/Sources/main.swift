@@ -1,6 +1,6 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
-import Darwin
-
-list()
+list("/Applications")
+foundations()
+unsafeCases()
