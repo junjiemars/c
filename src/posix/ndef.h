@@ -36,68 +36,53 @@
 
 
 
-#if !(NM_HAVE_RESTRICT)
-#  if (NM_HAVE___RESTRICT)
-#    if defined(restrict)
-#      undef  restrict
-#    endif
+#if !defined(restrict)
+#  if defined(NM_HAVE_RESTRICT) && (NM_HAVE_RESTRICT)
 #    define restrict  __restrict
 #  else
 #    define restrict
 #  endif
+#else
+#  define restrict
 #endif  /* restrict */
 
 
-#if !(NM_HAVE_STATIC_ASSERT || NM_HAVE__STATIC_ASSERT)
-#  define static_assert(e, m)  enum {static_assert = 1/!!((e) && (m))}
-#elif (NM_HAVE__STATIC_ASSERT)
-#  if !defined(static_assert)
+
+#if !defined(static_assert)
+#  if defined(NM_HAVE_STATIC_ASSERT) && (NM_HAVE_STATIC_ASSERT)
 #    define static_assert  _Static_assert
+#  else
+#    define static_assert(e, m)  enum {static_assert = 1/!!((e) && (m))}
 #  endif
 #endif  /* static_assert */
 
 
-#if !(NM_HAVE_ALIGNOF)
-#  if !(NM_HAVE__ALIGNOF)
-#    if defined(alignof)
-#      undef alignof
-#    endif
-#    if (MSVC)
-#      define alignof  __alignof
-#    else
-#      define alignof __alignof__
-#    endif
+
+
+#if !defined(alignof)
+#  if defined(NM_HAVE_ALIGNOF) && (NM_HAVE_ALIGNOF)
+#    define alignof  _Alignof
 #  else
 #    include <stdalign.h>
 #  endif
-#else
-#  include <stdalign.h>
 #endif  /* alignof */
 
 
-#if !(NM_HAVE_ALIGNAS)
-#  if !(NM_HAVE__ALIGNAS)
-#    if defined(alignas)
-#      undef alignas
-#    endif
-#    if (MSVC)
-#      define alignas(x)
-#    else
-#      define alignas(x)  __attribute__((aligned(x)))
-#    endif
+#if !defined(alignas)
+#  if defined(NM_HAVE_ALIGNAS) && (NM_HAVE_ALIGNAS)
+#    define alignas  _Alignas
 #  else
-#    include <stdalign.h>
+#    define alignas(x)  __attribute__((aligned(x)))
 #  endif
 #else
 #  include <stdalign.h>
 #endif  /* alignas */
 
 
-#if (NM_HAVE_GENERIC)
-#  if defined(generic)
-#    undef  generic
+#if !defined(generic)
+#  if defined(NM_HAVE_GENERIC) && (NM_HAVE_GENERIC)
+#    define generic  _Generic
 #  endif
-#  define generic  _Generic
 #else
 #  define generic
 #endif  /* generic */
