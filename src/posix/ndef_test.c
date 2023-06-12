@@ -98,6 +98,14 @@ test_alignof (void)
 void
 test_alignas (void)
 {
+  __attribute__ ((unused)) char alignas (2) c2 = 'A';
+  __attribute__ ((unused)) char alignas (8) c8 = 'B';
+  __attribute__ ((unused)) char alignas (4) c4 = 'C';
+
+  assert ((long)&c2 % 2 == 0);
+  assert ((long)&c8 % 8 == 0);
+  assert ((long)&c4 % 4 == 0);
+
 #define _m_(x, y) ((size_t) & (x)) == (((size_t) & (x)) / (y)) * (y)
   __attribute__ ((unused)) char alignas (double) c1 = 'A';
   assert (_m_ (c1, sizeof (double)));
