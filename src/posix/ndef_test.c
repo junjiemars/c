@@ -90,6 +90,9 @@ test_alignof (void)
 {
   __attribute__ ((unused)) size_t s = alignof (short);
   assert (s == sizeof (short));
+  assert (alignof (char) >= 1);
+  assert (alignof (int) >= 4);
+  assert (alignof (int *) >= 4);
 }
 
 void
