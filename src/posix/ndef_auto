@@ -77,7 +77,7 @@ fi
 # check _Generic
 #----------------------------------------
 if [ "$ndef_generic" = "yes" ]; then
-  nm_feature="generic"
+  nm_feature="_Generic"
   nm_feature_name="nm_have_generic"
   nm_feature_run=no
   nm_feature_h=

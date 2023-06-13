@@ -22,9 +22,10 @@ static void test_swp (void);
 
 struct X
 {
-  alignas (int) char ss[3];
+  char alignas (alignof (int)) ss[3];
   int i;
 };
+
 
 int
 main (int argc, char **argv)
@@ -100,7 +101,7 @@ test_alignas (void)
 {
   __attribute__ ((unused)) char alignas (2) c2 = 'A';
   __attribute__ ((unused)) char alignas (8) c8 = 'B';
-  __attribute__ ((unused)) char alignas (4) c4 = 'C';
+  __attribute__ ((unused)) char alignas (int) c4 = 'C';
 
   assert ((long)&c2 % 2 == 0);
   assert ((long)&c8 % 8 == 0);

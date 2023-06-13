@@ -42,8 +42,6 @@
 #  else
 #    define restrict
 #  endif
-#else
-#  define restrict
 #endif  /* restrict */
 
 
@@ -62,8 +60,10 @@
 #if !defined(alignof)
 #  if defined(NM_HAVE_ALIGNOF) && (NM_HAVE_ALIGNOF)
 #    define alignof  _Alignof
+#  elif defined(MSVC) && (MSVC)
+#    define alignof  __alignof
 #  else
-#    include <stdalign.h>
+#    define alignof  __alignof__
 #  endif
 #endif  /* alignof */
 
@@ -74,8 +74,6 @@
 #  else
 #    define alignas(x)  __attribute__((aligned(x)))
 #  endif
-#else
-#  include <stdalign.h>
 #endif  /* alignas */
 
 
@@ -83,8 +81,6 @@
 #  if defined(NM_HAVE_GENERIC) && (NM_HAVE_GENERIC)
 #    define generic  _Generic
 #  endif
-#else
-#  define generic
 #endif  /* generic */
 
 
