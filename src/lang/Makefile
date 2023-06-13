@@ -44,11 +44,11 @@ lang: lang_array                                \
 lang_test:  lang_array_test                     \
             lang_assert_test                    \
             lang_duration_test                  \
-            lang_enum_test                      \
-            lang_env_test                       \
-            lang_error_test                     \
-            lang_exit_test                      \
-            lang_fn_test                        \
+            lang_enum_test                     \
+            lang_env_test                      \
+            lang_error_test                    \
+            lang_exit_test                     \
+            lang_fn_test                       \
             lang_goto_test                      \
             lang_iso646_test                    \
             lang_jmp_test                       \
@@ -58,7 +58,7 @@ lang_test:  lang_array_test                     \
             lang_main_test                      \
             lang_math_test                      \
             lang_pointer_test                   \
-            lang_preprocess_test              \
+            lang_preprocess_test                \
             lang_random_test                    \
             lang_restrict_test                  \
             lang_scope_test                     \
@@ -84,11 +84,10 @@ INC += $(nm_inc_opt)$(root) $(nm_inc_opt)$(lang_root) $(nm_inc_opt)$(root)/posix
 
 
 ifeq ($(_MEMORY_),1)
-ifeq (YES, $(has_sanitize))
-CFLAGS += $(cflags_sanitize)
-endif # end of has_sanitize
+CFLAGS += $(f_sanitize)
 endif # end of _MEMORY_
 
+
 
 # array
 lang_array_binout := $(bin_path)/$(lang_prefix)_lang_array$(bin_ext)
@@ -877,6 +876,8 @@ lang_typedef_test: lang_typedef
 $(lang_typedef_binout): $(lang_root)/typedef/t.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+
 # typeof
 lang_typeof_binout := $(bin_path)/$(lang_prefix)_typeof$(bin_ext)
 
@@ -887,6 +888,8 @@ lang_typeof_test: lang_typeof
 $(lang_typeof_binout): $(lang_root)/typeof/to.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+
 # union
 lang_union_binout := $(bin_path)/$(lang_prefix)_union$(bin_ext)
 
@@ -896,6 +899,8 @@ lang_union_test: lang_union
 
 $(lang_union_binout): $(lang_root)/union/u.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 
 # variadic
 lang_variadic_binout := $(bin_path)/$(lang_prefix)_variadic$(bin_ext)
@@ -910,6 +915,8 @@ $(lang_variadic_binout): $(lang_variadic_cppout)
 
 $(lang_variadic_cppout): $(lang_root)/variadic/v.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+
+
 
 # volatile
 volatile_basic_binout := $(bin_path)/$(lang_prefix)_volatile_basic$(bin_ext)
@@ -938,5 +945,7 @@ $(volatile_pointer_binout): $(lang_root)/volatile/pointer.c
 
 $(volatile_struct_binout): $(lang_root)/volatile/struct.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 
 # eof
