@@ -6,10 +6,12 @@
 
 swift: swift_hi                                 \
        swift_lang                               \
+       swift_foundation                         \
        swift_os
 
 swift_test: swift_hi_test                       \
             swift_lang_test                     \
+            swift_foundation_test               \
             swift_os_test
 
 # env
@@ -60,6 +62,26 @@ $(swift_lang_package):
 $(swift_lang_binout): $(swift_lang_package)                 \
                       $(swift_root)/lang/Sources/main.swift
 	$(SWIFT) build --package-path=$(swift_root)/lang $(swift_build_opt)
+
+
+
+# foundation
+swift_foundation_package := $(swift_root)/foundation/Package.swift
+swift_foundation_binout := $(swift_root)/foundation/debug/foundation
+
+swift_foundation: $(swift_foundation_binout)
+swift_foundation_test: swift_foundation
+	$(SWIFT) run --package-path=$(swift_root)/foundation
+swift_foundation_clean:
+	$(SWIFT) run --package-path=$(swift_root)/foundation
+
+$(swift_foundation_package):
+	$(SWIFT) package --package-path=$(swift_root)/foundation  \
+		init --type=executable --name=foundation
+
+$(swift_foundation_binout): $(swift_foundation_package)                 \
+                      $(swift_root)/foundation/Sources/main.swift
+	$(SWIFT) build --package-path=$(swift_root)/foundation $(swift_build_opt)
 
 
 
