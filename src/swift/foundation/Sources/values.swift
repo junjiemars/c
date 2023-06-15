@@ -2,7 +2,6 @@ func values() {
     integers()
 }
 
-
 func integers() {
     let i1 = Int.init(0)
     assert(i1 == 0)

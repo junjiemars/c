@@ -22,11 +22,5 @@ func unsafeCases() {
     unsafePointers()
 }
 
-// unsafeCases
-
-func unsafePointers() {
-
-
-}
 
 
