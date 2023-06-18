@@ -24,6 +24,7 @@ fi
 if [    "$ndef___func__" = "yes"                \
      -o "$ndef_alignas" = "yes"                 \
      -o "$ndef_alignof" = "yes"                 \
+     -o "$ndef_complex" = "yes"                 \
      -o "$ndef_generic" = "yes"                 \
      -o "$ndef_restrict" = "yes"                \
      -o "$ndef_static_assert" = "yes"           \
@@ -73,6 +74,22 @@ if [ "$ndef_alignof" = "yes" ]; then
 	. ${NORE_ROOT}/auto/feature
 fi
 
+
+# check _Complex
+#----------------------------------------
+if [ "$ndef_complex" = "yes" ]; then
+  nm_feature="_Complex"
+  nm_feature_name="nm_have_complex"
+  nm_feature_run=no
+  nm_feature_h=
+  nm_feature_flags="$CFLAGS"
+  nm_feature_test='
+_Complex float f = 1.0 + 2.0i;
+_Complex double d = 3.0 + 4.0i;
+(void) f; (void) d;
+'
+  . ${NORE_ROOT}/auto/feature
+fi
 
 # check _Generic
 #----------------------------------------
