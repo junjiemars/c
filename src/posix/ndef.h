@@ -56,6 +56,14 @@
 
 
 
+#if !defined(alignas)
+#  if defined(NM_HAVE_ALIGNAS) && (NM_HAVE_ALIGNAS)
+#    define alignas  _Alignas
+#  else
+#    define alignas(x)  __attribute__((aligned(x)))
+#  endif
+#endif  /* alignas */
+
 
 #if !defined(alignof)
 #  if defined(NM_HAVE_ALIGNOF) && (NM_HAVE_ALIGNOF)
@@ -68,13 +76,11 @@
 #endif  /* alignof */
 
 
-#if !defined(alignas)
-#  if defined(NM_HAVE_ALIGNAS) && (NM_HAVE_ALIGNAS)
-#    define alignas  _Alignas
-#  else
-#    define alignas(x)  __attribute__((aligned(x)))
+#if !defined(complex)
+#  if defined(NM_HAVE_COMPLEX) && (NM_HAVE_COMPLEX)
+#    define complex  _Complex
 #  endif
-#endif  /* alignas */
+#endif  /* complex */
 
 
 #if !defined(generic)
