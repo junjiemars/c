@@ -1,6 +1,7 @@
 #
 # ./configure --has-swift
 # make clean test
+# https://developer.apple.com/library/archive/documentation/Porting/Conceptual/PortingUnix/intro/intro.html
 #
 
 
