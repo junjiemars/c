@@ -1,0 +1,18 @@
+# -*- mode:sh -*- vim:ft=sh
+
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+
+# check ncstd.h features
+ncc_cpu_endian="yes"
+ncc_sanitize_address="yes"
+. ${POSIX_ROOT}/ncstd_auto
+
+
+echo "checking for {zlib} ..."
+
+# check header files
+#----------------------------------------
+include="zlib.h" . ${NORE_ROOT}/auto/include
