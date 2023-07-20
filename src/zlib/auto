@@ -13,6 +13,27 @@ ncc_sanitize_address="yes"
 
 echo "checking for {zlib} ..."
 
-# check header files
-#----------------------------------------
-include="zlib.h" . ${NORE_ROOT}/auto/include
+
+has_zlib=no
+zlib_inc=
+zlib_ldflags=
+zlib_ldlibs=
+
+echo $echo_n " + checking for zlib ... $echo_c"
+if [ 0 -eq $(pkg-config --version 2>&1 1>/dev/null;echo $?) ]; then
+  zlib_inc=`pkg-config --cflags-only-I zlib`
+  zlib_ldflags=`pkg-config --libs-only-L zlib`
+  zlib_ldlibs=`pkg-config --libs-only-l zlib`
+fi
+
+if [ -n "$zlib_ldlibs" ]; then
+  has_zlib=yes
+  echo "yes"
+else
+  echo "no"
+fi
+
+flag=has_zlib op=":=" value="$has_zlib" . ${NORE_ROOT}/auto/make_define
+flag=zlib_inc op=":=" value="$zlib_inc" . ${NORE_ROOT}/auto/make_define
+flag=zlib_ldflags op=":=" value="$zlib_ldflags" . ${NORE_ROOT}/auto/make_define
+flag=zlib_ldlibs op=":=" value="$zlib_ldlibs" . ${NORE_ROOT}/auto/make_define

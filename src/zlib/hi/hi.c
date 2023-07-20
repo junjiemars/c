@@ -1,5 +1,5 @@
 #include <ncstd.h>
-#include <zlib.c>
+#include <zlib.h>
 
 int
 main (int argc, char **argv)
