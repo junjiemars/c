@@ -1,6 +1,4 @@
-#include <ncstd.h>
-#include <zlib.h>
-#include <stdio.h>
+#include "_zlib_.h"
 
 int
 main (void)
