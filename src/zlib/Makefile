@@ -33,7 +33,7 @@ zlib_hi_test: zlib_hi
 	$(zlib_hi_binout)
 
 $(zlib_hi_binout): $(zlib_root)/hi/hi.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(LDFLAGS) $^ $(bin_out)$@ $(LDLIBS)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(LDFLAGS) $(LDLIBS)
 
 
 
