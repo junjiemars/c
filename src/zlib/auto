@@ -21,9 +21,11 @@ zlib_ldlibs=
 
 echo $echo_n " + checking for zlib ... $echo_c"
 if [ 0 -eq $(pkg-config --version 2>&1 1>/dev/null;echo $?) ]; then
-  zlib_inc=`pkg-config --cflags-only-I zlib`
-  zlib_ldflags=`pkg-config --libs-only-L zlib`
-  zlib_ldlibs=`pkg-config --libs-only-l zlib`
+  if `pkg-config --exists zlib`; then
+    zlib_inc=`pkg-config --cflags-only-I zlib`
+    zlib_ldflags=`pkg-config --libs-only-L zlib`
+    zlib_ldlibs=`pkg-config --libs-only-l zlib`
+  fi
 fi
 
 if [ -n "$zlib_ldlibs" ]; then

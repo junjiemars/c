@@ -1,11 +1,11 @@
 #include <ncstd.h>
 #include <zlib.h>
+#include <stdio.h>
 
 int
-main (int argc, char **argv)
+main (void)
 {
-  (void) argc;
-  (void) argv;
+  printf ("zlib version = %s\n", ZLIB_VERSION);
 
   return 0;
 }
