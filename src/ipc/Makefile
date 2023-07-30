@@ -10,13 +10,15 @@ ipc_test:
 	@echo "#skip ..."
 else
 
-ipc: ipc_bone                                   \
-     ipc_filter                                 \
-     ipc_pager
+ipc: ipc_filter                                 \
+     ipc_pager                                  \
+     ipc_pipe                                   \
+     ipc_sock
 
-ipc_test: ipc_bone_test                         \
-          ipc_filter_test                       \
-          ipc_pager_test
+ipc_test: ipc_filter_test                       \
+          ipc_pager_test                        \
+          ipc_pipe_test                         \
+          ipc_sock_test
 
 endif
 
@@ -41,17 +43,6 @@ endif
 
 
 
-# bone
-ipc_bone_binout := $(bin_path)/$(ipc_prefix)_bone$(bin_ext)
-
-ipc_bone: $(ipc_bone_binout)
-ipc_bone_test: ipc_bone
-	$(ipc_bone_binout)
-
-$(ipc_bone_binout): $(ipc_root)/bone/b1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-
 
 # filter
 ipc_filter_d_binout := $(bin_path)/$(ipc_prefix)_filter_d$(bin_ext)
@@ -124,5 +115,31 @@ $(ipc_pager_emu_binout): $(ipc_root)/pager/p1.c \
     $^ $(bin_out)$@
 
 
+
+# pipe
+ipc_pipe_binout := $(bin_path)/$(ipc_prefix)_pipe$(bin_ext)
+
+ipc_pipe: $(ipc_pipe_binout)
+ipc_pipe_test: ipc_pipe
+	$(ipc_pipe_binout)
+
+$(ipc_pipe_binout): $(ipc_root)/pipe/p1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+
+# sock
+ipc_sock_binout := $(bin_path)/$(ipc_prefix)_sock$(bin_ext)
+
+ipc_sock: $(ipc_sock_binout)
+ipc_sock_test: ipc_sock
+	$(ipc_sock_binout)
+
+$(ipc_sock_binout): $(ipc_root)/sock/s1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+
+
 
 # eof
