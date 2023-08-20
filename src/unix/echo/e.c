@@ -1,4 +1,4 @@
-#include <_unix_.h>
+#include "_unix_.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -20,7 +20,7 @@ main (int argc, char **argv)
 
   for (char **p = argv + opt_ind; *p != 0; p++)
     {
-      char sp = (optind == argc - 1) ? 0x0 : 0x20;
+      char sp = (opt_ind == argc - 1) ? 0x0 : 0x20;
       fprintf (stdout, "%s%c", *p, sp);
     }
 
