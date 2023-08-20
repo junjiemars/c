@@ -1,48 +1,29 @@
 #include <_unix_.h>
 #include <stdio.h>
-#include <getopt.h>
-
-extern char *optarg;
-extern int   optind;
-
-void usage (const char *echo);
-
-void
-usage (const char *pcre)
-{
-  printf ("Usage: %s [-n]... [string ...]\n", pcre);
-	printf ("\n");
-	printf ("Write arguments to the standard output.\n");
-  printf ("  -n            do not print the trailing newline character.\n");
-}
 
 int
 main (int argc, char **argv)
 {
   int opt_n = 0;
-  int ch;
+  int opt_ind = 1;
 
-  while (-1 != (ch = getopt(argc, argv, "hn")))
+  for (int i = 1; i < argc; i++)
     {
-      switch (ch)
+      if (strcmp("-n", argv[i]) == 0)
         {
-        case 'n':
-          opt_n++;
-          break;
-        case 'h':
-        default:
-          usage (argv[0]);
-          return 0;
+           opt_n = 1;
+           opt_ind = i+1;
+           continue;
         }
     }
 
-  for (char **p = argv + optind; *p != 0; p++)
+  for (char **p = argv + opt_ind; *p != 0; p++)
     {
       char sp = (optind == argc - 1) ? 0x0 : 0x20;
       fprintf (stdout, "%s%c", *p, sp);
     }
 
-  if (!opt_n)
+  if (opt_n == 0)
     {
       fprintf (stdout, "\n");
     }
