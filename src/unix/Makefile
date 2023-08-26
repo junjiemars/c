@@ -12,12 +12,14 @@ else
 
 unix: unix_brk                                  \
       unix_echo                                 \
+      unix_ed \
       unix_exec                                 \
       unix_msq                                  \
 	    unix_tcpwrapper
 
 unix_test: unix_brk_test                        \
            unix_echo_test                       \
+           unix_ed_test                                         \
            unix_exec_test                       \
            unix_msq_test                        \
            unix_tcpwrapper_test
@@ -54,6 +56,16 @@ unix_echo_test: unix_echo
 	$(unix_echo_binout) abc 123 "xxx zzz"
 
 $(unix_echo_binout): $(unix_root)/echo/e.c $(getopt_c)
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# ed
+unix_ed_binout := $(bin_path)/$(unix_prefix)_ed$(bin_ext)
+
+unix_ed: $(unix_ed_binout)
+unix_ed_test: unix_ed
+	$(unix_ed_binout) -h
+
+$(unix_ed_binout): $(unix_root)/ed/ed.c $(getopt_c)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # exec
