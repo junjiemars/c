@@ -11,6 +11,7 @@
 
 #include "_unix_.h"
 #include <signal.h>
+#include <fcntl.h>
 
 
 int address(void);
@@ -22,11 +23,13 @@ void filename(void);
 void exfile(void);
 int execute(int, int*);
 int getchar(void);
+int getfile(void);
 char* getline(int);
+int gettty(void);
 void global(int k);
 int init(void);
 void move(int cflag);
-int newline(void);
+void newline(void);
 void nonzero(void);
 void putchar(int);
 void putfile(void);
@@ -37,6 +40,8 @@ int setdot(void);
 int setnoaddr(void);
 void substitute(char*);
 void unix(void);
+
+#define seek  lseek
 
 #define   SIGHUP   1
 #define   SIGINTR  2
@@ -407,7 +412,7 @@ address(void)
       peekc = c;
       if (a1==0)
         return(0);
-      a1 =+ minus;
+      a1 += minus;
       if (a1<zero || a1>dol)
         error;
       return(a1);
@@ -452,10 +457,10 @@ nonzero(void)
     error;
 }
 
-int
+void
 newline(void)
 {
-  register c;
+  register int c;
 
   if ((c = getchar()) == '\n')
     return;
@@ -473,7 +478,7 @@ void
 filename(void)
 {
   register char *p1, *p2;
-  register c;
+  register int c;
 
   count[1] = 0;
   c = getchar();
@@ -482,7 +487,7 @@ filename(void)
     if (*p1==0)
       error;
     p2 = file;
-    while (*p2++ = *p1++);
+    while ((*p2++ = *p1++));
     return;
   }
   if (c!=' ')
@@ -498,7 +503,7 @@ filename(void)
   if (savedfile[0]==0) {
     p1 = savedfile;
     p2 = file;
-    while (*p1++ = *p2++);
+    while ((*p1++ = *p2++));
   }
 }
 
@@ -524,7 +529,7 @@ onintr()
 int
 errfunc(void)
 {
-  register c;
+  register int c;
 
   listf = 0;
   puts("?");
@@ -546,7 +551,7 @@ errfunc(void)
 int
 getchar(void)
 {
-  if (lastc=peekc) {
+  if ((lastc=peekc)) {
     peekc = 0;
     return(lastc);
   }
@@ -558,13 +563,14 @@ getchar(void)
   }
   if (read(0, &lastc, 1) <= 0)
     return(lastc = EOF);
-  lastc =& 0177;
+  lastc &= 0177;
   return(lastc);
 }
 
-gettty()
+int
+gettty(void)
 {
-  register c, gf;
+  register int c, gf;
   register char *p;
 
   p = linebuf;
@@ -575,7 +581,7 @@ gettty()
         peekc = c;
       return(c);
     }
-    if ((c =& 0177) == 0)
+    if ((c &= 0177) == 0)
       continue;
     *p++ = c;
     if (p >= &linebuf[LBSIZE-2])
@@ -587,9 +593,10 @@ gettty()
   return(0);
 }
 
-getfile()
+int
+getfile(void)
 {
-  register c;
+  register int c;
   register char *lp, *fp;
 
   lp = linebuf;
@@ -615,11 +622,11 @@ getfile()
 }
 
 void
-putfile(void)Z
+putfile(void)
 {
   int *a1;
   register char *fp, *lp;
-  register nib;
+  register int nib;
 
   nib = 512;
   fp = genbuf;
@@ -646,9 +653,9 @@ putfile(void)Z
 int
 append(int (*f)(void), int *a)
 {
-  register *a1, *a2, *rdot;
+  register int *a1, *a2, *rdot;
   int nline, tl;
-  struct { int integer; };
+  struct { int integer; } endcore;
 
   nline = 0;
   dot = a;
