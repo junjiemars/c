@@ -12,29 +12,39 @@
 #include "_unix_.h"
 #include <signal.h>
 #include <fcntl.h>
+#include <stdlib.h>
 
 
-int address(void);
+int *address(void);
+int advance(char*, char*);
 int append(int (*f)(void), int*);
+int cclass(char*, int, int);
 void commands(void);
-void compile(int aeof);
+void compile(int);
+int compsub(void);
 int delete(void);
+void dosub(void);
 void filename(void);
 void exfile(void);
 int execute(int, int*);
+char* getblock(int, int);
 int getchar(void);
+int getcopy(void);
 int getfile(void);
 char* getline(int);
 int gettty(void);
-void global(int k);
+void global(int);
 int init(void);
-void move(int cflag);
+void move(int);
 void newline(void);
 void nonzero(void);
+char* place(char*, char*, char*);
 void putchar(int);
 void putfile(void);
 void putd(void);
+int putline(void);
 void puts(char*);
+void reverse(int*, int*);
 void setall(void);
 int setdot(void);
 int setnoaddr(void);
@@ -43,9 +53,9 @@ void unix(void);
 
 #define seek  lseek
 
-#define   SIGHUP   1
-#define   SIGINTR  2
-#define   SIGQUIT  3
+/* #define   SIGHUP   1 */
+/* #define   SIGINTR  2 */
+/* #define   SIGQUIT  3 */
 #define   FNSIZE   64
 #define   LBSIZE   512
 #define   ESIZE    128
@@ -90,8 +100,8 @@ char  *linebp;
 int   ninbuf;
 int   io;
 int   pflag;
-int   onhup;
-int   onquit;
+sig_t onhup; /* int   onhup; */
+sig_t onquit; /* int   onquit; */
 int   vflag   = 1;
 int   listf;
 int   col;
@@ -121,10 +131,10 @@ int
 main(int argc, char **argv)
 {
   register char *p1, *p2;
-  extern int onintr();
+  extern void onintr(int);
 
-  onquit = signal(SIGQUIT, 1);
-  onhup = signal(SIGHUP, 1);
+  onquit = signal(SIGQUIT, SIG_IGN);
+  onhup = signal(SIGHUP, SIG_IGN);
   argv++;
   if (argc > 1 && **argv=='-') {
     vflag = 0;
@@ -144,8 +154,8 @@ main(int argc, char **argv)
   }
   fendcore = sbrk(0);
   init();
-  if ((signal(SIGINTR, 1) & 01) == 0)
-    signal(SIGINTR, onintr);
+  if ((*(int*)signal(SIGINT, SIG_IGN) & *(int*)SIG_IGN) == 0)
+    signal(SIGINT, onintr);
   setexit();
   commands();
   unlink(tfname);
@@ -266,7 +276,7 @@ commands(void)
     setnoaddr();
     newline();
     unlink(tfname);
-    exit();
+    exit(0);
 
   case 'r':
   caseread:
@@ -325,7 +335,7 @@ commands(void)
   }
 }
 
-int
+int*
 address(void)
 {
   register int *a1, minus, c;
@@ -518,9 +528,10 @@ exfile(void)
   }
 }
 
-onintr()
+void
+onintr(int _sigintr)
 {
-  signal(SIGINTR, onintr);
+  signal(SIGINT, onintr);
   putchar('\n');
   lastc = '\n';
   error;
@@ -570,8 +581,8 @@ getchar(void)
 int
 gettty(void)
 {
-  register int c, gf;
-  register char *p;
+  register int c;
+  register char *p, *gf;
 
   p = linebuf;
   gf = globp;
@@ -663,7 +674,7 @@ append(int (*f)(void), int *a)
     if (dol >= endcore) {
       if (sbrk(1024) == -1)
         error;
-      endcore.integer =+ 1024;
+      endcore.integer += 1024;
     }
     tl = putline();
     nline++;
@@ -680,7 +691,8 @@ append(int (*f)(void), int *a)
 void
 unix(void)
 {
-  register savint, pid, rpid;
+  register sig_t savint;
+  register int pid, rpid;
   int retcode;
 
   setnoaddr();
@@ -688,18 +700,18 @@ unix(void)
     signal(SIGHUP, onhup);
     signal(SIGQUIT, onquit);
     execl("/bin/sh", "sh", "-t", 0);
-    exit();
+    exit(0);
   }
-  savint = signal(SIGINTR, 1);
+  savint = signal(SIGINT, SIG_IGN);
   while ((rpid = wait(&retcode)) != pid && rpid != -1);
-  signal(SIGINTR, savint);
+  signal(SIGINT, savint);
   puts("!");
 }
 
 int
 delete(void)
 {
-  register *a1, *a2, *a3;
+  register int *a1, *a2, *a3;
 
   setdot();
   newline();
@@ -707,7 +719,7 @@ delete(void)
   a1 = addr1;
   a2 = addr2+1;
   a3 = dol;
-  dol =- a2 - a1;
+  dol -= a2 - a1;
   do
     *a1++ = *a2++;
   while (a2 <= a3);
@@ -721,13 +733,13 @@ char*
 getline(int tl)
 {
   register char *bp, *lp;
-  register nl;
+  register int nl;
 
   lp = linebuf;
   bp = getblock(tl, READ);
   nl = nleft;
-  tl =& ~0377;
-  while (*lp++ = *bp++)
+  tl &= ~0377;
+  while ((*lp++ = *bp++))
     if (--nl == 0) {
       bp = getblock(tl=+0400, READ);
       nl = nleft;
@@ -735,18 +747,19 @@ getline(int tl)
   return(linebuf);
 }
 
-putline()
+int
+putline(void)
 {
   register char *bp, *lp;
-  register nl;
+  register int nl;
   int tl;
 
   lp = linebuf;
   tl = tline;
   bp = getblock(tl, WRITE);
   nl = nleft;
-  tl =& ~0377;
-  while (*bp = *lp++) {
+  tl &= ~0377;
+  while ((*bp = *lp++)) {
     if (*bp++ == '\n') {
       *--bp = 0;
       linebp = lp;
@@ -762,10 +775,10 @@ putline()
   return(nl);
 }
 
-getblock(atl, iof)
+char*
+getblock(int atl, int iof)
 {
-  extern read(), write();
-  register bno, off;
+  register int bno, off;
 
   bno = (atl>>8)&0377;
   off = (atl<<1)&0774;
@@ -775,7 +788,7 @@ getblock(atl, iof)
   }
   nleft = 512 - off;
   if (bno==iblock) {
-    ichanged =| iof;
+    ichanged |= iof;
     return(ibuff+off);
   }
   if (bno==oblock)
@@ -794,8 +807,8 @@ getblock(atl, iof)
   return(obuff+off);
 }
 
-blkio(b, buf, iofcn)
-int (*iofcn)();
+void
+blkio(int b, char *buf, int (*iofcn)())
 {
   seek(tfile, b, 3);
   if ((*iofcn)(tfile, buf, 512) != 512) {
@@ -808,7 +821,7 @@ int
 init(void)
 {
   register char *p;
-  register pid;
+  register pid_t pid;
 
   close(tfile);
   tline = 0;
@@ -819,7 +832,7 @@ init(void)
   pid = getpid();
   for (p = &tfname[11]; p > &tfname[6];) {
     *--p = (pid&07) + '0';
-    pid =>> 3;
+    pid >>= 3;
   }
   close(creat(tfname, 0600));
   tfile = open(tfname, 2);
@@ -832,7 +845,7 @@ void
 global(int k)
 {
   register char *gp;
-  register c;
+  register int c;
   register int *a1;
   char globuf[GBSIZE];
 
@@ -859,13 +872,13 @@ global(int k)
   *gp++ = '\n';
   *gp++ = 0;
   for (a1=zero; a1<=dol; a1++) {
-    *a1 =& ~01;
+    *a1 &= ~01;
     if (a1>=addr1 && a1<=addr2 && execute(0, a1)==k)
-      *a1 =| 01;
+      *a1 |= 01;
   }
   for (a1=zero; a1<=dol; a1++) {
     if (*a1 & 01) {
-      *a1 =& ~01;
+      *a1 &= ~01;
       dot = a1;
       globp = globuf;
       commands();
@@ -875,38 +888,39 @@ global(int k)
 }
 
 void
-substitute(int inglob)
+substitute(char *inglob)
 {
-  register gsubf, *a1, nl;
+  register int gsubf, *a1, nl;
   int getsub();
 
   gsubf = compsub();
   for (a1 = addr1; a1 <= addr2; a1++) {
     if (execute(0, a1)==0)
       continue;
-    inglob =| 01;
+    inglob += 01;
     dosub();
     if (gsubf) {
       while (*loc2) {
-        if (execute(1)==0)
+        if (execute(1, 0)==0)
           break;
         dosub();
       }
     }
     *a1 = putline();
     nl = append(getsub, a1);
-    a1 =+ nl;
-    addr2 =+ nl;
+    a1 += nl;
+    addr2 += nl;
   }
   if (inglob==0)
     error;
 }
 
-compsub()
+int
+compsub(void)
 {
-  register seof, c;
+  register int seof, c;
   register char *p;
-  int gsubf;
+  /* int gsubf; */
 
   if ((seof = getchar()) == '\n')
     error;
@@ -934,19 +948,21 @@ compsub()
   return(0);
 }
 
-getsub()
+int
+getsub(void)
 {
   register char *p1, *p2;
 
   p1 = linebuf;
   if ((p2 = linebp) == 0)
     return(EOF);
-  while (*p1++ = *p2++);
+  while ((*p1++ = *p2++));
   linebp = 0;
   return(0);
 }
 
-dosub()
+void
+dosub(void)
 {
   register char *lp, *sp, *rp;
   int c;
@@ -956,11 +972,11 @@ dosub()
   rp = rhsbuf;
   while (lp < loc1)
     *sp++ = *lp++;
-  while (c = *rp++) {
+  while ((c = *rp++)) {
     if (c=='&') {
       sp = place(sp, loc1, loc2);
       continue;
-    } else if (c<0 && (c =& 0177) >='1' && c < NBRA+'1') {
+    } else if (c<0 && (c &= 0177) >='1' && c < NBRA+'1') {
       sp = place(sp, braslist[c-'1'], braelist[c-'1']);
       continue;
     }
@@ -970,15 +986,16 @@ dosub()
   }
   lp = loc2;
   loc2 = sp + linebuf - genbuf;
-  while (*sp++ = *lp++)
+  while ((*sp++ = *lp++))
     if (sp >= &genbuf[LBSIZE])
       error;
   lp = linebuf;
   sp = genbuf;
-  while (*lp++ = *sp++);
+  while ((*lp++ = *sp++));
 }
 
-place(asp, al1, al2)
+char*
+place(char *asp, char *al1, char *al2)
 {
   register char *sp, *l1, *l2;
 
@@ -1028,7 +1045,8 @@ move(int cflag)
     error;
 }
 
-reverse(aa1, aa2)
+void
+reverse(int *aa1, int *aa2)
 {
   register int *a1, *a2, t;
 
@@ -1043,7 +1061,8 @@ reverse(aa1, aa2)
   }
 }
 
-getcopy()
+int
+getcopy(void)
 {
   if (addr1 > addr2)
     return(EOF);
@@ -1122,7 +1141,7 @@ compile(int aeof)
     case '*':
       if (*lastep==CBRA || *lastep==CKET)
         error;
-      *lastep =| STAR;
+      *lastep |= STAR;
       continue;
 
     case '$':
@@ -1171,7 +1190,7 @@ execute(int gf, int *addr)
       return(0);
     p1 = linebuf;
     p2 = genbuf;
-    while (*p1++ = *p2++);
+    while ((*p1++ = *p2++));
     locs = p1 = loc2;
   } else {
     if (addr==zero)
@@ -1207,10 +1226,11 @@ execute(int gf, int *addr)
   return(0);
 }
 
-advance(alp, aep)
+int
+advance(char *alp, char *aep)
 {
   register char *lp, *ep, *curlp;
-  char *nextep;
+  /* char *nextep; */
 
   lp = alp;
   ep = aep;
@@ -1237,14 +1257,14 @@ advance(alp, aep)
 
   case CCL:
     if (cclass(ep, *lp++, 1)) {
-      ep =+ *ep;
+      ep += *ep;
       continue;
     }
     return(0);
 
   case NCCL:
     if (cclass(ep, *lp++, 0)) {
-      ep =+ *ep;
+      ep += *ep;
       continue;
     }
     return(0);
@@ -1272,7 +1292,7 @@ advance(alp, aep)
   case NCCL|STAR:
     curlp = lp;
     while (cclass(ep, *lp++, ep[-1]==(CCL|STAR)));
-    ep =+ *ep;
+    ep += *ep;
     goto star;
 
   star:
@@ -1290,10 +1310,11 @@ advance(alp, aep)
   }
 }
 
-cclass(aset, ac, af)
+int
+cclass(char *aset, int ac, int af)
 {
   register char *set, c;
-  register n;
+  register int n;
 
   set = aset;
   if ((c = ac) == 0)
@@ -1308,11 +1329,13 @@ cclass(aset, ac, af)
 void
 putd(void)
 {
-  register r;
-  extern ldivr;
+  register int r;
+  extern int ldivr;
+	div_t dv;
 
-  count[1] = ldiv(count[0], count[1], 10);
-  count[0] = 0;
+	dv = div(count[0], count[1]);
+  count[1] = dv.rem;
+  count[0] = dv.quot;
   r = ldivr;
   if (count[1])
     putd();
@@ -1332,13 +1355,13 @@ puts(char *as)
 }
 
 char  line[70];
-char  *linp   line;
+char  *linp = line;
 
 void
 putchar(int ac)
 {
   register char *lp;
-  register c;
+  register int c;
 
   lp = linp;
   c = ac;
@@ -1365,7 +1388,7 @@ putchar(int ac)
       *lp++ = '\\';
       *lp++ = (c>>3)+'0';
       *lp++ = (c&07)+'0';
-      col =+ 2;
+      col += 2;
       goto out;
     }
   }
