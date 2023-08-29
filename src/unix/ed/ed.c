@@ -4,7 +4,8 @@
  * references:
  * 1. https://man.cat-v.org/unix-6th/1/ed
  * 2. https://man.cat-v.org/unix-6th/2/signal
- * 3. https://man.cat-v.org/unix-6th/3/reset
+ * 3. https://man.cat-v.org/unix-6th/3/setexit
+ * 4. https://man.cat-v.org/unix-6th/3/reset
  *
  */
 
@@ -12,17 +13,19 @@
 #include "_unix_.h"
 #include <signal.h>
 #include <fcntl.h>
+#include <setjmp.h>
+#include <sys/wait.h>
 #include <stdlib.h>
-
 
 int *address(void);
 int advance(char*, char*);
 int append(int (*f)(void), int*);
+void blkio(int, char*, ssize_t (*)());
 int cclass(char*, int, int);
 void commands(void);
 void compile(int);
 int compsub(void);
-int delete(void);
+void delete(void);
 void dosub(void);
 void filename(void);
 void exfile(void);
@@ -34,7 +37,7 @@ int getfile(void);
 char* getline(int);
 int gettty(void);
 void global(int);
-int init(void);
+void init(void);
 void move(int);
 void newline(void);
 void nonzero(void);
@@ -46,8 +49,8 @@ int putline(void);
 void puts(char*);
 void reverse(int*, int*);
 void setall(void);
-int setdot(void);
-int setnoaddr(void);
+void setdot(void);
+void setnoaddr(void);
 void substitute(char*);
 void unix(void);
 
@@ -108,7 +111,7 @@ int   col;
 char  *globp;
 int   tfile =   -1;
 int   tline;
-char  *tfname;
+char  tfname[12];
 char  *loc1;
 char  *loc2;
 char  *locs;
@@ -126,6 +129,9 @@ char  *braslist[NBRA];
 char  *braelist[NBRA];
 
 
+static jmp_buf jmpbuf_main;
+#define setexit() setjmp(jmpbuf_main)
+#define reset() longjmp(jmpbuf_main, 0)
 
 int
 main(int argc, char **argv)
@@ -154,7 +160,7 @@ main(int argc, char **argv)
   }
   fendcore = sbrk(0);
   init();
-  if ((*(int*)signal(SIGINT, SIG_IGN) & *(int*)SIG_IGN) == 0)
+  if ((signal(SIGINT, SIG_IGN) != SIG_IGN))
     signal(SIGINT, onintr);
   setexit();
   commands();
@@ -259,6 +265,7 @@ commands(void)
 
   case 'l':
     listf++;
+    __attribute__ ((fallthrough));
   case 'p':
     newline();
   print:
@@ -432,7 +439,7 @@ address(void)
   }
 }
 
-int
+void
 setdot(void)
 {
   if (addr2 == 0)
@@ -453,7 +460,7 @@ setall(void)
   setdot();
 }
 
-int
+void
 setnoaddr(void)
 {
   if (addr2)
@@ -529,7 +536,7 @@ exfile(void)
 }
 
 void
-onintr(int _sigintr)
+onintr(__attribute__ ((unused)) int _sigintr)
 {
   signal(SIGINT, onintr);
   putchar('\n');
@@ -671,8 +678,8 @@ append(int (*f)(void), int *a)
   nline = 0;
   dot = a;
   while ((*f)() == 0) {
-    if (dol >= endcore) {
-      if (sbrk(1024) == -1)
+    if (dol - (int*)&endcore) {
+      if (sbrk(1024) == (void*)-1)
         error;
       endcore.integer += 1024;
     }
@@ -708,7 +715,7 @@ unix(void)
   puts("!");
 }
 
-int
+void
 delete(void)
 {
   register int *a1, *a2, *a3;
@@ -808,7 +815,7 @@ getblock(int atl, int iof)
 }
 
 void
-blkio(int b, char *buf, int (*iofcn)())
+blkio(int b, char *buf, ssize_t (*iofcn)())
 {
   seek(tfile, b, 3);
   if ((*iofcn)(tfile, buf, 512) != 512) {
@@ -817,19 +824,19 @@ blkio(int b, char *buf, int (*iofcn)())
   }
 }
 
-int
+void
 init(void)
 {
   register char *p;
-  register pid_t pid;
+  register int pid;
 
   close(tfile);
   tline = 0;
   iblock = -1;
   oblock = -1;
-  tfname = "/tmp/exxxxx";
+  memcpy(tfname, "/tmp/exxxxx", _nof_(tfname));
   ichanged = 0;
-  pid = getpid();
+  pid = (int)getpid();
   for (p = &tfname[11]; p > &tfname[6];) {
     *--p = (pid&07) + '0';
     pid >>= 3;
@@ -985,7 +992,7 @@ dosub(void)
       error;
   }
   lp = loc2;
-  loc2 = sp + linebuf - genbuf;
+  loc2 = sp + (linebuf - genbuf);
   while ((*sp++ = *lp++))
     if (sp >= &genbuf[LBSIZE])
       error;
@@ -1270,11 +1277,11 @@ advance(char *alp, char *aep)
     return(0);
 
   case CBRA:
-    braslist[*ep++] = lp;
+    braslist[(int)(*ep++)] = lp;
     continue;
 
   case CKET:
-    braelist[*ep++] = lp;
+    braelist[(int)(*ep++)] = lp;
     continue;
 
   case CDOT|STAR:
@@ -1330,7 +1337,8 @@ void
 putd(void)
 {
   register int r;
-  extern int ldivr;
+  /* extern int ldivr; */
+  int ldivr = 0;
 	div_t dv;
 
 	dv = div(count[0], count[1]);

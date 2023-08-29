@@ -26,5 +26,19 @@ if [ yes = $nm_found ]; then
     . ${NORE_ROOT}/auto/make_define
 fi
 
+nm_feature="-Wimplicit-fallthrough=0"
+nm_feature_name=
+nm_feature_indent=yes
+nm_feature_run=no
+nm_feature_h=
+nm_feature_flags='-Wimplicit-fallthrough=0'
+nm_feature_test=
+. ${NORE_ROOT}/auto/feature
+if [ yes = $nm_found ]; then
+  flag=C_FLAGS op="+=" value=$nm_feature_flags  \
+    . ${NORE_ROOT}/auto/make_define
+fi
+
+
 
 # eof

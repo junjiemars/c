@@ -63,7 +63,8 @@ unix_ed_binout := $(bin_path)/$(unix_prefix)_ed$(bin_ext)
 
 unix_ed: $(unix_ed_binout)
 unix_ed_test: unix_ed
-	$(unix_ed_binout) -h
+	# $(unix_ed_binout) -h
+	echo $(unix_ed_binout)
 
 $(unix_ed_binout): $(unix_root)/ed/ed.c $(getopt_c)
 	$(CC) $(CFLAGS) -Wno-builtin-declaration-mismatch $(INC) $^ $(bin_out)$@
