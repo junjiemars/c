@@ -1,5 +1,7 @@
-#
+# 
 # ./configure --has-unix
+#
+# https://pdos.csail.mit.edu/6.828/2017/xv6.html
 #
 
 ifeq ($(NM_SYSTEM), WinNT)
