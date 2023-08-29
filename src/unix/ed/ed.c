@@ -166,8 +166,8 @@ commands(void)
 {
   int getfile(), gettty();
   register int *a1, c;
-  register char *p;
-  int r;
+  __attribute__ ((unused)) register char *p;
+  __attribute__ ((unused)) int r;
 
   for (;;) {
   if (pflag) {
