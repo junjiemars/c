@@ -1,4 +1,4 @@
-#include <_unix_.h>
+#include "_unix_.h"
 #include <stdio.h>
 
 #define ALLOC_SIZE  sizeof(long)
@@ -13,11 +13,8 @@ static int  bss_var;
 
 
 int
-main(int argc, char **argv)
+main(void)
 {
-  _unused_(argc);
-  _unused_(argv);
-
   test_brk();
   test_sbrk();
   test_alloc();

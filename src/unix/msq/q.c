@@ -1,4 +1,4 @@
-#include <_os_.h>
+#include "_unix_.h"
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -80,9 +80,6 @@ get_msg(int qid, int mtype)
 int
 main(int argc, char *argv[])
 {
-  _unused_(argc);
-  _unused_(argv);
-
   int qid, opt;
   int mode = 0;               /* 's' = send, 'r' = receive */
   int msgkey = M_KEY;
@@ -149,4 +146,3 @@ main(int argc, char *argv[])
 
   exit(EXIT_SUCCESS);
 }
-
