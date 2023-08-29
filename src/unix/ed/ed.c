@@ -6,6 +6,7 @@
  * 2. https://man.cat-v.org/unix-6th/2/signal
  * 3. https://man.cat-v.org/unix-6th/3/setexit
  * 4. https://man.cat-v.org/unix-6th/3/reset
+ * 5. https://man.cat-v.org/unix-6th/3/ldiv
  *
  */
 
@@ -1337,14 +1338,16 @@ void
 putd(void)
 {
   register int r;
-  /* extern int ldivr; */
-  int ldivr = 0;
-	div_t dv;
+  int ldivr;
+	ldiv_t dv;
+  struct { int q; int r; } w;
+  w.q = count[1];
+  w.r = count[0];
 
-	dv = div(count[0], count[1]);
-  count[1] = dv.rem;
-  count[0] = dv.quot;
-  r = ldivr;
+	dv = ldiv(*(long*)&w, 10);
+  count[1] = dv.quot;
+  count[0] = 0;
+  r = ldivr = dv.rem;
   if (count[1])
     putd();
   putchar(r + '0');
