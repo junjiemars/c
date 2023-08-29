@@ -39,7 +39,7 @@ void move(int);
 void newline(void);
 void nonzero(void);
 char* place(char*, char*, char*);
-void putchar(int);
+static void putchar(int);
 void putfile(void);
 void putd(void);
 int putline(void);

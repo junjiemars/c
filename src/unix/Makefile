@@ -66,7 +66,7 @@ unix_ed_test: unix_ed
 	$(unix_ed_binout) -h
 
 $(unix_ed_binout): $(unix_root)/ed/ed.c $(getopt_c)
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) -Wno-builtin-declaration-mismatch $(INC) $^ $(bin_out)$@
 
 # exec
 unix_exec_binout := $(bin_path)/$(unix_prefix)_exec$(bin_ext)
@@ -91,7 +91,7 @@ unix_msq_test: unix_msq
 	$(unix_msq_binout) -r -t 2
 	$(unix_msq_binout) -r -t 1
 else
-unix_msq: 
+unix_msq:
 unix_msq_test: unix_msq
 	@echo "#skip unix_msq_test ..."
 endif
