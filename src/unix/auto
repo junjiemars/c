@@ -12,17 +12,16 @@
 
 echo "checking for {unix} ..."
 
-
 nm_feature="-Wno-builtin-declaration-mismatch"
 nm_feature_name=
 nm_feature_indent=yes
 nm_feature_run=no
 nm_feature_h=
-nm_feature_flags='-Wno-builtin-declaration-mismatch'
+nm_feature_flags='-Werror -Wno-builtin-declaration-mismatch'
 nm_feature_test=
 . ${NORE_ROOT}/auto/feature
 if [ yes = $nm_found ]; then
-  flag=C_FLAGS op="+=" value=$nm_feature_flags  \
+  flag=CFLAGS op="+=" value='-Wno-builtin-declaration-mismatch'  \
     . ${NORE_ROOT}/auto/make_define
 fi
 
@@ -31,14 +30,40 @@ nm_feature_name=
 nm_feature_indent=yes
 nm_feature_run=no
 nm_feature_h=
-nm_feature_flags='-Wimplicit-fallthrough=0'
+nm_feature_flags='-Werror -Wimplicit-fallthrough=0'
 nm_feature_test=
 . ${NORE_ROOT}/auto/feature
 if [ yes = $nm_found ]; then
-  flag=C_FLAGS op="+=" value=$nm_feature_flags  \
+  flag=CFLAGS op="+=" value='-Wimplicit-fallthrough=0'  \
     . ${NORE_ROOT}/auto/make_define
 fi
 
 
+nm_feature="-Wno-deprecated-declarations"
+nm_feature_name=
+nm_feature_indent=yes
+nm_feature_run=no
+nm_feature_h=
+nm_feature_flags='-Werror -Wno-deprecated-declarations'
+nm_feature_test=
+. ${NORE_ROOT}/auto/feature
+if [ yes = $nm_found ]; then
+  flag=CFLAGS op="+=" value='-Wno-deprecated-declarations' \
+    . ${NORE_ROOT}/auto/make_define
+fi
+
+
+nm_feature="-Wno-deprecated-non-prototype"
+nm_feature_name=
+nm_feature_indent=yes
+nm_feature_run=no
+nm_feature_h=
+nm_feature_flags='-Werror -Wno-deprecated-non-prototype' \'
+nm_feature_test=
+. ${NORE_ROOT}/auto/feature
+if [ yes = $nm_found ]; then
+  flag=CFLAGS op="+=" value='-Wno-deprecated-non-prototype' \
+    . ${NORE_ROOT}/auto/make_define
+fi
 
 # eof

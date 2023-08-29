@@ -67,7 +67,7 @@ unix_ed_test: unix_ed
 	echo $(unix_ed_binout)
 
 $(unix_ed_binout): $(unix_root)/ed/ed.c $(getopt_c)
-	$(CC) $(CFLAGS) -Wno-builtin-declaration-mismatch $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # exec
 unix_exec_binout := $(bin_path)/$(unix_prefix)_exec$(bin_ext)
