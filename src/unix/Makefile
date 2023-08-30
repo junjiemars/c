@@ -1,4 +1,4 @@
-# 
+#
 # ./configure --has-unix
 #
 # https://pdos.csail.mit.edu/6.828/2017/xv6.html
@@ -53,9 +53,11 @@ unix_echo_binout := $(bin_path)/$(unix_prefix)_echo$(bin_ext)
 
 unix_echo: $(unix_echo_binout)
 unix_echo_test: unix_echo
+	$(unix_echo_binout)
 	$(unix_echo_binout) -h
 	$(unix_echo_binout) -n abc
-	$(unix_echo_binout) abc 123 "xxx zzz"
+	$(unix_echo_binout) a -n bb
+	$(unix_echo_binout) abc a bb  ccc    dddd "xxx_|  |_zzz"
 
 $(unix_echo_binout): $(unix_root)/echo/e.c $(getopt_c)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
