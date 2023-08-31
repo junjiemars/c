@@ -35,8 +35,8 @@ main (void)
           "  ru_maxrss: %ld,\n"
           "  ru_nsignal: %ld\n"
           "}\n",
-          ru.ru_utime.tv_sec, ru.ru_utime.tv_usec, ru.ru_stime.tv_sec,
-          ru.ru_stime.tv_usec, ru.ru_maxrss, ru.ru_nsignals);
+          ru.ru_utime.tv_sec, (long)ru.ru_utime.tv_usec, ru.ru_stime.tv_sec,
+          (long)ru.ru_stime.tv_usec, ru.ru_maxrss, ru.ru_nsignals);
 
   exit (EXIT_SUCCESS);
 }
