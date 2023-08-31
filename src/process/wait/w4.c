@@ -30,8 +30,8 @@ main (void)
 
   printf ("rusage:\n"
           "{\n"
-          "  ru_utime: { tv_sec: %ld, tv_usec: %d },\n"
-          "  ru_stime: { tv_sec: %ld, tv_usec: %d },\n"
+          "  ru_utime: { tv_sec: %ld, tv_usec: %ld },\n"
+          "  ru_stime: { tv_sec: %ld, tv_usec: %ld },\n"
           "  ru_maxrss: %ld,\n"
           "  ru_nsignal: %ld\n"
           "}\n",

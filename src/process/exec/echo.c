@@ -6,20 +6,20 @@
  */
 
 int
-main(int argc, char **argv)
+main (int argc, char **argv)
 {
-  char         **p;
-  extern char  **environ;
+  char **p;
+  extern char **environ;
 
   for (int i = 0; i < argc; i++)
     {
-      printf("argv[%d]: %s\n", i, argv[i]);
+      printf ("argv[%d]: %s\n", i, argv[i]);
     }
 
   for (p = environ; *p != 0; p++)
     {
-      printf("%s\n", *p);
+      printf ("%s\n", *p);
     }
 
-  exit(0);
+  exit (0);
 }

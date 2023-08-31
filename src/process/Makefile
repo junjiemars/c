@@ -191,7 +191,7 @@ $(process_exec_child_binout): $(process_root)/exec/child.c
     $^ $(bin_out)$@
 
 $(process_exec_sh): $(process_exec_echo_binout)
-	echo "#! $(CURDIR)/$< a b c\n\necho void\n" > $@ && chmod u+x $@
+	echo "#!$(CURDIR)/$< a b c\n\necho void\n" > $@ && chmod u+x $@
 
 $(process_exec_ve_binout): $(process_root)/exec/vary.c  \
                            $(process_root)/exec/ve1.c
