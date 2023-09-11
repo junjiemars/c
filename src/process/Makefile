@@ -542,8 +542,6 @@ $(process_wait_sig_binout): $(process_root)/wait/w0.c
 process_zombie_binout := $(bin_path)/$(process_prefix)_zombie$(bin_ext)
 
 process_zombie: $(process_zombie_binout)
-process_zombie_test: process_zombie_test
-
 process_zombie_test: $(process_zombie_binout)
 	$<
 
