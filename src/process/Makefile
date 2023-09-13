@@ -146,12 +146,13 @@ process_exec_echo_test: $(process_exec_echo_binout)
 
 process_exec_vary_test: $(process_exec_vary_binout)   \
                         $(process_exec_echo_binout)
-	$< "execl"
-	PATH="$(CURDIR)/$(bin_path)" $< "execlp"
-	XXX=zZZz $< "execle"
-	$< "execv"
-	PATH="$(CURDIR)/$(bin_path)" $< "execvp"
-	XXX=zZZz $< "execve"
+	env -i XXX=zZZz $< "execl"
+	env -i XXX=zZZz $< "execl" a bb ccc
+	env -i XXX=zZZz PATH="$(CURDIR)/$(bin_path)" $< "execlp" a bb ccc
+	env -i XXX=zZZz $< "execle" a bb ccc
+	env -i XXX=zZZz $< "execv" a bb ccc
+	env -i XXX=zZZz PATH="$(CURDIR)/$(bin_path)" $< "execvp" a bb ccc
+	env -i XXX=zZZz $< "execve" a bb ccc
 
 process_exec_child_test: $(process_exec_child_binout) \
                          $(process_exec_echo_binout)
