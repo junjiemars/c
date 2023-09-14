@@ -8,7 +8,6 @@
 int
 main (int argc, char **argv)
 {
-  int rc = 0;
   pid_t pid;
   char **args = 0;
   char **env = 0;
@@ -23,6 +22,7 @@ main (int argc, char **argv)
       int env_n = 0;
       extern char **environ;
 
+      /* duplicate environ */
       for (char **p = environ; *p != 0; p++)
         {
           env_n++;
@@ -34,6 +34,7 @@ main (int argc, char **argv)
         }
       env[env_n] = 0;
 
+      /* duplicate argv */
       args = (char **)malloc (sizeof (char *) * (argc + 1));
       args[0] = strdup (_FILE_NAME_);
       for (int i = 1; i < argc; i++)
@@ -42,8 +43,7 @@ main (int argc, char **argv)
         }
       args[argc] = 0;
 
-      rc = execve (_PATH_NAME_, args, env);
-      if (rc == -1)
+      if ((execve (_PATH_NAME_, args, env)) == -1)
         {
           perror (NULL);
           exit (EXIT_FAILURE);
@@ -52,8 +52,7 @@ main (int argc, char **argv)
       exit (EXIT_SUCCESS);
     }
 
-  pid = waitpid (pid, NULL, 0);
-  if (pid == -1)
+  if ((waitpid (pid, NULL, 0)) == -1)
     {
       perror (NULL);
       exit (EXIT_FAILURE);
