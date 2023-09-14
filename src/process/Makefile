@@ -141,8 +141,7 @@ process_exec_test: process_exec_echo_test       \
                    process_exec_path_test
 
 process_exec_echo_test: $(process_exec_echo_binout)
-	$<
-	$< a bb ccc
+	env -i XXX=zZZz $< a bb ccc
 
 process_exec_vary_test: $(process_exec_vary_binout)   \
                         $(process_exec_echo_binout)
@@ -156,7 +155,7 @@ process_exec_vary_test: $(process_exec_vary_binout)   \
 
 process_exec_child_test: $(process_exec_child_binout) \
                          $(process_exec_echo_binout)
-	$<
+	env -i XXX=zZZz $< a bb ccc
 
 process_exec_ve_test: $(process_exec_ve_binout)   \
                       $(process_exec_echo_binout)
