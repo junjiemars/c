@@ -1,3 +1,4 @@
+# -*- major-mode:makefile-gmake-mode -*-
 #
 # ./configure --has-process
 #
@@ -159,8 +160,8 @@ process_exec_child_test: $(process_exec_child_binout) \
 
 process_exec_ve_test: $(process_exec_ve_binout)   \
                       $(process_exec_echo_binout)
-	$< "execl"
-	XXX=zZZz $< "execle"
+	env -i XXX=zZZz $< "execl" a bb ccc
+	env -i XXX=zZZz $< "execle" a bb ccc
 	PATH="$(CURDIR)/$(bin_path)" $< "execlp"
 
 process_exec_sh_test: $(process_exec_sh)
@@ -245,7 +246,7 @@ process_group_test: process_group_id_test       \
 
 process_group_id_test: $(process_group_id_binout)
 	echo "make pid=$$PPID"
-	$<
+	-$<
 
 process_group_child_test: $(process_group_child_binout)
 	$<

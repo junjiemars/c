@@ -2,6 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
+ * 1. `brk` is not a part of POSIX standard.
+ *
+ */
+
 #define ALLOC_SIZE  sizeof(long)
 
 
