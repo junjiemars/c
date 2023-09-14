@@ -334,24 +334,24 @@ process_layout_raw_binout := $(bin_path)/$(process_prefix)_layout_raw$(bin_ext)
 process_layout_raw_asmout := $(tmp_path)/$(process_prefix)_layout_raw$(asm_ext)
 process_layout_brk_binout := $(bin_path)/$(process_prefix)_layout_brk$(bin_ext)
 
-ifeq ($(NM_SYSTEM), Darwin)
-process_layout: $(process_layout_raw_binout)
-process_layout_test: process_layout_raw_test
-else
 process_layout: $(process_layout_raw_binout)    \
                 $(process_layout_brk_binout)
 process_layout_test: process_layout_raw_test    \
                      process_layout_brk_test
-endif
 
 process_layout_raw_test: $(process_layout_raw_binout)
 	$<
 	size $<
 	nm $<
 
+ifeq ($(NM_SYSTEM),Darwin)
+process_layout_brk_test:
+	echo "# skpped, 'brk' had been deprecated on Darwin"
+else
 process_layout_brk_test: $(process_layout_brk_binout)
 	$<
 	size $<
+endif
 
 $(process_layout_raw_binout): $(process_layout_raw_asmout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
