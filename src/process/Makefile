@@ -345,7 +345,7 @@ process_layout_test: process_layout_raw_test    \
                      process_layout_brk_test
 
 process_layout_raw_test: $(process_layout_raw_binout)
-	env -i XXX=zZZz $< | sort -k1,1gr
+	env -i XXX=zZZz $< | sort -k1,1r
 	size $<
 	nm $<
 
