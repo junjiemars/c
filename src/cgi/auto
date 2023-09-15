@@ -1,0 +1,41 @@
+# -*- mode:sh -*- vim:ft=sh
+
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+
+# check ncstd.h features
+ncc_cpu_endian="yes"
+ncc_sanitize_address="yes"
+. ${POSIX_ROOT}/ncstd_auto
+
+
+echo "checking for {cgi} ..."
+
+
+has_fcgi=no
+fcgi_inc=
+fcgi_ldflags=
+fcgi_ldlibs=
+
+echo $echo_n " + checking for fcgi ... $echo_c"
+if pkg-config --version 2>&1 >/dev/null; then
+  if pkg-config --exists fcgi; then
+    fcgi_inc=`pkg-config --cflags-only-I fcgi`
+    fcgi_ldflags=`pkg-config --libs-only-L fcgi`
+    fcgi_ldlibs=`pkg-config --libs-only-l fcgi`
+  fi
+fi
+
+if [ -n "$fcgi_ldlibs" ]; then
+  has_fcgi=yes
+  echo "yes"
+else
+  echo "no"
+fi
+
+flag=has_fcgi op=":=" value="$has_fcgi" . ${NORE_ROOT}/auto/make_define
+flag=fcgi_inc op=":=" value="$fcgi_inc" . ${NORE_ROOT}/auto/make_define
+flag=fcgi_ldflags op=":=" value="$fcgi_ldflags" . ${NORE_ROOT}/auto/make_define
+flag=fcgi_ldlibs op=":=" value="$fcgi_ldlibs" . ${NORE_ROOT}/auto/make_define
