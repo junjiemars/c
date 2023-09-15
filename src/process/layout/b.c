@@ -3,103 +3,93 @@
 #include <stdlib.h>
 
 /*
- * 1. `brk` is not a part of POSIX standard.
+ * 1. `brk` is not a part of POSIX standard, since POSIX.1-2001.
  *
  */
 
-#define ALLOC_SIZE  sizeof(long)
+#define ALLOC_SIZE sizeof (long long)
 
+static void test_brk (void);
+static void test_sbrk (void);
+static void test_alloc (void);
 
-static void test_brk(void);
-static void test_sbrk(void);
-static void test_alloc(void);
-
-static int  ds_var  =  0x1122;
-static int  bss_var;
-
+static int ds_var = 0x1122;
+static int bss_var;
 
 int
-main(void)
+main (void)
 {
-  test_brk();
-  test_sbrk();
-  test_alloc();
+  test_brk ();
+  test_sbrk ();
+  test_alloc ();
 
   return 0;
 }
 
-
 void
-test_brk(void)
+test_brk (void)
 {
-  int    rc;
-
-  rc = brk(0);
-  if (rc)
+  if (brk (0) == -1)
     {
-      perror(NULL);
+      perror (NULL);
       return;
     }
-
 }
 
 void
-test_sbrk(void)
+test_sbrk (void)
 {
-  void  *rp;
-
-  rp = sbrk(0);
-  if (rp == (void *) -1)
+  void *rp;
+  if ((rp = sbrk (0)) == (void *)-1)
     {
-      perror(NULL);
+      perror (NULL);
       return;
     }
-
 }
 
 void
-test_alloc(void)
+test_alloc (void)
 {
-  int        rc;
-  char      *ss, *ss1;
-  intptr_t  *rp;
+  char *ss, *ss1;
+  intptr_t *bp, *bp1;
 
-  rp = sbrk(0);
-  if (rp == (void *) -1)
+  if ((bp = sbrk (0)) == (void *)-1)
     {
-      perror(NULL);
+      perror (NULL);
       return;
     }
 
-  rc = brk(rp + ALLOC_SIZE);
-  if (rc == -1)
+  if ((brk ((char *)bp + ALLOC_SIZE)) == -1)
     {
-      perror(NULL);
+      perror (NULL);
       return;
     }
 
-  rp = sbrk(0);
-  if (rp == (void *) -1)
+  bp1 = sbrk (0);
+  if (bp1 == (void *)-1)
     {
-      perror(NULL);
+      perror (NULL);
       return;
     }
 
-  ss1 = malloc(ALLOC_SIZE);
+  ss1 = malloc (ALLOC_SIZE);
   if (!ss1)
     {
-      perror(NULL);
+      perror (NULL);
       return;
     }
 
-  ss = (char *) rp;
-  snprintf(ss, ALLOC_SIZE, "%s", "ABCD");
-  printf("%-8s%p\n", ss, rp);
+  ss = (char *)bp;
+  snprintf (ss, ALLOC_SIZE, "%s", "___");
+  printf ("%-8s%p\n", ss, bp);
 
-  snprintf(ss1, ALLOC_SIZE, "%s", "abcd");
-  printf("%-8s%p\n", ss1, ss1);
+  ss = (char *)bp1;
+  snprintf (ss, ALLOC_SIZE, "%s", "ABC");
+  printf ("%-8s%p (brk)\n", ss, bp1);
 
-  printf("%#-8x%p\n", bss_var, &bss_var);
-  printf("%#-8x%p\n", ds_var, &ds_var);
+  snprintf (ss1, ALLOC_SIZE, "%s", "abc");
+  printf ("%-8s%p (malloc)\n", ss1, ss1);
 
+  printf ("%#-8x%p (bss)\n", bss_var, &bss_var);
+  printf ("%#-8x%p (ds)\n", ds_var, &ds_var);
 }

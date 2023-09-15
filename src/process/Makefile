@@ -54,6 +54,11 @@ process_prefix := process
 posix_root ?= $(root)/posix
 INC += $(nm_inc_opt)$(process_root) $(nm_inc_opt)$(posix_root)
 
+_MEMORY_ ?= 0
+ifeq ($(shell test $(_MEMORY_) -gt 0; echo $$?),0)
+CFLAGS += $(f_sanitize)
+endif
+
 ifeq ($(NM_SYSTEM),Linux)
 	cflags_static_opt := -static
 endif
