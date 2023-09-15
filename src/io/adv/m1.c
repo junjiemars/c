@@ -36,7 +36,7 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
 
-  /* keep the size */
+  /* keep the same size */
   if (ftruncate (fdst, ss.st_size) == -1)
     {
       perror (NULL);
