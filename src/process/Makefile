@@ -476,9 +476,13 @@ process_rlimit_raw_test: $(process_rlimit_raw_binout)
 	# ulimit -a
 	$(process_rlimit_raw_binout)
 
+ifeq ($(NM_SYSTEM),Linux)
 process_rlimit_p_test: $(process_rlimit_p_binout)
 	$(process_rlimit_p_binout) $$PPID
-	# prlimit -p$$PPID
+else
+process_rlimit_p_test: $(process_rlimit_p_binout)
+	echo "# skipped ... no support on $(NM_SYSTEM)"
+endif
 
 $(process_rlimit_raw_binout): $(process_rlimit_c)
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

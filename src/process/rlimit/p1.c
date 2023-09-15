@@ -4,6 +4,7 @@
 /*
  * Simulate `prlimit(1)' command.
  *
+ * 1. `prlimit(2)' is a Linux-specific extension.
  *
  */
 
