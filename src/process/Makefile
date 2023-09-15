@@ -461,17 +461,29 @@ $(process_orphan_grp_binout): $(process_root)/orphan/g1.c
 
 
 # rlimit
-process_rlimit_binout := $(bin_path)/$(process_prefix)_rlimit$(bin_ext)
+process_rlimit_raw_binout := $(bin_path)/$(process_prefix)_rlimit_raw$(bin_ext)
+process_rlimit_p_binout := $(bin_path)/$(process_prefix)_rlimit_p$(bin_ext)
 process_rlimit_c := $(tmp_path)/$(process_prefix)_rl.c
 process_rlimit_awk := $(process_root)/rlimit/rl.awk
 process_rlimit_awk_in := $(process_root)/rlimit/rl.awk.in
 
-process_rlimit: $(process_rlimit_binout)
-process_rlimit_test: process_rlimit
-	# ulimit -a
-	$(process_rlimit_binout)
+process_rlimit: $(process_rlimit_raw_binout)    \
+                $(process_rlimit_p_binout)
+process_rlimit_test: process_rlimit_raw_test    \
+                     process_rlimit_p_test
 
-$(process_rlimit_binout): $(process_rlimit_c)
+process_rlimit_raw_test: $(process_rlimit_raw_binout)
+	# ulimit -a
+	$(process_rlimit_raw_binout)
+
+process_rlimit_p_test: $(process_rlimit_p_binout)
+	$(process_rlimit_p_binout) $$PPID
+	# prlimit -p$$PPID
+
+$(process_rlimit_raw_binout): $(process_rlimit_c)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(process_rlimit_p_binout): $(process_root)/rlimit/p1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(process_rlimit_c): $(process_rlimit_awk)      \
