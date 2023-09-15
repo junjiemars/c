@@ -10,7 +10,8 @@ io_test:
 	@echo "#skip ..."
 else
 
-io: io_access                                   \
+io:                                             \
+    io_access                                   \
     io_adv                                      \
     io_close                                    \
     io_copy                                     \
@@ -35,7 +36,8 @@ io: io_access                                   \
     io_trunc                                    \
     io_umask
 
-io_test: io_access_test                         \
+io_test:                                        \
+         io_access_test                         \
          io_adv_test                            \
          io_close_test                          \
          io_copy_test                           \
@@ -789,7 +791,7 @@ io_stat_ft_test: $(io_stat_ft_binout)
 io_stat_uid_test: $(io_stat_uid_binout)
 	ls -lh $< $(shell command -v passwd)
 	$< $< $(shell command -v passwd)
-	chmod ug+s $<
+	-chmod ug+s $<
 	$< $<
 	ls -lh $<
 

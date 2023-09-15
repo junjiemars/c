@@ -494,7 +494,7 @@ ifeq ($(NM_SYSTEM),Linux)
 process_rlimit_p_test: $(process_rlimit_p_binout)
 	$(process_rlimit_p_binout) $$PPID
 else
-process_rlimit_p_test: $(process_rlimit_p_binout)
+process_rlimit_p_test:
 	echo "# skipped ... unsupported on $(NM_SYSTEM)"
 endif
 
