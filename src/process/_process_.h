@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
-
+#include <sys/mman.h>
 
 
 #endif /* end of _PROCESS_H_ */

@@ -20,6 +20,7 @@ process: process_argv                           \
          process_layout                         \
          process_login                          \
          process_main                           \
+         process_mmap                           \
          process_nice                           \
          process_orphan                         \
          process_rlimit                         \
@@ -38,6 +39,7 @@ process_test: process_argv_test                 \
               process_layout_test               \
               process_login_test                \
               process_main_test                 \
+              process_mmap_test                 \
               process_nice_test                 \
               process_orphan_test               \
               process_rlimit_test               \
@@ -409,6 +411,18 @@ $(process_main_binout): $(process_root)/main/m99.c
 
 
 
+# mmap
+process_mmap_prot_binout := $(bin_path)/$(process_prefix)_mmap_prot$(bin_ext)
+
+process_mmap: $(process_mmap_prot_binout)
+process_mmap_test: process_mmap_prot_test
+
+process_mmap_prot_test: $(process_mmap_prot_binout)
+	$<
+
+$(process_mmap_prot_binout): $(process_root)/mmap/p1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $< $(bin_out)$@
+
 # nice
 process_nice_raw_binout := $(bin_path)/$(process_prefix)_nice_raw$(bin_ext)
 process_nice_diff_binout := $(bin_path)/$(process_prefix)_nice_diff$(bin_ext)
@@ -481,7 +495,7 @@ process_rlimit_p_test: $(process_rlimit_p_binout)
 	$(process_rlimit_p_binout) $$PPID
 else
 process_rlimit_p_test: $(process_rlimit_p_binout)
-	echo "# skipped ... no support on $(NM_SYSTEM)"
+	echo "# skipped ... unsupported on $(NM_SYSTEM)"
 endif
 
 $(process_rlimit_raw_binout): $(process_rlimit_c)
