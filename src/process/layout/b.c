@@ -3,7 +3,12 @@
 #include <stdlib.h>
 
 /*
- * 1. `brk` is not a part of POSIX standard, since POSIX.1-2001.
+ * 1. Since POSIX.1-2001, `brk' is not a part of POSIX standard
+ * anymore.
+ *
+ * 2. Bearing in mind: the `malloc' will call `brk' twice, think about
+ * it why. Change `ALLOC_SIZE' then trace `malloc' call and see whats
+ * happens.
  *
  */
 
