@@ -1,12 +1,15 @@
 #include "_io_.h"
 
+/*
+ * Copy file using `mmap'
+ *
+ */
+
 int
 main (int argc, char **argv)
 {
-  int fdin, fdout;
-  char *src, *dst;
-  off_t fsz;
-  size_t bsz;
+  int fsrc, fdst;
+  char *psrc, *pdst;
   struct stat ss;
 
   if (argc < 3)
@@ -15,65 +18,50 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
 
-  if ((fdin = open (argv[1], O_RDONLY)) == -1)
+  if ((fsrc = open (argv[1], O_RDONLY)) == -1)
     {
       perror (NULL);
       exit (EXIT_FAILURE);
     }
 
-  if (fstat (fdin, &ss) == -1)
+  if (fstat (fsrc, &ss) == -1)
     {
       perror (NULL);
       exit (EXIT_FAILURE);
     }
 
-  if ((fdout = open (argv[2], O_RDWR | O_CREAT | O_TRUNC, 0644)) == -1)
+  if ((fdst = open (argv[2], O_RDWR | O_CREAT | O_TRUNC, 0644)) == -1)
     {
       perror (NULL);
       exit (EXIT_FAILURE);
     }
 
-  if (ftruncate (fdout, ss.st_size) == -1)
+  /* keep the size */
+  if (ftruncate (fdst, ss.st_size) == -1)
     {
       perror (NULL);
       exit (EXIT_FAILURE);
     }
 
-  fsz = 0;
-  src = NULL;
-  dst = NULL;
-
-  while (fsz < ss.st_size)
+  psrc = mmap (0, ss.st_size, PROT_READ, MAP_PRIVATE, fsrc, 0);
+  if (psrc == MAP_FAILED)
     {
-      if ((ss.st_size - fsz) > NM_PAGESIZE)
-        {
-          bsz = NM_PAGESIZE;
-        }
-      else
-        {
-          bsz = ss.st_size - fsz;
-        }
-
-      src = mmap (0, bsz, PROT_READ, MAP_SHARED, fdin, fsz);
-      if (src == MAP_FAILED)
-        {
-          perror (NULL);
-          exit (EXIT_FAILURE);
-        }
-
-      dst = mmap (0, bsz, PROT_READ | PROT_WRITE, MAP_SHARED, fdout, fsz);
-      if (dst == MAP_FAILED)
-        {
-          perror (NULL);
-          exit (EXIT_FAILURE);
-        }
-
-      memcpy (dst, src, bsz);
-      munmap (src, bsz);
-      munmap (dst, bsz);
-
-      fsz += bsz;
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
+
+  /* must be MAP_SHARED  */
+  pdst = mmap (0, ss.st_size, PROT_WRITE, MAP_SHARED, fdst, 0);
+  if (pdst == MAP_FAILED)
+    {
+      perror (NULL);
+      exit (EXIT_FAILURE);
+    }
+
+  memcpy (pdst, psrc, ss.st_size);
+
+  munmap (psrc, ss.st_size);
+  munmap (pdst, ss.st_size);
 
   exit (EXIT_SUCCESS);
 }
