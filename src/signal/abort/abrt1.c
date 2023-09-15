@@ -2,11 +2,11 @@
 
 
 /*
- * elmulates POSIX `abort(3)'.
+ * Elmulates POSIX `abort(3)'.
  *
  * https://pubs.opengroup.org/onlinepubs/9699919799/functions/abort.html
  *
- * on Linux: since glibc 2.27, `abort(3)' terminates the process
+ * On Linux: since glibc 2.27, `abort(3)' terminates the process
  * without flushing streams.
  *
  */

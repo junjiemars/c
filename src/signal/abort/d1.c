@@ -3,9 +3,10 @@
 /*
  * 1. `abort(3)' never return to its caller.
  *
- * 2. output streams are flushed and closed is implementation defined.
+ * 2. The output streams are flushed and closed is implementation
+ * defined.
  *
- * 3. if `on_sig_abrt' returns, `abort(3)' terminates the process.
+ * 3. If `on_sig_abrt' returns, `abort(3)' terminates the process.
  *
  */
 
@@ -14,7 +15,6 @@ extern void abort (void);
 #if !defined(_IGN_SIG_ABRT_) || (_IGN_SIG_ABRT_ < 0)
 static void on_sig_abrt (int);
 static void on_abrt_exit (void);
-
 #endif
 
 int
@@ -25,7 +25,9 @@ main (void)
   setvbuf (stdout, NULL, _IOFBF, 0);
   printf ("%d\n", getpid ());
 
+#if !defined(_IGN_SIG_ABRT_) || (_IGN_SIG_ABRT_ < 0)
   atexit (on_abrt_exit);
+#endif
 
   if (sigaction (SIGABRT, NULL, &act) == -1)
     {
@@ -38,14 +40,11 @@ main (void)
     {
       act.sa_handler = SIG_IGN;
     }
-
 #elif defined(_IGN_SIG_ABRT_) && (_IGN_SIG_ABRT_ == 0)
     /* SIG_DFL*/
-
 #else
   signal (SIGABRT, on_sig_abrt);
-
-#endif /* _IGN_SIG_ABRT_ */
+#endif
 
   abort ();
 
@@ -61,9 +60,8 @@ on_sig_abrt (int signo)
 
   /* cleanup then exit*/
 
-#if (_EXIT_SIG_HANDLER_)
+#if (_EXIT_SIG_HANDLER_ > 0)
   exit (EXIT_SUCCESS);
-
 #endif
 }
 
@@ -73,4 +71,4 @@ on_abrt_exit (void)
   printf ("# exiting ...\n");
 }
 
-#endif
+#endif /* _IGN_SIG_ABRT_ < 0 */

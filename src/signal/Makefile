@@ -1,5 +1,7 @@
+# -*- major-mode:makefile-gmake-mode -*-
 #
 # ./configure --has-signal
+#
 #
 
 
@@ -11,7 +13,8 @@ signal_test:
 else
 
 
-signal: signal_abort                            \
+signal:                                         \
+        signal_abort                            \
         signal_alarm                            \
         signal_child                            \
         signal_info                             \
@@ -29,7 +32,8 @@ signal: signal_abort                            \
         signal_timer                            \
         signal_wait
 
-signal_test: signal_abort_test                  \
+signal_test:                                    \
+             signal_abort_test                  \
              signal_alarm_test                  \
              signal_child_test                  \
              signal_info_test                   \
@@ -60,7 +64,7 @@ INC += $(nm_inc_opt)$(signal_root) $(nm_inc_opt)$(posix_root)
 # abort
 signal_abort_d_binout := $(bin_path)/$(signal_prefix)_abort_d$(bin_ext)
 signal_abort_a1_binout := $(bin_path)/$(signal_prefix)_abort_a1$(bin_ext)
-signal_abort_cflags ?= -D_IGN_SIG_ABRT_=-1 -D_EXIT_SIG_HANDLER_=1
+signal_abort_cflags := -D_IGN_SIG_ABRT_=-1 -D_EXIT_SIG_HANDLER_=1
 
 signal_abort: $(signal_abort_d_binout)        \
               $(signal_abort_a1_binout)
