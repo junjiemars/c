@@ -20,7 +20,7 @@ static void on_abrt_exit (void);
 int
 main (void)
 {
-  struct sigaction act;
+  struct sigaction oact;
 
   setvbuf (stdout, NULL, _IOFBF, 0);
   printf ("%d\n", getpid ());
@@ -29,7 +29,7 @@ main (void)
   atexit (on_abrt_exit);
 #endif
 
-  if (sigaction (SIGABRT, NULL, &act) == -1)
+  if (sigaction (SIGABRT, NULL, &oact) == -1)
     {
       perror (NULL);
       exit (EXIT_FAILURE);

@@ -92,7 +92,7 @@ signal_alarm_d_binout := $(bin_path)/$(signal_prefix)_alarm_d$(bin_ext)
 signal_alarm_a1_binout := $(bin_path)/$(signal_prefix)_alarm_a1$(bin_ext)
 signal_alarm_cflags ?= -D_ALRM_N_=4
 
-signal_alarm: $(signal_alarm_d_binout)        \
+signal_alarm: $(signal_alarm_d_binout)          \
               $(signal_alarm_a1_binout)
 
 

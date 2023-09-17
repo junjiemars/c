@@ -1,4 +1,4 @@
-# -*- major-mode:makefile-gmake-mode -*-
+# -*- mode:makefile-gmake -*-
 #
 # ./configure --has-process
 #
