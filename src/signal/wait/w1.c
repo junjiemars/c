@@ -56,6 +56,6 @@ on_sig_chld (int signo)
         }
 
       fprintf (stdout, "!on_sig_chld: child %d with 0x%04x exit ...\n", pid,
-               status);
+               WEXITSTATUS(status));
     }
 }

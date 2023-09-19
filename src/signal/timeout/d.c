@@ -1,34 +1,32 @@
 #include "_signal_.h"
-#include <sys/time.h>
 
 
-extern ssize_t  read1(int, void*, size_t, int);
-
+extern ssize_t read1 (int, void *, size_t, int);
 
 int
-main(int argc, char **argv)
+main (int argc, char **argv)
 {
-  ssize_t  n;
-  char     buf[] = "______________|\n";
-  int      timeout  =  1;
+  ssize_t n;
+  char buf[] = "______________|\n";
+  int timeout = 1;
 
   if (argc > 1)
     {
-      timeout = atoi(argv[1]);
+      timeout = atoi (argv[1]);
     }
-  printf("%d, %d\n", getpid(), timeout);
+  printf ("%d, %d\n", getpid (), timeout);
 
-  alarm(2);
+  alarm (2);
 
-  if ((n = read1(STDIN_FILENO, buf, sizeof(buf)-1, timeout)) == -1)
+  if ((n = read1 (STDIN_FILENO, buf, sizeof (buf) - 1, timeout)) == -1)
     {
-      perror(NULL);
+      perror (NULL);
     }
 
-  if (write(STDOUT_FILENO, buf, sizeof(buf)-1) == -1)
+  if (write (STDOUT_FILENO, buf, sizeof (buf) - 1) == -1)
     {
-      perror(NULL);
+      perror (NULL);
     }
 
-  exit(EXIT_SUCCESS);
+  exit (EXIT_SUCCESS);
 }
