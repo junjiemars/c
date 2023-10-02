@@ -425,7 +425,6 @@ $(signal_system_s1_binout): $(signal_root)/system/d.c   \
 signal_timeout_t1_binout := $(bin_path)/$(signal_prefix)_timeout_t1$(bin_ext)
 signal_timeout_n ?= 2
 
-
 signal_timeout: $(signal_timeout_t1_binout)
 signal_timeout_test: signal_timeout_t1_test
 
@@ -435,7 +434,7 @@ signal_timeout_t1_test: $(signal_timeout_t1_binout)
 
 $(signal_timeout_t1_binout): $(signal_root)/timeout/d.c   \
                              $(signal_root)/timeout/t1.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # timer
 signal_timer_libes_binout := $(bin_path)/$(signal_prefix)_timer_libes$(bin_ext)
