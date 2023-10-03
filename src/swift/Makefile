@@ -1,3 +1,4 @@
+# -*- mode:makefile-gmake -*-
 #
 # ./configure --has-swift
 # make clean test
@@ -20,15 +21,15 @@ swift_prefix := swift
 SWIFTC := $(has_swiftc)
 SWIFT := $(has_swift)
 
-swift_build_opt :=
+swift_build_opt := debug
 ifeq ($(NM_BUILD),YES)
-swift_build_opt := -c release
+swift_build_opt := release
 endif
 
 
 # hi
 swift_hi_package := $(swift_root)/hi/Package.swift
-swift_hi_binout := $(swift_root)/hi/debug/hi
+swift_hi_binout := $(swift_root)/hi/$(swift_build_opt)/hi
 
 swift_hi: $(swift_hi_binout)
 swift_hi_test: swift_hi
@@ -42,7 +43,7 @@ $(swift_hi_package):
 
 $(swift_hi_binout): $(swift_hi_package)                 \
                     $(swift_root)/hi/Sources/main.swift
-	$(SWIFT) build --package-path=$(swift_root)/hi $(swift_build_opt)
+	$(SWIFT) build --package-path=$(swift_root)/hi -c $(swift_build_opt)
 
 
 
