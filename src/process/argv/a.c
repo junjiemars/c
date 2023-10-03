@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <assert.h>
+#include "_process_.h"
 
 /*
  * 1. It's guaranteed by both ISO C and POSIX.1
@@ -10,7 +9,6 @@
  *
  */
 
-extern char  **environ;
 
 int
 main(int argc, char *argv[], char *envp[])
@@ -25,6 +23,7 @@ main(int argc, char *argv[], char *envp[])
     }
   assert(i == argc);
 
+  extern char  **environ;
   assert(&environ[0] == &envp[0]);
 
   i = 0;
