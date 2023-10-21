@@ -17,26 +17,26 @@ has_mix="no"
 has_mixasm="no"
 has_mixvm="no"
 
-echo ${echo_n} " + checking for mixasm ... " ${echo_c}
+printf " + checking for mixasm ... "
 mixasm=`command -v mixasm 2>/dev/null`
 if [ -n "$mixasm" ]; then
   has_mixasm="yes"
   flag=mixasm op=":=" value="$mixasm" . ${NORE_ROOT}/auto/make_define
-  echo "yes"
+  printf "yes\n"
 else
-  echo "no"
+  printf "no\n"
 fi
 flag=has_mixasm op=":=" value="$has_mixasm" . ${NORE_ROOT}/auto/make_define
 
 
-echo ${echo_n} " + checking for mixvm ... " ${echo_c}
+printf " + checking for mixvm ... "
 mixvm=`command -v mixvm 2>/dev/null`
 if [ -n "$mixvm" ]; then
   has_mixvm="yes"
   flag=mixvm op=":=" value="$mixvm" . ${NORE_ROOT}/auto/make_define
-  echo "yes"
+  printf "yes\n"
 else
-  echo "no"
+  printf "no\n"
 fi
 flag=has_mixvm op=":=" value="$has_mixvm" . ${NORE_ROOT}/auto/make_define
 

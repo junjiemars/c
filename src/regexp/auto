@@ -11,14 +11,14 @@
 #----------------------------------------
 has_pkg_config=NO
 has_libpcre=NO
-echo $echo_n " + checking for pkg-config ... $echo_c"
+printf " + checking for pkg-config ... "
 if [ 0 -eq $(pkg-config --version 2>&1 1>/dev/null;echo $?) ]; then
-  echo "yes"
+  printf "yes\n"
   has_pkg_config=YES
   flag=has_pkg_config op=":=" value="$has_pkg_config" \
       . ${NORE_ROOT}/auto/make_define
 else
-  echo "no"
+  printf "no\n"
 fi
 if [ "$has_pkg_config" = "YES" ]; then
   pcre_ldlibs=$(pkg-config --libs libpcre)

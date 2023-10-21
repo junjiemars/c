@@ -16,14 +16,14 @@ echo "checking for {flex} ..."
 # check flex
 #----------------------------------------
 has_flex=NO
-echo $echo_n " + checking for flex ... $echo_c"
+printf " + checking for flex ... "
 if flex --version >/dev/null; then
-  echo "yes"
+  printf "yes\n"
   has_flex=YES
   flag=has_flex op=":=" value="$has_flex" \
       . ${NORE_ROOT}/auto/make_define
 else
-  echo "no"
+  printf "no\n"
 fi
 
 

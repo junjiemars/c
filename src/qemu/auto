@@ -7,13 +7,13 @@
 ####
 
 
-echo ${echo_n} " + checking for qemu_x86-64 ... " ${echo_c}
+printf " + checking for qemu_x86-64 ... "
 has_qemu_x86_64="`command -v qemu-x86_64`"
 if [ -x "$has_qemu_x86_64" ]; then
   flag=has_qemu_x86_64 value="${has_qemu_x86_64}" . ${NORE_ROOT}/auto/make_define
-  echo "yes"
+  printf "yes\n"
 else
-  echo "no"
+  printf "no\n"
 fi
 
 # eof

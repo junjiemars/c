@@ -19,7 +19,7 @@ fcgi_inc=
 fcgi_ldflags=
 fcgi_ldlibs=
 
-echo $echo_n " + checking for fcgi ... $echo_c"
+printf " + checking for fcgi ... "
 if pkg-config --version 2>&1 >/dev/null; then
   if pkg-config --exists fcgi; then
     fcgi_inc=`pkg-config --cflags-only-I fcgi`
@@ -30,9 +30,9 @@ fi
 
 if [ -n "$fcgi_ldlibs" ]; then
   has_fcgi=yes
-  echo "yes"
+  printf "yes\n"
 else
-  echo "no"
+  printf "no\n"
 fi
 
 flag=has_fcgi op=":=" value="$has_fcgi" . ${NORE_ROOT}/auto/make_define

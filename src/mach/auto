@@ -209,13 +209,13 @@ esac
 #----------------------------------------
 has_pkg_config=NO
 has_jemalloc=NO
-echo $echo_n " + checking for pkg-config ... $echo_c"
+printf " + checking for pkg-config ... "
 if pkg-config --version >/dev/null; then
-  echo "yes"
+  printf "yes\n"
   flag=has_pkg_config op=":=" value="YES" \
       . ${NORE_ROOT}/auto/make_define
 else
-  echo "no"
+  printf "no\n"
 fi
 if [ "$has_pkg_config" = "YES" ]; then
   jemalloc_ldlibs="$(pkg-config --libs jemalloc)"

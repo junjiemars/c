@@ -7,6 +7,6 @@
 ####
 
 
-echo ${echo_n} " + checking for zig ... " ${echo_c}
+printf " + checking for zig ... "
 flag=has_zig value="`command -v zig`" . ${NORE_ROOT}/auto/make_define
-echo "yes"
+printf "yes\n"

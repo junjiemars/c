@@ -52,17 +52,17 @@ check_java_env () {
   local jni_ldflags=
   local jni_ldlibs=
 
-  echo ${echo_n} " + checking for java ... " ${echo_c}
+  printf " + checking for java ... "
 
   javac_ver="`${javac} -version 2>/dev/null`"
   if [ -z "$javac_ver" ]; then
-    echo "no"
+    printf "no\n"
     return
   fi
 
   javac_ver=`echo ${javac_ver}|sed -e 's/^javac \([0-9][0-9]*\)\..*$/\1/'`
   if [ 0 -ne $? ]; then
-    echo "no"
+    printf "no\n"
     return
   fi
 
@@ -96,7 +96,7 @@ check_java_env () {
   esac
 
   if [ ! -f "${java_home}/bin/java" ]; then
-    echo "no"
+    printf "no\n"
     return
   fi
 
@@ -113,7 +113,7 @@ check_java_env () {
   flag=jni_ldlibs value="$jni_ldlibs" . ${NORE_ROOT}/auto/make_define
 
   flag=has_java value="YES" . ${NORE_ROOT}/auto/make_define
-  echo "yes"
+  printf "yes\n"
 }
 
 
@@ -122,32 +122,32 @@ check_nodejs () {
   local nodejs_ver=
   local npm_ver=
 
-  echo ${echo_n} " + checking for node.js ... " ${echo_c}
+  printf " + checking for node.js ... "
 
   nodejs_ver="`node --version 2>/dev/null`"
   if [ 0 -ne $? -o -z "$nodejs_ver" ]; then
-    echo "no"
+    printf "no\n"
     return
   fi
 
   npm_ver="`npm --version 2>/dev/null`"
   if [ 0 -ne $? -o -z "$npm_ver" ]; then
-    echo "no"
+    printf "no\n"
     return
   fi
 
   flag=has_nodejs value="YES" . ${NORE_ROOT}/auto/make_define
-  echo "yes"
+  printf "yes\n"
 }
 
 check_python () {
   local python_ver="`python3 -c'import sys;print("%s.%s"%(sys.version_info.major,sys.version_info.minor))' 2>/dev/null`"
   local python_inc="/usr/include/python${python_ver}"
 
-  echo ${echo_n} " + checking for python ... " ${echo_c}
+  printf " + checking for python ... "
 
   if [ -z "$python_ver" ]; then
-    echo "no"
+    printf "no\n"
     return
   fi
 
@@ -160,13 +160,13 @@ check_python () {
   . ${NORE_ROOT}/auto/feature
 
   if [ "$nm_found" != "yes" ]; then
-    echo "no"
+    printf "no\n"
     return
   fi
 
   flag=has_python op=":=" value="yes" . ${NORE_ROOT}/auto/make_define
   flag=python_inc op=":=" value="$python_inc" . ${NORE_ROOT}/auto/make_define
-  echo "yes"
+  printf "yes\n"
 }
 
 

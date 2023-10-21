@@ -16,36 +16,36 @@ has_rust_etc=""
 has_pkg_config="${has_pkg_config:-no}"
 has_gtk_ver=""
 
-echo ${echo_n} " + checking for rustc ... " ${echo_c}
+printf " + checking for rustc ... "
 has_rustc="`command -v rustc`"
 if [ -x "$has_rustc" ]; then
   flag=has_rustc value="${has_rustc}" . ${NORE_ROOT}/auto/make_define
-  echo "yes"
+  printf "yes\n"
 else
   has_rustc=""
-  echo "no"
+  printf "no\n"
 fi
 
 
-echo ${echo_n} " + checking for cargo ... " ${echo_c}
+printf " + checking for cargo ... "
 has_cargo="`command -v cargo`"
 if [ -x "$has_cargo" ]; then
   flag=has_cargo value="${has_cargo}" . ${NORE_ROOT}/auto/make_define
-  echo "yes"
+  printf "yes\n"
 else
   has_cargo=""
-  echo "no"
+  printf "no\n"
 fi
 
 
-echo ${echo_n} " + checking for rustfmt ... " ${echo_c}
+printf " + checking for rustfmt ... "
 has_rust_fmt="`command -v rustfmt`"
 if [ -x "$has_rust_fmt" ]; then
   flag=has_rustfmt value="${has_rust_fmt}" . ${NORE_ROOT}/auto/make_define
-  echo "yes"
+  printf "yes\n"
 else
   has_rust_fmt=""
-  echo "no"
+  printf "no\n"
 fi
 
 
@@ -53,31 +53,31 @@ fi
 #----------------------------------------
 case $NM_SYSTEM in
   Darwin)
-    echo ${echo_n} " + checking for rust-lldb ... " ${echo_c}
+    printf " + checking for rust-lldb ... "
     has_lldb="`command -v lldb`"
     has_rust_lldb="`command -v rust-lldb`"
     if [ -x "$has_lldb" -a -x "$has_rust_lldb" ]; then
       flag=has_rust_lldb value="$has_rust_lldb" \
                          . ${NORE_ROOT}/auto/make_define
-      echo "yes"
+      printf "yes\n"
     else
       has_lldb=""
       has_rust_lldb=""
-      echo "no"
+      printf "no\n"
     fi
     ;;
   Linux|*)
-    echo ${echo_n} " + checking for rust-gdb ... " ${echo_c}
+    printf " + checking for rust-gdb ... "
     has_gdb="`command -v gdb`"
     has_rust_gdb="`command -v rust-gdb`"
     if [ -x "$has_gdb" -a -x "$has_rust_gdb" ]; then
       flag=has_rust_gdb value="$has_rust_gdb" \
                         . ${NORE_ROOT}/auto/make_define
-      echo "yes"
+      printf "yes\n"
     else
       has_gdb=""
       has_rust_gdb=""
-      echo "no"
+      printf "no\n"
     fi
     ;;
 esac
@@ -86,78 +86,78 @@ esac
 # check rust src/etc
 #----------------------------------------
 if [ -n "$has_rustc" ]; then
-  echo ${echo_n} " + checking for rust src ... " ${echo_c}
+  printf " + checking for rust src ... "
   rust_src_dir="/lib/rustlib/src/rust"
   has_rust_src="$(rustc --print sysroot)${rust_src_dir}"
 
   if [ "$has_rust_src" != "$rust_src_dir" -a -d "$has_rust_src" ]; then
     flag=has_rust_src value="${has_rust_src}" . ${NORE_ROOT}/auto/make_define
-    echo "yes"
-    echo ${echo_n} " + checking for ctags.rust ... " ${echo_c}
+    printf "yes\n"
+    printf " + checking for ctags.rust ... "
     rust_ctags_dir="/src/etc/ctags.rust"
     has_rust_ctags="${has_rust_src}${rust_ctags_dir}"
     if [ "$has_rust_ctags" != "$rust_ctags_dir" -a -r "$has_rust_ctags" ]; then
       flag=has_rust_ctags value="${has_rust_ctags}" . ${NORE_ROOT}/auto/make_define
-      echo "yes"
+      printf "yes\n"
     else
       rust_ctags_dir=""
-      echo "no"
+      printf "no\n"
     fi
   else
     has_rust_src=""
-    echo "no"
+    printf "no\n"
   fi
 
-  echo ${echo_n} " + checking for rust etc ... " ${echo_c}
+  printf " + checking for rust etc ... "
   rust_etc_dir="/lib/rustlib/etc"
   has_rust_etc="$(rustc --print sysroot)${rust_etc_dir}"
   if [ "$has_rust_etc" != "$rust_etc_dir" -a -d "$has_rust_etc" ]; then
     flag=has_rust_etc value="${has_rust_etc}" . ${NORE_ROOT}/auto/make_define
-    echo "yes"
+    printf "yes\n"
   else
     has_rust_etc=""
-    echo "no"
+    printf "no\n"
   fi
 
-  echo ${echo_n} " + checking for rust commit-hash ... " ${echo_c}
+  printf " + checking for rust commit-hash ... "
   has_rust_hash="$(rustc -vV|grep -e '^commit-hash'|sed -e 's#^commit-hash: \(.*\)$#\1#g') "
   if [ -n "$has_rust_hash" ]; then
     flag=has_rust_hash value="${has_rust_hash}" . ${NORE_ROOT}/auto/make_define
-    echo "yes"
+    printf "yes\n"
   else
     has_rust_hash=""
-    echo "no"
+    printf "no\n"
   fi
 fi
 
 # check pkg-config
 #----------------------------------------
-echo $echo_n " + checking for pkg-config ... $echo_c"
+printf " + checking for pkg-config ... "
 if [ -z "has_pkg_config" ] || [ 0 -eq $(pkg-config --version 2>&1 1>/dev/null;echo $?) ]; then
-  echo "yes"
+  printf "yes\n"
   has_pkg_config=yes
   flag=has_pkg_config op=":=" value="$has_pkg_config" \
                       . ${NORE_ROOT}/auto/make_define
 else
   has_pkg_config=no
-  echo "no"
+  printf "no\n"
 fi
 
 # check gtk4-rs: https://gtk-rs.org
 #----------------------------------------
-echo $echo_n " + checking for gtk4 ... $echo_c"
+printf " + checking for gtk4 ... "
 if [ -n "$has_pkg_config" ]; then
   pkg_config_gtk4="`pkg-config --modversion gtk4 2>/dev/null`"
   if [ -n "$pkg_config_gtk4" ]; then
     has_gtk_ver="v`echo $pkg_config_gtk4|cut -d'.' -f1`_`echo $pkg_config_gtk4|cut -d'.' -f2`"
     flag=has_gtk_ver op=":=" value="$has_gtk_ver" \
                      . ${NORE_ROOT}/auto/make_define
-    echo "yes"
+    printf "yes\n"
   else
-    echo "no"
+    printf "no\n"
   fi
 else
-    echo "no"
+    printf "no\n"
 fi
 
 

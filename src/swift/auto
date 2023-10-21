@@ -9,25 +9,25 @@
 has_swiftc=""
 has_swift=""
 
-echo ${echo_n} " + checking for swiftc ... " ${echo_c}
+printf " + checking for swiftc ... "
 has_swiftc="`command -v swiftc`"
 if [ -x "$has_swiftc" ]; then
   flag=has_swiftc value="${has_swiftc}" . ${NORE_ROOT}/auto/make_define
-  echo "yes"
+  printf "yes\n"
 else
   has_swiftc=""
-  echo "no"
+  printf "no\n"
 fi
 
 
-echo ${echo_n} " + checking for swift ... " ${echo_c}
+printf " + checking for swift ... "
 has_swift="`command -v swift`"
 if [ -x "$has_swift" ]; then
   flag=has_swift value="${has_swift}" . ${NORE_ROOT}/auto/make_define
-  echo "yes"
+  printf "yes\n"
 else
   has_swift=""
-  echo "no"
+  printf "no\n"
 fi
 
 

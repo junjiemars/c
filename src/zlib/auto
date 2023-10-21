@@ -19,7 +19,7 @@ zlib_inc=
 zlib_ldflags=
 zlib_ldlibs=
 
-echo $echo_n " + checking for zlib ... $echo_c"
+printf " + checking for zlib ... "
 if [ 0 -eq $(pkg-config --version 2>&1 1>/dev/null;echo $?) ]; then
   if `pkg-config --exists zlib`; then
     zlib_inc=`pkg-config --cflags-only-I zlib`
@@ -30,9 +30,9 @@ fi
 
 if [ -n "$zlib_ldlibs" ]; then
   has_zlib=yes
-  echo "yes"
+  printf "yes\n"
 else
-  echo "no"
+  printf "no\n"
 fi
 
 flag=has_zlib op=":=" value="$has_zlib" . ${NORE_ROOT}/auto/make_define

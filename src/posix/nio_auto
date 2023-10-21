@@ -151,7 +151,7 @@ fi
 # check dirname
 #----------------------------------------
 if [ "$nio_dirname" = "yes" ]; then
-  echo $echo_n " + checking for dirname ... $echo_c"
+  printf " + checking for dirname ... "
   nm_feature="dirname"
   nm_feature_name="nm_have_dirname"
   nm_feature_run=dumb
@@ -161,7 +161,7 @@ if [ "$nio_dirname" = "yes" ]; then
   . ${NORE_ROOT}/auto/feature
   if [ "$nm_found" = "yes" ]; then
     have=$nm_have_feature . ${NORE_ROOT}/auto/have
-    echo "yes"
+    printf "yes\n"
   else
     case $NM_SYSTEM in
       Linux)
@@ -199,7 +199,7 @@ if [ "$nio_dirname" = "yes" ]; then
         echo "$nm_found"
         ;;
       *)
-        echo "no"
+        printf "no\n"
         ;;
     esac
   fi
@@ -209,7 +209,7 @@ fi                              # nio_dirname
 # check basename
 #----------------------------------------
 if [ "$nio_basename" = "yes" ]; then
-  echo $echo_n " + checking for basename ... $echo_c"
+  printf " + checking for basename ... "
   nm_feature="basename"
   nm_feature_name="nm_have_basename"
   nm_feature_run=dumb
@@ -219,7 +219,7 @@ if [ "$nio_basename" = "yes" ]; then
   . ${NORE_ROOT}/auto/feature
   if [ "$nm_found" = "yes" ]; then
     have=$nm_have_feature . ${NORE_ROOT}/auto/have
-    echo "yes"
+    printf "yes\n"
   else
     case $NM_SYSTEM in
       Linux)
@@ -254,7 +254,7 @@ if [ "$nio_basename" = "yes" ]; then
         echo "$nm_found"
         ;;
       *)
-        echo "no"
+        printf "no\n"
         ;;
     esac
   fi
