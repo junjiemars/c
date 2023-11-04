@@ -11,5 +11,6 @@
 #if (LINUX)
 #  include <sys/wait.h>
 #endif
+#include <sys/stat.h>
 
 #endif  /* _IPC_H_ */

@@ -2,28 +2,28 @@
 
 
 int
-paging(const char *pathname, const char *pager)
+paging (const char *pathname, const char *pager)
 {
   FILE   *fp;
   int     fd[2];
   pid_t   pid;
 
-  if ((fp = fopen(pathname, "r")) == NULL)
+  if ((fp = fopen (pathname, "r")) == NULL)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
 
-  if (pipe(fd) == -1)
+  if (pipe (fd) == -1)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
 
-  if ((pid = fork()) == -1)
+  if ((pid = fork ()) == -1)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
   else if (pid > 0)
     {
@@ -31,61 +31,61 @@ paging(const char *pathname, const char *pager)
       size_t   linecap  =  NM_LINE_MAX;
       ssize_t  n;
 
-      close(fd[0]);
+      close (fd[0]);
 
       linep = &line[0];
 
-      while ((n = getline(&linep, &linecap, fp)) > 0)
+      while ((n = getline (&linep, &linecap, fp)) > 0)
         {
-          if (write(fd[1], line, n) != n)
+          if (write (fd[1], line, n) != n)
             {
               if (errno)
                 {
-                  perror(NULL);
+                  perror (NULL);
                 }
-              exit(EXIT_FAILURE);
+              exit (EXIT_FAILURE);
             }
         }
 
-      if (ferror(fp))
+      if (ferror (fp))
         {
-          perror(NULL);
-          exit(EXIT_FAILURE);
+          perror (NULL);
+          exit (EXIT_FAILURE);
         }
 
-      close(fd[1]);
+      close (fd[1]);
 
-      if (waitpid(pid, NULL, 0) == -1)
+      if (waitpid (pid, NULL, 0) == -1)
         {
-          perror(NULL);
-          exit(EXIT_FAILURE);
+          perror (NULL);
+          exit (EXIT_FAILURE);
         }
     }
   else
     {
       char  *pager_name;
 
-      close(fd[1]);
+      close (fd[1]);
 
       if (fd[0] != STDIN_FILENO)
         {
-          if (dup2(fd[0], STDIN_FILENO) != STDIN_FILENO)
+          if (dup2 (fd[0], STDIN_FILENO) != STDIN_FILENO)
             {
-              perror(NULL);
-              exit(EXIT_FAILURE);
+              perror (NULL);
+              exit (EXIT_FAILURE);
             }
-          close(fd[0]);
+          close (fd[0]);
         }
 
-      if ((pager_name = strrchr(pager, '/')) != NULL)
+      if ((pager_name = strrchr (pager, '/')) != NULL)
         {
           pager_name++;
         }
 
-      if (execl(pager, pager_name, 0) == -1)
+      if (execl (pager, pager_name, 0) == -1)
         {
-          perror(NULL);
-          exit(EXIT_FAILURE);
+          perror (NULL);
+          exit (EXIT_FAILURE);
         }
     }
 

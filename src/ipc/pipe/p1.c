@@ -1,4 +1,4 @@
-#include <_ipc_.h>
+#include "_ipc_.h"
 
 #define _TXT_ "hello world\n"
 
@@ -9,6 +9,7 @@ main (void)
   int fd[2];
   pid_t pid;
   char line[NM_LINE_MAX];
+  struct stat ss;
 
   if (pipe (fd) == -1)
     {
@@ -23,6 +24,7 @@ main (void)
     {
       close (fd[0]); /* close read */
       write (fd[1], _TXT_, sizeof (_TXT_) - 1);
+      waitpid (pid, NULL, 0);
     }
   else
     {

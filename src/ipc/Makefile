@@ -10,12 +10,14 @@ ipc_test:
 	@echo "#skip ..."
 else
 
-ipc: ipc_filter                                 \
+ipc: ipc_fd                                     \
+     ipc_filter                                 \
      ipc_pager                                  \
      ipc_pipe                                   \
      ipc_sock
 
-ipc_test: ipc_filter_test                       \
+ipc_test: ipc_fd_test                           \
+          ipc_filter_test                       \
           ipc_pager_test                        \
           ipc_pipe_test                         \
           ipc_sock_test
@@ -43,6 +45,15 @@ endif
 
 
 
+# fd
+ipc_fd_binout := $(bin_path)/$(ipc_prefix)_fd$(bin_ext)
+
+ipc_fd: $(ipc_fd_binout)
+ipc_fd_test: ipc_fd
+	$(ipc_fd_binout)
+
+$(ipc_fd_binout): $(ipc_root)/fd/f1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # filter
 ipc_filter_d_binout := $(bin_path)/$(ipc_prefix)_filter_d$(bin_ext)
