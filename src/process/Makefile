@@ -356,7 +356,7 @@ process_layout_brk_test:
 	echo "# skpped, 'brk' had been deprecated on Darwin"
 else
 process_layout_brk_test: $(process_layout_brk_binout)
-	$< | sort -k2,2gr
+	$< | sort -k2,2gr -k1,1nr
 	size $<
 endif
 

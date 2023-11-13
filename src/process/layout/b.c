@@ -116,6 +116,7 @@ test_alloc (void)
   printf ("%2d %p ds\n", ++sn, &ds_var);
   printf ("%2d %p sbrk\n", ++sn, bp2);
   printf ("%2d %p sbrk\n", ++sn, bp3);
+  printf ("%2d %p malloc\n", ++sn, ss);
   printf ("%2d %p malloc\n", ++sn, bp4);
   printf ("%2d %p free\n", ++sn, bp5);
 }
