@@ -54,8 +54,8 @@ void
 test_alloc (void)
 {
   int sn = 0;
-  char *ss, *ss1;
-  intptr_t *bp1, *bp2, *bp3;
+  char *ss;
+  intptr_t *bp1, *bp2, *bp3, *bp4, *bp5;
 
   if ((bp1 = sbrk (0)) == (void *)-1)
     {
@@ -90,25 +90,32 @@ test_alloc (void)
       return;
     }
 
-  ss1 = malloc (ALLOC_SIZE);
-  if (!ss1)
+  ss = malloc (ALLOC_SIZE);
+  if (!ss)
+    {
+      perror (NULL);
+      return;
+    }
+  bp4 = sbrk (0);
+  if (bp4 == (void *)-1)
     {
       perror (NULL);
       return;
     }
 
-  ss = (char *)bp1;
-  printf ("%2d %p (___) %-8s\n", ++sn, bp1, ss);
+  free (ss);
+  bp5 = sbrk (0);
+  if (bp5 == (void *)-1)
+    {
+      perror (NULL);
+      return;
+    }
 
-  ss = (char *)bp2;
-  printf ("%2d %p (sbrk) %-8s\n", ++sn, bp2, ss);
-
-  ss = (char *)bp3;
-  printf ("%2d %p (sbrk) %-8s\n", ++sn, bp3, ss);
-
-  ss = (char *)ss1;
-  printf ("%2d %p (malloc) %-8s\n", ++sn, ss1, ss1);
-
-  printf ("%2d %p (bss) %#-8x\n", ++sn, &bss_var, bss_var);
-  printf ("%2d %p (ds) %#-8x\n", ++sn, &ds_var, ds_var);
+  printf ("%2d %p ___\n", ++sn, bp1);
+  printf ("%2d %p bss\n", ++sn, &bss_var);
+  printf ("%2d %p ds\n", ++sn, &ds_var);
+  printf ("%2d %p sbrk\n", ++sn, bp2);
+  printf ("%2d %p sbrk\n", ++sn, bp3);
+  printf ("%2d %p malloc\n", ++sn, bp4);
+  printf ("%2d %p free\n", ++sn, bp5);
 }
