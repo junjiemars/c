@@ -1,6 +1,4 @@
 #include "_process_.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 /*
  * 1. Since POSIX.1-2001, `brk' is not a part of POSIX standard
@@ -55,23 +53,38 @@ test_sbrk (void)
 void
 test_alloc (void)
 {
+  int sn = 0;
   char *ss, *ss1;
-  intptr_t *bp, *bp1;
+  intptr_t *bp1, *bp2, *bp3;
 
-  if ((bp = sbrk (0)) == (void *)-1)
+  if ((bp1 = sbrk (0)) == (void *)-1)
     {
       perror (NULL);
       return;
     }
-
-  if ((brk ((char *)bp + ALLOC_SIZE)) == -1)
+  if ((brk ((char *)bp1 + ALLOC_SIZE)) == -1)
     {
       perror (NULL);
       return;
     }
+  bp2 = sbrk (0);
+  if (bp2 == (void *)-1)
+    {
+      perror (NULL);
+      return;
+    }
+  assert ((char *) bp2 == (char *)bp1 + ALLOC_SIZE);
 
-  bp1 = sbrk (0);
-  if (bp1 == (void *)-1)
+  bp3 = sbrk (ALLOC_SIZE);
+  if (bp3 == (void *)-1)
+    {
+      perror (NULL);
+      return;
+    }
+  assert (bp2 == bp3);
+
+  bp3 = sbrk (0);
+  if (bp3 == (void *)-1)
     {
       perror (NULL);
       return;
@@ -84,17 +97,18 @@ test_alloc (void)
       return;
     }
 
-  ss = (char *)bp;
-  snprintf (ss, ALLOC_SIZE, "%s", "___");
-  printf ("%-8s%p\n", ss, bp);
-
   ss = (char *)bp1;
-  snprintf (ss, ALLOC_SIZE, "%s", "ABC");
-  printf ("%-8s%p (brk)\n", ss, bp1);
+  printf ("%2d %p (___) %-8s\n", ++sn, bp1, ss);
 
-  snprintf (ss1, ALLOC_SIZE, "%s", "abc");
-  printf ("%-8s%p (malloc)\n", ss1, ss1);
+  ss = (char *)bp2;
+  printf ("%2d %p (sbrk) %-8s\n", ++sn, bp2, ss);
 
-  printf ("%#-8x%p (bss)\n", bss_var, &bss_var);
-  printf ("%#-8x%p (ds)\n", ds_var, &ds_var);
+  ss = (char *)bp3;
+  printf ("%2d %p (sbrk) %-8s\n", ++sn, bp3, ss);
+
+  ss = (char *)ss1;
+  printf ("%2d %p (malloc) %-8s\n", ++sn, ss1, ss1);
+
+  printf ("%2d %p (bss) %#-8x\n", ++sn, &bss_var, bss_var);
+  printf ("%2d %p (ds) %#-8x\n", ++sn, &ds_var, ds_var);
 }

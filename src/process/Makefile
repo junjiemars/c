@@ -347,7 +347,7 @@ process_layout_test: process_layout_raw_test    \
                      process_layout_brk_test
 
 process_layout_raw_test: $(process_layout_raw_binout)
-	env -i XXX=zZZz $< | sort -k1,1r
+	env -i XXX=zZZz $< | sort -k1,1gr
 	size $<
 	nm $<
 
@@ -356,7 +356,7 @@ process_layout_brk_test:
 	echo "# skpped, 'brk' had been deprecated on Darwin"
 else
 process_layout_brk_test: $(process_layout_brk_binout)
-	$<
+	$< | sort -k2,2gr
 	size $<
 endif
 

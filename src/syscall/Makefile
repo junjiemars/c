@@ -4,7 +4,6 @@
 
 ifeq ($(NM_SYSTEM),Linux)
 syscall: syscall_bone
-
 syscall_test: syscall_bone_test
 
 else
