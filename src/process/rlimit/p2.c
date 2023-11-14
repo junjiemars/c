@@ -29,8 +29,8 @@ main (int argc, char **argv)
 }
 
 int
-prlimit1 (pid_t pid, int resource, const struct rlimit *new_limit,
-          struct rlimit *old_limit)
+prlimit1 (pid_t pid, int resource, const struct rlimit *nlimit,
+          struct rlimit *olimit)
 {
   int rc;
 
@@ -39,13 +39,13 @@ prlimit1 (pid_t pid, int resource, const struct rlimit *new_limit,
       pid = 0;
     }
 
-  if (new_limit == NULL)
+  if (nlimit == NULL)
     {
-      rc = getrlimit (resource, old_limit);
+      rc = getrlimit (resource, olimit);
     }
   else
     {
-      rc = setrlimit (resource, new_limit);
+      rc = setrlimit (resource, nlimit);
     }
   return rc;
 }

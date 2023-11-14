@@ -479,18 +479,21 @@ process_rlimit_raw_binout := $(bin_path)/$(process_prefix)_rlimit_raw$(bin_ext)
 process_rlimit_c := $(tmp_path)/$(process_prefix)_rl.c
 process_rlimit_awk := $(process_root)/rlimit/rl.awk
 process_rlimit_awk_in := $(process_root)/rlimit/rl.awk.in
+process_rlimit_nofile_binout := $(bin_path)/$(process_prefix)_rlimit_nofile$(bin_ext)
 process_rlimit_pr_binout := $(bin_path)/$(process_prefix)_rlimit_pr$(bin_ext)
 process_rlimit_pr1_binout := $(bin_path)/$(process_prefix)_rlimit_pr1$(bin_ext)
-process_rlimit_nofile_binout := $(bin_path)/$(process_prefix)_rlimit_nofile$(bin_ext)
+process_rlimit_stack_binout := $(bin_path)/$(process_prefix)_rlimit_stack$(bin_ext)
 
 process_rlimit: $(process_rlimit_raw_binout)    \
                 $(process_rlimit_nofile_binout) \
                 $(process_rlimit_pr_binout)     \
-                $(process_rlimit_pr1_binout)
+                $(process_rlimit_pr1_binout)    \
+                $(process_rlimit_stack_binout)
 process_rlimit_test: process_rlimit_raw_test    \
                      process_rlimit_nofile_test \
                      process_rlimit_pr_test     \
-                     process_rlimit_pr1_test
+                     process_rlimit_pr1_test    \
+                     process_rlimit_stack_test
 
 process_rlimit_raw_test: $(process_rlimit_raw_binout)
 	# ulimit -a
@@ -507,6 +510,13 @@ process_rlimit_pr_test:
 	echo "# skipped ... prlimit no found"
 endif
 
+process_rlimit_stack_test: $(process_rlimit_stack_binout)
+	$(process_rlimit_stack_binout)
+
+$(process_rlimit_c): $(process_rlimit_awk)      \
+                     $(process_rlimit_awk_in)
+	awk -f $^ > $@
+
 process_rlimit_pr1_test: $(process_rlimit_pr1_binout)
 	$(process_rlimit_pr1_binout) $$PPID
 
@@ -522,9 +532,8 @@ $(process_rlimit_pr_binout): $(process_root)/rlimit/p1.c
 $(process_rlimit_pr1_binout): $(process_root)/rlimit/p2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(process_rlimit_c): $(process_rlimit_awk)      \
-                     $(process_rlimit_awk_in)
-	awk -f $^ > $@
+$(process_rlimit_stack_binout): $(process_root)/rlimit/s1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 
