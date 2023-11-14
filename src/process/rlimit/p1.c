@@ -1,5 +1,4 @@
 #include "_process_.h"
-#include <stdlib.h>
 
 /*
  * Simulate `prlimit(1)' command.

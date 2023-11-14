@@ -22,5 +22,11 @@ main (void)
       exit (EXIT_FAILURE);
     }
 
+  if (munmap (p, page_size) == -1)
+    {
+      perror (NULL);
+      exit (EXIT_FAILURE);
+    }
+
   exit (EXIT_SUCCESS);
 }
