@@ -8,6 +8,7 @@ main (void)
 {
   struct rlimit rl;
   stack_t ss;
+  struct sigaction sa;
 
   if (getrlimit (RLIMIT_STACK, &rl) == -1)
     {
@@ -15,7 +16,7 @@ main (void)
       return 1;
     }
   printf ("%s: cur = %li\n", _str_ (RLIMIT_STACK), (long)rl.rlim_cur);
-  pr_stack (&ss);
+  pr_stack (&rl);
 
   ss.ss_sp = malloc (MINSIGSTKSZ);
   if (ss.ss_sp == NULL)
@@ -30,14 +31,18 @@ main (void)
       perror (NULL);
       return 1;
     }
-  pr_stack (&ss);
+  pr_stack (&rl);
 
-  if (signal (SIGALRM, on_sig_alrm) == SIG_ERR)
+  sa.sa_handler = on_sig_alrm;
+  sa.sa_flags = SA_ONSTACK;
+  if (sigaction (SIGALRM, &sa, NULL) == -1)
     {
       perror (NULL);
       return 1;
     }
-  kill (0, SIGALRM);
+  kill (getpid (), SIGALRM);
+
+  pr_stack (&rl);
 
   return 0;
 }
