@@ -36,8 +36,8 @@ main (int argc, char **argv)
   *heap1 = 0x11;
   *heap2 = 0x22;
 
-  printf ("%-24p *heap1=%#x\n", heap1, *heap1);
-  printf ("%-24p *heap2=%#x\n", heap2, *heap2);
+  printf ("%-24p heap1=%#x\n", heap1, *heap1);
+  printf ("%-24p heap2=%#x\n", heap2, *heap2);
 
   printf ("%-24p bss1=%#x\n", bss1, bss1[0]);
   printf ("%-24p bss2=%#x\n", bss2, bss2[0]);
