@@ -30,6 +30,34 @@ nlim_clk_tck="yes"
 
 echo "checking for {process} ..."
 
+# check brk
+#----------------------------------------
+nm_feature="brk"
+nm_feature_name="nm_have_brk"
+nm_feature_run=
+nm_feature_h='
+#include <unistd.h>
+'
+nm_feature_flags=
+nm_feature_test='(void) brk(0);'
+. ${NORE_ROOT}/auto/feature
+flag=has_brk op=":=" value="$nm_found" . ${NORE_ROOT}/auto/make_define
+
+
+
+# check prlimit
+#----------------------------------------
+nm_feature="prlimit"
+nm_feature_name="nm_have_prlimit"
+nm_feature_run=
+nm_feature_h='
+#include <sys/resource.h>
+'
+nm_feature_flags=
+nm_feature_test='(void) prlimit(0,0,(const struct rlimit*)0,(const struct rlimit*)0);'
+. ${NORE_ROOT}/auto/feature
+flag=has_prlimit op=":=" value="$nm_found" . ${NORE_ROOT}/auto/make_define
+
 
 # check wait4
 #----------------------------------------
@@ -44,21 +72,6 @@ nm_feature_flags=
 nm_feature_test='(void) wait4(0, 0, 0, 0);'
 . ${NORE_ROOT}/auto/feature
 
-# check prlimit
-#----------------------------------------
-nm_feature="prlimit"
-nm_feature_name="nm_have_prlimit"
-nm_feature_run=
-nm_feature_h='
-#include <sys/resource.h>
-'
-nm_feature_flags=
-nm_feature_test='(void) prlimit(0,0,(const struct rlimit*)0,(const struct rlimit*)0);'
-. ${NORE_ROOT}/auto/feature
-if [ yes = $nm_found ]; then
-  flag=has_prlimit op=":=" value="$nm_found" \
-    . ${NORE_ROOT}/auto/make_define
-fi
 
 
 # eof

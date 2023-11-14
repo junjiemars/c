@@ -32,7 +32,7 @@ main (void)
 void
 test_brk (void)
 {
-  if (brk (0) == -1)
+  if (brk (0) == (void *)-1)
     {
       perror (NULL);
       return;

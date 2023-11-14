@@ -351,13 +351,18 @@ process_layout_raw_test: $(process_layout_raw_binout)
 	size $<
 	nm $<
 
-ifeq ($(NM_SYSTEM),Darwin)
-process_layout_brk_test:
-	echo "# skpped, 'brk' had been deprecated on Darwin"
-else
+ifeq ($(has_brk),yes)
+ifneq ($(NM_SYSTEM),Darwin)
 process_layout_brk_test: $(process_layout_brk_binout)
 	$< | sort -k2,2gr -k1,1nr
 	size $<
+else
+process_layout_brk_test:
+	echo "# skipped, 'brk' had been deprecated"
+endif
+else
+process_layout_brk_test:
+	echo "# skpped, 'brk' no found"
 endif
 
 $(process_layout_raw_binout): $(process_layout_raw_asmout)
@@ -507,7 +512,7 @@ process_rlimit_pr_test: $(process_rlimit_pr_binout)
 	$(process_rlimit_pr_binout) $$PPID
 else
 process_rlimit_pr_test:
-	echo "# skipped ... prlimit no found"
+	echo "# skipped, 'prlimit' no found"
 endif
 
 process_rlimit_stack_test: $(process_rlimit_stack_binout)
