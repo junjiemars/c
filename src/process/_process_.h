@@ -16,6 +16,10 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <sys/mman.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 
 
 #endif /* end of _PROCESS_H_ */

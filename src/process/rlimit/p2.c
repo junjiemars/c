@@ -1,5 +1,9 @@
 #include "_process_.h"
 
+/*
+ * Simulate `prlimit' system call.
+ */
+
 static int prlimit1 (pid_t, int, const struct rlimit *, struct rlimit *);
 static void pr_rlimit (struct rlimit *);
 
