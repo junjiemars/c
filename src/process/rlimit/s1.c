@@ -25,7 +25,7 @@ main (void)
       return 1;
     }
   ss.ss_size = MINSIGSTKSZ;
-  ss.ss_flags = SS_ONSTACK;
+  ss.ss_flags = 0;
   if (sigaltstack (&ss, (stack_t *)0) == -1)
     {
       perror (NULL);
