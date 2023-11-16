@@ -18,14 +18,13 @@ main (void)
   printf ("%s: cur = %li\n", _str_ (RLIMIT_STACK), (long)rl.rlim_cur);
   pr_stack (&rl);
 
-  ss.ss_sp = malloc (MINSIGSTKSZ);
-  if (ss.ss_sp == NULL)
+  if ((ss.ss_sp = malloc (MINSIGSTKSZ)) == NULL)
     {
       perror (NULL);
       return 1;
     }
   ss.ss_size = MINSIGSTKSZ;
-  ss.ss_flags = 0;
+  ss.ss_flags = SS_ONSTACK;
   if (sigaltstack (&ss, (stack_t *)0) == -1)
     {
       perror (NULL);
@@ -67,6 +66,9 @@ pr_stack (const void *addr)
       perror (NULL);
       return;
     }
-  printf ("%14p %4li %8li %14p\n", oss.ss_sp, (long)oss.ss_flags,
-          (long)oss.ss_size, addr);
+  printf ("%14p %4li %8li %14p %14p\n", oss.ss_sp, (long)oss.ss_flags,
+          (long)oss.ss_size, addr, oss.ss_sp + MINSIGSTKSZ);
+  assert (oss.ss_flags != SS_ONSTACK
+          || (addr > oss.ss_sp
+              && addr < (oss.ss_sp + MINSIGSTKSZ)));
 }
