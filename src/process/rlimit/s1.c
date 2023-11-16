@@ -24,7 +24,11 @@ main (void)
       return 1;
     }
   ss.ss_size = MINSIGSTKSZ;
+#if (DARWIN)
+  ss.ss_flags = 0;
+#else
   ss.ss_flags = SS_ONSTACK;
+#endif
   if (sigaltstack (&ss, (stack_t *)0) == -1)
     {
       perror (NULL);
