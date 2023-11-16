@@ -3,7 +3,7 @@
 #
 #
 
-ifeq ($(NM_SYSTEM), WinNT)
+ifeq ($(NM_SYSTEM),WinNT)
 io:
 	@echo "#skip ..."
 io_test:
@@ -150,7 +150,8 @@ io_adv_lock_test: $(io_adv_lock_binout)
 	$< <$(out)/Makefile
 
 io_adv_mmap_test: $(io_adv_mmap_binout)
-	$< $(io_root)/Makefile $(io_adv_out_file1);
+	time $< $(io_root)/Makefile $(io_adv_out_file1) \
+		&& diff $(io_root)/Makefile $(io_adv_out_file1)
 
 $(io_adv_nonblk_binout): $(io_root)/adv/nonblk1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

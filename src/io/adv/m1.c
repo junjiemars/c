@@ -14,7 +14,7 @@ main (int argc, char **argv)
 
   if (argc < 3)
     {
-      fprintf (stderr, "usage: <src> <dst>\n");
+      fprintf (stderr, "usage: %s <src> <dst>\n", argv[0]);
       exit (EXIT_FAILURE);
     }
 
@@ -50,7 +50,7 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
 
-  /* must be MAP_SHARED  */
+  /* must be MAP_SHARED */
   pdst = mmap (0, ss.st_size, PROT_WRITE, MAP_SHARED, fdst, 0);
   if (pdst == MAP_FAILED)
     {
@@ -58,8 +58,13 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
 
+  /* close after mapped is ok */
+  close (fsrc);
+  close (fdst);
+
   memcpy (pdst, psrc, ss.st_size);
 
+  /* unmap */
   munmap (psrc, ss.st_size);
   munmap (pdst, ss.st_size);
 

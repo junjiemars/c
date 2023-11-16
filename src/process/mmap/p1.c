@@ -1,6 +1,5 @@
 #include "_process_.h"
 
-
 int
 main (void)
 {
@@ -9,12 +8,12 @@ main (void)
 
   if ((p = mmap (NULL, page_size, PROT_READ | PROT_WRITE,
                  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0))
-      == (void *)-1)
+      == MAP_FAILED)
     {
       perror (NULL);
       exit (EXIT_FAILURE);
     }
-  printf ("%p\n", p);
+  printf ("%p %p\n", p, &p);
 
   if (mprotect (p, page_size, PROT_READ) == -1)
     {
