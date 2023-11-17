@@ -11,6 +11,10 @@
 #if (LINUX)
 #  include <sys/wait.h>
 #endif
+
 #include <sys/stat.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+
 
 #endif  /* _IPC_H_ */

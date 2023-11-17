@@ -9,7 +9,6 @@ main (void)
   int fd[2];
   pid_t pid;
   char line[NM_LINE_MAX];
-  struct stat ss;
 
   if (pipe (fd) == -1)
     {
