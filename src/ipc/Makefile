@@ -141,15 +141,17 @@ $(ipc_pipe_binout): $(ipc_root)/pipe/p1.c
 
 
 # sock
-ipc_sock_binout := $(bin_path)/$(ipc_prefix)_sock$(bin_ext)
+ipc_sock_bound_binout := $(bin_path)/$(ipc_prefix)_sock_bound$(bin_ext)
 ipc_sock_file := $(tmp_path)/$(ipc_prefix)_sock.file
 
-ipc_sock: $(ipc_sock_binout)
-ipc_sock_test: ipc_sock
-	-@rm $(ipc_sock_file)
-	$(ipc_sock_binout) $(ipc_sock_file)
+ipc_sock: $(ipc_sock_bound_binout)
+ipc_sock_test: ipc_sock_bound_test
 
-$(ipc_sock_binout): $(ipc_root)/sock/s1.c
+ipc_sock_bound_test: $(ipc_sock_bound_binout)
+	$(shell test -f $(ipc_sock_file) && rm $(ipc_sock_file))
+	$< $(ipc_sock_file)
+
+$(ipc_sock_bound_binout): $(ipc_root)/sock/b1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
