@@ -21,7 +21,7 @@ struct score_s
 
 
 void list_array(const void *base, size_t nel, size_t width,
-								void (*print)(const void *el));
+                void (*print)(const void *el));
 
 void print_int(const void *e);
 void print_str(const void *e);

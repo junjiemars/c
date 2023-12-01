@@ -137,9 +137,17 @@ $(ds_stack_binout): $(ds_root)/stack/test.c     \
 	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
 
 # tree
+ds_tree_bone_binout := $(bin_path)/$(ds_prefix)_tree_bone$(bin_ext)
 
-ds_tree:
-ds_tree_test: ds_tree
+ds_tree: $(ds_tree_bone_binout)
+ds_tree_test: ds_tree_bone_test
+
+ds_tree_bone_test: $(ds_tree_bone_binout)
+	$<
+
+$(ds_tree_bone_binout): $(ds_root)/tree/test.c      \
+                        $(ds_root)/tree/bone/tb1.c
+	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
 
 # d2b
 ds_d2b_binout := $(bin_path)/$(ds_prefix)_d2b$(bin_ext)
