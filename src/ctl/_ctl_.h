@@ -7,6 +7,10 @@
 #include <str.h>
 #include <string.h>
 
+#if (DARWIN && CLANG)
+#pragma clang diagnostic ignored "-Wunused"
+#endif
+
 int compare_int (int *, int *);
 int equal_int (int *, int *);
 size_t hash_int (int *);

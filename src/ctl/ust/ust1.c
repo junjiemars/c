@@ -1,6 +1,4 @@
 #include "_ctl_.h"
-#include <stdio.h>
-
 
 #define P
 #define T int
@@ -10,118 +8,113 @@
 #define T double
 #include <ust.h>
 
-
 #define P
 #include <str.h>
 #define T str
 #include <ust.h>
 
-
 #define T image
 #include <ust.h>
 
-
-static void  test_ust_int(void);
-static void  test_ust_double(void);
-static void  test_ust_str(void);
-static void  test_ust_image(void);
-
+static void test_ust_int (void);
+static void test_ust_double (void);
+static void test_ust_str (void);
+static void test_ust_image (void);
 
 int
-main(void)
+main (void)
 {
-  test_ust_int();
-  test_ust_double();
-  test_ust_str();
-  test_ust_image();
-}
-
-
-void
-test_ust_int(void)
-{
-  int  d1[]  =  {9, 1, 8, 3, 4};
-
-  ust_int a = ust_int_init(hash_int, equal_int);
-
-  for (size_t i = 0; i < _nof_(d1); i++)
-    {
-      ust_int_insert(&a, d1[i]);
-    }
-
-  printf("ust<int>\n------------\n");
-
-  foreach(ust_int, &a, it)
-    {
-      printf("%d\n", *it.ref);
-    }
-
-  ust_int_free(&a);
+  test_ust_int ();
+  test_ust_double ();
+  test_ust_str ();
+  test_ust_image ();
 }
 
 void
-test_ust_double(void)
+test_ust_int (void)
 {
-  double  d[]  =  {9.0, 1.0, 8.0, 3.0, 4.0};
+  int d1[] = { 9, 1, 8, 3, 4 };
 
-  ust_double a = ust_double_init(hash_double, equal_double);
+  ust_int a = ust_int_init (hash_int, equal_int);
 
-  for (size_t i = 0; i < _nof_(d); i++)
+  for (size_t i = 0; i < _nof_ (d1); i++)
     {
-      ust_double_insert(&a, 9);
+      ust_int_insert (&a, d1[i]);
     }
 
-  printf("ust<double>\n------------\n");
+  printf ("ust<int>\n------------\n");
 
-  foreach(ust_double, &a, it)
+  foreach (ust_int, &a, it)
     {
-      printf("%lf\n", *it.ref);
+      printf ("%d\n", *it.ref);
     }
 
-  ust_double_free(&a);
+  ust_int_free (&a);
 }
 
 void
-test_ust_str(void)
+test_ust_double (void)
 {
-  char  *d[]  =  {"9a", "1a", "8a", "3a", "4a"};
+  double d[] = { 9.0, 1.0, 8.0, 3.0, 4.0 };
 
-  ust_str a = ust_str_init(hash_str, equal_str);
+  ust_double a = ust_double_init (hash_double, equal_double);
 
-  for (size_t i = 0; i < _nof_(d); i++)
+  for (size_t i = 0; i < _nof_ (d); i++)
     {
-      ust_str_insert(&a, str_init(d[i]));
+      ust_double_insert (&a, 9);
     }
 
-  printf("ust<str>\n------------\n");
+  printf ("ust<double>\n------------\n");
 
-  foreach(ust_str, &a, it)
+  foreach (ust_double, &a, it)
     {
-      printf("\"%s\"\n", str_c_str(it.ref));
+      printf ("%lf\n", *it.ref);
     }
 
-  ust_str_free(&a);
+  ust_double_free (&a);
 }
 
 void
-test_ust_image(void)
+test_ust_str (void)
 {
-  ust_image a = ust_image_init(hash_image, equal_image);
+  char *d[] = { "9a", "1a", "8a", "3a", "4a" };
 
-  for(size_t i = 0; i < 5; i++)
+  ust_str a = ust_str_init (hash_str, equal_str);
+
+  for (size_t i = 0; i < _nof_ (d); i++)
     {
-      ust_image_insert(&a, image_read());
+      ust_str_insert (&a, str_init (d[i]));
     }
 
-  printf("ust<image>\n------------\n");
+  printf ("ust<str>\n------------\n");
 
-  foreach(ust_image, &a, it)
+  foreach (ust_str, &a, it)
     {
-      printf("\"{ %d, %zu }\"\n", *it.ref->data, it.ref->size);
+      printf ("\"%s\"\n", str_c_str (it.ref));
     }
 
-  ust_image b = ust_image_copy(&a);
+  ust_str_free (&a);
+}
 
-  ust_image_free(&a);
-  ust_image_free(&b);
+void
+test_ust_image (void)
+{
+  ust_image a = ust_image_init (hash_image, equal_image);
+
+  for (size_t i = 0; i < 5; i++)
+    {
+      ust_image_insert (&a, image_read ());
+    }
+
+  printf ("ust<image>\n------------\n");
+
+  foreach (ust_image, &a, it)
+    {
+      printf ("\"{ %d, %zu }\"\n", *it.ref->data, it.ref->size);
+    }
+
+  ust_image b = ust_image_copy (&a);
+
+  ust_image_free (&a);
+  ust_image_free (&b);
 }
