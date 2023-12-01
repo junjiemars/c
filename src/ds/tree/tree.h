@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct
+typedef struct node_s
 {
   void *data;
   struct node_s *parent;
