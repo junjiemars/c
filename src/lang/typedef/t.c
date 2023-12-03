@@ -23,11 +23,11 @@ typedef struct point1_s
 {
   int x;
   int y;
-} point1_t /* type */;
+} point1_t /* declaration */;
 
 /* x_t alias of int */
 /* p_t alias of pointer to int */
-/* f_t as function accept int and return pointer to int */
+/* fn_t as a function that accept int and return pointer to int */
 typedef int x_t, *p_t, *(*fn_t) (int);
 
 p_t
@@ -48,6 +48,10 @@ test_fn (void)
   printf ("test_fn(3)        = %4i\n", *p);
 }
 
+/* ux_t alias of unsigned int */
+typedef unsigned int ux_t;
+/* wrong: unsigned x_int ux_t; */
+
 int
 main (void)
 {
@@ -58,6 +62,7 @@ main (void)
   printf ("sizeof(x_t)       = %4zu\n", sizeof (x_t));
   printf ("sizeof(p_t)       = %4zu\n", sizeof (p_t));
   printf ("sizeof(f_t)       = %4zu\n", sizeof (fn_t));
+	printf ("sizeof(ux_t)      = %4zu\n", sizeof (ux_t));
 
   test_fn ();
 

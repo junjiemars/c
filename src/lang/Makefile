@@ -572,6 +572,7 @@ $(lang_preprocess_cppout): $(lang_root)/preprocess/p.c
 
 # scope
 lang_scope_binout := $(bin_path)/$(lang_prefix)_scope$(bin_ext)
+lang_scope_cppout := $(tmp_path)/$(lang_prefix)_scope$(cpp_ext)
 
 scope_cflags = $(CFLAGS)
 ifeq ($(CC_NAME), msvc)
@@ -582,8 +583,11 @@ lang_scope: $(lang_scope_binout)
 lang_scope_test: lang_scope
 	$(lang_scope_binout)
 
-$(lang_scope_binout): $(lang_root)/scope/scope.c
-	$(CC) $(scope_cflags) $(INC) $^ $(bin_out)$@
+$(lang_scope_binout): $(lang_scope_cppout)
+	$(CC) $(CFLAGS) $^ $(bin_out)$@
+
+$(lang_scope_cppout): $(lang_root)/scope/scope.c
+	$(CPP) $(CPPFLAGS) $(INC) $^ $(nm_stage_pre) $(cpp_out)$@
 
 
 # signal

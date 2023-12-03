@@ -1,8 +1,9 @@
-int  i2  =  12345;
+int i2 = 12345;
 
-inline int sqr(int n)
+inline int
+sqr (int n)
 {
-	return n*n;
+  return n * n;
 }
 
 /*
@@ -10,4 +11,4 @@ inline int sqr(int n)
  * would not be able to call it.
  *
  */
-extern int sqr(int);
+extern int sqr (int);
