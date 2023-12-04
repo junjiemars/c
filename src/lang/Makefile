@@ -302,8 +302,6 @@ lang_linkage_lnk_objout := $(tmp_path)/$(lang_prefix)_linkage_lnk$(obj_ext)
 lang_linkage_c_objout := $(tmp_path)/$(lang_prefix)_linkage_c$(obj_ext)
 lang_linkage_whole_binout := $(bin_path)/$(lang_prefix)_linkage_whole$(bin_ext)
 
-
-
 ifeq ($(NM_SYSTEM), WinNT)
 lang_linkage:
 	@echo "skip ..."

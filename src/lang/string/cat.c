@@ -27,7 +27,7 @@ self_strcat(char *s1, const char *s2)
 
     ss = strchr(s1, 0);
     strcpy(ss, s2);
-    
+
     return s1;
 }
 
@@ -45,15 +45,15 @@ main(int argc, char **argv)
 
     s1_len = strlen(argv[1]);
     s2_len = strlen(argv[2]);
-    
+
     s1 = malloc(s1_len + s2_len + 1);
     if (!s1) {
-        perror(s1);
+        perror("s1 malloc");
         goto clean_exit;
     }
     s2 = malloc(s2_len + 1);
     if (!s2) {
-        perror(s2);
+        perror("s2 malloc");
         goto clean_exit;
     }
 
@@ -64,7 +64,7 @@ main(int argc, char **argv)
     strcpy(s1, argv[1]);
     strcpy(s2, argv[2]);
     test_strcat(self_strcat, s1, s2);
-    
+
 clean_exit:
     free(s1);
     free(s2);

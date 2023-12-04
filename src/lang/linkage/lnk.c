@@ -29,5 +29,3 @@ fn_i(int i) {
 
 /* declaration with external linkage */
 int fn_cube(int);
-
-
