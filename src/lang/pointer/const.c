@@ -1,27 +1,28 @@
-#include <_lang_.h>
-#include <stdio.h>
+#include "_lang_.h"
 
 void
-test_ptr_to_const_obj(void) {
-  printf("----------\n");
-  
+test_ptr_to_const_obj (void)
+{
+  printf ("----------\n");
+
   int v1 = 0x11223344;
-	const int *p1 = &v1;
+  const int *p1 = &v1;
 
   /* read-only variable is not assignable */
   /* *p1 += 1; */
 
-	**(int**)&p1 += 1;
+  **(int **)&p1 += 1;
 
   int const *p2 = p1;
 
-	printf("%32s: p1@%p = 0x%x\n", "const int *p1", p1, *p1);
-  printf("%32s: p1@%p = 0x%x\n", "int const *p2", p2, *p2);
+  printf ("%32s: p1@%p = 0x%x\n", "const int *p1", p1, *p1);
+  printf ("%32s: p1@%p = 0x%x\n", "int const *p2", p2, *p2);
 }
 
 void
-test_const_ptr_to_obj(void) {
-  printf("----------\n");
+test_const_ptr_to_obj (void)
+{
+  printf ("----------\n");
 
   int v1 = 0x11223344;
   int *const p1 = &v1;
@@ -32,31 +33,33 @@ test_const_ptr_to_obj(void) {
   /* cannot assign to variable 'p1' with const-qualified type 'int *const' */
   /* int v2 = 0x44332211; */
   /* p1 = &v2; */
-  
-  **(int**)&p1 += 1;
 
-  printf("%32s: p1@%p = 0x%x\n", "int *const p1", p1, *p1);
+  **(int **)&p1 += 1;
+
+  printf ("%32s: p1@%p = 0x%x\n", "int *const p1", p1, *p1);
 }
 
 void
-test_const_ptr_to_const_obj(void) {
-  printf("----------\n");
+test_const_ptr_to_const_obj (void)
+{
+  printf ("----------\n");
 
   int v1 = 0x11223344;
   const int *const p1 = &v1;
 
-  **(int**)&p1 += 1;
+  **(int **)&p1 += 1;
 
   int const *const p2 = p1;
-  
-  printf("%32s: p1@%p = 0x%x\n", "const int *const p1", p1, *p1);
-  printf("%32s: p1@%p = 0x%x\n", "int const *const p2", p2, *p2);
+
+  printf ("%32s: p1@%p = 0x%x\n", "const int *const p1", p1, *p1);
+  printf ("%32s: p1@%p = 0x%x\n", "int const *const p2", p2, *p2);
 }
 
 void
-test_ptr_to_ptr_to_const_obj(void) {
-  printf("----------\n");
-  
+test_ptr_to_ptr_to_const_obj (void)
+{
+  printf ("----------\n");
+
   int v1 = 0x1122;
   int *p1 = &v1;
   const int **p2 = (const int **)&p1;
@@ -68,12 +71,13 @@ test_ptr_to_ptr_to_const_obj(void) {
   /* read-only variable is not assignable */
   /* **p2 += 1; */
 
-  printf("%32s: p2@%p = 0x%x\n", "const int **p2", p2, **p2);
+  printf ("%32s: p2@%p = 0x%x\n", "const int **p2", p2, **p2);
 }
 
 void
-test_ptr_to_const_ptr_to_const_obj(void) {
-  printf("----------\n");
+test_ptr_to_const_ptr_to_const_obj (void)
+{
+  printf ("----------\n");
 
   int v1 = 0x1122;
   int *p1 = &v1;
@@ -86,17 +90,18 @@ test_ptr_to_const_ptr_to_const_obj(void) {
   /* read-only variable is not assignable */
   /* *p2 = p3; */
   /* **p2 += 1; */
-  
+
   const int *const *p4 = p2;
 
-  printf("%32s: p2@%p = 0x%x\n", "int const *const *p2", p2, **p2);
-  printf("%32s: p2@%p = 0x%x\n", "const int *const *p4", p4, **p4);
+  printf ("%32s: p2@%p = 0x%x\n", "int const *const *p2", p2, **p2);
+  printf ("%32s: p2@%p = 0x%x\n", "const int *const *p4", p4, **p4);
 }
 
 void
-test_const_ptr_to_ptr_to_const_obj(void) {
-  printf("----------\n");
-  
+test_const_ptr_to_ptr_to_const_obj (void)
+{
+  printf ("----------\n");
+
   int v1 = 0x1122;
   int *p1 = &v1;
   int const **const p2 = (int const **const)&p1;
@@ -114,14 +119,15 @@ test_const_ptr_to_ptr_to_const_obj(void) {
 
   const int **const p4 = p2;
 
-  printf("%32s: p2@%p = 0x%x\n", "int const **const p2", p2, **p2);
-  printf("%32s: p2@%p = 0x%x\n", "const int **const p4", p4, **p4);
+  printf ("%32s: p2@%p = 0x%x\n", "int const **const p2", p2, **p2);
+  printf ("%32s: p2@%p = 0x%x\n", "const int **const p4", p4, **p4);
 }
 
 void
-test_const_ptr_to_const_ptr_to_obj(void) {
-  printf("----------\n");
-  
+test_const_ptr_to_const_ptr_to_obj (void)
+{
+  printf ("----------\n");
+
   int v1 = 0x1122;
   int *p1 = &v1;
   int *const *const p2 = (int *const *const)&p1;
@@ -134,20 +140,20 @@ test_const_ptr_to_const_ptr_to_obj(void) {
   /* int *p3 = &v2; */
   /* p2 = (int *const *const)&p3; */
 
-  printf("%32s: p2@%p = 0x%x\n", "int *const *const p2", p2, **p2);
+  printf ("%32s: p2@%p = 0x%x\n", "int *const *const p2", p2, **p2);
 }
 
-int 
-main(void){
+int
+main (void)
+{
 
-
-  test_ptr_to_const_obj();
-  test_const_ptr_to_obj();
-  test_const_ptr_to_const_obj();
-  test_ptr_to_ptr_to_const_obj();
-  test_ptr_to_const_ptr_to_const_obj();
-  test_const_ptr_to_ptr_to_const_obj();
-  test_const_ptr_to_const_ptr_to_obj();
+  test_ptr_to_const_obj ();
+  test_const_ptr_to_obj ();
+  test_const_ptr_to_const_obj ();
+  test_ptr_to_ptr_to_const_obj ();
+  test_ptr_to_const_ptr_to_const_obj ();
+  test_const_ptr_to_ptr_to_const_obj ();
+  test_const_ptr_to_const_ptr_to_obj ();
 
   return 0;
 }
