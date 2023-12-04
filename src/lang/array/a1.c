@@ -1,5 +1,9 @@
 #include "_lang_.h"
 
+#if (GCC)
+#pragma GCC diagnostic ignored "-Warray-parameter"
+#endif
+
 /* base, row-index, col-index, col-n, width */
 #define Aij(b, r, c, n, w) ((char *)(b) + (r) * (n) * (w) + (c) * (w))
 
