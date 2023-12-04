@@ -3,17 +3,28 @@
 
 void print_LC_ALL (void);
 void test_setlocale (const char *);
-void test_LC_ALL (void);
+void test_strcoll (const char *);
+
+int
+main (int argc, char **argv)
+{
+  char *locale = "";
+  if (argc > 1)
+    {
+      locale = argv[1];
+    }
+  test_setlocale (locale);
+  test_strcoll (locale);
+  return 0;
+}
 
 void
 print_LC_ALL (void)
 {
   static char text[128];
   time_t t = time (0);
-
   printf ("%.3f\n", 31415.9265354);
-
-  strftime (text, sizeof (text), "%A, %B, %d, %Y(%x)\n", localtime (&t));
+  strftime (text, sizeof (text), "%A, %B, %d, %Y(%x)", localtime (&t));
   puts (text);
 }
 
@@ -30,14 +41,13 @@ test_setlocale (const char *locale)
   print_LC_ALL ();
 }
 
-int
-main (int argc, char **argv)
+void
+test_strcoll (const char *locale)
 {
-  char *locale = "";
-  if (argc > 1)
-    {
-      locale = argv[1];
-    }
-  test_setlocale (locale);
-  return 0;
+  int rc;
+  const char *s1 = "café";
+  const char *s2 = "caffè";
+  setlocale (LC_ALL, locale);
+  rc = strcoll (s1, s2);
+  printf ("%s %s %s\n", s1, (rc < 0) ? "<" : rc == 0 ? "=" : ">", s2);
 }

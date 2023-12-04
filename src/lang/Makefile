@@ -338,15 +338,20 @@ $(lang_linkage_c_objout): $(lang_root)/linkage/c.c
 lang_locale_binout := $(bin_path)/$(lang_prefix)_locale$(bin_ext)
 
 lang_locale: $(lang_locale_binout)
-lang_locale_test: lang_locale
-	$(lang_locale_binout)
-	$(lang_locale_binout) "C"
-	$(lang_locale_binout) "POSIX"
-	$(lang_locale_binout) "en_US"
-	$(lang_locale_binout) "fr_FR"
-	$(lang_locale_binout) "zh_CN"
-	$(lang_locale_binout) "zh_HK"
-	$(lang_locale_binout) "XXX"
+lang_locale_test: $(lang_locale_binout)
+	$<
+	$< ""
+	$< "C"
+	$< "POSIX"
+	$< "UTF-8"
+	$< "utf8"
+	$< "en_US"
+	$< "en_US.UTF-8"
+	$< "fr_FR"
+	$< "fr_FR.UTF-8"
+	$< "zh_CN"
+	$< "zh_CN.UTF-8"
+	$< "XXX"
 
 $(lang_locale_binout): $(lang_root)/locale/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
