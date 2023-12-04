@@ -1,6 +1,5 @@
 #include "_lang_.h"
 #include <locale.h>
-#include <time.h>
 
 void print_LC_ALL (void);
 void test_setlocale (const char *);
