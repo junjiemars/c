@@ -3,18 +3,25 @@
 
 void print_LC_ALL (void);
 void test_setlocale (const char *);
-void test_strcoll (const char *);
+void test_strcmp (const char *, const char *);
+void test_strcoll (const char *, const char *);
+void test_strxfrm (const char *);
 
 int
 main (int argc, char **argv)
 {
   char *locale = "";
+  const char *s1 = "café";
+  const char *s2 = "caffè";
+
   if (argc > 1)
     {
       locale = argv[1];
     }
   test_setlocale (locale);
-  test_strcoll (locale);
+  test_strcmp (s1, s2);
+  test_strcoll (s1, s2);
+  test_strxfrm (s2);
   return 0;
 }
 
@@ -42,12 +49,25 @@ test_setlocale (const char *locale)
 }
 
 void
-test_strcoll (const char *locale)
+test_strcmp (const char *s1, const char *s2)
 {
-  int rc;
-  const char *s1 = "café";
-  const char *s2 = "caffè";
-  setlocale (LC_ALL, locale);
-  rc = strcoll (s1, s2);
-  printf ("%s %s %s\n", s1, (rc < 0) ? "<" : rc == 0 ? "=" : ">", s2);
+  int c = strcmp (s1, s2);
+  printf ("strcmp(%s,%s) = %d\n", s1, s2, c);
+}
+
+void
+test_strcoll (const char *s1, const char *s2)
+{
+  int c;
+  c = strcoll (s1, s2);
+  printf ("strcoll(%s,%s) = %d\n", s1, s2, c);
+}
+
+void
+test_strxfrm (const char *s2)
+{
+  char s1[BUFSIZ];
+  size_t c;
+  c = strxfrm (s1, s2, BUFSIZ);
+  printf ("strxfrm(%s,%s) = %zu\n", s1, s2, c);
 }
