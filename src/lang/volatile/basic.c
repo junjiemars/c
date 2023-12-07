@@ -1,4 +1,4 @@
-#include <_lang_.h>
+#include "_lang_.h"
 
 static int n;
 static volatile int n1;
@@ -6,6 +6,7 @@ static volatile int n1;
 static void bar (void);
 static void bar1 (void);
 static int incr (void);
+static int incr1 (void);
 
 int
 main (void)
@@ -13,7 +14,7 @@ main (void)
   bar ();
   bar1 ();
   incr ();
-
+  incr1 ();
   return 0;
 }
 
@@ -41,7 +42,7 @@ void
 bar1 (void)
 {
   /*
-   * With -O2/-O2:
+   * With -O2 or -O3:
    * 1. bar1 may be inline into main routine
    * 2. but, load n1 from memory never disappear
    */
@@ -67,4 +68,15 @@ incr (void)
    */
   n1 += 0xff;
   return n1;
+}
+
+int
+incr1 (void)
+{
+  int a = n;
+  for (int i = 0; i < 3; i++)
+    {
+      a++;
+    }
+  return a;
 }
