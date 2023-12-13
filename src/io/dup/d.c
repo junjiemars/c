@@ -1,4 +1,4 @@
-#include <_io_.h>
+#include "_io_.h"
 
 /*
  * 1. the fd return by `dup' is guaranteed to be the lowest-numbered
@@ -7,7 +7,7 @@
  */
 
 static char  buf[BUFSIZ];
-static __attribute__((unused)) int  next_fd  =  STDERR_FILENO + 1;
+static __attribute__((unused)) int  next_fd  =  STDERR_FILENO;
 
 int
 main(void)
@@ -21,7 +21,8 @@ main(void)
       perror(NULL);
       exit(EXIT_FAILURE);
     }
-  assert(fd_in == next_fd++);
+  /* in Makefile redirection, there are one more fd opened */
+  assert(fd_in > next_fd++);
 
   fd_out = dup(STDOUT_FILENO);
   if (fd_out == -1)
@@ -29,7 +30,7 @@ main(void)
       perror(NULL);
       exit(EXIT_FAILURE);
     }
-  assert(fd_out == next_fd++);
+  assert(fd_out > next_fd++);
 
   while ((n = read(fd_in, buf, BUFSIZ)) > 0)
     {
