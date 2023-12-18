@@ -35,6 +35,7 @@ main (void)
       exit (EXIT_FAILURE);
     }
   assert ((fd_out + 1) == next_fd);
+  assert ((fd_in + 1) == fd_out);
 
   while ((n = read (fd_in, buf, BUFSIZ)) > 0)
     {
@@ -45,5 +46,10 @@ main (void)
         }
     }
 
+#if (NM_HAVE_GETDTABLE_SIZE)
+  int fd_size = getdtablesize ();
+  int fd_out_of_range = dup2 (STDIN_FILENO, fd_size+1);
+  assert (fd_out_of_range == -1);
+#endif
   exit (EXIT_SUCCESS);
 }
