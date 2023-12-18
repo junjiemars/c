@@ -11,37 +11,39 @@
  *
  */
 
-static char  buf[BUFSIZ];
-static int   next_fd  =  10;
+static char buf[BUFSIZ];
+static int next_fd = 10;
 
 int
-main(void)
+main (void)
 {
-  int  n;
-  int  fd_in, fd_out;
+  int n;
+  int fd_in, fd_out;
 
-  fd_in = dup2(STDIN_FILENO, next_fd++);
+  fd_in = dup2 (STDIN_FILENO, next_fd++);
   if (fd_in == -1)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
+  assert ((fd_in + 1) == next_fd);
 
-  fd_out = dup2(STDOUT_FILENO, next_fd++);
+  fd_out = dup2 (STDOUT_FILENO, next_fd++);
   if (fd_out == -1)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
+  assert ((fd_out + 1) == next_fd);
 
-  while ((n = read(fd_in, buf, BUFSIZ)) > 0)
+  while ((n = read (fd_in, buf, BUFSIZ)) > 0)
     {
-      if (write(fd_out, buf, n) != n)
+      if (write (fd_out, buf, n) != n)
         {
-          perror(NULL);
-          exit(EXIT_FAILURE);
+          perror (NULL);
+          exit (EXIT_FAILURE);
         }
     }
 
-  exit(EXIT_SUCCESS);
+  exit (EXIT_SUCCESS);
 }
