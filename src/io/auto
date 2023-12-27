@@ -40,18 +40,18 @@ nm_feature_test='(void) getdtablesize();'
 . ${NORE_ROOT}/auto/feature
 flag=has_getdtablesize op=":=" value="$nm_found" \. ${NORE_ROOT}/auto/make_define
 
-# check posix_fadvice
+# check posix_fadvise
 #----------------------------------------
-nm_feature="posix_fadvice"
-nm_feature_name="nm_have_posix_fadvice"
+nm_feature="posix_fadvise"
+nm_feature_name="nm_have_posix_fadvise"
 nm_feature_run=
 nm_feature_h='
 #include <unistd.h>
 '
 nm_feature_flags=
-nm_feature_test='(void) posix_fadvice(0,0,0,0);'
+nm_feature_test='(void) posix_fadvise(0,0,0,0);'
 . ${NORE_ROOT}/auto/feature
-flag=has_posix_fadvice op=":=" value="$nm_found" \. ${NORE_ROOT}/auto/make_define
+flag=has_posix_fadvise op=":=" value="$nm_found" \. ${NORE_ROOT}/auto/make_define
 
 
 # eof
