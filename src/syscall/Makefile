@@ -29,7 +29,7 @@ syscall_bone_test: syscall_bone
 	$(syscall_bone_binout)
 
 $(syscall_bone_binout): $(syscall_root)/bone/b.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) --no-stdlibc $^ $(bin_out)$@
 
 
 

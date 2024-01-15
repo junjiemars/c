@@ -404,6 +404,11 @@ lang_math: $(lang_math_complex_binout)          \
 lang_math_test: lang_math_complex_test          \
                 lang_math_float_test
 
+lang_math_ldlibs :=
+ifeq ($(NM_SYSTEM),Linux)
+lang_math_ldlibs += $(nm_lib_opt)m
+endif
+
 lang_math_complex_test: $(lang_math_complex_binout)
 	$(lang_math_complex_binout)
 
@@ -411,10 +416,10 @@ lang_math_float_test: $(lang_math_float_binout)
 	$(lang_math_float_binout)
 
 $(lang_math_complex_binout): $(lang_root)/math/m.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(lang_math_ldlibs)
 
 $(lang_math_float_binout): $(lang_math_float_cppout)
-	$(CC) $(CFLAGS) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $^ $(bin_out)$@ $(lang_math_ldlibs)
 
 $(lang_math_float_cppout): $(lang_root)/math/f.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
