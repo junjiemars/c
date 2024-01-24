@@ -1,0 +1,33 @@
+# -*- mode:sh -*- vim:ft=sh
+####
+## No More than a C build system for clang, gcc and msvc.
+## https://github.com/junjiemars/nore
+####
+## cxx/auto
+####
+
+has_cxx=""
+has_cmake=""
+
+printf " + checking for c++ ... "
+has_cxx="`command -v c++`"
+if [ -x "$has_cxx" ]; then
+  flag=has_cxx value="${has_cxx}" . ${NORE_ROOT}/auto/make_define
+  printf "yes\n"
+else
+  has_cxx=""
+  printf "no\n"
+fi
+
+printf " + checking for cmake ... "
+has_cmake="`command -v cmake`"
+if [ -x "$has_cmake" ]; then
+  flag=has_cmake value="${has_cmake}" . ${NORE_ROOT}/auto/make_define
+  printf "yes\n"
+else
+  has_cmake=""
+  printf "no\n"
+fi
+
+
+# eof
