@@ -34,9 +34,11 @@ cxx_std14_init: $(cxx_root)/std14/CMakeLists.txt
 	cmake -S $(cxx_root)/std14 -B $(cxx_std14_build)
 
 cxx_std14: cxx_std14_init
-	make -C $(cxx_std14_build)
+	make -C $(cxx_std14_build) clean cxx_std14
 
 cxx_std14_test: cxx_std14
 	-$(cxx_std14_binout)
+
+.PHONY: cxx_std14_init
 
 # eof
