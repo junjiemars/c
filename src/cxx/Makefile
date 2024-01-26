@@ -30,15 +30,17 @@ cxx_build_root := $(tmp_path)/cxx
 cxx_std14_build := $(cxx_build_root)/std14
 cxx_std14_binout := $(cxx_std14_build)/cxx_std14
 
-cxx_std14_init: $(cxx_root)/std14/CMakeLists.txt
-	cmake -S $(cxx_root)/std14 -B $(cxx_std14_build)
-
-cxx_std14: cxx_std14_init
-	make -C $(cxx_std14_build) clean cxx_std14
-
+cxx_std14: $(cxx_root)/std14/CMakeLists.txt \
+           $(cxx_std14_binout)
 cxx_std14_test: cxx_std14
 	-$(cxx_std14_binout)
+cxx_std14_clean:
+	make -C $(cxx_std14_build) clean
 
-.PHONY: cxx_std14_init
+$(cxx_std14_binout): $(cxx_root)/std14/main.cpp
+	cmake -S $(cxx_root)/std14 -B $(cxx_std14_build)
+	make -C $(cxx_std14_build) cxx_std14
+
+# .PHONY: cxx_std14_init
 
 # eof
