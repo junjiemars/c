@@ -6,7 +6,7 @@
 
 rust: rust_attr                                 \
       rust_box                                  \
-      rust_eframe                                 \
+      rust_eframe                               \
       rust_enum                                 \
       rust_error                                \
       rust_game                                 \
@@ -149,9 +149,9 @@ $(rust_hi_binout): $(rust_hi_cargo)             \
 	&& cp $(cargo_out_dir)/$(rust_hi_name) $(bin_path)
 
 # eframe
-rust_eframe_name := $(rust_prefix)_eframe
 rust_eframe_cargo := $(rust_root)/eframe/Cargo.toml
-rust_eframe_binout := $(bin_path)/$(rust_eframe_name)$(bin_ext)
+rust_eframe_name := $(rust_prefix)_eframe$(bin_ext)
+rust_eframe_binout := $(bin_path)/$(rust_eframe_name)
 
 rust_eframe: $(rust_eframe_binout)
 rust_eframe_test: rust_eframe
@@ -163,16 +163,17 @@ $(rust_eframe_cargo):
 	$(CARGO) add --manifest-path=$@ env_logger
 
 $(rust_eframe_binout): $(rust_eframe_cargo)
-	$(CARGO) build $(rust_build_opt)                      \
-    --manifest-path $<                                  \
-    --target-dir $(cargo_target_dir)                    \
-    && cp $(cargo_out_dir)/$(rust_eframe_name)$(bin_ext) $@
+	$(CARGO) build $(rust_build_opt)                \
+    --manifest-path $<                            \
+    --target-dir $(cargo_target_dir)              \
+		&& cp $(cargo_out_dir)/$(rust_eframe_name) $@
 
 
 
 # enum
 rust_enum_cargo := $(rust_root)/enum/Cargo.toml
-rust_enum_binout := $(bin_path)/$(rust_prefix)_enum$(bin_ext)
+rust_enum_name := $(rust_prefix)_enum$(bin_ext)
+rust_enum_binout := $(bin_path)/$(rust_enum_name)
 
 rust_enum: $(rust_enum_binout)
 rust_enum_test: rust_enum
@@ -183,11 +184,10 @@ $(rust_enum_cargo):
 
 $(rust_enum_binout): $(rust_enum_cargo)             \
                      $(rust_root)/enum/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    --target-dir $(cargo_target_dir)            \
-    -Z unstable-options                         \
-    --out-dir $(bin_path)
+	$(CARGO) build                                        \
+    --manifest-path $<                                  \
+    --target-dir $(cargo_target_dir)                    \
+	&& cp $(cargo_out_dir)/$(rust_enum_name) $(bin_path)
 
 
 
@@ -613,7 +613,8 @@ $(rust_unsafe_binout): $(rust_unsafe_cargo)             \
 
 # box
 rust_box_cargo := $(rust_root)/box/Cargo.toml
-rust_box_binout := $(bin_path)/$(rust_prefix)_box$(bin_ext)
+rust_box_name := $(rust_prefix)_box$(bin_ext)
+rust_box_binout := $(bin_path)/$(rust_box_name)
 
 rust_box: $(rust_box_binout)
 rust_box_doc: $(rust_box_cargo)
@@ -626,11 +627,10 @@ $(rust_box_cargo):
 
 $(rust_box_binout): $(rust_box_cargo)             \
                     $(rust_root)/box/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    -Z unstable-options                         \
-    --target-dir $(cargo_target_dir)            \
-    --out-dir $(bin_path)
+	$(CARGO) build                                        \
+    --manifest-path $<                                  \
+    --target-dir $(cargo_target_dir)                    \
+	&& cp $(cargo_out_dir)/$(rust_box_name) $(bin_path)
 
 # websrv
 rust_websrv_cargo := $(rust_root)/websrv/Cargo.toml

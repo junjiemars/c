@@ -14,7 +14,7 @@ cxx:                                             \
     cxx_std14
 
 cxx_test:                                        \
-         cxx_std14_test
+		cxx_std14_test
 
 endif
 
@@ -38,7 +38,8 @@ cxx_std14_clean:
 	make -C $(cxx_std14_build) clean
 
 $(cxx_std14_binout): $(cxx_root)/std14/main.cpp
-	cmake -S $(cxx_root)/std14 -B $(cxx_std14_build)
+	cmake -S $(cxx_root)/std14 -B $(cxx_std14_build) \
+    -DCMAKE_EXPORT_COMPILE_COMMANDS=1
 	make -C $(cxx_std14_build) cxx_std14
 
 # .PHONY: cxx_std14_init
