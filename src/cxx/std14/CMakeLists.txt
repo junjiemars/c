@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 # Add your source files
 set(SOURCES
-    main.cpp
+    main.cc
 )
 
 # Add your header files

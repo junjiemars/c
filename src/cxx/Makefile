@@ -44,7 +44,7 @@ $(cxx_std14_makefile): $(cxx_root)/std14/CMakeLists.txt
     -DCMAKE_EXPORT_COMPILE_COMMANDS=1 \
 		&& cp $(cxx_std14_compile_commands) $(cxx_root)/std14/
 
-$(cxx_std14_binout): $(cxx_root)/std14/main.cpp
+$(cxx_std14_binout): $(cxx_std14_makefile)
 	make -C $(cxx_std14_build) cxx_std14
 
 # eof
