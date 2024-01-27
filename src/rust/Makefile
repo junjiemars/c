@@ -141,11 +141,11 @@ rust_hi_test: rust_hi
 $(rust_hi_cargo):
 	$(CARGO) new --bin --vcs=none --name=$(rust_hi_name) $(rust_root)/hi
 
-$(rust_hi_binout): $(rust_hi_cargo)             \
+$(rust_hi_binout): $(rust_hi_cargo) \
                    $(rust_root)/hi/src/main.rs
-	$(CARGO) build $(rust_build_opt)                    \
-		--manifest-path $<                                \
-    --target-dir $(cargo_target_dir)                  \
+	$(CARGO) build $(rust_build_opt) \
+		--manifest-path $< \
+    --target-dir $(cargo_target_dir) \
 	&& cp $(cargo_out_dir)/$(rust_hi_name) $(bin_path)
 
 # eframe
@@ -163,9 +163,9 @@ $(rust_eframe_cargo):
 	$(CARGO) add --manifest-path=$@ env_logger
 
 $(rust_eframe_binout): $(rust_eframe_cargo)
-	$(CARGO) build $(rust_build_opt)                \
-    --manifest-path $<                            \
-    --target-dir $(cargo_target_dir)              \
+	$(CARGO) build $(rust_build_opt) \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
 		&& cp $(cargo_out_dir)/$(rust_eframe_name) $@
 
 
@@ -182,19 +182,19 @@ rust_enum_test: rust_enum
 $(rust_enum_cargo):
 	$(CARGO) new --bin --vcs=none --name=$(rust_prefix)_enum $(rust_root)/enum
 
-$(rust_enum_binout): $(rust_enum_cargo)             \
+$(rust_enum_binout): $(rust_enum_cargo) \
                      $(rust_root)/enum/src/main.rs
-	$(CARGO) build                                        \
-    --manifest-path $<                                  \
-    --target-dir $(cargo_target_dir)                    \
-	&& cp $(cargo_out_dir)/$(rust_enum_name) $(bin_path)
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_enum_name) $@
 
 
 
-
 # game
-rust_game_cargo := $(rust_root)/game/Cargo.toml
-rust_game_binout := $(bin_path)/$(rust_prefix)_game$(bin_ext)
+rust_game_cargo := $(rust_root)/game/cargo.toml
+rust_game_name := $(rust_prefix)_game$(bin_ext)
+rust_game_binout := $(bin_path)/$(rust_game_name)
 
 rust_game: $(rust_game_binout)
 rust_game_doc: $(rust_game_cargo)
@@ -202,17 +202,17 @@ rust_game_doc: $(rust_game_cargo)
 rust_game_test: rust_game
 	echo "Q" | $(rust_game_binout)
 
-$(rust_game_binout): $(rust_game_cargo)             \
+$(rust_game_binout): $(rust_game_cargo) \
                      $(rust_root)/game/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    -Z unstable-options                         \
-    --target-dir $(cargo_target_dir)            \
-    --out-dir $(bin_path)
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_game_name) $@
 
 # owner
 rust_owner_cargo := $(rust_root)/owner/Cargo.toml
-rust_owner_binout := $(bin_path)/$(rust_prefix)_owner$(bin_ext)
+rust_owner_name := $(rust_prefix)_owner$(bin_ext)
+rust_owner_binout := $(bin_path)/$(rust_owner_name)
 
 rust_owner: $(rust_owner_binout)
 rust_owner_doc: $(rust_owner_cargo)
@@ -223,20 +223,19 @@ rust_owner_test: rust_owner
 $(rust_owner_cargo):
 	$(CARGO) new --bin --name $(rust_prefix)_owner $(rust_root)/owner
 
-$(rust_owner_binout): $(rust_owner_cargo)             \
+$(rust_owner_binout): $(rust_owner_cargo) \
                       $(rust_root)/owner/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    -Z unstable-options                         \
-    --target-dir $(cargo_target_dir)            \
-    --out-dir $(bin_path)
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_owner_name) $@
 
 
 
 # rest
-rust_rest_name := $(rust_prefix)_rest
 rust_rest_cargo := $(rust_root)/rest/Cargo.toml
-rust_rest_binout := $(bin_path)/$(rust_rest_name)$(bin_ext)
+rust_rest_name := $(rust_prefix)_rest$(bin_ext)
+rust_rest_binout := $(bin_path)/$(rust_rest_name)
 # https://github.com/seanmonstar/warp/tree/master/examples
 
 rust_rest: $(rust_rest_binout)
@@ -248,16 +247,17 @@ $(rust_rest_cargo):
 	$(CARGO) add --manifest-path=$@ serde serde_json tokio warp uuid
 
 $(rust_rest_binout): $(rust_rest_cargo)
-	$(CARGO) build                                          \
-		--manifest-path $<                                    \
-    --target-dir $(cargo_target_dir)                      \
-    && cp $(cargo_out_dir)/$(rust_rest_name)$(bin_ext) $@
+	$(CARGO) build \
+		--manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+  && cp $(cargo_out_dir)/$(rust_rest_name) $@
 
 
 
 # generic
 rust_generic_cargo := $(rust_root)/generic/Cargo.toml
-rust_generic_binout := $(bin_path)/$(rust_prefix)_generic$(bin_ext)
+rust_generic_name := $(rust_prefix)_generic$(bin_ext)
+rust_generic_binout := $(bin_path)/$(rust_generic_name)
 
 rust_generic: $(rust_generic_binout)
 rust_generic_doc: $(rust_generic_cargo)
@@ -268,17 +268,19 @@ rust_generic_test: rust_generic
 $(rust_generic_cargo):
 	$(CARGO) new --bin --name $(rust_prefix)_generic $(rust_root)/generic
 
-$(rust_generic_binout): $(rust_generic_cargo)             \
+$(rust_generic_binout): $(rust_generic_cargo) \
                         $(rust_root)/generic/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    -Z unstable-options                         \
-    --target-dir $(cargo_target_dir)            \
-    --out-dir $(bin_path)
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_generic_name) $@
+
+
 
 # error
 rust_error_cargo := $(rust_root)/error/Cargo.toml
-rust_error_binout := $(bin_path)/$(rust_prefix)_error$(bin_ext)
+rust_error_name := $(rust_prefix)_error$(bin_ext)
+rust_error_binout := $(bin_path)/$(rust_error_name)
 
 rust_error: $(rust_error_binout)
 rust_error_doc: $(rust_error_cargo)
@@ -289,28 +291,29 @@ rust_error_test: rust_error
 $(rust_error_cargo):
 	$(CARGO) new --bin --name $(rust_prefix)_error $(rust_root)/error
 
-$(rust_error_binout): $(rust_error_cargo)             \
+$(rust_error_binout): $(rust_error_cargo) \
                         $(rust_root)/error/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    -Z unstable-options                         \
-    --target-dir $(cargo_target_dir)            \
-    --out-dir $(bin_path)
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_error_name) $@
+
+
 
 # grep
 rust_grep_cargo := $(rust_root)/grep/Cargo.toml
-rust_grep_binout := $(bin_path)/$(rust_prefix)_grep$(bin_ext)
+rust_grep_name := $(rust_prefix)_grep$(bin_ext)
+rust_grep_binout := $(bin_path)/$(rust_grep_name)
 
 rust_grep: $(rust_grep_binout)
 rust_grep_doc: $(rust_grep_cargo)
 	-$(CARGO) doc --open --manifest-path $<
 rust_grep_test: rust_grep_run
 
-rust_grep_unit_test: $(rust_grep_cargo)         \
+rust_grep_unit_test: $(rust_grep_cargo) \
                      rust_grep
-	$(CARGO) test                                 \
-    --manifest-path $<                          \
-    -Z unstable-options                         \
+	$(CARGO) test \
+    --manifest-path $< \
     --target-dir $(cargo_target_dir)
 
 rust_grep_run: $(rust_grep_binout)
@@ -321,19 +324,19 @@ rust_grep_run: $(rust_grep_binout)
 $(rust_grep_cargo):
 	$(CARGO) new --bin --name=$(rust_prefix)_grep $(rust_root)/grep
 
-$(rust_grep_binout): $(rust_grep_cargo)             \
+$(rust_grep_binout): $(rust_grep_cargo) \
                      $(rust_root)/grep/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    -Z unstable-options                         \
-    --target-dir $(cargo_target_dir)            \
-    --out-dir $(bin_path)
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_grep_name) $@
 
+
 
 # gtk
-rust_gtk_name := $(rust_prefix)_gtk
 rust_gtk_cargo := $(rust_root)/gtk/Cargo.toml
-rust_gtk_binout := $(bin_path)/$(rust_gtk_name)$(bin_ext)
+rust_gtk_name := $(rust_prefix)_gtk$(bin_ext)
+rust_gtk_binout := $(bin_path)/$(rust_gtk_name)
 
 ifneq ($(has_gtk_ver),)
 rust_gtk: $(rust_gtk_binout)
@@ -354,15 +357,17 @@ $(rust_gtk_cargo):
 
 $(rust_gtk_binout): $(rust_gtk_cargo)             \
                     $(rust_root)/gtk/src/main.rs
-	$(CARGO) build                                          \
-    --manifest-path $<                                    \
-    --target-dir $(cargo_target_dir)                      \
-    && cp $(cargo_out_dir)/$(rust_gtk_name)$(bin_ext) $@
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+  && cp $(cargo_out_dir)/$(rust_gtk_name)$(bin_ext) $@
+
+
 
 # iced
-rust_iced_name := $(rust_prefix)_iced
 rust_iced_cargo := $(rust_root)/iced/Cargo.toml
-rust_iced_binout := $(bin_path)/$(rust_iced_name)$(bin_ext)
+rust_iced_name := $(rust_prefix)_iced$(bin_ext)
+rust_iced_binout := $(bin_path)/$(rust_iced_name)
 # https://github.com/iced-rs/iced
 
 rust_iced: $(rust_iced_binout)
@@ -375,10 +380,10 @@ $(rust_iced_cargo):
 	$(CARGO) add --manifest-path=$@ env_logger
 
 $(rust_iced_binout): $(rust_iced_cargo)
-	$(CARGO) build $(rust_build_opt)                        \
-    --manifest-path $<                                    \
-    --target-dir $(cargo_target_dir)                      \
-    && cp $(cargo_out_dir)/$(rust_iced_name)$(bin_ext) $@
+	$(CARGO) build $(rust_build_opt) \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+  && cp $(cargo_out_dir)/$(rust_iced_name)$(bin_ext) $@
 
 
 
@@ -405,7 +410,8 @@ $(rust_io_binout): $(rust_io_cargo)             \
 
 # iter
 rust_iter_cargo := $(rust_root)/iter/Cargo.toml
-rust_iter_binout := $(bin_path)/$(rust_prefix)_iter$(bin_ext)
+rust_iter_name := $(rust_prefix)_iter$(bin_ext)
+rust_iter_binout := $(bin_path)/$(rust_iter_name)
 
 rust_iter: $(rust_iter_binout)
 rust_iter_doc: $(rust_iter_cargo)
@@ -416,20 +422,19 @@ rust_iter_test: rust_iter
 $(rust_iter_cargo):
 	$(CARGO) new --bin --name=$(rust_prefix)_iter $(rust_root)/iter
 
-$(rust_iter_binout): $(rust_iter_cargo)             \
+$(rust_iter_binout): $(rust_iter_cargo) \
                      $(rust_root)/iter/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    -Z unstable-options                         \
-    --target-dir $(cargo_target_dir)            \
-    --out-dir $(bin_path)
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_iter_name) $@
 
 
 
-
 # lang
 rust_lang_cargo := $(rust_root)/lang/Cargo.toml
-rust_lang_binout := $(bin_path)/$(rust_prefix)_lang$(bin_ext)
+rust_lang_name := $(rust_prefix)_lang$(bin_ext)
+rust_lang_binout := $(bin_path)/$(rust_lang_name)
 
 rust_lang: $(rust_lang_binout)
 rust_lang_doc: $(rust_lang_cargo)
@@ -440,13 +445,12 @@ rust_lang_test: rust_lang
 $(rust_lang_cargo):
 	$(CARGO) new --bin --name=$(rust_prefix)_lang $(rust_root)/lang
 
-$(rust_lang_binout): $(rust_lang_cargo)             \
+$(rust_lang_binout): $(rust_lang_cargo) \
                      $(rust_root)/lang/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    --target-dir $(cargo_target_dir)            \
-    -Z unstable-options                         \
-    --out-dir $(bin_path)
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_lang_name) $@
 
 
 
