@@ -5,7 +5,7 @@
 #ifdef __cpp_lib_concepts
 #include <concepts>
 
-template <typename T> concept Addable = •requires (T a, T b)
+template <typename T> concept Addable = requires (T a, T b)
 {
 	{ a + b } -> std::same_as<T>;
 };
@@ -24,8 +24,6 @@ main ()
 #ifdef __cpp_lib_concepts
 	std::cout << add(3, 4) << std::endl;
 #endif
-
-
 
   return 0;
 }
