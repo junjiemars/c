@@ -91,21 +91,21 @@ io_access_at_binout := $(bin_path)/$(io_prefix)_access_at$(bin_ext)
 io_access_open_file := $(tmp_path)/$(io_prefix)_access_open_file
 io_access_open_link := $(tmp_path)/$(io_prefix)_access_open_link
 
-io_access: $(io_access_open_binout)             \
+io_access: $(io_access_open_binout) \
            $(io_access_at_binout)
-io_access_test: io_access_open_test             \
+io_access_test: io_access_open_test \
                 io_access_at_test
 
-io_access_open_test: $(io_access_open_binout)   \
-                     $(io_access_open_file)     \
+io_access_open_test: $(io_access_open_binout) \
+                     $(io_access_open_file) \
                      $(io_access_open_link)
 	$< $(io_access_open_file)
 	# sudo chown root:root $(io_access_open_file)
 	# sudo chown root $(io_access_open_binout) && sudo chmod u+s $<
 	# $< $(io_access_open_file)
 
-io_access_at_test: $(io_access_at_binout)       \
-                   $(io_access_open_file)       \
+io_access_at_test: $(io_access_at_binout) \
+                   $(io_access_open_file) \
                    $(io_access_open_link)
 	ls -lh $(shell which passwd)
 	$< $(io_access_open_file)
@@ -124,6 +124,7 @@ $(io_access_open_binout): $(io_root)/access/a.c
 $(io_access_at_binout): $(io_root)/access/aat.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 
 # adv
 io_adv_nonblk_binout := $(bin_path)/$(io_prefix)_adv_nonblk$(bin_ext)

@@ -1,8 +1,8 @@
 #include "_io_.h"
 
 /*
- * 1. access just check real user/group-id.
- * 2. open check effective user/group-id.
+ * 1. access just check real user/group id.
+ * 2. open check effective user/group id.
  *
  * References:
  * 1.

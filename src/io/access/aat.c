@@ -1,5 +1,4 @@
 #include "_io_.h"
-#include <fcntl.h>
 
 /*
  * faccessat samed as access if:
