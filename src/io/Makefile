@@ -107,8 +107,7 @@ io_access_open_test: $(io_access_open_binout) \
 io_access_at_test: $(io_access_at_binout) \
                    $(io_access_open_file) \
                    $(io_access_open_link)
-	ls -lh $(shell which passwd)
-	$< $(io_access_open_file)
+	$< $(io_access_open_file) $(io_access_open_link) $(shell command -v passwd)
 
 $(io_access_open_file):
 	echo "#!/bin/sh\necho abc" > $@

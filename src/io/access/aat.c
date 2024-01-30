@@ -8,11 +8,26 @@
  * faccessat(,,,flag=AT_EACCESS) using effective uid/gid.
  */
 
+#define print_test(m, e, r)                                                   \
+  printf ("access %s (%s,%s): %s\n",                                          \
+          (m) == F_OK   ? _str_ (F_OK)                                        \
+          : (m) == R_OK ? _str_ (R_OK)                                        \
+          : (m) == W_OK ? _str_ (W_OK)                                        \
+          : (m) == X_OK ? _str_ (X_OK)                                        \
+                        : "",                                                 \
+          ((e)&AT_EACCESS) == AT_EACCESS ? "effective" : "real",              \
+          ((e)&AT_SYMLINK_NOFOLLOW) == AT_SYMLINK_NOFOLLOW ? "nofollow"       \
+                                                           : "follow",        \
+          (r) == 0 ? "yes" : "no")
+
 int
 main (int argc, char **argv)
 {
   int rc;
   uid_t uid, euid;
+  int modes[] = { F_OK, R_OK, W_OK, X_OK };
+  int flags[] = { 0, AT_EACCESS, AT_SYMLINK_NOFOLLOW,
+                  AT_EACCESS | AT_SYMLINK_NOFOLLOW };
 
   if (argc < 2)
     {
@@ -28,28 +43,21 @@ main (int argc, char **argv)
 
   for (int i = 1; i < argc; i++)
     {
-      rc = faccessat (AT_FDCWD, argv[i], F_OK, 0);
-      if (rc == -1)
-        {
-          perror ("!exist access");
-        }
+      printf ("%s\n", argv[i]);
 
-      rc = faccessat (AT_FDCWD, argv[i], R_OK, 0);
-      if (rc == -1)
+      for (size_t m = 0; m < _nof_ (modes); m++)
         {
-          perror ("!read access");
-        }
-
-      rc = faccessat (AT_FDCWD, argv[i], R_OK, AT_EACCESS);
-      if (rc == -1)
-        {
-          perror ("!read access (effective)");
+          for (size_t f = 0; f < _nof_ (flags); f++)
+            {
+              rc = faccessat (AT_FDCWD, argv[i], modes[m], flags[f]);
+              print_test (modes[m], flags[f], rc);
+            }
         }
 
       rc = open (argv[i], O_RDONLY);
       if (rc == -1)
         {
-          perror ("!open for read");
+          perror ("!open for readonly");
         }
     }
 
