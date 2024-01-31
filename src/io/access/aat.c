@@ -25,9 +25,9 @@ main (int argc, char **argv)
 {
   int rc;
   uid_t uid, euid;
-  int modes[] = { F_OK, R_OK, W_OK, X_OK };
+  int modes[] = { F_OK, R_OK, W_OK, X_OK, -1 };
   int flags[] = { 0, AT_EACCESS, AT_SYMLINK_NOFOLLOW,
-                  AT_EACCESS | AT_SYMLINK_NOFOLLOW };
+                  AT_EACCESS | AT_SYMLINK_NOFOLLOW, -1 };
 
   if (argc < 2)
     {
@@ -45,12 +45,12 @@ main (int argc, char **argv)
     {
       printf ("%s\n", argv[i]);
 
-      for (size_t m = 0; m < _nof_ (modes); m++)
+      for (int *mode = modes; *mode > -1; mode++)
         {
-          for (size_t f = 0; f < _nof_ (flags); f++)
+          for (int *flag = flags; *flag > -1; flag++)
             {
-              rc = faccessat (AT_FDCWD, argv[i], modes[m], flags[f]);
-              print_test (modes[m], flags[f], rc);
+              rc = faccessat (AT_FDCWD, argv[i], *mode, *flag);
+              print_test (*mode, *flag, rc);
             }
         }
 
