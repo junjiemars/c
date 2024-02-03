@@ -60,5 +60,9 @@ if [ yes = $nm_found ]; then
 fi
 
 
+# check stdatomic.h
+#----------------------------------------
+include="stdatomic.h" . ${NORE_ROOT}/auto/include
+
 
 # eof

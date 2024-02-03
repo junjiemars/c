@@ -3,10 +3,12 @@
 #
 
 parallel: parallel_openmp                       \
-          parallel_pthread
+          parallel_pthread                      \
+          parallel_atomic
 
 parallel_test: parallel_openmp_test             \
-               parallel_pthread_test
+               parallel_pthread_test            \
+               parallel_atomic_test
 
 # env
 parallel_prefix := parallel
@@ -159,4 +161,14 @@ $(parallel_pthread_wait_binout): $(parallel_root)/pthread/wait.c
 $(parallel_pthread_once_binout): $(parallel_root)/pthread/once.c
 	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
 
-# EOF
+# atomic
+parallel_atomic_bone_binout := $(bin_path)/$(parallel_prefix)_atomic_bone$(bin_ext)
+
+parallel_atomic: $(parallel_atomic_bone_binout)
+parallel_atomic_test: parallel_atomic
+	$(parallel_atomic_bone_binout)
+
+$(parallel_atomic_bone_binout): $(parallel_root)/atomic/b1.c
+	$(CC) $(CPPLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# eof
