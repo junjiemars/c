@@ -1,38 +1,31 @@
-#include <_io_.h>
-
-/*
- * 1. `mkdir'
- *
- */
+#include "_io_.h"
 
 int
-main(int argc, char **argv)
+main (int argc, char **argv)
 {
-  int  fd;
+  DIR *dir;
+  struct dirent *ent;
 
   if (argc < 2)
     {
-      printf("usage <pathname> [dir...]\n");
-      exit(EXIT_SUCCESS);
+      fprintf (stderr, "usage: %s <dir>\n", argv[0]);
+      exit (EXIT_FAILURE);
     }
 
-  fd = open(argv[1], O_RDONLY);
-  if (fd == -1)
+  dir = opendir (argv[1]);
+  if (dir == NULL)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
 
-  for (int i = 2; i < argc; i++)
+  while ((ent = readdir (dir)) != NULL)
     {
-      if (mkdirat(fd, argv[i], 0755) == -1)
-        {
-          perror(NULL);
-          continue;
-        }
+      long loc = telldir (dir);
+      printf ("#%07ld: %s\n", loc, ent->d_name);
     }
 
+  closedir (dir);
 
-  exit(EXIT_SUCCESS);
-
+  exit (EXIT_SUCCESS);
 }

@@ -259,13 +259,13 @@ io_dir_deep_test: $(io_dir_deep_binout)
 $(io_dir_raw_binout): $(io_root)/dir/r1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(io_dir_mk_binout): $(io_root)/dir/d1.c
+$(io_dir_mk_binout): $(io_root)/dir/m1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_dir_itor_binout): $(io_root)/dir/itor.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(io_dir_tell_binout): $(io_root)/dir/d2.c
+$(io_dir_tell_binout): $(io_root)/dir/d1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_dir_deep_binout): $(io_root)/dir/deep.c
