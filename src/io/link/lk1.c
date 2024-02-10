@@ -1,4 +1,4 @@
-#include <_io_.h>
+#include "_io_.h"
 
 /*
  * 1. Make a hard link.
@@ -9,19 +9,19 @@
  */
 
 int
-main(int argc, char **argv)
+main (int argc, char **argv)
 {
   if (argc < 3)
     {
-      fprintf(stderr, "usage: <existing> <link>\n");
-      exit(EXIT_FAILURE);
+      fprintf (stderr, "usage: %s <existing> <link>\n", argv[0]);
+      exit (EXIT_FAILURE);
     }
 
-  if (linkat(AT_FDCWD, argv[1], AT_FDCWD, argv[2], AT_SYMLINK_FOLLOW) == -1)
+  if (linkat (AT_FDCWD, argv[1], AT_FDCWD, argv[2], AT_SYMLINK_FOLLOW) == -1)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
 
-  exit(EXIT_SUCCESS);
+  exit (EXIT_SUCCESS);
 }

@@ -1,6 +1,5 @@
 #include "_io_.h"
 
-
 /*
  * 1. The default file mode creation mask: 666 for file, 777 for
  * directory.
@@ -24,12 +23,8 @@
 #define __RWRW (__RW__ | ____RW)
 #define RWRWRW (RW____ | __RW__ | ____RW)
 
-
-
 static void print_mask(mode_t);
 __attribute__((unused)) static int has_mask(int, mode_t);
-
-
 
 int
 main(int argc, char **argv)
