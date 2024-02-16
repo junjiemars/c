@@ -292,7 +292,7 @@ $(rust_error_cargo):
 	$(CARGO) new --bin --name $(rust_prefix)_error $(rust_root)/error
 
 $(rust_error_binout): $(rust_error_cargo) \
-                        $(rust_root)/error/src/main.rs
+                      $(rust_root)/error/src/main.rs
 	$(CARGO) build \
     --manifest-path $< \
     --target-dir $(cargo_target_dir) \
@@ -389,6 +389,7 @@ $(rust_iced_binout): $(rust_iced_cargo)
 
 # io
 rust_io_cargo := $(rust_root)/io/Cargo.toml
+rust_io_name := $(rust_prefix)_io$(bin_ext)
 rust_io_binout := $(bin_path)/$(rust_prefix)_io$(bin_ext)
 
 rust_io: $(rust_io_binout)
@@ -400,13 +401,12 @@ rust_io_test: rust_io
 $(rust_io_cargo):
 	$(CARGO) new --bin --name $(rust_prefix)_io $(rust_root)/io
 
-$(rust_io_binout): $(rust_io_cargo)             \
+$(rust_io_binout): $(rust_io_cargo) \
                    $(rust_root)/io/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    -Z unstable-options                         \
-    --target-dir $(cargo_target_dir)            \
-    --out-dir $(bin_path)
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_io_name)$(bin_ext) $@
 
 # iter
 rust_iter_cargo := $(rust_root)/iter/Cargo.toml

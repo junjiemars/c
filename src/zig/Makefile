@@ -3,6 +3,7 @@
 # make clean test
 #
 
+ifeq ($(has_zig),yes)
 zig: zig_hi                                     \
      zig_c                                      \
      zig_game                                   \
@@ -11,10 +12,15 @@ zig_test: zig_hi_test                           \
           zig_c_test                            \
           zig_game_test                         \
           zig_value_test
+else
+zig:
+	echo "#skip..."
+zig_test: zig
+	echo "#skip..."
+endif
 
 
 # env
-ZIG := $(has_zig)
 zig_prefix := zig
 zig_cache_dir := $(CURDIR)/$(tmp_path)/zig-cache
 zig_prefix_exe_dir := $(CURDIR)/$(bin_path)
@@ -33,7 +39,7 @@ zig_hi_test: zig_hi
 	$(zig_hi_binout)
 
 $(zig_hi_build): $(ZIG)
-	cd $(zig_root)/hi && $(ZIG) init-exe
+	cd $(zig_root)/hi && $(ZIG) init
 
 $(zig_hi_binout): $(zig_hi_build)
 	$(ZIG) build                                  \
