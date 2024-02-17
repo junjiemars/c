@@ -8,5 +8,11 @@
 
 
 printf " + checking for zig ... "
-flag=has_zig value="`command -v zig`" . ${NORE_ROOT}/auto/make_define
-printf "yes\n"
+has_zig=no
+ZIG=$(command -v zig 2>/dev/null)
+if [ -n "$ZIG" ]; then
+	has_zig=yes
+  flag=has_zig value="$has_zig" . ${NORE_ROOT}/auto/make_define
+  flag=ZIG value="$ZIG" . ${NORE_ROOT}/auto/make_define
+fi
+printf "${has_zig}\n"
