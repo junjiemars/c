@@ -48,7 +48,7 @@ main (void)
 
 #if (NM_HAVE_GETDTABLE_SIZE)
   int fd_size = getdtablesize ();
-  int fd_out_of_range = dup2 (STDIN_FILENO, fd_size+1);
+  int fd_out_of_range = dup2 (STDIN_FILENO, fd_size + 1);
   assert (fd_out_of_range == -1);
 #endif
   exit (EXIT_SUCCESS);
