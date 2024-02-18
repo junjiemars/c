@@ -4,7 +4,6 @@
 #
 #
 
-
 ifeq ($(CC_NAME), msvc)
 signal:
 	@echo "#skip ..."
@@ -53,6 +52,7 @@ signal_test:                                    \
 
 endif														# msvc
 
+
 
 # env
 signal_prefix := signal
@@ -60,15 +60,16 @@ posix_root := $(root)/posix
 
 INC += $(nm_inc_opt)$(signal_root) $(nm_inc_opt)$(posix_root)
 
+
 
 # abort
 signal_abort_d_binout := $(bin_path)/$(signal_prefix)_abort_d$(bin_ext)
 signal_abort_a1_binout := $(bin_path)/$(signal_prefix)_abort_a1$(bin_ext)
 signal_abort_cflags := -D_IGN_SIG_ABRT_=-1 -D_EXIT_SIG_HANDLER_=1
 
-signal_abort: $(signal_abort_d_binout)        \
+signal_abort: $(signal_abort_d_binout) \
               $(signal_abort_a1_binout)
-signal_abort_test: signal_abort_d_test        \
+signal_abort_test: signal_abort_d_test \
                    signal_abort_a1_test
 
 signal_abort_d_test: $(signal_abort_d_binout)
@@ -81,11 +82,12 @@ $(signal_abort_d_binout): $(signal_root)/abort/d1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(signal_abort_cflags) \
     $^ $(bin_out)$@
 
-$(signal_abort_a1_binout): $(signal_root)/abort/d1.c    \
+$(signal_abort_a1_binout): $(signal_root)/abort/d1.c \
                            $(signal_root)/abort/abrt1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(signal_abort_cflags) \
     $^ $(bin_out)$@
 
+
 
 # alarm
 signal_alarm_d_binout := $(bin_path)/$(signal_prefix)_alarm_d$(bin_ext)
