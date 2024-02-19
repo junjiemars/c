@@ -62,9 +62,9 @@ io_test:                                        \
          io_time_test                           \
          io_trunc_test                          \
          io_umask_test
-
 endif
 
+
 
 # env
 io_prefix := io
@@ -84,6 +84,7 @@ ifeq ($(NM_SYSTEM), Darwin)
 stat := stat -x
 endif
 
+
 
 # access
 io_access_open_binout := $(bin_path)/$(io_prefix)_access_open$(bin_ext)
@@ -172,6 +173,8 @@ $(io_adv_mmap_binout): $(io_root)/adv/m1.c
 $(io_adv_fadvise_binout): $(io_root)/adv/a1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+
 # close
 io_close_binout := $(bin_path)/$(io_prefix)_close$(bin_ext)
 
@@ -182,6 +185,7 @@ io_close_test: io_close
 $(io_close_binout): $(io_root)/close/c1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 
 # copy
 io_copy_unbuf_binout := $(bin_path)/$(io_prefix)_copy_unbuf$(bin_ext)
@@ -599,6 +603,8 @@ $(io_read_raw_binout): $(io_root)/read/r1.c
 $(io_read_iov_binout): $(io_root)/read/r2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+
 # redirect
 io_redirect_binout := $(bin_path)/$(io_prefix)_redirect$(bin_ext)
 io_redirect_out1 := $(tmp_path)/$(io_prefix)_redirect.out1
@@ -614,6 +620,8 @@ io_redirect_test: io_redirect
 
 $(io_redirect_binout): $(io_root)/redirect/r.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 
 # rename
 io_rename_binout := $(bin_path)/$(io_prefix)_rename$(bin_ext)
