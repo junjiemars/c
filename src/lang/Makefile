@@ -3,7 +3,6 @@
 #
 #
 
-
 lang: lang_array                                \
       lang_assert                               \
       lang_duration                             \
@@ -424,17 +423,19 @@ $(lang_math_float_binout): $(lang_math_float_cppout)
 $(lang_math_float_cppout): $(lang_root)/math/f.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
+
+
 # random
 lang_random_basic_binout := $(bin_path)/$(lang_prefix)_random_raw$(bin_ext)
 # lang_random_arc_binout := $(bin_path)/$(lang_prefix)_random_arc$(bin_ext)
 lang_random_secure_binout := $(bin_path)/$(lang_prefix)_random_secure$(bin_ext)
 lang_random_seed_binout := $(bin_path)/$(lang_prefix)_random_seed$(bin_ext)
 
-lang_random: lang_random_basic                  \
-             lang_random_secure                 \
+lang_random: lang_random_basic \
+             lang_random_secure \
              lang_random_seed
-lang_random_test: lang_random_basic_test        \
-                  lang_random_secure_test       \
+lang_random_test: lang_random_basic_test \
+                  lang_random_secure_test \
                   lang_random_seed_test
 
 lang_random_basic: $(lang_random_basic_binout)
@@ -468,6 +469,8 @@ $(lang_random_secure_binout): $(lang_root)/random/s.c
 
 $(lang_random_seed_binout): $(lang_root)/random/seed.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 
 # restrict
 lang_restrict_binout := $(bin_path)/$(lang_prefix)_restrict$(bin_ext)
