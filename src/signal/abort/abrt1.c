@@ -1,8 +1,7 @@
 #include "_signal_.h"
 
-
 /*
- * Elmulates POSIX `abort(3)'.
+ * Elmulates POSIX `abort(3)':
  *
  * https://pubs.opengroup.org/onlinepubs/9699919799/functions/abort.html
  *
@@ -11,43 +10,42 @@
  *
  */
 
-
 void
-abort(void)
+abort (void)
 {
-  sigset_t          set;
-  struct sigaction  act;
+  sigset_t set;
+  struct sigaction act;
 
-  if (sigaction(SIGABRT, NULL, &act) == -1)
+  if (sigaction (SIGABRT, NULL, &act) == -1)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
 
   if (act.sa_handler == SIG_IGN)
     {
       act.sa_handler = SIG_DFL;
-      sigaction(SIGABRT, &act, NULL);
+      sigaction (SIGABRT, &act, NULL);
     }
 
   if (act.sa_handler == SIG_DFL)
     {
-      fflush(NULL);
+      fflush (NULL);
     }
 
-  sigfillset(&set);
-  sigdelset(&set, SIGABRT);
-  sigprocmask(SIG_SETMASK, &set, NULL);
+  sigfillset (&set);
+  sigdelset (&set, SIGABRT);
+  sigprocmask (SIG_SETMASK, &set, NULL);
 
-  raise(SIGABRT);
+  raise (SIGABRT);
 
-  fflush(NULL);
+  fflush (NULL);
 
   act.sa_handler = SIG_DFL;
-  sigaction(SIGABRT, &act, NULL);
-  sigprocmask(SIG_SETMASK, &set, NULL);
+  sigaction (SIGABRT, &act, NULL);
+  sigprocmask (SIG_SETMASK, &set, NULL);
 
-  raise(SIGABRT);
+  raise (SIGABRT);
 
-  exit(EXIT_FAILURE);
+  exit (EXIT_FAILURE);
 }

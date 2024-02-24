@@ -338,6 +338,7 @@ $(signal_sleep_s3_binout): $(signal_root)/sleep/d.c   \
                            $(signal_root)/sleep/s3.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 
 # suspend
 signal_suspend_raw_binout := $(bin_path)/$(signal_prefix)_suspend_raw$(bin_ext)
@@ -346,20 +347,19 @@ signal_suspend_flag_binout := $(bin_path)/$(signal_prefix)_suspend_flag$(bin_ext
 signal_suspend_stage_binout := $(bin_path)/$(signal_prefix)_suspend_stage$(bin_ext)
 signal_suspend_n ?= 1
 
-signal_suspend: $(signal_suspend_raw_binout)    \
-                $(signal_suspend_wait_binout)  \
-                $(signal_suspend_flag_binout)   \
+signal_suspend: $(signal_suspend_raw_binout) \
+                $(signal_suspend_wait_binout) \
+                $(signal_suspend_flag_binout) \
                 $(signal_suspend_stage_binout)
-signal_suspend_test: signal_suspend_raw_test    \
-                     signal_suspend_wait_test  \
-                     signal_suspend_flag_test   \
+signal_suspend_test: signal_suspend_raw_test \
+                     signal_suspend_wait_test \
+                     signal_suspend_flag_test \
                      signal_suspend_stage_test
 
 signal_suspend_stage: $(signal_suspend_stage_binout)
 
 signal_suspend_raw_test: $(signal_suspend_raw_binout)
-	# $< $(signal_suspend_n)
-	@echo "#skip ..."
+	$< $(signal_suspend_n)
 
 signal_suspend_wait_test: $(signal_suspend_wait_binout)
 	-$< $(signal_suspend_n)
@@ -383,6 +383,7 @@ $(signal_suspend_flag_binout): $(signal_root)/suspend/f.c
 $(signal_suspend_stage_binout): $(signal_root)/suspend/s.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 
 # sync
 signal_sync_child_binout := $(bin_path)/$(signal_prefix)_sync_child$(bin_ext)

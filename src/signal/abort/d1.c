@@ -2,10 +2,7 @@
 
 /*
  * 1. `abort(3)' never return to its caller.
- *
- * 2. The output streams are flushed and closed is implementation
- * defined.
- *
+ * 2. The output streams are flushed and closed is implementation defined.
  * 3. If `on_sig_abrt' returns, `abort(3)' terminates the process.
  *
  */

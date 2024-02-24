@@ -21,6 +21,10 @@
 *.la
 *.lo
 
+# ai
+.prompt
+.context
+
 # Shared objects (inc. Windows DLLs)
 *.dll
 *.so
