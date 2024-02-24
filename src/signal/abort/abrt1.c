@@ -1,7 +1,7 @@
 #include "_signal_.h"
 
 /*
- * Elmulates POSIX `abort(3)':
+ * Emulates POSIX `abort(3)':
  *
  * https://pubs.opengroup.org/onlinepubs/9699919799/functions/abort.html
  *

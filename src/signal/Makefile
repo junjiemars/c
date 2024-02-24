@@ -94,13 +94,11 @@ signal_alarm_d_binout := $(bin_path)/$(signal_prefix)_alarm_d$(bin_ext)
 signal_alarm_a1_binout := $(bin_path)/$(signal_prefix)_alarm_a1$(bin_ext)
 signal_alarm_cflags ?= -D_ALRM_N_=4
 
-signal_alarm: $(signal_alarm_d_binout)          \
+signal_alarm: $(signal_alarm_d_binout) \
               $(signal_alarm_a1_binout)
 
-
-signal_alarm_test: signal_alarm_d_test          \
+signal_alarm_test: signal_alarm_d_test \
                    signal_alarm_a1_test
-
 
 signal_alarm_d_test: $(signal_alarm_d_binout)
 	$<
@@ -109,21 +107,23 @@ signal_alarm_a1_test: $(signal_alarm_a1_binout)
 	$<
 
 $(signal_alarm_d_binout): $(signal_root)/alarm/d1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@  \
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@ \
     $(signal_alarm_cflags)
 
-$(signal_alarm_a1_binout): $(signal_root)/alarm/d1.c  \
+$(signal_alarm_a1_binout): $(signal_root)/alarm/d1.c \
                            $(signal_root)/alarm/alrm1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@  \
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@ \
     $(signal_alarm_cflags)
+
+
 
 # child
 signal_child_proc_binout := $(bin_path)/$(signal_prefix)_child_proc$(bin_ext)
 signal_child_chld_binout := $(bin_path)/$(signal_prefix)_child_chld$(bin_ext)
 
-signal_child: $(signal_child_proc_binout)       \
+signal_child: $(signal_child_proc_binout) \
               $(signal_child_chld_binout)
-signal_child_test: signal_child_proc_test         \
+signal_child_test: signal_child_proc_test \
                    signal_child_chld_test
 
 
@@ -139,7 +139,7 @@ $(signal_child_proc_binout): $(signal_root)/child/p1.c
 $(signal_child_chld_binout): $(signal_root)/child/c1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-
+
 
 # info
 signal_info_lst_binout := $(bin_path)/$(signal_prefix)_lst$(bin_ext)
@@ -148,10 +148,10 @@ signal_info_sig2str_h := $(inc_path)/sig2str.h
 signal_info_sig2str_c := $(tmp_path)/sig2str.c
 signal_info_lst_awk_in := $(signal_root)/info/sig2str.awk.$(NM_SYSTEM).in
 
-signal_info: $(signal_info_lst_binout)          \
+signal_info: $(signal_info_lst_binout) \
              $(signal_info_dfl_binout)
 
-signal_info_test: signal_info_lst_test          \
+signal_info_test: signal_info_lst_test \
                   signal_info_dfl_test
 
 signal_info_lst_test: $(signal_info_lst_binout)
@@ -171,6 +171,8 @@ $(signal_info_dfl_binout): $(signal_root)/info/dfl1.c \
 $(signal_info_sig2str_c): $(signal_root)/info/sig2str.awk \
                           $(signal_info_lst_awk_in)
 	awk -f $^ > $@
+
+
 
 # io
 signal_io_xfsz_binout := $(bin_path)/$(signal_prefix)_xfsz$(bin_ext)
@@ -204,6 +206,7 @@ signal_job_tstp_test: $(signal_job_tstp_binout)
 $(signal_job_tstp_binout): $(signal_root)/job/j1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 
 # kill
 signal_kill_binout := $(bin_path)/$(signal_prefix)_kill$(bin_ext)
@@ -215,17 +218,31 @@ signal_kill_test: signal_kill
 $(signal_kill_binout): $(signal_root)/kill/k1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+
 # pause
-signal_pause_binout := $(bin_path)/$(signal_prefix)_pause$(bin_ext)
-signal_pause_pid := $(tmp_path)/$(signal_prefix)_pause.pid
+signal_pause_d_binout := $(bin_path)/$(signal_prefix)_pause_d$(bin_ext)
+signal_pause_p1_binout := $(bin_path)/$(signal_prefix)_pause_p1$(bin_ext)
 
-signal_pause: $(signal_pause_binout)
-signal_pause_test: signal_pause
-	# $(signal_pause_binout)
-	@echo "#skip ..."
+signal_pause: $(signal_pause_d_binout) \
+              $(signal_pause_p1_binout)
+signal_pause_test: signal_pause_d_test \
+                   signal_pause_p1_test
 
-$(signal_pause_binout): $(signal_root)/pause/p1.c
+signal_pause_d_test: $(signal_pause_d_binout)
+	-$< |head -n1|xargs kill -TERM
+
+signal_pause_p1_test: $(signal_pause_p1_binout)
+	-$< |head -n1|xargs kill -TERM
+
+$(signal_pause_d_binout): $(signal_root)/pause/d1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(signal_pause_p1_binout): $(signal_root)/pause/d1.c \
+                           $(signal_root)/pause/pause1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 
 # queue
 signal_queue_q1_binout := $(bin_path)/$(signal_prefix)_queue_q1$(bin_ext)
@@ -256,6 +273,7 @@ $(signal_queue_q1_binout): $(signal_root)/queue/q1.c
 $(signal_queue_q2_binout): $(signal_root)/queue/q2.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 
 # safe
 signal_safe_stdio_binout := $(bin_path)/$(signal_prefix)_safe_stdio$(bin_ext)
@@ -289,6 +307,7 @@ $(signal_safe_nre_binout): $(signal_root)/safe/re1.c
 $(signal_safe_re_binout): $(signal_root)/safe/re1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_REENTRANT_=1 $^ $(bin_out)$@
 
+
 
 # sleep
 signal_sleep_d_binout := $(bin_path)/$(signal_prefix)_sleep_d$(bin_ext)

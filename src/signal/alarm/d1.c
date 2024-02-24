@@ -1,5 +1,4 @@
 #include "_signal_.h"
-#include <stdlib.h>
 
 /*
  * `alarm` recursively
@@ -46,6 +45,7 @@ main (void)
   for (i = 0;; i++)
     {
       /* void */
+      sleep (1);
     }
 
   exit (EXIT_SUCCESS);
