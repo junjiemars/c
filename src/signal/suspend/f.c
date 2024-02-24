@@ -1,61 +1,57 @@
-#include <_signal_.h>
+#include "_signal_.h"
 
+static void on_sig (int);
 
-static void on_sig(int);
-
-
-static volatile sig_atomic_t  qflag;
-
+static volatile sig_atomic_t qflag;
 
 int
-main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv)
+main (void)
 {
-  sigset_t  nset, oset, zset;
+  sigset_t nset, oset, zset;
 
-  printf("%d\n", getpid());
+  printf ("%d\n", getpid ());
 
-  signal(SIGINT, on_sig);
-  signal(SIGQUIT, on_sig);
+  signal (SIGINT, on_sig);
+  signal (SIGQUIT, on_sig);
 
-  sigemptyset(&zset);
-  sigemptyset(&nset);
-  sigaddset(&nset, SIGQUIT);
+  sigemptyset (&zset);
+  sigemptyset (&nset);
+  sigaddset (&nset, SIGQUIT);
 
-  if (sigprocmask(SIG_BLOCK, &nset, &oset))
+  if (sigprocmask (SIG_BLOCK, &nset, &oset))
     {
-      perror(NULL);
+      perror (NULL);
     };
-  printf("! %s blocked\n", _str_(SIGQUIT));
+  printf ("! %s blocked\n", _str_ (SIGQUIT));
 
   while (qflag == 0)
     {
-      printf("! suspend enter...\n");
-      sigsuspend(&zset);
+      printf ("! suspend enter...\n");
+      sigsuspend (&zset);
     }
   qflag = 0;
 
-  printf("! suspend return\n");
+  printf ("! suspend return\n");
 
-  if (sigprocmask(SIG_SETMASK, &oset, NULL))
+  if (sigprocmask (SIG_SETMASK, &oset, NULL))
     {
-      perror(NULL);
+      perror (NULL);
     }
-  printf("! %s unblocked\n", _str_(SIGQUIT));
+  printf ("! %s unblocked\n", _str_ (SIGQUIT));
 
-
-  exit(EXIT_SUCCESS);
+  exit (EXIT_SUCCESS);
 }
 
 void
-on_sig(int signo)
+on_sig (int signo)
 {
   if (SIGINT == signo)
     {
-      printf("# %s, %d\n", _str_(SIGINT), qflag);
+      printf ("# %s, %d\n", _str_ (SIGINT), qflag);
     }
   else if (SIGQUIT == signo)
     {
       qflag = 1;
-      printf("# %s, %d\n", _str_(SIGQUIT), qflag);
+      printf ("# %s, %d\n", _str_ (SIGQUIT), qflag);
     }
 }

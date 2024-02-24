@@ -1,4 +1,4 @@
-#include <_signal_.h>
+#include "_signal_.h"
 
 /*
  * expect:
@@ -11,63 +11,60 @@
  *
  */
 
+static void on_sig_int (int);
 
-static void on_sig_int(int);
-
-
-static int  N  =  1;
+static int N = 1;
 
 int
-main(int argc, char **argv)
+main (int argc, char **argv)
 {
-  sigset_t  nset, oset;
+  sigset_t nset, oset;
 
   if (argc > 1)
     {
-      N = atoi(argv[1]);
+      N = atoi (argv[1]);
     }
 
-  setvbuf(stdout, NULL, _IONBF, 0);
-  printf("%d\n", getpid());
+  setvbuf (stdout, NULL, _IONBF, 0);
+  printf ("%d\n", getpid ());
 
-  if (signal(SIGINT, on_sig_int) == SIG_ERR)
+  if (signal (SIGINT, on_sig_int) == SIG_ERR)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
 
-  sigemptyset(&nset);
-  sigaddset(&nset, SIGINT);
+  sigemptyset (&nset);
+  sigaddset (&nset, SIGINT);
 
-  printf("! %s blocked(%d)\n", _str_(SIGINT), SIGINT);
+  printf ("! %s blocked(%d)\n", _str_ (SIGINT), SIGINT);
 
-  if (sigprocmask(SIG_SETMASK, &nset, &oset) == -1)
+  if (sigprocmask (SIG_SETMASK, &nset, &oset) == -1)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
 
-  printf("! enter...\n");
+  printf ("! enter...\n");
 
-  sleep(N);
+  sleep (N);
 
-  printf("! leaved\n");
+  printf ("! leaved\n");
 
-  if (sigprocmask(SIG_SETMASK, &oset, NULL) == -1)
+  if (sigprocmask (SIG_SETMASK, &oset, NULL) == -1)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
-  printf("! %s(%d) unblocked\n", _str_(SIGINT), SIGINT);
+  printf ("! %s(%d) unblocked\n", _str_ (SIGINT), SIGINT);
 
-  printf("# exit\n");
+  printf ("# exit\n");
 
-  exit(EXIT_SUCCESS);
+  exit (EXIT_SUCCESS);
 }
 
-
 void
-on_sig_int(int signo)
+on_sig_int (int signo)
 {
-  printf("# %s(%d) caught\n", _str_(SIGINT), signo);
+  printf ("# %s(%d) caught\n", _str_ (SIGINT), signo);
 }

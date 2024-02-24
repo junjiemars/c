@@ -24,7 +24,12 @@ main (int argc, char **argv)
           perror (NULL);
           exit (EXIT_FAILURE);
         }
-      strcpy (command, argv[1]);
+      for (int i = 1; i < argc - 1; i++)
+        {
+          strcat (command, argv[i]);
+          strcat (command, " ");
+        }
+      strcat (command, argv[argc - 1]);
     }
 
   printf ("%d\n", getpid ());

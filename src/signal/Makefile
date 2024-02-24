@@ -357,6 +357,7 @@ signal_suspend_test: signal_suspend_raw_test \
                      signal_suspend_stage_test
 
 signal_suspend_stage: $(signal_suspend_stage_binout)
+	$< $(signal_suspend_n)
 
 signal_suspend_raw_test: $(signal_suspend_raw_binout)
 	$< $(signal_suspend_n)
@@ -397,14 +398,15 @@ signal_sync_child_test: $(signal_sync_child_binout)
 $(signal_sync_child_binout): $(signal_root)/sync/s1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 
 # system
 signal_system_d_binout := $(bin_path)/$(signal_prefix)_system_d$(bin_ext)
 signal_system_s1_binout := $(bin_path)/$(signal_prefix)_system_s1$(bin_ext)
 
-signal_system: $(signal_system_d_binout)      \
+signal_system: $(signal_system_d_binout) \
                $(signal_system_s1_binout)
-signal_system_test: signal_system_d_test      \
+signal_system_test: signal_system_d_test \
                     signal_system_s1_test
 
 signal_system_d_test: $(signal_system_d_binout)
@@ -420,9 +422,11 @@ signal_system_s1_test: $(signal_system_s1_binout)
 $(signal_system_d_binout): $(signal_root)/system/d.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-$(signal_system_s1_binout): $(signal_root)/system/d.c   \
+$(signal_system_s1_binout): $(signal_root)/system/d.c \
                             $(signal_root)/system/s1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 
 # timeout
 signal_timeout_t1_binout := $(bin_path)/$(signal_prefix)_timeout_t1$(bin_ext)
