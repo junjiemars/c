@@ -224,6 +224,7 @@ $(io_copy_stdbuf_binout): $(io_root)/copy/stdbuf.c
 $(io_copy_hole_binout): $(io_root)/copy/hole1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 
 # dir
 io_dir_raw_binout := $(bin_path)/$(io_prefix)_dir_raw$(bin_ext)
@@ -579,14 +580,16 @@ io_own_test: io_own
 $(io_own_binout): $(io_root)/own/o1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 
 # read
 io_read_raw_binout := $(bin_path)/$(io_prefix)_read_raw$(bin_ext)
 io_read_iov_binout := $(bin_path)/$(io_prefix)_read_iov$(bin_ext)
+io_read_dev_binout := $(bin_path)/$(io_prefix)_read_dev$(bin_ext)
 
-io_read: $(io_read_raw_binout)                  \
+io_read: $(io_read_raw_binout) \
          $(io_read_iov_binout)
-io_read_test: io_read_raw_test                  \
+io_read_test: io_read_raw_test \
               io_read_iov_test
 
 io_read_raw_test: $(io_read_raw_binout)
@@ -597,10 +600,18 @@ io_read_iov_test: $(io_read_iov_binout)
 	$< <$(io_root)/read/r2.c
 	$< <$(out)/nore.h
 
+io_read_dev_test: $(io_read_dev_binout)
+	$< /dev/null
+	$< /dev/zero
+	$< /dev/urandom
+
 $(io_read_raw_binout): $(io_root)/read/r1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(io_read_iov_binout): $(io_root)/read/r2.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(io_read_dev_binout): $(io_root)/read/r3.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
