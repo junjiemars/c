@@ -25,6 +25,7 @@ ipc_test: ipc_fd_test                           \
 
 endif
 
+
 
 # env
 ipc_prefix := ipc
@@ -63,12 +64,12 @@ ipc_filter_d_binout := $(bin_path)/$(ipc_prefix)_filter_d$(bin_ext)
 ipc_filter_calc_binout := $(bin_path)/$(ipc_prefix)_filter_calc$(bin_ext)
 ipc_filter_file := $(tmp_path)/$(ipc_prefix)_filter.file
 
-ipc_filter: $(ipc_filter_d_binout)              \
+ipc_filter: $(ipc_filter_d_binout) \
             $(ipc_filter_calc_binout)
-ipc_filter_test: ipc_filter_d_test              \
+ipc_filter_test: ipc_filter_d_test \
                  ipc_filter_calc_test
 
-ipc_filter_d_test: $(ipc_filter_d_binout)       \
+ipc_filter_d_test: $(ipc_filter_d_binout) \
                    $(ipc_filter_calc_binout)
 	echo "3 + 5" | $< $(ipc_filter_calc_binout)
 
@@ -90,11 +91,11 @@ ipc_pager_std_binout := $(bin_path)/$(ipc_prefix)_pager_std$(bin_ext)
 ipc_pager_emu_binout := $(bin_path)/$(ipc_prefix)_pager_emu$(bin_ext)
 ipc_pager_more_bin = $(shell command -v more)
 
-ipc_pager: $(ipc_pager_raw_binout)              \
-           $(ipc_pager_std_binout)              \
+ipc_pager: $(ipc_pager_raw_binout) \
+           $(ipc_pager_std_binout) \
            $(ipc_pager_emu_binout)
-ipc_pager_test: ipc_pager_raw_test              \
-                ipc_pager_std_test              \
+ipc_pager_test: ipc_pager_raw_test \
+                ipc_pager_std_test \
                 ipc_pager_emu_test
 
 ipc_pager_raw_test: $(ipc_pager_raw_binout)
@@ -111,21 +112,21 @@ ipc_pager_emu_test: $(ipc_pager_emu_binout)
 
 $(ipc_pager_raw_binout): $(ipc_root)/pager/p1.c \
                          $(ipc_root)/pager/r1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC)                    \
-    $(nm_def_opt)DEF_PAGER="\"${ipc_pager_more_bin}\""  \
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) \
+    $(nm_def_opt)DEF_PAGER="\"${ipc_pager_more_bin}\"" \
     $^ $(bin_out)$@
 
 $(ipc_pager_std_binout): $(ipc_root)/pager/p1.c \
                          $(ipc_root)/pager/s1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC)                    \
-    $(nm_def_opt)DEF_PAGER="\"${ipc_pager_more_bin}\""  \
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) \
+    $(nm_def_opt)DEF_PAGER="\"${ipc_pager_more_bin}\"" \
     $^ $(bin_out)$@
 
 $(ipc_pager_emu_binout): $(ipc_root)/pager/p1.c \
                          $(ipc_root)/pager/s1.c \
                          $(ipc_root)/pager/e1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC)                    \
-    $(nm_def_opt)DEF_PAGER="\"${ipc_pager_more_bin}\""  \
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) \
+    $(nm_def_opt)DEF_PAGER="\"${ipc_pager_more_bin}\"" \
     $^ $(bin_out)$@
 
 
@@ -157,7 +158,5 @@ $(ipc_sock_bound_binout): $(ipc_root)/sock/b1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
-
-
 
 # eof

@@ -1,18 +1,17 @@
 #include "_ipc_.h"
 
-static void  on_sig_pipe (int);
-
+static void on_sig_pipe (int);
 
 int
 main (int argc, char *argv[])
 {
-  pid_t   pid;
-  int     fdp[2], fdc[2];
-  char   *filter, *filter_name;
+  pid_t pid;
+  int fdp[2], fdc[2];
+  char *filter, *filter_name;
 
   if (argc < 2)
     {
-      fprintf (stderr, "usage: <filter-pathname>\n");
+      fprintf (stderr, "usage: <filter-path>\n");
       exit (EXIT_FAILURE);
     }
   filter = argv[1];
@@ -27,7 +26,7 @@ main (int argc, char *argv[])
       exit (EXIT_FAILURE);
     }
 
-  if (pipe (fdp) == -1 || pipe(fdc) == -1)
+  if (pipe (fdp) == -1 || pipe (fdc) == -1)
     {
       perror (NULL);
       exit (EXIT_FAILURE);
@@ -43,14 +42,14 @@ main (int argc, char *argv[])
       close (fdp[0]);
       close (fdc[1]);
 
-      char    line[NM_LINE_MAX];
+      char line[NM_LINE_MAX];
 
       while (fgets (line, NM_LINE_MAX, stdin) != NULL)
         {
-          size_t   nw  =  strlen (line);
-          ssize_t  nr;
+          size_t nw = strlen (line);
+          ssize_t nr;
 
-          if (write (fdp[1], line, nw) != (ssize_t) nw)
+          if (write (fdp[1], line, nw) != (ssize_t)nw)
             {
               perror (NULL);
               exit (EXIT_FAILURE);

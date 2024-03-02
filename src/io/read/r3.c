@@ -1,6 +1,9 @@
 #include "_io_.h"
-#include <stdlib.h>
-#include <unistd.h>
+
+/*
+ * 1. Access devices with the same syntax as accessing regular files.
+ * 2. Access permissions also same for devices and regular files.
+ */
 
 #define BUF_SMALL 8
 static char buf_small[BUF_SMALL];
@@ -23,7 +26,7 @@ main (int argc, char **argv)
       exit (EXIT_FAILURE);
     }
 
-  if ((n = read (fd, buf_small, BUF_SMALL - 1)) < 0)
+  if ((n = read (fd, buf_small, BUF_SMALL)) < 0)
     {
       perror (NULL);
       exit (EXIT_FAILURE);
