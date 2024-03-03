@@ -54,6 +54,7 @@ objs/Makefile
 
 # editor swap files
 *.swp
+*.nvimlog
 
 # vscode files
 .vscode/

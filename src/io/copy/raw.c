@@ -1,5 +1,4 @@
 #include "_io_.h"
-#include <sys/fcntl.h>
 
 /*
  * user-mode to kenerl mode.
