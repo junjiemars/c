@@ -805,6 +805,8 @@ $(io_size_link): $(io_size_file)
 $(io_size_binout): $(io_root)/size/s1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+
 # stat
 io_stat_ft_binout := $(bin_path)/$(io_prefix)_stat_ft$(bin_ext)
 io_stat_uid_binout := $(bin_path)/$(io_prefix)_stat_uid$(bin_ext)
@@ -854,7 +856,7 @@ $(io_stat_stat1_binout): $(io_root)/stat/stat1.c
 $(io_stat_dev_binout): $(io_root)/stat/dev1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-
+
 
 # struct
 io_struct_binout := $(bin_path)/$(io_prefix)_struct$(bin_ext)
