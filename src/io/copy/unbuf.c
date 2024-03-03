@@ -9,29 +9,27 @@
  *
  */
 
-static char  buf[BUFSIZ];
-
+static char buf[BUFSIZ];
 
 int
-main(void)
+main (void)
 {
-  ssize_t  n;
+  ssize_t n;
 
-  while ((n = read(STDIN_FILENO, buf, BUFSIZ)) > 0)
+  while ((n = read (STDIN_FILENO, buf, BUFSIZ)) > 0)
     {
-      if (write(STDOUT_FILENO, buf, n) != n)
+      if (write (STDOUT_FILENO, buf, n) != n)
         {
-          perror("!write error");
-          exit(EXIT_FAILURE);
+          perror ("!write error");
+          exit (EXIT_FAILURE);
         }
     }
 
   if (n == -1)
     {
-      perror("!read error");
-      exit(EXIT_FAILURE);
+      perror ("!read error");
+      exit (EXIT_FAILURE);
     }
 
-  exit(EXIT_SUCCESS);
-
+  exit (EXIT_SUCCESS);
 }
