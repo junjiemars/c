@@ -123,10 +123,15 @@ test_generic (void)
   printf ("%s: no `generic' found\n", __FUNCTION__);
 #else
 
-#define _tn_(x) generic ((x), int : 1, double : 2, default : 3)
-  static_assert (1 == _tn_ (0), "int");
-  static_assert (2 == _tn_ (0.1), "double");
-#undef _tn_
+#define _ndef_test_generic_(x) \
+  generic ((x), \
+           int : 1, \
+           double : 2, \
+           default : 'a')
+  static_assert (1 == _ndef_test_generic_ (0), "int");
+  static_assert (2 == _ndef_test_generic_ (0.1), "double");
+  static_assert ('a' == _ndef_test_generic_ ("X"), "default");
+#undef _ndef_test_generic_
 
 #endif
 }
