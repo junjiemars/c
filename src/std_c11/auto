@@ -29,39 +29,49 @@ nm_feature_flags=
 nm_feature_test='alignas(64) char cache[64];'
 . ${NORE_ROOT}/auto/feature
 
-nm_feature="noreturn"
-nm_feature_name="nm_have_noreturn"
-nm_feature_run=no
-nm_feature_h='#include <stdnoreturn.h>
-              #include <stdlib.h>
-              noreturn void fatal(int x) {
-                exit(x);
-              }
-'
-nm_feature_flags=
-nm_feature_test='fatal(0);'
-. ${NORE_ROOT}/auto/feature
-
-nm_feature="static_assert"
-nm_feature_name="nm_have_static_assert"
-nm_feature_run=no
-nm_feature_h="#include <assert.h>"
-nm_feature_flags=
-nm_feature_flags=
-nm_feature_test="enum {N=5}; static_assert(N==5, \"N is not equal 5\");"
-. ${NORE_ROOT}/auto/feature
-
 nm_feature="atomic"
 nm_feature_name="nm_have_atomic"
 nm_feature_run=no
 nm_feature_h='#include <stdatomic.h>
 _Atomic struct A {
-  int x; 
+  int x;
 } a;'
 nm_feature_flags=
 nm_feature_test='atomic_is_lock_free(&a);'
 . ${NORE_ROOT}/auto/feature
 
+nm_feature="_Generic"
+nm_feature_name="nm_have_generic"
+nm_feature_run=no
+nm_feature_h=
+nm_feature_flags=
+nm_feature_test='
+#define type_name(x) _Generic((x), int:1, double:2, default: 3)
+(void) sizeof(type_name(1));
+(void) sizeof(type_name(1.0));
+'
+. ${NORE_ROOT}/auto/feature
 
+nm_feature="noreturn"
+nm_feature_name="nm_have_noreturn"
+nm_feature_run=no
+nm_feature_h='#include <stdnoreturn.h>
+#include <stdlib.h>
+noreturn void fatal(int x) {
+  exit(x);
+}
+'
+nm_feature_flags=
+nm_feature_test='fatal(0);'
+. ${NORE_ROOT}/auto/feature
+
+nm_feature="_Static_assert"
+nm_feature_name="nm_have_static_assert"
+nm_feature_run=no
+nm_feature_h="#include <assert.h>"
+nm_feature_flags=
+nm_feature_flags=
+nm_feature_test="enum {N=5}; _Static_assert(N==5, \"N is not equal 5\");"
+. ${NORE_ROOT}/auto/feature
 
 # eof
