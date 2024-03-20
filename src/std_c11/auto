@@ -13,23 +13,23 @@ include="uchar.h" . ${NORE_ROOT}/auto/include
 
 echo "checking C11 new features ..."
 #-----------------------------------
-nm_feature="alignof"
+nm_feature="_Alignof"
 nm_feature_name="nm_have_alignof"
 nm_feature_run=no
 nm_feature_h='#include <stdalign.h>'
 nm_feature_flags=
-nm_feature_test='(void) (1 == alignof(char));'
+nm_feature_test='(void) (1 == _Alignof(char));'
 . ${NORE_ROOT}/auto/feature
 
-nm_feature="alignas"
+nm_feature="_Alignas"
 nm_feature_name="nm_have_alignas"
 nm_feature_run=no
 nm_feature_h='#include <stdalign.h>'
 nm_feature_flags=
-nm_feature_test='alignas(64) char cache[64];'
+nm_feature_test='_Alignas(64) char cache[64];'
 . ${NORE_ROOT}/auto/feature
 
-nm_feature="atomic"
+nm_feature="_Atomic"
 nm_feature_name="nm_have_atomic"
 nm_feature_run=no
 nm_feature_h='#include <stdatomic.h>
@@ -52,12 +52,12 @@ nm_feature_test='
 '
 . ${NORE_ROOT}/auto/feature
 
-nm_feature="noreturn"
+nm_feature="_Noreturn"
 nm_feature_name="nm_have_noreturn"
 nm_feature_run=no
 nm_feature_h='#include <stdnoreturn.h>
 #include <stdlib.h>
-noreturn void fatal(int x) {
+_Noreturn void fatal(int x) {
   exit(x);
 }
 '
