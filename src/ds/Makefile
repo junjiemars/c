@@ -1,3 +1,4 @@
+# -*- mode:makefile-gmake -*-
 #
 # ./configure --has-ds
 # make clean test
@@ -76,10 +77,10 @@ list_link_sorted_binout := $(bin_path)/$(ds_prefix)_list_link_sorted$(bin_ext)
 ds_list: list_link
 ds_list_test: list_link_test
 
-list_link: list_link_bone                       \
+list_link: list_link_bone \
            list_link_sorted
 
-list_link_test: list_link_bone_test             \
+list_link_test: list_link_bone_test \
                 list_link_sorted_test
 
 list_link_bone: $(list_link_bone_binout)
@@ -90,18 +91,19 @@ list_link_bone_test: list_link_bone
 list_link_sorted_test: list_link_sorted
 	$(list_link_sorted_binout)
 
-$(list_link_bone_binout): $(ds_root)/list/link_bone/test.c  \
+$(list_link_bone_binout): $(ds_root)/list/link_bone/test.c \
                           $(ds_root)/list/link_bone/list.h
-	$(CC) $(CFLAGS) $(INC)                        \
-    $(ds_root)/list/link_bone/test.c            \
+	$(CC) $(CFLAGS) $(INC) \
+    $(ds_root)/list/link_bone/test.c \
     $(bin_out)$@
 
-$(list_link_sorted_binout): $(ds_root)/list/link_sorted/test.c  \
+$(list_link_sorted_binout): $(ds_root)/list/link_sorted/test.c \
 				        						$(ds_root)/list/link_sorted/list.h
-	$(CC) $(CFLAGS) $(INC)                        \
-    $(ds_root)/list/link_sorted/test.c          \
+	$(CC) $(CFLAGS) $(INC) \
+    $(ds_root)/list/link_sorted/test.c \
     $(bin_out)$@
 
+
 
 # queue
 ds_queue_binout := $(bin_path)/$(ds_prefix)_queue$(bin_ext)

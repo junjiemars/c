@@ -128,9 +128,9 @@ test_generic (void)
            int : 1, \
            double : 2, \
            default : 'a')
-  static_assert (1 == _ndef_test_generic_ (0), "int");
-  static_assert (2 == _ndef_test_generic_ (0.1), "double");
-  static_assert ('a' == _ndef_test_generic_ ("X"), "default");
+  assert (1 == _ndef_test_generic_ (0) && "int");
+  assert (2 == _ndef_test_generic_ (0.1) && "double");
+  assert ('a' == _ndef_test_generic_ ("X") && "default");
 #undef _ndef_test_generic_
 
 #endif
