@@ -2340,6 +2340,7 @@ time used only by the process.
 ** References
 - [[https://0xax.gitbooks.io/linux-insides/content/][gitbooks: Linux Inside]]
 - [[http://oliveryang.net/2015/09/pitfalls-of-TSC-usage/][Time stamp counter]]
+- [[https://github.com/mit-pdos/xv6-public.git][xv6-public]]
 
 * Flex & Bison
 	:PROPERTIES:
