@@ -5,7 +5,7 @@
 #
 
 
-flex: flex_basic																\
+flex: flex_basic                                \
       flex_c
 
 flex_test: flex_basic_test											\

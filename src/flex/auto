@@ -8,7 +8,7 @@
 
 
 # check posix features
-. src/posix/auto
+# . src/posix/auto
 
 
 echo "checking for {flex} ..."
@@ -26,6 +26,18 @@ else
   printf "no\n"
 fi
 
+# check bison
+#----------------------------------------
+has_bison=NO
+printf " + checking for bison ... "
+if bison --version >/dev/null; then
+  printf "yes\n"
+  has_bison=YES
+  flag=has_bison op=":=" value="$has_bison" \
+      . ${NORE_ROOT}/auto/make_define
+else
+  printf "no\n"
+fi
 
 # check compiler options
 #----------------------------------------
@@ -47,6 +59,26 @@ case "$CC_NAME" in
   msvc)
     ;;
 esac
+
+case "$CC_NAME" in
+  gcc|clang)
+    nm_feature="$CC_NAME -Wno-sign-compare"
+    nm_feature_name=
+    nm_feature_indent=yes
+    nm_feature_run=no
+    nm_feature_h=
+    nm_feature_flags='-Wno-sign-compare'
+    nm_feature_test=
+    . ${NORE_ROOT}/auto/feature
+    if [ yes = $nm_found ]; then
+      flag=CFLAGS op="+=" value="$nm_feature_flags" \
+          . ${NORE_ROOT}/auto/make_define
+    fi
+    ;;
+  msvc)
+    ;;
+esac
+
 
 
 # eof
