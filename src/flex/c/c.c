@@ -1,12 +1,12 @@
-#include <_flex_.h>
+#include "_flex_.h"
 #include <stdio.h>
 
 int
 main(int argc, char **argv)
 {
-  _unused_(argc);
-  _unused_(argv);
-  
+  (void) (argc);
+  (void) (argv);
+
   int i = 1234;
   doulbe d = 3.1415926;
 
