@@ -1,12 +1,10 @@
 #include "_ld_.h"
 
-extern void a(char*);
+extern void a (char *);
 
 int
-main(void)
+main (void)
 {
-  static char  ss[]  =  "Hello, world!\n";
-
-  a(ss);
-
+  static char ss[] = "Hello, world!\n";
+  a (ss);
 }

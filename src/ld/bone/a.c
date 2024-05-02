@@ -1,4 +1,6 @@
-#include <_ld_.h>
+#include "_ld_.h"
+#include <unistd.h>
+#include <string.h>
 
 void a(char *s)
 {

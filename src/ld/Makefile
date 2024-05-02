@@ -1,3 +1,4 @@
+# -*- mode:makefile-gmake -*-
 #
 # ./configure --has-ld
 #
@@ -33,7 +34,7 @@ endif
 
 # env
 ld_prefix := ld
-INC += $(nm_inc_opt)$(ld_root) $(nm_inc_opt)$(root)/posix
+INC += $(nm_inc_opt)$(ld_root)
 
 ifeq ($(CC_NAME),msvc)
 getopt_c := $(root)/posix/getopt.c
@@ -47,18 +48,22 @@ ld_bone_a_objout := $(tmp_path)/$(ld_prefix)_bone_a$(obj_ext)
 
 ld_bone: $(ld_bone_binout)
 ld_bone_test: ld_bone
+	size $(ld_bone_m_objout)
+	size $(ld_bone_a_objout)
+	size $(ld_bone_binout)
 	$(ld_bone_binout)
 
-$(ld_bone_binout): $(ld_bone_m_objout)          \
+$(ld_bone_binout): $(ld_bone_m_objout) \
                    $(ld_bone_a_objout)
 	$(LINK) $^ $(bin_out) $@ $(nm_lib_opt)c
 
 $(ld_bone_m_objout): $(ld_root)/bone/m.c
-	$(CC) $(INC) $(nm_stage_c) $^ $(obj_out)$@
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
 $(ld_bone_a_objout): $(ld_root)/bone/a.c
-	$(CC) $(INC) $(nm_stage_c) $^ $(obj_out)$@
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
+# end of bone
 
 # entry
 ld_entry_binout := $(bin_path)/$(ld_prefix)_entry$(bin_ext)
