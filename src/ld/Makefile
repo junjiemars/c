@@ -40,6 +40,7 @@ ifeq ($(CC_NAME),msvc)
 getopt_c := $(root)/posix/getopt.c
 endif
 
+# end of env
 
 # bone
 ld_bone_binout := $(bin_path)/$(ld_prefix)_bone$(bin_ext)
@@ -55,7 +56,7 @@ ld_bone_test: ld_bone
 
 $(ld_bone_binout): $(ld_bone_m_objout) \
                    $(ld_bone_a_objout)
-	$(LINK) $^ $(bin_out) $@ $(nm_lib_opt)c
+	$(LD) $^ $(bin_out) $@ $(nm_lib_opt)c
 
 $(ld_bone_m_objout): $(ld_root)/bone/m.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
@@ -85,6 +86,7 @@ $(ld_entry_binout): $(ld_root)/entry/e.c
 $(ld_entry_objout): $(ld_root)/entry/e.c
 	$(CC) $(INC) $^ $(nm_stage_c) $(obj_out)$@
 
+# end of entry
 
 # nostartfiles
 ld_nostartfiles_binout := $(bin_path)/$(ld_prefix)_nostartfiles$(bin_ext)
