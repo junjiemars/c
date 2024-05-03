@@ -8,6 +8,37 @@
 
 echo "checking for cc's {ld} ..."
 
+ld_link_opt="-l"
+ld_out_opt="-o"
+flag="ld_link_opt" op="=" value="$ld_link_opt" \
+  . ${NORE_ROOT}/auto/make_define
+flag="ld_out_opt" op="=" value="$ld_out_opt" \
+  . ${NORE_ROOT}/auto/make_define
+
+ldtest_c="$NM_OUT/ldtest.c"
+ldtest_o="$NM_OUT/ldtest.o"
+ldtest="$NM_OUT/ldtest"
+
+# check entry option
+#----------------------------------------
+ld_entry_opt=-e
+has_ld_entry_opt=no
+printf " + checking for -e ... "
+cat <<END>"$ldtest_c"
+int main1(void) {
+  return 0;
+}
+END
+$CC $obj_out "$ldtest_o" $nm_stage_c "$ldtest_c"
+$LD $ld_out_opt $ldtest $ld_entry_opt _main1 "$ldtest_o" ${ld_link_opt}c
+if [ $? -eq 0 -a -f "$ldtest" ]; then
+  has_ld_entry_opt=yes
+  flag="ld_entry_opt" op="=" value="$ld_entry_opt" \
+    . ${NORE_ROOT}/auto/make_define
+fi
+printf "%s\n" "$has_ld_entry_opt"
+rm -f "$ldtest_c" "$ldtest_o" "$ldtest"
+
 # check static option
 #----------------------------------------
 nm_feature="-static"
@@ -36,18 +67,18 @@ nm_feature_test=
 if [ yes = $nm_found ]; then
   flag="ld_nostartfiles_opt" op=":=" value="$nm_feature"  \
     . ${NORE_ROOT}/auto/make_define
-  nm_feature="-Wl,-e"
-  nm_feature_name=
-  nm_feature_indent=yes
-  nm_feature_run=yes
-  nm_feature_h=
-  nm_feature_flags='-Wl,-e_main'
-  nm_feature_test='return 0;'
-  . ${NORE_ROOT}/auto/feature
-  if [ yes = $nm_found ]; then
-    flag="ld_entry_opt" op=":=" value="$nm_feature" \
-      . ${NORE_ROOT}/auto/make_define
-  fi
+  # nm_feature="-Wl,-e"
+  # nm_feature_name=
+  # nm_feature_indent=yes
+  # nm_feature_run=yes
+  # nm_feature_h=
+  # nm_feature_flags='-Wl,-e_main'
+  # nm_feature_test='return 0;'
+  # . ${NORE_ROOT}/auto/feature
+  # if [ yes = $nm_found ]; then
+  #   flag="ld_entry_opt" op=":=" value="$nm_feature" \
+  #     . ${NORE_ROOT}/auto/make_define
+  # fi
 fi
 
 # check nostdlib option

@@ -1,7 +1,9 @@
 #include "_ld_.h"
+#include <string.h>
+#include <unistd.h>
 
 /*
- * 1. Using `exit' instead of  using `return'.
+ * 1. Using `exit' instead of using `return'.
  *
  * 2. Can't get `argc' and `argv' when compile with `-nostartfiles'.
  *
@@ -11,28 +13,15 @@
  *
  */
 
-extern char  **environ;
-
-static char  BUF[NM_LINE_MAX];
-
+#define ss " "
 
 int
-_main1(void)
+main1 (int argc, char **argv)
 {
-  size_t   n;
-  ssize_t  rc;
-
-  n = strlen(environ[0]);
-  memcpy(BUF, environ[0], n);
-  BUF[n++] = '\n';
-  BUF[n++] = '\0';
-
-  rc = write(STDOUT_FILENO, BUF, n-1);
-  if (rc == -1)
+  for (int i = 0; i < argc; i++)
     {
-      exit(EXIT_FAILURE);
+      write (STDOUT_FILENO, argv[i], strlen (argv[i]));
+      write (STDOUT_FILENO, ss, sizeof (ss) - 1);
     }
-
-
-  exit(EXIT_SUCCESS);
+  return 0;
 }

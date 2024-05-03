@@ -49,14 +49,11 @@ ld_bone_a_objout := $(tmp_path)/$(ld_prefix)_bone_a$(obj_ext)
 
 ld_bone: $(ld_bone_binout)
 ld_bone_test: ld_bone
-	size $(ld_bone_m_objout)
-	size $(ld_bone_a_objout)
-	size $(ld_bone_binout)
 	$(ld_bone_binout)
 
 $(ld_bone_binout): $(ld_bone_m_objout) \
                    $(ld_bone_a_objout)
-	$(LD) $^ $(bin_out) $@ $(nm_lib_opt)c
+	$(LD) ${ld_out_opt} $@ $^ $(ld_link_opt)c
 
 $(ld_bone_m_objout): $(ld_root)/bone/m.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
@@ -70,39 +67,34 @@ $(ld_bone_a_objout): $(ld_root)/bone/a.c
 ld_entry_binout := $(bin_path)/$(ld_prefix)_entry$(bin_ext)
 ld_entry_objout := $(tmp_path)/$(ld_prefix)_entry$(obj_ext)
 
-ifeq ($(ld_entry_opt),)
-ld_entry:
-	@echo "#skip ld_entry_test ..."
-ld_entry_test: ld_entry
-else
 ld_entry: $(ld_entry_binout)
 ld_entry_test: ld_entry
 	$(ld_entry_binout) "abc"
-endif
 
-$(ld_entry_binout): $(ld_root)/entry/e.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_nostartfiles_opt) $(ld_entry_opt)_main1
+$(ld_entry_binout): $(ld_entry_objout)
+	$(LD) -o $@ -e _main1 $^ $(nm_lib_opt)c
 
 $(ld_entry_objout): $(ld_root)/entry/e.c
-	$(CC) $(INC) $^ $(nm_stage_c) $(obj_out)$@
+	$(CC) $(CFLAGS) $(INC) $^ $(nm_stage_c) $(obj_out)$@
 
 # end of entry
 
 # nostartfiles
 ld_nostartfiles_binout := $(bin_path)/$(ld_prefix)_nostartfiles$(bin_ext)
+ld_nostartfiles_objout := $(tmp_path)/$(ld_prefix)_nostartfiles$(obj_ext)
 
-ifeq ($(ld_nostartfiles_opt),)
-ld_nostartfiles:
-	@echo "#skip ld_nostartfiles_test ..."
-ld_nostartfiles_test: ld_nostartfiles
-else
+
 ld_nostartfiles: $(ld_nostartfiles_binout)
 ld_nostartfiles_test: ld_nostartfiles
 	$(ld_nostartfiles_binout)
-endif
 
-$(ld_nostartfiles_binout): $(ld_root)/nostartfiles/nosfs.c
-	$(CC) $(INC) $^ $(bin_out)$@ $(ld_nostartfiles_opt)
+$(ld_nostartfiles_binout): $(ld_nostartfiles_objout)
+	$(LD) $(bin_out) $@ $^ $(nm_lib_opt)c
+
+$(ld_nostartfiles_objout): $(ld_root)/nostartfiles/nosfs.c
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
+
+# end of nostartfiles
 
 # stage
 ld_stage_binout := $(bin_path)/$(ld_prefix)_stage$(bin_ext)

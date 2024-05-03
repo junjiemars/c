@@ -1,19 +1,28 @@
 #include "_ld_.h"
+#include <unistd.h>
 
-
-#define SS  "enter start ...\n"
-
+#define ss "enter start ...\n"
 
 int
-main(void)
+main (void)
 {
-  ssize_t  n;
-
-  n = write(STDOUT_FILENO, SS, sizeof(SS)-1);
+  ssize_t n;
+  n = write (STDOUT_FILENO, ss, sizeof (ss) - 1);
   if (n == -1)
     {
-      _exit(EXIT_FAILURE);
+      _exit (1);
     }
+  _exit (0);
+}
 
-  _exit(EXIT_SUCCESS);
+void
+_start ()
+{
+#if __x86_64__
+  __asm("mov $0, %rbx\n"
+        "leaq 8(%rsp), %rdi\n"
+        "call _main\n"
+        "mov %eax, %edi\n"
+        "call _exit\n");
+#endif
 }
