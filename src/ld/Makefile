@@ -18,6 +18,7 @@ ld: ld_bone                                     \
     ld_nostdlib                                 \
     ld_stage                                    \
     ld_static                                   \
+    ld_symbol                                   \
     ld_tiny                                     \
     ld_wrap
 
@@ -27,6 +28,7 @@ ld_test: ld_bone_test                           \
          ld_nostdlib_test                       \
          ld_stage_test                          \
          ld_static_test                         \
+         ld_symbol_test                         \
          ld_tiny_test                           \
          ld_wrap_test
 
@@ -53,7 +55,7 @@ ld_bone_test: ld_bone
 
 $(ld_bone_binout): $(ld_bone_m_objout) \
                    $(ld_bone_a_objout)
-	$(LD) ${ld_out_opt} $@ $^ $(ld_crt_lib) $(ld_lib_opt)c
+	$(LD) $(ld_v_opt) $(ld_out_opt) $@ $^ $(ld_crt_lib) $(ld_lib_opt)c
 
 $(ld_bone_m_objout): $(ld_root)/bone/m.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
@@ -105,7 +107,6 @@ ld_stage_f_objout := $(tmp_path)/$(ld_prefix)_stage_f$(obj_ext)
 ld_stage_f_asmout := $(tmp_path)/$(ld_prefix)_stage_f$(asm_ext)
 ld_stage_f_cppout := $(tmp_path)/$(ld_prefix)_stage_f$(cpp_ext)
 
-
 ld_stage: $(ld_stage_binout)
 ld_stage_test: ld_stage
 	$(ld_stage_binout)
@@ -131,6 +132,8 @@ $(ld_stage_cppout): $(ld_root)/stage/s1.c
 $(ld_stage_f_cppout): $(ld_root)/stage/f1.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
+# end of stage
+
 # static
 ld_static_binout := $(bin_path)/$(ld_prefix)_static$(bin_ext)
 
@@ -147,6 +150,7 @@ endif
 $(ld_static_binout): $(ld_root)/static/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_static_opt)
 
+# end of static
 
 # nostdlib
 ld_nostdlib_binout := $(bin_path)/$(ld_prefix)_nostdlib$(bin_ext)
@@ -164,6 +168,23 @@ endif
 $(ld_nostdlib_binout): $(ld_root)/nostdlib/nostd.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_nostdlib_opt) $(ld_lib_opt)c
 
+# end of nostdlib
+
+# symbol
+ld_symbol_binout := $(bin_path)/$(ld_prefix)_symbol$(bin_ext)
+ld_symbol_objout := $(tmp_path)/$(ld_prefix)_symbol$(obj_ext)
+
+ld_symbol: $(ld_symbol_binout)
+ld_symbol_test: ld_symbol
+	$(ld_symbol_binout)
+
+$(ld_symbol_binout): $(ld_symbol_objout)
+	$(LD) $(ld_out_opt) $@ $^ $(ld_crt_lib) $(ld_lib_opt)c
+
+$(ld_symbol_objout): $(ld_root)/symbol/s.c
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
+
+# end of symbol
 
 # tiny
 ld_tiny_binout := $(bin_path)/$(ld_prefix)_tiny$(bin_ext)
@@ -179,6 +200,7 @@ $(ld_tiny_binout): $(ld_tiny_objout)
 $(ld_tiny_objout): $(ld_root)/tiny/t.c
 	$(CC) $(INC) $(nm_stage_c) $^ $(bin_out)$@
 
+# end of tiny
 
 # wrap
 ld_wrap_binout := $(bin_path)/$(ld_prefix)_wrap$(bin_ext)
@@ -196,5 +218,7 @@ endif
 
 $(ld_wrap_binout): $(ld_root)/wrap/w.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_wrap_flags)
+
+# end of wrap
 
 # eof

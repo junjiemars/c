@@ -11,6 +11,7 @@ echo "checking for cc's {ld} ..."
 ld_lib_opt="-l"
 ld_libdir_opt="-L"
 ld_out_opt="-o"
+ld_v_opt="-v"
 if [ "$CC_NAME" = "msvc" ]; then
   ld_lib_opt=""
   ld_libdir_opt="-libpath:"
@@ -23,6 +24,8 @@ fi
 flag="ld_lib_opt" op="=" value="$ld_lib_opt" \
   . ${NORE_ROOT}/auto/make_define
 flag="ld_out_opt" op="=" value="$ld_out_opt" \
+  . ${NORE_ROOT}/auto/make_define
+flag="ld_v_opt" op="=" value="$ld_v_opt" \
   . ${NORE_ROOT}/auto/make_define
 flag="ld_crt_lib" op="=" value="$ld_crt_lib" \
   . ${NORE_ROOT}/auto/make_define
