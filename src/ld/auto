@@ -16,9 +16,15 @@ if [ $CC_NAME = "msvc" ]; then
   ld_libdir_opt="-libpath:"
   ld_out_opt="-out"
 fi
+ld_lib_crt=
+if [ $NM_SYSTEM = "Linux" ]; then
+  ld_lib_crt=$(locate crt1.o)
+fi
 flag="ld_lib_opt" op="=" value="$ld_lib_opt" \
   . ${NORE_ROOT}/auto/make_define
 flag="ld_out_opt" op="=" value="$ld_out_opt" \
+  . ${NORE_ROOT}/auto/make_define
+flag="ld_lib_crt" op="=" value="$ld_lib_crt" \
   . ${NORE_ROOT}/auto/make_define
 
 ldtest_c="$NM_OUT/ldtest.c"

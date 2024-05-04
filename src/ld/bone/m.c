@@ -5,6 +5,5 @@ extern void a (char *);
 int
 main (void)
 {
-  static char ss[] = "Hello, world!\n";
-  a (ss);
+  a ("Hello, ld\n");
 }
