@@ -11,20 +11,20 @@ echo "checking for cc's {ld} ..."
 ld_lib_opt="-l"
 ld_libdir_opt="-L"
 ld_out_opt="-o"
-if [ $CC_NAME = "msvc" ]; then
+if [ "$CC_NAME" = "msvc" ]; then
   ld_lib_opt=""
   ld_libdir_opt="-libpath:"
   ld_out_opt="-out"
 fi
-ld_lib_crt=
-if [ $NM_SYSTEM = "Linux" ]; then
-  ld_lib_crt=$(locate crt1.o)
+ld_crt_lib=
+if [ "$NM_SYSTEM" = "Linux" ]; then
+  ld_crt_lib=$(locate crt1.o|grep '/crt1\.o' 2>/dev/null)
 fi
 flag="ld_lib_opt" op="=" value="$ld_lib_opt" \
   . ${NORE_ROOT}/auto/make_define
 flag="ld_out_opt" op="=" value="$ld_out_opt" \
   . ${NORE_ROOT}/auto/make_define
-flag="ld_lib_crt" op="=" value="$ld_lib_crt" \
+flag="ld_crt_lib" op="=" value="$ld_crt_lib" \
   . ${NORE_ROOT}/auto/make_define
 
 ldtest_c="$NM_OUT/ldtest.c"
