@@ -53,7 +53,7 @@ ld_bone_test: ld_bone
 
 $(ld_bone_binout): $(ld_bone_m_objout) \
                    $(ld_bone_a_objout)
-	$(LD) ${ld_out_opt} $@ $^ $(ld_link_opt)c
+	$(LD) ${ld_out_opt} $@ $^ $(ld_lib_opt)c
 
 $(ld_bone_m_objout): $(ld_root)/bone/m.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
@@ -72,7 +72,7 @@ ld_entry_test: ld_entry
 	$(ld_entry_binout) "abc"
 
 $(ld_entry_binout): $(ld_entry_objout)
-	$(LD) -o $@ -e _main1 $^ $(nm_lib_opt)c
+	$(LD) $(ld_out_opt) $@ $(ld_entry_opt) _main1 $^ $(ld_lib_opt)c
 
 $(ld_entry_objout): $(ld_root)/entry/e.c
 	$(CC) $(CFLAGS) $(INC) $^ $(nm_stage_c) $(obj_out)$@
@@ -89,7 +89,7 @@ ld_nostartfiles_test: ld_nostartfiles
 	$(ld_nostartfiles_binout)
 
 $(ld_nostartfiles_binout): $(ld_nostartfiles_objout)
-	$(LD) $(bin_out) $@ $^ $(nm_lib_opt)c
+	$(LD) $(bin_out) $@ $^ $(ld_lib_opt)c
 
 $(ld_nostartfiles_objout): $(ld_root)/nostartfiles/nosfs.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
@@ -162,7 +162,7 @@ ld_nostdlib_test: ld_nostdlib
 endif
 
 $(ld_nostdlib_binout): $(ld_root)/nostdlib/nostd.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_nostdlib_opt) $(nm_lib_opt)c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(ld_nostdlib_opt) $(ld_lib_opt)c
 
 
 # tiny

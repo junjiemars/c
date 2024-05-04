@@ -8,9 +8,15 @@
 
 echo "checking for cc's {ld} ..."
 
-ld_link_opt="-l"
+ld_lib_opt="-l"
+ld_libdir_opt="-L"
 ld_out_opt="-o"
-flag="ld_link_opt" op="=" value="$ld_link_opt" \
+if [ $CC_NAME = "msvc" ]; then
+  ld_lib_opt=""
+  ld_libdir_opt="-libpath:"
+  ld_out_opt="-out"
+fi
+flag="ld_lib_opt" op="=" value="$ld_lib_opt" \
   . ${NORE_ROOT}/auto/make_define
 flag="ld_out_opt" op="=" value="$ld_out_opt" \
   . ${NORE_ROOT}/auto/make_define
@@ -30,7 +36,7 @@ int main1(void) {
 }
 END
 $CC $obj_out "$ldtest_o" $nm_stage_c "$ldtest_c"
-$LD $ld_out_opt $ldtest $ld_entry_opt _main1 "$ldtest_o" ${ld_link_opt}c
+$LD $ld_out_opt $ldtest $ld_entry_opt _main1 "$ldtest_o" ${ld_lib_opt}c
 if [ $? -eq 0 -a -f "$ldtest" ]; then
   has_ld_entry_opt=yes
   flag="ld_entry_opt" op="=" value="$ld_entry_opt" \
