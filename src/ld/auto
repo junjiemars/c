@@ -58,21 +58,19 @@ rm -f "$ldtest_c" "$ldtest_o" "$ldtest"
 #----------------------------------------
 ld_static_opt=-static
 has_ld_static_opt=no
-printf " + checking for -static ... "
-cat <<END>"$ldtest_c"
-int main(void) {
-  return 0;
-}
-END
-$CC $obj_out "$ldtest_o" $nm_stage_c "$ldtest_c"
-$LD $ld_out_opt $ldtest $ld_static_opt "$ldtest_o"
-if [ $? -eq 0 -a -f "$ldtest" ]; then
+nm_feature="-Wl,-static"
+nm_feature_name=
+nm_feature_indent=yes
+nm_feature_run=yes
+nm_feature_h=
+nm_feature_flags=
+nm_feature_test=
+. ${NORE_ROOT}/auto/feature
+if [ yes = $nm_found ]; then
   has_ld_static_opt=yes
-  flag="ld_static_opt" op="=" value="$ld_static_opt" \
+  flag="ld_static_opt" op=":=" value="$nm_feature"  \
     . ${NORE_ROOT}/auto/make_define
 fi
-printf "%s\n" "$has_ld_static_opt"
-rm -f "$ldtest_c" "$ldtest_o" "$ldtest"
 
 # check nostartfiles option
 #----------------------------------------

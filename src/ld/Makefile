@@ -69,9 +69,15 @@ $(ld_bone_a_objout): $(ld_root)/bone/a.c
 ld_entry_binout := $(bin_path)/$(ld_prefix)_entry$(bin_ext)
 ld_entry_objout := $(tmp_path)/$(ld_prefix)_entry$(obj_ext)
 
+ifeq ($(has_entry_opt),no)
+ld_entry:
+	@echo "#skip ld_entry_test ..."
+ld_entry_test: ld_entry
+else
 ld_entry: $(ld_entry_binout)
 ld_entry_test: ld_entry
 	$(ld_entry_binout) "abc"
+endif
 
 $(ld_entry_binout): $(ld_entry_objout)
 	$(LD) $(ld_out_opt) $@ $(ld_entry_opt) _main1 $^ $(ld_lib_opt)c
