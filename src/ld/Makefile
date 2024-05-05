@@ -12,7 +12,8 @@ io_test:
 else
 
 
-ld: ld_bone                                     \
+ld: ld_asm                                      \
+    ld_bone                                     \
     ld_entry                                    \
     ld_nostartfiles                             \
     ld_nostdlib                                 \
@@ -22,7 +23,8 @@ ld: ld_bone                                     \
     ld_tiny                                     \
     ld_wrap
 
-ld_test: ld_bone_test                           \
+ld_test: ld_asm_test                            \
+         ld_bone_test                           \
          ld_entry_test                          \
          ld_nostartfiles_test                   \
          ld_nostdlib_test                       \
@@ -43,6 +45,18 @@ getopt_c := $(root)/posix/getopt.c
 endif
 
 # end of env
+
+# asm
+ld_asm_binout := $(bin_path)/$(ld_prefix)_asm$(bin_ext)
+
+ld_asm: $(ld_asm_binout)
+ld_asm_test: ld_asm
+	$(ld_asm_binout)
+
+$(ld_asm_binout): $(ld_root)/asm/i.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# end of asm
 
 # bone
 ld_bone_binout := $(bin_path)/$(ld_prefix)_bone$(bin_ext)
