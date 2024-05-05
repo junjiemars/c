@@ -3,7 +3,7 @@
 
 /*
  * 1. with `-std' option using `__asm__` instead of `asm'.
- * 2. extended asm.
+ * 2. extended asm: assembler instructions with C expression operands.
  * 3.
  *
  */
@@ -14,6 +14,8 @@ add (int a, int b)
   int rc = 0;
 #if __x86_64__
   __asm__ volatile("add %1, %2\n\t" : "=r"(rc) : "r"(a), "0"(b));
+#elif __aarch64__
+  __asm__ volatile("add %0,%1,%2\n\t" : "=r"(rc) : "r"(a), "0"(b));
 #else
   rc = a + b;
 #endif
