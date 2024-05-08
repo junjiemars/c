@@ -17,23 +17,29 @@ if [ "$CC_NAME" = "msvc" ]; then
   ld_libdir_opt="-libpath:"
   ld_out_opt="-out"
 fi
-ld_crt_lib=
-if [ "$NM_SYSTEM" = "Linux" ]; then
-  printf " + checking for crt1 ... "
-  ld_crt_lib="/usr/lib/$(uname -m)-linux-gnu/crt1.o"
-  if [ -f "$ld_crt_lib" ]; then
-    printf "yes\n"
-  else
-    printf "no\n"
-  fi
+ld_libc_dir=
+printf " + checking for libc dir ... "
+case $NM_SYSTEM in
+  Linux)
+    ld_libc_dir="/usr/lib/$(uname -m)-linux-gnu"
+    ;;
+  Darwin)
+    ld_libc_dir="/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib"
+    ;;
+esac
+if [ -n "$ld_libc_dir" -a -d "$ld_libc_dir" ]; then
+  printf "yes\n"
+else
+  printf "no\n"
 fi
+
 flag="ld_lib_opt" op="=" value="$ld_lib_opt" \
   . ${NORE_ROOT}/auto/make_define
 flag="ld_out_opt" op="=" value="$ld_out_opt" \
   . ${NORE_ROOT}/auto/make_define
 flag="ld_v_opt" op="=" value="$ld_v_opt" \
   . ${NORE_ROOT}/auto/make_define
-flag="ld_crt_lib" op="=" value="$ld_crt_lib" \
+flag="ld_libc_dir" op="=" value="$ld_libc_dir" \
   . ${NORE_ROOT}/auto/make_define
 
 ldtest_c="$NM_OUT/ldtest.c"
