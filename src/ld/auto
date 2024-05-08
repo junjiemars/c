@@ -19,7 +19,13 @@ if [ "$CC_NAME" = "msvc" ]; then
 fi
 ld_crt_lib=
 if [ "$NM_SYSTEM" = "Linux" ]; then
-  ld_crt_lib=$(locate crt1.o|grep '/crt1\.o' 2>/dev/null)
+  printf " + checking for crt1 ... "
+  ld_crt_lib="/usr/lib/$(uname -m)-linux-gnu/crt1.o"
+  if [ -f "$ld_crt_lib" ]; then
+    printf "yes\n"
+  else
+    printf "no\n"
+  fi
 fi
 flag="ld_lib_opt" op="=" value="$ld_lib_opt" \
   . ${NORE_ROOT}/auto/make_define
