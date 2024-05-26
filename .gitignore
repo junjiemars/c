@@ -170,3 +170,6 @@ compile_commands.json
 
 # mix
 **/*.mix
+
+# python
+**/python/venv
