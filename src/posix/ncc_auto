@@ -16,6 +16,7 @@ if [    "$ncc_cpu_endian" = "yes"               \
      -o "$ncc_omit_frame_pointer" = "yes"       \
      -o "$ncc_no_omit_frame_pointer" = "yes"    \
      -o "$ncc_sanitize_address" = "yes"         \
+     -o "$ncc_sanitize_alignment" = "yes"       \
      -o "$ncc_sanitize_leak" = "yes"            \
      -o "$ncc_pic" = "yes"                      \
    ]; then
@@ -23,8 +24,6 @@ if [    "$ncc_cpu_endian" = "yes"               \
 else
   return
 fi
-
-
 
 
 # check endian features
@@ -226,7 +225,7 @@ esac
 case "$CC_NAME" in
    gcc|clang)
      if [ "$ncc_sanitize_address" = "yes" ] \
-        && [ -z "$ncc_sanitize_address_done" ]; then
+          && [ -z "$ncc_sanitize_address_done" ]; then
        nm_feature="-fsanitize=address"
        nm_feature_name=
        nm_feature_indent=yes
@@ -241,6 +240,23 @@ case "$CC_NAME" in
            . ${NORE_ROOT}/auto/make_define
        fi
        ncc_sanitize_address_done="yes"
+     fi
+     if [ "$ncc_sanitize_alignment" = "yes" ] \
+          && [ -z "$ncc_sanitize_alignment_done" ]; then
+       nm_feature="-fsanitize=alignment"
+       nm_feature_name=
+       nm_feature_indent=yes
+       nm_feature_run=no
+       nm_feature_h=
+       nm_feature_flags='-fsanitize=alignment'
+       nm_feature_test=
+       . ${NORE_ROOT}/auto/feature
+       if [ yes = $nm_found ]; then
+         flag=f_sanitize                        \
+           op="+=" value=$nm_feature_flags      \
+           . ${NORE_ROOT}/auto/make_define
+       fi
+       ncc_sanitize_alignment_done="yes"
      fi
      if [ "$ncc_sanitize_leak" = "yes" ] \
         && [ -z "$ncc_sanitize_leak_done" ]; then
