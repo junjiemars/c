@@ -157,7 +157,7 @@ if [ -n "$has_pkg_config" ]; then
     printf "no\n"
   fi
 else
-    printf "no\n"
+  printf "no\n"
 fi
 
 

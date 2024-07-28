@@ -41,7 +41,7 @@ fn say() {
 
     #[cfg(not(any(target_os = "linux", target_os = "macos")))]
     {
-        println!("(unknown)");
+        println!("(unknown, may be windows)");
     }
 
     os1::say();

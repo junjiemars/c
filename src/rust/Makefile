@@ -1,3 +1,4 @@
+# -*- mode:makefile-gmake -*-
 #
 # ./configure --has-rust
 # make clean test
@@ -32,7 +33,7 @@ rust: rust_attr                                 \
 
 rust_test: rust_attr_test                       \
            rust_box_test                        \
-           rust_eframe_test                       \
+           rust_eframe_test                     \
            rust_enum_test                       \
            rust_error_test                      \
            rust_game_test                       \
@@ -119,11 +120,11 @@ rust_attr_test: rust_attr
 $(rust_attr_cargo):
 	$(CARGO) new --bin --vcs=none --name=$(rust_attr_name) $(rust_root)/attr
 
-$(rust_attr_binout): $(rust_attr_cargo)             \
+$(rust_attr_binout): $(rust_attr_cargo) \
                      $(rust_root)/attr/src/main.rs
-	$(CARGO) build $(rust_build_opt)                      \
-		--manifest-path $<                                  \
-    --target-dir $(cargo_target_dir)                    \
+	$(CARGO) build $(rust_build_opt) \
+		--manifest-path $< \
+    --target-dir $(cargo_target_dir) \
 	&& cp $(cargo_out_dir)/$(rust_attr_name) $(bin_path)
 
 
