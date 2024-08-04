@@ -25,6 +25,7 @@ rust: rust_attr                                 \
       rust_mem                                  \
       rust_min                                  \
       rust_module                               \
+      rust_opencv                               \
       rust_owner                                \
       rust_rest                                 \
       rust_unsafe                               \
@@ -51,6 +52,7 @@ rust_test: rust_attr_test                       \
            rust_mem_test                        \
            rust_min_test                        \
            rust_module_test                     \
+           rust_opencv_test                     \
            rust_owner_test                      \
            rust_rest_test                       \
            rust_unsafe_test                     \
@@ -209,6 +211,31 @@ $(rust_game_binout): $(rust_game_cargo) \
     --manifest-path $< \
     --target-dir $(cargo_target_dir) \
 	&& cp $(cargo_out_dir)/$(rust_game_name) $@
+
+
+
+# opencv
+rust_opencv_cargo := $(rust_root)/opencv/Cargo.toml
+rust_opencv_name := $(rust_prefix)_opencv$(bin_ext)
+rust_opencv_binout := $(bin_path)/$(rust_opencv_name)
+
+rust_opencv: $(rust_opencv_binout)
+rust_opencv_doc: $(rust_opencv_cargo)
+	-$(CARGO) doc --open --manifest-path $<
+rust_opencv_test: rust_opencv
+	$(rust_opencv_binout)
+
+$(rust_opencv_cargo):
+	$(CARGO) new --bin --name $(rust_prefix)_opencv $(rust_root)/opencv
+	cd $(rust_root)/opencv && $(CARGO) add opencv
+
+$(rust_opencv_binout): $(rust_opencv_cargo) \
+                       $(rust_root)/opencv/src/main.rs
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_opencv_name) $@
+
 
 # owner
 rust_owner_cargo := $(rust_root)/owner/Cargo.toml
