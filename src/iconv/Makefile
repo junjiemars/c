@@ -1,3 +1,4 @@
+# -*- mode:makefile-gmake -*-
 #
 # ./configure --has-iconv
 #
@@ -28,6 +29,7 @@ ifeq ($(_MEMORY_),1)
 	CFLAGS += $(f_sanitize)
 endif
 
+
 
 # basic
 iconv_basic_binout := $(bin_path)/$(iconv_prefix)_basic$(bin_ext)
