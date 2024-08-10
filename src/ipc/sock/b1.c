@@ -15,7 +15,7 @@ main (int argc, char **argv)
     }
   sock_file = argv[1];
 
-  /* avoid address alreay used */
+  /* avoid address already in use */
   unlink (sock_file);
 
   un.sun_family = AF_UNIX;
