@@ -1,16 +1,10 @@
 #include "_ipc_.h"
-#include <stdlib.h>
-#include <sys/socket.h>
 
 void pr_addr (const struct sockaddr *, const char *);
 
 int
 main (void)
 {
-
-
-
-
   /* unix address */
   struct sockaddr_un unix = { 0 };
   unix.sun_family = AF_UNIX;
@@ -21,16 +15,22 @@ main (void)
   struct sockaddr_in in4 = { 0 };
   in4.sin_family = AF_INET;
   in4.sin_port = 0x1234;
-  in4.sin_addr.s_addr = 0x7f000001;
+  in4.sin_addr.s_addr = inet_addr ("127.0.0.1");
   pr_addr ((struct sockaddr *)&in4, "in4");
+  printf ("in4.sin_addr.s_addr = %s\n", inet_ntoa (in4.sin_addr));
 
   /* internet v6 address */
   struct sockaddr_in6 in6 = { 0 };
-  in6.sin6_family = AF_INET;
+  in6.sin6_family = AF_INET6;
   in6.sin6_port = 0x1234;
-  struct in6_addr in6_addr = {0};
-  in6.sin6_addr = in6_addr;
+  struct in6_addr in6_addr_n;
+  char in6_addr_ss[128] = {0};
+  strcpy (in6_addr_ss, "240e:3a2:e7f:1410:84eb:7d13:9c3a:e7f5");
+  inet_pton(AF_INET6, in6_addr_ss, &in6_addr_n);
+  in6.sin6_addr = in6_addr_n;
   pr_addr ((struct sockaddr *)&in6, "in6");
+  inet_ntop (AF_INET6, &in6.sin6_addr, in6_addr_ss, sizeof (in6_addr_ss));
+  printf ("in6.sin6_addr = %s\n", in6_addr_ss);
 
   exit (EXIT_SUCCESS);
 }
