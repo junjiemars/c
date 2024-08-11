@@ -146,12 +146,15 @@ $(ipc_pipe_binout): $(ipc_root)/pipe/p1.c
 # sock
 ipc_sock_bound_binout := $(bin_path)/$(ipc_prefix)_sock_bound$(bin_ext)
 ipc_sock_byte_order_binout := $(bin_path)/$(ipc_prefix)_sock_byte_order$(bin_ext)
+ipc_sock_addr_binout := $(bin_path)/$(ipc_prefix)_sock_addr$(bin_ext)
 ipc_sock_file := $(tmp_path)/$(ipc_prefix)_sock.file
 
 ipc_sock: $(ipc_sock_bound_binout) \
-          $(ipc_sock_byte_order_binout)
+          $(ipc_sock_byte_order_binout) \
+          $(ipc_sock_addr_binout)
 ipc_sock_test: ipc_sock_bound_test \
-               ipc_sock_byte_order_test
+               ipc_sock_byte_order_test \
+               ipc_sock_addr_test
 
 ipc_sock_bound_test: $(ipc_sock_bound_binout)
 	$< $(ipc_sock_file)
@@ -160,10 +163,16 @@ ipc_sock_bound_test: $(ipc_sock_bound_binout)
 ipc_sock_byte_order_test: $(ipc_sock_byte_order_binout)
 	$< 0x11223344
 
+ipc_sock_addr_test: $(ipc_sock_addr_binout)
+	$< $(sock_file)
+
 $(ipc_sock_bound_binout): $(ipc_root)/sock/b1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(ipc_sock_byte_order_binout): $(ipc_root)/sock/bo1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(ipc_sock_addr_binout): $(ipc_root)/sock/addr1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
