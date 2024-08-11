@@ -5,8 +5,10 @@
 #include <nlim.h>
 #include <nstr.h>
 #include <nio.h>
+#include <nasrt.h>
 #include <errno.h>
 #include <stdlib.h>
+
 
 #if (LINUX)
 #  include <sys/wait.h>
@@ -15,6 +17,8 @@
 #include <sys/stat.h>
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <arpa/inet.h>
+
 
 
 #endif  /* _IPC_H_ */
