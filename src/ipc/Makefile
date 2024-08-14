@@ -15,13 +15,15 @@ ipc: ipc_fd                                     \
      ipc_filter                                 \
      ipc_pager                                  \
      ipc_pipe                                   \
-     ipc_sock
+     ipc_sock                                   \
+     ipc_addr
 
 ipc_test: ipc_fd_test                           \
           ipc_filter_test                       \
           ipc_pager_test                        \
           ipc_pipe_test                         \
-          ipc_sock_test
+          ipc_sock_test                         \
+          ipc_addr_test
 
 endif
 
@@ -173,6 +175,20 @@ $(ipc_sock_byte_order_binout): $(ipc_root)/sock/bo1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(ipc_sock_addr_binout): $(ipc_root)/sock/addr1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+
+# addr
+ipc_addr_host_binout := $(bin_path)/$(ipc_prefix)_addr_host$(bin_ext)
+
+ipc_addr: $(ipc_addr_host_binout)
+ipc_addr_test: ipc_addr_host_test
+
+ipc_addr_host_test: $(ipc_addr_host_binout)
+	$<
+
+$(ipc_addr_host_binout): $(ipc_root)/addr/h1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

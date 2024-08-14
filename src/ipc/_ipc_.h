@@ -18,7 +18,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <arpa/inet.h>
-
+#include <netdb.h>
 
 
 #endif  /* _IPC_H_ */
