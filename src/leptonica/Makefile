@@ -37,7 +37,7 @@ INC += $(nm_inc_opt)$(root)
 INC += $(nm_inc_opt)$(root)/posix
 INC += $(nm_inc_opt)$(leptonica_root) $(nm_inc_opt)$(root)
 INC += $(nm_inc_opt)$(leptonica_inc_dir)
-LDFLAGS += $(nm_libdir_opt)$(leptonica_lib_dir)
+leptonica_libs := $(nm_libdir_opt)$(leptonica_lib_dir) $(nm_lib_opt)leptonica
 
 leptonica_cc_opt :=
 leptonica_ld_opt :=
@@ -91,7 +91,8 @@ leptonica_basic: $(leptonica_build) \
 leptonica_basic_test: leptonica_basic_shared_test
 
 leptonica_basic_static_test: $(leptonica_build) \
-                             $(leptonica_basic_static_binout)
+                             $(leptonica_basic_static_binout) \
+                             $(leptonica_basic_in_image)
 	$(leptonica_basic_static_binout) \
     -i $(CURDIR)/$(leptonica_basic_in_image) \
     -o $(CURDIR)/$(tmp_path)/$(leptonica_prefix)_basic_static_out.png
@@ -101,7 +102,8 @@ leptonica_basic_static_test: $(leptonica_build) \
     -x 0.50
 
 leptonica_basic_shared_test: $(leptonica_build) \
-                             $(leptonica_basic_shared_binout)
+                             $(leptonica_basic_shared_binout) \
+                             $(leptonica_basic_in_image)
 	LD_LIBRARY_PATH=$(leptonica_lib_dir) $(leptonica_basic_shared_binout) \
     -i $(CURDIR)/$(leptonica_basic_in_image) \
     -o $(CURDIR)/$(tmp_path)/$(leptonica_prefix)_basic_shared_out.png
@@ -118,8 +120,7 @@ $(leptonica_basic_static_binout): $(leptonica_root)/basic/b.c \
 
 $(leptonica_basic_shared_binout): $(leptonica_root)/basic/b.c \
                                   $(getopt_c)
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ \
-    $(nm_libdir_opt)$(leptonica_lib_dir) $(nm_lib_opt)leptonica
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(leptonica_libs)
 
 $(leptonica_basic_in_image): $(leptonica_root)/basic/b.png
 	cp $< $@
