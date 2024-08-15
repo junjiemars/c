@@ -18,8 +18,8 @@ endif
 
 # env
 leptonica_prefix := leptonica
-leptonica_out := $(CURDIR)/$(out)/var/leptonica
 
+leptonica_out := $(CURDIR)/$(out)/var/leptonica
 leptonica_git_src := 'https://github.com/DanBloomberg/leptonica.git'
 leptonica_home := $(leptonica_root)/leptonica_home
 
@@ -135,14 +135,14 @@ clean_leptonica_home:
 	-$(RM) -rf $(leptonica_home)
 
 clean_leptonica_out:
-	test ! -f $(CURDIR)/$(leptonica_home)/Makefile  \
+	test ! -f $(CURDIR)/$(leptonica_home)/Makefile \
     || make -C $(CURDIR)/$(leptonica_home) clean
 	test ! -d $(leptonica_out) || rm -r $(leptonica_out)
 
 clean_leptonica_bin:
-	test ! -f $(leptonica_basic_static_binout)    \
+	test ! -f $(leptonica_basic_static_binout) \
     || rm $(leptonica_basic_static_binout)
-	test ! -f $(leptonica_basic_shared_binout)    \
+	test ! -f $(leptonica_basic_shared_binout) \
     || rm $(leptonica_basic_shared_binout)
 
 

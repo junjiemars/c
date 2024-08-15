@@ -4,9 +4,7 @@
 #include <nore.h>
 #include <leptonica/allheaders.h>
 #include <tesseract/capi.h>
-
-
-#define _unused_(x) (void)(x)
-
+#include <stdio.h>
+#include <string.h>
 
 #endif /* end of _TESSERACT_H_ */
