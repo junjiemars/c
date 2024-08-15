@@ -1,10 +1,11 @@
+# -*- mode:makefile-gmake -*-
 #
-# ./configure --has-leptonica
+# ./configure --has-leptonica --has-tesseract
 #
 # install dependencies on ubuntu
 # git clone --depth=1 --branch=1 https://github.com/DanBloomberg/leptonica.git
 # ./autogen.sh
-# ./configure 
+# ./configure
 # make -j4 install
 # sudo ldconfig
 #
@@ -23,6 +24,7 @@ tesseract: tesseract_basic                      \
 tesseract_test: tesseract_basic_test            \
                 tesseract_pdf_test
 
+
 
 # env
 tesseract_prefix := tesseract
@@ -51,6 +53,7 @@ $(tesseract_build):  $(leptonica_build)         \
 $(tesseract_home):
 	git clone --depth=1 --branch=main $(tesseract_git_src) $@
 
+
 
 # basic
 tesseract_basic_binout := $(bin_path)/$(tesseract_prefix)_basic$(bin_ext)

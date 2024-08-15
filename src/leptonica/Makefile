@@ -1,27 +1,33 @@
+# -*- mode:makefile-gmake -*-
 #
 # ./configure --has-leptonica
 #
 
+ifeq ($(has_leptonica_required),YES)
 leptonica: leptonica_basic
-
 leptonica_test: leptonica_basic_test
+else
+leptonica:
+	@echo "#skip ..."
 
+leptonica_test:
+	@echo "#skip ..."
+endif
+
+
 
 # env
 leptonica_prefix := leptonica
-
 leptonica_out := $(CURDIR)/$(out)/var/leptonica
 
 leptonica_git_src := 'https://github.com/DanBloomberg/leptonica.git'
 leptonica_home := $(leptonica_root)/leptonica_home
 
-
 leptonica_inc_dir := $(leptonica_out)/include
 export leptonica_lib_dir := $(leptonica_out)/lib
-leptonica_build := $(leptonica_inc_dir)/leptonica/allheaders.h  \
+leptonica_build := $(leptonica_inc_dir)/leptonica/allheaders.h \
                    $(leptonica_lib_dir)/libleptonica$(lib_ext)
-leptonica_lib_arout := $(leptonica_lib_dir)/liblept.a
-
+leptonica_lib_arout := $(leptonica_lib_dir)/libleptonica.a
 
 INC += $(nm_inc_opt)$(root)
 INC += $(nm_inc_opt)$(root)/posix
@@ -29,11 +35,9 @@ INC += $(nm_inc_opt)$(leptonica_root) $(nm_inc_opt)$(root)
 INC += $(nm_inc_opt)$(leptonica_inc_dir)
 LDFLAGS += $(nm_libdir_opt)$(leptonica_lib_dir)
 
-
 leptonica_cc_opt :=
 leptonica_ld_opt :=
 leptonica_debug_opt :=
-
 
 leptonica_cc_opt += $(nm_release_opt)
 leptonica_cc_opt += $(nm_optimize_opt)
@@ -60,16 +64,17 @@ endif # end of msvc
 
 $(leptonica_build): $(leptonica_home)
 	CFLAGS="$(leptonica_cc_opt)" cd $(leptonica_home) \
-    && ./autogen.sh                                 \
-    && ./configure --prefix=$(leptonica_out)        \
-                   --disable-programs               \
-                   $(leptonica_enable_debug)        \
+    && ./autogen.sh \
+    && ./configure --prefix=$(leptonica_out) \
+                   --disable-programs \
+                   $(leptonica_enable_debug) \
     && make -C . -j4 install
 
 
 $(leptonica_home):
 	git clone --depth=1 --branch=master $(leptonica_git_src) $@
 
+
 
 # basic
 leptonica_basic_static_binout := $(bin_path)/$(leptonica_prefix)_basic_static$(bin_ext)
@@ -77,51 +82,48 @@ leptonica_basic_shared_binout := $(bin_path)/$(leptonica_prefix)_basic_shared$(b
 leptonica_basic_in_image := $(tmp_path)/$(leptonica_prefix)_basic_in.png
 
 
-ifeq (YES, $(has_leptonica_required))
-leptonica_basic: $(leptonica_build)               \
-                 $(leptonica_basic_shared_binout) \
+leptonica_basic: $(leptonica_build) \
                  $(leptonica_basic_in_image)
 leptonica_basic_test: leptonica_basic_shared_test
-else
-leptonica_basic:
-	@echo "#skip leptonica_basic_test ..."
-leptonica_basic_test: leptonica_basic
-endif # end of has_leptonica_required
 
-leptonica_basic_static_test: leptonica_basic
-	$(leptonica_static_binout)                                          \
-    -i $(CURDIR)/$(leptonica_basic_in_image)                          \
+leptonica_basic_static_test: $(leptonica_build) \
+                             $(leptonica_basic_static_binout)
+	$(leptonica_basic_static_binout) \
+    -i $(CURDIR)/$(leptonica_basic_in_image) \
     -o $(CURDIR)/$(tmp_path)/$(leptonica_prefix)_basic_static_out.png
-	$(leptonica_static_binout)                                                \
-    -i $(CURDIR)/$(leptonica_basic_in_image)                                \
-    -o $(CURDIR)/$(tmp_path)/$(leptonica_prefix)_basic_static_out_half.png  \
+	$(leptonica_basic_static_binout) \
+    -i $(CURDIR)/$(leptonica_basic_in_image) \
+    -o $(CURDIR)/$(tmp_path)/$(leptonica_prefix)_basic_static_out_half.png \
     -x 0.50
 
-leptonica_basic_shared_test: leptonica_basic
+leptonica_basic_shared_test: $(leptonica_build) \
+                             $(leptonica_basic_shared_binout)
 	LD_LIBRARY_PATH=$(leptonica_lib_dir) $(leptonica_basic_shared_binout) \
-    -i $(CURDIR)/$(leptonica_basic_in_image)                            \
+    -i $(CURDIR)/$(leptonica_basic_in_image) \
     -o $(CURDIR)/$(tmp_path)/$(leptonica_prefix)_basic_shared_out.png
-	LD_LIBRARY_PATH=$(leptonica_lib_dir) $(leptonica_basic_shared_binout)     \
-    -i $(CURDIR)/$(leptonica_basic_in_image)                                \
-    -o $(CURDIR)/$(tmp_path)/$(leptonica_prefix)_basic_shared_out_half.png  \
-    -x 0.50                                                                 \
+	LD_LIBRARY_PATH=$(leptonica_lib_dir) $(leptonica_basic_shared_binout) \
+    -i $(CURDIR)/$(leptonica_basic_in_image) \
+    -o $(CURDIR)/$(tmp_path)/$(leptonica_prefix)_basic_shared_out_half.png \
+    -x 0.50 \
     -y 0.25
 
 $(leptonica_basic_static_binout): $(leptonica_root)/basic/b.c \
-                                  $(getopt_c)                 \
+                                  $(getopt_c) \
                                   $(leptonica_lib_arout)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(stdmath_lib_opt)
 
 $(leptonica_basic_shared_binout): $(leptonica_root)/basic/b.c \
                                   $(getopt_c)
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@                        \
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ \
     $(nm_libdir_opt)$(leptonica_lib_dir) $(nm_lib_opt)leptonica
 
 $(leptonica_basic_in_image): $(leptonica_root)/basic/b.png
 	cp $< $@
 
+
+
 # clean
-leptonica_clean: clean                          \
+leptonica_clean: clean \
                  clean_leptonica_home
 
 

@@ -1,6 +1,5 @@
 # -*- mode:sh -*- vim:ft=sh
 
-
 # check leptonica requirements
 #----------------------------------------
 has_leptonica_required=NO
