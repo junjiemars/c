@@ -36,6 +36,8 @@ tesseract_libs += $(nm_libdir_opt)$(tesseract_lib_dir) $(nm_lib_opt)tesseract
 tesseract_libs += $(nm_libdir_opt)$(leptonica_lib_dir) $(nm_lib_opt)leptonica
 tesseract_lib_path = $(tesseract_lib_dir):$(leptonica_lib_dir)
 
+export PKG_CONFIG_PATH = $(leptonica_lib_dir)/pkgconfig:$(tesseract_lib_dir)/pkgconfig
+
 $(tesseract_tessdata): $(tesseract_build)
 	curl "$(tesseract_eng_traineddata)" -o $@
 
