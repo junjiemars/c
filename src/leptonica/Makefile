@@ -24,14 +24,17 @@ leptonica_git_src := 'https://github.com/DanBloomberg/leptonica.git'
 leptonica_home := $(leptonica_root)/leptonica_home
 
 leptonica_inc_dir := $(leptonica_out)/include
-export leptonica_lib_dir := $(leptonica_out)/lib
-leptonica_build := $(leptonica_inc_dir)/leptonica/allheaders.h \
-                   $(leptonica_lib_dir)/libleptonica$(lib_ext)
+leptonica_lib_dir := $(leptonica_out)/lib
 leptonica_lib_arout := $(leptonica_lib_dir)/libleptonica.a
 leptonica_lib_ar := $(nm_lib_opt)z $(nm_lib_opt)png16 $(nm_lib_opt)z \
                     $(nm_lib_opt)jpeg $(nm_lib_opt)openjp2 $(nm_lib_opt)gif \
                     $(nm_lib_opt)tiff $(nm_lib_opt)webp \
                     $(nm_lib_opt)webpmux $(nm_lib_opt)webp
+
+leptonica_build := $(leptonica_inc_dir)/leptonica/allheaders.h
+leptonica_build += $(leptonica_lib_dir)/libleptonica$(lib_ext)
+leptonica_build += $(leptonica_lib_dir)/pkgconfig
+
 
 INC += $(nm_inc_opt)$(root)
 INC += $(nm_inc_opt)$(root)/posix
@@ -63,22 +66,20 @@ ifeq (msvc, $(CC_NAME))
 getopt_c := $(root)/posix/getopt.c
 endif # end of msvc
 
-                   # --disable-static                 \
-                   # --disable-programs               \
+# build leptonica
+PKG_CONFIG_PATH = $(leptonica_lib_dir)/pkgconfig
 
 $(leptonica_build): $(leptonica_home)
-	CFLAGS="$(leptonica_cc_opt)" cd $(leptonica_home) \
+	cd $(leptonica_home) \
     && ./autogen.sh \
-    && ./configure --prefix=$(leptonica_out) \
+    && CFLAGS="$(leptonica_cc_opt)" \
+       ./configure --prefix=$(leptonica_out) \
                    --disable-programs \
                    $(leptonica_enable_debug) \
     && make -C . -j4 install
 
-
 $(leptonica_home):
 	git clone --depth=1 --branch=master $(leptonica_git_src) $@
-
-export PKG_CONFIG_PATH = $(leptonica_lib_dir)/pkgconfig
 
 
 
@@ -153,7 +154,7 @@ clean_leptonica_bin:
         clean_leptoonica_home                   \
         clean_leptonica_out                     \
         clean_leptonica_bin                     \
-        leptonica_basic leptonica_basic_test
+        leptonica leptonica_test
 
 
 # eof
