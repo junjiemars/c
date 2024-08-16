@@ -26,10 +26,15 @@ leptonica_home := $(leptonica_root)/leptonica_home
 leptonica_inc_dir := $(leptonica_out)/include
 leptonica_lib_dir := $(leptonica_out)/lib
 leptonica_lib_arout := $(leptonica_lib_dir)/libleptonica.a
-leptonica_lib_ar := $(nm_lib_opt)z $(nm_lib_opt)png16 $(nm_lib_opt)z \
-                    $(nm_lib_opt)jpeg $(nm_lib_opt)openjp2 $(nm_lib_opt)gif \
-                    $(nm_lib_opt)tiff $(nm_lib_opt)webp \
-                    $(nm_lib_opt)webpmux $(nm_lib_opt)webp
+
+leptonica_lib_ar := $(nm_lib_opt)z
+leptonica_lib_ar += $(nm_lib_opt)png16
+leptonica_lib_ar += $(nm_lib_opt)jpeg
+leptonica_lib_ar += $(nm_lib_opt)openjp2
+leptonica_lib_ar += $(nm_lib_opt)gif
+leptonica_lib_ar += $(nm_lib_opt)tiff
+leptonica_lib_ar += $(nm_lib_opt)webpmux
+leptonica_lib_ar += $(nm_lib_opt)webp
 
 leptonica_build := $(leptonica_inc_dir)/leptonica/allheaders.h
 leptonica_build += $(leptonica_lib_dir)/libleptonica$(lib_ext)
@@ -119,7 +124,7 @@ leptonica_basic_shared_test: $(leptonica_build) \
 $(leptonica_basic_static_binout): $(leptonica_root)/basic/b.c \
                                   $(getopt_c) \
                                   $(leptonica_lib_arout)
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(stdmath_lib_opt) $(leptonica_lib_ar)
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(leptonica_lib_ar)
 
 $(leptonica_basic_shared_binout): $(leptonica_root)/basic/b.c \
                                   $(getopt_c)
