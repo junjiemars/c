@@ -78,6 +78,8 @@ $(leptonica_build): $(leptonica_home)
 $(leptonica_home):
 	git clone --depth=1 --branch=master $(leptonica_git_src) $@
 
+export PKG_CONFIG_PATH = $(leptonica_lib_dir)/pkgconfig
+
 
 
 # basic

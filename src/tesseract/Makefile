@@ -34,12 +34,10 @@ INC += $(nm_inc_opt)$(tesseract_root)
 INC += $(nm_inc_opt)$(tesseract_inc_dir)
 tesseract_libs += $(nm_libdir_opt)$(tesseract_lib_dir) $(nm_lib_opt)tesseract
 tesseract_libs += $(nm_libdir_opt)$(leptonica_lib_dir) $(nm_lib_opt)leptonica
-tesseract_lib_path = $(tesseract_lib_dir):$(leptonica_lib_dir)
-
-export PKG_CONFIG_PATH = $(leptonica_lib_dir)/pkgconfig:$(tesseract_lib_dir)/pkgconfig
+tesseract_lib_path = $(tesseract_lib_dir)$(nm_path_sep)$(leptonica_lib_dir)
 
 $(tesseract_tessdata): $(tesseract_build)
-	curl "$(tesseract_eng_traineddata)" -o $@
+	curl $(tesseract_eng_traineddata) -o $@
 
 $(tesseract_build): $(leptonica_build) \
                     $(tesseract_home)
@@ -50,6 +48,8 @@ $(tesseract_build): $(leptonica_build) \
 
 $(tesseract_home):
 	git clone --depth=1 --branch=main $(tesseract_git_src) $@
+
+export PKG_CONFIG_PATH = $(tesseract_lib_dir)/pkgconfig
 
 
 
