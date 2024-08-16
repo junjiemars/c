@@ -1,0 +1,14 @@
+# -*- mode:sh -*- vim:ft=sh
+
+# check tesseract requirements
+#----------------------------------------
+has_tesseract_required=NO
+printf " + checking for tesseract required ... "
+if pkg-config --version &>/dev/null; then
+  printf "yes\n"
+  has_tesseract_required=YES
+  flag=has_tesseract_required op=":=" value="YES" \
+      . ${NORE_ROOT}/auto/make_define
+else
+  printf "no\n"
+fi

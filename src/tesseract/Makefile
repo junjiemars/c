@@ -3,12 +3,18 @@
 # ./configure --has-leptonica --has-tesseract
 #
 
-
+ifeq ($(has_tesseract_required),YES)
 tesseract: tesseract_basic                      \
            tesseract_pdf
 
 tesseract_test: tesseract_basic_test            \
                 tesseract_pdf_test
+else
+tesseract:
+	@echo "#skip ..."
+tesseract_test:
+	@echo "#skip ..."
+endif
 
 
 
