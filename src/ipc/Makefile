@@ -181,14 +181,24 @@ $(ipc_sock_addr_binout): $(ipc_root)/sock/addr1.c
 
 # addr
 ipc_addr_host_binout := $(bin_path)/$(ipc_prefix)_addr_host$(bin_ext)
+ipc_addr_info_binout := $(bin_path)/$(ipc_prefix)_addr_info$(bin_ext)
 
-ipc_addr: $(ipc_addr_host_binout)
-ipc_addr_test: ipc_addr_host_test
+ipc_addr: $(ipc_addr_host_binout) \
+          $(ipc_addr_info_binout)
+ipc_addr_test: ipc_addr_host_test \
+               ipc_addr_info_test
 
 ipc_addr_host_test: $(ipc_addr_host_binout)
 	$<
 
+ipc_addr_info_test: $(ipc_addr_info_binout)
+	$< "www.example.com" "http"
+	$< "127.0.0.1" "ssh"
+
 $(ipc_addr_host_binout): $(ipc_root)/addr/h1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(ipc_addr_info_binout): $(ipc_root)/addr/ai1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
