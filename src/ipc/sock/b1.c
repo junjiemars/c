@@ -3,7 +3,7 @@
 int
 main (int argc, char **argv)
 {
-  int fd;
+  int sfd;
   int size;
   const char *sock_file;
   struct sockaddr_un un;
@@ -20,16 +20,15 @@ main (int argc, char **argv)
 
   un.sun_family = AF_UNIX;
   strcpy (un.sun_path, sock_file);
-  if ((fd = socket (AF_UNIX, SOCK_STREAM, 0)) < 0)
+  if ((sfd = socket (AF_UNIX, SOCK_STREAM, 0)) < 0)
     {
       perror (NULL);
       exit (EXIT_FAILURE);
     }
 
   /* intptr_t offsetof1 = (intptr_t)&((struct sockaddr_un *)0)->sun_path; */
-
   size = offsetof (struct sockaddr_un, sun_path) + strlen (un.sun_path);
-  if (bind (fd, (struct sockaddr *)&un, size) < 0)
+  if (bind (sfd, (struct sockaddr *)&un, size) < 0)
     {
       perror (NULL);
       exit (EXIT_FAILURE);

@@ -19,7 +19,8 @@ main (int argc, char **argv)
   rc = getaddrinfo (argv[1], argv[2], &hints, &ais);
   if (rc != 0)
     {
-      err (EXIT_FAILURE, "getaddrinfo error: %s", gai_strerror (rc));
+      fprintf (stderr, "getaddrinfo error: %s", gai_strerror (rc));
+      exit (EXIT_FAILURE);
     }
 
   for (struct addrinfo *ai = ais; ai != 0; ai = ai->ai_next)
