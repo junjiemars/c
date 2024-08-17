@@ -8,7 +8,7 @@
 #include <nasrt.h>
 #include <errno.h>
 #include <stdlib.h>
-
+#include <err.h>
 
 #if (LINUX)
 #  include <sys/wait.h>

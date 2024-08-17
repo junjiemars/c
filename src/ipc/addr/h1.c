@@ -1,6 +1,6 @@
 #include "_ipc_.h"
 
-void pr_hostent (struct hostent *);
+void print_hostent (struct hostent *);
 
 int
 main (void)
@@ -9,7 +9,7 @@ main (void)
 
   while ((h = gethostent ()) != 0)
     {
-      pr_hostent (h);
+      print_hostent (h);
     }
 
   endhostent ();
@@ -18,7 +18,7 @@ main (void)
 }
 
 void
-pr_hostent (struct hostent *ent)
+print_hostent (struct hostent *ent)
 {
   printf ("h_name: %s\n", ent->h_name);
   printf ("h_aliases:\n");

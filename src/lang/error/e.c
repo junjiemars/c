@@ -1,56 +1,55 @@
 #include "_lang_.h"
 
-static void  test_open_file(const char*);
-static void  test_sqrt(double);
+static void test_open_file (const char *);
+static void test_sqrt (double);
 
 int
-main(int argc, char **argv)
+main (int argc, char **argv)
 {
   if (argc < 2)
     {
-      printf("input a filename\n");
+      printf ("input a filename\n");
       return 1;
     }
 
-  test_open_file(argv[1]);
-  test_sqrt(-1 * argc);
+  test_open_file (argv[1]);
+  test_sqrt (-1 * argc);
 
   return 0;
 }
 
-
 void
-test_open_file(const char *filename)
+test_open_file (const char *filename)
 {
-  FILE *out = fopen(filename, "r");
+  FILE *out = fopen (filename, "r");
   if (out)
     {
-      fprintf(stdout, "#open %s success\n", filename);
+      fprintf (stdout, "#open %s success\n", filename);
       goto clean_exit;
     }
 
   int e = errno;
   if (e)
     {
-      perror("!panic");
+      perror ("!panic");
     }
 
- clean_exit:
+clean_exit:
   if (out)
     {
-      fclose(out);
+      fclose (out);
     }
 }
 
 void
-test_sqrt(double x)
+test_sqrt (double x)
 {
-  double  d    =  sqrt(x);
-  int     err  =  errno;
+  double d = sqrt (x);
+  int err = errno;
 
   if (err)
     {
-      fprintf(stderr, "!panic: %s\n", strerror(err));
+      fprintf (stderr, "!panic: %s\n", strerror (err));
     }
-  printf("%f\n", d);
+  printf ("%f\n", d);
 }

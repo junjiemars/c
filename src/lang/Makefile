@@ -194,21 +194,36 @@ $(lang_env_set_binout): $(lang_env_set_cppout)
 $(lang_env_set_cppout): $(lang_root)/env/set.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
+
 
 # error
 lang_error_basic_binout := $(bin_path)/$(lang_prefix)_error_basic$(bin_ext)
+lang_error_format_binout := $(bin_path)/$(lang_prefix)_error_format$(bin_ext)
+lang_error_file := $(tmp_path)/$(lang_prefix)_error_file
 
 ifeq ($(NM_SYSTEM),Linux)
 	error_ldlibs += $(nm_lib_opt)m
 endif
 
-lang_error: $(lang_error_basic_binout)
-lang_error_test: lang_error
-	$(lang_error_basic_binout) $(CURDIR)/Makefilex
-	$(lang_error_basic_binout) $(CURDIR)/Makefile
+lang_error: $(lang_error_basic_binout) \
+            $(lang_error_format_binout)
+lang_error_test: lang_error_basic_test \
+                 lang_error_format_test
+
+lang_error_basic_test: $(lang_error_basic_binout)
+	$< $(CURDIR)/Makefilex
+	$< $(CURDIR)/Makefile
+
+lang_error_format_test: $(lang_error_format_binout)
+	-$< 35 # EAGAIN
 
 $(lang_error_basic_binout): $(lang_root)/error/e.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(error_ldlibs)
+
+$(lang_error_format_binout): $(lang_root)/error/fmt1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 
 # exit
 lang_exit_binout := $(bin_path)/$(lang_prefix)_exit$(bin_ext)
