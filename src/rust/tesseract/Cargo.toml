@@ -1,0 +1,7 @@
+[package]
+name = "rust_tesseract"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rusty-tesseract = "1.1.10"
