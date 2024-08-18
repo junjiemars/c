@@ -141,7 +141,7 @@ src/zig/**/zig-out/
 
 # rust
 src/rust/**/target/
-src/rust/**/Cargo.lock
+src/**/Cargo.lock
 **/.rustfmt.toml
 **/rustfmt.toml
 

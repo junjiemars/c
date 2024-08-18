@@ -28,7 +28,6 @@ rust: rust_attr                                 \
       rust_opencv                               \
       rust_owner                                \
       rust_rest                                 \
-      rust_tesseract                            \
       rust_unsafe                               \
       rust_websrv                               \
       rust_ws
@@ -56,7 +55,6 @@ rust_test: rust_attr_test                       \
            rust_opencv_test                     \
            rust_owner_test                      \
            rust_rest_test                       \
-           rust_tesseract_test                  \
            rust_unsafe_test                     \
            rust_websrv_test                     \
            rust_ws_test
@@ -281,28 +279,6 @@ $(rust_rest_binout): $(rust_rest_cargo)
 		--manifest-path $< \
     --target-dir $(cargo_target_dir) \
   && cp $(cargo_out_dir)/$(rust_rest_name) $@
-
-
-
-# tesseract
-rust_tesseract_cargo := $(rust_root)/tesseract/Cargo.toml
-rust_tesseract_name := $(rust_prefix)_tesseract$(bin_ext)
-rust_tesseract_binout := $(bin_path)/$(rust_tesseract_name)
-# https://github.com/thomasgruebl/rusty-tesseract
-
-rust_tesseract: $(rust_tesseract_binout)
-rust_tesseract_test: rust_tesseract
-	$(rust_tesseract_binout)
-
-$(rust_tesseract_cargo):
-	$(CARGO) new --bin --vcs=none --name $(rust_prefix)_tesseract $(rust_root)/tesseract
-	$(CARGO) add --manifest-path=$@ rusty-tesseract
-
-$(rust_tesseract_binout): $(rust_tesseract_cargo)
-	$(CARGO) build \
-		--manifest-path $< \
-    --target-dir $(cargo_target_dir) \
-  && cp $(cargo_out_dir)/$(rust_tesseract_name) $@
 
 
 

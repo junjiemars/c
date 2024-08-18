@@ -5,15 +5,16 @@
 
 ifeq ($(has_tesseract_required),YES)
 tesseract: tesseract_basic                      \
-           tesseract_pdf
+           tesseract_pdf                        \
+           tesseract_rust
 
 tesseract_test: tesseract_basic_test            \
-                tesseract_pdf_test
+                tesseract_pdf_test              \
+                tesseract_rust_test
 else
 tesseract:
-	@echo "#skip ..."
-tesseract_test:
-	@echo "#skip ..."
+tesseract_test: tesseract
+	@echo "#skip ... no all tesseract requirements found"
 endif
 
 
@@ -53,6 +54,7 @@ tesseract_cc_opt += $(nm_symbol_opt)
 
 # build tesseract
 PKG_CONFIG_PATH := $(tesseract_lib_dir)/pkgconfig
+tesseract_example_png := $(tesseract_example_png)
 
 has_tesseract: $(tesseract_build) \
                $(tesseract_tessdata)
@@ -82,7 +84,7 @@ tesseract_basic: has_tesseract \
                  $(tesseract_basic_binout)
 tesseract_basic_test: tesseract_basic
 	LD_LIBRARY_PATH=$(tesseract_lib_path) \
-		$(tesseract_basic_binout) $(CURDIR)/src/tesseract/example.png
+		$(tesseract_basic_binout) $(tesseract_example_png)
 
 $(tesseract_basic_binout): $(tesseract_root)/basic/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(tesseract_libs)
@@ -96,11 +98,42 @@ tesseract_pdf: has_tesseract \
                $(tesseract_pdf_binout)
 tesseract_pdf_test: tesseract_pdf
 	LD_LIBRARY_PATH=$(tesseract_lib_path) \
-		$(tesseract_pdf_binout) $(CURDIR)/src/tesseract/example.png \
+		$(tesseract_pdf_binout) $(tesseract_example_png) \
 			$(CURDIR)/$(tmp_path)$(tesseract_prefix)_out 5000
 
 $(tesseract_pdf_binout): $(tesseract_root)/pdf/pdf.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(tesseract_libs)
+
+
+
+# rust
+tesseract_rust_cargo := $(tesseract_root)/rust/Cargo.toml
+tesseract_rust_name := $(tesseract_prefix)_rust$(bin_ext)
+tesseract_rust_binout := $(bin_path)/$(tesseract_rust_name)
+tesseract_cargo_target_dir := $(CURDIR)/$(tmp_path)
+tesseract_cargo_out_dir := "$(tesseract_cargo_target_dir)/debug"
+# https://github.com/thomasgruebl/rusty-tesseract
+
+ifeq ($(has_tesseract_rust_required),YES)
+tesseract_rust: $(tesseract_rust_binout)
+tesseract_rust_test: tesseract_rust
+	$(tesseract_rust_binout)
+else
+tesseract_rust:
+tesseract_rust_test: tesseract_rust
+	@echo "#skip ... no all rust requirements found"
+endif
+
+$(tesseract_rust_cargo):
+	$(CARGO) new --bin --vcs=none \
+		--name $(tesseract_prefix)_rust $(tesseract_root)/rust
+	$(CARGO) add --manifest-path=$@ rusty-tesseract
+
+$(tesseract_rust_binout): $(tesseract_rust_cargo)
+	$(CARGO) build \
+		--manifest-path $< \
+    --target-dir $(tesseract_cargo_target_dir) \
+  && cp $(tesseract_cargo_out_dir)/$(tesseract_rust_name) $@
 
 
 

@@ -3,13 +3,14 @@
 # check leptonica requirements
 #----------------------------------------
 has_leptonica_required=NO
+# sudo port install autoconf automake libtool
 printf " + checking for leptonica required ... "
-if ((which libtoolize >/dev/null && libtoolize --version >/dev/null)            \
-     || (which glibtoolize >/dev/null && glibtoolize --version >/dev/null))     \
-    && ((which aclocal >/dev/null && aclocal --version >/dev/null)              \
-        && (which autoheader >/dev/null && autoheader --version >/dev/null)     \
-        && (which autoconf >/dev/null && autoconf --version >/dev/null)         \
-        && (which automake >/dev/null && automake --version >/dev/null)); then
+if ((command -v libtoolize &>/dev/null && libtoolize --version >/dev/null)            \
+     || (command -v glibtoolize &>/dev/null && glibtoolize --version >/dev/null))     \
+    && ((command -v aclocal &>/dev/null && aclocal --version >/dev/null)              \
+        && (command -v autoheader &>/dev/null && autoheader --version >/dev/null)     \
+        && (command -v autoconf &>/dev/null && autoconf --version >/dev/null)         \
+        && (command -v automake &>/dev/null && automake --version >/dev/null)); then
   printf "yes\n"
   has_leptonica_required=YES
   flag=has_leptonica_required op=":=" value="YES" \

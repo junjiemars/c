@@ -3,15 +3,13 @@
 # ./configure --has-leptonica
 #
 
-ifeq ($(has_leptonica_required),YES)
+ifeq ($(has_leptonica_required),NO)
 leptonica: leptonica_basic
 leptonica_test: leptonica_basic_test
 else
 leptonica:
-	@echo "#skip ..."
-
-leptonica_test:
-	@echo "#skip ..."
+leptonica_test: leptonica
+	@echo "#skip ... no all leptonica requirements found"
 endif
 
 

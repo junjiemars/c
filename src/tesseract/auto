@@ -4,11 +4,26 @@
 #----------------------------------------
 has_tesseract_required=NO
 printf " + checking for tesseract required ... "
-if pkg-config --version &>/dev/null; then
-  printf "yes\n"
-  has_tesseract_required=YES
+if test ${has_leptonica_required} = YES \
+    && pkg-config --version &>/dev/null; then
   flag=has_tesseract_required op=":=" value="YES" \
       . ${NORE_ROOT}/auto/make_define
+  printf "yes\n"
 else
+  printf "no\n"
+fi
+
+# check rust requirements
+#----------------------------------------
+has_tesseract_rust_required=NO
+printf " + checking for tesseract rust ... "
+has_cargo="`command -v cargo`"
+if [ -x "$has_cargo" ]; then
+  flag=has_tesseract_rust_required \
+    op=":=" value="YES" . ${NORE_ROOT}/auto/make_define
+  flag=CARGO value="${has_cargo}" . ${NORE_ROOT}/auto/make_define
+  printf "yes\n"
+else
+  has_cargo=""
   printf "no\n"
 fi
