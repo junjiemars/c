@@ -21,8 +21,7 @@ main (int argc, char **argv)
   in4.sin_port = htons (port);
   in4.sin_addr.s_addr = inet_addr (node);
 
-  sfd = socket (AF_INET, SOCK_STREAM, 0);
-  if (sfd == -1)
+  if ((sfd = socket (AF_INET, SOCK_STREAM, 0)) == -1)
     {
       perror (0);
       exit (EXIT_FAILURE);
@@ -31,11 +30,14 @@ main (int argc, char **argv)
   if (connect (sfd, (struct sockaddr *)&in4, sizeof (in4)) < 0)
     {
       status = errno;
-      perror (0);
-      goto clean_exit;
+      if (status != ECONNREFUSED)
+        {
+          perror (0);
+          goto clean_exit;
+        }
     }
 
-  printf ("XXX\n");
+  printf ("#successed");
 
  clean_exit:
   close (sfd);
