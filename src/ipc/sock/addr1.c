@@ -26,16 +26,28 @@ main (void)
              &in6.sin6_addr);
   print_addr ((struct sockaddr *)&in6, "in6");
 
-  /* www.example.com http */
-  struct addrinfo hint = { 0 }, *w3;
+  struct addrinfo hint = { 0 };
+  /* IPv4: www.example.com http */
+  struct addrinfo *w4;
   hint.ai_family = AF_INET;
   hint.ai_socktype = SOCK_STREAM;
-  if (getaddrinfo ("www.example.com", "http", &hint, &w3) != 0)
+  if (getaddrinfo ("www.example.com", "http", &hint, &w4) != 0)
     {
       fprintf (stderr, "%s\n", gai_strerror (errno));
     }
-  print_addr (w3->ai_addr, "http");
-  freeaddrinfo (w3);
+  print_addr (w4->ai_addr, "http");
+  freeaddrinfo (w4);
+
+  /* IPv4: www.example.com http */
+  struct addrinfo *w6;
+  hint.ai_family = AF_INET6;
+  hint.ai_socktype = SOCK_STREAM;
+  if (getaddrinfo ("www.example.com", "http", &hint, &w6) != 0)
+    {
+      fprintf (stderr, "%s\n", gai_strerror (errno));
+    }
+  print_addr (w6->ai_addr, "http");
+  freeaddrinfo (w6);
 
   exit (EXIT_SUCCESS);
 }
@@ -51,21 +63,20 @@ print_addr (const struct sockaddr *addr, const char *prefix)
   if (addr->sa_family == AF_INET)
     {
       char ss[INET_ADDRSTRLEN];
-      if (inet_ntop (addr->sa_family,
-                     &((struct sockaddr_in *)addr)->sin_addr.s_addr, ss,
+      struct sockaddr_in *in4 = (struct sockaddr_in *)addr;
+      if (inet_ntop (addr->sa_family, &in4->sin_addr.s_addr, ss,
                      INET_ADDRSTRLEN))
         {
-          printf ("%s:inet_ntop = %s\n", prefix, ss);
+          printf ("sin_addr = %s, port = %hu\n", ss, ntohs (in4->sin_port));
         }
     }
   else if (addr->sa_family == AF_INET6)
     {
       char ss[INET6_ADDRSTRLEN];
-      if (inet_ntop (addr->sa_family,
-                     &((struct sockaddr_in6 *)addr)->sin6_addr, ss,
-                     INET6_ADDRSTRLEN))
+      struct sockaddr_in6 *in6 = (struct sockaddr_in6 *)addr;
+      if (inet_ntop (addr->sa_family, &in6->sin6_addr, ss, INET6_ADDRSTRLEN))
         {
-          printf ("%s:inet_ntop = %s\n", prefix, ss);
+          printf ("sin6_addr = %s, port = %hu\n", ss, ntohs (in6->sin6_port));
         }
     }
 }
