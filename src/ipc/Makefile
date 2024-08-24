@@ -172,7 +172,8 @@ ipc_sock_addr_test: $(ipc_sock_addr_binout)
 	$< $(sock_file)
 
 ipc_sock_telnet_test: $(ipc_sock_telnet_binout)
-	$< 93.184.215.14 80
+	$< www.example.com 80
+	$< www.example.com http
 
 $(ipc_sock_bound_binout): $(ipc_root)/sock/b1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
