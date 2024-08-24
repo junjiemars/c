@@ -1,7 +1,6 @@
 #include "_ipc_.h"
-#include <netinet/in.h>
 
-void print_addr (const struct sockaddr *, const char *);
+static void print_addr (const struct sockaddr *, const char *);
 
 int
 main (void)
@@ -19,7 +18,6 @@ main (void)
   inet_pton (AF_INET, "127.0.0.1", &in4.sin_addr.s_addr);
   print_addr ((struct sockaddr *)&in4, "in4");
 
-
   /* internet v6 address */
   struct sockaddr_in6 in6 = { 0 };
   in6.sin6_family = AF_INET6;
@@ -27,6 +25,17 @@ main (void)
   inet_pton (AF_INET6, "240e:3a2:e7f:1410:84eb:7d13:9c3a:e7f5",
              &in6.sin6_addr);
   print_addr ((struct sockaddr *)&in6, "in6");
+
+  /* www.example.com http */
+  struct addrinfo hint = { 0 }, *w3;
+  hint.ai_family = AF_INET;
+  hint.ai_socktype = SOCK_STREAM;
+  if (getaddrinfo ("www.example.com", "http", &hint, &w3) != 0)
+    {
+      fprintf (stderr, "%s\n", gai_strerror (errno));
+    }
+  print_addr (w3->ai_addr, "http");
+  freeaddrinfo (w3);
 
   exit (EXIT_SUCCESS);
 }

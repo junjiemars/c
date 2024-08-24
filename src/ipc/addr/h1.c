@@ -1,6 +1,6 @@
 #include "_ipc_.h"
 
-void print_hostent (struct hostent *);
+static void print_hostent (struct hostent *);
 
 int
 main (void)
