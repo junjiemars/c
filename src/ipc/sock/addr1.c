@@ -64,8 +64,7 @@ print_addr (const struct sockaddr *addr, const char *prefix)
     {
       char ss[INET_ADDRSTRLEN];
       struct sockaddr_in *in4 = (struct sockaddr_in *)addr;
-      if (inet_ntop (addr->sa_family, &in4->sin_addr.s_addr, ss,
-                     INET_ADDRSTRLEN))
+      if (inet_ntop (addr->sa_family, &in4->sin_addr, ss, INET_ADDRSTRLEN))
         {
           printf ("sin_addr = %s, port = %hu\n", ss, ntohs (in4->sin_port));
         }
