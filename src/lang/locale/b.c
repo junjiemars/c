@@ -1,11 +1,11 @@
 #include "_lang_.h"
 #include <locale.h>
 
-void print_LC_ALL (void);
-void test_setlocale (const char *);
-void test_strcmp (const char *, const char *);
-void test_strcoll (const char *, const char *);
-void test_strxfrm (const char *);
+static void print_LC_ALL (void);
+static void test_setlocale (const char *);
+static void test_strcmp (const char *, const char *);
+static void test_strcoll (const char *, const char *);
+static void test_strxfrm (const char *);
 
 int
 main (int argc, char **argv)

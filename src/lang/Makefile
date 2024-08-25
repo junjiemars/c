@@ -117,6 +117,7 @@ $(lang_assert_binout): $(lang_assert_cppout)
 $(lang_assert_cppout): $(lang_root)/assert/a.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
+
 
 # duration
 lang_duration_binout := $(bin_path)/$(lang_prefix)_duration$(bin_ext)
@@ -349,11 +350,22 @@ $(lang_linkage_lnk_objout): $(lang_root)/linkage/lnk.c  \
 $(lang_linkage_c_objout): $(lang_root)/linkage/c.c
 	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
-# locale
-lang_locale_binout := $(bin_path)/$(lang_prefix)_locale$(bin_ext)
+
 
-lang_locale: $(lang_locale_binout)
-lang_locale_test: $(lang_locale_binout)
+# locale
+lang_locale_get_binout := $(bin_path)/$(lang_prefix)_locale_get$(bin_ext)
+lang_locale_set_binout := $(bin_path)/$(lang_prefix)_locale_set$(bin_ext)
+
+lang_locale: $(lang_locale_get_binout) \
+             $(lang_locale_set_binout)
+lang_locale_test: lang_locale_get_test \
+                  lang_locale_set_test
+
+lang_locale_get_test: $(lang_locale_get_binout)
+	$<
+	env LC_ALL="POSIX" $<
+
+lang_locale_set_test: $(lang_locale_set_binout)
 	$<
 	$< ""
 	$< "C"
@@ -368,7 +380,10 @@ lang_locale_test: $(lang_locale_binout)
 	$< "zh_CN.UTF-8"
 	$< "XXX"
 
-$(lang_locale_binout): $(lang_root)/locale/b.c
+$(lang_locale_get_binout): $(lang_root)/locale/c1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(lang_locale_set_binout): $(lang_root)/locale/b.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
