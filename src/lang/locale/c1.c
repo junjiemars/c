@@ -1,18 +1,32 @@
 #include "_lang_.h"
 #include <locale.h>
 
+static void print_locale (const char *);
+
 int
 main (void)
 {
   printf ("current locale:\n------------\n");
-  for (int cate = LC_ALL; cate < _LC_LAST; cate++)
-    {
-      printf ("%d %s\n", cate, setlocale (cate, 0));
-    }
+  print_locale (0);
 
   printf ("env locale:\n------------\n");
-  for (int cate = LC_ALL; cate < _LC_LAST; cate++)
-    {
-      printf ("%d %s\n", cate, setlocale (cate, ""));
-    }
+  print_locale ("");
+}
+
+void
+print_locale (const char *locale)
+{
+  printf ("%s=%s\n", _str_ (LC_ALL), setlocale (LC_ALL, locale));
+
+  printf ("%s=%s\n", _str_ (LC_COLLATE), setlocale (LC_COLLATE, locale));
+
+  printf ("%s=%s\n", _str_ (LC_CTYPE), setlocale (LC_CTYPE, locale));
+
+  printf ("%s=%s\n", _str_ (LC_MONETARY), setlocale (LC_MONETARY, locale));
+
+  printf ("%s=%s\n", _str_ (LC_NUMERIC), setlocale (LC_NUMERIC, locale));
+
+  printf ("%s=%s\n", _str_ (LC_TIME), setlocale (LC_TIME, locale));
+
+  printf ("%s=%s\n", _str_ (LC_MESSAGES), setlocale (LC_MESSAGES, locale));
 }
