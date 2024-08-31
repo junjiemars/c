@@ -16,8 +16,6 @@ main (void)
 void
 print_locale (const char *locale)
 {
-  printf ("%s=%s\n", _str_ (LC_ALL), setlocale (LC_ALL, locale));
-
   printf ("%s=%s\n", _str_ (LC_COLLATE), setlocale (LC_COLLATE, locale));
 
   printf ("%s=%s\n", _str_ (LC_CTYPE), setlocale (LC_CTYPE, locale));

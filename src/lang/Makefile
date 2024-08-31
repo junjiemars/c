@@ -363,6 +363,8 @@ lang_locale_test: lang_locale_get_test \
 
 lang_locale_get_test: $(lang_locale_get_binout)
 	$<
+	env LANG="en_US.UTF-8" $<
+	env LC_NUMERIC="POSIX" $<
 	env LC_ALL="POSIX" $<
 
 lang_locale_set_test: $(lang_locale_set_binout)
