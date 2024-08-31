@@ -27,14 +27,12 @@ if [    "$nio_getdelim" = "yes"                 \
      -o "$nio_fdopen" = "yes"                   \
      -o "$nio_dirname" = "yes"                  \
      -o "$nio_basename" = "yes"                 \
+     -o "$nio_popen" = "yes"                    \
    ]; then
   echo "checking for nio.h ..."
 else
   return
 fi
-
-
-
 
 
 # check getdelim
@@ -71,7 +69,7 @@ if [ "$nio_getdelim" = "yes" ]; then
     *)
       ;;
   esac
-fi
+fi # end of getdelim
 
 
 # check fileno
@@ -258,10 +256,40 @@ if [ "$nio_basename" = "yes" ]; then
         ;;
     esac
   fi
-fi                              # nio_basename
+fi # nio_basename
 
 
+#check popen
+#----------------------------------------
+if [ "$nio_popen" = "yes" ]; then
+  nm_feature="popen"
+  nm_feature_name="nm_have_popen"
+  nm_feature_run=no
+  nm_feature_h='#include <stdio.h>'
+  nm_feature_flags=
+  nm_feature_inc=
+  nm_feature_ldlibs=
+  nm_feature_test='FILE* f=popen("dir","r"); if (f) pclose(f);'
+  . ${NORE_ROOT}/auto/feature
+  case $CC_NAME in
+    clang|cc)
+    have=$nm_have_feature . ${NORE_ROOT}/auto/have
+      ;;
+    msvc)
+      nm_feature="_popen"
+      nm_feature_name="nm_have_popen"
+      nm_feature_run=no
+      nm_feature_h='#include <stdio.h>'
+      nm_feature_flags=
+      nm_feature_inc=
+      nm_feature_ldlibs=
+      nm_feature_test='FILE* f=_popen("dir","r"); if (f) _pclose(f);'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+  esac
+fi # end of popen
 
-fi                              # define_nio_h
+
+fi # define_nio_h
 
 # eof

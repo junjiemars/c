@@ -295,6 +295,7 @@ $(stdio_open_re_binout): $(stdio_root)/open/ro1.c
 $(stdio_open_fd_binout): $(stdio_root)/open/fd1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 
 # process
 stdio_process_binout := $(bin_path)/$(stdio_prefix)_process$(bin_ext)
@@ -305,6 +306,8 @@ stdio_process_test: stdio_process
 
 $(stdio_process_binout): $(stdio_root)/process/p.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 
 # scan
 stdio_scan_stdin_binout := $(bin_path)/$(stdio_prefix)_scan$(bin_ext)

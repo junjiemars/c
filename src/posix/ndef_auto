@@ -111,14 +111,14 @@ fi
 # check restrict keyword
 #----------------------------------------
 if [ "$ndef_restrict" = "yes" ]; then
-	nm_feature="__restrict keyword"
+	nm_feature="__restrict"
 	nm_feature_name="nm_have_restrict"
 	nm_feature_run=
 	nm_feature_h=
 	nm_feature_flags="$CFLAGS"
 	nm_feature_test='int x = 0x11; int *__restrict p = &x; (void)sizeof(p);'
 	. ${NORE_ROOT}/auto/feature
-fi
+fi # end of __restrict
 
 
 # check static_assert
@@ -130,8 +130,8 @@ if [ "$ndef_static_assert" = "yes" ]; then
   nm_feature_h="#include <assert.h>"
   nm_feature_flags="$CFLAGS"
   nm_feature_test='enum {N=5}; _Static_assert(N==5, "N is not equal 5");'
-  . ${NORE_ROOT}/auto/feature     # end of _Static_assert
-fi
+  . ${NORE_ROOT}/auto/feature
+fi  # end of _Static_assert
 
 
 # check __VA_ARGS__
