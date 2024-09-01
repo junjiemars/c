@@ -99,9 +99,15 @@ test_alignas (void)
 
   struct X
   {
-    char alignas (alignof (int)) ss[3];
     int i;
+#if (MSVC)
+    char alignas (sizeof (long long)) ss[sizeof (long long)];
+#else
+    char alignas (alignof (long long)) ss[sizeof (long long)];
+#endif
   };
+
+  assert (sizeof (struct X) == sizeof (long long) * 2);
 
   __attribute__ ((unused)) char alignas (2) c2 = 'A';
   __attribute__ ((unused)) char alignas (8) c8 = 'B';
@@ -109,14 +115,11 @@ test_alignas (void)
 
   assert ((long)&c2 % 2 == 0);
   assert ((long)&c8 % 8 == 0);
-  assert ((long)&c4 % 4 == 0);
+  assert ((long)&c4 % sizeof (int) == 0);
 
 #define _m_(x, y) ((size_t) & (x)) == (((size_t) & (x)) / (y)) * (y)
   __attribute__ ((unused)) char alignas (double) c1 = 'A';
   assert (_m_ (c1, sizeof (double)));
-
-  __attribute__ ((unused)) struct X x1 = { 0 };
-  assert (_m_ (x1, sizeof (int) * 2));
 #undef _m_
 
 #endif

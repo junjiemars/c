@@ -56,7 +56,7 @@ if [ "$ndef_alignas" = "yes" ]; then
 	nm_feature_name="nm_have_alignas"
 	nm_feature_run=
 	nm_feature_h=
-	nm_feature_flags=
+	nm_feature_flags="$CFLAGS"
 	nm_feature_test='int _Alignas(int) a; (void) sizeof(a);'
 	. ${NORE_ROOT}/auto/feature
 fi
@@ -69,7 +69,7 @@ if [ "$ndef_alignof" = "yes" ]; then
 	nm_feature_name="nm_have_alignof"
 	nm_feature_run=
 	nm_feature_h=
-	nm_feature_flags=
+	nm_feature_flags="$CFLAGS"
 	nm_feature_test='int a = (int) _Alignof(short); (void) sizeof(a);'
 	. ${NORE_ROOT}/auto/feature
 fi
