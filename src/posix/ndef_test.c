@@ -99,6 +99,14 @@ test_alignof (void)
   assert (alignof (char) >= 1);
   assert (alignof (int) >= 4);
   assert (alignof (int *) >= 4);
+
+  struct X
+  {
+    char c;
+    int i;
+  };
+  assert (sizeof (struct X) == alignof (struct X) * 2);
+  assert (alignof (struct X) == sizeof (int));
 #endif
 }
 
@@ -160,24 +168,25 @@ test_generic (void)
 void
 test_str (void)
 {
-#define _ndef_test_str_ 0666
-  printf ("_str_(%s) = 0%o\n", _str_ (_ndef_test_str_), _ndef_test_str_);
-
-#undef _ndef_test_str_
+  assert (sizeof (_str_ (0600)) == 5);
 }
 
 void
 test_cat (void)
 {
   int _cat_ (a, 1) = 1;
-  printf ("_cat_(%s, %s) = %d\n", _str_ (a), _str_ (1), a1);
+  assert (a1 == 1);
 }
 
 void
 test_isut (void)
 {
-  printf ("_isut_(char) = %d\n_isut_(unsigned char) = %d\n", _isut_ (char),
-          _isut_ (unsigned char));
+  int is_unsigned_char = _isut_ (char);
+  if (is_unsigned_char)
+    {
+      assert (is_unsigned_char == _isut_ (short));
+    }
+  assert (_isut_ (unsigned short) == _isut_ (unsigned char));
 }
 
 void
@@ -189,7 +198,6 @@ test_nof (void)
     3,
   };
   assert (_nof_ (a) == sizeof (a) / sizeof (*a));
-  printf ("_nof_(a) = %zu\n", _nof_ (a));
 }
 
 void
