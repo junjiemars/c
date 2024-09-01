@@ -64,6 +64,7 @@ nio_fileno="yes"
 nio_fdopen="yes"
 nio_dirname="yes"
 nio_basename="yes"
+nio_popen="yes"
 . ${POSIX_ROOT}/nio_auto
 
 
