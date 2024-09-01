@@ -29,8 +29,19 @@ main (int argc, char **argv)
 
   test_restrict ((const int *restrict)&argc, (const char *restrict)argv[0]);
   test_static_assert ();
+
+#if (NM_HAVE_ALIGNOF)
   test_alignof ();
+#else
+  printf ("!no `alignof' found\n");
+#endif
+
+#if (NM_HAVE_ALIGNAS)
   test_alignas ();
+#else
+  printf ("!no `alignas' found\n");
+#endif
+
   test_generic ();
 
   test_str ();
@@ -91,32 +102,26 @@ test_static_assert (void)
 void
 test_alignof (void)
 {
-#if !(NM_HAVE_ALIGNOF)
-  printf ("%s no `alignof' found\n", __FUNCTION__);
-#else
-  __attribute__ ((unused)) size_t s = alignof (short);
-  assert (s == sizeof (short));
-  assert (alignof (char) >= 1);
-  assert (alignof (int) >= 4);
-  assert (alignof (int *) >= 4);
-
   struct X
   {
     char c;
     int i;
   };
+
+  size_t alignof_char = alignof (char);
+  assert (alignof_char >= 1);
+  assert (alignof (short) >= 2);
+  assert (alignof (int) >= 4);
+  assert (alignof (int *) >= 8);
+  assert (alignof (struct X) == sizeof (int));
+
   assert (sizeof (struct X) == alignof (struct X) * 2);
   assert (alignof (struct X) == sizeof (int));
-#endif
 }
 
 void
 test_alignas (void)
 {
-#if !(NM_HAVE_ALIGNAS)
-  printf ("%s: no `alignas' found\n", __FUNCTION__);
-#else
-
   struct X
   {
     int i;
@@ -141,8 +146,6 @@ test_alignas (void)
   __attribute__ ((unused)) char alignas (double) c1 = 'A';
   assert (_m_ (c1, sizeof (double)));
 #undef _m_
-
-#endif
 }
 
 void
