@@ -71,23 +71,35 @@ void
 test_restrict (__attribute__ ((unused)) const int *restrict ii,
                __attribute__ ((unused)) const char *restrict ss)
 {
-  assert (*ii > 0 && ss != NULL);
+#if !(NM_HAVE_RESTRICT)
+  printf ("%s no `restrict' found\n");
+#else
+  assert (ii != 0 && ss != 0);
+#endif
 }
 
 void
 test_static_assert (void)
 {
+#if !(NM_HAVE_STATIC_ASSERT)
+  printf ("%s no `static_assert' found\n");
+#else
   static_assert (sizeof (char) == 1, "sizeof(char) must be 1 byte");
+#endif
 }
 
 void
 test_alignof (void)
 {
+#if !(NM_HAVE_ALIGNOF)
+  printf ("%s no `alignof' found\n", __FUNCTION__);
+#else
   __attribute__ ((unused)) size_t s = alignof (short);
   assert (s == sizeof (short));
   assert (alignof (char) >= 1);
   assert (alignof (int) >= 4);
   assert (alignof (int *) >= 4);
+#endif
 }
 
 void
