@@ -84,8 +84,8 @@ if [ "$ndef_complex" = "yes" ]; then
   nm_feature_h=
   nm_feature_flags="$CFLAGS"
   nm_feature_test='
-_Complex float f = 1.0 + 2.0i;
-_Complex double d = 3.0 + 4.0i;
+float _Complex f = 1.0 + 2.0i;
+double _Complex d = 3.0 + 4.0i;
 (void) f; (void) d;
 '
   . ${NORE_ROOT}/auto/feature
