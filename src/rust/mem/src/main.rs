@@ -1,26 +1,16 @@
-/*
- * https://doc.rust-lang.org/stable/reference/variables.html
- *
- */
+// https://doc.rust-lang.org/reference/type-layout.html
 
-#![allow(unused)]
 fn main() {
-    let init_should_be;
-    let init_may_be;
-
-    if random_bool() {
-        init_should_be = ();
-        init_may_be = ();
-    } else {
-        init_should_be = ();
-    }
-
-    assert_eq!(init_should_be, ());
-
-    // `E0381' use of possibly-uninitialized `init_may_be`
-    // assert_eq!(init_may_be, ());
+    mem_type_layout::size_and_align();
 }
 
-fn random_bool() -> bool {
-    true
+mod mem_type_layout {
+    use std::mem::{align_of_val, size_of};
+
+    pub fn size_and_align() {
+        let i = 123;
+        let l = 123i64;
+        assert_eq!(size_of::<i32>(), align_of_val(&i));
+        assert_eq!(size_of::<i64>(), align_of_val(&l));
+    }
 }

@@ -554,6 +554,7 @@ $(rust_macro_binout): $(rust_macro_cargo)             \
 
 # mem
 rust_mem_cargo := $(rust_root)/mem/Cargo.toml
+rust_mem_name := $(rust_prefix)_mem$(bin_ext)
 rust_mem_binout := $(bin_path)/$(rust_prefix)_mem$(bin_ext)
 
 rust_mem: $(rust_mem_binout)
@@ -567,11 +568,10 @@ $(rust_mem_cargo):
 
 $(rust_mem_binout): $(rust_mem_cargo)             \
                       $(rust_root)/mem/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    --target-dir $(cargo_target_dir)            \
-    -Z unstable-options                         \
-    --out-dir $(bin_path)
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_mem_name) $@
 
 
 
