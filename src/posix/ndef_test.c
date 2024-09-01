@@ -109,12 +109,13 @@ test_alignof (void)
   };
 
   size_t alignof_char = alignof (char);
-  assert (alignof_char >= 1);
-  assert (alignof (short) >= 2);
-  assert (alignof (int) >= 4);
-  assert (alignof (int *) >= 8);
+  assert (alignof_char == 1);
+  assert (alignof (short) == 2);
+  assert (alignof (int) == 4);
+  assert (alignof (int *) == 8);
+  assert (alignof (char[8]) == alignof (char));
+  assert (alignof (short[8]) == alignof (short));
   assert (alignof (struct X) == sizeof (int));
-
   assert (sizeof (struct X) == alignof (struct X) * 2);
   assert (alignof (struct X) == sizeof (int));
 }
