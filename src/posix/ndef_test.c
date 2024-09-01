@@ -181,12 +181,11 @@ test_cat (void)
 void
 test_isut (void)
 {
-  int is_unsigned_char = _isut_ (char);
-  if (is_unsigned_char)
+  assert (_isut_ (unsigned short));
+  if (_isut_ (char))
     {
-      assert (is_unsigned_char == _isut_ (short));
+      assert (_isut_ (char) == _isut_ (unsigned char));
     }
-  assert (_isut_ (unsigned short) == _isut_ (unsigned char));
 }
 
 void
