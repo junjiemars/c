@@ -20,12 +20,6 @@ static void test_isut (void);
 static void test_nof (void);
 static void test_swp (void);
 
-struct X
-{
-  char alignas (alignof (int)) ss[3];
-  int i;
-};
-
 
 int
 main (int argc, char **argv)
@@ -99,6 +93,16 @@ test_alignof (void)
 void
 test_alignas (void)
 {
+#if !(NM_HAVE_ALIGNAS)
+  printf ("%s: no `alignas' found\n", __FUNCTION__);
+#else
+
+  struct X
+  {
+    char alignas (alignof (int)) ss[3];
+    int i;
+  };
+
   __attribute__ ((unused)) char alignas (2) c2 = 'A';
   __attribute__ ((unused)) char alignas (8) c8 = 'B';
   __attribute__ ((unused)) char alignas (int) c4 = 'C';
@@ -114,6 +118,8 @@ test_alignas (void)
   __attribute__ ((unused)) struct X x1 = { 0 };
   assert (_m_ (x1, sizeof (int) * 2));
 #undef _m_
+
+#endif
 }
 
 void

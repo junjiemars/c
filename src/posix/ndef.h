@@ -59,8 +59,6 @@
 #if !defined(alignas)
 #  if defined(NM_HAVE_ALIGNAS) && (NM_HAVE_ALIGNAS)
 #    define alignas  _Alignas
-#  elif defined(MSVC) && (MSVC)
-#    define alignas
 #  else
 #    define alignas(x)  __attribute__((aligned(x)))
 #  endif
