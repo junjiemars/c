@@ -566,8 +566,8 @@ rust_mem_test: rust_mem
 $(rust_mem_cargo):
 	$(CARGO) new --bin --name=$(rust_prefix)_mem $(rust_root)/mem
 
-$(rust_mem_binout): $(rust_mem_cargo)             \
-                      $(rust_root)/mem/src/main.rs
+$(rust_mem_binout): $(rust_mem_cargo) \
+                    $(rust_root)/mem/src/main.rs
 	$(CARGO) build \
     --manifest-path $< \
     --target-dir $(cargo_target_dir) \
