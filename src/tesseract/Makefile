@@ -129,9 +129,10 @@ $(tesseract_rust_cargo):
 		--name $(tesseract_prefix)_rust $(tesseract_root)/rust
 	$(CARGO) add --manifest-path=$@ rusty-tesseract
 
+
 $(tesseract_rust_binout): $(tesseract_rust_cargo)
 	$(CARGO) build \
-		--manifest-path $< \
+    --manifest-path $< \
     --target-dir $(tesseract_cargo_target_dir) \
   && cp $(tesseract_cargo_out_dir)/$(tesseract_rust_name) $@
 
