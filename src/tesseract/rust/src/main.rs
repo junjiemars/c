@@ -1,5 +1,4 @@
 use clap::Parser;
-use rusty_tesseract;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -14,17 +13,18 @@ pub struct Args {
 }
 
 fn main() {
-    println!("Hello, world!");
+
 }
 
 mod tests {
-    use rusty_tesseract;
     #[test]
-    fn test_list_lang() {
-        get_tesseract_langs();
+    fn test_list_langs() {
+        let langs = rusty_tesseract::get_tesseract_langs();
+				println!("{:#?}", langs)
     }
 		#[test]
-		fn test_list_parameters() {
-				get_tesseract_config_parameters();
+		fn test_list_params() {
+				let params = rusty_tesseract::get_tesseract_config_parameters();
+				println!("{:#?}", params)
 		}
 }
