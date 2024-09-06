@@ -3,7 +3,7 @@
 # ./configure --has-leptonica
 #
 
-ifeq ($(has_leptonica_required),NO)
+ifeq ($(has_leptonica_required),YES)
 leptonica: leptonica_basic
 leptonica_test: leptonica_basic_test
 else
