@@ -153,6 +153,7 @@ src/gnucm/c-3
 
 # io
 **/.*.file
+**/*.gz
 
 # uemacs
 src/uemacs/uemacs_home

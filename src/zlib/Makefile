@@ -1,4 +1,9 @@
+# -*- mode:makefile-gmake -*-
+#
 # ./configure --has-zlib
+#
+# http://zlib.net/
+#
 
 ifeq ($(has_zlib),yes)
 zlib:  zlib_hi
@@ -9,6 +14,8 @@ zlib:
 zlib_test:
 	@echo "#skip ..."
 endif
+
+
 
 # env
 zlib_prefix := zlib
@@ -24,13 +31,19 @@ endif # end of _MEMORY_
 LDFLAGS += $(zlib_ldflags)
 LDLIBS += $(zlib_ldlibs)
 
+
 
 # hi
 zlib_hi_binout := $(bin_path)/$(zlib_prefix)_hi$(bin_ext)
+zlib_hi_in_file := $(tmp_path)/$(zlib_prefix)_hi.gz
 
 zlib_hi: $(zlib_hi_binout)
-zlib_hi_test: zlib_hi
+zlib_hi_test: zlib_hi \
+              $(zlib_hi_in_file)
 	$(zlib_hi_binout)
+
+$(zlib_hi_in_file): $(zlib_root)/hi/hi.c
+	gzip -c $< >$@
 
 $(zlib_hi_binout): $(zlib_root)/hi/hi.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(LDFLAGS) $(LDLIBS)
