@@ -1,22 +1,46 @@
-use libc::{getpid, printf, strlen};
-use std::ffi::CString;
+//
+// https://github.com/rust-lang/rfcs/blob/master/text/1291-promote-libc.md
+//
 
 fn main() {
+    let pid = getpid();
+    println!("getpid() = {pid}");
+
+    let ss = "Inside C";
+    let ss_len = strlen(ss);
+    println!("strlen({ss}) = {ss_len} ");
+
+    test_printf();
+}
+
+fn getpid() -> i32 {
+    use libc::getpid;
+    use std::os::raw::c_int;
     // getpid(2)
-    let pid = unsafe { getpid() };
-    println!("pid = {}", pid);
+    let pid: c_int = unsafe { getpid() };
+    return pid;
+}
 
-    // printf(3)
-    unsafe {
-        let cstr = CString::new("Inside C, %d\n").expect("XX");
-        printf(cstr.as_ptr(), pid);
-    }
-
+fn strlen(ss: &str) -> usize {
+    use libc::strlen;
+    use std::ffi::CString;
     // strlen(3)
-    unsafe {
-        let cstr = CString::new("Inside C").expect("XX");
-        let fmt = CString::new("strlen(\"%s\") = %d\n").expect("XX");
-        let len = strlen(cstr.as_ptr());
-        printf(fmt.as_ptr(), cstr.as_ptr(), len);
+    let len = match CString::new(ss) {
+        Ok(cstr) => unsafe { strlen(cstr.as_ptr()) },
+        Err(_) => 0,
+    };
+    return len;
+}
+
+fn test_printf() {
+    use libc::printf;
+    use std::ffi::CString;
+    if let Ok(fmt) = CString::new("using printf(\"%s\")\n") {
+        if let Ok(ss) = CString::new("foo") {
+            // printf(3)
+            unsafe {
+                let _ = printf(fmt.as_ptr(), ss.as_ptr());
+            }
+        }
     }
 }

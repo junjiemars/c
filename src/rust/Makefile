@@ -499,15 +499,14 @@ $(rust_lib_binout): $(rust_lib_cargo)             \
                     $(rust_root)/lib/src/lib.rs
 	$(CARGO) build --lib                          \
     --manifest-path $<                          \
-    -Z unstable-options                         \
     --target-dir $(cargo_target_dir)            \
-    --out-dir $(bin_path)
 	@cp $(cargo_target_dir)/debug/$(rust_lib_rlib) $@
 
 
 
 # libc
 rust_libc_cargo := $(rust_root)/libc/Cargo.toml
+rust_libc_name := $(rust_prefix)_libc$(bin_ext)
 rust_libc_binout := $(bin_path)/$(rust_prefix)_libc$(bin_ext)
 
 rust_libc: $(rust_libc_binout)
@@ -519,13 +518,12 @@ rust_libc_tree: $(rust_libc_cargo)
 rust_libc_test: rust_libc
 	$(rust_libc_binout)
 
-$(rust_libc_binout): $(rust_libc_cargo)             \
+$(rust_libc_binout): $(rust_libc_cargo) \
                      $(rust_root)/libc/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    --target-dir $(cargo_target_dir)            \
-    -Z unstable-options                         \
-    --out-dir $(bin_path)                       \
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_libc_name) $@
 
 
 
