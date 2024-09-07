@@ -625,7 +625,8 @@ $(rust_module_binout): $(rust_module_cargo) \
 
 # unsafe
 rust_unsafe_cargo := $(rust_root)/unsafe/Cargo.toml
-rust_unsafe_binout := $(bin_path)/$(rust_prefix)_unsafe$(bin_ext)
+rust_unsafe_name := $(rust_prefix)_unsafe$(bin_ext)
+rust_unsafe_binout := $(bin_path)/$(rust_unsafe_name)
 
 rust_unsafe: $(rust_unsafe_binout)
 rust_unsafe_doc: $(rust_unsafe_cargo)
@@ -636,13 +637,12 @@ rust_unsafe_test: rust_unsafe
 $(rust_unsafe_cargo):
 	$(CARGO) new --bin --name $(rust_prefix)_unsafe $(rust_root)/unsafe
 
-$(rust_unsafe_binout): $(rust_unsafe_cargo)             \
+$(rust_unsafe_binout): $(rust_unsafe_cargo) \
                        $(rust_root)/unsafe/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    -Z unstable-options                         \
-    --target-dir $(cargo_target_dir)            \
-    --out-dir $(bin_path)
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_unsafe_name) $@
 
 
 
@@ -660,12 +660,14 @@ rust_box_test: rust_box
 $(rust_box_cargo):
 	$(CARGO) new --bin --name $(rust_prefix)_box $(rust_root)/box
 
-$(rust_box_binout): $(rust_box_cargo)             \
+$(rust_box_binout): $(rust_box_cargo) \
                     $(rust_root)/box/src/main.rs
-	$(CARGO) build                                        \
-    --manifest-path $<                                  \
-    --target-dir $(cargo_target_dir)                    \
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
 	&& cp $(cargo_out_dir)/$(rust_box_name) $(bin_path)
+
+
 
 # websrv
 rust_websrv_cargo := $(rust_root)/websrv/Cargo.toml
