@@ -128,6 +128,7 @@ $(rust_attr_binout): $(rust_attr_cargo) \
 		--manifest-path $< \
     --target-dir $(cargo_target_dir) \
 	&& cp $(cargo_out_dir)/$(rust_attr_name) $(bin_path)
+
 
 
 

@@ -10,7 +10,7 @@ fn main() {
     let ss_len = strlen(ss);
     println!("strlen({ss}) = {ss_len} ");
 
-    test_printf();
+    test_printf("printf(\"%s\")\n", ss);
 }
 
 fn getpid() -> i32 {
@@ -32,11 +32,11 @@ fn strlen(ss: &str) -> usize {
     return len;
 }
 
-fn test_printf() {
+fn test_printf(fmt: &str, ss: &str) {
     use libc::printf;
     use std::ffi::CString;
-    if let Ok(fmt) = CString::new("using printf(\"%s\")\n") {
-        if let Ok(ss) = CString::new("foo") {
+    if let Ok(fmt) = CString::new(fmt) {
+        if let Ok(ss) = CString::new(ss) {
             // printf(3)
             unsafe {
                 let _ = printf(fmt.as_ptr(), ss.as_ptr());
