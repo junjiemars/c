@@ -237,6 +237,7 @@ $(rust_opencv_binout): $(rust_opencv_cargo) \
     --target-dir $(cargo_target_dir) \
 	&& cp $(cargo_out_dir)/$(rust_opencv_name) $@
 
+
 
 # owner
 rust_owner_cargo := $(rust_root)/owner/Cargo.toml
@@ -380,11 +381,10 @@ endif
 
 $(rust_gtk_cargo):
 	$(CARGO) new --bin --name $(rust_prefix)_gtk $(rust_root)/gtk
-	$(CARGO) tree --manifest-path $@ --prune gtk4                                 \
+	$(CARGO) tree --manifest-path $@ --prune gtk4 \
     $(CARGO) add gtk4 --manifest-path $@ --rename gtk --features $(has_gtk_ver)
 
-
-$(rust_gtk_binout): $(rust_gtk_cargo)             \
+$(rust_gtk_binout): $(rust_gtk_cargo) \
                     $(rust_root)/gtk/src/main.rs
 	$(CARGO) build \
     --manifest-path $< \
@@ -436,6 +436,8 @@ $(rust_io_binout): $(rust_io_cargo) \
     --manifest-path $< \
     --target-dir $(cargo_target_dir) \
 	&& cp $(cargo_out_dir)/$(rust_io_name)$(bin_ext) $@
+
+
 
 # iter
 rust_iter_cargo := $(rust_root)/iter/Cargo.toml
@@ -530,6 +532,7 @@ $(rust_libc_binout): $(rust_libc_cargo) \
 
 # macro
 rust_macro_cargo := $(rust_root)/macro/Cargo.toml
+rust_macro_name := $(rust_prefix)_macro$(bin_ext)
 rust_macro_binout := $(bin_path)/$(rust_prefix)_macro$(bin_ext)
 
 rust_macro: $(rust_macro_binout)
@@ -541,13 +544,12 @@ rust_macro_test: rust_macro
 $(rust_macro_cargo):
 	$(CARGO) new --bin --name=$(rust_prefix)_macro $(rust_root)/macro
 
-$(rust_macro_binout): $(rust_macro_cargo)             \
+$(rust_macro_binout): $(rust_macro_cargo) \
                       $(rust_root)/macro/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    --target-dir $(cargo_target_dir)            \
-    -Z unstable-options                         \
-    --out-dir $(bin_path)
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_macro_name) $@
 
 
 
@@ -576,6 +578,7 @@ $(rust_mem_binout): $(rust_mem_cargo) \
 
 # min
 rust_min_cargo := $(rust_root)/min/Cargo.toml
+rust_min_name := $(rust_prefix)_min$(bin_ext)
 rust_min_binout := $(bin_path)/$(rust_prefix)_min$(bin_ext)
 rust_min_profile ?= min
 
@@ -587,19 +590,19 @@ rust_min_test: rust_min
 $(rust_min_cargo):
 	$(CARGO) new $(rust_root)/min
 
-$(rust_min_binout): $(rust_min_cargo)             \
+$(rust_min_binout): $(rust_min_cargo) \
                     $(rust_root)/min/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    --profile $(rust_min_profile)               \
-    -Z unstable-options                         \
-    --target-dir $(cargo_target_dir)            \
-    --out-dir $(bin_path)
+	$(CARGO) build \
+    --manifest-path $< \
+    --profile $(rust_min_profile) \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_target_dir)/$(rust_min_profile)/$(rust_min_name) $@
 
 
 
 # module
 rust_module_cargo := $(rust_root)/module/Cargo.toml
+rust_module_name := $(rust_prefix)_module$(bin_ext)
 rust_module_binout := $(bin_path)/$(rust_prefix)_module$(bin_ext)
 
 rust_module: $(rust_module_binout)
@@ -611,14 +614,14 @@ rust_module_test: rust_module
 $(rust_module_cargo):
 	$(CARGO) new --bin --name=$(rust_prefix)_module $(rust_root)/module
 
-$(rust_module_binout): $(rust_module_cargo)             \
+$(rust_module_binout): $(rust_module_cargo) \
                        $(rust_root)/module/src/main.rs
-	$(CARGO) build                                \
-    --manifest-path $<                          \
-    -Z unstable-options                         \
-    --target-dir $(cargo_target_dir)            \
-    --out-dir $(bin_path)
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_module_name) $@
 
+
 
 # unsafe
 rust_unsafe_cargo := $(rust_root)/unsafe/Cargo.toml
@@ -641,6 +644,7 @@ $(rust_unsafe_binout): $(rust_unsafe_cargo)             \
     --target-dir $(cargo_target_dir)            \
     --out-dir $(bin_path)
 
+
 
 # box
 rust_box_cargo := $(rust_root)/box/Cargo.toml

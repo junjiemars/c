@@ -1,3 +1,3 @@
 pub(crate) fn say() {
-    println!("macos");
+    println!("macos says");
 }

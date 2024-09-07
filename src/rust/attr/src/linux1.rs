@@ -1,3 +1,3 @@
 pub(crate) fn say() {
-    println!("linux");
+    println!("linux says");
 }

@@ -15,9 +15,8 @@ fn main() {
 
 fn getpid() -> i32 {
     use libc::getpid;
-    use std::os::raw::c_int;
     // getpid(2)
-    let pid: c_int = unsafe { getpid() };
+    let pid = unsafe { getpid() };
     return pid;
 }
 
@@ -32,7 +31,7 @@ fn strlen(ss: &str) -> usize {
     return len;
 }
 
-fn test_printf(fmt: &str, ss: &str) {
+fn test_printf(fmt: &str, ss: &str) -> i32 {
     use libc::printf;
     use std::ffi::CString;
     if let Ok(fmt) = CString::new(fmt) {
@@ -43,4 +42,5 @@ fn test_printf(fmt: &str, ss: &str) {
             }
         }
     }
+    return 0;
 }

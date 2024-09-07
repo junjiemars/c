@@ -8,6 +8,9 @@ mod linux1;
 #[cfg(target_os = "macos")]
 mod macos1;
 
+#[cfg(target_os = "windows")]
+mod windows1;
+
 #[cfg_attr(target_os = "linux", path = "linux1.rs")]
 #[cfg_attr(target_os = "macos", path = "macos1.rs")]
 #[cfg_attr(target_os = "windows", path = "windows1.rs")]
@@ -32,6 +35,11 @@ fn say() {
     #[cfg(target_os = "macos")]
     {
         macos1::say();
+    }
+
+    #[cfg(target_os = "windows")]
+    {
+        windows1::say();
     }
 
     #[cfg(all(unix, target_pointer_width = "64"))]
