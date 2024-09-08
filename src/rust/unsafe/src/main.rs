@@ -1,4 +1,5 @@
 fn main() {
+    test_null_pointer();
     test_raw_pointer();
     test_box_pointer();
     test_addr_of();
@@ -14,6 +15,18 @@ fn main() {
     //     let v_slice1: &[u32] = slice::from_raw_parts(v_ptr1, v_len1);
     //     assert_eq!(vec1.as_slice(), v_slice1);
     // }
+}
+
+fn test_null_pointer() {
+    let p1: *const i32 = std::ptr::null();
+    assert!(p1.is_null());
+    assert!(p1 as usize == 0);
+    let p2: *mut i32 = std::ptr::null_mut();
+    assert!(p2.is_null());
+    assert!(p2 as usize == 0);
+    let a1 = [1, 2, 3];
+    let p3 = a1.as_ptr();
+    assert!(!p3.is_null());
 }
 
 fn test_raw_pointer() {
