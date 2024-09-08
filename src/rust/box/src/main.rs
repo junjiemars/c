@@ -1,3 +1,7 @@
+//
+// https://doc.rust-lang.org/std/boxed/struct.Box.html
+//
+
 #![allow(unused)]
 
 use crate::List::{Cons, Nil};
@@ -17,7 +21,8 @@ fn boxing() {
     println!("b1 = {}", b1);
 
     let mut b2 = Box::new(0);
-    *b2 = *b2 + 1;
+    *b2 = *b1 + 1;
+    println!("b2 = {b2}");
 
     let a1 = BoxedArray {
         aa: Box::new([1, 2, 3]),
