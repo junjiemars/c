@@ -24,7 +24,7 @@ fn boxing() {
     *b2 = *b1 + 1;
     println!("b2 = {b2}");
 
-    let a1 = BoxedArray {
+    let mut a1 = BoxedArray {
         aa: Box::new([1, 2, 3]),
     };
     println!("a1 = {}", a1);
@@ -113,11 +113,11 @@ struct BoxedArray<T> {
 
 impl<T: fmt::Display> fmt::Display for BoxedArray<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "_[");
+        write!(f, "a[");
         for a in &self.aa[..] {
-            write!(f, "{}", *a);
+            write!(f, "{},", *a);
         }
-        write!(f, "]_")
+        write!(f, "]")
     }
 }
 
