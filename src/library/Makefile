@@ -2,7 +2,6 @@
 # ./configure --has-library
 #
 
-
 library: geo                                    \
          math_static                            \
          math_shared
@@ -11,10 +10,10 @@ library_test: geo_test                          \
               math_static_test									\
               math_shared_test
 
+
 
 # env
 INC += -I$(library_root)
-
 
 # geo
 geo_arout := $(lib_path)/geo$(ar_ext)
@@ -44,6 +43,7 @@ $(geo_libout): $(library_root)/geo/geo.c $(geo_h)
 $(geo_h): $(library_root)/geo/geo.h
 	cp $< $(inc_path)
 
+
 
 # math
 ifeq (msvc, $(CC_NAME))
@@ -60,6 +60,8 @@ ifeq (Darwin, $(NM_SYSTEM))
 LD_LIBRARY_PATH := DYLD_LIBRARY_PATH
 LDLIBS := $(nm_lib_opt)geo
 endif
+
+
 
 math_static_binout := $(bin_path)/math_static$(bin_ext)
 math_shared_binout := $(bin_path)/math_shared$(bin_ext)
@@ -84,6 +86,7 @@ $(math_static_binout): $(library_root)/math/math1.c $(geo_arout)
 $(math_shared_binout): $(library_root)/math/math1.c $(geo_libout)
 	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $< $(bin_out)$@ $(LDFLAGS) $(LDLIBS)
 
+
 
 .PHONY: geo geo_test geo_list_ar                \
         math_static math_static_test            \
