@@ -4,18 +4,23 @@ int
 main (int argc, char *argv[])
 {
   pid_t pid;
-  int status;
-  int signal = 0;
+  int stated;
+  int signaled = 0;
+  int sleeped = 0;
 
   if (argc < 2)
     {
-      fprintf (stderr, "usage: %s <status> [signal]\n", argv[0]);
+      fprintf (stderr, "usage: %s <stated> [signaled] [sleeped]\n", argv[0]);
       exit (EXIT_FAILURE);
     }
-  sscanf (argv[1], "%x", &status);
+  sscanf (argv[1], "%x", &stated);
   if (argc > 2)
     {
-      signal = atoi (argv[2]);
+      signaled = atoi (argv[2]);
+    }
+  if (argc > 3)
+    {
+      sscanf (argv[3], "%d", &sleeped);
     }
 
   printf ("parent pid: %d\n", getpid ());
@@ -30,41 +35,45 @@ main (int argc, char *argv[])
       fprintf (stderr, "child pid: %d\n", getpid ());
       /* note: no newline */
       printf ("child output ...");
-      if (signal > 0)
+      if (signaled > 0)
         {
           pause ();
         }
-      _exit (status);
+      _exit (stated);
     }
 
-  if (signal > 0)
+  if (signaled > 0)
     {
-      kill (pid, signal);
+      if (sleeped > 0)
+        {
+          sleep (sleeped);
+        }
+      kill (pid, signaled);
     }
 
-  if (waitpid (pid, &status, 0) < 0)
+  if (waitpid (pid, &stated, 0) < 0)
     {
       perror (NULL);
       exit (EXIT_FAILURE);
     }
-  printf ("waitpid get state: 0x%0x\n", status);
+  printf ("waitpid get stated: 0x%x\n", stated);
 
-  if (WIFEXITED (status))
+  if (WIFEXITED (stated))
     {
-      printf ("child normal exit(0x%0x)\n", WEXITSTATUS (status));
+      printf ("child normal exit(0x%x)\n", WEXITSTATUS (stated));
     }
-  else if (WIFSIGNALED (status))
+  else if (WIFSIGNALED (stated))
     {
-      printf ("child signed by %d, core dump: %d\n", WTERMSIG (status),
-              WCOREDUMP (status));
+      printf ("child signed by %d, core dump: %d\n", WTERMSIG (stated),
+              WCOREDUMP (stated));
     }
-  else if (WIFSTOPPED (status))
+  else if (WIFSTOPPED (stated))
     {
-      printf ("child stopped by %d\n", WSTOPSIG (status));
+      printf ("child stopped by %d\n", WSTOPSIG (stated));
     }
-  else if (WIFCONTINUED (status))
+  else if (WIFCONTINUED (stated))
     {
-      printf ("child continued by %d\n", WSTOPSIG (status));
+      printf ("child continued by %d\n", WSTOPSIG (stated));
     }
 
   exit (EXIT_SUCCESS);

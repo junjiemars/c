@@ -1,9 +1,12 @@
 #include "_process_.h"
+#include <stdlib.h>
+#include <sys/wait.h>
 
 int
 main (void)
 {
   pid_t pid;
+  int state;
   struct rusage ru;
 
   if ((pid = fork ()) == -1)
@@ -19,24 +22,34 @@ main (void)
           n += 1;
         }
       printf ("child: pid=%d, n=%d\n", getpid (), n);
-      exit (EXIT_SUCCESS);
+      exit (0x11223344);
     }
 
-  if (wait4 (pid, NULL, 0, &ru) == -1)
+  if (wait4 (pid, &state, 0, &ru) == -1)
     {
-      perror (NULL);
+      perror (0);
       exit (EXIT_FAILURE);
     }
+  if (WIFEXITED (state))
+    {
+      state = WEXITSTATUS (state);
+    }
+  else if (WIFSIGNALED (state))
+    {
+      state = WTERMSIG (state);
+    }
 
-  printf ("rusage:\n"
+  printf ("state: 0x%x\n"
+          "rusage:\n"
           "{\n"
           "  ru_utime: { tv_sec: %ld, tv_usec: %ld },\n"
           "  ru_stime: { tv_sec: %ld, tv_usec: %ld },\n"
           "  ru_maxrss: %ld,\n"
           "  ru_nsignal: %ld\n"
           "}\n",
-          ru.ru_utime.tv_sec, (long)ru.ru_utime.tv_usec, ru.ru_stime.tv_sec,
-          (long)ru.ru_stime.tv_usec, ru.ru_maxrss, ru.ru_nsignals);
+          state, ru.ru_utime.tv_sec, (long)ru.ru_utime.tv_usec,
+          ru.ru_stime.tv_sec, (long)ru.ru_stime.tv_usec, ru.ru_maxrss,
+          ru.ru_nsignals);
 
   exit (EXIT_SUCCESS);
 }

@@ -23,6 +23,7 @@ main (void)
       exit (EXIT_SUCCESS);
     }
 
+  /* interrupt by SIGCHLD */
   pause ();
 
   exit (EXIT_SUCCESS);

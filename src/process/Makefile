@@ -218,10 +218,9 @@ process_exit_at_binout := $(bin_path)/$(process_prefix)_exit_at$(bin_ext)
 process_exit_state_binout := $(bin_path)/$(process_prefix)_exit_state$(bin_ext)
 process_exit_file := $(tmp_path)/$(process_prefix)_exit.file
 
-
-process_exit: $(process_exit_at_binout)         \
+process_exit: $(process_exit_at_binout) \
               $(process_exit_state_binout)
-process_exit_test: process_exit_at_test         \
+process_exit_test: process_exit_at_test \
                    process_exit_state_test
 
 process_exit_at_test: $(process_exit_at_binout)
@@ -229,7 +228,11 @@ process_exit_at_test: $(process_exit_at_binout)
 
 process_exit_state_test: $(process_exit_state_binout)
 	$< 0x11223344
+	$< 0x11223344 0 1
 	$< 0x11223344 2
+	$< 0x11223344 3 1
+
+
 
 $(process_exit_at_binout): $(process_root)/exit/at1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -586,10 +589,10 @@ $(process_tty_pass_binout): $(process_root)/tty/p1.c
 process_wait_4_binout := $(bin_path)/$(process_prefix)_wait_4$(bin_ext)
 process_wait_sig_binout := $(bin_path)/$(process_prefix)_wait_sig$(bin_ext)
 
-process_wait: $(process_wait_4_binout)          \
+process_wait: $(process_wait_4_binout) \
               $(process_wait_sig_binout)
 
-process_wait_test: process_wait_4_test          \
+process_wait_test: process_wait_4_test \
                    process_wait_sig_test
 
 process_wait_4_test: $(process_wait_4_binout)
