@@ -281,9 +281,9 @@ process_id_get_binout := $(bin_path)/$(process_prefix)_id_get$(bin_ext)
 process_id_set_binout := $(bin_path)/$(process_prefix)_id_set$(bin_ext)
 process_id_file := $(tmp_path)/$(process_prefix)_id.file
 
-process_id: $(process_id_get_binout)            \
+process_id: $(process_id_get_binout) \
             $(process_id_set_binout)
-process_id_test: process_id_get_test            \
+process_id_test: process_id_get_test \
                  process_id_set_test
 
 process_id_get_test: $(process_id_get_binout)
