@@ -28,6 +28,7 @@ rust: rust_attr                                 \
       rust_opencv                               \
       rust_owner                                \
       rust_rest                                 \
+      rust_string                               \
       rust_unsafe                               \
       rust_websrv                               \
       rust_ws
@@ -55,6 +56,7 @@ rust_test: rust_attr_test                       \
            rust_opencv_test                     \
            rust_owner_test                      \
            rust_rest_test                       \
+           rust_string_test                     \
            rust_unsafe_test                     \
            rust_websrv_test                     \
            rust_ws_test
@@ -132,25 +134,28 @@ $(rust_attr_binout): $(rust_attr_cargo) \
 
 
 
-# hi
-rust_hi_cargo := $(rust_root)/hi/Cargo.toml
-rust_hi_name := $(rust_prefix)_hi$(bin_ext)
-rust_hi_binout := $(bin_path)/$(rust_hi_name)
+# box
+rust_box_cargo := $(rust_root)/box/Cargo.toml
+rust_box_name := $(rust_prefix)_box$(bin_ext)
+rust_box_binout := $(bin_path)/$(rust_box_name)
 
-rust_hi: $(rust_hi_binout)
-rust_hi_test: rust_hi
-	size $(rust_hi_binout)
-	$(rust_hi_binout)
+rust_box: $(rust_box_binout)
+rust_box_doc: $(rust_box_cargo)
+	-$(CARGO) doc --open --manifest-path $<
+rust_box_test: rust_box
+	$(rust_box_binout)
 
-$(rust_hi_cargo):
-	$(CARGO) new --bin --vcs=none --name=$(rust_hi_name) $(rust_root)/hi
+$(rust_box_cargo):
+	$(CARGO) new --bin --name $(rust_prefix)_box $(rust_root)/box
 
-$(rust_hi_binout): $(rust_hi_cargo) \
-                   $(rust_root)/hi/src/main.rs
-	$(CARGO) build $(rust_build_opt) \
-		--manifest-path $< \
+$(rust_box_binout): $(rust_box_cargo) \
+                    $(rust_root)/box/src/main.rs
+	$(CARGO) build \
+    --manifest-path $< \
     --target-dir $(cargo_target_dir) \
-	&& cp $(cargo_out_dir)/$(rust_hi_name) $(bin_path)
+	&& cp $(cargo_out_dir)/$(rust_box_name) $(bin_path)
+
+
 
 # eframe
 rust_eframe_cargo := $(rust_root)/eframe/Cargo.toml
@@ -195,6 +200,29 @@ $(rust_enum_binout): $(rust_enum_cargo) \
 
 
 
+# error
+rust_error_cargo := $(rust_root)/error/Cargo.toml
+rust_error_name := $(rust_prefix)_error$(bin_ext)
+rust_error_binout := $(bin_path)/$(rust_error_name)
+
+rust_error: $(rust_error_binout)
+rust_error_doc: $(rust_error_cargo)
+	-$(CARGO) doc --open --manifest-path $<
+rust_error_test: rust_error
+	-$(shell RUST_BACKTRACE=1 $(rust_error_binout))
+
+$(rust_error_cargo):
+	$(CARGO) new --bin --name $(rust_prefix)_error $(rust_root)/error
+
+$(rust_error_binout): $(rust_error_cargo) \
+                      $(rust_root)/error/src/main.rs
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_error_name) $@
+
+
+
 # game
 rust_game_cargo := $(rust_root)/game/cargo.toml
 rust_game_name := $(rust_prefix)_game$(bin_ext)
@@ -212,75 +240,6 @@ $(rust_game_binout): $(rust_game_cargo) \
     --manifest-path $< \
     --target-dir $(cargo_target_dir) \
 	&& cp $(cargo_out_dir)/$(rust_game_name) $@
-
-
-
-# opencv
-rust_opencv_cargo := $(rust_root)/opencv/Cargo.toml
-rust_opencv_name := $(rust_prefix)_opencv$(bin_ext)
-rust_opencv_binout := $(bin_path)/$(rust_opencv_name)
-
-rust_opencv: $(rust_opencv_binout)
-rust_opencv_doc: $(rust_opencv_cargo)
-	-$(CARGO) doc --open --manifest-path $<
-rust_opencv_test: rust_opencv
-	$(rust_opencv_binout)
-
-$(rust_opencv_cargo):
-	$(CARGO) new --bin --name $(rust_prefix)_opencv $(rust_root)/opencv
-	cd $(rust_root)/opencv && $(CARGO) add opencv
-
-$(rust_opencv_binout): $(rust_opencv_cargo) \
-                       $(rust_root)/opencv/src/main.rs
-	$(CARGO) build \
-    --manifest-path $< \
-    --target-dir $(cargo_target_dir) \
-	&& cp $(cargo_out_dir)/$(rust_opencv_name) $@
-
-
-
-# owner
-rust_owner_cargo := $(rust_root)/owner/Cargo.toml
-rust_owner_name := $(rust_prefix)_owner$(bin_ext)
-rust_owner_binout := $(bin_path)/$(rust_owner_name)
-
-rust_owner: $(rust_owner_binout)
-rust_owner_doc: $(rust_owner_cargo)
-	-$(CARGO) doc --open --manifest-path $<
-rust_owner_test: rust_owner
-	$(rust_owner_binout)
-
-$(rust_owner_cargo):
-	$(CARGO) new --bin --name $(rust_prefix)_owner $(rust_root)/owner
-
-$(rust_owner_binout): $(rust_owner_cargo) \
-                      $(rust_root)/owner/src/main.rs
-	$(CARGO) build \
-    --manifest-path $< \
-    --target-dir $(cargo_target_dir) \
-	&& cp $(cargo_out_dir)/$(rust_owner_name) $@
-
-
-
-# rest
-rust_rest_cargo := $(rust_root)/rest/Cargo.toml
-rust_rest_name := $(rust_prefix)_rest$(bin_ext)
-rust_rest_binout := $(bin_path)/$(rust_rest_name)
-# https://github.com/seanmonstar/warp/tree/master/examples
-
-rust_rest: $(rust_rest_binout)
-rust_rest_test: rust_rest
-	$(rust_rest_binout)
-
-$(rust_rest_cargo):
-	$(CARGO) new --bin --vcs=none --name $(rust_prefix)_rest $(rust_root)/rest
-	$(CARGO) add --manifest-path=$@ serde serde_json tokio warp uuid
-
-$(rust_rest_binout): $(rust_rest_cargo)
-	$(CARGO) build \
-		--manifest-path $< \
-    --target-dir $(cargo_target_dir) \
-  && cp $(cargo_out_dir)/$(rust_rest_name) $@
 
 
 
@@ -304,29 +263,6 @@ $(rust_generic_binout): $(rust_generic_cargo) \
     --manifest-path $< \
     --target-dir $(cargo_target_dir) \
 	&& cp $(cargo_out_dir)/$(rust_generic_name) $@
-
-
-
-# error
-rust_error_cargo := $(rust_root)/error/Cargo.toml
-rust_error_name := $(rust_prefix)_error$(bin_ext)
-rust_error_binout := $(bin_path)/$(rust_error_name)
-
-rust_error: $(rust_error_binout)
-rust_error_doc: $(rust_error_cargo)
-	-$(CARGO) doc --open --manifest-path $<
-rust_error_test: rust_error
-	-$(shell RUST_BACKTRACE=1 $(rust_error_binout))
-
-$(rust_error_cargo):
-	$(CARGO) new --bin --name $(rust_prefix)_error $(rust_root)/error
-
-$(rust_error_binout): $(rust_error_cargo) \
-                      $(rust_root)/error/src/main.rs
-	$(CARGO) build \
-    --manifest-path $< \
-    --target-dir $(cargo_target_dir) \
-	&& cp $(cargo_out_dir)/$(rust_error_name) $@
 
 
 
@@ -360,6 +296,28 @@ $(rust_grep_binout): $(rust_grep_cargo) \
     --manifest-path $< \
     --target-dir $(cargo_target_dir) \
 	&& cp $(cargo_out_dir)/$(rust_grep_name) $@
+
+
+
+# hi
+rust_hi_cargo := $(rust_root)/hi/Cargo.toml
+rust_hi_name := $(rust_prefix)_hi$(bin_ext)
+rust_hi_binout := $(bin_path)/$(rust_hi_name)
+
+rust_hi: $(rust_hi_binout)
+rust_hi_test: rust_hi
+	size $(rust_hi_binout)
+	$(rust_hi_binout)
+
+$(rust_hi_cargo):
+	$(CARGO) new --bin --vcs=none --name=$(rust_hi_name) $(rust_root)/hi
+
+$(rust_hi_binout): $(rust_hi_cargo) \
+                   $(rust_root)/hi/src/main.rs
+	$(CARGO) build $(rust_build_opt) \
+		--manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_hi_name) $(bin_path)
 
 
 
@@ -623,6 +581,97 @@ $(rust_module_binout): $(rust_module_cargo) \
 
 
 
+# opencv
+rust_opencv_cargo := $(rust_root)/opencv/Cargo.toml
+rust_opencv_name := $(rust_prefix)_opencv$(bin_ext)
+rust_opencv_binout := $(bin_path)/$(rust_opencv_name)
+
+rust_opencv: $(rust_opencv_binout)
+rust_opencv_doc: $(rust_opencv_cargo)
+	-$(CARGO) doc --open --manifest-path $<
+rust_opencv_test: rust_opencv
+	$(rust_opencv_binout)
+
+$(rust_opencv_cargo):
+	$(CARGO) new --bin --name $(rust_prefix)_opencv $(rust_root)/opencv
+	cd $(rust_root)/opencv && $(CARGO) add opencv
+
+$(rust_opencv_binout): $(rust_opencv_cargo) \
+                       $(rust_root)/opencv/src/main.rs
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_opencv_name) $@
+
+
+
+# owner
+rust_owner_cargo := $(rust_root)/owner/Cargo.toml
+rust_owner_name := $(rust_prefix)_owner$(bin_ext)
+rust_owner_binout := $(bin_path)/$(rust_owner_name)
+
+rust_owner: $(rust_owner_binout)
+rust_owner_doc: $(rust_owner_cargo)
+	-$(CARGO) doc --open --manifest-path $<
+rust_owner_test: rust_owner
+	$(rust_owner_binout)
+
+$(rust_owner_cargo):
+	$(CARGO) new --bin --name $(rust_prefix)_owner $(rust_root)/owner
+
+$(rust_owner_binout): $(rust_owner_cargo) \
+                      $(rust_root)/owner/src/main.rs
+	$(CARGO) build \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+	&& cp $(cargo_out_dir)/$(rust_owner_name) $@
+
+
+
+# rest
+rust_rest_cargo := $(rust_root)/rest/Cargo.toml
+rust_rest_name := $(rust_prefix)_rest$(bin_ext)
+rust_rest_binout := $(bin_path)/$(rust_rest_name)
+# https://github.com/seanmonstar/warp/tree/master/examples
+
+rust_rest: $(rust_rest_binout)
+rust_rest_test: rust_rest
+	$(rust_rest_binout)
+
+$(rust_rest_cargo):
+	$(CARGO) new --bin --vcs=none --name $(rust_prefix)_rest $(rust_root)/rest
+	$(CARGO) add --manifest-path=$@ serde serde_json tokio warp uuid
+
+$(rust_rest_binout): $(rust_rest_cargo)
+	$(CARGO) build \
+		--manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+  && cp $(cargo_out_dir)/$(rust_rest_name) $@
+
+
+
+# string
+rust_string_cargo := $(rust_root)/string/Cargo.toml
+rust_string_name := $(rust_prefix)_string$(bin_ext)
+rust_string_binout := $(bin_path)/$(rust_string_name)
+# https://github.com/seanmonstar/warp/tree/master/examples
+
+rust_string: $(rust_string_binout)
+rust_string_test: rust_string
+	$(rust_string_binout)
+
+$(rust_string_cargo):
+	$(CARGO) new --bin --vcs=none --name $(rust_prefix)_string $(rust_root)/string
+	$(CARGO) add --manifest-path=$@
+
+$(rust_string_binout): $(rust_string_cargo)
+	$(CARGO) build \
+		--manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+  && cp $(cargo_out_dir)/$(rust_string_name) $@
+
+
+
 # unsafe
 rust_unsafe_cargo := $(rust_root)/unsafe/Cargo.toml
 rust_unsafe_name := $(rust_prefix)_unsafe$(bin_ext)
@@ -643,29 +692,6 @@ $(rust_unsafe_binout): $(rust_unsafe_cargo) \
     --manifest-path $< \
     --target-dir $(cargo_target_dir) \
 	&& cp $(cargo_out_dir)/$(rust_unsafe_name) $@
-
-
-
-# box
-rust_box_cargo := $(rust_root)/box/Cargo.toml
-rust_box_name := $(rust_prefix)_box$(bin_ext)
-rust_box_binout := $(bin_path)/$(rust_box_name)
-
-rust_box: $(rust_box_binout)
-rust_box_doc: $(rust_box_cargo)
-	-$(CARGO) doc --open --manifest-path $<
-rust_box_test: rust_box
-	$(rust_box_binout)
-
-$(rust_box_cargo):
-	$(CARGO) new --bin --name $(rust_prefix)_box $(rust_root)/box
-
-$(rust_box_binout): $(rust_box_cargo) \
-                    $(rust_root)/box/src/main.rs
-	$(CARGO) build \
-    --manifest-path $< \
-    --target-dir $(cargo_target_dir) \
-	&& cp $(cargo_out_dir)/$(rust_box_name) $(bin_path)
 
 
 
@@ -694,6 +720,7 @@ $(rust_websrv_binout): $(rust_websrv_cargo)             \
     --out-dir $(bin_path)
 	@cp $(rust_websrv_html) $(bin_path)/
 
+
 
 # ws : workspace
 rust_ws_cargo := $(rust_root)/ws/Cargo.toml
