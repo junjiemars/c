@@ -1,3 +1,7 @@
+use std::slice;
+use std::str;
+// mod umbra;
+
 fn main() {
     test_str_literal();
     test_byte_string();
@@ -5,7 +9,20 @@ fn main() {
 
 fn test_str_literal() {
     let escape1 = "|\x61\x62\u{211d}\x63|";
-    println!("{escape1}");
+    println!(
+        "{escape1}: len={}, chars={:?}, count={}",
+        escape1.len(),
+        escape1.chars(),
+        escape1.chars().count()
+    );
+    assert_eq!(escape1.chars().count(), 6);
+    let p1 = escape1.as_ptr();
+    unsafe {
+        let a1 = slice::from_raw_parts(p1, escape1.len());
+        if let Ok(s2) = str::from_utf8(a1) {
+            assert_eq!(s2, escape1);
+        }
+    }
 
     let long1 = "long long ago, \
                    there is a mountain,
@@ -22,13 +39,12 @@ and a temple on it.";
 }
 
 fn test_byte_string() {
-    use std::str;
     let b1 = b"abc";
     assert!(b1.len() == 3 && b1[0] == 0x61u8);
     println!("{:?}", b1);
 
     if let Ok(s1) = str::from_utf8(b1) {
-        assert!(s1 == "abc");
+        assert!(s1 == "abc" && b1 == s1.as_bytes());
     }
 
     let quote1 = br###"ab|"##|c"###;
@@ -36,9 +52,12 @@ fn test_byte_string() {
         assert!(quote1[0] == 0x61 && quote1.len() == s2.len())
     }
 
-    let b2 = b"\x4e\x2d";
+    let b2 = b"\xe4\xb8\xad";
     match str::from_utf8(b2) {
-        Ok(s) => println!("{s}"),
-        Err(e) => println!("error: {:?}", e)
+        Ok(s) => {
+            let s1 = String::from("中");
+            assert_eq!(s1, s)
+        }
+        Err(e) => println!("error: {:?}", e),
     }
 }
