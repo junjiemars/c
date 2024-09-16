@@ -7,6 +7,7 @@
 
 rust: rust_attr                                 \
       rust_box                                  \
+      rust_core                                 \
       rust_eframe                               \
       rust_enum                                 \
       rust_error                                \
@@ -35,6 +36,7 @@ rust: rust_attr                                 \
 
 rust_test: rust_attr_test                       \
            rust_box_test                        \
+           rust_core_test                       \
            rust_eframe_test                     \
            rust_enum_test                       \
            rust_error_test                      \
@@ -154,6 +156,26 @@ $(rust_box_binout): $(rust_box_cargo) \
     --manifest-path $< \
     --target-dir $(cargo_target_dir) \
 	&& cp $(cargo_out_dir)/$(rust_box_name) $(bin_path)
+
+
+
+# core
+rust_core_cargo := $(rust_root)/core/Cargo.toml
+rust_core_name := $(rust_prefix)_core$(bin_ext)
+rust_core_binout := $(bin_path)/$(rust_core_name)
+
+rust_core: $(rust_core_binout)
+rust_core_test: rust_core
+	$(rust_core_binout)
+
+$(rust_core_cargo):
+	$(CARGO) new --bin --vcs=none --name $(rust_core_name) $(rust_root)/core
+
+$(rust_core_binout): $(rust_core_cargo)
+	$(CARGO) build $(rust_build_opt) \
+    --manifest-path $< \
+    --target-dir $(cargo_target_dir) \
+		&& cp $(cargo_out_dir)/$(rust_core_name) $@
 
 
 

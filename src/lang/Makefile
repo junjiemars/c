@@ -708,6 +708,8 @@ $(lang_stor_s_objout): $(lang_root)/storage/s.c
 $(lang_stor_extern_objout): $(lang_root)/storage/extern.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
+
+
 # string
 lang_string_basic_binout := $(bin_path)/$(lang_prefix)_string_basic$(bin_ext)
 lang_string_n_binout := $(bin_path)/$(lang_prefix)_string_n$(bin_ext)
@@ -718,6 +720,7 @@ lang_string_cat_binout := $(bin_path)/$(lang_prefix)_string_cat$(bin_ext)
 lang_string_chr_binout := $(bin_path)/$(lang_prefix)_string_chr$(bin_ext)
 lang_string_pbrk_binout := $(bin_path)/$(lang_prefix)_string_pbrk$(bin_ext)
 lang_string_spn_binout := $(bin_path)/$(lang_prefix)_string_spn$(bin_ext)
+lang_string_bcmp_binout := $(bin_path)/$(lang_prefix)_string_bcmp$(bin_ext)
 
 lang_string: lang_string_basic                  \
              lang_string_n                      \
@@ -727,7 +730,8 @@ lang_string: lang_string_basic                  \
              lang_string_cat                    \
              lang_string_chr                    \
              lang_string_pbrk                   \
-             lang_string_spn
+             lang_string_spn                    \
+             lang_string_bcmp
 
 lang_string_test: lang_string_basic_test        \
                   lang_string_n_test            \
@@ -737,7 +741,8 @@ lang_string_test: lang_string_basic_test        \
                   lang_string_cat_test          \
                   lang_string_chr_test          \
                   lang_string_pbrk_test         \
-                  lang_string_spn_test
+                  lang_string_spn_test          \
+                  lang_string_bcmp_test
 
 lang_string_basic: $(lang_string_basic_binout)
 lang_string_basic_test: lang_string_basic
@@ -787,6 +792,10 @@ lang_string_spn_test: lang_string_spn
 	$(lang_string_spn_binout) "the quick brown fox jumps over the lazy dog" "fthe q"
 	$(lang_string_spn_binout) "the quick brown fox jumps over the lazy dog" "fthe x"
 
+lang_string_bcmp: $(lang_string_bcmp_binout)
+lang_string_bcmp_test: lang_string_bcmp
+	$(lang_string_bcmp_binout)
+
 $(lang_string_basic_binout): $(lang_root)/string/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
@@ -813,6 +822,11 @@ $(lang_string_pbrk_binout): $(lang_root)/string/pbrk.c
 
 $(lang_string_spn_binout): $(lang_root)/string/spn.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(lang_string_bcmp_binout): $(lang_root)/string/bcmp1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 
 # struct
 lang_struct_binout := $(bin_path)/$(lang_prefix)_struct$(bin_ext)
