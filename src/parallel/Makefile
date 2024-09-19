@@ -28,6 +28,8 @@ ifeq (1, $(_MEMORY_))
   endif # end of has_sanitize
 endif # end of _MEMORY_
 
+
+
 
 # openmp
 parallel_openmp_basic_binout := $(bin_path)/$(parallel_prefix)_openmp_basic$(bin_ext)
@@ -59,6 +61,8 @@ parallel_openmp_for_test: parallel_openmp_for
 
 $(parallel_openmp_for_binout): $(parallel_root)/openmp/for.c
 	$(CC) $(CFLAGS) $(INC) $(nm_openmp_opt) $^ $(bin_out)$@
+
+
 
 # pthread
 parallel_pthread_basic_binout := $(bin_path)/$(parallel_prefix)_pthread_basic$(bin_ext)
@@ -161,6 +165,8 @@ $(parallel_pthread_wait_binout): $(parallel_root)/pthread/wait.c
 $(parallel_pthread_once_binout): $(parallel_root)/pthread/once.c
 	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
 
+
+
 # atomic
 parallel_atomic_bone_binout := $(bin_path)/$(parallel_prefix)_atomic_bone$(bin_ext)
 
@@ -170,5 +176,7 @@ parallel_atomic_test: parallel_atomic
 
 $(parallel_atomic_bone_binout): $(parallel_root)/atomic/b1.c
 	$(CC) $(CPPLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 
 # eof

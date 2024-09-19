@@ -3,6 +3,9 @@
 
 
 #include <nustd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
 
 
 #endif /* end of _PARALLEL_H_ */
