@@ -1,3 +1,4 @@
+# -*- mode:makefile-gmake -*-
 #
 # ./configure --without-debug --has-parallel
 #
@@ -169,13 +170,25 @@ $(parallel_pthread_once_binout): $(parallel_root)/pthread/once.c
 
 # atomic
 parallel_atomic_bone_binout := $(bin_path)/$(parallel_prefix)_atomic_bone$(bin_ext)
+parallel_atomic_counter_binout := $(bin_path)/$(parallel_prefix)_atomic_counter$(bin_ext)
 
 parallel_atomic: $(parallel_atomic_bone_binout)
-parallel_atomic_test: parallel_atomic
+parallel_atomic_test: parallel_atomic_bone_test
+
+parallel_atomic_bone_test: $(parallel_atomic_bone_binout)
 	$(parallel_atomic_bone_binout)
+
 
 $(parallel_atomic_bone_binout): $(parallel_root)/atomic/b1.c
 	$(CC) $(CPPLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+ifeq ($(has_pthread),YES)
+parallel_atomic_counter_test: $(parallel_atomic_counter_binout)
+	$(parallel_atomic_counter_binout) 4
+
+$(parallel_atomic_counter_binout): $(parallel_root)/atomic/a1.c
+	$(CC) $(CPPLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+endif
 
 
 
