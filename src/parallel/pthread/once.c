@@ -20,7 +20,8 @@ main (void)
           perror (NULL);
         }
     }
-  assert (count == 1 && "init just only once");
+  assert (count == 1
+          && "it is guaranteed init_routine() has completed and just once");
 
   return 0;
 }
@@ -29,8 +30,6 @@ void
 init_routine (void)
 {
   pthread_t tid;
-  ++count;
-
   tid = pthread_self ();
-  fprintf (stderr, "#tid = %p, count = %i\n", &tid, count);
+  fprintf (stderr, "#tid = %p, count = %i\n", &tid, ++count);
 }

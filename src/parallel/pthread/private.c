@@ -12,7 +12,7 @@ typedef struct thread_state_s
 static pthread_key_t thread_key;
 
 static void *roll (void *);
-static void destructor (void *);
+static void drop (void *);
 
 int
 main (void)
@@ -31,7 +31,7 @@ main (void)
     }
 
   /* create key */
-  rc = pthread_key_create (&thread_key, destructor);
+  rc = pthread_key_create (&thread_key, drop);
   if (rc)
     {
       perror ("!panic, pthread_key_create");
@@ -86,7 +86,7 @@ roll (void *arg)
 }
 
 void
-destructor (void *arg)
+drop (void *arg)
 {
   thread_state_s *state = (thread_state_s *)arg;
   fprintf (stderr, "#%02li, destructor\n", state->sn);
