@@ -1,101 +1,99 @@
-#include <_parallel_.h>
-#include <stdio.h>
+#include "_parallel_.h"
 #include <pthread.h>
-#include <stdlib.h>
 
 #define N_THREAD 4
 
 typedef struct thread_state_s
 {
-  long      sn;
+  long sn;
   pthread_t tid;
 } thread_state_t;
 
-static int              opt_has_mutex = 0;
-static int              race_counter  = 0;
-static pthread_mutex_t  mutex;
+static int opt_has_mutex = 0;
+static int race_counter = 0;
+static pthread_mutex_t mutex;
 
-void *race(void *arg);
-
-void *
-race(void *arg)
-{
-  int             rc;
-  thread_state_t *state = (thread_state_t *) arg;
-
-  if (opt_has_mutex)
-    {
-      rc = pthread_mutex_lock(&mutex);
-      if (rc)
-        {
-          perror("!panic, pthread_mutex_lock");
-        }
-    }
-
-  ++race_counter;
-  sleep(1);
-
-  fprintf(stderr, "> #%02li, tid=0x%016zx, counter=%02i\n",
-          state->sn, (long) state->tid, race_counter);
-
-  if (opt_has_mutex)
-    {
-      rc = pthread_mutex_unlock(&mutex);
-      if (rc)
-        {
-          perror("!panic, pthread_mutex_unlock");
-        }
-    }
-
-  return arg;
-}
+static void *race (void *arg);
 
 int
-main(int argc, char *argv[])
+main (int argc, char *argv[])
 {
-  thread_state_t  states[N_THREAD];
-  int             rc;
+  int rc;
+  thread_state_t states[N_THREAD];
 
   if (argc > 1)
     {
-      opt_has_mutex = atoi(argv[1]);
+      opt_has_mutex = atoi (argv[1]);
     }
 
   /* init mutex */
-  rc = pthread_mutex_init(&mutex, 0);
+  rc = pthread_mutex_init (&mutex, 0);
   if (rc)
     {
-      perror("!panic, pthread_mutex_init");
+      perror ("!panic, pthread_mutex_init");
       return 1;
     }
 
   /* create threads */
   for (long i = 0; i < N_THREAD; i++)
     {
-      states[i].sn = i+1;
-      rc = pthread_create(&states[i].tid, 0, race, &states[i]);
+      states[i].sn = i + 1;
+      rc = pthread_create (&states[i].tid, 0, race, &states[i]);
       if (rc)
         {
-          perror("!panic, pthread_create");
-          return 1;
+          perror ("!panic, pthread_create");
+          goto clean_exit;
         }
     }
 
   /* join threads */
   for (long i = 0; i < N_THREAD; i++)
     {
-      rc = pthread_join(states[i].tid, 0);
+      rc = pthread_join (states[i].tid, 0);
       if (rc)
         {
-          perror("!panic, pthread_join");
+          perror ("!panic, pthread_join");
         }
     }
 
-  rc = pthread_mutex_destroy(&mutex);
-  if (rc)
+clean_exit:
+  if (pthread_mutex_destroy (&mutex) < 0)
     {
-      perror("!panic, pthread_mutex_destroy");
+      perror ("!panic, pthread_mutex_destroy");
     }
 
-  return 0;
+  return rc;
+}
+
+void *
+race (void *arg)
+{
+  int rc;
+  thread_state_t *state = (thread_state_t *)arg;
+
+  if (opt_has_mutex)
+    {
+      rc = pthread_mutex_lock (&mutex);
+      if (rc)
+        {
+          perror ("!panic, pthread_mutex_lock");
+        }
+    }
+
+  ++race_counter;
+  sleep (1);
+
+  fprintf (stderr, "> #%02li, tid=0x%016zx, counter=%02i\n", state->sn,
+           (long)state->tid, race_counter);
+
+  if (opt_has_mutex)
+    {
+      rc = pthread_mutex_unlock (&mutex);
+      if (rc)
+        {
+          perror ("!panic, pthread_mutex_unlock");
+        }
+    }
+
+  return arg;
 }

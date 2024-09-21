@@ -1,7 +1,5 @@
-#include <_parallel_.h>
-#include <stdio.h>
+#include "_parallel_.h"
 #include <pthread.h>
-#include <stdlib.h>
 
 #define N_THREAD 4
 
@@ -13,28 +11,11 @@ typedef struct thread_state_s
 
 static pthread_key_t thread_key;
 
-void *roll(void *);
-void destructor(void *);
-
-void *
-roll(void *arg)
-{
-  thread_state_s *state = (thread_state_s *) arg;
-  fprintf(stderr, "#%02li\n", state->sn);
-  sleep(1);
-  return arg;
-}
-
-void
-destructor(void *arg)
-{
-  thread_state_s *state = (thread_state_s *) arg;
-  fprintf(stderr, "#%02li, destructor\n", state->sn);
-  free(state->data);
-}
+static void *roll (void *);
+static void destructor (void *);
 
 int
-main(void)
+main (void)
 {
   int rc;
   int *data = 0;
@@ -42,55 +23,72 @@ main(void)
   thread_state_s state[N_THREAD];
 
   /* alloc data */
-  data = malloc(sizeof(*data) * N_THREAD);
+  data = malloc (sizeof (*data) * N_THREAD);
   if (!data)
     {
-      perror("!panic, malloc");
+      perror ("!panic, malloc");
       return 1;
     }
 
   /* create key */
-  rc = pthread_key_create(&thread_key, destructor);
+  rc = pthread_key_create (&thread_key, destructor);
   if (rc)
     {
-      perror("!panic, pthread_key_create");
+      perror ("!panic, pthread_key_create");
       goto clean_exit;
     }
 
   /* create thread */
   for (long i = 0; i < N_THREAD; i++)
     {
-      state[i].sn = i+1;
+      state[i].sn = i + 1;
       state[i].data = data;
-      rc = pthread_create(&thread[i], 0, roll, &state[i]);
+      rc = pthread_create (&thread[i], 0, roll, &state[i]);
       if (rc)
         {
-          perror("!panic, pthread_create");
+          perror ("!panic, pthread_create");
           goto clean_key;
         }
     }
 
-  sleep(1);
+  sleep (1);
 
   /* join thread */
   for (long i = 0; i < N_THREAD; i++)
     {
-      rc = pthread_join(thread[i], 0);
+      rc = pthread_join (thread[i], 0);
       if (rc)
         {
-          perror("!panic, pthread_join");
+          perror ("!panic, pthread_join");
         }
     }
 
- clean_key:
-  rc = pthread_key_delete(thread_key);
+clean_key:
+  rc = pthread_key_delete (thread_key);
   if (rc)
     {
-      perror("!panic, pthread_key_delete");
+      perror ("!panic, pthread_key_delete");
     }
 
- clean_exit:
-  free(data);
+clean_exit:
+  free (data);
 
   return 0;
+}
+
+void *
+roll (void *arg)
+{
+  thread_state_s *state = (thread_state_s *)arg;
+  fprintf (stderr, "#%02li\n", state->sn);
+  sleep (1);
+  return arg;
+}
+
+void
+destructor (void *arg)
+{
+  thread_state_s *state = (thread_state_s *)arg;
+  fprintf (stderr, "#%02li, destructor\n", state->sn);
+  free (state->data);
 }

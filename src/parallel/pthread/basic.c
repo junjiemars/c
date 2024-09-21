@@ -1,12 +1,19 @@
 #include "_parallel_.h"
 #include <pthread.h>
 
+/*
+ * 1. `pthread_t' is an opaque type as the identifer of thread.
+ * 2. so `pthread_equal' exists because 1st.
+ *
+ */
+
 #define N_THREAD 4
 
 typedef struct thread_state_s
 {
   long sn;
   pthread_t tid;
+  int data;
 } thread_state_s;
 
 void *
@@ -18,6 +25,7 @@ echo (void *arg)
 
   assert (pthread_equal (state->tid, pthread_self ()) && "same thread");
 
+  state->data = random ();
   sleep (1);
 
   return &state->sn;
