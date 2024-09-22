@@ -22,18 +22,12 @@ main (void)
 {
   int rc;
   void *retval;
-  pthread_t *threads;
+  pthread_t threads[N_THREAD];
 
   state = alloc (0);
   if (!state)
     {
       fprintf (stderr, "!panic, " _str_ (alloc) "\n");
-      return 1;
-    }
-
-  if ((threads = malloc (sizeof (pthread_t) * N_THREAD)) == NULL)
-    {
-      perror (NULL);
       return 1;
     }
 
@@ -44,7 +38,6 @@ main (void)
       if (rc)
         {
           perror ("!panic, " _str_ (pthread_create));
-          goto clean_exit;
         }
     }
 
@@ -58,8 +51,6 @@ main (void)
         }
     }
 
-clean_exit:
-  free (threads);
   return rc;
 }
 
