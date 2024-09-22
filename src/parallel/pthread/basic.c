@@ -1,7 +1,6 @@
 #include "_parallel_.h"
 #include <limits.h>
 #include <pthread.h>
-#include <unistd.h>
 
 /*
  * 1. `pthread_t' is an opaque type as the identifer of thread.
@@ -53,8 +52,8 @@ main (void)
           perror ("!panic, pthread_join");
           continue;
         }
-      fprintf (stderr, "< #%02li, tid=0x%016zx, return %li\n", state[i].sn,
-               (long)state[i].tid, *(long *)retval);
+      fprintf (stderr, "< #%02li, tid=0x%0zx, return %li\n", state[i].sn,
+               (size_t)state[i].tid, *(long *)retval);
     }
 
   return 0;

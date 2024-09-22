@@ -8,7 +8,7 @@ typedef struct thread_state_s
   unsigned int idle;
   long sn;
   pthread_t tid;
-} thread_state_s;
+} thread_state_t;
 
 static void *do_ (void *arg);
 static void do__ (void *arg);
@@ -18,7 +18,7 @@ main (void)
 {
   int rc;
   void *retval = (void *)0;
-  thread_state_s state[N_THREAD];
+  thread_state_t state[N_THREAD];
 
   /* create threads */
   for (long i = 0; i < N_THREAD; i++)
@@ -41,7 +41,7 @@ main (void)
           perror (NULL);
         }
       assert (PTHREAD_CANCELED != retval
-              && ((thread_state_s *)retval)->sn == state[i].sn);
+              && ((thread_state_t *)retval)->sn == state[i].sn);
     }
 
   return 0;
@@ -50,7 +50,7 @@ main (void)
 void *
 do_ (void *arg)
 {
-  thread_state_s *state = (thread_state_s *)arg;
+  thread_state_t *state = (thread_state_t *)arg;
   fprintf (stderr, "> #%02li do_ %is ...\n", state->sn, state->idle);
 
   sleep (state->idle);
@@ -58,14 +58,22 @@ do_ (void *arg)
 
   fprintf (stderr, "< #%02li do_ exit\n", state->sn);
 
-  /* must: otherwise non-void return */
-  pthread_exit (arg);
+  switch (state->sn)
+    {
+    case 0:
+    case 1:
+    case 2:
+      pthread_exit (state);
+      break;                    /* unreachable */
+    default:
+      return state;
+    }
 }
 
 void
 do__ (void *arg)
 {
-  thread_state_s *state = (thread_state_s *)arg;
+  thread_state_t *state = (thread_state_t *)arg;
   fprintf (stderr, ">> #%02li, do__ %is ...\n", state->sn, state->idle);
 
   sleep (state->idle);

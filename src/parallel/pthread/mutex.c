@@ -83,8 +83,8 @@ race (void *arg)
   ++race_counter;
   sleep (1);
 
-  fprintf (stderr, "> #%02li, tid=0x%016zx, counter=%02i\n", state->sn,
-           (long)state->tid, race_counter);
+  fprintf (stderr, "> #%02li, tid=0x%0zx, counter=%02i\n", state->sn,
+           (size_t)state->tid, race_counter);
 
   if (opt_has_mutex)
     {
