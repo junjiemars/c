@@ -27,10 +27,10 @@ main (int argc, char *argv[])
     }
 
   /* init mutex */
-  rc = pthread_mutex_init (&mutex, 0);
+  rc = pthread_mutex_init (&mutex, NULL);
   if (rc)
     {
-      perror ("!panic, pthread_mutex_init");
+      perror ("!panic, " _str_ (pthread_mutex_init));
       return 1;
     }
 
@@ -38,10 +38,10 @@ main (int argc, char *argv[])
   for (long i = 0; i < N_THREAD; i++)
     {
       states[i].sn = i + 1;
-      rc = pthread_create (&states[i].tid, 0, race, &states[i]);
+      rc = pthread_create (&states[i].tid, NULL, race, &states[i]);
       if (rc)
         {
-          perror ("!panic, pthread_create");
+          perror ("!panic, " _str_ (pthread_create));
           goto clean_exit;
         }
     }
@@ -49,17 +49,17 @@ main (int argc, char *argv[])
   /* join threads */
   for (long i = 0; i < N_THREAD; i++)
     {
-      rc = pthread_join (states[i].tid, 0);
+      rc = pthread_join (states[i].tid, NULL);
       if (rc)
         {
-          perror ("!panic, pthread_join");
+          perror ("!panic, " _str_ (pthread_join));
         }
     }
 
 clean_exit:
   if (pthread_mutex_destroy (&mutex) < 0)
     {
-      perror ("!panic, pthread_mutex_destroy");
+      perror ("!panic, " _str_ (pthread_mutex_destroy));
     }
 
   return rc;
@@ -76,22 +76,23 @@ race (void *arg)
       rc = pthread_mutex_lock (&mutex);
       if (rc)
         {
-          perror ("!panic, pthread_mutex_lock");
+          perror ("!panic, " _str_ (pthread_mutex_lock));
         }
     }
 
   ++race_counter;
-  sleep (1);
 
   fprintf (stderr, "> #%02li, tid=0x%0zx, counter=%02i\n", state->sn,
            (size_t)state->tid, race_counter);
+
+  sleep (1);
 
   if (opt_has_mutex)
     {
       rc = pthread_mutex_unlock (&mutex);
       if (rc)
         {
-          perror ("!panic, pthread_mutex_unlock");
+          perror ("!panic, " _str_ (pthread_mutex_unlock));
         }
     }
 

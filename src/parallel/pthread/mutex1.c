@@ -21,16 +21,17 @@ int
 main (void)
 {
   int rc;
-  pthread_t *ts;
+  void *retval;
+  pthread_t *threads;
 
   state = alloc (0);
-  if (state == NULL)
+  if (!state)
     {
-      fprintf (stderr, "!panic, protected_alloc\n");
+      fprintf (stderr, "!panic, " _str_ (alloc) "\n");
       return 1;
     }
 
-  if ((ts = malloc (sizeof (pthread_t) * N_THREAD)) == NULL)
+  if ((threads = malloc (sizeof (pthread_t) * N_THREAD)) == NULL)
     {
       perror (NULL);
       return 1;
@@ -39,10 +40,10 @@ main (void)
   /* create threads */
   for (long i = 0; i < N_THREAD; i++)
     {
-      rc = pthread_create (&ts[i], 0, race, &ts[i]);
+      rc = pthread_create (&threads[i], NULL, race, &state);
       if (rc)
         {
-          perror ("!panic, pthread_create");
+          perror ("!panic, " _str_ (pthread_create));
           goto clean_exit;
         }
     }
@@ -50,69 +51,69 @@ main (void)
   /* join threads */
   for (long i = 0; i < N_THREAD; i++)
     {
-      rc = pthread_join (ts[i], NULL);
-      if (rc != 0)
+      rc = pthread_join (threads[i], &retval);
+      if (rc)
         {
-          perror ("!panic, pthread_join");
+          perror ("!panic, " _str_ (pthread_join));
         }
     }
 
 clean_exit:
-  drop (state);
-  free (ts);
+  free (threads);
   return rc;
 }
 
 void *
 race (void *arg)
 {
-  thread_state_t *state = (thread_state_t *)arg;
-
-  hold (state);
+  thread_state_t *s = (thread_state_t *)arg;
+  hold (s);
   sleep (1);
-  drop (state);
+  drop (s);
   return arg;
 }
+
 thread_state_t *
 alloc (int id)
 {
-  thread_state_t *p = NULL;
+  thread_state_t *s = NULL;
 
-  if ((p = malloc (sizeof (thread_state_t))) != NULL)
+  if ((s = malloc (sizeof (thread_state_t))) != NULL)
     {
-      p->id = id;
-      p->count = 1;
-      if (pthread_mutex_init (&p->lock, NULL) != 0)
+      s->id = id;
+      s->count = 1;
+      if (pthread_mutex_init (&s->lock, NULL) != 0)
         {
-          free (p);
+          perror ("!panic, " _str_ (pthread_mutex_init));
+          free (s);
           return NULL;
         }
     }
-  return p;
+  return s;
 }
 
 void
-hold (thread_state_t *p)
+hold (thread_state_t *s)
 {
   pthread_t tid = pthread_self ();
-  pthread_mutex_lock (&p->lock);
-  p->count++;
-  fprintf (stderr, "#tid=%p count=%d\n", tid, p->count);
-  pthread_mutex_unlock (&p->lock);
+  pthread_mutex_lock (&s->lock);
+  s->count++;
+  fprintf (stderr, "#tid=0x%0zx, count=%d\n", (size_t)tid, s->count);
+  pthread_mutex_unlock (&s->lock);
 }
 
 void
-drop (thread_state_t *p)
+drop (thread_state_t *s)
 {
-  pthread_mutex_lock (&p->lock);
-  if (--p->count == 0)
+  pthread_mutex_lock (&s->lock);
+  if (--s->count == 0)
     {
-      pthread_mutex_unlock (&p->lock);
-      pthread_mutex_destroy (&p->lock);
-      free (p);
+      pthread_mutex_unlock (&s->lock);
+      pthread_mutex_destroy (&s->lock);
+      free (s);
     }
   else
     {
-      pthread_mutex_unlock (&p->lock);
+      pthread_mutex_unlock (&s->lock);
     }
 }
