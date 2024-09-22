@@ -43,6 +43,7 @@ main (void)
     }
 
   /* join threads */
+  fprintf (stderr, "#main, tid=0x%0zx\n", (size_t)pthread_self ());
   for (long i = 0; i < N_THREAD; i++)
     {
       fprintf (stderr, "- joining thread #%02li ...\n", i);
