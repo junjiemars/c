@@ -3,19 +3,19 @@
 
 #define N_THREAD 4
 
-typedef struct protected_s
+typedef struct thread_state_s
 {
   int id;
   int count;
   pthread_mutex_t lock;
-} protected_s;
+} thread_state_t;
 
-static protected_s *state;
+static thread_state_t *state;
 
 static void *race (void *arg);
-static protected_s *protected_alloc (int);
-static void protected_hold (protected_s *);
-static void protected_drop (protected_s *);
+static thread_state_t *alloc (int);
+static void hold (thread_state_t *);
+static void drop (thread_state_t *);
 
 int
 main (void)
@@ -23,7 +23,7 @@ main (void)
   int rc;
   pthread_t *ts;
 
-  state = protected_alloc (0);
+  state = alloc (0);
   if (state == NULL)
     {
       fprintf (stderr, "!panic, protected_alloc\n");
@@ -58,7 +58,7 @@ main (void)
     }
 
 clean_exit:
-  protected_drop (state);
+  drop (state);
   free (ts);
   return rc;
 }
@@ -66,19 +66,19 @@ clean_exit:
 void *
 race (void *arg)
 {
-  protected_s *state = (protected_s *)arg;
+  thread_state_t *state = (thread_state_t *)arg;
 
-  protected_hold (state);
+  hold (state);
   sleep (1);
-  protected_drop (state);
+  drop (state);
   return arg;
 }
-protected_s *
-protected_alloc (int id)
+thread_state_t *
+alloc (int id)
 {
-  protected_s *p = NULL;
+  thread_state_t *p = NULL;
 
-  if ((p = malloc (sizeof (protected_s))) != NULL)
+  if ((p = malloc (sizeof (thread_state_t))) != NULL)
     {
       p->id = id;
       p->count = 1;
@@ -92,7 +92,7 @@ protected_alloc (int id)
 }
 
 void
-protected_hold (protected_s *p)
+hold (thread_state_t *p)
 {
   pthread_t tid = pthread_self ();
   pthread_mutex_lock (&p->lock);
@@ -102,7 +102,7 @@ protected_hold (protected_s *p)
 }
 
 void
-protected_drop (protected_s *p)
+drop (thread_state_t *p)
 {
   pthread_mutex_lock (&p->lock);
   if (--p->count == 0)

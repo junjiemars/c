@@ -59,6 +59,22 @@ if [ yes = $nm_found ]; then
       . ${NORE_ROOT}/auto/make_define
 fi
 
+## check pthread_mutex_timedlock
+##----------------------------------------
+nm_feature="pthread_mutex_timedlock"
+nm_feature_name="nm_have_pthread_mutex_timedlock"
+nm_feature_run=no
+nm_feature_h='
+#include <pthread.h>
+#include <time.h>'
+nm_feature_flags='-pthread'
+nm_feature_test='pthread_mutex_timedlock((pthread_mutex_lock*)0, (struct timespec*)0);'
+. ${NORE_ROOT}/auto/feature
+if [ yes = $nm_found ]; then
+  flag=has_pthread_mutex_timedlock op=":=" value="YES" \
+      . ${NORE_ROOT}/auto/make_define
+fi
+
 
 # check stdatomic.h
 #----------------------------------------
