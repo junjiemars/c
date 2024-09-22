@@ -17,7 +17,7 @@ int
 main (void)
 {
   int rc;
-  void *retval = (void *)0;
+  void *retval;
   thread_state_t state[N_THREAD];
 
   /* create threads */
@@ -40,8 +40,10 @@ main (void)
         {
           perror (NULL);
         }
-      assert (PTHREAD_CANCELED != retval
-              && ((thread_state_t *)retval)->sn == state[i].sn);
+      else
+        {
+          assert (state[i].sn == (long)retval);
+        }
     }
 
   return 0;
@@ -58,16 +60,7 @@ do_ (void *arg)
 
   fprintf (stderr, "< #%02li do_ exit\n", state->sn);
 
-  switch (state->sn)
-    {
-    case 0:
-    case 1:
-    case 2:
-      pthread_exit (state);
-      break;                    /* unreachable */
-    default:
-      return state;
-    }
+  return (void *)state->sn;
 }
 
 void
@@ -81,7 +74,7 @@ do__ (void *arg)
   if (1 == (state->sn & 1))
     {
       fprintf (stderr, "<< #%02li, do__ exit |\n", state->sn);
-      pthread_exit (state);
+      pthread_exit ((void *)state->sn);
     }
   else
     {
