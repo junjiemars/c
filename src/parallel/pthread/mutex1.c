@@ -60,7 +60,7 @@ race (void *arg)
   pthread_t tid = pthread_self ();
   thread_state_t *s = (thread_state_t *)arg;
   hold (s);
-  fprintf (stderr, "#tid=0x%0zx, count=0x%0zx\n", (size_t)tid, (size_t) s->count);
+  fprintf (stderr, "#tid=0x%0zx, count=%02d\n", (size_t)tid, s->count);
   sleep (1);
   drop (s);
   return arg;
