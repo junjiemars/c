@@ -5,15 +5,12 @@
 
 typedef struct thread_state_s
 {
-  int id;
   int count;
   pthread_mutex_t lock;
 } thread_state_t;
 
-static thread_state_t *state;
-
 static void *race (void *arg);
-static thread_state_t *alloc (int);
+static thread_state_t *alloc (void);
 static void hold (thread_state_t *);
 static void drop (thread_state_t *);
 
@@ -23,9 +20,10 @@ main (void)
   int rc;
   void *retval;
   pthread_t threads[N_THREAD];
+  thread_state_t *state;
 
-  state = alloc (0);
-  if (!state)
+  state = alloc ();
+  if (state == NULL)
     {
       fprintf (stderr, "!panic, " _str_ (alloc) "\n");
       return 1;
@@ -34,10 +32,11 @@ main (void)
   /* create threads */
   for (long i = 0; i < N_THREAD; i++)
     {
-      rc = pthread_create (&threads[i], NULL, race, &state);
+      rc = pthread_create (&threads[i], NULL, race, state);
       if (rc)
         {
           perror ("!panic, " _str_ (pthread_create));
+          return 1;
         }
     }
 
@@ -51,27 +50,29 @@ main (void)
         }
     }
 
+  drop (state);
   return rc;
 }
 
 void *
 race (void *arg)
 {
+  pthread_t tid = pthread_self ();
   thread_state_t *s = (thread_state_t *)arg;
   hold (s);
+  fprintf (stderr, "#tid=0x%0zx, count=0x%0zx\n", (size_t)tid, (size_t) s->count);
   sleep (1);
   drop (s);
   return arg;
 }
 
 thread_state_t *
-alloc (int id)
+alloc (void)
 {
   thread_state_t *s = NULL;
 
   if ((s = malloc (sizeof (thread_state_t))) != NULL)
     {
-      s->id = id;
       s->count = 1;
       if (pthread_mutex_init (&s->lock, NULL) != 0)
         {
@@ -86,10 +87,8 @@ alloc (int id)
 void
 hold (thread_state_t *s)
 {
-  pthread_t tid = pthread_self ();
   pthread_mutex_lock (&s->lock);
   s->count++;
-  fprintf (stderr, "#tid=0x%0zx, count=%d\n", (size_t)tid, s->count);
   pthread_mutex_unlock (&s->lock);
 }
 
