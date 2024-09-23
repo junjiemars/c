@@ -51,7 +51,7 @@ main (void)
     }
 
   /* join threads */
-  for (long i = 0; i < N_THREAD; i++)
+  for (int i = 0; i < N_THREAD; i++)
     {
       rc = pthread_join (threads[i], &retval);
       if (rc)
