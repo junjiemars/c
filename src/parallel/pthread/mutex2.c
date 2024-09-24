@@ -1,9 +1,9 @@
 #include "_parallel_.h"
 #include <pthread.h>
 
-#define N_HASH 2
+#define N_HASH 3
 #define N_THREAD 4
-#define _hash_(id) (((size_t)id) % N_HASH)
+#define _hash_(id) ((unsigned int)id % N_HASH)
 
 static struct thread_state_s *h_states[N_HASH] = { 0 };
 static pthread_mutex_t h_lock = PTHREAD_MUTEX_INITIALIZER;
@@ -12,6 +12,7 @@ typedef struct thread_state_s
 {
   int id;
   int count;
+  int workload;
   pthread_mutex_t lock;
   struct thread_state_s *next;
 } thread_state_t;
@@ -28,16 +29,6 @@ main (void)
   int rc;
   void *retval;
   pthread_t threads[N_THREAD];
-
-  /* alloc states */
-  for (int i = 0; i < N_HASH; i++)
-    {
-      h_states[i] = alloc (i);
-      if (h_states[i] == NULL)
-        {
-          return 1;
-        }
-    }
 
   /* create threads */
   for (int i = 0; i < N_THREAD; i++)
@@ -64,14 +55,26 @@ main (void)
 }
 
 void *
-race (void *id)
+race (void *arg)
 {
-  int idx = *(int *)id;
+  int id;
+  thread_state_t *s;
   pthread_t tid = pthread_self ();
-  thread_state_t *s = find (idx);
 
+  id = *(int *)arg;
+  s = find (id);
+  if (!s)
+    {
+      if ((s = alloc (id)) == NULL)
+        {
+          fprintf (stderr, "#tid=0x%0zx, " _str_ (alloc) " failed\n",
+                   (size_t)tid);
+          return NULL;
+        }
+    }
   hold (s);
-  fprintf (stderr, "#tid=0x%0zx, count=%02d\n", (size_t)tid, s->count);
+  fprintf (stderr, "#tid=0x%0zx, id=%d, count=%02d, workload=%d\n",
+           (size_t)tid, s->id, s->count, s->workload);
   sleep (1);
   drop (s);
   return s;
@@ -81,7 +84,7 @@ thread_state_t *
 alloc (int id)
 {
   int idx;
-  thread_state_t *s = NULL;
+  thread_state_t *s;
 
   if ((s = malloc (sizeof (thread_state_t))) != NULL)
     {
@@ -92,6 +95,7 @@ alloc (int id)
           free (s);
           return NULL;
         }
+      s->id = id;
       idx = _hash_ (id);
       pthread_mutex_lock (&h_lock);
       s->next = h_states[idx];
@@ -107,27 +111,26 @@ void
 hold (thread_state_t *s)
 {
   pthread_mutex_lock (&s->lock);
-  s->count++;
+  s->workload++;
   pthread_mutex_unlock (&s->lock);
 }
 
 thread_state_t *
 find (int id)
 {
-  int idx = _hash_ (id);
-  thread_state_t *p;
+  thread_state_t *s;
 
   pthread_mutex_lock (&h_lock);
-  for (p = h_states[id]; p != NULL; p = p->next)
+  for (s = h_states[_hash_ (id)]; s != NULL; s = s->next)
     {
-      if (p->id == idx)
+      if (s->id == id)
         {
-          p->count++;
+          s->count++;
           break;
         }
     }
-  pthread_mutex_lock (&h_lock);
-  return p;
+  pthread_mutex_unlock (&h_lock);
+  return s;
 }
 
 void
