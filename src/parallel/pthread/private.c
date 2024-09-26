@@ -1,15 +1,15 @@
 #include "_parallel_.h"
 #include <pthread.h>
 
-#define N_THREAD 4
+#define N_THREAD 1
+#define _need_drop_(x) (((x)&1) == 1)
 
 typedef struct thread_state_s
 {
   long sn;
-  int *data;
-} thread_state_s;
+} thread_state_t;
 
-static pthread_key_t thread_key;
+static pthread_key_t thread_keys[N_THREAD];
 
 static void *roll (void *);
 static void drop (void *);
@@ -18,60 +18,67 @@ int
 main (void)
 {
   int rc;
-  int *data = 0;
-  pthread_t thread[N_THREAD];
-  thread_state_s state[N_THREAD];
-
-  /* alloc data */
-  data = malloc (sizeof (*data) * N_THREAD);
-  if (!data)
-    {
-      perror ("!panic, malloc");
-      return 1;
-    }
-
-  /* create key */
-  rc = pthread_key_create (&thread_key, drop);
-  if (rc)
-    {
-      perror ("!panic, pthread_key_create");
-      goto clean_exit;
-    }
+  pthread_t threads[N_THREAD];
+  thread_state_t *states[N_THREAD];
 
   /* create thread */
   for (long i = 0; i < N_THREAD; i++)
     {
-      state[i].sn = i + 1;
-      state[i].data = data;
-      rc = pthread_create (&thread[i], 0, roll, &state[i]);
+      states[i] = malloc (sizeof (thread_state_t));
+      if (!states[i])
+        {
+          perror ("!panic, " _str_ (malloc));
+          return 1;
+        }
+      states[i]->sn = i;
+      void (*drop_fn) (void *) = _need_drop_ (i) ? drop : NULL;
+
+      /* create thread key */
+      rc = pthread_key_create (&thread_keys[i], drop_fn);
       if (rc)
         {
-          perror ("!panic, pthread_create");
-          goto clean_key;
+          perror ("!panic, " _str_ (pthread_key_create));
+          return 1;
+        }
+
+      /* specify private data */
+      rc = pthread_setspecific (thread_keys[i], states[i]);
+      if (rc)
+        {
+          perror ("!panic, " _str_ (pthread_setspecific));
+          return 1;
+        }
+
+      /* create thread */
+      rc = pthread_create (&threads[i], 0, roll, (void *)i);
+      if (rc)
+        {
+          perror ("!panic, " _str_ (pthread_create) "\n");
+          return 1;
         }
     }
-
-  sleep (1);
 
   /* join thread */
-  for (long i = 0; i < N_THREAD; i++)
+  for (int i = 0; i < N_THREAD; i++)
     {
-      rc = pthread_join (thread[i], 0);
+      rc = pthread_join (threads[i], 0);
       if (rc)
         {
-          perror ("!panic, pthread_join");
+          perror ("!panic, " _str_ (pthread_join) "\n");
+        }
+
+      /* drop */
+      rc = pthread_key_delete (thread_keys[i]);
+      if (rc)
+        {
+          perror ("!panic, " _str_ (pthread_key_delete));
+        }
+
+      if (!_need_drop_ (i))
+        {
+          free (states[i]);
         }
     }
-
-clean_key:
-  rc = pthread_key_delete (thread_key);
-  if (rc)
-    {
-      perror ("!panic, pthread_key_delete");
-    }
-
-clean_exit:
-  free (data);
 
   return 0;
 }
@@ -79,8 +86,20 @@ clean_exit:
 void *
 roll (void *arg)
 {
-  thread_state_s *state = (thread_state_s *)arg;
-  fprintf (stderr, "#%02li\n", state->sn);
+  long sn = (long)arg;
+  thread_state_t *state;
+
+  state = pthread_getspecific (thread_keys[sn]);
+  if (state == NULL)
+    {
+      fprintf (stderr, "!panic, %s, no error\n", _str_ (pthread_getspecific));
+    }
+  else
+    {
+      pthread_t tid = pthread_self ();
+      fprintf (stderr, "#roll tid=0x%0zx in=%02li get=%02li\n", (size_t)tid,
+               sn, state->sn);
+    }
   sleep (1);
   return arg;
 }
@@ -88,7 +107,11 @@ roll (void *arg)
 void
 drop (void *arg)
 {
-  thread_state_s *state = (thread_state_s *)arg;
-  fprintf (stderr, "#%02li, destructor\n", state->sn);
-  free (state->data);
+  pthread_t tid = pthread_self ();
+  thread_state_t *state = (thread_state_t *)arg;
+  fprintf (stderr, "# drop tid=0x%0zx get=%02li\n", (size_t)tid, state->sn);
+  if (_need_drop_ (state->sn))
+    {
+      free (state);
+    }
 }
