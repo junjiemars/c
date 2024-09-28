@@ -1,6 +1,15 @@
 #include "_parallel_.h"
 #include <pthread.h>
 
+/*
+ * 1. one thread key allowed assiciate with multiple threads;
+ *
+ * 2. the associated data will be set null after `free' in `drop'.
+ *
+ * 3. do we need a lock when call `pthread_setspecific' in `roll'?
+ *
+ */
+
 #define N_THREAD 2
 
 typedef struct thread_state_s
@@ -35,7 +44,7 @@ main (void)
       if (rc)
         {
           perror ("!panic, " _str_ (pthread_create));
-          return 1;
+          return rc;
         }
     }
 
@@ -49,6 +58,7 @@ main (void)
         }
     }
 
+
   /* drop */
   rc = pthread_key_delete (key);
   if (rc)
@@ -56,12 +66,13 @@ main (void)
       perror ("!panic, " _str_ (pthread_key_delete));
     }
 
-  return 0;
+  return rc;
 }
 
 void *
 roll (void *arg)
 {
+  int rc, err;
   int sn = *(int *)arg;
   thread_state_t *state;
   pthread_t tid = pthread_self ();
@@ -72,21 +83,24 @@ roll (void *arg)
       state = malloc (sizeof (thread_state_t));
       if (!state)
         {
+          err = errno;
           perror ("!panic, " _str_ (malloc));
-          exit (1);
+          exit (err);
         }
       state->sn = sn;
-      if (pthread_setspecific (key, state) != 0)
+      rc = pthread_setspecific (key, state);
+      if (rc)
         {
           perror ("!panic, " _str_ (pthread_setspecific));
-          exit (1);
+          exit (rc);
         }
-      fprintf (stderr, "# roll tid=0x%0zx set in=%02i\n", (size_t)tid, sn);
+      fprintf (stderr, "# roll tid=0x%0zx in=%02i set=%02i\n", (size_t)tid, sn,
+               sn);
     }
   else
     {
-      fprintf (stderr, "# roll tid=0x%0zx get in=%02i get=%02i\n", (size_t)tid,
-               sn, state->sn);
+      fprintf (stderr, "# roll tid=0x%0zx in=%02i get=%02i\n", (size_t)tid, sn,
+               state->sn);
     }
   sleep (1);
   return arg;
@@ -97,7 +111,9 @@ drop (void *arg)
 {
   int sn = *(int *)arg;
   pthread_t tid = pthread_self ();
-  thread_state_t *state = (thread_state_t *)arg;
+  thread_state_t *state;
+
+  state = (thread_state_t *)arg;
   if (state == NULL)
     {
       fprintf (stderr, "# drop tid=0x%0zx in=%02i get=null\n", (size_t)tid,
@@ -108,5 +124,6 @@ drop (void *arg)
       fprintf (stderr, "# drop tid=0x%0zx in=%02i get=%02i\n", (size_t)tid, sn,
                state->sn);
       free (state);
+      assert (pthread_getspecific (key) == NULL);
     }
 }
