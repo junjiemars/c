@@ -1,8 +1,9 @@
 #include "_parallel_.h"
 #include <pthread.h>
 
-#define N_HASH 3
+#define N_HASH 2
 #define N_THREAD 4
+#define N_OP 2
 #define _hash_(id) ((unsigned int)id % N_HASH)
 
 static struct thread_state_s *h_states[N_HASH] = { 0 };
@@ -18,16 +19,18 @@ typedef struct thread_state_s
 } thread_state_t;
 
 static void *race (void *arg);
-static thread_state_t *alloc (int);
-static void hold (thread_state_t *);
 static thread_state_t *find (int);
-static void drop (thread_state_t *);
+static void alloc (void *);
+static void drop (void *);
+
+static void (*list_ops[N_OP]) (void *) = { alloc, drop };
+static unsigned op_seed = 29;
 
 int
 main (void)
 {
   int rc;
-  void *retval;
+  int *retval;
   pthread_t threads[N_THREAD];
 
   /* create threads */
@@ -44,11 +47,17 @@ main (void)
   /* join threads */
   for (int i = 0; i < N_THREAD; i++)
     {
-      rc = pthread_join (threads[i], &retval);
+      rc = pthread_join (threads[i], (void **)&retval);
       if (rc)
         {
           perror ("!panic, " _str_ (pthread_join));
+          return 1;
         }
+    }
+
+  for (int i = 0; i < N_THREAD; i++)
+    {
+      drop ((void *)&i);
     }
 
   return rc;
@@ -57,75 +66,65 @@ main (void)
 void *
 race (void *arg)
 {
-  int id;
+  int id = *(int *)arg;
+  void (*op) (void *);
+
+  for (int i = 0; i < N_THREAD; i++)
+    {
+      op = list_ops[rand_r (&op_seed) % N_OP];
+      op ((void *)&id);
+    }
+
+  return arg;
+}
+
+void
+alloc (void *arg)
+{
+  int rc;
+  int id, idx;
   thread_state_t *s;
   pthread_t tid = pthread_self ();
 
   id = *(int *)arg;
-  s = find (id);
-  if (!s)
-    {
-      if ((s = alloc (id)) == NULL)
-        {
-          fprintf (stderr, "#tid=0x%0zx, " _str_ (alloc) " failed\n",
-                   (size_t)tid);
-          return NULL;
-        }
-    }
-  hold (s);
-  fprintf (stderr, "#tid=0x%0zx, id=%d, count=%02d, workload=%d\n",
-           (size_t)tid, s->id, s->count, s->workload);
-  sleep (1);
-  drop (s);
-  return s;
-}
-
-thread_state_t *
-alloc (int id)
-{
-  int idx;
-  thread_state_t *s;
 
   if ((s = malloc (sizeof (thread_state_t))) != NULL)
     {
-      s->count = 1;
-      if (pthread_mutex_init (&s->lock, NULL) != 0)
+      rc = pthread_mutex_init (&s->lock, NULL);
+      if (rc)
         {
           perror ("!panic, " _str_ (pthread_mutex_init));
           free (s);
-          return NULL;
+          exit (rc);
         }
+      fprintf (stderr, "# alloc tid=0x%0zx id=%02i\n", (size_t)tid, id);
+
       s->id = id;
       idx = _hash_ (id);
+
       pthread_mutex_lock (&h_lock);
+
       s->next = h_states[idx];
       h_states[idx] = s;
+
       pthread_mutex_lock (&s->lock);
       pthread_mutex_unlock (&h_lock);
       pthread_mutex_unlock (&s->lock);
     }
-  return s;
-}
-
-void
-hold (thread_state_t *s)
-{
-  pthread_mutex_lock (&s->lock);
-  s->workload++;
-  pthread_mutex_unlock (&s->lock);
 }
 
 thread_state_t *
 find (int id)
 {
-  thread_state_t *s;
+  thread_state_t *s = NULL;
+  pthread_t tid = pthread_self ();
 
   pthread_mutex_lock (&h_lock);
   for (s = h_states[_hash_ (id)]; s != NULL; s = s->next)
     {
       if (s->id == id)
         {
-          s->count++;
+          fprintf (stderr, "# find tid=0x%0zx id=%02i\n", (size_t)tid, id);
           break;
         }
     }
@@ -134,34 +133,39 @@ find (int id)
 }
 
 void
-drop (thread_state_t *s)
+drop (void *arg)
 {
+  int id;
   int idx;
-  thread_state_t *p;
+  thread_state_t *s, *p;
+  pthread_t tid = pthread_self ();
+
+  id = *(int *)arg;
+  p = find (id);
+
+  if (!p)
+    {
+      return;
+    }
 
   pthread_mutex_lock (&h_lock);
-  if (--s->count == 0)
+  idx = _hash_ (p->id);
+  s = h_states[idx];
+  if (s == p)
     {
-      idx = _hash_ (s->id);
-      p = h_states[idx];
-      if (p == s)
-        {
-          h_states[idx] = s->next;
-        }
-      else
-        {
-          for (p = p->next; p != s; p = p->next)
-            {
-              // void
-            }
-          p->next = s->next;
-        }
-      pthread_mutex_unlock (&h_lock);
-      pthread_mutex_destroy (&s->lock);
-      free (s);
+      h_states[idx] = s->next;
     }
   else
     {
-      pthread_mutex_unlock (&h_lock);
+      for (s = p->next; s != p; s = p->next)
+        {
+          // void
+        }
+      s->next = p->next;
     }
+  fprintf (stderr, "# drop tid=0x%0zx id=%02i\n", (size_t)tid, id);
+  pthread_mutex_unlock (&h_lock);
+  pthread_mutex_destroy (&s->lock);
+  free (s);
+  pthread_mutex_unlock (&h_lock);
 }
