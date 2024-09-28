@@ -19,7 +19,7 @@ typedef struct thread_state_s
 
 static pthread_key_t key;
 
-static void *roll (void *);
+static void *race (void *);
 static void drop (void *);
 
 int
@@ -40,7 +40,7 @@ main (void)
   for (int i = 0; i < N_THREAD; i++)
     {
       /* create thread */
-      rc = pthread_create (&threads[i], NULL, roll, (void *)&i);
+      rc = pthread_create (&threads[i], NULL, race, (void *)&i);
       if (rc)
         {
           perror ("!panic, " _str_ (pthread_create));
@@ -70,7 +70,7 @@ main (void)
 }
 
 void *
-roll (void *arg)
+race (void *arg)
 {
   int rc, err;
   int sn = *(int *)arg;
