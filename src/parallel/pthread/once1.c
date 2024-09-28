@@ -1,7 +1,7 @@
 #include "_parallel_.h"
 #include <pthread.h>
 
-#define N_THREAD 4
+#define N_THREAD 8
 
 typedef struct thread_state_s
 {
@@ -9,7 +9,7 @@ typedef struct thread_state_s
 } thread_state_t;
 
 static pthread_once_t once = PTHREAD_ONCE_INIT;
-static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+/* static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER; */
 static pthread_key_t key;
 
 static void *race (void *);
@@ -71,7 +71,7 @@ race (void *arg)
 
   pthread_once (&once, init);
 
-  pthread_mutex_lock (&lock);
+  /* pthread_mutex_lock (&lock); */
 
   state = pthread_getspecific (key);
   if (state == NULL)
@@ -93,7 +93,7 @@ race (void *arg)
   fprintf (stderr, "# race, tid=0x%0zx, sn=%02i, state=%02i\n", (size_t)tid,
            sn, state->sn);
 
-  pthread_mutex_unlock (&lock);
+  /* pthread_mutex_unlock (&lock); */
 
   sleep (1);
   return arg;
