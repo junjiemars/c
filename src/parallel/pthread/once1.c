@@ -1,7 +1,12 @@
 #include "_parallel_.h"
 #include <pthread.h>
 
-#define N_THREAD 8
+/*
+ * 1. answer the 3.Q in `priviate.c'.
+ *
+ */
+
+#define N_THREAD 4
 
 typedef struct thread_state_s
 {
@@ -90,8 +95,8 @@ race (void *arg)
       perror ("!panic, " _str_ (pthread_setspecific));
       exit (rc);
     }
-  fprintf (stderr, "# race, tid=0x%0zx, sn=%02i, state=%02i\n", (size_t)tid,
-           sn, state->sn);
+  fprintf (stderr, "# race tid=0x%0zx sn=%02i state=%02i\n", (size_t)tid, sn,
+           state->sn);
 
   /* pthread_mutex_unlock (&lock); */
 
@@ -107,7 +112,7 @@ drop (void *arg)
 
   if (state)
     {
-      fprintf (stderr, "# drop, tid=0x%0zx, state=%02i\n", (size_t)tid,
+      fprintf (stderr, "# drop tid=0x%0zx state=%02i\n", (size_t)tid,
                state->sn);
       free (state);
     }

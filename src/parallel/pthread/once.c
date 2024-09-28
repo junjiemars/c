@@ -55,7 +55,7 @@ race (void *arg)
   pthread_once (&once, init);
 
   pthread_mutex_lock (&lock);
-  fprintf (stderr, "# race, tid=0x%0zx, sn=%02i\n", (size_t)tid, sn);
+  fprintf (stderr, "# race tid=0x%0zx sn=%02i\n", (size_t)tid, sn);
   pthread_mutex_unlock (&lock);
 
   sleep (1);
