@@ -78,6 +78,7 @@ parallel_pthread_once_binout := $(bin_path)/$(parallel_prefix)_pthread_once$(bin
 parallel_pthread_once1_binout := $(bin_path)/$(parallel_prefix)_pthread_once1$(bin_ext)
 parallel_pthread_mutex1_binout := $(bin_path)/$(parallel_prefix)_pthread_mutex1$(bin_ext)
 parallel_pthread_mutex2_binout := $(bin_path)/$(parallel_prefix)_pthread_mutex2$(bin_ext)
+parallel_pthread_getenv1_binout := $(bin_path)/$(parallel_prefix)_pthread_getenv1$(bin_ext)
 
 ifeq (YES, $(has_pthread))
 
@@ -92,7 +93,8 @@ parallel_pthread: parallel_pthread_basic        \
                   parallel_pthread_stacksize    \
                   parallel_pthread_wait         \
                   parallel_pthread_once         \
-                  parallel_pthread_once1
+                  parallel_pthread_once1        \
+                  parallel_pthread_getenv1
 
 parallel_pthread_test: parallel_pthread_basic_test      \
                        parallel_pthread_deadlock_test   \
@@ -105,7 +107,8 @@ parallel_pthread_test: parallel_pthread_basic_test      \
                        parallel_pthread_stacksize_test  \
                        parallel_pthread_wait_test       \
                        parallel_pthread_once_test       \
-                       parallel_pthread_once1_test
+                       parallel_pthread_once1_test      \
+                       parallel_pthread_getenv1_test
 
 else
 parallel_pthread:
@@ -163,6 +166,10 @@ parallel_pthread_once1: $(parallel_pthread_once1_binout)
 parallel_pthread_once1_test: parallel_pthread_once1
 	$(parallel_pthread_once1_binout)
 
+parallel_pthread_getenv1: $(parallel_pthread_getenv1_binout)
+parallel_pthread_getenv1_test: parallel_pthread_getenv1
+	$(parallel_pthread_getenv1_binout)
+
 $(parallel_pthread_basic_binout): $(parallel_root)/pthread/basic.c
 	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
 
@@ -197,6 +204,9 @@ $(parallel_pthread_once_binout): $(parallel_root)/pthread/once.c
 	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
 
 $(parallel_pthread_once1_binout): $(parallel_root)/pthread/once1.c
+	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
+
+$(parallel_pthread_getenv1_binout): $(parallel_root)/pthread/getenv1.c
 	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
 
 

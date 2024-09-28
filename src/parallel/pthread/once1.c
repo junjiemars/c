@@ -35,6 +35,7 @@ main (void)
       if (rc)
         {
           perror (NULL);
+          exit (rc);
         }
     }
 
@@ -45,10 +46,18 @@ main (void)
       if (rc)
         {
           perror ("!panic, " _str_ (pthread_join));
+          exit (rc);
         }
     }
 
-  return rc;
+  rc = pthread_key_delete (key);
+  if (rc)
+    {
+      perror ("!panic, " _str_ (pthread_key_delete));
+      exit (rc);
+    }
+
+  exit (0);
 }
 
 void
