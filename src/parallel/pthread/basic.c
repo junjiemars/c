@@ -4,7 +4,10 @@
 
 /*
  * 1. `pthread_t' is an opaque type as the identifer of thread.
+ *
  * 2. so `pthread_equal' exists because 1st.
+ *
+ * https://sites.cs.ucsb.edu/~tyang/class/240a17/slides/pthreads.pdf
  *
  */
 
