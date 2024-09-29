@@ -93,15 +93,16 @@ race (void *arg)
   rc = pthread_mutex_trylock (mx1);
   if (rc)
     {
-      snprintf (errstr, N_ERRSTR, ">%d !panic, #%02li mutex1=%p lock=%d:%d %s",
+      snprintf (errstr, N_ERRSTR, ">%d !panic, #%02li mutex=%p lock=%d:%d %s",
                 ++n_out, state->sn, mx1, lock1, lock2,
                 _str_ (pthread_mutex_trylock));
       perror (errstr);
     }
   else
     {
-      fprintf (stderr, ">%d #%02li tid=%p counter=%02i lock=%d:%d\n", ++n_out,
-               state->sn, &state->tid, race_counter, ++lock1, lock2);
+      fprintf (stderr, ">%d #%02li tid=%p counter=%02i mutex=%p lock=%d:%d\n",
+               ++n_out, state->sn, &state->tid, race_counter, mx1, ++lock1,
+               lock2);
     }
   sleep (1);
 
@@ -112,15 +113,16 @@ race (void *arg)
         {
           /* EBUSY on Darwin */
           snprintf (errstr, N_ERRSTR,
-                    ">%d !panic, #%02li mutex2=%p lock=%d:%d %s", ++n_out,
+                    ">%d !panic, #%02li mutex=%p lock=%d:%d %s", ++n_out,
                     state->sn, mx2, lock1, lock2,
                     _str_ (pthread_mutex_trylock));
           perror (errstr);
         }
       else
         {
-          fprintf (stderr, ">%d #%02li tid=%p counter=%02i lock=%d:%d\n",
-                   ++n_out, state->sn, &state->tid, race_counter, lock1,
+          fprintf (stderr,
+                   ">%d #%02li tid=%p counter=%02i mutex=%p lock=%d:%d\n",
+                   ++n_out, state->sn, &state->tid, race_counter, mx2, lock1,
                    ++lock2);
         }
     }
@@ -140,7 +142,13 @@ race (void *arg)
                         _str_ (pthread_mutex_unlock));
               perror (errstr);
             }
-          lock2--;
+          else
+            {
+              fprintf (stderr,
+                       ">%d #%02li tid=%p counter=%02i mutex=%p lock=%d:%d\n",
+                       ++n_out, state->sn, &state->tid, race_counter, mx2,
+                       lock1, --lock2);
+            }
         }
     }
 
@@ -154,7 +162,13 @@ race (void *arg)
                     _str_ (pthread_mutex_unlock));
           perror (errstr);
         }
-      lock1--;
+      else
+        {
+          fprintf (stderr,
+                   ">%d #%02li tid=%p counter=%02i mutex=%p lock=%d:%d\n",
+                   ++n_out, state->sn, &state->tid, race_counter, mx1, --lock1,
+                   lock2);
+        }
     }
   fprintf (stderr, ">%d #%02li tid=%p counter=%02i lock=%d:%d\n", ++n_out,
            state->sn, &state->tid, race_counter, lock1, lock2);
