@@ -23,12 +23,13 @@ main (void)
   /* create threads */
   for (long i = 0; i < N_THREAD; i++)
     {
-      state[i].sn = i + 1;
-      state[i].idle = i;
+      state[i].sn = i;
+      state[i].idle = i + 1;
       rc = pthread_create (&state[i].tid, NULL, do_, &state[i]);
       if (rc)
         {
           perror (NULL);
+          exit (EXIT_FAILURE);
         }
     }
 
@@ -39,6 +40,7 @@ main (void)
       if (rc)
         {
           perror (NULL);
+          exit (EXIT_FAILURE);
         }
       else
         {
