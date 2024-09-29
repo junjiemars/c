@@ -17,7 +17,7 @@ int
 main (void)
 {
   int rc;
-  void *retval;
+  long retval;
   thread_state_t state[N_THREAD];
 
   /* create threads */
@@ -45,6 +45,7 @@ main (void)
       else
         {
           assert (state[i].sn == (long)retval);
+          fprintf (stderr, "#%02li exit code %02li.\n", state[i].sn, retval);
         }
     }
 
