@@ -1,9 +1,9 @@
-#include <_parallel_.h>
+#include "_parallel_.h"
 #include <pthread.h>
 
 #define N_THREAD 2
 #define N_MUTEX 2
-#define N_ERRSTR 64
+#define N_ERRSTR 128
 
 typedef struct thread_state_s
 {
@@ -21,12 +21,13 @@ void *
 race (void *arg)
 {
   int rc;
+  int n_out = 0;
   thread_state_t *state = (thread_state_t *)arg;
   pthread_mutex_t *mx1, *mx2;
   char errstr[N_ERRSTR];
 
-  fprintf (stderr, "> #%02li, tid=%p, counter=%02i\n", state->sn, &state->tid,
-           race_counter);
+  fprintf (stderr, ">%d #%02li tid=%p counter=%02i\n", ++n_out, state->sn,
+           &state->tid, race_counter);
 
   mx1 = &mutex[(state->sn + 0) % N_MUTEX];
   mx2 = &mutex[(state->sn + 1) % N_MUTEX];
@@ -34,11 +35,13 @@ race (void *arg)
   rc = pthread_mutex_trylock (mx1);
   if (rc)
     {
-      snprintf (errstr, N_ERRSTR, "> !panic, #%02li, pthread_mutex_trylock",
-                state->sn);
+      snprintf (errstr, N_ERRSTR, ">%d !panic, #%02li %s", ++n_out, state->sn,
+                _str_ (pthread_mutex_trylock));
       perror (errstr);
       goto exit;
     }
+  fprintf (stderr, ">%d #%02li tid=%p counter=%02i\n", ++n_out, state->sn,
+           &state->tid, race_counter);
   sleep (1);
 
   if (opt_has_deadlock)
@@ -47,41 +50,43 @@ race (void *arg)
       if (rc)
         {
           /* EBUSY on Darwin */
-          snprintf (errstr, N_ERRSTR,
-                    ">> !panic, #%02li, pthread_mutex_trylock", state->sn);
+          snprintf (errstr, N_ERRSTR, ">%d !panic, #%02li %s", ++n_out,
+                    state->sn, _str_ (pthread_mutex_trylock));
           perror (errstr);
           goto exit_lock1;
         }
+      fprintf (stderr, ">%d #%02li tid=%p counter=%02i\n", ++n_out, state->sn,
+               &state->tid, race_counter);
     }
 
   ++race_counter;
-  sleep (1);
-  fprintf (stderr, ">>> #%02li, tid=0x%p, counter=%02i\n", state->sn,
+  fprintf (stderr, ">%d #%02li, tid=0x%p counter=%02i\n", ++n_out, state->sn,
            &state->tid, race_counter);
 
   if (opt_has_deadlock)
     {
+      sleep (1);
       rc = pthread_mutex_unlock (mx2);
       if (rc)
         {
-          snprintf (errstr, N_ERRSTR,
-                    "<< !panic, #%02li, pthread_mutex_unlock", state->sn);
+          snprintf (errstr, N_ERRSTR, ">%d !panic, #%02li %s", ++n_out,
+                    state->sn, _str_ (pthread_mutex_unlock));
           perror (errstr);
         }
+      sleep (1);
     }
 
 exit_lock1:
-  sleep (1);
   rc = pthread_mutex_unlock (mx1);
   if (rc)
     {
-      snprintf (errstr, N_ERRSTR, "<< !panic, #%02li, pthread_mutex_unlock",
-                state->sn);
+      snprintf (errstr, N_ERRSTR, ">%d !panic, #%02li %s", ++n_out, state->sn,
+                _str_ (pthread_mutex_unlock));
       perror (errstr);
     }
 exit:
-  fprintf (stderr, "< #%02li, tid=%p, counter=%02i\n", state->sn, &state->tid,
-           race_counter);
+  fprintf (stderr, ">%d #%02li tid=%p counter=%02i\n", ++n_out, state->sn,
+           &state->tid, race_counter);
   return arg;
 }
 
