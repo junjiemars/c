@@ -57,7 +57,8 @@ main (int argc, char *argv[])
     }
 
 clean_exit:
-  if (pthread_mutex_destroy (&mutex) < 0)
+  rc = pthread_mutex_destroy (&mutex);
+  if (rc)
     {
       perror ("!panic, " _str_ (pthread_mutex_destroy));
     }
@@ -82,7 +83,7 @@ race (void *arg)
 
   ++race_counter;
 
-  fprintf (stderr, "> #%02li, tid=0x%0zx, counter=%02i\n", state->sn,
+  fprintf (stderr, "> #%02li, tid=0x%0zx counter=%02i\n", state->sn,
            (size_t)state->tid, race_counter);
 
   sleep (1);

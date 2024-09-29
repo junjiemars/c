@@ -87,6 +87,7 @@ race (void *arg)
   fprintf (stderr, ">%d #%02li tid=%p counter=%02i lock=%d:%d\n", ++n_out,
            state->sn, &state->tid, race_counter, lock1, lock2);
 
+  /* ensure each thread always keeps the lock that another thread acquires */
   mx1 = &mutex[(state->sn + 0) % N_MUTEX];
   mx2 = &mutex[(state->sn + 1) % N_MUTEX];
 
