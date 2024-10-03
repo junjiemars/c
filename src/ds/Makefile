@@ -12,7 +12,8 @@ ds: double_linked_list                          \
     ds_stack                                    \
     ds_tree                                     \
     ds_calc                                     \
-    ds_d2b
+    ds_d2b                                      \
+    ds_umbra_str
 
 ds_test: double_linked_list_test                \
          single_linked_list_test                \
@@ -21,7 +22,8 @@ ds_test: double_linked_list_test                \
          ds_stack_test                          \
          ds_tree_test                           \
          ds_calc_test                           \
-         ds_d2b_test
+         ds_d2b_test                            \
+         ds_umbra_str_test
 
 # env
 ds_prefix := ds
@@ -186,5 +188,14 @@ $(ds_calc_binout): $(ds_root)/calc/calc.c       \
     $<                                          \
     $(bin_out)$@
 
+# umbra str
+ds_umbra_str_binout := $(bin_path)/$(ds_prefix)_umbra_str$(bin_ext)
+
+ds_umbra_str: $(ds_umbra_str_binout)
+ds_umbra_str_test: ds_umbra_str
+	$(ds_umbra_str_binout)
+
+$(ds_umbra_str_binout): $(ds_root)/umbra_str/us1.c
+	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
 
 # eof
