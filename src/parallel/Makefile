@@ -74,6 +74,7 @@ parallel_pthread_mutex_binout := $(bin_path)/$(parallel_prefix)_pthread_mutex$(b
 parallel_pthread_stacksize_binout := $(bin_path)/$(parallel_prefix)_pthread_stacksize$(bin_ext)
 parallel_pthread_private_binout := $(bin_path)/$(parallel_prefix)_pthread_private$(bin_ext)
 parallel_pthread_wait_binout := $(bin_path)/$(parallel_prefix)_pthread_wait$(bin_ext)
+parallel_pthread_cond1_binout := $(bin_path)/$(parallel_prefix)_pthread_cond1$(bin_ext)
 parallel_pthread_once_binout := $(bin_path)/$(parallel_prefix)_pthread_once$(bin_ext)
 parallel_pthread_once1_binout := $(bin_path)/$(parallel_prefix)_pthread_once1$(bin_ext)
 parallel_pthread_mutex1_binout := $(bin_path)/$(parallel_prefix)_pthread_mutex1$(bin_ext)
@@ -92,6 +93,7 @@ parallel_pthread: parallel_pthread_basic        \
                   parallel_pthread_private      \
                   parallel_pthread_stacksize    \
                   parallel_pthread_wait         \
+                  parallel_pthread_cond1        \
                   parallel_pthread_once         \
                   parallel_pthread_once1        \
                   parallel_pthread_getenv1
@@ -106,6 +108,7 @@ parallel_pthread_test: parallel_pthread_basic_test      \
                        parallel_pthread_private_test    \
                        parallel_pthread_stacksize_test  \
                        parallel_pthread_wait_test       \
+                       parallel_pthread_cond1_test      \
                        parallel_pthread_once_test       \
                        parallel_pthread_once1_test      \
                        parallel_pthread_getenv1_test
@@ -158,6 +161,10 @@ parallel_pthread_wait: $(parallel_pthread_wait_binout)
 parallel_pthread_wait_test: parallel_pthread_wait
 	$(parallel_pthread_wait_binout)
 
+parallel_pthread_cond1: $(parallel_pthread_cond1_binout)
+parallel_pthread_cond1_test: parallel_pthread_cond1
+	$(parallel_pthread_cond1_binout)
+
 parallel_pthread_once: $(parallel_pthread_once_binout)
 parallel_pthread_once_test: parallel_pthread_once
 	$(parallel_pthread_once_binout)
@@ -198,6 +205,9 @@ $(parallel_pthread_private_binout): $(parallel_root)/pthread/private.c
 	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
 
 $(parallel_pthread_wait_binout): $(parallel_root)/pthread/wait.c
+	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
+
+$(parallel_pthread_cond1_binout): $(parallel_root)/pthread/cond1.c
 	$(CC) $(CFLAGS) $(INC) $(fpthread) $^ $(bin_out)$@
 
 $(parallel_pthread_once_binout): $(parallel_root)/pthread/once.c
