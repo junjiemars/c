@@ -26,17 +26,20 @@ main (void)
 {
   int cmp;
 
-  /* cmp = test_cmp ("Hello, Nore", "Hello, Nore"); */
-  /* assert (cmp == 0); */
+  cmp = test_cmp ("Hello, Nore", "Hello, Nore");
+  assert (cmp == 0);
 
-  /* cmp = test_cmp ("Hello, Nore", "Hello, Norf"); */
-  /* assert (cmp < 0); */
+  cmp = test_cmp ("Hello, Nore", "Hello, Norf");
+  assert (cmp < 0);
 
-  /* cmp = test_cmp ("Hello, Nore", "Hello, Nord"); */
-  /* assert (cmp > 0); */
+  cmp = test_cmp ("Hello, Nore", "Hello, Nord");
+  assert (cmp > 0);
 
   cmp = test_cmp ("Hello, Nore aaaa", "Hello, Nore");
   assert (cmp > 0);
+
+  cmp = test_cmp ("Hello, Nore aaaa", "Hello, Nore aab");
+  assert (cmp < 0);
 
   return 0;
 }
@@ -56,10 +59,10 @@ new_umbra_str (const char *ss)
     }
   else
     {
-      memcpy ((char *)&u->pre, ss, N_PRE);
-      u->ptr = malloc (u->len - N_PRE + 1);
+      strncpy ((char *)&u->pre, ss, N_PRE - 1);
+      u->ptr = malloc (u->len);
       assert (u->ptr != NULL);
-      strncpy (u->ptr, ss, u->len - N_PRE);
+      strncpy (u->ptr, ss, u->len);
     }
   return u;
 }
@@ -67,7 +70,7 @@ new_umbra_str (const char *ss)
 void
 free_umbra_str (const umbra_str_t *u)
 {
-  if (u->len >= n_in)
+  if (u->len >= N_IN)
     {
       free (u->ptr);
     }
@@ -77,21 +80,23 @@ free_umbra_str (const umbra_str_t *u)
 int
 umbra_str_cmp (const umbra_str_t *u1, const umbra_str_t *u2)
 {
-  int d;
+  int max = _max_ (u1->len, u2->len);
   if (u1->len >= N_IN && u2->len >= N_IN)
     {
-      d = u1->pre - u2->pre;
-      if (d == 0)
-        {
-          return strncmp (u1->ptr, u2->ptr, _max_ (u1->len, u2->len) - N_PRE);
-        }
-      return d;
+      return strncmp (u1->ptr, u2->ptr, max);
+    }
+  else if (u1->len < N_IN && u2->len < N_IN)
+    {
+      return strncmp ((char *)&u1->pre, (char *)&u2->pre, N_IN);
     }
   else if (u1->len < N_IN && u2->len >= N_IN)
     {
-      d = strncmp ((char *)&u1->pre, u2->pre
+      return strncmp ((char *)&u1->pre, u2->ptr, max);
     }
-  return d;
+  else
+    {
+      return strncmp (u1->ptr, (char *)&u2->pre, max);
+    }
 }
 
 int
