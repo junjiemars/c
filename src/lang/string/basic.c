@@ -44,7 +44,6 @@ self_strncpy (char *dst, const char *src, size_t n)
   char *r = dst;
   while (n-- > 0 && 0 != (*dst++ = *src++))
     ;
-  *dst = '\0';
   return r;
 }
 
@@ -114,6 +113,8 @@ test_strncpy (void)
   char b1[8], b2[8];
   char *s1 = "abc";
   char *s2 = "abcd";
+  char *sx1 = "aaaaaaaa";
+  char *sx2 = "aaaaaaaaaaaaaaaa";
 
   strncpy (b1, s2, 3);
   self_strncpy (b2, s2, 3);
@@ -126,6 +127,11 @@ test_strncpy (void)
   strncpy (b1, s2, 4);
   self_strncpy (b2, s2, 4);
   assert (0 == strcmp (s2, b1) && 0 == strcmp (s2, b2));
+
+  strncpy (b1, sx2, sizeof (b1));
+  self_strncpy (b2, sx2, sizeof (b2));
+  assert (0 == memcmp (b1, sx1, sizeof (b1))
+          && 0 == memcmp (b2, sx1, sizeof (b2)));
 }
 
 void
