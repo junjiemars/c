@@ -2,7 +2,6 @@
 #define _DS_H_
 
 #include <ncstd.h>
-#include <assert.h>
 
 #ifdef MSVC
 #  pragma warning(disable: 4996) /*_CRT_SECURE_NO_WARNINGS*/
