@@ -7,37 +7,53 @@
 ####
 
 # check posix features
-. src/posix/auto
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
 
+# check ncc.h features
+ncc_sanitize_address="no"
+. ${POSIX_ROOT}/ncc_auto
+
+# check nustd.h features
+nustd_ssize_t="yes"
+. ${POSIX_ROOT}/nustd_auto
+
+# check nlim.h features
+nlim_pagesize="no"
+. ${POSIX_ROOT}/nlim_auto
+
+
 
 echo "checking for {unix} ..."
 
-nm_feature="-Wno-builtin-declaration-mismatch"
+
+has_m4=NO
+printf " + checking for m4 ... "
+if command -v m4 &>/dev/null; then
+  printf "yes\n"
+  has_m4=YES
+  flag=has_m4 op=":=" value="$has_m4" . ${NORE_ROOT}/auto/make_define
+else
+  printf "no\n"
+fi
+
+
+
+nm_feature="-Wno-int-conversion"
 nm_feature_name=
 nm_feature_indent=yes
 nm_feature_run=no
 nm_feature_h=
-nm_feature_flags='-Werror -Wno-builtin-declaration-mismatch'
+nm_feature_flags='-Werror -Wno-int-conversion'
 nm_feature_test=
 . ${NORE_ROOT}/auto/feature
 if [ yes = $nm_found ]; then
-  flag=CFLAGS op="+=" value='-Wno-builtin-declaration-mismatch'  \
+  flag=CFLAGS op="+=" value="-Wno-int-conversion" \
     . ${NORE_ROOT}/auto/make_define
 fi
 
-nm_feature="-Wimplicit-fallthrough=0"
-nm_feature_name=
-nm_feature_indent=yes
-nm_feature_run=no
-nm_feature_h=
-nm_feature_flags='-Werror -Wimplicit-fallthrough=0'
-nm_feature_test=
-. ${NORE_ROOT}/auto/feature
-if [ yes = $nm_found ]; then
-  flag=CFLAGS op="+=" value='-Wimplicit-fallthrough=0'  \
-    . ${NORE_ROOT}/auto/make_define
-fi
-
+
 
 nm_feature="-Wno-deprecated-declarations"
 nm_feature_name=
@@ -52,6 +68,7 @@ if [ yes = $nm_found ]; then
     . ${NORE_ROOT}/auto/make_define
 fi
 
+
 
 nm_feature="-Wno-deprecated-non-prototype"
 nm_feature_name=
@@ -65,5 +82,7 @@ if [ yes = $nm_found ]; then
   flag=CFLAGS op="+=" value='-Wno-deprecated-non-prototype' \
     . ${NORE_ROOT}/auto/make_define
 fi
+
+
 
 # eof

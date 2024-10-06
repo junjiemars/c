@@ -1,3 +1,4 @@
+# -*- mode:makefile-gmake -*-
 #
 # ./configure --has-unix
 #
@@ -14,15 +15,17 @@ else
 
 unix: unix_brk                                  \
       unix_echo                                 \
-      unix_ed \
+      unix_ed                                   \
       unix_exec                                 \
+      unix_m4                                   \
       unix_msq                                  \
 	    unix_tcpwrapper
 
 unix_test: unix_brk_test                        \
            unix_echo_test                       \
-           unix_ed_test                                         \
+           unix_ed_test                         \
            unix_exec_test                       \
+           unix_m4_test                         \
            unix_msq_test                        \
            unix_tcpwrapper_test
 
@@ -36,6 +39,7 @@ ifeq ($(shell test -n "$(_MEMORY_)" && test $(_MEMORY_) -gt 0; echo $$?),0)
 	CFLAGS += $(cflags_sanitize)
 endif
 
+
 
 # brk
 unix_brk_binout := $(bin_path)/$(unix_prefix)_brk$(bin_ext)
@@ -47,6 +51,7 @@ unix_brk_test: unix_brk
 $(unix_brk_binout): $(unix_root)/brk/b.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 
 # echo
 unix_echo_binout := $(bin_path)/$(unix_prefix)_echo$(bin_ext)
@@ -62,6 +67,7 @@ unix_echo_test: unix_echo
 $(unix_echo_binout): $(unix_root)/echo/e.c $(getopt_c)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 # ed
 unix_ed_binout := $(bin_path)/$(unix_prefix)_ed$(bin_ext)
 
@@ -73,6 +79,8 @@ unix_ed_test: unix_ed
 $(unix_ed_binout): $(unix_root)/ed/ed.c $(getopt_c)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+
 # exec
 unix_exec_binout := $(bin_path)/$(unix_prefix)_exec$(bin_ext)
 
@@ -82,6 +90,20 @@ unix_exec_test: unix_exec
 
 $(unix_exec_binout): $(unix_root)/exec/e.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+
+# m4
+ifeq (YES, $(has_m4))
+unix_m4_test:
+	printf "abc\n" | m4
+	m4 $(unix_root)/m4/ex1.txt
+else
+unix_m4:
+	@echo "skip ..."
+unix_m4_test: unix_m4
+  @echo "skip ..."
+endif
 
 # msq
 unix_msq_binout := $(bin_path)/$(unix_prefix)_msq$(bin_ext)
@@ -104,6 +126,7 @@ endif
 $(unix_msq_binout): $(unix_root)/msq/q.c
 	$(CC) $(CFLAGS) $(msq_cflags) $(INC) $^ $(bin_out)$@
 
+
 
 # tcp wrapper
 unix_tcpwrapper_binout := $(bin_path)/$(unix_prefix)_tcpwrapper$(bin_ext)

@@ -3,6 +3,4 @@
 
 #include <nustd.h>
 
-
-
 #endif /* end of _UNIX_H_ */
