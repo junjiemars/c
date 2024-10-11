@@ -97,7 +97,7 @@ $(unix_exec_binout): $(unix_root)/exec/e.c
 ifeq (YES, $(has_m4))
 unix_m4_test:
 	printf "abc\n" | m4
-	m4 $(unix_root)/m4/ex1.txt
+	m4 $(unix_root)/m4/b1.m4
 else
 unix_m4:
 	@echo "skip ..."

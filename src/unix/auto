@@ -23,10 +23,12 @@ nustd_ssize_t="yes"
 nlim_pagesize="no"
 . ${POSIX_ROOT}/nlim_auto
 
-
+
+check_no_int_conversion=yes
+check_no_deprecated_declarations=yes
+check_no_deprecated_non_prototype=yes
 
 echo "checking for {unix} ..."
-
 
 has_m4=NO
 printf " + checking for m4 ... "
@@ -38,51 +40,55 @@ else
   printf "no\n"
 fi
 
-
 
-nm_feature="-Wno-int-conversion"
-nm_feature_name=
-nm_feature_indent=yes
-nm_feature_run=no
-nm_feature_h=
-nm_feature_flags='-Werror -Wno-int-conversion'
-nm_feature_test=
-. ${NORE_ROOT}/auto/feature
-if [ yes = $nm_found ]; then
-  flag=CFLAGS op="+=" value="-Wno-int-conversion" \
-    . ${NORE_ROOT}/auto/make_define
+# check CC's -Wno-int-conversion
+if [ $check_no_int_conversion = yes ]; then
+  nm_feature="-Wno-int-conversion"
+  nm_feature_name=
+  nm_feature_indent=yes
+  nm_feature_run=no
+  nm_feature_h=
+  nm_feature_flags='-Werror -Wno-int-conversion'
+  nm_feature_test=
+  . ${NORE_ROOT}/auto/feature
+  if [ yes = $nm_found ]; then
+    flag=CFLAGS op="+=" value="-Wno-int-conversion" \
+                . ${NORE_ROOT}/auto/make_define
+  fi
 fi
 
-
-
-nm_feature="-Wno-deprecated-declarations"
-nm_feature_name=
-nm_feature_indent=yes
-nm_feature_run=no
-nm_feature_h=
-nm_feature_flags='-Werror -Wno-deprecated-declarations'
-nm_feature_test=
-. ${NORE_ROOT}/auto/feature
-if [ yes = $nm_found ]; then
-  flag=CFLAGS op="+=" value='-Wno-deprecated-declarations' \
-    . ${NORE_ROOT}/auto/make_define
+# check CC's -Wno-deprecated-declarations
+if [ $check_no_deprecated_declarations = yes ]; then
+  nm_feature="-Wno-deprecated-declarations"
+  nm_feature_name=
+  nm_feature_indent=yes
+  nm_feature_run=no
+  nm_feature_h=
+  nm_feature_flags='-Werror -Wno-deprecated-declarations'
+  nm_feature_test=
+  . ${NORE_ROOT}/auto/feature
+  if [ yes = $nm_found ]; then
+    flag=CFLAGS op="+=" value='-Wno-deprecated-declarations' \
+                . ${NORE_ROOT}/auto/make_define
+  fi
 fi
 
-
 
-nm_feature="-Wno-deprecated-non-prototype"
-nm_feature_name=
-nm_feature_indent=yes
-nm_feature_run=no
-nm_feature_h=
-nm_feature_flags='-Werror -Wno-deprecated-non-prototype' \'
-nm_feature_test=
-. ${NORE_ROOT}/auto/feature
-if [ yes = $nm_found ]; then
-  flag=CFLAGS op="+=" value='-Wno-deprecated-non-prototype' \
-    . ${NORE_ROOT}/auto/make_define
+# check CC's -Wno-deprecated-non-prototype
+if [ $check_no_deprecated_non_prototype = yes ]; then
+  nm_feature="-Wno-deprecated-non-prototype"
+  nm_feature_name=
+  nm_feature_indent=yes
+  nm_feature_run=no
+  nm_feature_h=
+  nm_feature_flags='-Werror -Wno-deprecated-non-prototype'
+  nm_feature_test=
+  . ${NORE_ROOT}/auto/feature
+  if [ yes = $nm_found ]; then
+    flag=CFLAGS op="+=" value='-Wno-deprecated-non-prototype' \
+                . ${NORE_ROOT}/auto/make_define
+  fi
 fi
 
-
 
 # eof
