@@ -16,7 +16,7 @@ typedef struct PyStr
 PyStr *pystr_new (const char *);
 void pystr_del (const PyStr *);
 PyStr *pystr_assign (PyStr *, const char *);
-PyStr *pystr_append (PyStr *, const char *);
+PyStr *pystr_add (PyStr *, const char *);
 char *pystr_str (const PyStr *);
 size_t pystr_len (const PyStr *);
 size_t pystr_cap (const PyStr *);
@@ -50,8 +50,8 @@ main (void)
           && pystr->str != NULL);
   pystr_dump (pystr);
 
-  pystr_append (pystr, ss11);
-  pystr_append (pystr, "aaaa");
+  pystr_add (pystr, ss11);
+  pystr_add (pystr, "aaaa");
   pystr_dump (pystr);
   assert (pystr_cap (pystr) == PYSTR_CAPACITY);
 
@@ -94,12 +94,9 @@ pystr_new (const char *ss)
 {
   PyStr *pystr;
 
-  pystr = malloc (sizeof (*pystr));
+  pystr = calloc (1, sizeof (*pystr));
   if (pystr == NULL)
     return NULL;
-  pystr->len = 0;
-  pystr->capacity = 0;
-  pystr->str = NULL;
   pystr_assign (pystr, ss);
   return pystr;
 }
@@ -137,7 +134,7 @@ pystr_assign (PyStr *pystr, const char *ss)
 }
 
 PyStr *
-pystr_append (PyStr *pystr, const char *ss)
+pystr_add (PyStr *pystr, const char *ss)
 {
   size_t len;
   size_t capacity;
