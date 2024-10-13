@@ -43,6 +43,8 @@ erf
 *.i
 *.dylib
 *.pdb
+*.pid
+*.conf
 
 # objs directory
 objs/

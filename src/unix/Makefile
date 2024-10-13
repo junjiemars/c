@@ -14,6 +14,7 @@ else
 
 
 unix: unix_brk                                  \
+      unix_daemon                               \
       unix_echo                                 \
       unix_ed                                   \
       unix_exec                                 \
@@ -22,6 +23,7 @@ unix: unix_brk                                  \
 	    unix_tcpwrapper
 
 unix_test: unix_brk_test                        \
+           unix_daemon_test                     \
            unix_echo_test                       \
            unix_ed_test                         \
            unix_exec_test                       \
@@ -50,6 +52,22 @@ unix_brk_test: unix_brk
 
 $(unix_brk_binout): $(unix_root)/brk/b.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+
+# daemon
+unix_daemon_binout := $(bin_path)/$(unix_prefix)_daemon$(bin_ext)
+unix_daemon_lockfile := $(CURDIR)/$(bin_path)/$(unix_prefix)_d1.pid
+unix_daemon_conffile := $(CURDIR)/$(src_root)/d1.conf
+
+unix_daemon: $(unix_daemon_binout)
+unix_daemon_test: unix_daemon
+	$(unix_daemon_binout)
+
+$(unix_daemon_binout): $(unix_root)/daemon/d1.c
+	$(CC) $(CFLAGS) $(INC) \
+		$(nm_def_opt)D_LOCK_FILE="\"$(unix_daemon_lockfile)\"" \
+		$^ $(bin_out)$@
 
 
 

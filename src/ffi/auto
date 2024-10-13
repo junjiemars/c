@@ -141,29 +141,24 @@ check_nodejs () {
 }
 
 check_python () {
-  local python_ver="`python3 -c'import sys;print("%s.%s"%(sys.version_info.major,sys.version_info.minor))' 2>/dev/null`"
-  local python_inc="/usr/include/python${python_ver}"
-
+  local python_ver="$(python -c'import sys;print("%s"%(sys.version_info.major))' 2>/dev/null)"
+  local python_inc="$(python -c'import sysconfig;print("%s"%(sysconfig.get_path("include")))' 2>/dev/null)"
   printf " + checking for python ... "
-
-  if [ -z "$python_ver" ]; then
+  if [ -z "$python_ver" -o -z "$python_inc" -o $python_ver -lt 3 ]; then
     printf "no\n"
     return
   fi
-
   nm_feature=
   nm_feature_name=
   nm_feature_run=dumb
   nm_feature_h='#include <Python.h>'
-  nm_feature_flags="$CFLAGS ${nm_inc_opt}${python_inc}"
+  nm_feature_flags="${nm_inc_opt}${python_inc}"
   nm_feature_test='PyObject *o1 = NULL; (void)o1;'
   . ${NORE_ROOT}/auto/feature
-
   if [ "$nm_found" != "yes" ]; then
     printf "no\n"
     return
   fi
-
   flag=has_python op=":=" value="yes" . ${NORE_ROOT}/auto/make_define
   flag=python_inc op=":=" value="$python_inc" . ${NORE_ROOT}/auto/make_define
   printf "yes\n"
