@@ -13,6 +13,7 @@ ds: double_linked_list                          \
     ds_tree                                     \
     ds_calc                                     \
     ds_d2b                                      \
+    ds_python                                   \
     ds_umbra_str
 
 ds_test: double_linked_list_test                \
@@ -23,6 +24,7 @@ ds_test: double_linked_list_test                \
          ds_tree_test                           \
          ds_calc_test                           \
          ds_d2b_test                            \
+         ds_python_test                         \
          ds_umbra_str_test
 
 # env
@@ -187,6 +189,17 @@ $(ds_calc_binout): $(ds_root)/calc/calc.c       \
     -I$(ds_root)/queue                          \
     $<                                          \
     $(bin_out)$@
+
+# python
+ds_python_pystr_binout := $(bin_path)/$(ds_prefix)_python_pystr$(bin_ext)
+
+ds_python: $(ds_python_pystr_binout)
+ds_python_test: ds_python
+	$(ds_python_pystr_binout)
+
+$(ds_python_pystr_binout): $(ds_root)/python/pystr1.c
+	$(CC) $(CFLAGS) $(INC) $< $(bin_out)$@
+
 
 # umbra str
 ds_umbra_str_binout := $(bin_path)/$(ds_prefix)_umbra_str$(bin_ext)
