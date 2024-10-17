@@ -15,6 +15,7 @@ ipc: ipc_fd                                     \
      ipc_filter                                 \
      ipc_pager                                  \
      ipc_pipe                                   \
+     ipc_sem                                    \
      ipc_sock                                   \
      ipc_addr
 
@@ -22,6 +23,7 @@ ipc_test: ipc_fd_test                           \
           ipc_filter_test                       \
           ipc_pager_test                        \
           ipc_pipe_test                         \
+          ipc_sem_test                          \
           ipc_sock_test                         \
           ipc_addr_test
 
@@ -141,6 +143,20 @@ ipc_pipe_test: ipc_pipe
 	$(ipc_pipe_binout)
 
 $(ipc_pipe_binout): $(ipc_root)/pipe/p1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+
+# sem
+ipc_sem_unnamed_binout := $(bin_path)/$(ipc_prefix)_sem_unnamed$(bin_ext)
+
+ipc_sem: $(ipc_sem_unnamed_binout)
+ipc_sem_test: ipc_sem_unnamed_test
+
+ipc_sem_unnamed_test: $(ipc_sem_unnamed_binout)
+	$<
+
+$(ipc_sem_unnamed_binout): $(ipc_root)/sem/un1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
