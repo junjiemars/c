@@ -138,11 +138,17 @@ $(ipc_pager_emu_binout): $(ipc_root)/pager/p1.c \
 # pipe
 ipc_pipe_bone_binout := $(bin_path)/$(ipc_prefix)_pipe_bone$(bin_ext)
 ipc_pipe_chain_binout := $(bin_path)/$(ipc_prefix)_pipe_chain$(bin_ext)
+ipc_pipe_std_binout := $(bin_path)/$(ipc_prefix)_pipe_std$(bin_ext)
+ipc_pipe_pager_binout := $(bin_path)/$(ipc_prefix)_pipe_pager$(bin_ext)
 
 ipc_pipe: $(ipc_pipe_bone_binout) \
-          $(ipc_pipe_chain_binout)
+          $(ipc_pipe_chain_binout) \
+          $(ipc_pipe_std_binout) \
+          $(ipc_pipe_pager_binout)
 ipc_pipe_test: ipc_pipe_bone_test \
-               ipc_pipe_chain_test
+               ipc_pipe_chain_test \
+               ipc_pipe_std_test \
+               ipc_pipe_pager_test
 
 ipc_pipe_bone_test: $(ipc_pipe_bone_binout)
 	$<
@@ -150,10 +156,22 @@ ipc_pipe_bone_test: $(ipc_pipe_bone_binout)
 ipc_pipe_chain_test: $(ipc_pipe_chain_binout)
 	$<
 
+ipc_pipe_std_test: $(ipc_pipe_std_binout)
+	$<
+
+ipc_pipe_pager_test: $(ipc_pipe_pager_binout)
+	PAGER=$(shell command -v less) $< $(CURDIR)/$(ipc_root)/Makefile
+
 $(ipc_pipe_bone_binout): $(ipc_root)/pipe/p1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(ipc_pipe_chain_binout): $(ipc_root)/pipe/p2.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(ipc_pipe_std_binout): $(ipc_root)/pipe/p3.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(ipc_pipe_pager_binout): $(ipc_root)/pipe/p4.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
