@@ -160,7 +160,7 @@ ipc_pipe_std_test: $(ipc_pipe_std_binout)
 	$<
 
 ipc_pipe_pager_test: $(ipc_pipe_pager_binout)
-	PAGER=$(shell command -v less) $< $(CURDIR)/$(ipc_root)/Makefile
+	$< $(CURDIR)/$(ipc_root)/pipe/p4.c
 
 $(ipc_pipe_bone_binout): $(ipc_root)/pipe/p1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

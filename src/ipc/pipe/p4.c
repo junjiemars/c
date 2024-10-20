@@ -47,6 +47,7 @@ main (int argc, char **argv)
         {
           fprintf (stderr, "fread error\n");
         }
+      close (fildes[1]);
       waitpid (pid, NULL, 0);
     }
   else
@@ -60,6 +61,14 @@ main (int argc, char **argv)
       if ((pager = getenv ("PAGER")) == NULL)
         {
           pager = _PAGER_;
+        }
+      if ((pager_argv0 = strrchr (pager, '/')) != NULL)
+        {
+          pager_argv0++;
+        }
+      else
+        {
+          pager_argv0 = pager;
         }
       execl (pager, pager_argv0, (char *)0);
     }
