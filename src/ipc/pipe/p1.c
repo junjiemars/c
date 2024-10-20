@@ -1,6 +1,7 @@
-#include "_ipc_.h"
+#include <_ipc_.h>
+#include <string.h>
 
-#define _TXT_ "hello pipe\n"
+#define _TXT_ "hello pipe"
 
 int
 main (void)
@@ -13,13 +14,13 @@ main (void)
   if (pipe (fd) == -1)
     {
       perror (0);
-      exit (EXIT_FAILURE);
+      exit (1);
     }
 
   if ((pid = fork ()) == -1)
     {
       perror (0);
-      exit (EXIT_FAILURE);
+      exit (1);
     }
   else if (pid > 0)
     {
@@ -30,9 +31,12 @@ main (void)
   else
     {
       close (fd[1]); /* close write fd */
-      n = read (fd[0], line, NM_LINE_MAX);
+      n = snprintf (line, NM_LINE_MAX,
+                    "%zi received from %zi: ", (size_t)getpid (),
+                    (size_t)getppid ());
+      n += read (fd[0], line + n, NM_LINE_MAX);
       write (STDOUT_FILENO, line, n);
     }
 
-  exit (EXIT_SUCCESS);
+  exit (0);
 }
