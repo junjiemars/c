@@ -58,6 +58,7 @@ main (int argc, char **argv)
           fprintf (stderr, "dup2 stdin error\n");
           exit (1);
         }
+      close (fildes[0]);
       if ((pager = getenv ("PAGER")) == NULL)
         {
           pager = _PAGER_;
@@ -70,7 +71,10 @@ main (int argc, char **argv)
         {
           pager_argv0 = pager;
         }
-      execl (pager, pager_argv0, (char *)0);
+      if (execl (pager, pager_argv0, (char *)0) < 0)
+        {
+          perror (NULL);
+        }
     }
 
   exit (0);
