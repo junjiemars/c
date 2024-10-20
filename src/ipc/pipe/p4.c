@@ -71,9 +71,10 @@ main (int argc, char **argv)
         {
           pager_argv0 = pager;
         }
-      if (execl (pager, pager_argv0, (char *)0) < 0)
+      if (execl (pager, pager_argv0, (char *)0) == -1)
         {
           perror (NULL);
+          exit (1);
         }
     }
 
