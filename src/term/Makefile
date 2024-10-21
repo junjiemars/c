@@ -22,6 +22,7 @@ term_test: term_map_test                        \
 
 endif
 
+
 
 # env
 term_prefix := term
@@ -37,16 +38,20 @@ ifeq ($(shell test $(_MEMORY_) -gt 0; echo $$?),0)
 CFLAGS += $(cflags_sanitize)
 endif
 
+
 
 # map
 term_map_binout := $(bin_path)/$(term_prefix)_map$(bin_ext)
 
 term_map: $(term_map_binout)
 term_map_test: term_map
-	$(term_map_binout)
+	$(term_map_binout) \
+    && stty -g | tr ':' '\n' | awk '/eof=2/{x=1}END{if(x==1)exit 0;exit 1}'
 
 $(term_map_binout): $(term_root)/m1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 
 # csize
 term_csize_binout := $(bin_path)/$(term_prefix)_csize$(bin_ext)

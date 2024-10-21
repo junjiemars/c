@@ -143,12 +143,14 @@ ipc_pipe_pager_binout := $(bin_path)/$(ipc_prefix)_pipe_pager$(bin_ext)
 
 ipc_pipe: $(ipc_pipe_bone_binout) \
           $(ipc_pipe_chain_binout) \
-          $(ipc_pipe_std_binout) \
+          ipc_pipe_std \
           $(ipc_pipe_pager_binout)
 ipc_pipe_test: ipc_pipe_bone_test \
                ipc_pipe_chain_test \
                ipc_pipe_std_test \
                ipc_pipe_pager_test
+
+ipc_pipe_std: $(ipc_pipe_std_binout)
 
 ipc_pipe_bone_test: $(ipc_pipe_bone_binout)
 	$<
@@ -157,7 +159,7 @@ ipc_pipe_chain_test: $(ipc_pipe_chain_binout)
 	$<
 
 ipc_pipe_std_test: $(ipc_pipe_std_binout)
-	$<
+	$< "cat $(CURDIR)/$(ipc_root)/pipe/p3.c"
 
 ipc_pipe_pager_test: $(ipc_pipe_pager_binout)
 	$< $(CURDIR)/$(ipc_root)/pipe/p4.c

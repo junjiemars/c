@@ -1,7 +1,10 @@
 # -*- mode:sh -*- vim:ft=sh
 
 # check posix features
-. src/posix/auto
+
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
 
 
 # eof

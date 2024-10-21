@@ -10,15 +10,15 @@ main (int argc, char **argv)
   pid_t pid;
   char buf[PIPE_BUF];
   FILE *fp;
-  char *filename, *pager, *pager_argv0;
+  char *pathname, *pager, *pager_argv0;
   size_t nread;
 
   if (argc < 2)
     {
-      fprintf (stderr, "usage: %s <filename>\n", argv[0]);
+      fprintf (stderr, "usage: %s <pathname>\n", argv[0]);
       exit (1);
     }
-  filename = argv[1];
+  pathname = argv[1];
 
   if (pipe (fildes) == -1)
     {
@@ -34,7 +34,7 @@ main (int argc, char **argv)
   else if (pid > 0)
     {
       close (fildes[0]);
-      if ((fp = fopen (filename, "r")) == NULL)
+      if ((fp = fopen (pathname, "r")) == NULL)
         {
           perror (NULL);
           exit (1);

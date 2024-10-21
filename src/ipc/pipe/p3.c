@@ -1,66 +1,48 @@
 #include <_ipc_.h>
-#include <string.h>
 
-#define _TXT_ "hello pipe\n"
+#define _PAGER_ "${PAGER:-/usr/bin/less}"
 
 int
-main (void)
+main (int argc, char **argv)
 {
-  ssize_t n;
-  int fildes1[2], fildes2[2];
-  pid_t pid;
-  char line[PIPE_BUF];
+  char buf[BUFSIZ];
+  size_t n_read;
+  char *command;
+  FILE *fpin, *fpout;
 
-  if (pipe (fildes1) == -1)
+  if (argc < 2)
     {
-      perror (0);
+      fprintf (stderr, "usage: %s <command>\n", argv[0]);
+      exit (1);
+    }
+  command = argv[1];
+
+  if ((fpin = popen (command, "r")) == NULL)
+    {
+      perror (NULL);
       exit (1);
     }
 
-  if ((pid = fork ()) == -1)
+  if ((fpout = popen (_PAGER_, "w")) == NULL)
     {
-      perror (0);
+      perror (NULL);
       exit (1);
     }
-  else if (pid > 0)
+
+  while ((n_read = fread (buf, sizeof (char), BUFSIZ, fpin)) > 0)
     {
-      close (fildes1[0]);
-      write (fildes1[1], _TXT_, sizeof (_TXT_) - 1);
-      waitpid (pid, NULL, 0);
+      fwrite (buf, sizeof (char), n_read, fpout);
     }
-  else
+  if (ferror (fpin))
     {
-      close (fildes1[1]);
+      fprintf (stderr, "fread error: %s\n", strerror (errno));
+      exit (1);
+    }
 
-      if (pipe (fildes2) == -1)
-        {
-          perror (NULL);
-          exit (1);
-        }
-
-      if ((pid = fork ()) == -1)
-        {
-          perror (NULL);
-          exit (1);
-        }
-      else if (pid > 0)
-        {
-          close (fildes2[0]);
-          n = snprintf (line, PIPE_BUF,
-                        "%zi received from %zi: ", (size_t)getpid (),
-                        (size_t)getppid ());
-          n += read (fildes1[0], line + n, PIPE_BUF);
-          write (fildes2[1], line, n);
-        }
-      else
-        {
-          close (fildes2[1]);
-          n = snprintf (line, PIPE_BUF,
-                        "%zi received from %zi: ", (size_t)getpid (),
-                        (size_t)getppid ());
-          n += read (fildes2[0], line + n, PIPE_BUF);
-          write (STDOUT_FILENO, line, n);
-        }
+  if (pclose (fpout) == -1)
+    {
+      fprintf (stderr, "pclose error: %s\n", strerror (errno));
+      exit (1);
     }
 
   exit (0);

@@ -1,12 +1,11 @@
 #include "_ipc_.h"
 
-
 int
 paging (const char *pathname, const char *pager)
 {
-  FILE   *fp;
-  int     fd[2];
-  pid_t   pid;
+  FILE *fp;
+  int fd[2];
+  pid_t pid;
 
   if ((fp = fopen (pathname, "r")) == NULL)
     {
@@ -27,9 +26,9 @@ paging (const char *pathname, const char *pager)
     }
   else if (pid > 0)
     {
-      char     line[NM_LINE_MAX], *linep;
-      size_t   linecap  =  NM_LINE_MAX;
-      ssize_t  n;
+      char line[NM_LINE_MAX], *linep;
+      size_t linecap = NM_LINE_MAX;
+      ssize_t n;
 
       close (fd[0]);
 
@@ -63,7 +62,7 @@ paging (const char *pathname, const char *pager)
     }
   else
     {
-      char  *pager_name;
+      char *pager_name;
 
       close (fd[1]);
 

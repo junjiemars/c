@@ -1,14 +1,14 @@
-#include "_ipc_.h"
+#include <_ipc_.h>
 
-static pid_t  *childpid  =  NULL;
-static int     maxfd     =  16;
+static pid_t *childpid = NULL;
+static int maxfd = 16;
 
-
-FILE *popen(const char *command, const char *mode)
+FILE *
+popen (const char *command, const char *mode)
 {
-  int     fd[2];
-  pid_t   pid;
-  FILE   *fp;
+  int fd[2];
+  pid_t pid;
+  FILE *fp;
 
   if (!(*mode == 'r' || *mode == 'w'))
     {
@@ -18,27 +18,27 @@ FILE *popen(const char *command, const char *mode)
 
   if (childpid == NULL)
     {
-      if ((childpid = calloc(maxfd, sizeof(pid_t))) == NULL)
+      if ((childpid = calloc (maxfd, sizeof (pid_t))) == NULL)
         {
           return NULL;
         }
     }
 
-  if (pipe(fd) == -1)
+  if (pipe (fd) == -1)
     {
       return NULL;
     }
 
   if (fd[0] >= maxfd || fd[1] >= maxfd)
     {
-      close(fd[0]);
-      close(fd[1]);
+      close (fd[0]);
+      close (fd[1]);
 
       errno = EMFILE;
       return NULL;
     }
 
-  if ((pid = fork()) == -1)
+  if ((pid = fork ()) == -1)
     {
       return NULL;
     }
@@ -46,20 +46,20 @@ FILE *popen(const char *command, const char *mode)
     {
       if (*mode == 'r')
         {
-          close(fd[0]);
+          close (fd[0]);
           if (fd[1] != STDOUT_FILENO)
             {
-              dup2(fd[1], STDOUT_FILENO);
-              close(fd[1]);
+              dup2 (fd[1], STDOUT_FILENO);
+              close (fd[1]);
             }
         }
       else
         {
-          close(fd[1]);
+          close (fd[1]);
           if (fd[0] != STDIN_FILENO)
             {
-              dup2(fd[0], STDIN_FILENO);
-              close(fd[0]);
+              dup2 (fd[0], STDIN_FILENO);
+              close (fd[0]);
             }
         }
 
@@ -67,42 +67,42 @@ FILE *popen(const char *command, const char *mode)
         {
           if (childpid[i] > 0)
             {
-              close(i);
+              close (i);
             }
         }
 
-      execl("/bin/sh", "sh", "-c", command, 0);
+      execl ("/bin/sh", "sh", "-c", command, 0);
 
-      _exit(127);
+      _exit (127);
     }
 
   if (*mode == 'r')
     {
-      close(fd[1]);
-      if ((fp = fdopen(fd[0], mode)) == NULL)
+      close (fd[1]);
+      if ((fp = fdopen (fd[0], mode)) == NULL)
         {
           return NULL;
         }
     }
   else
     {
-      close(fd[0]);
-      if ((fp = fdopen(fd[1], mode)) == NULL)
+      close (fd[0]);
+      if ((fp = fdopen (fd[1], mode)) == NULL)
         {
           return NULL;
         }
     }
 
-  childpid[fileno(fp)] = pid;
+  childpid[fileno (fp)] = pid;
 
   return fp;
 }
 
 int
-pclose(FILE *fp)
+pclose (FILE *fp)
 {
-  int    fd, stat;
-  pid_t  pid;
+  int fd, stat;
+  pid_t pid;
 
   if (childpid == NULL)
     {
@@ -110,7 +110,7 @@ pclose(FILE *fp)
       return -1;
     }
 
-  if ((fd = fileno(fp)) >= maxfd)
+  if ((fd = fileno (fp)) >= maxfd)
     {
       errno = EINVAL;
       return -1;
@@ -123,12 +123,12 @@ pclose(FILE *fp)
     }
 
   childpid[fd] = 0;
-  if (fclose(fp) == EOF)
+  if (fclose (fp) == EOF)
     {
       return -1;
     }
 
-  while (waitpid(pid, &stat, 0) == -1)
+  while (waitpid (pid, &stat, 0) == -1)
     {
       if (errno != EINTR)
         {

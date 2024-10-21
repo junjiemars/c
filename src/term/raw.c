@@ -1,5 +1,6 @@
 #include "_term_.h"
 #include <signal.h>
+#include <stdio.h>
 
 static void on_sig(int signo);
 static void on_atexit(void);

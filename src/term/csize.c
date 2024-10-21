@@ -6,55 +6,54 @@
  */
 
 int
-main(void)
+main (void)
 {
-  int             rc;
-  struct termios  oterm, nterm;
+  int rc;
+  struct termios oterm, nterm;
 
-  rc = tcgetattr(STDIN_FILENO, &oterm);
+  rc = tcgetattr (STDIN_FILENO, &oterm);
   if (rc == -1)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
 
   switch (oterm.c_cflag & CSIZE)
     {
     case CS5:
-      printf("5 bits/byte\n");
+      printf ("5 bits/byte\n");
       break;
     case CS6:
-      printf("6 bits/byte\n");
+      printf ("6 bits/byte\n");
       break;
     case CS7:
-      printf("7 bits/byte\n");
+      printf ("7 bits/byte\n");
       break;
     case CS8:
-      printf("8 bits/byte\n");
+      printf ("8 bits/byte\n");
       break;
     default:
-      printf("(unknown bits/byte)\n");
+      printf ("(unknown bits/byte)\n");
       break;
     }
 
   oterm.c_cflag &= ~CSIZE;
   oterm.c_cflag |= CS8;
 
-  rc = tcsetattr(STDIN_FILENO, TCSANOW, (const struct termios *) &oterm);
+  rc = tcsetattr (STDIN_FILENO, TCSANOW, (const struct termios *)&oterm);
   if (rc == -1)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
 
-  rc = tcgetattr(STDIN_FILENO, &nterm);
+  rc = tcgetattr (STDIN_FILENO, &nterm);
   if (rc == -1)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
-  assert(memcpy(&oterm, &nterm, sizeof(struct termios)));
+  assert (memcpy (&oterm, &nterm, sizeof (struct termios)));
 
-  exit(EXIT_SUCCESS);
-
+  exit (EXIT_SUCCESS);
 }

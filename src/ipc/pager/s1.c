@@ -1,47 +1,45 @@
-#include "_ipc_.h"
+#include <_ipc_.h>
 
-
-extern FILE  *popen(const char*, const char*);
-extern int    pclose(FILE *stream);
-
+extern FILE *popen (const char *, const char *);
+extern int pclose (FILE *stream);
 
 int
-paging(const char *pathname, const char *pager)
+paging (const char *pathname, const char *pager)
 {
-  char      line[NM_LINE_MAX];
-  FILE     *fpin, *fpout;
+  char line[NM_LINE_MAX];
+  FILE *fpin, *fpout;
 
-  if ((fpin = fopen(pathname, "r")) == NULL)
+  if ((fpin = fopen (pathname, "r")) == NULL)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
 
-  if ((fpout = popen(pager, "w")) == NULL)
+  if ((fpout = popen (pager, "w")) == NULL)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
 
-  while (fgets(line, NM_LINE_MAX, fpin) != NULL)
+  while (fgets (line, NM_LINE_MAX, fpin) != NULL)
     {
-      if (fputs(line, fpout) == EOF)
+      if (fputs (line, fpout) == EOF)
         {
-          perror(NULL);
-          exit(EXIT_FAILURE);
+          perror (NULL);
+          exit (EXIT_FAILURE);
         }
     }
 
-  if (ferror(fpin))
+  if (ferror (fpin))
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
 
-  if (pclose(fpout) == -1)
+  if (pclose (fpout) == -1)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
 
   return 0;

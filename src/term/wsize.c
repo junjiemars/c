@@ -1,5 +1,6 @@
 #include "_term_.h"
 #include <signal.h>
+#include <stdio.h>
 
 /*
  * Watching SIGWINCH signal.
