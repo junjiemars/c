@@ -3,6 +3,8 @@
 #
 #
 
+
+
 ifeq ($(CC_NAME), msvc)
 term:
 	@echo "#skip ..."
@@ -11,14 +13,14 @@ term_test:
 else
 
 term: term_map                                  \
-      term_csize                                \
-      term_wsize                                \
-      term_raw
+      term_cflag                                \
+      term_win                                  \
+      term_mode
 
 term_test: term_map_test                        \
-           term_csize_test                      \
-           term_wsize_test                      \
-           term_raw_test
+           term_cflag_test                      \
+           term_win_test                        \
+           term_mode_test
 
 endif
 
@@ -41,57 +43,59 @@ endif
 
 
 # map
-term_map_binout := $(bin_path)/$(term_prefix)_map$(bin_ext)
+term_map_eof_binout := $(bin_path)/$(term_prefix)_map_eof$(bin_ext)
 
-term_map: $(term_map_binout)
-term_map_test: term_map
-	$(term_map_binout) \
-    && stty -g | tr ':' '\n' | awk '/eof=2/{x=1}END{if(x==1)exit 0;exit 1}'
+term_map: $(term_map_eof_binout)
+term_map_test: term_map_eof_test
 
-$(term_map_binout): $(term_root)/m1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+term_map_eof_test: $(term_map_eof_binout)
+	$< && stty -a | grep -q -e 'eof = \^B;'
+
+$(term_map_eof_binout): $(term_root)/map/eof1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 
-# csize
-term_csize_binout := $(bin_path)/$(term_prefix)_csize$(bin_ext)
+# cflag
+term_cflag_csize_binout := $(bin_path)/$(term_prefix)_cflag_csize$(bin_ext)
 
-term_csize: $(term_csize_binout)
-term_csize_test: term_csize
-	$(term_csize_binout)
+term_cflag: $(term_cflag_csize_binout)
+term_cflag_test: term_cflag_csize_test
 
-$(term_csize_binout): $(term_root)/csize.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+term_cflag_csize_test: $(term_cflag_csize_binout)
+	$<
 
+$(term_cflag_csize_binout): $(term_root)/cflag/csize.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-# wsize
-term_wsize_binout := $(bin_path)/$(term_prefix)_wsize$(bin_ext)
-term_wsize_cppout := $(tmp_path)/$(term_prefix)_wsize$(cpp_ext)
+
 
-term_wsize: $(term_wsize_binout)
-term_wsize_test: term_wsize
-	$(term_wsize_binout)
+# win
+term_win_size_binout := $(bin_path)/$(term_prefix)_win_size$(bin_ext)
 
-$(term_wsize_binout): $(term_wsize_cppout)
-	$(CC) $(CFLAGS) $^ $(bin_out)$@
+term_win: $(term_win_size_binout)
+term_win_test: term_win_size_test
 
-$(term_wsize_cppout): $(term_root)/wsize.c
-	$(CC) $(CPPFLAGS) $(INC) $(nm_def_opt)_PAUSE_=0 $^ $(nm_stage_pre) $(cpp_out)$@
+term_win_size_test: $(term_win_size_binout)
+	$<
 
-# raw
-term_raw_binout := $(bin_path)/$(term_prefix)_raw$(bin_ext)
-term_raw_cppout := $(tmp_path)/$(term_prefix)_raw$(cpp_ext)
+$(term_win_size_binout): $(term_root)/win/w1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-term_raw: $(term_raw_binout)
-term_raw_test: term_raw
-	-@echo "abc" | $(term_raw_binout)
+
 
-$(term_raw_binout): $(term_raw_cppout)
-	$(CC) $(CFLAGS) $^ $(bin_out)$@
+# mode
+term_mode_raw_binout := $(bin_path)/$(term_prefix)_mode_raw$(bin_ext)
 
-$(term_raw_cppout): $(term_root)/raw.c
-	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+term_mode: $(term_mode_raw_binout)
+term_mode_test: term_mode_raw_test
 
+term_mode_raw_test: $(term_mode_raw_binout)
+	-@echo "abc" | $<
 
+$(term_mode_raw_binout): $(term_root)/mode/raw1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
 
 # eof

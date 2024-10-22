@@ -6,5 +6,14 @@ if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
 
+# check ttyname_r
+#----------------------------------------
+nm_feature="ttyname_r"
+nm_feature_name="nm_have_tty_name_r"
+nm_feature_run=no
+nm_feature_h='#include <unistd.h>'
+nm_feature_flags=
+nm_feature_test='(void)ttyname_r(0,0,0);'
+. ${NORE_ROOT}/auto/feature
 
 # eof

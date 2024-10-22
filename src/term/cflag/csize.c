@@ -1,4 +1,8 @@
 #include "_term_.h"
+#include <assert.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 /*
  * set character-size to 8 bits/byte.

@@ -1,4 +1,8 @@
 #include "_term_.h"
+#include <assert.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 /*
  * 1. disable INTR.
