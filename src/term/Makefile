@@ -49,6 +49,8 @@ term_map: $(term_map_eof_binout)
 term_map_test: term_map_eof_test
 
 term_map_eof_test: $(term_map_eof_binout)
+  # saved_stty=$(stty -g)
+  # stty $saved_stty
 	$< && stty -a | grep -q -e 'eof = \^B;'
 
 $(term_map_eof_binout): $(term_root)/map/eof1.c
@@ -91,7 +93,7 @@ term_mode: $(term_mode_raw_binout)
 term_mode_test: term_mode_raw_test
 
 term_mode_raw_test: $(term_mode_raw_binout)
-	-@echo "abc" | $<
+	-@echo "" | $<
 
 $(term_mode_raw_binout): $(term_root)/mode/raw1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
