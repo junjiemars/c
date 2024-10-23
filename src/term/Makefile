@@ -89,9 +89,10 @@ $(term_win_size_binout): $(term_root)/win/w1.c
 # mode
 term_mode_raw_binout := $(bin_path)/$(term_prefix)_mode_raw$(bin_ext)
 
-term_mode: $(term_mode_raw_binout)
+term_mode: term_mode_raw
 term_mode_test: term_mode_raw_test
 
+term_mode_raw: $(term_mode_raw_binout)
 term_mode_raw_test: $(term_mode_raw_binout)
 	-@echo "" | $<
 

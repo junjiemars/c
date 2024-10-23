@@ -14,7 +14,7 @@
 #define RAW_OFLAG (OPOST)
 
 static void on_sig (int signo);
-static void on_exit (void);
+static void on_atexit (void);
 
 static int tty_cbreak (int fd);
 static int tty_raw (int fd);
@@ -31,7 +31,7 @@ main (void)
   char c;
   ssize_t n;
 
-  atexit (on_exit);
+  atexit (on_atexit);
 
   /* trap SIGINT, SIGQUIT and SIGTERM */
   if (signal (SIGINT, on_sig) == SIG_ERR)
@@ -238,7 +238,7 @@ tty_reset (int fd)
 }
 
 void
-on_exit ()
+on_atexit (void)
 {
   if (ttyfd >= 0)
     {
