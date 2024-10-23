@@ -12,13 +12,17 @@ term_test:
 	@echo "#skip ..."
 else
 
-term: term_map                                  \
+term: term_ioctl                                \
+      term_map                                  \
       term_cflag                                \
+      term_pty                                  \
       term_win                                  \
       term_mode
 
-term_test: term_map_test                        \
+term_test: term_ioctl_test                      \
+           term_map_test                        \
            term_cflag_test                      \
+           term_pty_test                        \
            term_win_test                        \
            term_mode_test
 
@@ -41,6 +45,18 @@ CFLAGS += $(cflags_sanitize)
 endif
 
 
+
+# ioctl
+term_ioctl_ldisc_binout := $(bin_path)/$(term_prefix)_ioctl_ldisc$(bin_ext)
+
+term_ioctl: $(term_ioctl_ldisc_binout)
+term_ioctl_test: term_ioctl_ldisc_test
+
+term_ioctl_ldisc_test: $(term_ioctl_ldisc_binout)
+	$<
+
+$(term_ioctl_ldisc_binout): $(term_root)/ioctl/c1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 # map
 term_map_eof_binout := $(bin_path)/$(term_prefix)_map_eof$(bin_ext)
@@ -68,6 +84,44 @@ term_cflag_csize_test: $(term_cflag_csize_binout)
 	$<
 
 $(term_cflag_csize_binout): $(term_root)/cflag/csize.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+
+# pty
+term_pty_raw_binout := $(bin_path)/$(term_prefix)_pty_raw$(bin_ext)
+term_pty_rt_binout := $(bin_path)/$(term_prefix)_pty_rt$(bin_ext)
+term_pty_script1_binout := $(bin_path)/$(term_prefix)_pty_script1$(bin_ext)
+
+term_pty: term_pty_raw \
+          term_pty_rt \
+          term_pty_script1
+term_pty_test: term_pty_raw_test \
+               term_pty_rt_test \
+               term_pty_script1_test
+
+term_pty_raw: $(term_pty_raw_binout)
+term_pty_raw_test: $(term_pty_raw_binout)
+	$<
+
+term_pty_rt: $(term_pty_rt_binout)
+term_pty_rt_test: $(term_pty_rt_binout)
+	$<
+
+term_pty_script1: $(term_pty_script1_binout)
+term_pty_script1_test: $(term_pty_script1_binout)
+	$<
+
+$(term_pty_raw_binout): $(term_root)/pty/r1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(term_pty_rt_binout): $(term_root)/pty/ptys.c \
+                       $(term_root)/pty/rt_test.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+$(term_pty_script1_binout): $(term_root)/pty/ptys.c \
+                       $(term_root)/pty/script1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
