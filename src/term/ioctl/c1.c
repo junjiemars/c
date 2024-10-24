@@ -15,6 +15,7 @@ main (void)
       exit (1);
     }
 
+#if !(LINUX)
   switch (ldisc)
     {
     case TTYDISC:
@@ -33,6 +34,7 @@ main (void)
       printf ("fd %d %s(%d)\n", fd, "Unknown", ldisc);
       break;
     }
+#endif /* end of LINUX */
 
   exit (0);
 }
