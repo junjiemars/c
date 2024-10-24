@@ -17,6 +17,7 @@ term: term_ioctl                                \
       term_map                                  \
       term_cflag                                \
       term_pty                                  \
+      term_script                               \
       term_win                                  \
       term_mode
 
@@ -24,6 +25,7 @@ term_test: term_ioctl_test                      \
            term_map_test                        \
            term_cflag_test                      \
            term_pty_test                        \
+           term_script_test                     \
            term_win_test                        \
            term_mode_test
 
@@ -132,6 +134,25 @@ $(term_pty_script1_binout): $(term_root)/pty/ptys.c \
                        $(term_root)/pty/script1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+
+# script
+term_script_log_file := $(CURDIR)/$(tmp_path)/$(term_prefix)_script.log
+term_script_tim_file := $(CURDIR)/$(tmp_path)/$(term_prefix)_script.tim
+
+ifeq ($(has_script_program), YES)
+ifeq ($(NM_SYSTEM), Darwin)			# Darwin
+term_script_test:
+	script -r $(term_script_log_file) ls -lh \
+    && script -p $(term_script_log_file)
+else 														# Linux
+	script -T $(term_script_tim_file) -O $(term_script_log_file) ls -lh \
+    && scriptreplay -T $(term_script_tim_file) -O $(term_script_log_file)
+endif														# end of system
+else
+term_script_test:
+	@echo "# missing script(1) program, skip $@ ..."
+endif														# end of script
 
 
 # win
