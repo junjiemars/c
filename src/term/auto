@@ -26,4 +26,33 @@ nm_feature_flags=
 nm_feature_test='(void)ptsname_r(0);'
 . ${NORE_ROOT}/auto/feature
 
+
+# check leptonica requirements
+#----------------------------------------
+has_script_program=NO
+printf " + checking for script(1) program ... "
+if command -v script &>/dev/null; then
+  printf "yes\n"
+  has_script_program=YES
+  case $NM_SYSTEM in
+    Darwin)
+      flag=has_script_program op=":=" value="YES" \
+        . ${NORE_ROOT}/auto/make_define
+    ;;
+    Linux)
+      if command -v scriptreplay &>/dev/null; then
+        flag=has_script_program op=":=" value="YES" \
+          . ${NORE_ROOT}/auto/make_define
+      fi
+      ;;
+    *)
+      # ignore: unknown system
+      printf "no\n"
+      ;;
+  esac
+else
+  printf "no\n"
+fi
+
+
 # eof
