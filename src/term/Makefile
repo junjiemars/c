@@ -146,7 +146,8 @@ term_script_test:
 	script -r $(term_script_log_file) ls -lh \
     && script -p $(term_script_log_file)
 else 														# Linux
-	script -T $(term_script_tim_file) -O $(term_script_log_file) ls -lh \
+term_script_test:
+	script -T $(term_script_tim_file) -O $(term_script_log_file) -c "ls -lh" \
     && scriptreplay -T $(term_script_tim_file) -O $(term_script_log_file)
 endif														# end of system
 else
