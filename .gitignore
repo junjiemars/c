@@ -164,6 +164,7 @@ src/uemacs/uemacs_home
 .cache
 compile_commands.json
 **/.clang-format
+**/.cc-fmt*.c
 
 # rust-analyzer
 **/rust-project.json
