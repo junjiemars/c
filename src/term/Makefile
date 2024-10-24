@@ -1,3 +1,4 @@
+# -*- mode:makefile-gmake -*-
 #
 # ./configure --has-term
 #
@@ -93,12 +94,19 @@ term_pty_raw_binout := $(bin_path)/$(term_prefix)_pty_raw$(bin_ext)
 term_pty_rt_binout := $(bin_path)/$(term_prefix)_pty_rt$(bin_ext)
 term_pty_script1_binout := $(bin_path)/$(term_prefix)_pty_script1$(bin_ext)
 
+ifeq ($(NM_SYSTEM), Darwin)
 term_pty: term_pty_raw \
           term_pty_rt \
           term_pty_script1
 term_pty_test: term_pty_raw_test \
                term_pty_rt_test \
                term_pty_script1_test
+else
+term_pty:
+	-echo "# skip $@ ..."
+term_pty_test: term_pty
+	-echo "# skip $@ ..."
+endif
 
 term_pty_raw: $(term_pty_raw_binout)
 term_pty_raw_test: $(term_pty_raw_binout)
