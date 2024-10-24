@@ -1,19 +1,17 @@
 #include "ptys.h"
 #include "_term_.h"
 #include <errno.h>
-#include <limits.h>
+#include <fcntl.h>
 #include <stdlib.h>
-#include <sys/errno.h>
-#include <sys/fcntl.h>
+#include <string.h>
 #include <sys/ioctl.h>
-#include <unistd.h>
+#include <limits.h>
 
 int
 pty_open_master (char *name, size_t namesz)
 {
   int fd;
   int rc;
-  char *ss;
 
   if (name == NULL || namesz == 0)
     {
@@ -36,11 +34,17 @@ pty_open_master (char *name, size_t namesz)
       goto clean_exit;
     }
 
+#if (NM_HAVE_PTSNAME_R)
+  char ss[_POSIX_PATH_MAX];
+#else
+  char *ss;
   if ((ss = ptsname (fd)) == NULL)
     {
       goto clean_exit;
     }
-  strncpy (name, ss, namesz);
+#endif
+
+      strncpy (name, ss, namesz);
   name[namesz - 1] = '\0';
 
   return fd;

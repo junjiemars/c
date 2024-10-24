@@ -140,6 +140,9 @@ $(term_pty_script1_binout): $(term_root)/pty/ptys.c \
 term_script_log_file := $(CURDIR)/$(tmp_path)/$(term_prefix)_script.log
 term_script_tim_file := $(CURDIR)/$(tmp_path)/$(term_prefix)_script.tim
 
+term_script:
+	@echo "# no build target, skip $< ..."
+
 ifeq ($(has_script_program), YES)
 ifeq ($(NM_SYSTEM), Darwin)			# Darwin
 term_script_test:
