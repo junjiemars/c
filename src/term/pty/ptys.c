@@ -1,23 +1,17 @@
-#include "ptys.h"
 #include "_term_.h"
+#include "ptys.h"
 #include <errno.h>
 #include <fcntl.h>
+#include <limits.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
-#include <limits.h>
 
 int
 pty_open_master (char *name, size_t namesz)
 {
   int fd;
   int rc;
-
-  if (name == NULL || namesz == 0)
-    {
-      errno = EINVAL;
-      return -1;
-    }
 
   if ((fd = posix_openpt (O_RDWR)) < 0)
     {
@@ -36,6 +30,10 @@ pty_open_master (char *name, size_t namesz)
 
 #if (NM_HAVE_PTSNAME_R)
   char ss[_POSIX_PATH_MAX];
+  if (ptsname_r (fd, ss, _POSIX_PATH_MAX) == -1)
+    {
+      goto clean_exit;
+    }
 #else
   char *ss;
   if ((ss = ptsname (fd)) == NULL)
@@ -43,8 +41,7 @@ pty_open_master (char *name, size_t namesz)
       goto clean_exit;
     }
 #endif
-
-      strncpy (name, ss, namesz);
+  strncpy (name, ss, namesz);
   name[namesz - 1] = '\0';
 
   return fd;
@@ -80,7 +77,6 @@ pty_fork (int *fdp, char *name, size_t namesz)
     {
       return -1;
     }
-
   strncpy (name, ss, namesz);
   name[namesz - 1] = '\0';
 
@@ -88,7 +84,7 @@ pty_fork (int *fdp, char *name, size_t namesz)
     {
       return -1;
     }
-  else if (pid == 0)
+  else if (pid == 0) /* child */
     {
       if (setsid () < 0)
         {
@@ -125,11 +121,9 @@ pty_fork (int *fdp, char *name, size_t namesz)
 
       return 0;
     }
-  else
+  else /* parent */
     {
       *fdp = fdm;
       return pid;
     }
-
-  return 0;
 }

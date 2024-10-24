@@ -129,7 +129,6 @@ $(term_pty_rt_binout): $(term_root)/pty/ptys.c \
                        $(term_root)/pty/rt_test.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-
 $(term_pty_script1_binout): $(term_root)/pty/ptys.c \
                        $(term_root)/pty/script1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
