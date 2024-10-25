@@ -21,6 +21,7 @@ io:                                             \
     io_fcntl                                    \
     io_link                                     \
     io_ls                                       \
+    io_multiplex                                \
     io_name                                     \
     io_open                                     \
     io_own                                      \
@@ -47,6 +48,7 @@ io_test:                                        \
          io_fcntl_test                          \
          io_link_test                           \
          io_ls_test                             \
+         io_multiplex_test                      \
          io_name_test                           \
          io_open_test                           \
          io_own_test                            \
@@ -62,6 +64,7 @@ io_test:                                        \
          io_time_test                           \
          io_trunc_test                          \
          io_umask_test
+
 endif
 
 
@@ -472,6 +475,21 @@ io_ls_raw_test: $(io_ls_raw_binout)
 $(io_ls_raw_binout): $(io_root)/ls/l1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+
+# multiplex
+io_multiplex_raw_binout := $(bin_path)/$(io_prefix)_multiplex_raw$(bin_ext)
+
+io_multiplex: $(io_multiplex_raw_binout)
+io_multiplex_test: io_multiplex_raw_test
+
+io_multiplex_raw_test: $(io_multiplex_raw_binout)
+	$< 3<Makefile 4<configure
+
+$(io_multiplex_raw_binout): $(io_root)/multiplex/r1.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+
+
 # name
 io_name_binout := $(bin_path)/$(io_prefix)_name$(bin_ext)
 
