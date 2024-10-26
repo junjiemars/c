@@ -1,4 +1,4 @@
-# -*- major-mode:makefile-gmake-mode -*-
+# -*- mode:makefile-gmake -*-
 #
 # ./configure --has-signal
 #
@@ -11,7 +11,6 @@ signal_test:
 	@echo "#skip ..."
 else
 
-
 signal:                                         \
         signal_abort                            \
         signal_alarm                            \
@@ -22,7 +21,7 @@ signal:                                         \
         signal_kill                             \
         signal_pause                            \
         signal_queue                            \
-        singal_safe                             \
+        signal_safe                             \
         signal_sleep                            \
         signal_suspend                          \
         signal_sync                             \
@@ -281,12 +280,12 @@ signal_safe_nre_binout := $(bin_path)/$(signal_prefix)_safe_nre$(bin_ext)
 signal_safe_re_binout := $(bin_path)/$(signal_prefix)_safe_re$(bin_ext)
 
 
-signal_safe: $(signal_safe_stdio_binout)        \
-             $(signal_safe_nre_binout)          \
+signal_safe: $(signal_safe_stdio_binout) \
+             $(signal_safe_nre_binout) \
              $(signal_safe_re_binout)
 
-signal_safe_test: signal_safe_stdio_test        \
-                  signal_safe_nre_test          \
+signal_safe_test: signal_safe_stdio_test \
+                  signal_safe_nre_test \
                   signal_safe_re_test
 
 signal_safe_stdio_test: $(signal_safe_stdio_binout)
@@ -462,6 +461,8 @@ $(signal_timeout_t1_binout): $(signal_root)/timeout/d.c   \
                              $(signal_root)/timeout/t1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+
 # timer
 signal_timer_libes_binout := $(bin_path)/$(signal_prefix)_timer_libes$(bin_ext)
 
@@ -474,6 +475,7 @@ signal_timer_libes_test: $(signal_timer_libes_binout)
 $(signal_timer_libes_binout): $(signal_root)/timer/t1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 
 # wait
 signal_wait1_binout := $(bin_path)/$(signal_prefix)_wait1$(bin_ext)
@@ -485,8 +487,6 @@ signal_wait_test: signal_wait
 $(signal_wait1_binout): $(signal_root)/wait/w1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
-
-
-
+
 
 # eof
