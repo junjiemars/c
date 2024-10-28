@@ -14,6 +14,7 @@ else
 signal:                                         \
         signal_abort                            \
         signal_alarm                            \
+        signal_bone                             \
         signal_child                            \
         signal_info                             \
         signal_io                               \
@@ -33,6 +34,7 @@ signal:                                         \
 signal_test:                                    \
              signal_abort_test                  \
              signal_alarm_test                  \
+             signal_bone_test                   \
              signal_child_test                  \
              signal_info_test                   \
              signal_io_test                     \
@@ -66,25 +68,25 @@ signal_abort_d_binout := $(bin_path)/$(signal_prefix)_abort_d$(bin_ext)
 signal_abort_a1_binout := $(bin_path)/$(signal_prefix)_abort_a1$(bin_ext)
 signal_abort_cflags := -D_IGN_SIG_ABRT_=-1 -D_EXIT_SIG_HANDLER_=1
 
-signal_abort: $(signal_abort_d_binout) \
-              $(signal_abort_a1_binout)
+signal_abort: signal_abort_d \
+              signal_abort_a1
 signal_abort_test: signal_abort_d_test \
                    signal_abort_a1_test
 
+signal_abort_d: $(signal_abort_d_binout)
+signal_abort_a1: $(signal_abort_a1_binout)
+
 signal_abort_d_test: $(signal_abort_d_binout)
 	-$<
-
 signal_abort_a1_test: $(signal_abort_a1_binout)
 	-$<
 
 $(signal_abort_d_binout): $(signal_root)/abort/d1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(signal_abort_cflags) \
-    $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(signal_abort_a1_binout): $(signal_root)/abort/d1.c \
                            $(signal_root)/abort/abrt1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(signal_abort_cflags) \
-    $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(signal_abort_cflags) $(bin_out)$@ $^
 
 
 
@@ -116,6 +118,18 @@ $(signal_alarm_a1_binout): $(signal_root)/alarm/d1.c \
 
 
 
+# bone
+signal_bone_binout := $(bin_path)/$(signal_prefix)_bone$(bin_ext)
+
+signal_bone: $(signal_bone_binout)
+signal_bone_test: $(signal_bone_binout)
+	$(signal_bone_binout)
+
+$(signal_bone_binout): $(signal_root)/bone/b1.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+
+
+
 # child
 signal_child_proc_binout := $(bin_path)/$(signal_prefix)_child_proc$(bin_ext)
 signal_child_chld_binout := $(bin_path)/$(signal_prefix)_child_chld$(bin_ext)
@@ -125,18 +139,16 @@ signal_child: $(signal_child_proc_binout) \
 signal_child_test: signal_child_proc_test \
                    signal_child_chld_test
 
-
 signal_child_proc_test: $(signal_child_proc_binout)
 	$<
-
 signal_child_chld_test: $(signal_child_chld_binout)
 	$< 1
 
 $(signal_child_proc_binout): $(signal_root)/child/p1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(signal_child_chld_binout): $(signal_root)/child/c1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
 
