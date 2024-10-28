@@ -15,13 +15,13 @@ main (void)
   /* examine current mask */
   assert (sigprocmask (SIG_BLOCK, NULL, &oset) == 0
           && "should return current mask");
-  assert (oset == 0 && "sigset_t default should be zero");
+  assert (*(unsigned long*)&oset == 0 && "sigset_t default should be zero");
 
   sigfillset (&nset);
   assert (sigismember (&nset, SIGABRT) == 1 && "SIGABRT should in set");
 
   sigemptyset (&nset);
-  assert (nset == 0 && "should be zero");
+  assert (*(unsigned long*)&nset == 0 && "should be zero");
 
   sigaddset (&nset, SIGABRT);
   assert (sigismember (&nset, SIGABRT) == 1 && "SIGABRT should in set");
