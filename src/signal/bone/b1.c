@@ -2,7 +2,9 @@
 #include <pthread.h>
 
 static void on_sig (int);
-static void pr_pid (void);
+
+static volatile pid_t pid;
+static volatile pthread_t tid;
 
 int
 main (void)
@@ -10,18 +12,19 @@ main (void)
   sigset_t oset, nset;
   struct sigaction oact, nact;
 
-  pr_pid ();
+  pid = getpid ();
+  tid = pthread_self ();
 
   /* examine current mask */
   assert (sigprocmask (SIG_BLOCK, NULL, &oset) == 0
           && "should return current mask");
-  assert (*(unsigned long*)&oset == 0 && "sigset_t default should be zero");
+  assert (*(unsigned long *)&oset == 0 && "sigset_t default should be zero");
 
   sigfillset (&nset);
   assert (sigismember (&nset, SIGABRT) == 1 && "SIGABRT should in set");
 
   sigemptyset (&nset);
-  assert (*(unsigned long*)&nset == 0 && "should be zero");
+  assert (*(unsigned long *)&nset == 0 && "should be zero");
 
   sigaddset (&nset, SIGABRT);
   assert (sigismember (&nset, SIGABRT) == 1 && "SIGABRT should in set");
@@ -44,7 +47,7 @@ main (void)
   raise (SIGABRT);
   /* reach here because SIGABRT steal been blocked */
   raise (SIGHUP);
-  /* reach here because caught SIGHUP and return from signal handler */
+  /* reach here because caught SIGHUP and then return from signal handler */
 
   exit (0);
 }
@@ -52,13 +55,9 @@ main (void)
 void
 on_sig (int signo)
 {
-  assert (signo == SIGHUP && "should caught SIGHUP");
-  pr_pid ();
-}
+  pid_t pid1 = getpid ();
+  pthread_t tid1 = pthread_self ();
 
-void
-pr_pid (void)
-{
-  fprintf (stderr, "pid=0x%zu tid=0x%zu\n", (size_t)getpid (),
-           (size_t)pthread_self ());
+  assert (pid == pid1 && tid == tid1 && "should same pid and tid");
+  assert (signo == SIGHUP && "should caught SIGHUP");
 }
