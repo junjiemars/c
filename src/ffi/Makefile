@@ -78,6 +78,7 @@ $(ffi_nodejs_prefix):
 
 # python
 python_venv_dir := $(CURDIR)/$(ffi_root)/python/venv
+python_cflags := $(python_cflags) $(nm_optimize_opt) $(nm_symbol_opt)
 
 ffi_python_venv := $(python_venv_dir)/bin/activate
 ffi_python_required := $(python_venv_dir)/bin/pip
@@ -114,11 +115,13 @@ ffi_python_bone_dist: $(ffi_python_venv_required) \
 
 $(ffi_python_bone_binout): $(ffi_python_venv) \
                            $(ffi_root)/python/bone/foo.c
-	@source $< && pip install -v --editable $(ffi_root)/python/bone
+	CFLAGS="$(python_cflags)" source $< \
+    && pip install -v --editable $(ffi_root)/python/bone
 
 $(ffi_python_bone_tgzout): $(ffi_python_venv) \
                            $(ffi_root)/python/bone/foo.c
-	@source $< && python -m build -o $(tmp_path) $(ffi_root)/python/bone
+	CFLAGS="$(python_cflags)" && source $< \
+    && python -m build -v -o $(tmp_path) $(ffi_root)/python/bone
 
 
 
