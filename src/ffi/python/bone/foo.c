@@ -4,8 +4,7 @@
  *
  * References:
  * 1. https://docs.python.org/3/extending/extending.html
- * 2. https://setuptools.pypa.io/en/latest/userguide/quickstart.html
- *
+ * 2. https://setuptools.pypa.io/en/latest/userguide/ext_modules.html
  */
 
 PyObject *
