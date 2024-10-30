@@ -49,6 +49,7 @@ erf
 # objs directory
 objs/
 out/
+**/dist
 
 # makefiles
 /Makefile
@@ -178,3 +179,4 @@ compile_commands.json
 
 # python
 **/python/venv
+**/*.egg-info/*
