@@ -5,9 +5,11 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "nore"  # as it would appear on PyPI
 version = "0.1.0"
+authors = [
+  {name = "Nore"},
+]
 
 [tool.setuptools]
-# packages = ["example"]
 ext-modules = [
   {name = "nore", sources = ["foo.c"]}
 ]
