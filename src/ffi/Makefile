@@ -78,58 +78,73 @@ $(ffi_nodejs_prefix):
 
 # python
 python_venv_dir := $(CURDIR)/$(ffi_root)/python/venv
+python_venv_activate := $(python_venv_dir)/bin/activate
 python_inc := $(python_inc)
 python_cflags := $(python_cflags)
 python_ldflags := $(python_ldflags)
 
-ffi_python_venv := $(python_venv_dir)/bin/activate
-ffi_python_required := $(python_venv_dir)/bin/pip
+ffi_python_required := $(python_venv_activate_dir)/bin/pip
 ffi_python_c_inc := $(python_inc) $(nm_inc_opt)$(CURDIR)/$(out)
 ffi_python_c_cflags := $(python_cflags) $(nm_optimize_opt) $(nm_symbol_opt)
 ffi_python_c_cflags := $(python_ldflags)
 ffi_python_c_binout := $(ffi_root)/python/c/nore.cpython-$(python_mod_id).so \
                        $(ffi_root)/python/c/nore.egg-info
 ffi_python_c_tgzout := $(tmp_path)/nore*.tar.gz
-ffi_python_driver_binout := $(bin_path)/$(ffi_prefix)_python_c_driver$(bin_ext)
 
 ifeq ($(has_python),yes)
 ffi_python: ffi_python_c
-ffi_python_test: ffi_python_test
+ffi_python_test: ffi_python_ctest
 else
 ffi_python:
-	@echo "# skip $@, no python env found"
+	@echo "# skip $@, no Python env found"
 ffi_python_test: ffi_python
-	@echo "# skip $@, no python env found"
+	@echo "# skip $@, no Python env found"
 endif
 
-$(ffi_python_venv_required): $(ffi_python_venv)
-	@source $< && pip install --upgrade pip setuptools build
-$(ffi_python_venv):
+$(python_venv_required): $(python_venv_activate)
+	@source $< && pip install --upgrade pip setuptools build maturin
+$(python_venv_activate):
 	@python -mvenv $(python_venv_dir)
 
-ffi_python_c: $(ffi_python_venv_required) \
+ifeq ($(has_python_c),yes)
+ffi_python_c: $(python_venv_required) \
               $(ffi_python_c_binout)
-
-ffi_python_driver: $(ffi_python_driver_binout)
-
 ffi_python_c_test: ffi_python_c
-	@source $(ffi_python_venv) \
-    && python -c'import nore;print("2*3=%d"%(nore.multiply(2,3)))'
+	@source $(python_venv_activate) \
+    && python -c'import nore_c;print("2*3=%d"%(nore_c.multiply(2,3)))'
+else
+ffi_python_c:
+	@echo "# skip $@, no Python for C env found"
+ffi_python_c_test: ffi_python_c
+	@echo "# skip $@, no Python for C env found"
+endif
+
 ffi_python_c_clean:
 	test -z "$(ffi_python_c_binout)" || rm -rf $(ffi_python_c_binout)
-ffi_python_c_dist: $(ffi_python_venv_required) \
+ffi_python_c_dist: $(python_venv_required) \
                    $(ffi_python_c_tgzout)
-$(ffi_python_c_binout): $(ffi_python_venv) \
+$(ffi_python_c_binout): $(python_venv_activate) \
                         $(ffi_root)/python/c/foo.c
 	CFLAGS="$(ffi_python_c_cflags)" source $< \
     && pip install -v --editable $(ffi_root)/python/c
-$(ffi_python_c_tgzout): $(ffi_python_venv) \
+$(ffi_python_c_tgzout): $(python_venv_activate) \
                         $(ffi_root)/python/c/foo.c
 	CFLAGS="$(ffi_python_c_cflags)" && source $< \
     && python -m build -v -o $(tmp_path) $(ffi_root)/python/c
 
-$(ffi_python_driver_binout): $(ffi_root)/python/c/d1.c
-	$(CC) $(python_cflags) $(python_inc) $(python_ldflags) $(bin_out)$@ $^
+ifeq ($(has_python_rs),yes)
+ffi_python_rs: $(python_venv_required) \
+               $(ffi_python_rs_binout)
+ffi_python_rs_test: ffi_python_rs
+	@source $(python_venv_activate) \
+    && python -c'import nore_rs;print("2*3=%d"%(nore_rs.multiply(2,3)))'
+else
+ffi_python_rs:
+	@echo "# skip $@, no Python for Rust env found"
+ffi_python_rs_test: ffi_python_rs
+	@echo "# skip $@, no Python for Rust env found"
+endif
+
 
 
 .PHONY: ffi_jni ffi_jni_test \

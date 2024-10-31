@@ -59,13 +59,13 @@ static struct PyModuleDef nore_module = {
 };
 
 PyMODINIT_FUNC
-PyInit_nore (void)
+PyInit_nore_c (void)
 {
   PyObject *m;
   m = PyModule_Create (&nore_module);
   if (m == NULL)
     return NULL;
-  NoreError = PyErr_NewException ("nore.error", NULL, NULL);
+  NoreError = PyErr_NewException ("nore_c.error", NULL, NULL);
   if (PyModule_AddObjectRef (m, "error", NoreError) < 0)
     {
       Py_CLEAR (NoreError);

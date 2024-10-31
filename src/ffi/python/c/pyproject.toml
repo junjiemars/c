@@ -3,13 +3,13 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "nore"  # as it would appear on PyPI
+name = "nore_c"  # as it would appear on PyPI
 version = "0.1.0"
 authors = [
-  {name = "Nore"},
+  {name = "Nore(C)"},
 ]
 
 [tool.setuptools]
 ext-modules = [
-  {name = "nore", sources = ["foo.c"]}
+  {name = "nore_c", sources = ["foo.c"]}
 ]
