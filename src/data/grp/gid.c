@@ -7,56 +7,59 @@
  *
  */
 
-extern void  print_group(const struct group *);
+extern void print_group (const struct group *);
 
-static struct group  *getgrgid1(uid_t);
-
+static struct group *getgrgid1 (uid_t, struct group *);
 
 int
-main(int argc, char *argv[])
+main (int argc, char *argv[])
 {
+  struct group g;
+
   if (argc < 2)
     {
-      fprintf(stderr, "usage: <gid...>\n");
-      exit(EXIT_FAILURE);
+      fprintf (stderr, "usage: <gid...>\n");
+      exit (EXIT_FAILURE);
     }
 
   for (int i = 1; i < argc; i++)
     {
-      struct group  *g;
 
       errno = 0;
-      if ((g = getgrgid1((gid_t) atoi(argv[i]))) == NULL)
+      if (getgrgid1 ((gid_t)atoi (argv[i]), &g) == NULL)
         {
           if (errno)
             {
-              perror(NULL);
+              perror (NULL);
             }
           continue;
         }
 
-      print_group(g);
+      print_group (&g);
     }
 
-  exit(EXIT_SUCCESS);
+  exit (EXIT_SUCCESS);
 }
 
 struct group *
-getgrgid1(uid_t gid)
+getgrgid1 (uid_t gid, struct group *grp)
 {
-  struct group  *g;
+  struct group *g;
 
-  setgrent();
+  setgrent ();
 
-  while ((g = getgrent()) != NULL)
+  while ((g = getgrent ()) != NULL)
     {
       if (gid == g->gr_gid)
         {
-          break;
+          /* !TODO: just partial copy, wrong way */
+          *grp = *g;
+          endgrent ();
+          return grp;
         }
     }
 
-  endgrent();
+  endgrent ();
 
-  return g;
+  return NULL;
 }

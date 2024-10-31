@@ -1,9 +1,5 @@
 #include "_ctl_.h"
 
-#if (DARWIN && CLANG)
-#pragma clang diagnostic ignored "-Wunused-variable"
-#endif
-
 int
 compare_int (int *a, int *b)
 {

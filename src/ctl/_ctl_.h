@@ -3,12 +3,14 @@
 
 #include <assert.h>
 #include <ncstd.h>
+#include <ndef.h>
 #include <stdio.h>
 #include <str.h>
 #include <string.h>
 
-#if (DARWIN && CLANG)
-#pragma clang diagnostic ignored "-Wunused"
+#if (CLANG)
+#pragma clang diagnostic ignored "-Wunused-variable"
+#pragma clang diagnostic ignored "-Wunused-but-set-variable"
 #endif
 
 int compare_int (int *, int *);

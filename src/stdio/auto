@@ -11,7 +11,6 @@ if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
 
-
 # check ncstd.h features
 ncc_sanitize_address="yes"
 ndef_restrict="yes"

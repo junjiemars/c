@@ -1,3 +1,5 @@
+# -*- mode:makefile-gmake -*-
+#
 # ./configure --has-stdio
 #
 # standard IO library

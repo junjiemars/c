@@ -1,10 +1,10 @@
+# -*- mode:makefile-gmake -*-
+#
 # ./configure --has-ctl
 #
 # ctl: the C template library
 # https://github.com/glouw/ctl.git
 #
-
-
 
 ctl: ctl_deq                                    \
      ctl_lst                                    \
@@ -47,6 +47,9 @@ endif
 
 ifeq ($(CC_NAME), msvc)
 	CFLAGS += -wd4127 -wd4267 -wd4244
+endif
+ifeq ($(CC_NAME), clang)
+  CFLAGS += -Wno-unused-but-set-variable
 endif
 
 $(ctl_home):

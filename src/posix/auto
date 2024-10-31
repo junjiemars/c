@@ -13,9 +13,13 @@ fi
 
 # check for <ncc.h>
 ncc_cpu_endian="yes"
+ncc_cache_line_size="yes"
 ncc_sanitize_address="yes"
 ncc_sanitize_alignment="yes"
 ncc_sanitize_leak="yes"
+ncc_omit_frame_pointer="yes"
+ncc_no_omit_frame_pointer="yes"
+ncc_pic="yes"
 . ${POSIX_ROOT}/ncc_auto
 
 # check for <npstd.h>

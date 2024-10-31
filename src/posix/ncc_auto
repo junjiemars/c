@@ -164,8 +164,7 @@ case "$CC_NAME" in
       nm_feature_test=
       . ${NORE_ROOT}/auto/feature
       if [ yes = $nm_found ]; then
-        flag=omit_frame_pointer                 \
-          op=":=" value=$nm_feature_flags       \
+        flag=f_omit_frame_pointer op=':=' value=$nm_feature_flags \
           . ${NORE_ROOT}/auto/make_define
       fi
     fi
@@ -179,8 +178,7 @@ case "$CC_NAME" in
       nm_feature_test=
       . ${NORE_ROOT}/auto/feature
       if [ yes = $nm_found ]; then
-        flag=cflags_no_omit_frame_pointer       \
-          op=":=" value=$nm_feature_flags       \
+        flag=f_no_omit_frame_pointer op=':=' value=$nm_feature_flags \
           . ${NORE_ROOT}/auto/make_define
       fi
      fi
@@ -196,8 +194,7 @@ case "$CC_NAME" in
        nm_feature_test=
        . ${NORE_ROOT}/auto/feature
        if [ yes = $nm_found ]; then
-         flag=omit_frame_pointer                \
-           op=":=" value=$nm_feature_flags      \
+         flag=f_omit_frame_pointer op=':=' value=$nm_feature_flags \
            . ${NORE_ROOT}/auto/make_define
        fi
      fi
@@ -211,8 +208,7 @@ case "$CC_NAME" in
        nm_feature_test=
        . ${NORE_ROOT}/auto/feature
        if [ yes = $nm_found ]; then
-         flag=cflags_no_omit_frame_pointer      \
-           op=":=" value=$nm_feature_flags      \
+         flag=f_no_omit_frame_pointer op=':=' value=$nm_feature_flags \
            . ${NORE_ROOT}/auto/make_define
        fi
      fi
@@ -235,6 +231,8 @@ case "$CC_NAME" in
        nm_feature_test=
        . ${NORE_ROOT}/auto/feature
        if [ yes = $nm_found ]; then
+         flag=f_sanitize_address op=':=' value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
          flag=f_sanitize                        \
            op="+=" value=$nm_feature_flags      \
            . ${NORE_ROOT}/auto/make_define
@@ -252,6 +250,8 @@ case "$CC_NAME" in
        nm_feature_test=
        . ${NORE_ROOT}/auto/feature
        if [ yes = $nm_found ]; then
+         flag=f_sanitize_alignment op=':=' value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
          flag=f_sanitize                        \
            op="+=" value=$nm_feature_flags      \
            . ${NORE_ROOT}/auto/make_define
@@ -269,7 +269,9 @@ case "$CC_NAME" in
        nm_feature_test=
        . ${NORE_ROOT}/auto/feature
        if [ yes = $nm_found ]; then
-         flag=f_sanitize                        \
+        flag=f_sanitize_leak op=':=' value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+          flag=f_sanitize                        \
            op="+=" value=$nm_feature_flags      \
            . ${NORE_ROOT}/auto/make_define
        fi
@@ -295,8 +297,7 @@ if [ "$ncc_pic" = "yes" -a -z "$ncc_pic_done" ]; then
   		nm_feature_test=
   		. ${NORE_ROOT}/auto/feature
   		if [ yes = $nm_found ]; then
-  			flag=CFLAGS                               \
-          op='+=' value='-fPIC'                   \
+  			flag=f_pic op=':=' value="$nm_feature_flags" \
           . ${NORE_ROOT}/auto/make_define
   		fi
       ncc_pic_done="yes"

@@ -14,15 +14,15 @@ PyObject *
 nore_system (PyObject *self, PyObject *args)
 {
   const char *command;
-  int rval;
+  int rc;
   if (!PyArg_ParseTuple (args, "s", &command))
     return NULL;
-  if ((rval = system (command)) != 0)
+  if ((rc = system (command)) != 0)
     {
       PyErr_SetFromErrno (NoreError);
       return NULL;
     }
-  return PyLong_FromLong (rval);
+  return PyLong_FromLong (rc);
 }
 
 PyObject *
@@ -39,7 +39,7 @@ static PyMethodDef nore_methods[] = {
       .ml_name = "system",
       .ml_meth = nore_system,
       .ml_flags = METH_VARARGS,
-      .ml_doc = "system call system(3).",
+      .ml_doc = "call system(3).",
   },
   {
       .ml_name = "multiply",
