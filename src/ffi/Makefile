@@ -111,7 +111,7 @@ ffi_python_c: $(ffi_python_venv_required) \
 ffi_python_driver: $(ffi_python_driver_binout)
 
 ffi_python_c_test: ffi_python_c
-	@source $(ffi_python_venv) && python -c'import nore;print("%s"%(nore.c_multiply(2,3)))'
+	@source $(ffi_python_venv) && python -c'import nore;print("2*3=%d"%(nore.multiply(2,3)))'
 ffi_python_c_clean:
 	test -z "$(ffi_python_c_binout)" || rm -rf $(ffi_python_c_binout)
 ffi_python_c_dist: $(ffi_python_venv_required) \
