@@ -79,12 +79,12 @@ $(ffi_nodejs_prefix):
 # python
 python_venv_dir := $(CURDIR)/$(ffi_root)/python/venv
 python_venv_activate := $(python_venv_dir)/bin/activate
-python_venv_required := $(python_venv_dir)/bin/pip
+python_venv_required := $(python_venv_dir)/bin/python
 ffi_python_c_root := $(ffi_root)/python/c
 ffi_python_rs_root := $(ffi_root)/python/rs
 
 ifeq ($(has_python),yes)
-ffi_python: ffi_python_c
+ffi_python: ffi_python_c ffi_python_rs
 ffi_python_test: ffi_python_c_test
 else
 ffi_python:
