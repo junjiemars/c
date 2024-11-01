@@ -80,9 +80,8 @@ $(ffi_nodejs_prefix):
 python_venv_dir := $(CURDIR)/$(ffi_root)/python/venv
 python_venv_activate := $(python_venv_dir)/bin/activate
 python_venv_required := $(python_venv_dir)/bin/pip
-python_inc := $(python_inc)
-python_cflags := $(python_cflags)
-python_ldflags := $(python_ldflags)
+ffi_python_c_root := $(ffi_root)/python/c
+ffi_python_rs_root := $(ffi_root)/python/rs
 
 ifeq ($(has_python),yes)
 ffi_python: ffi_python_c
@@ -103,7 +102,7 @@ $(python_venv_activate):
 ffi_python_c_inc := $(python_inc) $(nm_inc_opt)$(CURDIR)/$(out)
 ffi_python_c_cflags := $(python_cflags) $(nm_optimize_opt) $(nm_symbol_opt)
 ffi_python_c_cflags := $(python_ldflags)
-ffi_python_c_binout := $(ffi_root)/python/c/nore$(python_mod_suffix) $(ffi_root)/python/c/nore.egg-info
+ffi_python_c_binout := $(ffi_python_c_root)/nore$(python_mod_ext) $(ffi_python_c_root)/nore.egg-info
 ffi_python_c_tgzout := $(tmp_path)/nore*.tar.gz
 
 ifeq ($(has_python_c),yes)
@@ -121,13 +120,18 @@ ffi_python_c_clean:
 	test -z "$(ffi_python_c_binout)" || rm -rf $(ffi_python_c_binout)
 ffi_python_c_dist: $(python_venv_required) $(ffi_python_c_tgzout)
 $(ffi_python_c_binout): $(python_venv_activate) $(ffi_root)/python/c/foo.c
-	CFLAGS="$(ffi_python_c_cflags)" source $< && pip install -v --editable $(ffi_root)/python/c
+	CFLAGS="$(ffi_python_c_cflags)" source $< && pip install -v --editable $(ffi_python_c_root)
 $(ffi_python_c_tgzout): $(python_venv_activate) $(ffi_root)/python/c/foo.c
-	CFLAGS="$(ffi_python_c_cflags)" && source $< && python -m build -v -o $(tmp_path) $(ffi_root)/python/c
+	CFLAGS="$(ffi_python_c_cflags)" && source $< && python -m build -v -o $(tmp_path) $(ffi_python_c_root)
 
 # Python(Rust)
-ffi_python_rs_binout := $(ffi_root)/python/rs/target/debug/libnore_rs$(lib_ext)
-ffi_python_rs_pyo3 := $(ffi_root)/python/rs/Cargo.toml $(ffi_root)/python/rs/pyproject.toml
+ffi_python_rs_build := debug
+ifeq ($(NM_BUILD),YES)
+ffi_python_rs_build := release
+ffi_python_rs_build_release := -r
+endif
+ffi_python_rs_binout := $(ffi_python_rs_root)/target/$(ffi_python_rs_build)/libnore_rs$(lib_ext)
+ffi_python_rs_pyo3 := $(ffi_python_rs_root)/Cargo.toml $(ffi_python_rs_root)/pyproject.toml
 
 ifeq ($(has_python_rs),yes)
 ffi_python_rs: $(python_venv_required) $(ffi_python_rs_binout)
@@ -142,12 +146,12 @@ endif
 
 ffi_python_rs_clean:
 	cd $(ffi_root)/python/rs && cargo clean
-$(ffi_python_rs_binout): $(ffi_python_rs_pyo3) $(ffi_root)/python/rs/src/lib.rs
-	cd $(ffi_root)/python/rs && cargo build
-	@source $(python_venv_activate) && cd $(ffi_root)/python/rs && maturin develop
+$(ffi_python_rs_binout): $(ffi_python_rs_pyo3) $(ffi_python_rs_root)/src/lib.rs
+	cd $(ffi_python_rs_root) && cargo build $(ffi_python_rs_build_release)
+	@source $(python_venv_activate) && cd $(ffi_python_rs_root) && maturin develop
 $(ffi_python_rs_pyo3): $(python_venv_required)
-	@source $(python_venv_activate) && python -m maturin init $(ffi_root)/python/rs -b pyo3
-	cd $(ffi_root)/python/rs && cargo add libc
+	@source $(python_venv_activate) && python -m maturin init $(ffi_python_rs_root) -b pyo3
+	cd $(ffi_python_rs_root) && cargo add libc
 
 
 

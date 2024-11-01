@@ -143,7 +143,7 @@ check_nodejs () {
 check_python () {
   local python_minor="$(python3 -c'import sys;print("%s"%(sys.version_info.minor))' 2>/dev/null)"
   local python_inc="$(python3 -c'import sysconfig;print("%s"%(sysconfig.get_path("include")))' 2>/dev/null)"
-  local python_mod_suffix="$(python3 -c'import sysconfig;print("%s"%(sysconfig.get_config_var("EXT_SUFFIX")))' 2>/dev/null)"
+  local python_mod_ext="$(python3 -c'import sysconfig;print("%s"%(sysconfig.get_config_var("EXT_SUFFIX")))' 2>/dev/null)"
   local python_cflags="$(python3 -c'import sysconfig;print("%s"%(sysconfig.get_config_var("CFLAGS")))' 2>/dev/null)"
   local python_ldflags="$(python3 -c'import sysconfig;print("%s"%(sysconfig.get_config_var("LDFLAGS")))' 2>/dev/null)"
   local python_rs_ver="$(command -v rustc && rustc -V|sed -E -e's/^rustc ([.0-9]+) .*$/\1/'|tr '.' '\n' 2>/dev/null)"
@@ -167,7 +167,7 @@ check_python () {
   if [ "$nm_found" = "yes" ]; then
     flag=has_python_c op=":=" value="yes" . ${NORE_ROOT}/auto/make_define
     flag=python_inc op=":=" value="${nm_feature_flags}" . ${NORE_ROOT}/auto/make_define
-    flag=python_mod_suffix op=":=" value="${python_mod_suffix}" . ${NORE_ROOT}/auto/make_define
+    flag=python_mod_ext op=":=" value="${python_mod_ext}" . ${NORE_ROOT}/auto/make_define
     flag=python_cflags op=":=" value="${python_cflags}" . ${NORE_ROOT}/auto/make_define
     flag=python_ldflags op=":=" value="${python_ldflags}" . ${NORE_ROOT}/auto/make_define
     printf "yes\n"
