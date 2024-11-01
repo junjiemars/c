@@ -143,12 +143,12 @@ check_nodejs () {
 check_python () {
   local python_minor="$(python3 -c'import sys;print("%s"%(sys.version_info.minor))' 2>/dev/null)"
   local python_inc="$(python3 -c'import sysconfig;print("%s"%(sysconfig.get_path("include")))' 2>/dev/null)"
-  local python_mod_id="$(python3 -c'import sys;print("%s%s-%s"%(sys.version_info.major,sys.version_info.minor,sys.platform))' 2>/dev/null)"
+  local python_mod_suffix="$(python3 -c'import sysconfig;print("%s"%(sysconfig.get_config_var("EXT_SUFFIX")))' 2>/dev/null)"
   local python_cflags="$(python3 -c'import sysconfig;print("%s"%(sysconfig.get_config_var("CFLAGS")))' 2>/dev/null)"
   local python_ldflags="$(python3 -c'import sysconfig;print("%s"%(sysconfig.get_config_var("LDFLAGS")))' 2>/dev/null)"
-  local python_rs_ver="$(rustc -V|sed -E -e's/^rustc ([.0-9]+) .*$/\1/')"
-  local python_rs_major=
-  local python_rs_minor=
+  local python_rs_ver="$(command -v rustc && rustc -V|sed -E -e's/^rustc ([.0-9]+) .*$/\1/'|tr '.' '\n' 2>/dev/null)"
+  local python_rs_major="$(printf '%s' $python_rs_ver|sed -n -e'1p')"
+  local python_rs_minor="$(printf '%s' $python_rs_ver|sed -n -e'2p')"
   printf " + checking for Python ... "
   if [ -z "$python_minor" -o -z "$python_inc" -o $python_minor -lt 8 ]; then
     printf "no\n"
@@ -164,30 +164,23 @@ check_python () {
   nm_feature_flags="${nm_inc_opt}${python_inc}"
   nm_feature_test='PyObject *o1 = NULL; (void)o1;'
   . ${NORE_ROOT}/auto/feature
-  if [ "$nm_found" != "yes" ]; then
+  if [ "$nm_found" = "yes" ]; then
+    flag=has_python_c op=":=" value="yes" . ${NORE_ROOT}/auto/make_define
+    flag=python_inc op=":=" value="${nm_feature_flags}" . ${NORE_ROOT}/auto/make_define
+    flag=python_mod_suffix op=":=" value="${python_mod_suffix}" . ${NORE_ROOT}/auto/make_define
+    flag=python_cflags op=":=" value="${python_cflags}" . ${NORE_ROOT}/auto/make_define
+    flag=python_ldflags op=":=" value="${python_ldflags}" . ${NORE_ROOT}/auto/make_define
+    printf "yes\n"
+  else
     printf "no\n"
-    return
   fi
-  flag=has_python_c op=":=" value="yes" . ${NORE_ROOT}/auto/make_define
-  flag=python_inc op=":=" value="${nm_feature_flags}" . ${NORE_ROOT}/auto/make_define
-  flag=python_mod_id op=":=" value="${python_mod_id}" . ${NORE_ROOT}/auto/make_define
-  flag=python_cflags op=":=" value="${python_cflags}" . ${NORE_ROOT}/auto/make_define
-  flag=python_ldflags op=":=" value="${python_ldflags}" . ${NORE_ROOT}/auto/make_define
-  printf "yes\n"
   printf " + checking for Python(Rust) ..."
-  if [ -z "$python_rs_ver" ]; then
+  if [ -z "$python_rs_ver" -o $python_rs_major -lt 1 -o $python_rs_minor -lt 7 ]; then
     printf "no\n"
+  else
+    flag=has_python_rs op=":=" value="yes" . ${NORE_ROOT}/auto/make_define
+    printf "yes\n"
   fi
-  python_rs_major="$(echo $python_rs_ver|sed -E -e's/^([1-9]+)\..*$/\1/g')"
-  python_rs_minor="$(echo $python_rs_ver|sed -E -e's/^.*\.([1-9]+)\..*$/\1/g')"
-  if [ -z "$python_rs_major" -o -z "$python_rs_minor" ]; then
-    printf "no\n"
-  fi
-  if [ $python_rs_major -lt 1 -o $python_rs_minor -lt 7 ]; then
-    printf "no\n"
-  fi
-  printf "yes\n"
-  flag=has_python_rs op=":=" value="yes" . ${NORE_ROOT}/auto/make_define
 }
 
 

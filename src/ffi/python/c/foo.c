@@ -39,7 +39,7 @@ static PyMethodDef nore_methods[] = {
       .ml_name = "system",
       .ml_meth = nore_system,
       .ml_flags = METH_VARARGS,
-      .ml_doc = "call system(3).",
+      .ml_doc = "Call system(3).",
   },
   {
       .ml_name = "multiply",
@@ -53,7 +53,7 @@ static PyMethodDef nore_methods[] = {
 static struct PyModuleDef nore_module = {
   .m_base = PyModuleDef_HEAD_INIT,
   .m_name = "nore",
-  .m_doc = "Illustrate extending Python in C.",
+  .m_doc = "A Python module implemented in C.",
   .m_size = -1,
   .m_methods = nore_methods,
 };

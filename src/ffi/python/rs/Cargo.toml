@@ -5,8 +5,9 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
-name = "rs"
+name = "nore_rs"
 crate-type = ["cdylib"]
 
 [dependencies]
+libc = "0.2.161"
 pyo3 = "0.22.0"

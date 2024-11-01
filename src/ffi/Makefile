@@ -79,21 +79,14 @@ $(ffi_nodejs_prefix):
 # python
 python_venv_dir := $(CURDIR)/$(ffi_root)/python/venv
 python_venv_activate := $(python_venv_dir)/bin/activate
+python_venv_required := $(python_venv_dir)/bin/pip
 python_inc := $(python_inc)
 python_cflags := $(python_cflags)
 python_ldflags := $(python_ldflags)
 
-ffi_python_required := $(python_venv_activate_dir)/bin/pip
-ffi_python_c_inc := $(python_inc) $(nm_inc_opt)$(CURDIR)/$(out)
-ffi_python_c_cflags := $(python_cflags) $(nm_optimize_opt) $(nm_symbol_opt)
-ffi_python_c_cflags := $(python_ldflags)
-ffi_python_c_binout := $(ffi_root)/python/c/nore.cpython-$(python_mod_id).so \
-                       $(ffi_root)/python/c/nore.egg-info
-ffi_python_c_tgzout := $(tmp_path)/nore*.tar.gz
-
 ifeq ($(has_python),yes)
 ffi_python: ffi_python_c
-ffi_python_test: ffi_python_ctest
+ffi_python_test: ffi_python_c_test
 else
 ffi_python:
 	@echo "# skip $@, no Python env found"
@@ -106,44 +99,55 @@ $(python_venv_required): $(python_venv_activate)
 $(python_venv_activate):
 	@python -mvenv $(python_venv_dir)
 
+# Python(C)
+ffi_python_c_inc := $(python_inc) $(nm_inc_opt)$(CURDIR)/$(out)
+ffi_python_c_cflags := $(python_cflags) $(nm_optimize_opt) $(nm_symbol_opt)
+ffi_python_c_cflags := $(python_ldflags)
+ffi_python_c_binout := $(ffi_root)/python/c/nore$(python_mod_suffix) $(ffi_root)/python/c/nore.egg-info
+ffi_python_c_tgzout := $(tmp_path)/nore*.tar.gz
+
 ifeq ($(has_python_c),yes)
-ffi_python_c: $(python_venv_required) \
-              $(ffi_python_c_binout)
+ffi_python_c: $(python_venv_required) $(ffi_python_c_binout)
 ffi_python_c_test: ffi_python_c
-	@source $(python_venv_activate) \
-    && python -c'import nore_c;print("2*3=%d"%(nore_c.multiply(2,3)))'
+	@source $(python_venv_activate) && python -c'import nore_c;print("2*3=%d"%(nore_c.multiply(2,3)))'
 else
 ffi_python_c:
-	@echo "# skip $@, no Python for C env found"
+	@echo "# skip $@, no Python(C) env found"
 ffi_python_c_test: ffi_python_c
-	@echo "# skip $@, no Python for C env found"
+	@echo "# skip $@, no Python(C) env found"
 endif
 
 ffi_python_c_clean:
 	test -z "$(ffi_python_c_binout)" || rm -rf $(ffi_python_c_binout)
-ffi_python_c_dist: $(python_venv_required) \
-                   $(ffi_python_c_tgzout)
-$(ffi_python_c_binout): $(python_venv_activate) \
-                        $(ffi_root)/python/c/foo.c
-	CFLAGS="$(ffi_python_c_cflags)" source $< \
-    && pip install -v --editable $(ffi_root)/python/c
-$(ffi_python_c_tgzout): $(python_venv_activate) \
-                        $(ffi_root)/python/c/foo.c
-	CFLAGS="$(ffi_python_c_cflags)" && source $< \
-    && python -m build -v -o $(tmp_path) $(ffi_root)/python/c
+ffi_python_c_dist: $(python_venv_required) $(ffi_python_c_tgzout)
+$(ffi_python_c_binout): $(python_venv_activate) $(ffi_root)/python/c/foo.c
+	CFLAGS="$(ffi_python_c_cflags)" source $< && pip install -v --editable $(ffi_root)/python/c
+$(ffi_python_c_tgzout): $(python_venv_activate) $(ffi_root)/python/c/foo.c
+	CFLAGS="$(ffi_python_c_cflags)" && source $< && python -m build -v -o $(tmp_path) $(ffi_root)/python/c
+
+# Python(Rust)
+ffi_python_rs_binout := $(ffi_root)/python/rs/target/debug/libnore_rs$(lib_ext)
+ffi_python_rs_pyo3 := $(ffi_root)/python/rs/Cargo.toml $(ffi_root)/python/rs/pyproject.toml
 
 ifeq ($(has_python_rs),yes)
-ffi_python_rs: $(python_venv_required) \
-               $(ffi_python_rs_binout)
+ffi_python_rs: $(python_venv_required) $(ffi_python_rs_binout)
 ffi_python_rs_test: ffi_python_rs
-	@source $(python_venv_activate) \
-    && python -c'import nore_rs;print("2*3=%d"%(nore_rs.multiply(2,3)))'
+	@source $(python_venv_activate) && python -c'import nore_rs;print("2*3=%d"%(nore_rs.multiply(2,3)))'
 else
 ffi_python_rs:
-	@echo "# skip $@, no Python for Rust env found"
+	@echo "# skip $@, no Python(Rust) env found"
 ffi_python_rs_test: ffi_python_rs
-	@echo "# skip $@, no Python for Rust env found"
+	@echo "# skip $@, no Python(Rust) env found"
 endif
+
+ffi_python_rs_clean:
+	cd $(ffi_root)/python/rs && cargo clean
+$(ffi_python_rs_binout): $(ffi_python_rs_pyo3) $(ffi_root)/python/rs/src/lib.rs
+	cd $(ffi_root)/python/rs && cargo build
+	@source $(python_venv_activate) && cd $(ffi_root)/python/rs && maturin develop
+$(ffi_python_rs_pyo3): $(python_venv_required)
+	@source $(python_venv_activate) && python -m maturin init $(ffi_root)/python/rs -b pyo3
+	cd $(ffi_root)/python/rs && cargo add libc
 
 
 
