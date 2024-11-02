@@ -1,6 +1,9 @@
 #include "_data_.h"
 #include <grp.h>
 
+/*
+ * Print struct group
+ */
 void
 print_group (const struct group *grp)
 {

@@ -9,12 +9,12 @@
 
 extern void print_group (const struct group *);
 
-static struct group *getgrnam1 (const char *, struct group *);
+static struct group *getgrnam1 (const char *);
 
 int
 main (int argc, char *argv[])
 {
-  struct group g;
+  struct group *g;
 
   if (argc < 2)
     {
@@ -25,7 +25,7 @@ main (int argc, char *argv[])
   for (int i = 1; i < argc; i++)
     {
       errno = 0;
-      if (getgrnam1 (argv[i], &g) == NULL)
+      if ((g = getgrnam1 (argv[i])) == NULL)
         {
           if (errno)
             {
@@ -34,26 +34,24 @@ main (int argc, char *argv[])
           continue;
         }
 
-      print_group (&g);
+      print_group (g);
     }
 
   exit (EXIT_SUCCESS);
 }
 
 struct group *
-getgrnam1 (const char *name, struct group *grp)
+getgrnam1 (const char *name)
 {
   struct group *g;
 
-  setgrent ();
+  (void)setgrent ();
 
   while ((g = getgrent ()) != NULL)
     {
       if (strcmp (name, g->gr_name) == 0)
         {
-          *grp = *g;
-          endgrent ();
-          return grp;
+          return g;
         }
     }
 

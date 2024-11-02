@@ -9,12 +9,12 @@
 
 extern void print_group (const struct group *);
 
-static struct group *getgrgid1 (uid_t, struct group *);
+static struct group *getgrgid1 (uid_t);
 
 int
 main (int argc, char *argv[])
 {
-  struct group g;
+  struct group *g;
 
   if (argc < 2)
     {
@@ -24,9 +24,8 @@ main (int argc, char *argv[])
 
   for (int i = 1; i < argc; i++)
     {
-
       errno = 0;
-      if (getgrgid1 ((gid_t)atoi (argv[i]), &g) == NULL)
+      if ((g = getgrgid1 ((gid_t)atoi (argv[i]))) == NULL)
         {
           if (errno)
             {
@@ -35,14 +34,14 @@ main (int argc, char *argv[])
           continue;
         }
 
-      print_group (&g);
+      print_group (g);
     }
 
   exit (EXIT_SUCCESS);
 }
 
 struct group *
-getgrgid1 (uid_t gid, struct group *grp)
+getgrgid1 (uid_t gid)
 {
   struct group *g;
 
@@ -52,10 +51,7 @@ getgrgid1 (uid_t gid, struct group *grp)
     {
       if (gid == g->gr_gid)
         {
-          /* !TODO: just partial copy, wrong way */
-          *grp = *g;
-          endgrent ();
-          return grp;
+          return g;
         }
     }
 
