@@ -220,6 +220,10 @@ func generics() {
 
     var o1: OptionalValue<Int> = .none
     o1 = .some(100)
+    assert(o1 != .init(nilLiteral: ()))
+
+    let o2 = Optional.some(100)
+    assert(o2 != nil)
 
     assert(anyOverlapped([1,2,3], [3]))
     assert(anyOverlapped(["A","B","C"], ["B"]))

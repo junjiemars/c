@@ -67,7 +67,8 @@ $(swift_lang_package):
 		init --type=executable --name=lang
 
 $(swift_lang_binout): $(swift_lang_package) \
-                      $(swift_root)/lang/Sources/main.swift
+                      $(swift_root)/lang/Sources/main.swift \
+                      $(swift_root)/lang/Sources/lang.swift
 	$(SWIFT) build --package-path=$(swift_root)/lang -c $(swift_build)
 
 
