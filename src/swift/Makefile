@@ -117,7 +117,9 @@ $(swift_os_package):
 		init --type=executable --name=os
 
 $(swift_os_binout): $(swift_os_package) \
-                    $(swift_root)/os/Sources/main.swift
+                    $(swift_root)/os/Sources/main.swift \
+                    $(swift_root)/os/Sources/c.swift \
+                    $(swift_root)/os/Sources/lib.swift
 	$(SWIFT) build --package-path=$(swift_root)/os -c $(swift_build)
 
 

@@ -11,7 +11,6 @@
   #endif
 #endif
 
-
 list("/Applications")
 foundations()
 processes()
