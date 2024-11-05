@@ -6,10 +6,11 @@ static void on_sig (int);
 static volatile pid_t pid;
 static volatile pthread_t tid;
 
+
 int
 main (void)
 {
-  sigset_t oset, nset;
+  sigset_t oset, nset, pset;
   struct sigaction oact, nact;
 
   pid = getpid ();
@@ -21,6 +22,7 @@ main (void)
   assert (*(unsigned long *)&oset == 0 && "sigset_t default should be zero");
 
   sigfillset (&nset);
+  assert ((unsigned long)(~nset) == 0 && "should be full");
   assert (sigismember (&nset, SIGABRT) == 1 && "SIGABRT should in set");
 
   sigemptyset (&nset);
@@ -48,6 +50,9 @@ main (void)
   /* reach here because SIGABRT steal been blocked */
   raise (SIGHUP);
   /* reach here because caught SIGHUP and then return from signal handler */
+
+  sigprocmask (SIG_BLOCK, NULL, &pset);
+  assert (nset == pset && "should unchanged");
 
   exit (0);
 }
