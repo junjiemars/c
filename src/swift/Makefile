@@ -68,7 +68,16 @@ $(swift_lang_package):
 
 $(swift_lang_binout): $(swift_lang_package) \
                       $(swift_root)/lang/Sources/main.swift \
-                      $(swift_root)/lang/Sources/lang.swift
+                      $(swift_root)/lang/Sources/lang.swift \
+                      $(swift_root)/lang/Sources/values.swift \
+                      $(swift_root)/lang/Sources/controls.swift \
+                      $(swift_root)/lang/Sources/functions.swift \
+                      $(swift_root)/lang/Sources/objects.swift \
+                      $(swift_root)/lang/Sources/enumerations.swift \
+                      $(swift_root)/lang/Sources/concurrency.swift \
+                      $(swift_root)/lang/Sources/protocols.swift \
+                      $(swift_root)/lang/Sources/errors.swift \
+                      $(swift_root)/lang/Sources/protocols.swift
 	$(SWIFT) build --package-path=$(swift_root)/lang -c $(swift_build)
 
 
