@@ -24,4 +24,51 @@ func functionsAndClosures() {
   assert([1, 2, 3, 4, 5].map({ n in return (n * n) }).count == 5)
 
   assert([1, 5, 9, 2, 1].sorted { $0 > $1 }.count == 5)
+
+  let mean1 = arithmeticMean(1.0, 2.0, 3.0)
+  assert(mean1 == 2.0)
+
+  var si1 = 1
+  var si2 = 2
+  swapTwoInts(&si1, &si2)
+  assert(si1 == 2 && si2 == 1)
+
+  // function type
+  let doOnInts1 = addInts
+  let doOnInts2 = mulInts
+  let sumInts = doOnInts1(1, 2, 3)
+  assert(sumInts == 6)
+  let mulInts = doOnInts2(1, 2, 3)
+  assert(mulInts == 6)
+}
+
+// variadic parameters
+func arithmeticMean(_ numbers: Double...) -> Double {
+  var sum = 0.0
+  for n in numbers {
+    sum += n
+  }
+  return sum / Double(numbers.count)
+}
+
+func swapTwoInts(_ a: inout Int, _ b: inout Int) {
+  let temp = a
+  a = b
+  b = temp
+}
+
+func addInts(_ integers: Int...) -> Int {
+  var sum = 0
+  for i in integers {
+    sum += i
+  }
+  return sum
+}
+
+func mulInts(_ integers: Int...) -> Int {
+  var sum = 0
+  for i in integers {
+    sum *= i
+  }
+  return sum
 }

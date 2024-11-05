@@ -81,6 +81,7 @@ enum Rank: Int {
 enum Suit {
   case spades, hearts, diamonds, clubs
 }
+
 struct Card {
   var rank: Rank
   var suit: Suit
