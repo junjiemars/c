@@ -9,18 +9,13 @@
  *
  */
 
-
 unsigned int
-alarm(unsigned int nsecs)
+alarm (unsigned int nsecs)
 {
-  struct itimerval  o;
-  struct itimerval  n  =
-    {
-      .it_interval  =  { 0 },
-      .it_value     =  { nsecs, 0 }
-    };
+  struct itimerval o;
+  struct itimerval n = { .it_interval = { 0 }, .it_value = { nsecs, 0 } };
 
-  setitimer(ITIMER_REAL, &n, &o);
+  setitimer (ITIMER_REAL, &n, &o);
 
-  return o.it_value.tv_sec + o.it_value.tv_usec/1000000;
+  return o.it_value.tv_sec + o.it_value.tv_usec / 1000000;
 }

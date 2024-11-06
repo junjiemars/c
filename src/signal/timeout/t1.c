@@ -1,11 +1,9 @@
 #include "_signal_.h"
 
-
 /*
  * Extends `read(2)' to support `timeout'.
  *
  * 1. Same as `read(2)' excepts
- *
  * 2. `errno(3)' be set to `EINTR' if the `timeout' expires.
  *
  */
