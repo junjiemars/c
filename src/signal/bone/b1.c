@@ -6,7 +6,6 @@ static void on_sig (int);
 static volatile pid_t pid;
 static volatile pthread_t tid;
 
-
 int
 main (void)
 {
@@ -17,8 +16,7 @@ main (void)
   tid = pthread_self ();
 
   /* examine current mask */
-  assert (sigprocmask (SIG_BLOCK, NULL, &oset) == 0
-          && "should return current mask");
+  assert (sigprocmask (0, NULL, &oset) == 0 && "should return current mask");
   assert (*(unsigned long *)&oset == 0 && "sigset_t default should be zero");
 
   sigfillset (&nset);
@@ -37,10 +35,12 @@ main (void)
   /* block SIGABRT */
   sigemptyset (&nset);
   sigaddset (&nset, SIGABRT);
-  assert (sigprocmask (SIG_SETMASK, &nset, &oset) == 0
+  assert (sigprocmask (SIG_SETMASK, &nset, NULL) == 0
           && "should block SIGABRT");
   raise (SIGABRT);
   /* reach here because SIGABRT had been blocked */
+  assert (sigpending (&pset) == 0 && "should return pending mask");
+  assert (sigismember (&pset, SIGABRT) == 1 && "SIGABRT should in set");
 
   nact.sa_handler = on_sig;
   nact.sa_flags = 0;
@@ -49,8 +49,9 @@ main (void)
   raise (SIGABRT);
   /* reach here because SIGABRT steal been blocked */
   raise (SIGHUP);
-  /* reach here because caught SIGHUP and then return from signal handler */
+  /* reach here because SIGHUP been caught and return from signal hander */
 
+  sigemptyset (&pset);
   sigprocmask (SIG_BLOCK, NULL, &pset);
   assert (nset == pset && "should unchanged");
 

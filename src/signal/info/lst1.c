@@ -1,7 +1,6 @@
 #include "_signal_.h"
 #include "sig2str.h"
 
-
 /*
  * 1. `sys_signame' is not portable.
  *
@@ -17,29 +16,27 @@
  *
  */
 
-
 /* extern const char * const  sys_siglist[]; */
 /* extern const char * const  sys_signame[]; */
 
-
 int
-main(void)
+main (void)
 {
-  char  *d;
-  char   s[SIG2STR_MAX];
-  int    nsig  =  N_SIG2STR;    /* NSIG */
+  char *d;
+  char s[SIG2STR_MAX];
+  int nsig = N_SIG2STR; /* NSIG */
 
   for (int i = 1; i < nsig; i++)
     {
-      if (sig2str(i, &s[0]) == -1)
+      if (sig2str (i, &s[0]) == -1)
         {
-          perror(NULL);
-          exit(EXIT_FAILURE);
+          perror (NULL);
+          exit (EXIT_FAILURE);
         }
 
-      d = strsignal(i);
-      printf("SIG%-16s: [%02i] %s\n", s, i, d);
+      d = strsignal (i);
+      printf ("SIG%-16s: [%02i] %s\n", s, i, d);
     }
 
-  exit(EXIT_SUCCESS);
+  exit (EXIT_SUCCESS);
 }

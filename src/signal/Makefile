@@ -153,6 +153,7 @@ $(signal_child_chld_binout): $(signal_root)/child/c1.c
 
 
 # info
+signal_info_inc := $(nm_inc_opt)$(signal_root)/info
 signal_info_lst_binout := $(bin_path)/$(signal_prefix)_lst$(bin_ext)
 signal_info_dfl_binout := $(bin_path)/$(signal_prefix)_dfl$(bin_ext)
 signal_info_sig2str_h := $(inc_path)/sig2str.h
@@ -167,17 +168,16 @@ signal_info_test: signal_info_lst_test \
 
 signal_info_lst_test: $(signal_info_lst_binout)
 	$<
-
 signal_info_dfl_test: $(signal_info_dfl_binout)
 	$<
 
 $(signal_info_lst_binout): $(signal_root)/info/lst1.c \
                            $(signal_info_sig2str_c)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_inc_opt)$(signal_root)/info $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(signal_info_inc) $(bin_out)$@ $^
 
 $(signal_info_dfl_binout): $(signal_root)/info/dfl1.c \
                            $(signal_info_sig2str_c)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_inc_opt)$(signal_root)/info $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(signal_info_inc) $(bin_out)$@ $^
 
 $(signal_info_sig2str_c): $(signal_root)/info/sig2str.awk \
                           $(signal_info_lst_awk_in)
@@ -198,8 +198,8 @@ signal_io_xfsz_test: $(signal_io_xfsz_binout)
 	-$< 0<${signal_root}/io/x1.c 1>${signal_io_file}
 
 $(signal_io_xfsz_binout): $(signal_root)/io/x1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC)                                \
-    -DBUF_SIZE=$(signal_io_xfsz_n) -DRL_FSIZE=$(signal_io_xfsz_rl)  \
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) \
+    -DBUF_SIZE=$(signal_io_xfsz_n) -DRL_FSIZE=$(signal_io_xfsz_rl) \
     $^ $(bin_out)$@
 
 # job
