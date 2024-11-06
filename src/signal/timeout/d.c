@@ -1,7 +1,6 @@
 #include "_signal_.h"
 
-
-extern ssize_t read1 (int, void *, size_t, int);
+extern ssize_t read3 (int, void *, size_t, int);
 
 int
 main (int argc, char **argv)
@@ -18,7 +17,7 @@ main (int argc, char **argv)
 
   alarm (2);
 
-  if ((n = read1 (STDIN_FILENO, buf, sizeof (buf) - 1, timeout)) == -1)
+  if ((n = read3 (STDIN_FILENO, buf, sizeof (buf) - 1, timeout)) == -1)
     {
       perror (NULL);
     }

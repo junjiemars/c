@@ -8,15 +8,17 @@
  *
  */
 
-ssize_t read1 (int, void *, size_t, int timeout);
+ssize_t read3 (int, void *, size_t, int timeout);
 
 static void on_sig_alrm (int signo);
 
 static sigjmp_buf env_alrm;
+static sig_atomic_t can_jump;
 
 ssize_t
-read1 (int fd, void *buf, size_t count, int timeout)
+read3 (int fd, void *buf, size_t count, int timeout)
 {
+  sigset_t oset;
   struct sigaction nact;
 
   alarm (0);
@@ -24,13 +26,24 @@ read1 (int fd, void *buf, size_t count, int timeout)
   sigfillset (&nact.sa_mask);
   sigdelset (&nact.sa_mask, SIGALRM);
   nact.sa_flags = 0;
+#ifdef SIG_INTERRUPT
+  nact_sa_flags = SA_INTERRUPT; /* don't restart `read(2)' */
+#endif
   nact.sa_handler = on_sig_alrm;
 
+  /* return twice */
   if (sigsetjmp (env_alrm, 1) == SIGALRM)
     {
+      /* return from on_sig_alrm */
+      if (sigprocmask (0, NULL, &oset) == -1)
+        {
+          /* SIGALRM should be added */
+          assert (sigismember (&oset, SIGALRM));
+        }
       errno = EINTR;
       return -1;
     }
+  can_jump = 1;
 
   if (timeout > 0)
     {
@@ -49,6 +62,10 @@ on_sig_alrm (int signo)
 {
   if (signo == SIGALRM)
     {
-      siglongjmp (env_alrm, signo);
+      if (can_jump)
+        {
+          can_jump = 0;
+          siglongjmp (env_alrm, signo);
+        }
     }
 }
