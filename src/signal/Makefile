@@ -143,6 +143,7 @@ signal_child_proc_test: $(signal_child_proc_binout)
 	$<
 signal_child_chld_test: $(signal_child_chld_binout)
 	$< 1
+	$< 1 0x20	# SA_NOCLDWAIT
 
 $(signal_child_proc_binout): $(signal_root)/child/p1.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
