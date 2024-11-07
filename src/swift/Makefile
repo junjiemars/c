@@ -4,17 +4,21 @@
 #
 # make clean test
 #
+# https://www.swift.org
+# https://docs.swift.org/swift-book
+# https://swiftpackageindex.com
 # https://developer.apple.com/library/archive/documentation/Porting/Conceptual/PortingUnix/intro/intro.html
-#
 #
 
 
 swift: swift_hi                                 \
+       swift_cli                                \
        swift_lang                               \
        swift_foundation                         \
        swift_os
 
 swift_test: swift_hi_test                       \
+            swift_cli_test                      \
             swift_lang_test                     \
             swift_foundation_test               \
             swift_os_test
@@ -79,6 +83,22 @@ $(swift_lang_binout): $(swift_lang_package) \
                       $(swift_root)/lang/Sources/errors.swift \
                       $(swift_root)/lang/Sources/protocols.swift
 	$(SWIFT) build --package-path=$(swift_root)/lang -c $(swift_build)
+
+
+
+# cli
+swift_cli_package := $(swift_root)/cli/Package.swift
+swift_cli_binout := $(swift_root)/cli/.build/$(swift_build)/cli
+
+swift_cli: $(swift_cli_binout)
+swift_cli_test: swift_cli
+	$(swift_cli_binout) --input $@
+swift_cli_clean:
+	$(SWIFT) package --package-path=$(swift_root)/cli clean
+
+$(swift_cli_binout): $(swift_cli_package) \
+                     $(swift_root)/cli/Sources/cli.swift
+	$(SWIFT) build --package-path=$(swift_root)/cli -c $(swift_build)
 
 
 

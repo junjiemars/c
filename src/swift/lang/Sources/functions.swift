@@ -39,7 +39,7 @@ func functionsAndClosures() {
   let sumInts = doOnInts1(1, 2, 3)
   assert(sumInts == 6)
   let mulInts = doOnInts2(1, 2, 3)
-  assert(mulInts == 6)
+  assert(mulInts == 6, "1 * 2 * 3 = 6")
 }
 
 // variadic parameters
@@ -66,9 +66,9 @@ func addInts(_ integers: Int...) -> Int {
 }
 
 func mulInts(_ integers: Int...) -> Int {
-  var sum = 0
+  var mul = 1
   for i in integers {
-    sum *= i
+    mul *= i
   }
-  return sum
+  return mul
 }
