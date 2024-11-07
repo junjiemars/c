@@ -1,10 +1,47 @@
 func simpleValues() {
+  immutableAndMutable()
+  strings()
+  foo()
+}
+
+func immutableAndMutable() {
   var v1 = 0x11
   v1 += 1
   let c1 = 0x22
   // c1 += 1
   assert(v1 < c1)
+}
 
+func strings() {
+  var s1 = "abc"
+  assert(s1.count == 3)
+  s1 += "123"
+  assert(s1.count == 6)
+
+  // string interpolation
+  let apples = 3
+  let oranges = 5
+  let appleSummary = "I have \(apples) apples."
+  let fruitSummary = "I have \(apples + oranges) pieces of fruit."
+  assert(appleSummary.count > 0 && fruitSummary.count > 0)
+  print(#"apples=\#(apples)"#)
+
+  let quotation = """
+    Say your name!
+    quote or unquote the `name' is ambiguous
+
+    """
+  assert(!quotation.isEmpty)
+  let sayMyName = "Nore"
+  print("\(quotation)\(sayMyName)")
+
+  let cafe = "cafe"
+  let cafe1 = cafe + "\u{301}"
+  assert(cafe.count == cafe1.count)
+  print("\(cafe)=\(cafe1)")
+}
+
+func foo() {
   let d1 = 70.0
   let d2: Double = 70.000001
   assert(d1 < d2)
@@ -15,19 +52,6 @@ func simpleValues() {
 
   // assert(d1 == f1)
   assert(d1 == Double(f1))
-
-  let apples = 3
-  let oranges = 5
-  let appleSummary = "I have \(apples) apples."
-  let fruitSummary = "I have \(apples + oranges) pieces of fruit."
-  assert(appleSummary.count > 0 && fruitSummary.count > 0)
-
-  let quotation = """
-    Say your name!
-    quote or unquote the `name' is ambiguous
-    """
-  assert(!quotation.isEmpty)
-  print(quotation)
 
   var a1 = ["strawberries", "limes", "tangerines"]
   assert(a1[1] == "limes")
