@@ -20,7 +20,9 @@ main (void)
   assert (*(unsigned long *)&oset == 0 && "sigset_t default should be zero");
 
   sigfillset (&nset);
-  assert ((unsigned long)(~nset) == 0 && "should be full");
+#if !(LINUX)
+  assert ((unsigned long)nset == 0 && "should be full");
+#endif  /* ! LINUX */
   assert (sigismember (&nset, SIGABRT) == 1 && "SIGABRT should in set");
 
   sigemptyset (&nset);
@@ -53,7 +55,7 @@ main (void)
 
   sigemptyset (&pset);
   sigprocmask (SIG_BLOCK, NULL, &pset);
-  assert (nset == pset && "should unchanged");
+  assert (*(unsigned long*)&nset == *(unsigned long*)&pset && "should unchanged");
 
   exit (0);
 }
