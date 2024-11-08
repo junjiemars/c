@@ -36,7 +36,7 @@ read3 (int fd, void *buf, size_t nbyte, int timeout)
   nact.sa_handler = on_sig_alrm;
 
   /* return twice */
-  if (sigsetjmp (env_alrm, 1) == SIGALRM)
+  if (sigsetjmp (env_alrm, 1 /* save signal mask */) == SIGALRM)
     {
       /* return from on_sig_alrm */
       if (sigprocmask (0, NULL, &oset) == -1)

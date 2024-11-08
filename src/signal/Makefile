@@ -254,11 +254,11 @@ signal_pause_p1_test: $(signal_pause_p1_binout)
 	-$< |head -n1|xargs kill -TERM
 
 $(signal_pause_d_binout): $(signal_root)/pause/d1.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(signal_pause_p1_binout): $(signal_root)/pause/d1.c \
                            $(signal_root)/pause/pause1.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
 
@@ -387,6 +387,7 @@ signal_suspend_wait_binout := $(bin_path)/$(signal_prefix)_suspend_wait$(bin_ext
 signal_suspend_flag_binout := $(bin_path)/$(signal_prefix)_suspend_flag$(bin_ext)
 signal_suspend_stage_binout := $(bin_path)/$(signal_prefix)_suspend_stage$(bin_ext)
 signal_suspend_n ?= 1
+signal_suspend_file := $(tmp_path)/$(signal_prefix)_suspend_file
 
 signal_suspend: $(signal_suspend_raw_binout) \
                 $(signal_suspend_wait_binout) \
@@ -399,31 +400,30 @@ signal_suspend_test: signal_suspend_raw_test \
 
 signal_suspend_stage: $(signal_suspend_stage_binout)
 	$< $(signal_suspend_n)
-
 signal_suspend_raw_test: $(signal_suspend_raw_binout)
 	$< $(signal_suspend_n)
-
+	$< 1 | tee $(signal_suspend_file)|head -n1|xargs kill -INT \
+    && cat $(signal_suspend_file)
 signal_suspend_wait_test: $(signal_suspend_wait_binout)
 	-$< $(signal_suspend_n)
-
 signal_suspend_flag_test: $(signal_suspend_flag_binout)
-	# $<
-	@echo "#skip ..."
+	$< 1 | tee $(signal_suspend_file) | head -n1 | xargs kill -QUIT \
+    && cat $(signal_suspend_file)
 
 signal_suspend_stage_test: $(signal_suspend_stage_binout)
 	-$< $(signal_suspend_n)
 
 $(signal_suspend_raw_binout): $(signal_root)/suspend/r.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(signal_suspend_wait_binout): $(signal_root)/suspend/w.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(signal_suspend_flag_binout): $(signal_root)/suspend/f.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(signal_suspend_stage_binout): $(signal_root)/suspend/s.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
 

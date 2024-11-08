@@ -1,4 +1,4 @@
-#include "_signal_.h"
+#include <_signal_.h>
 
 /*
  * POSIX `sigsuspend(2)':
@@ -18,7 +18,9 @@ static int N = 1;
 int
 main (int argc, char **argv)
 {
-  sigset_t nset, oset, wset;
+  int rc;
+  struct sigaction nact, oact;
+  sigset_t nset, oset1, oset2, wset;
 
   if (argc > 1)
     {
@@ -28,7 +30,10 @@ main (int argc, char **argv)
   setvbuf (stdout, NULL, _IONBF, 0);
   printf ("%d\n", getpid ());
 
-  if (signal (SIGINT, on_sig_int) == SIG_ERR)
+  nact.sa_handler = on_sig_int;
+  sigemptyset (&nact.sa_mask);
+  nact.sa_flags = 0;
+  if (sigaction (SIGINT, &nact, &oact) == -1)
     {
       perror (NULL);
       exit (EXIT_FAILURE);
@@ -37,14 +42,14 @@ main (int argc, char **argv)
   sigemptyset (&nset);
   sigaddset (&nset, SIGINT);
 
-  if (sigprocmask (SIG_BLOCK, &nset, &oset))
+  if (sigprocmask (SIG_BLOCK, &nset, &oset1))
     {
       perror (NULL);
       exit (EXIT_FAILURE);
     }
   printf ("# %s(%d) blocked\n", _str_ (SIGINT), SIGINT);
 
-  printf ("! enter ...\n");
+  printf ("! enter critical ...\n");
 
   sleep (N);
 
@@ -55,11 +60,19 @@ main (int argc, char **argv)
       if (sigismember (&wset, SIGINT))
         {
           printf ("# %s(%d) pending\n", _str_ (SIGINT), SIGINT);
-          sigsuspend (&oset);
+
+          rc = sigsuspend (&oset1);
+
+          /* examine `sigsuspend' effects */
+          assert (rc == -1 && errno == EINTR && "should return -1");
+          sigprocmask (0, NULL, &oset2);
+          assert (oset1 == oset2 && "should restored");
+
+          printf ("# %s(%d) go\n", _str_ (SIGINT), SIGINT);
         }
     }
 
-  if (sigprocmask (SIG_SETMASK, &oset, NULL))
+  if (sigprocmask (SIG_SETMASK, &oset1, NULL))
     {
       perror (NULL);
       exit (EXIT_FAILURE);
@@ -74,5 +87,8 @@ main (int argc, char **argv)
 void
 on_sig_int (int signo)
 {
-  printf ("# %s(%d) at %s\n", _str_ (SIGINT), signo, __FUNCTION__);
+  if (signo == SIGINT)
+    {
+      printf ("# %s(%d) at %s\n", _str_ (SIGINT), signo, __FUNCTION__);
+    }
 }
