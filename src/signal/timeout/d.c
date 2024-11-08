@@ -7,25 +7,35 @@ main (int argc, char **argv)
 {
   ssize_t n;
   char buf[] = "______________|\n";
-  int timeout = 1;
+  int timeout = 0;
+  sigset_t oset1, oset2;
 
   if (argc > 1)
     {
       timeout = atoi (argv[1]);
     }
-  printf ("%d, %d\n", getpid (), timeout);
+  printf ("pid=%d, timeout=%ds\n", getpid (), timeout);
 
-  alarm (2);
+  /* examine `read3' is alarm safe */
+  /* alarm (2); */
 
-  if ((n = read3 (STDIN_FILENO, buf, sizeof (buf) - 1, timeout)) == -1)
+  /* examine signal mask before call `read3' */
+  sigprocmask (0, NULL, &oset1);
+
+  n = read3 (STDIN_FILENO, buf, sizeof (buf) - 1, timeout);
+
+  /* examine signal mask after call `read3' */
+  sigprocmask (0, NULL, &oset2);
+  assert (oset1 == oset2 && "should signal mask be restored");
+
+  if (n == -1)
     {
       perror (NULL);
     }
-
-  if (write (STDOUT_FILENO, buf, sizeof (buf) - 1) == -1)
+  else if (n > 0)
     {
-      perror (NULL);
+      write (STDOUT_FILENO, buf, sizeof (buf) - 1);
     }
 
-  exit (EXIT_SUCCESS);
+  exit (0);
 }

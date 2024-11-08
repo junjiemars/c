@@ -471,14 +471,14 @@ $(signal_system_s1_binout): $(signal_root)/system/d.c \
 
 # timeout
 signal_timeout_t1_binout := $(bin_path)/$(signal_prefix)_timeout_t1$(bin_ext)
-signal_timeout_n ?= 2
 
 signal_timeout: $(signal_timeout_t1_binout)
 signal_timeout_test: signal_timeout_t1_test
 
 signal_timeout_t1_test: $(signal_timeout_t1_binout)
-	-echo "abc" | $< ${signal_timeout_n}
-	-$< $(signal_timeout_n)
+	-echo "abc" | $<
+	-echo "abc" | $< 2
+	-$< 2
 
 $(signal_timeout_t1_binout): $(signal_root)/timeout/d.c \
                              $(signal_root)/timeout/t1.c

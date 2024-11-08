@@ -1,27 +1,26 @@
 #include "_signal_.h"
-#include <sys/wait.h>
 
 static void on_sig_chld (int signo);
 
 int
 main (void)
 {
-  int e;
+  int err;
   pid_t pid;
 
   if (SIG_ERR == signal (SIGCHLD, on_sig_chld))
     {
-      e = errno;
-      fprintf (stderr, "!main: %s\n", strerror (e));
-      return e;
+      err = errno;
+      fprintf (stderr, "!main: %s\n", strerror (err));
+      return err;
     }
 
   pid = fork ();
   if (-1 == pid)
     {
-      e = errno;
-      fprintf (stderr, "!main: %s\n", strerror (e));
-      return e;
+      err = errno;
+      fprintf (stderr, "!main: %s\n", strerror (err));
+      return err;
     }
 
   if (0 == pid)
@@ -56,6 +55,6 @@ on_sig_chld (int signo)
         }
 
       fprintf (stdout, "!on_sig_chld: child %d with 0x%04x exit ...\n", pid,
-               WEXITSTATUS(status));
+               WEXITSTATUS (status));
     }
 }

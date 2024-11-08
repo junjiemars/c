@@ -4,7 +4,7 @@
  * Extends `read(2)' to support `timeout'.
  *
  * 1. Same as `read(2)' excepts
- * 2. `errno(3)' be set to `EINTR' if the `timeout' expires.
+ * 2. `errno(3)' be set to `ETIMEDOUT' if the `timeout' expires.
  *
  */
 
@@ -15,12 +15,16 @@ static void on_sig_alrm (int signo);
 static sigjmp_buf env_alrm;
 static sig_atomic_t can_jump;
 
+/*
+ * Read `nbyte' bytes from `fd' into `buf' in `timeout' seconds.
+ */
 ssize_t
-read3 (int fd, void *buf, size_t count, int timeout)
+read3 (int fd, void *buf, size_t nbyte, int timeout)
 {
   sigset_t oset;
   struct sigaction nact;
 
+  /* void current alarm */
   alarm (0);
 
   sigfillset (&nact.sa_mask);
@@ -40,7 +44,7 @@ read3 (int fd, void *buf, size_t count, int timeout)
           /* SIGALRM should be added */
           assert (sigismember (&oset, SIGALRM));
         }
-      errno = EINTR;
+      errno = ETIMEDOUT;
       return -1;
     }
   can_jump = 1;
@@ -51,10 +55,11 @@ read3 (int fd, void *buf, size_t count, int timeout)
         {
           return -1;
         }
+      /* alarm only catching SIGALRM */
       alarm (timeout);
     }
 
-  return read (fd, buf, count);
+  return read (fd, buf, nbyte);
 }
 
 void
