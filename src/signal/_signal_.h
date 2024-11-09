@@ -1,17 +1,14 @@
 #ifndef _SIGNAL_H_
 #define _SIGNAL_H_
 
-#include <nustd.h>
 #include <nasrt.h>
 #include <nlim.h>
+#include <nustd.h>
 
-#include <signal.h>
-#include <errno.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <setjmp.h>
-#include <sys/wait.h>
+#include <signal.h> /* IWYU pragma: keep */
+#include <stdio.h>  /* IWYU pragma: keep */
+#include <stdlib.h> /* IWYU pragma: keep */
 #include <sys/time.h>
+#include <sys/wait.h>
 
 #endif /* end of _SIGNAL_H_ */
