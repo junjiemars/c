@@ -436,8 +436,9 @@ signal_sync_test: signal_sync_child_test
 signal_sync_child_test: $(signal_sync_child_binout)
 	$<
 
-$(signal_sync_child_binout): $(signal_root)/sync/s1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(signal_sync_child_binout): $(signal_root)/sync/d.c \
+                             $(signal_root)/sync/psync1.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
 
