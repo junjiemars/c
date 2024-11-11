@@ -223,8 +223,7 @@ signal_job_test: signal_job_tstp_test
 signal_job_tstp: $(signal_job_tstp_binout)
 
 signal_job_tstp_test: $(signal_job_tstp_binout)
-	# $<
-	@echo "#skip ... (C-z emit SIGTSTP)"
+	$< | head -n1 | xargs kill -TSTP
 
 $(signal_job_tstp_binout): $(signal_root)/job/j1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(bin_out)$@ $^

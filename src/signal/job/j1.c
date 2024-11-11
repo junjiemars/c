@@ -8,6 +8,7 @@ main (void)
   ssize_t n;
   char buf[BUFSIZ];
 
+  setvbuf (stdout, 0, _IONBF, 0);
   printf ("%d\n", getpid ());
 
   if (signal (SIGTSTP, SIG_IGN) == SIG_DFL)
