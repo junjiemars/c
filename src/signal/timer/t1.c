@@ -10,7 +10,7 @@
  */
 
 int
-main(void)
+main (void)
 {
-  exit(EXIT_SUCCESS);
+  exit (EXIT_SUCCESS);
 }

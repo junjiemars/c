@@ -47,6 +47,7 @@ return 0;
     ;;
 esac                            # end of GETPW_R_SIZE_MAX
 
+
 
 # check nanosleep
 #----------------------------------------
@@ -65,6 +66,26 @@ return 0;
 . ${NORE_ROOT}/auto/feature
 flag="has_nanosleep" op=":=" value="$nm_found" . ${NORE_ROOT}/auto/make_define
 
+
+
+# check clock_nanosleep
+#----------------------------------------
+nm_feature="clock_nanosleep"
+nm_feature_name="nm_clock_nanosleep"
+nm_feature_run=no
+nm_feature_h='
+#include <time.h>
+'
+nm_feature_flags=
+nm_feature_test='
+struct timespec req, cur;
+clock_nanosleep(CLOCK_REALTIME, &req, &cur);
+return 0;
+'
+. ${NORE_ROOT}/auto/feature
+flag="has_clock_nanosleep" op=":=" value="$nm_found" . ${NORE_ROOT}/auto/make_define
+
+
 
 
 # check sigqueue
@@ -84,6 +105,6 @@ union sigval v = { .sival_int = 0x11223344 };
 . ${NORE_ROOT}/auto/feature
 flag="has_sigqueue" op=":=" value="$nm_found" . ${NORE_ROOT}/auto/make_define
 
+
 
-
-# EOF
+# eof
