@@ -1,7 +1,10 @@
-#include "_signal_.h"
+#include <errno.h>
+#include <signal.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 /*
- * emulates POSIX `system(3)'.
+ * Emulates POSIX `system(3)'.
  *
  * https://pubs.opengroup.org/onlinepubs/9699919799/functions/system.html
  *
@@ -48,19 +51,20 @@ system (const char *command)
     {
       stat = -1;
     }
-  else if (pid == 0)
+  else if (pid == 0) /* child process */
     {
+      /* restore sigaction and mask */
       if (sigaction (SIGINT, &intr, NULL) == -1)
         {
           return -1;
         }
       if (sigaction (SIGQUIT, &quit, NULL) == -1)
         {
-          return 1;
+          return -1;
         }
       if (sigprocmask (SIG_SETMASK, &oset, NULL) == -1)
         {
-          return 1;
+          return -1;
         }
 
       execl (CMD_PROC, "sh", "-c", command, NULL);
@@ -77,6 +81,7 @@ system (const char *command)
             }
         }
 
+      /* restore sigaction and mask */
       if (sigaction (SIGINT, &intr, NULL) == -1)
         {
           return -1;

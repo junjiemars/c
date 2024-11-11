@@ -54,11 +54,11 @@ main (int argc, char **argv)
 void
 on_sig_int (int signo)
 {
-  printf ("# %s(%d)\n", _str_ (SIGINT), signo);
+  printf ("# caught %s(%d)\n", _str_ (SIGINT), signo);
 }
 
 void
 on_sig_chld (int signo)
 {
-  printf ("# %s(%d)\n", _str_ (SIGCHLD), signo);
+  printf ("# caught %s(%d)\n", _str_ (SIGCHLD), signo);
 }

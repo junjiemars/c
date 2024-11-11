@@ -51,7 +51,7 @@ signal_test:                                    \
              signal_timer_test                  \
              signal_wait_test
 
-endif														# msvc
+endif
 
 
 
@@ -66,7 +66,6 @@ INC += $(nm_inc_opt)$(signal_root) $(nm_inc_opt)$(posix_root)
 # abort
 signal_abort_d_binout := $(bin_path)/$(signal_prefix)_abort_d$(bin_ext)
 signal_abort_a1_binout := $(bin_path)/$(signal_prefix)_abort_a1$(bin_ext)
-signal_abort_cflags := -D_IGN_SIG_ABRT_=-1 -D_EXIT_SIG_HANDLER_=1
 
 signal_abort: signal_abort_d \
               signal_abort_a1
@@ -78,15 +77,21 @@ signal_abort_a1: $(signal_abort_a1_binout)
 
 signal_abort_d_test: $(signal_abort_d_binout)
 	-$<
+	-$< 1
+	-$< -1
+	-$< -1 0
 signal_abort_a1_test: $(signal_abort_a1_binout)
 	-$<
+	-$< 1
+	-$< -1
+	-$< -1 0
 
 $(signal_abort_d_binout): $(signal_root)/abort/d1.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(signal_abort_a1_binout): $(signal_root)/abort/d1.c \
                            $(signal_root)/abort/abrt1.c
-	$(CC) $(CFLAGS) $(INC) $(signal_abort_cflags) $(bin_out)$@ $^
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
 
@@ -222,7 +227,7 @@ signal_job_tstp_test: $(signal_job_tstp_binout)
 	@echo "#skip ... (C-z emit SIGTSTP)"
 
 $(signal_job_tstp_binout): $(signal_root)/job/j1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
 
@@ -445,6 +450,7 @@ $(signal_sync_child_binout): $(signal_root)/sync/d.c \
 # system
 signal_system_d_binout := $(bin_path)/$(signal_prefix)_system_d$(bin_ext)
 signal_system_s1_binout := $(bin_path)/$(signal_prefix)_system_s1$(bin_ext)
+signal_system_ed_in := "a\nNore\n.\n1p\nQ\n"
 
 signal_system: $(signal_system_d_binout) \
                $(signal_system_s1_binout)
@@ -454,12 +460,12 @@ signal_system_test: signal_system_d_test \
 signal_system_d_test: $(signal_system_d_binout)
 	$< || test $$? -eq 1
 	$< "date"
-	# $< "/bin/ed"
+	printf $(signal_system_ed_in) | $< "/bin/ed"
 
 signal_system_s1_test: $(signal_system_s1_binout)
 	-$< || test $$? -eq 1
 	$< "date"
-	# $< "/bin/ed"
+	printf $(signal_system_ed_in) | $< "/bin/ed"
 
 $(signal_system_d_binout): $(signal_root)/system/d.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@

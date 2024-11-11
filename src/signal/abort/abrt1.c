@@ -1,4 +1,7 @@
-#include "_signal_.h"
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 /*
  * Emulates POSIX `abort(3)':
@@ -37,7 +40,7 @@ abort (void)
   sigdelset (&set, SIGABRT);
   sigprocmask (SIG_SETMASK, &set, NULL);
 
-  raise (SIGABRT);
+  kill (getpid (), SIGABRT);
 
   fflush (NULL);
 
@@ -45,7 +48,7 @@ abort (void)
   sigaction (SIGABRT, &act, NULL);
   sigprocmask (SIG_SETMASK, &set, NULL);
 
-  raise (SIGABRT);
+  kill (getpid (), SIGABRT);
 
   exit (EXIT_FAILURE);
 }

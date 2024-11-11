@@ -9,57 +9,77 @@
 
 extern void abort (void);
 
-#if !defined(_IGN_SIG_ABRT_) || (_IGN_SIG_ABRT_ < 0)
+/* ignore > 0, default = 0, raise < 0 */
+static int ignore_abort = 0;
+
+/* exit > 0 */
+static sig_atomic_t exit_on_sig = 1;
+
 static void on_sig_abrt (int);
 static void on_abrt_exit (void);
-#endif
 
 int
-main (void)
+main (int argc, char **argv)
 {
   struct sigaction oact;
+
+  /* usage: [ignore-abort] [exit-on-signal] */
+  if (argc > 1)
+    {
+      ignore_abort = atoi (argv[1]);
+    }
+  if (argc > 2)
+    {
+      exit_on_sig = atoi (argv[2]);
+    }
 
   setvbuf (stdout, NULL, _IOFBF, 0);
   printf ("%d\n", getpid ());
 
-#if !defined(_IGN_SIG_ABRT_) || (_IGN_SIG_ABRT_ < 0)
   atexit (on_abrt_exit);
-#endif
 
+  /* examine current sigaction */
   if (sigaction (SIGABRT, NULL, &oact) == -1)
     {
       perror (NULL);
       exit (EXIT_FAILURE);
     }
 
-#if defined(_IGN_SIG_ABRT_) && (_IGN_SIG_ABRT_ > 0)
-  if (act.sa_handler != SIG_IGN)
+  if (ignore_abort > 0)
     {
-      act.sa_handler = SIG_IGN;
+      if (oact.sa_handler != SIG_IGN)
+        {
+          printf ("# ignore SIGABRT ... \n");
+          signal (SIGABRT, SIG_IGN);
+        }
     }
-#elif defined(_IGN_SIG_ABRT_) && (_IGN_SIG_ABRT_ == 0)
-    /* SIG_DFL*/
-#else
-  signal (SIGABRT, on_sig_abrt);
-#endif
+  else if (ignore_abort < 0)
+    {
+      printf ("# trap SIGABRT ...\n");
+      signal (SIGABRT, on_sig_abrt);
+    }
+  else
+    {
+      /* SIG_DFL*/
+      printf ("# default SIGABRT ...\n");
+    }
 
   abort ();
 
   /* never reach here; */
 }
 
-#if !defined(_IGN_SIG_ABRT_) || (_IGN_SIG_ABRT_ < 0)
-
 void
 on_sig_abrt (int signo)
 {
-  printf ("# %s(%d)\n", _str_ (SIGABRT), signo);
+  printf ("# caught %s(%d)\n", _str_ (SIGABRT), signo);
 
   /* cleanup then exit*/
 
-#if (_EXIT_SIG_HANDLER_ > 0)
-  exit (EXIT_SUCCESS);
-#endif
+  if (exit_on_sig > 0)
+    {
+      exit (EXIT_SUCCESS);
+    }
 }
 
 void
@@ -67,5 +87,3 @@ on_abrt_exit (void)
 {
   printf ("# exiting ...\n");
 }
-
-#endif /* _IGN_SIG_ABRT_ < 0 */
