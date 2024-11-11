@@ -10,5 +10,6 @@
 #include <stdlib.h> /* IWYU pragma: keep */
 #include <sys/time.h>
 #include <sys/wait.h>
+#include <errno.h>
 
 #endif /* end of _SIGNAL_H_ */

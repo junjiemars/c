@@ -341,7 +341,7 @@ signal_sleep_d_binout := $(bin_path)/$(signal_prefix)_sleep_d$(bin_ext)
 signal_sleep_s1_binout := $(bin_path)/$(signal_prefix)_sleep_s1$(bin_ext)
 signal_sleep_s2_binout := $(bin_path)/$(signal_prefix)_sleep_s2$(bin_ext)
 signal_sleep_s3_binout := $(bin_path)/$(signal_prefix)_sleep_s3$(bin_ext)
-signal_sleep_n ?= 1
+signal_sleep_n ?= 3
 signal_sleep_deps = $(signal_sleep_d_binout)
 signal_sleep_deps += $(signal_sleep_s1_binout)
 signal_sleep_deps += $(signal_sleep_s2_binout)
@@ -359,18 +359,15 @@ signal_sleep_test: $(signal_sleep_test_deps)
 
 signal_sleep_d_test: $(signal_sleep_d_binout)
 	$< $(signal_sleep_n)
-
 signal_sleep_s1_test: $(signal_sleep_s1_binout)
 	$< $(signal_sleep_n)
-
 signal_sleep_s2_test: $(signal_sleep_s2_binout)
 	$< $(signal_sleep_n)
-
 signal_sleep_s3_test: $(signal_sleep_s3_binout)
 	$< $(signal_sleep_n)
 
 $(signal_sleep_d_binout): $(signal_root)/sleep/d.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(signal_sleep_s1_binout): $(signal_root)/sleep/d.c \
                            $(signal_root)/sleep/s1.c
