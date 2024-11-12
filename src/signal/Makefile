@@ -450,16 +450,27 @@ $(signal_suspend_stage_binout): $(signal_root)/suspend/s.c
 
 
 # sync
-signal_sync_child_binout := $(bin_path)/$(signal_prefix)_sync_child$(bin_ext)
+signal_sync_bone_binout := $(bin_path)/$(signal_prefix)_sync_bone$(bin_ext)
+signal_sync_file_binout := $(bin_path)/$(signal_prefix)_sync_file$(bin_ext)
+signal_sync_file := $(tmp_path)/$(signal_prefix)_sync.file
 
-signal_sync: $(signal_sync_child_binout)
-signal_sync_test: signal_sync_child_test
+signal_sync: $(signal_sync_bone_binout) \
+             $(signal_sync_file_binout)
+signal_sync_test: signal_sync_bone_test \
+                  signal_sync_file_test
 
-signal_sync_child_test: $(signal_sync_child_binout)
+signal_sync_bone_test: $(signal_sync_bone_binout)
 	$<
+signal_sync_file_test: $(signal_sync_file_binout)
+	touch $(signal_sync_file)
+	$< $(signal_sync_file)
 
-$(signal_sync_child_binout): $(signal_root)/sync/d.c \
-                             $(signal_root)/sync/psync1.c
+$(signal_sync_bone_binout): $(signal_root)/sync/d1.c \
+                            $(signal_root)/sync/psync1.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+
+$(signal_sync_file_binout): $(signal_root)/sync/d2.c \
+                            $(signal_root)/sync/psync1.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
@@ -511,16 +522,16 @@ $(signal_timeout_t1_binout): $(signal_root)/timeout/d.c \
 
 
 # timer
-signal_timer_libes_binout := $(bin_path)/$(signal_prefix)_timer_libes$(bin_ext)
+signal_timer_d_binout := $(bin_path)/$(signal_prefix)_timer_d$(bin_ext)
 
-signal_timer: $(signal_timer_libes_binout)
-signal_timer_test: signal_timer_libes_test
+signal_timer: $(signal_timer_d_binout)
+signal_timer_test: signal_timer_d_test
 
-signal_timer_libes_test: $(signal_timer_libes_binout)
+signal_timer_d_test: $(signal_timer_d_binout)
 	$<
 
-$(signal_timer_libes_binout): $(signal_root)/timer/t1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(signal_timer_d_binout): $(signal_root)/timer/d1.c
+	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
 
