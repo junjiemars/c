@@ -67,7 +67,11 @@ on_sig (int signo)
 {
   pid_t pid1 = getpid ();
   pthread_t tid1 = pthread_self ();
+  sigset_t set;
 
   assert (pid == pid1 && tid == tid1 && "should same pid and tid");
   assert (signo == SIGHUP && "should caught SIGHUP");
+
+  sigprocmask (0, NULL, &set);
+  assert (sigismember (&set, SIGHUP) && "should blocked SIGHUP");
 }

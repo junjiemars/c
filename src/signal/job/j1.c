@@ -7,14 +7,25 @@ main (void)
 {
   ssize_t n;
   char buf[BUFSIZ];
+  void (*oact) (int);
 
   setvbuf (stdout, 0, _IONBF, 0);
   printf ("%d\n", getpid ());
 
-  if (signal (SIGTSTP, SIG_IGN) == SIG_DFL)
+  if ((oact = signal (SIGTSTP, SIG_IGN)) == SIG_ERR)
     {
-      printf ("# %s catching...\n", _str_ (SIGTSTP));
+      perror (NULL);
+      exit (EXIT_FAILURE);
+    }
+  else if (oact == SIG_DFL)
+    {
+      printf ("# %s(%d) catching...\n", _str_ (SIGTSTP), SIGTSTP);
       signal (SIGTSTP, on_sig_tstp);
+    }
+  else
+    {
+      printf ("# %s(%d) ignored\n", _str_ (SIGTSTP), SIGTSTP);
+      exit (EXIT_FAILURE);
     }
 
   while ((n = read (STDIN_FILENO, buf, BUFSIZ)) > 0)
@@ -65,11 +76,13 @@ on_sig_tstp (int signo)
       printf ("! %s restore to default\n", _str_ (SIGTSTP));
     }
 
-  printf ("! %s(DFL) raising...\n", _str_ (SIGTSTP));
+  printf ("! %s(%d) raising...\n", _str_ (SIGTSTP), SIGTSTP);
 
   kill (getpid (), SIGTSTP);
 
-  printf ("! %s(DFL) raised...\n", _str_ (SIGTSTP));
+  /* reach here after received SIGCONT signal */
+
+  printf ("! %s(%d) raised...\n", _str_ (SIGTSTP), SIGTSTP);
 
   if (signal (SIGTSTP, on_sig_tstp) == SIG_ERR)
     {
@@ -77,6 +90,6 @@ on_sig_tstp (int signo)
     }
   else
     {
-      printf ("! %s catching...\n", _str_ (SIGTSTP));
+      printf ("! %s(%d) catching...\n", _str_ (SIGTSTP), SIGTSTP);
     }
 }
