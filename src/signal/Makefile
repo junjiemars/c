@@ -184,7 +184,7 @@ $(signal_info_lst_awk_in):
 else
 $(signal_info_lst_awk_in):
 	kill -l|tr '\t' '\n' \
-   |awk '{sub("SIG","",$2);print $2}' \
+   |sed -E -e's/ *[0-9]\) *//g' -n -e'1,31p' \
    |sed -n -e'1,31p' &>out/tmp/signal_sig2str.awk.Linux.in
 endif
 
