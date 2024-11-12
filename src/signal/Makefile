@@ -181,11 +181,6 @@ signal_info_test: signal_info_lst_test \
 ifeq ($(NM_SYSTEM), Darwin)
 $(signal_info_lst_awk_in):
 	kill -l|tr ' ' '\n'|sed -n -e'1,31p'>$@
-else
-$(signal_info_lst_awk_in):
-	kill -l|tr '\t' '\n' \
-   |sed -E -e's/ *[0-9]\) *//g' -n -e'1,31p' \
-   |sed -n -e'1,31p'>$@
 endif
 
 signal_info_lst_test: $(signal_info_lst_binout)
