@@ -180,10 +180,10 @@ signal_info_test: signal_info_lst_test \
 
 ifeq ($(NM_SYSTEM), Darwin)
 $(signal_info_lst_awk_in):
-	kill -l|tr ' ' '\n'|sed -n -e'1,31p' >$@
+	kill -l|tr ' ' '\n'|sed -n -e'1,31p'>$@
 else
 $(signal_info_lst_awk_in):
-	kill -l|tr '\t' '\n'|awk '{sub("SIG","",$2);print $2}'|sed -n -e'1,31p' >$@
+	kill -l|tr '\t' '\n'|awk '{sub("SIG","",$$2);print $$2}'|sed -n -e'1,31p'>$@
 endif
 
 signal_info_lst_test: $(signal_info_lst_binout)
