@@ -181,6 +181,9 @@ signal_info_test: signal_info_lst_test \
 ifeq ($(NM_SYSTEM), Darwin)
 $(signal_info_lst_awk_in):
 	kill -l|tr ' ' '\n'|sed -n -e'1,31p'>$@
+else
+$(signal_info_lst_awk_in): $(signal_root)/info/sig2str.awk.Linux.in
+	cp $< $@
 endif
 
 signal_info_lst_test: $(signal_info_lst_binout)
