@@ -25,6 +25,7 @@ nustd_ssize_t="yes"
 if [    "$nio_getdelim" = "yes"                 \
      -o "$nio_fileno" = "yes"                   \
      -o "$nio_fdopen" = "yes"                   \
+     -o "$nio_fmemopen" = "yes"                 \
      -o "$nio_dirname" = "yes"                  \
      -o "$nio_basename" = "yes"                 \
      -o "$nio_popen" = "yes"                    \
@@ -145,6 +146,25 @@ if [ "$nio_fdopen" = "yes" ]; then
   esac
 fi
 
+
+#check fmemopen
+#----------------------------------------
+if [ "$nio_fmemopen" = "yes" ]; then
+    nm_feature="fmemopen"
+    nm_feature_name="nm_have_fmemopen"
+    nm_feature_run=no
+    nm_feature_h='#include <stdio.h>'
+    nm_feature_flags=
+    nm_feature_inc=
+    nm_feature_ldlibs=
+    nm_feature_test='char *buf[0];FILE* f=fmemopen(buf,0,"r"); fclose(f);'
+    . ${NORE_ROOT}/auto/feature
+    if [ "$nm_found" = "yes" ]; then
+      have=$nm_have_feature . ${NORE_ROOT}/auto/have
+      flag=$nm_feature_name op=":=" value="yes" \
+        . ${NORE_ROOT}/auto/make_define
+    fi
+fi # end of fmemopen
 
 # check dirname
 #----------------------------------------

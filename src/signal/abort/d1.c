@@ -1,4 +1,5 @@
 #include <_signal_.h>
+#include <signal.h>
 
 /*
  * 1. `abort(3)' never return to its caller.
@@ -74,12 +75,11 @@ on_sig_abrt (int signo)
 {
   printf ("# caught %s(%d)\n", _str_ (SIGABRT), signo);
 
-  /* cleanup then exit*/
-
   if (exit_on_sig > 0)
     {
       exit (EXIT_SUCCESS);
     }
+  signal (SIGABRT, on_sig_abrt);
 }
 
 void

@@ -19,12 +19,7 @@ abort (void)
   sigset_t set;
   struct sigaction act;
 
-  if (sigaction (SIGABRT, NULL, &act) == -1)
-    {
-      perror (NULL);
-      exit (EXIT_FAILURE);
-    }
-
+  sigaction (SIGABRT, NULL, &act);
   if (act.sa_handler == SIG_IGN)
     {
       act.sa_handler = SIG_DFL;
@@ -50,5 +45,6 @@ abort (void)
 
   kill (getpid (), SIGABRT);
 
+  /* should never reach here */
   exit (EXIT_FAILURE);
 }

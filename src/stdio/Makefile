@@ -274,27 +274,36 @@ $(stdio_line_gets_binout): $(stdio_root)/line/s.c   \
 # open
 stdio_open_re_binout := $(bin_path)/$(stdio_prefix)_open_re$(bin_ext)
 stdio_open_fd_binout := $(bin_path)/$(stdio_prefix)_open_fd$(bin_ext)
+stdio_open_mem_binout := $(bin_path)/$(stdio_prefix)_open_mem$(bin_ext)
 stdio_open_file := $(tmp_path)/$(stdio_prefix)_open.file
 
-stdio_open: $(stdio_open_re_binout)
-stdio_open_test: stdio_open_re_test             \
-                 stdio_open_fd_test
+stdio_open: $(stdio_open_re_binout) \
+            $(stdio_open_fd_binout) \
+            $(stdio_open_mem_binout)
+stdio_open_test: stdio_open_re_test \
+                 stdio_open_fd_test \
+                 stdio_open_mem_test
 
 $(stdio_open_file):
 	echo "abcdef" > $@
 
-stdio_open_re_test: $(stdio_open_re_binout)     \
+stdio_open_re_test: $(stdio_open_re_binout) \
                     $(stdio_open_file)
 	$< $(stdio_open_file)
 
 stdio_open_fd_test: $(stdio_open_fd_binout)
 	$< < $(stdio_root)/open/fd1.c
 
+stdio_open_mem_test: $(stdio_open_mem_binout)
+	$< < $(stdio_root)/open/mem1.c
 
 $(stdio_open_re_binout): $(stdio_root)/open/ro1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(stdio_open_fd_binout): $(stdio_root)/open/fd1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+$(stdio_open_mem_binout): $(stdio_root)/open/mem1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 

@@ -209,18 +209,18 @@ $(signal_info_sig2str_c): $(signal_root)/info/sig2str.awk \
 # io
 signal_io_xfsz_binout := $(bin_path)/$(signal_prefix)_xfsz$(bin_ext)
 signal_io_xfsz_n ?= 100
-signal_io_xfsz_rl ?= 2000
-signal_io_file := $(tmp_path)/$(signal_prefix)_xfsz.file
+signal_io_xfsz_rl ?= 4
+signal_io_xfsz_file := $(tmp_path)/$(signal_prefix)_xfsz.file
 
 signal_io: $(signal_io_xfsz_binout)
 signal_io_test: signal_io_xfsz_test
 
 signal_io_xfsz_test: $(signal_io_xfsz_binout)
-	-$< 0<${signal_root}/io/x1.c 1>${signal_io_file}
+	-$< 0<${signal_root}/io/x1.c 2>&1 >${signal_io_xfsz_file}
 
 $(signal_io_xfsz_binout): $(signal_root)/io/x1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) \
-    -DBUF_SIZE=$(signal_io_xfsz_n) -DRL_FSIZE=$(signal_io_xfsz_rl) \
+    -DBUF_SIZE=$(signal_io_xfsz_n) -DFIL_SIZE=$(signal_io_xfsz_rl) \
     $^ $(bin_out)$@
 
 # job
