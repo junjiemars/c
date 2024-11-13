@@ -17,30 +17,29 @@ void
 abort (void)
 {
   sigset_t set;
-  struct sigaction act;
+  struct sigaction nact, oact;
 
-  sigaction (SIGABRT, NULL, &act);
-  if (act.sa_handler == SIG_IGN)
+  sigaction (SIGABRT, NULL, &oact);
+  nact = oact;
+  if (nact.sa_handler == SIG_IGN)
     {
-      act.sa_handler = SIG_DFL;
-      sigaction (SIGABRT, &act, NULL);
+      nact.sa_handler = SIG_DFL;
+      sigaction (SIGABRT, &nact, NULL);
     }
 
-  if (act.sa_handler == SIG_DFL)
-    {
-      fflush (NULL);
-    }
+  fflush (NULL);
 
   sigfillset (&set);
   sigdelset (&set, SIGABRT);
   sigprocmask (SIG_SETMASK, &set, NULL);
+  sigaction (SIGABRT, &nact, NULL);
 
   kill (getpid (), SIGABRT);
 
-  fflush (NULL);
+  /* fflush (NULL); */
 
-  act.sa_handler = SIG_DFL;
-  sigaction (SIGABRT, &act, NULL);
+  nact.sa_handler = SIG_DFL;
+  sigaction (SIGABRT, &nact, NULL);
   sigprocmask (SIG_SETMASK, &set, NULL);
 
   kill (getpid (), SIGABRT);

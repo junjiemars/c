@@ -36,7 +36,6 @@ main (int argc, char **argv)
 
   setvbuf (stdout, NULL, _IOFBF, 0);
   printf ("%d\n", getpid ());
-
   atexit (on_abrt_exit);
 
   /* examine current sigaction */
@@ -75,11 +74,11 @@ on_sig_abrt (int signo)
 {
   printf ("# caught %s(%d)\n", _str_ (SIGABRT), signo);
 
+  signal (SIGABRT, on_sig_abrt);
   if (exit_on_sig > 0)
     {
       exit (EXIT_SUCCESS);
     }
-  signal (SIGABRT, on_sig_abrt);
 }
 
 void
