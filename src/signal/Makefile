@@ -255,16 +255,19 @@ $(signal_kill_binout): $(signal_root)/kill/k1.c
 signal_pause_d_binout := $(bin_path)/$(signal_prefix)_pause_d$(bin_ext)
 signal_pause_p1_binout := $(bin_path)/$(signal_prefix)_pause_p1$(bin_ext)
 
-signal_pause: $(signal_pause_d_binout) \
-              $(signal_pause_p1_binout)
-signal_pause_test: signal_pause_d_test \
-                   signal_pause_p1_test
+signal_pause: signal_pause_d \
+              signal_pause_p1
+signal_pause_test: signal_pause_d \
+                   signal_pause_p1
+
+signal_pause_d: $(signal_pause_d_binout)
+signal_pause_p1: $(signal_pause_p1_binout)
 
 signal_pause_d_test: $(signal_pause_d_binout)
-	-$< |head -n1|xargs kill -TERM
+	-$< |head -n1|xargs kill -KILL
 
 signal_pause_p1_test: $(signal_pause_p1_binout)
-	-$< |head -n1|xargs kill -TERM
+	-$< |head -n1|xargs kill -KILL
 
 $(signal_pause_d_binout): $(signal_root)/pause/d1.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^

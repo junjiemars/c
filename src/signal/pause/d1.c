@@ -8,8 +8,7 @@
 
 extern int pause (void);
 
-static void on_sig_usr1 (int signo);
-static void on_sig_term (int signo);
+static void on_sig_usr (int signo);
 
 int
 main (void)
@@ -22,13 +21,11 @@ main (void)
 
   sigprocmask (0, NULL, &oset1);
 
-  signal (SIGUSR1, on_sig_usr1);
-  signal (SIGTERM, on_sig_term);
+  signal (SIGUSR1, on_sig_usr);
+  signal (SIGUSR2, on_sig_usr);
 
   for (;;)
     {
-      printf ("# kill -USR1 %d\n# kill -TERM %d\n", pid, pid);
-
       pause ();
 
       sigprocmask (0, NULL, &oset2);
@@ -39,15 +36,14 @@ main (void)
 }
 
 void
-on_sig_usr1 (int signo)
+on_sig_usr (int signo)
 {
-  printf ("! %s(%d)\n", _str_ (SIGUSR1), signo);
-}
-
-void
-on_sig_term (int signo)
-{
-  printf ("! %s(%d)\n", _str_ (SIGTERM), signo);
-  printf ("# exiting ...\n");
-  exit (EXIT_SUCCESS);
+  if (signo == SIGUSR1)
+    {
+      printf ("! caught %s(%d)\n", _str_ (SIGUSR1), signo);
+    }
+  else if (signo == SIGUSR2)
+    {
+      printf ("! caught %s(%d)\n", _str_ (SIGUSR1), signo);
+    }
 }
