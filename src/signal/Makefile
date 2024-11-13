@@ -462,7 +462,6 @@ signal_sync_test: signal_sync_bone_test \
 signal_sync_bone_test: $(signal_sync_bone_binout)
 	$<
 signal_sync_file_test: $(signal_sync_file_binout)
-	touch $(signal_sync_file)
 	$< $(signal_sync_file)
 
 $(signal_sync_bone_binout): $(signal_root)/sync/d1.c \

@@ -1,6 +1,8 @@
 #include "psync.h"
 #include <_signal_.h>
+#include <stdio.h>
 
+#define N 3
 static volatile int counter = 0;
 
 int
@@ -14,13 +16,15 @@ main (int argc, char **argv)
       fprintf (stderr, "usage: %s <path>\n", argv[0]);
       exit (EXIT_FAILURE);
     }
+  fprintf (stderr, "%d\n", getpid ());
 
-  if ((file = fopen (argv[1], "rw")) == NULL)
+  if ((file = fopen (argv[1], "w+b")) == NULL)
     {
       perror (NULL);
       exit (EXIT_FAILURE);
     }
-  fprintf (stderr, "%d\n", getpid ());
+  setvbuf (file, 0, _IONBF, 0);
+  fwrite ((int *)&counter, sizeof (counter), 1, file);
 
   tell_wait ();
 
@@ -31,46 +35,36 @@ main (int argc, char **argv)
     }
   else if (pid == 0) /* child process */
     {
-      fsync (fileno (file));
-      fscanf (file, "%i", &counter);
+      for (int i = 0; i < N; i++)
+        {
+          fseek (file, 0, SEEK_SET);
+          fread ((int *)&counter, sizeof (counter), 1, file);
+          ++counter;
+          fseek (file, 0, SEEK_SET);
+          fwrite ((int *)&counter, sizeof (counter), 1, file);
+          fprintf (stderr, "--- %8d %02d\n", getpid (), counter);
 
-      tell_parent (getppid ());
-      fprintf (stderr, "--- %d read %02d\n", getpid (), counter);
-
-      wait_parent ();
-
-      ++counter;
-      fwrite ((int *)&counter, sizeof (counter), 1, file);
-      fsync (fileno (file));
-
-      tell_parent (getppid ());
-      fprintf (stderr, "--- %d wrote %02d\n", getpid (), counter);
-
-      tell_parent (getppid ());
-      wait_parent ();
+          tell_parent (getppid ());
+          wait_parent ();
+        }
     }
   else
     {
-      ++counter;
-      fwrite ((int *)&counter, sizeof (counter), 1, file);
-      fsync (fileno (file));
+      for (int i = 0; i < N; i++)
+        {
+          tell_child (pid);
+          wait_child ();
 
-      tell_child (pid);
-      fprintf (stderr, "+++ %d wrote %02d\n", getpid (), counter);
-
-      wait_child ();
-
-      fsync (fileno (file));
-      fscanf (file, "%i", &counter);
-
-      tell_child (pid);
-      fprintf (stderr, "+++ %d read %02d\n", getpid (), counter);
-
-      wait_child ();
+          fseek (file, 0, SEEK_SET);
+          fread ((int *)&counter, sizeof (counter), 1, file);
+          ++counter;
+          fseek (file, 0, SEEK_SET);
+          fwrite ((int *)&counter, sizeof (counter), 1, file);
+          fprintf (stderr, "+++ %8d %02d\n", getpid (), counter);
+        }
     }
 
   fclose (file);
-  fsync (fileno (file));
 
   return 0;
 }
