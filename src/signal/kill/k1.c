@@ -11,31 +11,29 @@
  *
  */
 
-
-static void on_sig_usr(int);
-
+static void on_sig_usr (int);
 
 int
-main()
+main ()
 {
-  signal(SIGUSR1, on_sig_usr);
-  signal(SIGUSR2, on_sig_usr);
+  signal (SIGUSR1, on_sig_usr);
+  signal (SIGUSR2, on_sig_usr);
 
-  raise(SIGUSR1);
-  kill(getpid(), SIGUSR2);
+  raise (SIGUSR1);
+  kill (getpid (), SIGUSR2);
 
-  exit(EXIT_SUCCESS);
+  exit (EXIT_SUCCESS);
 }
 
 void
-on_sig_usr(int signo)
+on_sig_usr (int signo)
 {
   if (SIGUSR1 == signo)
     {
-      printf("# %s\n", _str_(SIGUSR1));
+      printf ("# caught %s(%d)\n", _str_ (SIGUSR1), SIGUSR1);
     }
   else if (SIGUSR2 == signo)
     {
-      printf("# %s\n", _str_(SIGUSR2));
+      printf ("# caught %s(%d)\n", _str_ (SIGUSR2), SIGUSR2);
     }
 }

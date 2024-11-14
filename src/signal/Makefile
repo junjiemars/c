@@ -168,7 +168,7 @@ $(signal_child_chld_binout): $(signal_root)/child/c1.c
 signal_info_inc := $(nm_inc_opt)$(signal_root)/info
 signal_info_lst_binout := $(bin_path)/$(signal_prefix)_info_lst$(bin_ext)
 signal_info_dfl_binout := $(bin_path)/$(signal_prefix)_info_dfl$(bin_ext)
-signal_info_sig2str_h := $(inc_path)/sig2str.h
+signal_info_sig2str_h := $(tmp_path)/sig2str.h
 signal_info_sig2str_c := $(tmp_path)/sig2str.c
 signal_info_lst_awk_in := $(tmp_path)/$(signal_prefix)_sig2str.awk.$(NM_SYSTEM).in
 
@@ -201,7 +201,7 @@ $(signal_info_dfl_binout): $(signal_root)/info/dfl1.c \
 
 $(signal_info_sig2str_c): $(signal_root)/info/sig2str.awk \
                           $(signal_info_lst_awk_in)
-	awk -f $^ > $@
+	cp $(signal_root)/info/sig2str.h $(signal_info_sig2str_h) && awk -f $^ > $@
 
 
 

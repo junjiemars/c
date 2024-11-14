@@ -1,5 +1,4 @@
 #include "_signal_.h"
-#include <sys/signal.h>
 
 static void on_sig_chld (int, siginfo_t *, void *);
 

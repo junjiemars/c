@@ -1,7 +1,6 @@
 #include <errno.h>
 #include <setjmp.h>
 #include <signal.h>
-#include <sys/signal.h>
 #include <unistd.h>
 
 /*
