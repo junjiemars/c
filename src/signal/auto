@@ -107,4 +107,20 @@ flag="has_sigqueue" op=":=" value="$nm_found" . ${NORE_ROOT}/auto/make_define
 
 
 
+# check sys_siglist
+#----------------------------------------
+nm_feature="sys_siglist"
+nm_feature_name="nm_sys_siglist"
+nm_feature_run=no
+nm_feature_h='#include <signal.h>
+extern const char * const sys_siglist[];
+extern const char * const sys_signame[];
+'
+nm_feature_flags=""
+nm_feature_test='(void)NSIG;(void*)sys_siglist[0];(void*)sys_signame[0];'
+. ${NORE_ROOT}/auto/feature
+flag="has_sys_siglist" op=":=" value="$nm_found" \
+  . ${NORE_ROOT}/auto/make_define
+
+
 # eof

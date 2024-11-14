@@ -165,9 +165,11 @@ $(signal_child_chld_binout): $(signal_root)/child/c1.c
 
 
 # info
-signal_info_inc := $(nm_inc_opt)$(signal_root)/info
+signal_info_raw_binout := $(bin_path)/$(signal_prefix)_info_raw$(bin_ext)
 signal_info_lst_binout := $(bin_path)/$(signal_prefix)_info_lst$(bin_ext)
 signal_info_dfl_binout := $(bin_path)/$(signal_prefix)_info_dfl$(bin_ext)
+
+signal_info_inc := $(nm_inc_opt)$(signal_root)/info
 signal_info_sig2str_h := $(tmp_path)/sig2str.h
 signal_info_sig2str_c := $(tmp_path)/sig2str.c
 signal_info_lst_awk_in := $(tmp_path)/$(signal_prefix)_sig2str.awk.$(NM_SYSTEM).in
@@ -299,12 +301,10 @@ signal_queue_test: signal_queue
 endif
 
 signal_queue_q1_test: $(signal_queue_q1_binout)
-	$< ${signal_queue_n} | cat -
-	# echo "#skip ... (C-\ emit SIGQUIT)"
+	$< ${signal_queue_n} | xargs kill -QUIT
 
 signal_queue_q2_test: $(signal_queue_q2_binout)
-	$< ${signal_queue_n} | cat -
-	# echo "#skip ... (C-\ emit SIGQUIT)"
+	$< ${signal_queue_n} | xargs kill -QUIT
 
 $(signal_queue_q1_binout): $(signal_root)/queue/q1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
