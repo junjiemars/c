@@ -1,5 +1,4 @@
-#include <_signal_.h>
-#include <signal.h>
+#include "../_signal_.h"
 
 /*
  * 1. `abort(3)' never return to its caller.
