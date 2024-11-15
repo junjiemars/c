@@ -175,10 +175,12 @@ signal_info_sig2str_c := $(tmp_path)/sig2str.c
 signal_info_lst_awk_in := $(tmp_path)/$(signal_prefix)_sig2str.awk.$(NM_SYSTEM).in
 
 signal_info: $(signal_info_lst_binout) \
-             $(signal_info_dfl_binout)
+             $(signal_info_dfl_binout) \
+             $(signal_info_raw_binout)
 
 signal_info_test: signal_info_lst_test \
-                  signal_info_dfl_test
+                  signal_info_dfl_test \
+                  signal_info_raw_test
 
 ifeq ($(NM_SYSTEM), Darwin)
 $(signal_info_lst_awk_in):
@@ -191,6 +193,8 @@ endif
 signal_info_lst_test: $(signal_info_lst_binout)
 	$<
 signal_info_dfl_test: $(signal_info_dfl_binout)
+	$<
+signal_info_raw_test: $(signal_info_raw_binout)
 	$<
 
 $(signal_info_lst_binout): $(signal_root)/info/lst1.c \
@@ -205,6 +209,8 @@ $(signal_info_sig2str_c): $(signal_root)/info/sig2str.awk \
                           $(signal_info_lst_awk_in)
 	cp $(signal_root)/info/sig2str.h $(signal_info_sig2str_h) && awk -f $^ > $@
 
+$(signal_info_raw_binout): $(signal_root)/info/r1.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
 
