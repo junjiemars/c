@@ -1,4 +1,4 @@
-#include <_signal_.h>
+#include "../_signal_.h"
 
 /*
  * The child inherits the parent's signal dispositions when a process
@@ -6,47 +6,44 @@
  *
  */
 
-static void on_sig_alrm(int);
-
+static void on_sig_alrm (int);
 
 int
-main(void)
+main (void)
 {
-  int    stat;
-  pid_t  pid;
+  int stat;
+  pid_t pid;
 
-  signal(SIGALRM, on_sig_alrm);
+  signal (SIGALRM, on_sig_alrm);
 
-  pid = fork();
-  if (-1 == pid)
+  if ((pid = fork ()) == -1)
     {
-      perror(NULL);
-      exit(errno);
+      perror (NULL);
+      exit (errno);
     }
-  else if (0 == pid)
+  else if (pid == 0) /* child process */
     {
-      printf("%-8d: pause...\n", getpid());
-      pause();
+      printf ("%-8d: pause...\n", getpid ());
+      pause ();
     }
   else
     {
-      printf("%-8d: sleep(1)...\n", getpid());
+      printf ("%-8d: sleep(1)...\n", getpid ());
 
-      sleep(1);
-      kill(pid, SIGALRM);
+      sleep (1);
+      kill (pid, SIGALRM);
 
-      waitpid(pid, &stat, 0);
+      waitpid (pid, &stat, 0);
     }
 
-  exit(EXIT_SUCCESS);
-
+  exit (EXIT_SUCCESS);
 }
 
 void
-on_sig_alrm(int signo)
+on_sig_alrm (int signo)
 {
   if (SIGALRM == signo)
     {
-      printf("%-8d: %s\n", getpid(), _str_(SIGALRM));
+      printf ("%-8d: %s\n", getpid (), _str_ (SIGALRM));
     }
 }

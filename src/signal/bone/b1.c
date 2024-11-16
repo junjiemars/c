@@ -1,4 +1,4 @@
-#include "_signal_.h"
+#include "../_signal_.h"
 #include <pthread.h>
 
 static void on_sig (int);
@@ -9,11 +9,19 @@ static volatile pthread_t tid;
 int
 main (void)
 {
+  void (*sigfn) (int);
   sigset_t oset, nset, pset;
   struct sigaction oact, nact;
 
   pid = getpid ();
   tid = pthread_self ();
+
+  sigfn = signal (SIGHUP, on_sig);
+  assert (sigfn != SIG_ERR && "should non SIG_ERR");
+
+  /* signal and sigaction should has samed effect */
+  sigaction (SIGHUP, NULL, &oact);
+  assert (oact.sa_handler == on_sig && "should same signal handler");
 
   /* examine current mask */
   assert (sigprocmask (0, NULL, &oset) == 0 && "should return current mask");
@@ -65,6 +73,7 @@ main (void)
 void
 on_sig (int signo)
 {
+  int saved_errno= errno;
   pid_t pid1 = getpid ();
   pthread_t tid1 = pthread_self ();
   sigset_t set;
@@ -74,4 +83,6 @@ on_sig (int signo)
 
   sigprocmask (0, NULL, &set);
   assert (sigismember (&set, SIGHUP) && "should blocked SIGHUP");
+
+  errno = saved_errno
 }

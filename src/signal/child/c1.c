@@ -1,4 +1,4 @@
-#include "_signal_.h"
+#include "../_signal_.h"
 
 static void on_sig_chld (int, siginfo_t *, void *);
 
@@ -85,7 +85,6 @@ on_sig_chld (int signo, siginfo_t *info, void *ctx)
               "pid=%d uid=%d status=0x%0x errno=%d code=%s(%d)\n",
               _str_ (SIGCHLD), info->si_signo, info->si_pid, info->si_uid,
               info->si_status, info->si_errno, code_name, info->si_code);
-
 
       c = (ucontext_t *)ctx;
       printf ("context:%p\n"

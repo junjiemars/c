@@ -346,10 +346,10 @@ $(signal_safe_stdio_binout): $(signal_root)/safe/stdio1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(signal_safe_nre_binout): $(signal_root)/safe/re1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -DALRM_N=32 $(bin_out)$@ $^
 
 $(signal_safe_re_binout): $(signal_root)/safe/re1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_REENTRANT_=1 $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) -D_REENTRANT_=1 $(bin_out)$@ $^
 
 
 

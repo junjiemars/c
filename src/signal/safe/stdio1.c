@@ -1,4 +1,4 @@
-#include "_signal_.h"
+#include "../_signal_.h"
 
 /*
  * 1. the outputs of `printf(3)' are interleaved.
@@ -9,57 +9,58 @@
  *
  */
 
+static void on_sig (int);
 
-static void  on_sig(int, siginfo_t*, void*);
+static volatile int count = 8;
 
-static volatile int  count  =  8;
-
-static char  alpha[]  =  "abcdefghijklmnopqrstuvwxyz";
-static char  digit[]   =  "0123456789";
-
+static char alpha[] = "abcdefghijklmnopqrstuvwxyz";
+static char digit[] = "0123456789";
 
 int
-main(void)
+main (void)
 {
-  struct sigaction  act, oact;
+  sigset_t set;
+  struct sigaction act;
 
-  act.sa_sigaction = on_sig;
-  act.sa_flags = SA_SIGINFO;
+  setvbuf (stdout, 0, _IONBF, 0);
+  printf ("%d\n%s\n%s\n", getpid (), alpha, digit);
 
-  if (sigaction(SIGALRM, &act, &oact) == -1)
+  act.sa_handler = on_sig;
+  act.sa_flags = 0;
+  sigfillset (&set);
+  sigdelset (&set, SIGALRM);
+
+  if (sigaction (SIGALRM, &act, NULL) == -1)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
-  (void) oact;
 
-  alarm(1);
+  alarm (1);
 
   for (;;)
     {
-      printf("%c", alpha[count % _nof_(alpha)]);
-      pause();
+      printf ("%c", alpha[count % _nof_ (alpha)]);
+      pause ();
     }
-  printf("\n");
+  putchar ('\n');
 
-  exit(EXIT_SUCCESS);
+  exit (EXIT_SUCCESS);
 }
 
-
 void
-on_sig(int signo, siginfo_t *info, void *ctx)
+on_sig (int signo)
 {
-  (void) signo;
-  (void) info;
-  (void) ctx;
+  if (signo == SIGALRM)
+    {
+      printf ("%c\n", digit[count % _nof_ (digit)]);
+
+      alarm (1);
+    }
 
   if (--count < 1)
     {
-      printf("\n");
-      exit(EXIT_SUCCESS);
+      putchar ('\n');
+      exit (EXIT_SUCCESS);
     }
-
-  printf("%c\n", digit[count % _nof_(digit)]);
-
-  alarm(1);
 }
