@@ -1,4 +1,4 @@
-#include "_ipc_.h"
+#include "../_ipc_.h"
 
 static void print_addr (const struct sockaddr *, const char *);
 

@@ -1,4 +1,4 @@
-#include "_signal_.h"
+#include "../_signal_.h"
 
 /*
  * 1. `raise(3)' function was defined by ISO C, sends a signal to the
