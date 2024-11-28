@@ -1,4 +1,4 @@
-#include <_ipc_.h>
+#include "../_ipc_.h"
 #include <string.h>
 
 #define _TXT_ "hello pipe\n"

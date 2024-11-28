@@ -1,6 +1,7 @@
 #ifndef _IPC_H_
 #define _IPC_H_
 
+#include <nore.h>
 #include <nustd.h>
 #include <nlim.h>
 #include <nstr.h>

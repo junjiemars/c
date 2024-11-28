@@ -1,4 +1,4 @@
-#include "_ipc_.h"
+#include "../_ipc_.h"
 
 int
 main (int argc, char **argv)

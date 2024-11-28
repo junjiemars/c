@@ -6,7 +6,7 @@
  *
 */
 
-#include <_algo_.h>
+#include "../_algo_.h"
 
 
 unsigned long hash(const char *ss);
