@@ -1,0 +1,13 @@
+# -*- mode:sh -*- vim:ft=sh
+
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+
+# check ncc.h features
+ncc_sanitize_address="yes"
+. ${POSIX_ROOT}/ncc_auto
+
+
+# eof

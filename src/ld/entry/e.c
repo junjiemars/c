@@ -1,4 +1,4 @@
-#include "_ld_.h"
+#include "../_ld_.h"
 #include <string.h>
 #include <unistd.h>
 
