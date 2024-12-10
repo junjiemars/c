@@ -12,7 +12,8 @@ void yyerror (char *);
 %%
 
 calcseq: /* void */
-| calcseq exp EOL { printf ("= %d\n", $1); };
+| calcseq exp EOL { printf ("= %d\n", $2); }
+;
 
 exp: factor
 | exp ADD factor { $$ = $1 + $3; }
@@ -31,17 +32,8 @@ term: NUM  { $$ = $1; }
 %%
 
 int
-main (int argc, char **argv)
+main (void)
 {
-  if (argc > 1)
-    {
-      yyin = fopen (argv[1], "r");
-    }
-  else
-    {
-      yyin = stdin;
-    }
-
   return yyparse ();
 }
 

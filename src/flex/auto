@@ -10,7 +10,6 @@
 # check posix features
 # . src/posix/auto
 
-
 echo "checking for {flex} ..."
 
 # check flex
@@ -25,7 +24,7 @@ if flex --version >/dev/null; then
     flag=LDFLAGS op="+=" value="${nm_libdir_opt}${flex_lib_dir}" \
       . ${NORE_ROOT}/auto/make_define
     flag=has_flex op=":=" value="$has_flex" \
-        . ${NORE_ROOT}/auto/make_define
+      . ${NORE_ROOT}/auto/make_define
   else
     printf "no\n"
   fi

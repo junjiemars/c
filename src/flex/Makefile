@@ -85,7 +85,7 @@ flex_calc_yout := $(tmp_path)/calc.tab.c
 ifeq (YES, $(has_flex_bison))
 flex_calc: $(flex_calc_binout)
 flex_calc_test: flex_calc
-	printf "1 + 2\n" | $(flex_calc_binout)
+	printf "1 + 3 * 4 / 2 + |-5\n" | $(flex_calc_binout)
 else
 flex_calc:
 	@echo "#skip $@, missing flex/bison."
