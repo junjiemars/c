@@ -18,10 +18,17 @@ echo "checking for {flex} ..."
 has_flex=NO
 printf " + checking for flex ... "
 if flex --version >/dev/null; then
-  printf "yes\n"
-  has_flex=YES
-  flag=has_flex op=":=" value="$has_flex" \
+  flex_lib_dir="$(dirname $(dirname $(command -v flex)))/lib"
+  if [ -d ${flex_lib_dir} ]; then
+    printf "yes\n"
+    has_flex=YES
+    flag=LDFLAGS op="+=" value="${nm_libdir_opt}${flex_lib_dir}" \
       . ${NORE_ROOT}/auto/make_define
+    flag=has_flex op=":=" value="$has_flex" \
+        . ${NORE_ROOT}/auto/make_define
+  else
+    printf "no\n"
+  fi
 else
   printf "no\n"
 fi
