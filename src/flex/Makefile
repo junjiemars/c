@@ -19,7 +19,6 @@ flex_test: flex_basic_test                      \
 flex_prefix := flex
 
 INC += $(nm_inc_opt)$(flex_root) $(nm_inc_opt)$(root)/posix
-LDLIBS += -lfl
 
 ifeq (Linux, $(NM_SYSTEM))
 CFLAGS += -D_POSIX_C_SOURCE=200809L
@@ -93,7 +92,7 @@ flex_calc_test: flex_calc
 endif # end of has_flex
 
 $(flex_calc_binout): $(flex_calc_lexout) $(flex_calc_yout)
-	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^ $(LDFLAGS) -lfl
+	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^ $(LDLIBS)
 
 $(flex_calc_lexout): $(flex_root)/calc/calc.lex
 	flex -o $@ $^

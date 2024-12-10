@@ -15,19 +15,30 @@ echo "checking for {flex} ..."
 # check flex
 #----------------------------------------
 has_flex=NO
-printf " + checking for flex ... "
-if flex --version >/dev/null; then
-  flex_lib_dir="$(dirname $(dirname $(command -v flex)))/lib"
-  if [ -d ${flex_lib_dir} ]; then
-    printf "yes\n"
-    has_flex=YES
-    flag=LDFLAGS op="+=" value="${nm_libdir_opt}${flex_lib_dir}" \
-      . ${NORE_ROOT}/auto/make_define
-    flag=has_flex op=":=" value="$has_flex" \
-      . ${NORE_ROOT}/auto/make_define
-  else
-    printf "no\n"
+flex_ldlibs=
+check_flex () {
+  local lddir=
+  flex --version >/dev/null || return 1
+  flex_ldlibs="$(pkg-config --libs libfl 2>/dev/null)"
+  if [ -n "$flex_ldlibs" ]; then
+    return 0
   fi
+  lddir="$(dirname $(dirname $(command -v flex)))/lib"
+  if [ -d "$lddir" ] && ls ${lddir}/libfl* &>/dev/null; then
+    flex_ldlibs="${nm_libdir_opt}${lddir} -lfl"
+    return 0
+  fi
+  return 1
+}
+
+printf " + checking for flex ... "
+if check_flex; then
+  printf "yes\n"
+  has_flex=YES
+  flag=LDLIBS op="+=" value="${flex_ldlibs}" \
+    . ${NORE_ROOT}/auto/make_define
+  flag=has_flex op=":=" value="$has_flex" \
+    . ${NORE_ROOT}/auto/make_define
 else
   printf "no\n"
 fi
