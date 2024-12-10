@@ -52,11 +52,11 @@ $(treesitter_lib_libout): $(treesitter_home)
 treesitter_c_binout := $(bin_path)/$(treesitter_prefix)_c$(bin_ext)
 treesitter_c_parser_git_src := 'https://github.com/tree-sitter/tree-sitter-c.git'
 treesitter_c_parser_dir := $(treesitter_root)/c/parser
-treesitter_c_parser_inc := $(nm_inc_opt)$(treesitter_root)/c/parser/src/treesitter
+treesitter_c_parser_inc := $(nm_inc_opt)$(treesitter_c_parser_dir)/src/treesitter
 treesitter_c_parser := $(treesitter_root)/c/parser/src/parser.c
 treesitter_c := $(treesitter_c_binout)
 treesitter_c_test: $(treesitter_c_binout)
-	$<
+	$< "char a[] = {'a','b','c',0}"
 
 $(treesitter_c_binout): $(treesitter_root)/c/c1.c \
                         $(treesitter_c_parser)    \
