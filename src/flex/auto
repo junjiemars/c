@@ -24,7 +24,7 @@ check_flex () {
     return 0
   fi
   lddir="$(dirname $(dirname $(command -v flex)))/lib"
-  if [ -d "$lddir" ] && ls ${lddir}/libfl* &>/dev/null; then
+  if [ -d "$lddir" -a -f ${lddir}/libfl.a ]; then
     flex_ldlibs="${nm_libdir_opt}${lddir} -lfl"
     return 0
   fi
