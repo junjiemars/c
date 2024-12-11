@@ -13,6 +13,7 @@ extern void yyerror (char *);
 [+-]?[0-9]+  { yylval = atoi (yytext); return NUM; }
 \n           { return EOL; }
 [ \t]*       { /* ignore whitespace */ }
+""         { exit (0); }
 .            { yyerror (yytext); }
 
 %%

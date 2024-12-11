@@ -8,11 +8,13 @@
 flex: flex_basic                                \
       flex_c                                    \
       flex_calc                                 \
+      flex_infix                                \
       flex_rpn
 
 flex_test: flex_basic_test                      \
+           flex_c_test                          \
            flex_calc_test                       \
-           flex_calc_test                       \
+           flex_infix_test                      \
            flex_rpn_test
 
 
@@ -107,21 +109,43 @@ $(flex_calc_yout): $(flex_root)/calc/calc.y
 flex_rpn_binout := $(bin_path)/$(flex_prefix)_rpn$(bin_ext)
 flex_rpn_yout := $(tmp_path)/rpn.tab.c
 
-ifeq (YES, $(has_flex_bison))
+ifeq (YES, $(has_bison))
 flex_rpn: $(flex_rpn_binout)
 flex_rpn_test: flex_rpn
-	printf "2.0 3 4 5 + * /\n" | $(flex_rpn_binout)
+	printf "6 2.0 3 4 5 + * / ^\n" | $(flex_rpn_binout)
 else
 flex_rpn:
-	@echo "#skip $@, missing flex_bison."
+	@echo "#skip $@, missing bison."
 flex_rpn_test: flex_rpn
-endif # end of has_flex
+endif # end of has_bison
 
 $(flex_rpn_binout): $(flex_rpn_yout)
 	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^
 
 $(flex_rpn_yout): $(flex_root)/rpn/rpn.y
 	bison -d -b $(tmp_path)/rpn $^
+
+
+
+# infix: algebraic calculation
+flex_infix_binout := $(bin_path)/$(flex_prefix)_infix$(bin_ext)
+flex_infix_yout := $(tmp_path)/infix.tab.c
+
+ifeq (YES, $(has_bison))
+flex_infix: $(flex_infix_binout)
+flex_infix_test: flex_infix
+	printf "6 ^ (2.0 / (3 * (4 + 5))) \n" | $(flex_infix_binout)
+else
+flex_infix:
+	@echo "#skip $@, missing bison."
+flex_infix_test: flex_infix
+endif # end of has_bison
+
+$(flex_infix_binout): $(flex_infix_yout)
+	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^
+
+$(flex_infix_yout): $(flex_root)/infix/infix.y
+	bison -d -b $(tmp_path)/infix $^
 
 
 

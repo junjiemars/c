@@ -4,28 +4,36 @@
 
 int yylex (void);
 void yyerror (char const *);
+
 %}
 
 %define api.value.type {long double}
+
 %token NUM
+%left '-' '+'
+%left '*' '/'
+%precedence NEG
+%right '^'
 
 %%
 
-rpnseq: %empty
-| rpnseq line
+infixseq: %empty
+| infixseq line
 ;
 
 line: '\n'
 | exp '\n' { printf ("= %.20Lg\n", $1); }
+| error '\n' { yyerrok; }
 ;
 
 exp: NUM
-| exp exp '+' { $$ = $1 + $2; }
-| exp exp '-' { $$ = $1 + $2; }
-| exp exp '*' { $$ = $1 * $2; }
-| exp exp '/' { $$ = $1 / $2; }
-| exp exp '^' { $$ = powl ($1, $2); }
-| exp 'n' { $$ = -$1; }
+| exp '+' exp { $$ = $1 + $3; }
+| exp '-' exp { $$ = $1 - $3; }
+| exp '*' exp { $$ = $1 * $3; }
+| exp '/' exp { $$ = $1 / $3; }
+| '-' exp %prec NEG { $$ = -$2; }
+| exp '^' exp { $$ = powl ($1, $3); }
+| '(' exp ')' { $$ = $2; }
 ;
 
 %%
