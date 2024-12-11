@@ -7,11 +7,13 @@
 
 flex: flex_basic                                \
       flex_c                                    \
-      flex_calc
+      flex_calc                                 \
+      flex_rpn
 
 flex_test: flex_basic_test                      \
            flex_calc_test                       \
-           flex_calc_test
+           flex_calc_test                       \
+           flex_rpn_test
 
 
 
@@ -98,6 +100,28 @@ $(flex_calc_lexout): $(flex_root)/calc/calc.lex
 	flex -o $@ $^
 $(flex_calc_yout): $(flex_root)/calc/calc.y
 	bison -d -b $(tmp_path)/calc $^
+
+
+
+# rpn: reverse polish notatition calculation
+flex_rpn_binout := $(bin_path)/$(flex_prefix)_rpn$(bin_ext)
+flex_rpn_yout := $(tmp_path)/rpn.tab.c
+
+ifeq (YES, $(has_flex_bison))
+flex_rpn: $(flex_rpn_binout)
+flex_rpn_test: flex_rpn
+	printf "2.0 3 4 5 + * /\n" | $(flex_rpn_binout)
+else
+flex_rpn:
+	@echo "#skip $@, missing flex_bison."
+flex_rpn_test: flex_rpn
+endif # end of has_flex
+
+$(flex_rpn_binout): $(flex_rpn_yout)
+	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^
+
+$(flex_rpn_yout): $(flex_root)/rpn/rpn.y
+	bison -d -b $(tmp_path)/rpn $^
 
 
 
