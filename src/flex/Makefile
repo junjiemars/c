@@ -9,12 +9,14 @@ flex: flex_basic                                \
       flex_c                                    \
       flex_calc                                 \
       flex_infix                                \
+      flex_fn                                   \
       flex_rpn
 
 flex_test: flex_basic_test                      \
            flex_c_test                          \
            flex_calc_test                       \
            flex_infix_test                      \
+           flex_fn_test                         \
            flex_rpn_test
 
 
@@ -145,7 +147,29 @@ $(flex_infix_binout): $(flex_infix_yout)
 	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^
 
 $(flex_infix_yout): $(flex_root)/infix/infix.y
-	bison -d -b $(tmp_path)/infix $^
+	bison -d -b $(tmp_path)/infix --html $^
+
+
+
+# fn: funcation calculation
+flex_fn_binout := $(bin_path)/$(flex_prefix)_fn$(bin_ext)
+flex_fn_yout := $(flex_root)/fn/fn.tab.c
+
+ifeq (YES, $(has_bison))
+flex_fn: $(flex_fn_binout)
+flex_fn_test: flex_fn
+	printf "6 ^ (2.0 / (3 * (4 + 5))) \n" | $(flex_fn_binout)
+else
+flex_fn:
+	@echo "#skip $@, missing bison."
+flex_fn_test: flex_fn
+endif # end of has_bison
+
+$(flex_fn_binout): $(flex_fn_yout)
+	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^
+
+$(flex_fn_yout): $(flex_root)/fn/fn.y
+	bison -d -b $(flex_root)/fn/fn --html $^
 
 
 
