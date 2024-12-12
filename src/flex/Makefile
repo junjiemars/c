@@ -153,27 +153,32 @@ $(flex_infix_yout): $(flex_root)/infix/infix.y
 
 # fn: funcation calculation
 flex_fn_binout := $(bin_path)/$(flex_prefix)_fn$(bin_ext)
-flex_fn_yout := $(flex_root)/fn/fn.tab.c
+flex_fn_yout := $(flex_root)/fn/fcalc.tab.c
 
 ifeq (YES, $(has_bison))
 flex_fn: $(flex_fn_binout)
 flex_fn_test: flex_fn
-	printf "6 ^ (2.0 / (3 * (4 + 5))) \n" | $(flex_fn_binout)
+	printf "x=sqrt(2)\n x^2\n " | $(flex_fn_binout)
 else
 flex_fn:
 	@echo "#skip $@, missing bison."
 flex_fn_test: flex_fn
 endif # end of has_bison
 
-$(flex_fn_binout): $(flex_fn_yout)
+flex_fn_clean:
+	test ! -f $(flex_fn_yout) || rm $(flex_root)/fn/fcalc.tab.*
+
+$(flex_fn_binout): $(flex_root)/fn/fn.c \
+                   $(flex_fn_yout)
 	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^
 
-$(flex_fn_yout): $(flex_root)/fn/fn.y
-	bison -d -b $(flex_root)/fn/fn --html $^
+$(flex_fn_yout): $(flex_root)/fn/fcalc.y
+	bison -d -b $(flex_root)/fn/fcalc $^
 
 
 
-.PHONY: flex_basic flex_basic_test							\
-        flex_c flex_c_test
+.PHONY: flex_basic flex_basic_test              \
+        flex_c flex_c_test                      \
+        flex_fn flex_fn_test flex_fn_clean
 
 #eof
