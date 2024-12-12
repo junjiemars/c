@@ -69,10 +69,6 @@ yylex (void)
     {
       return YYEOF;
     }
-  else if (c == '')
-    {
-      exit (0);
-    }
   else
     {
       return c;

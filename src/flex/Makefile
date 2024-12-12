@@ -97,7 +97,7 @@ flex_calc_yout := $(tmp_path)/calc.tab.c
 ifeq (YES, $(has_flex_bison))
 flex_calc: $(flex_calc_binout)
 flex_calc_test: flex_calc
-	printf "1 + 3 * 4 / 2 + |-5\n" | $(flex_calc_binout)
+	printf "1 + 3 * 4 / 2 + |-5\n" | $(flex_calc_binout)
 else
 flex_calc:
 	@echo "#skip $@, missing flex/bison."
@@ -121,7 +121,7 @@ flex_rpn_yout := $(tmp_path)/rpn.tab.c
 ifeq (YES, $(has_bison))
 flex_rpn: $(flex_rpn_binout)
 flex_rpn_test: flex_rpn
-	printf "6 2.0 3 4 5 + * / ^\n" | $(flex_rpn_binout)
+	printf "6 2.0 3 4 5 + * / ^\n" | $(flex_rpn_binout)
 else
 flex_rpn:
 	@echo "#skip $@, missing bison."
@@ -143,7 +143,7 @@ flex_infix_yout := $(tmp_path)/infix.tab.c
 ifeq (YES, $(has_bison))
 flex_infix: $(flex_infix_binout)
 flex_infix_test: flex_infix
-	printf "6 ^ (2.0 / (3 * (4 + 5))) \n" | $(flex_infix_binout)
+	printf "6 ^ (2.0 / (3 * (4 + 5))) \n" | $(flex_infix_binout)
 else
 flex_infix:
 	@echo "#skip $@, missing bison."
@@ -165,7 +165,7 @@ flex_fn_yout := $(flex_root)/fn/fcalc.tab.c
 ifeq (YES, $(has_bison))
 flex_fn: $(flex_fn_binout)
 flex_fn_test: flex_fn
-	printf "x=sqrt(2)\n x^2 %% 4\n PI\n e\n ln(e)\n" | $(flex_fn_binout)
+	printf "x=sqrt(2)\n x^2 %% 4\n PI\n e\n ln(e)\n" | $(flex_fn_binout)
 else
 flex_fn:
 	@echo "#skip $@, missing bison."
