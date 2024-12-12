@@ -160,7 +160,7 @@ flex_fn_yout := $(flex_root)/fn/fcalc.tab.c
 ifeq (YES, $(has_bison))
 flex_fn: $(flex_fn_binout)
 flex_fn_test: flex_fn
-	printf "x=sqrt(2)\n x^2\n " | $(flex_fn_binout)
+	printf "x=sqrt(2)\n x^2 %% 4 \n" | $(flex_fn_binout)
 else
 flex_fn:
 	@echo "#skip $@, missing bison."

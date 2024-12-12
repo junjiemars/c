@@ -16,6 +16,7 @@ void yyerror (char const *);
 %precedence '='
 %left '-' '+'
 %left '*' '/'
+%left '%'
 %precedence NEG
 %right '^'
 
@@ -41,6 +42,7 @@ exp:
 | exp '-' exp        { $$ = $1 - $3;                    }
 | exp '*' exp        { $$ = $1 * $3;                    }
 | exp '/' exp        { $$ = $1 / $3;                    }
+| exp '%' exp        { $$ = fmod ($1, $3);              }
 | '-' exp  %prec NEG { $$ = -$2;                        }
 | exp '^' exp        { $$ = pow ($1, $3);               }
 | '(' exp ')'        { $$ = $2;                         }
@@ -55,7 +57,7 @@ exp:
 struct Fun
 {
   char const *name;
-  Fn *fun;
+  Fun *fun;
 };
 
 struct Fun const funs[] = {
