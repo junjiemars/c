@@ -3,7 +3,7 @@
 
 #include "../_flex_.h"
 
-typedef double (Fun) (double);
+typedef double (FunPtr) (double);
 
 typedef struct SymbolTable
 {
@@ -11,8 +11,8 @@ typedef struct SymbolTable
   int type;
   union
   {
-    double var;
-    Fun *fun;
+    long double var;
+    FunPtr *fun;
   } value;
   struct SymbolTable *next;
 } SymbolTable;

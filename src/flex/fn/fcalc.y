@@ -52,12 +52,25 @@ exp:
 
 #include <ctype.h>
 #include <stddef.h>
+#include <strings.h>
 #include <stdlib.h>
+
+struct Var
+{
+  char const *name;
+  long double var;
+};
+
+struct Var const vars[] = {
+  { "e",  2.71828182845904523536028747135266250L },
+  { "PI", 3.14159265358979323846264338327950288L },
+  { 0, 0.0 }
+};
 
 struct Fun
 {
   char const *name;
-  Fun *fun;
+  FunPtr *fun;
 };
 
 struct Fun const funs[] = {
@@ -80,8 +93,12 @@ static void init_sym_table (void);
 SymbolTable *sym_table;
 
 int
-main (void)
+main (int argc, char **argv)
 {
+  if (argc > 1 && strcmp ("--trace", argv[1]) == 0)
+    {
+      yydebug = 1;
+    }
   init_sym_table ();
   return yyparse ();
 }
@@ -90,6 +107,11 @@ void
 init_sym_table (void)
 {
   sym_table = NULL;
+  for (int i = 0; vars[i].name; i++)
+    {
+      SymbolTable *p = putsym (vars[i].name, VAR);
+      p->value.var = vars[i].var;
+    }
   for (int i = 0; funs[i].name; i++)
     {
       SymbolTable *p = putsym (funs[i].name, FUN);

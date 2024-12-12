@@ -160,7 +160,7 @@ flex_fn_yout := $(flex_root)/fn/fcalc.tab.c
 ifeq (YES, $(has_bison))
 flex_fn: $(flex_fn_binout)
 flex_fn_test: flex_fn
-	printf "x=sqrt(2)\n x^2 %% 4 \n" | $(flex_fn_binout)
+	printf "x=sqrt(2)\n x^2 %% 4\n PI\n e\n ln(e)\n" | $(flex_fn_binout)
 else
 flex_fn:
 	@echo "#skip $@, missing bison."
@@ -172,7 +172,7 @@ flex_fn_clean:
 
 $(flex_fn_binout): $(flex_root)/fn/fn.c \
                    $(flex_fn_yout)
-	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^ $(flex_lib_math)
+	$(CC) $(CFLAGS) $(INC) $(LFLAGS) -DYYDEBUG=1 $(bin_out)$@ $^ $(flex_lib_math)
 
 $(flex_fn_yout): $(flex_root)/fn/fcalc.y
 	bison -d -b $(flex_root)/fn/fcalc $^
