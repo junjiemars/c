@@ -18,11 +18,11 @@ if [ -z "$has_i18n" ]; then
   printf " + check for i18n ... "
   ldflags_i18n="$(pkg-config --libs icu-i18n 2>/dev/null)"
   if [ -n "$ldflags_i18n" ]; then
-    has_i18n=YES
     flag=ldflags_i18n op=":=" value="${ldflags_i18n}" \
                       . ${NORE_ROOT}/auto/make_define
     flag=has_i18n op=":=" value="${has_i18n}" \
                   . ${NORE_ROOT}/auto/make_define
+    has_i18n=YES
     printf "yes\n"
   else
     printf "no\n"
