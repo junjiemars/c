@@ -52,7 +52,7 @@ exp:
 
 #include <ctype.h>
 #include <stddef.h>
-#include <strings.h>
+#include <string.h>
 #include <stdlib.h>
 
 struct Var
