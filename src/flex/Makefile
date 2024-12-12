@@ -61,7 +61,7 @@ flex_basic_test: flex_basic
 endif # end of has_flex
 
 $(flex_basic_binout): $(flex_basic_lexout)
-	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^ $(LDLIBS)
+	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^ $(ldflags_flex)
 
 $(flex_basic_lexout): $(flex_root)/basic/b.lex
 	flex -o $@ $^
@@ -83,7 +83,7 @@ flex_c_test: flex_c
 endif # end of has_flex
 
 $(flex_c_binout): $(flex_c_lexout)
-	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^ $(LDLIBS)
+	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^ $(ldflags_flex)
 
 $(flex_c_lexout): $(flex_root)/c/c.lex
 	flex -o $@ $^
@@ -105,7 +105,7 @@ flex_calc_test: flex_calc
 endif # end of has_flex
 
 $(flex_calc_binout): $(flex_calc_lexout) $(flex_calc_yout)
-	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^ $(LDLIBS)
+	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^ $(ldflags_flex)
 
 $(flex_calc_lexout): $(flex_root)/calc/calc.lex
 	flex -o $@ $^

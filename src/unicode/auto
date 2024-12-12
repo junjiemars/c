@@ -10,4 +10,23 @@ fi
 ncc_sanitize_address="yes"
 . ${POSIX_ROOT}/ncc_auto
 
+# check i18n
+#----------------------------------------
+if [ -z "$has_i18n" ]; then
+  has_i18n=NO
+  ldflags_i18n=
+  printf " + check for i18n ... "
+  ldflags_i18n="$(pkg-config --libs icu-i18n 2>/dev/null)"
+  if [ -n "$ldflags_i18n" ]; then
+    printf "yes\n"
+    has_i18n=YES
+    flag=ldflags_i18n op=":=" value="${ldflags_i18n}" \
+                      . ${NORE_ROOT}/auto/make_define
+    flag=has_i18n op=":=" value="${has_i18n}" \
+                  . ${NORE_ROOT}/auto/make_define
+  else
+    printf "no\n"
+  fi
+fi
+
 # eof

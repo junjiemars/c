@@ -14,46 +14,50 @@ echo "checking for {flex} ..."
 
 # check flex
 #----------------------------------------
-has_flex=NO
-flex_ldlibs=
 check_flex () {
   local lddir=
   flex --version >/dev/null || return 1
-  flex_ldlibs="$(pkg-config --libs libfl 2>/dev/null)"
-  if [ -n "$flex_ldlibs" ]; then
+  ldflags_flex="$(pkg-config --libs libfl 2>/dev/null)"
+  if [ -n "$ldflags_flex" ]; then
     return 0
   fi
   lddir="$(dirname $(dirname $(command -v flex)))/lib"
   if [ -d "$lddir" -a -f ${lddir}/libfl.a ]; then
-    flex_ldlibs="${nm_libdir_opt}${lddir} -lfl"
+    ldflags_flex="${nm_libdir_opt}${lddir} -lfl"
     return 0
   fi
   return 1
 }
 
-printf " + checking for flex ... "
-if check_flex; then
-  printf "yes\n"
-  has_flex=YES
-  flag=LDLIBS op="+=" value="${flex_ldlibs}" \
-    . ${NORE_ROOT}/auto/make_define
-  flag=has_flex op=":=" value="$has_flex" \
-    . ${NORE_ROOT}/auto/make_define
-else
-  printf "no\n"
+if [ -z "$has_flex" ]; then
+  has_flex=NO
+  ldflags_flex=
+  printf " + checking for flex ... "
+  if check_flex; then
+    printf "yes\n"
+    has_flex=YES
+    flag=ldflags_flex op="+=" value="${ldflags_flex}" \
+                      . ${NORE_ROOT}/auto/make_define
+    flag=has_flex op=":=" value="$has_flex" \
+                  . ${NORE_ROOT}/auto/make_define
+  else
+    printf "no\n"
+  fi
 fi
 
 # check bison
 #----------------------------------------
-has_bison=NO
-printf " + checking for bison ... "
-if bison --version >/dev/null; then
-  printf "yes\n"
-  has_bison=YES
-  flag=has_bison op=":=" value="$has_bison" \
-      . ${NORE_ROOT}/auto/make_define
-else
-  printf "no\n"
+if [ -z "$has_bison" ]; then
+  has_bison=NO
+  printf " + checking for bison ... "
+  if bison --version >/dev/null; then
+    printf "yes\n"
+    has_bison=YES
+    flag=has_bison op=":=" value="$has_bison" \
+                   . ${NORE_ROOT}/auto/make_define
+  else
+    printf "no\n"
+  fi
 fi
 
 # check compiler options

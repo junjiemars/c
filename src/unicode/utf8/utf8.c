@@ -18,12 +18,13 @@
 const unsigned char *
 to_base (unsigned char *o, unsigned i, unsigned base)
 {
+  static char *tbl = "0123456789ABCDEF";
   unsigned char *s = &o[TO_BASE_N - 1];
   *s = 0;
   do
     {
       s--;
-      *s = "0123456789ABCDEF"[i % base];
+      *s = tbl[i % base];
       i /= base;
     }
   while (i);
