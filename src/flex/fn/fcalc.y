@@ -5,7 +5,6 @@
 
 int yylex (void);
 void yyerror (char const *);
-
 %}
 
 %define api.value.type union
@@ -124,11 +123,11 @@ init_sym_table (void)
 int
 yylex (void)
 {
-  int c = getchar ();
+  int c;
 
-  while (c == ' ' || c == '\t')
+  while ((c = getchar ()) == ' ' || c == '\t')
     {
-      c = getchar ();
+      /* void */
     }
 
   if (c == EOF || c == '')
