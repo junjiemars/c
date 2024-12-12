@@ -35,11 +35,11 @@ if [ -z "$has_flex" ]; then
   printf " + checking for flex ... "
   if check_flex; then
     printf "yes\n"
-    has_flex=YES
     flag=ldflags_flex op="+=" value="${ldflags_flex}" \
                       . ${NORE_ROOT}/auto/make_define
     flag=has_flex op=":=" value="$has_flex" \
                   . ${NORE_ROOT}/auto/make_define
+    has_flex=YES
   else
     printf "no\n"
   fi
@@ -52,9 +52,9 @@ if [ -z "$has_bison" ]; then
   printf " + checking for bison ... "
   if bison --version >/dev/null; then
     printf "yes\n"
-    has_bison=YES
     flag=has_bison op=":=" value="$has_bison" \
                    . ${NORE_ROOT}/auto/make_define
+    has_bison=YES
   else
     printf "no\n"
   fi
