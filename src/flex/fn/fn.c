@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <strings.h>
 
-symrec *
+SymbolTable *
 putsym (char const *name, int sym_type)
 {
-  symrec *rs = (symrec *)malloc (sizeof (symrec));
+  SymbolTable *rs = (SymbolTable *)malloc (sizeof (SymbolTable));
   rs->name = strdup (name);
   rs->type = sym_type;
   rs->value.var = 0;
@@ -14,10 +14,10 @@ putsym (char const *name, int sym_type)
   return rs;
 }
 
-symrec *
+SymbolTable *
 getsym (char const *name)
 {
-  for (symrec *p = sym_table; p; p = p->next)
+  for (SymbolTable *p = sym_table; p; p = p->next)
     {
       if (strcmp (p->name, name) == 0)
         {

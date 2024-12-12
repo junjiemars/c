@@ -3,25 +3,23 @@
 
 #include "../_flex_.h"
 
-typedef double (func_t) (double);
+typedef double (Fn) (double);
 
-struct symrec
+typedef struct SymbolTable
 {
   char *name;
   int type;
   union
   {
     double var;
-    func_t *fun;
+    Fn *fun;
   } value;
-  struct symrec *next;
-};
+  struct SymbolTable *next;
+} SymbolTable;
 
-typedef struct symrec symrec;
+extern SymbolTable *sym_table;
 
-extern symrec *sym_table;
-
-symrec *putsym (char const *name, int sym_type);
-symrec *getsym (char const *name);
+SymbolTable *putsym (char const *name, int sym_type);
+SymbolTable *getsym (char const *name);
 
 #endif

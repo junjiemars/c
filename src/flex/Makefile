@@ -30,6 +30,8 @@ ifeq (Linux, $(NM_SYSTEM))
 CFLAGS += -D_POSIX_C_SOURCE=200809L
 endif # end of Linux
 
+flex_lib_math := $(nm_lib_opt)m
+
 has_flex_bison := NO
 ifeq (YES, $(has_flex))
 ifeq (YES, $(has_bison))
@@ -170,7 +172,7 @@ flex_fn_clean:
 
 $(flex_fn_binout): $(flex_root)/fn/fn.c \
                    $(flex_fn_yout)
-	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^
+	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^ $(flex_lib_math)
 
 $(flex_fn_yout): $(flex_root)/fn/fcalc.y
 	bison -d -b $(flex_root)/fn/fcalc $^

@@ -10,7 +10,7 @@ void yyerror (char const *);
 
 %define api.value.type union
 %token <double> NUM
-%token <symrec*> VAR FUN
+%token <SymbolTable*> VAR FUN
 %nterm <double> exp
 
 %precedence '='
@@ -55,7 +55,7 @@ exp:
 struct Fun
 {
   char const *name;
-  func_t *fun;
+  Fn *fun;
 };
 
 struct Fun const funs[] = {
@@ -75,7 +75,7 @@ struct Fun const funs[] = {
 
 static void init_sym_table (void);
 
-symrec *sym_table;
+SymbolTable *sym_table;
 
 int
 main (void)
@@ -90,7 +90,7 @@ init_sym_table (void)
   sym_table = NULL;
   for (int i = 0; funs[i].name; i++)
     {
-      symrec *p = putsym (funs[i].name, FUN);
+      SymbolTable *p = putsym (funs[i].name, FUN);
       p->value.fun = funs[i].fun;
     }
 }
@@ -140,7 +140,7 @@ yylex (void)
       ungetc (c, stdin);
       symbuf[i] = '\0';
 
-      symrec *s = getsym (symbuf);
+      SymbolTable *s = getsym (symbuf);
       if (!s)
         {
           s = putsym (symbuf, VAR);
