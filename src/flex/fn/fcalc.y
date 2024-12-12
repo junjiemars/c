@@ -97,7 +97,9 @@ main (int argc, char **argv)
 {
   if (argc > 1 && strcmp ("--trace", argv[1]) == 0)
     {
+#if (YYDEBUG)
       yydebug = 1;
+#endif
     }
   init_sym_table ();
   return yyparse ();

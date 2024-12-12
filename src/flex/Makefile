@@ -26,6 +26,11 @@ flex_prefix := flex
 
 INC += $(nm_inc_opt)$(flex_root) $(nm_inc_opt)$(root)/posix
 
+YYDEBUG=0
+ifeq ($(nm_build_opt),)
+YYDEBUG=1
+endif
+
 ifeq (Linux, $(NM_SYSTEM))
 CFLAGS += -D_POSIX_C_SOURCE=200809L
 endif # end of Linux
@@ -172,7 +177,8 @@ flex_fn_clean:
 
 $(flex_fn_binout): $(flex_root)/fn/fn.c \
                    $(flex_fn_yout)
-	$(CC) $(CFLAGS) $(INC) $(LFLAGS) -DYYDEBUG=1 $(bin_out)$@ $^ $(flex_lib_math)
+	$(CC) $(CFLAGS) $(INC) $(LFLAGS) -DYYDEBUG=$(YYDEBUG) \
+    $(bin_out)$@ $^ $(flex_lib_math)
 
 $(flex_fn_yout): $(flex_root)/fn/fcalc.y
 	bison -d -b $(flex_root)/fn/fcalc $^
