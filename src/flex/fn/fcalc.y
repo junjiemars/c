@@ -11,9 +11,9 @@ void yyerror (char const *);
 %define api.value.type union
 /* %define parse.error detailed */
 
-%token <long double> NUM
+%token <double> NUM
 %token <SymbolTable*> VAR FUN
-%nterm <long double> exp
+%nterm <double> exp
 
 %precedence '='
 %left '-' '+'
@@ -32,7 +32,7 @@ fnseq:
 
 line:
   '\n'
-| exp '\n'   { printf ("= %.19Lg\n", $1); }
+| exp '\n'   { printf ("= %.19g\n", $1); }
 | error '\n' { yyerrok;                }
 ;
 
@@ -135,7 +135,7 @@ yylex (void)
       /* void */
     }
 
-  if (c == EOF || c == '')
+  if (c == EOF)
     {
       return YYEOF;
     }
@@ -143,7 +143,7 @@ yylex (void)
   if (c == '.' || isdigit (c))
     {
       ungetc (c, stdin);
-      if (scanf ("%Lf", &yylval.NUM) != 1)
+      if (scanf ("%lf", &yylval.NUM) != 1)
         {
           abort ();
         }

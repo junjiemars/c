@@ -11,7 +11,7 @@ typedef struct SymbolTable
   int type;
   union
   {
-    long double var;
+    double var;
     FunPtr *fun;
   } value;
   struct SymbolTable *next;
@@ -22,6 +22,6 @@ extern SymbolTable *sym_table;
 SymbolTable *putsym (char const *name, int sym_type);
 SymbolTable *getsym (char const *name);
 
-long double fact (long double);
+double fact (double);
 
 #endif
