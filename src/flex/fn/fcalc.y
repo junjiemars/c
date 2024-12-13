@@ -5,16 +5,15 @@
 
 int yylex (void);
 void yyerror (char const *);
-long double fact (long double);
 
 %}
 
 %define api.value.type union
 /* %define parse.error detailed */
 
-%token <double> NUM
+%token <long double> NUM
 %token <SymbolTable*> VAR FUN
-%nterm <double> exp
+%nterm <long double> exp
 
 %precedence '='
 %left '-' '+'
@@ -33,7 +32,7 @@ fnseq:
 
 line:
   '\n'
-| exp '\n'   { printf ("= %.19g\n", $1); }
+| exp '\n'   { printf ("= %.19Lg\n", $1); }
 | error '\n' { yyerrok;                }
 ;
 
@@ -126,18 +125,6 @@ init_sym_table (void)
     }
 }
 
-long double
-fact (long double d)
-{
-  long n = (long)d;
-  long double acc = 1;
-  while (n > 1)
-    {
-      acc *= n--;
-    }
-  return acc;
-}
-
 int
 yylex (void)
 {
@@ -156,7 +143,7 @@ yylex (void)
   if (c == '.' || isdigit (c))
     {
       ungetc (c, stdin);
-      if (scanf ("%lf", &yylval.NUM) != 1)
+      if (scanf ("%Lf", &yylval.NUM) != 1)
         {
           abort ();
         }

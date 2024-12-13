@@ -22,4 +22,6 @@ extern SymbolTable *sym_table;
 SymbolTable *putsym (char const *name, int sym_type);
 SymbolTable *getsym (char const *name);
 
+long double fact (long double);
+
 #endif

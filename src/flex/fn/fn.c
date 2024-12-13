@@ -26,3 +26,15 @@ getsym (char const *name)
     }
   return NULL;
 }
+
+long double
+fact (long double d)
+{
+  long n = (long)d;
+  long double acc = 1;
+  while (n > 1)
+    {
+      acc *= n--;
+    }
+  return acc;
+}
