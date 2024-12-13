@@ -5,9 +5,13 @@
 
 int yylex (void);
 void yyerror (char const *);
+long double fact (long double);
+
 %}
 
 %define api.value.type union
+/* %define parse.error detailed */
+
 %token <double> NUM
 %token <SymbolTable*> VAR FUN
 %nterm <double> exp
@@ -16,8 +20,9 @@ void yyerror (char const *);
 %left '-' '+'
 %left '*' '/'
 %left '%'
-%precedence NEG
+%left '!'
 %right '^'
+%precedence NEG
 
 %%
 
@@ -42,8 +47,9 @@ exp:
 | exp '*' exp        { $$ = $1 * $3;                    }
 | exp '/' exp        { $$ = $1 / $3;                    }
 | exp '%' exp        { $$ = fmod ($1, $3);              }
-| '-' exp  %prec NEG { $$ = -$2;                        }
+| exp '!'            { $$ = fact ($1);                  }
 | exp '^' exp        { $$ = pow ($1, $3);               }
+| '-' exp  %prec NEG { $$ = -$2;                        }
 | '(' exp ')'        { $$ = $2;                         }
 ;
 
@@ -118,6 +124,18 @@ init_sym_table (void)
       SymbolTable *p = putsym (funs[i].name, FUN);
       p->value.fun = funs[i].fun;
     }
+}
+
+long double
+fact (long double d)
+{
+  long n = (long)d;
+  long double acc = 1;
+  while (n > 1)
+    {
+      acc *= n--;
+    }
+  return acc;
 }
 
 int
