@@ -9,6 +9,7 @@ void yyerror (char const *);
 %}
 
 %define api.value.type union
+/* %define api.location.type */
 /* %define parse.error detailed */
 
 %token <double> NUM

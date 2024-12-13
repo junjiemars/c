@@ -1,94 +1,34 @@
 # -*- mode:sh -*- vim:ft=sh
 #
 
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+# check ncc.h features
+ncc_sanitize_address="yes"
+ncc_sanitize_leak="yes"
+. ${POSIX_ROOT}/ncc_auto
+
 # check libuv
 #----------------------------------------
-has_pkg_config=no
-has_libuv=no
-printf " + checking for pkg-config ... "
-if [ 0 -eq $(pkg-config --version 2>&1 1>/dev/null;echo $?) ]; then
-  printf "yes\n"
-  has_pkg_config=yes
-  flag=has_pkg_config op=":=" value="$has_pkg_config" \
+if [ -z "$has_libuv" ]; then
+  has_libuv=NO
+  printf " + checking for libuv ... "
+  ldflags_uv="$(pkg-config --libs libuv 2>/dev/null)"
+  inc_uv="$(pkg-config --cflags-only-I libuv 2>/dev/null)"
+  if [ -n "$ldflags_uv" -a -n "$inc_uv" ]; then
+    has_libuv=YES
+    flag=inc_uv op=":=" value="$inc_uv" \
       . ${NORE_ROOT}/auto/make_define
-else
-  printf "no\n"
-fi
-if [ "$has_pkg_config" = "yes" ]; then
-  uv_ldlibs=$(pkg-config --libs libuv)
-  uv_cflags=$(pkg-config --cflags libuv)
-  if [ -n "$uv_ldlibs" ]; then
-    nm_feature="libuv"
-    nm_feature_name="nm_have_libuv"
-    nm_feature_indent=yes
-    nm_feature_run=yes
-    nm_feature_h="#include <uv.h>"
-    nm_feature_flags="$uv_cflags"
-    nm_feature_tails="$uv_ldlibs"
-    nm_feature_test='printf("%u", uv_version());'
-    . ${NORE_ROOT}/auto/feature
-    if [ yes = $nm_found ]; then
-      flag=has_libuv op=":=" value="yes" \
-          . ${NORE_ROOT}/auto/make_define
-      flag=uv_ldlibs op=":=" value="$uv_ldlibs" \
-          . ${NORE_ROOT}/auto/make_define
-      flag=LDLIBS op="+=" value="$uv_ldlibs" \
-          . ${NORE_ROOT}/auto/make_define
-      flag=CFLAGS op="+=" value="$uv_cflags" \
-          . ${NORE_ROOT}/auto/make_define
-    fi
+    flag=ldflags_uv op=":=" value="$ldflags_uv" \
+      . ${NORE_ROOT}/auto/make_define
+    flag=has_libuv op=":=" value="$has_libuv" \
+      . ${NORE_ROOT}/auto/make_define
+    printf "yes\n"
+  else
+    printf "no\n"
   fi
 fi
-
-
-# check compiler sanitize features
-#----------------------------------------
-case "$CC_NAME" in
-  gcc|clang)
-    nm_feature="$CC_NAME -fsanitize=address"
-    nm_feature_name=
-    nm_feature_indent=yes
-    nm_feature_run=no
-    nm_feature_h=
-    nm_feature_flags='-fsanitize=address'
-    nm_feature_test=
-    . ${NORE_ROOT}/auto/feature
-    if [ yes = $nm_found ]; then
-      flag=has_sanitize op=":=" value="YES" \
-          . ${NORE_ROOT}/auto/make_define
-      flag=has_sanitize_address op=":=" value="YES" \
-          . ${NORE_ROOT}/auto/make_define
-      flag=cflags_sanitize op="+=" value=$nm_feature_flags \
-          . ${NORE_ROOT}/auto/make_define
-    fi
-    ;;
-  msvc)
-    ;;
-esac
-
-# check compiler sanitize features
-#----------------------------------------
-case "$CC_NAME" in
-  gcc|clang)
-    nm_feature="$CC_NAME -fsanitize=leak"
-    nm_feature_name=
-    nm_feature_indent=yes
-    nm_feature_run=no
-    nm_feature_h=
-    nm_feature_flags='-fsanitize=leak'
-    nm_feature_test=
-    . ${NORE_ROOT}/auto/feature
-    if [ yes = $nm_found ]; then
-      flag=has_sanitize op=":=" value="YES" \
-          . ${NORE_ROOT}/auto/make_define
-      flag=has_sanitize_leak op=":=" value="YES" \
-          . ${NORE_ROOT}/auto/make_define
-      flag=cflags_sanitize op="+=" value=$nm_feature_flags \
-          . ${NORE_ROOT}/auto/make_define
-    fi
-    ;;
-  msvc)
-    ;;
-esac
 
 # eof
