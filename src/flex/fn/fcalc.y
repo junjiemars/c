@@ -16,12 +16,13 @@ void yyerror (char const *);
 %token <SymbolTable*> VAR FUN
 %nterm <double> exp
 
-%precedence '='
 %left '-' '+'
 %left '*' '/'
 %left '%'
 %left '!'
 %right '^'
+
+%precedence '='
 %precedence NEG
 
 %%

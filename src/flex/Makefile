@@ -56,8 +56,9 @@ flex_basic_test: flex_basic
 	$(flex_basic_binout) $(flex_root)/basic/b.in
 else
 flex_basic:
-	@echo "#skip flex_test, missing flex."
+	@echo "#skip $@, missing flex."
 flex_basic_test: flex_basic
+	@echo "#skip $@, missing flex."
 endif # end of has_flex
 
 $(flex_basic_binout): $(flex_basic_lexout)
@@ -78,8 +79,9 @@ flex_c_test: flex_c
 	$(flex_c_binout) $(flex_root)/c/c.c
 else
 flex_c:
-	@echo "#skip flex_test, missing flex."
+	@echo "#skip $@, missing flex."
 flex_c_test: flex_c
+	@echo "#skip $@, missing flex."
 endif # end of has_flex
 
 $(flex_c_binout): $(flex_c_lexout)
@@ -102,6 +104,7 @@ else
 flex_calc:
 	@echo "#skip $@, missing flex/bison."
 flex_calc_test: flex_calc
+	@echo "#skip $@, missing flex/bison."
 endif # end of has_flex
 
 $(flex_calc_binout): $(flex_calc_lexout) $(flex_calc_yout)
@@ -126,6 +129,7 @@ else
 flex_rpn:
 	@echo "#skip $@, missing bison."
 flex_rpn_test: flex_rpn
+	@echo "#skip $@, missing bison."
 endif # end of has_bison
 
 $(flex_rpn_binout): $(flex_rpn_yout)
@@ -148,6 +152,7 @@ else
 flex_infix:
 	@echo "#skip $@, missing bison."
 flex_infix_test: flex_infix
+	@echo "#skip $@, missing bison."
 endif # end of has_bison
 
 $(flex_infix_binout): $(flex_infix_yout)
@@ -170,6 +175,7 @@ else
 flex_fn:
 	@echo "#skip $@, missing bison."
 flex_fn_test: flex_fn
+	@echo "#skip $@, missing bison."
 endif # end of has_bison
 
 flex_fn_clean:
