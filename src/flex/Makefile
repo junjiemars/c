@@ -10,14 +10,16 @@ flex: flex_basic                                \
       flex_calc                                 \
       flex_infix                                \
       flex_fn                                   \
-      flex_rpn
+      flex_rpn                                  \
+      flex_wc
 
 flex_test: flex_basic_test                      \
            flex_c_test                          \
            flex_calc_test                       \
            flex_infix_test                      \
            flex_fn_test                         \
-           flex_rpn_test
+           flex_rpn_test                        \
+           flex_wc_test
 
 
 
@@ -188,6 +190,29 @@ $(flex_fn_binout): $(flex_root)/fn/fn.c \
 
 $(flex_fn_yout): $(flex_root)/fn/fcalc.y
 	bison -b $(flex_root)/fn/fcalc $^
+
+
+
+# wc
+flex_wc_binout := $(bin_path)/$(flex_prefix)_wc$(bin_ext)
+flex_wc_lexout := $(tmp_path)/wc_lex.yy.c
+
+ifeq (YES, $(has_flex))
+flex_wc: $(flex_wc_binout)
+flex_wc_test: flex_wc
+	$(flex_wc_binout) $(flex_root)/Makefile
+else
+flex_wc:
+	@echo "#skip $@, missing flex."
+flex_wc_test: flex_wc
+	@echo "#skip $@, missing flex."
+endif # end of has_flex
+
+$(flex_wc_binout): $(flex_wc_lexout)
+	$(CC) $(CFLAGS) $(INC) $(LFLAGS) $(bin_out)$@ $^ $(ldflags_flex)
+
+$(flex_wc_lexout): $(flex_root)/wc/wc.lex
+	flex -o $@ $^
 
 
 
