@@ -200,7 +200,7 @@ flex_wc_lexout := $(tmp_path)/wc_lex.yy.c
 ifeq (YES, $(has_flex))
 flex_wc: $(flex_wc_binout)
 flex_wc_test: flex_wc
-	$(flex_wc_binout) $(flex_root)/Makefile
+	echo 'abc'|$(flex_wc_binout) $(flex_root)/Makefile $(flex_root)/wc/wc.lex
 else
 flex_wc:
 	@echo "#skip $@, missing flex."
