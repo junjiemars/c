@@ -15,8 +15,8 @@ typedef struct WcState
 %option reentrant
 
 WORD [^ \t\v\r\n\f]
-EOL  \n
-
+LINE \n
+CHAR .
 %%
 
 {WORD}+ {
@@ -25,13 +25,13 @@ EOL  \n
   wcstate->n_char += yyget_leng (yyscanner);
 }
 
-{EOL} {
+{LINE} {
   WcState *wcstate = yyget_extra (yyscanner);
   wcstate->n_line += 1;
   wcstate->n_char += 1;
 }
 
-. {
+{CHAR} {
   WcState *wcstate = yyget_extra (yyscanner);
   wcstate->n_char += 1;
 }
