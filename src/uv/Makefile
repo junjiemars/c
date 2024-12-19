@@ -2,6 +2,7 @@
 #
 # ./configure --has-uv
 #
+# https://github.com/libuv/libuv
 #
 
 uv: uv_dns                                      \
@@ -32,19 +33,19 @@ endif
 # dns
 uv_dns_binout := $(bin_path)/$(uv_prefix)_dns$(bin_ext)
 
-ifeq (YES,$(has_libuv))
+ifeq (YES, $(has_libuv))
 uv_dns: $(uv_dns_binout)
 uv_dns_test: uv_dns
 	$(uv_dns_binout) "www.bing.com"
 else
 uv_dns:
-	@echo "#skip $@"
+	@echo "#skip $@ ..."
 uv_dns_test: uv_dns
-	@echo "#skip $@"
+	@echo "#skip $@ ..."
 endif
 
 $(uv_dns_binout): $(uv_root)/dns/d1.c
-	$(CC) $(INC) $(CFLAGS) $^ $(bin_out)$@ $(LDLIBS)
+	$(CC) $(INC) $(CFLAGS) $(bin_out)$@ $^ $(LDLIBS)
 
 
 
@@ -71,22 +72,22 @@ $(uv_neti_binout): $(uv_root)/neti/neti.c
 uv_parser_objout := $(lib_path)/$(uv_prefix)_parser$(obj_ext)
 uv_parser_binout := $(bin_path)/$(uv_prefix)_parser$(bin_ext)
 
-ifeq (YES,$(has_libuv))
+ifeq (YES, $(has_libuv))
 uv_parser: $(uv_parser_binout)
 uv_parser_test: uv_parser
 	$(uv_parser_binout)
 else
 uv_parser:
-	@echo "#skip $@"
+	@echo "#skip $@ ..."
 uv_parser_test: uv_parser
-	@echo "#skip $@"
+	@echo "#skip $@ ..."
 endif
 
 $(uv_parser_objout): $(uv_root)/parser/http_parser.c  \
                      $(uv_root)/parser/http_parser.h
-	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $< $(obj_out)$@
+	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $(obj_out)$@ $<
 
-$(uv_parser_binout): $(uv_parser_objout)        \
+$(uv_parser_binout): $(uv_parser_objout) \
                      $(uv_root)/parser/test.c
 	$(CC) $(CFLAGS) $(INC) $? $(bin_out)$@
 
@@ -95,7 +96,7 @@ $(uv_parser_binout): $(uv_parser_objout)        \
 # httpd
 uv_httpd_binout := $(bin_path)/$(uv_prefix)_httpd$(bin_ext)
 
-ifeq (YES,$(has_libuv))
+ifeq (YES, $(has_libuv))
 uv_httpd: $(uv_httpd_binout)
 uv_httpd_test: uv_httpd $(uv_root)/httpd/cgi.c
 	@cp $(uv_root)/httpd/cgi.c $(bin_path)/

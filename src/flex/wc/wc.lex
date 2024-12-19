@@ -1,5 +1,6 @@
 %{
 #include <pthread.h>
+
 typedef struct WcState
 {
   int n_char;
@@ -13,6 +14,7 @@ typedef struct WcState
 %}
 
 %option reentrant
+%option extra-type="WcState *"
 
 WORD [^ \t\v\r\n\f]
 LINE \n
@@ -20,24 +22,20 @@ CHAR .
 %%
 
 {WORD}+ {
-  WcState *wcstate = yyget_extra (yyscanner);
-  wcstate->n_word += 1;
-  wcstate->n_char += yyget_leng (yyscanner);
+  ++yyextra->n_word;
+  yyextra->n_char += yyget_leng (yyscanner);
 }
 
 {LINE} {
-  WcState *wcstate = yyget_extra (yyscanner);
-  wcstate->n_line += 1;
-  wcstate->n_char += 1;
+  ++yyextra->n_line;
+  ++yyextra->n_char;
 }
 
 {CHAR} {
-  WcState *wcstate = yyget_extra (yyscanner);
-  wcstate->n_char += 1;
+  ++yyextra->n_char;
 }
 
 %%
-
 
 #include <locale.h>
 
@@ -99,6 +97,11 @@ wc (void *arg)
   yyset_in (wcs->file, scanner);
   yylex (scanner);
   yylex_destroy (scanner);
+
+  if (wcs->path[0] != '\0')
+    {
+      fclose (wcs->file);
+    }
 
   pthread_exit (0);
 }

@@ -18,18 +18,18 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  */
-#include "_uv_.h"
+#include "../_uv_.h"
 #include "http_parser.h"
-#include <stdlib.h>
 #include <assert.h>
+#include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdlib.h> /* rand */
 #include <string.h>
-#include <stdarg.h>
 
 #if defined(__APPLE__)
-# undef strlncpy
-#endif  /* defined(__APPLE__) */
+#undef strlncpy
+#endif /* defined(__APPLE__) */
 
 #undef TRUE
 #define TRUE 1
@@ -41,14 +41,15 @@
 #define MAX_CHUNKS 16
 
 #if !defined(MIN)
-#  define MIN(a,b) ((a) < (b) ? (a) : (b))
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
 #endif
 
-#define ARRAY_SIZE(x) (sizeof(x) / sizeof(*x))
+#define ARRAY_SIZE(x) (sizeof (x) / sizeof (*x))
 
 static http_parser parser;
 
-struct message {
+struct message
+{
   const char *name; // for debugging purposes
   const char *raw;
   enum http_parser_type type;
@@ -65,8 +66,13 @@ struct message {
   const char *userinfo;
   uint16_t port;
   int num_headers;
-  enum { NONE=0, FIELD, VALUE } last_header_element;
-  char headers [MAX_HEADERS][2][MAX_ELEMENT_SIZE];
+  enum
+  {
+    NONE = 0,
+    FIELD,
+    VALUE
+  } last_header_element;
+  char headers[MAX_HEADERS][2][MAX_ELEMENT_SIZE];
   int should_keep_alive;
 
   int num_chunks;
@@ -673,7 +679,6 @@ const struct message requests[] =
   ,.body= ""
   }
 
-
 #define QUERY_TERMINATED_HOST 22
 , {.name= "host terminated by a query string"
   ,.type= HTTP_REQUEST
@@ -840,7 +845,7 @@ const struct message requests[] =
              }
   ,.body= ""
   }
-#endif  /* !HTTP_PARSER_STRICT */
+#endif /* !HTTP_PARSER_STRICT */
 
 /* see https://github.com/ry/http-parser/issues/47 */
 #define EAT_TRAILING_CRLF_NO_CONNECTION_CLOSE 29
@@ -1333,841 +1338,824 @@ const struct message requests[] =
 /* * R E S P O N S E S * */
 const struct message responses[] =
 #define GOOGLE_301 0
-{ {.name= "google 301"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 301 Moved Permanently\r\n"
-         "Location: http://www.google.com/\r\n"
-         "Content-Type: text/html; charset=UTF-8\r\n"
-         "Date: Sun, 26 Apr 2009 11:11:49 GMT\r\n"
-         "Expires: Tue, 26 May 2009 11:11:49 GMT\r\n"
-         "X-$PrototypeBI-Version: 1.6.0.3\r\n" /* $ char in header field */
-         "Cache-Control: public, max-age=2592000\r\n"
-         "Server: gws\r\n"
-         "Content-Length:  219  \r\n"
-         "\r\n"
-         "<HTML><HEAD><meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n"
-         "<TITLE>301 Moved</TITLE></HEAD><BODY>\n"
-         "<H1>301 Moved</H1>\n"
-         "The document has moved\n"
-         "<A HREF=\"http://www.google.com/\">here</A>.\r\n"
-         "</BODY></HTML>\r\n"
-  ,.should_keep_alive= TRUE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 301
-  ,.response_status= "Moved Permanently"
-  ,.content_length= 219
-  ,.num_headers= 8
-  ,.headers=
-    { { "Location", "http://www.google.com/" }
-    , { "Content-Type", "text/html; charset=UTF-8" }
-    , { "Date", "Sun, 26 Apr 2009 11:11:49 GMT" }
-    , { "Expires", "Tue, 26 May 2009 11:11:49 GMT" }
-    , { "X-$PrototypeBI-Version", "1.6.0.3" }
-    , { "Cache-Control", "public, max-age=2592000" }
-    , { "Server", "gws" }
-    , { "Content-Length", "219  " }
-    }
-  ,.body= "<HTML><HEAD><meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n"
+    { { .name = "google 301",
+        .type = HTTP_RESPONSE,
+        .raw
+        = "HTTP/1.1 301 Moved Permanently\r\n"
+          "Location: http://www.google.com/\r\n"
+          "Content-Type: text/html; charset=UTF-8\r\n"
+          "Date: Sun, 26 Apr 2009 11:11:49 GMT\r\n"
+          "Expires: Tue, 26 May 2009 11:11:49 GMT\r\n"
+          "X-$PrototypeBI-Version: 1.6.0.3\r\n" /* $ char in header field */
+          "Cache-Control: public, max-age=2592000\r\n"
+          "Server: gws\r\n"
+          "Content-Length:  219  \r\n"
+          "\r\n"
+          "<HTML><HEAD><meta http-equiv=\"content-type\" "
+          "content=\"text/html;charset=utf-8\">\n"
           "<TITLE>301 Moved</TITLE></HEAD><BODY>\n"
           "<H1>301 Moved</H1>\n"
           "The document has moved\n"
           "<A HREF=\"http://www.google.com/\">here</A>.\r\n"
-          "</BODY></HTML>\r\n"
-  }
+          "</BODY></HTML>\r\n",
+        .should_keep_alive = TRUE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 301,
+        .response_status = "Moved Permanently",
+        .content_length = 219,
+        .num_headers = 8,
+        .headers = { { "Location", "http://www.google.com/" },
+                     { "Content-Type", "text/html; charset=UTF-8" },
+                     { "Date", "Sun, 26 Apr 2009 11:11:49 GMT" },
+                     { "Expires", "Tue, 26 May 2009 11:11:49 GMT" },
+                     { "X-$PrototypeBI-Version", "1.6.0.3" },
+                     { "Cache-Control", "public, max-age=2592000" },
+                     { "Server", "gws" },
+                     { "Content-Length", "219  " } },
+        .body = "<HTML><HEAD><meta http-equiv=\"content-type\" "
+                "content=\"text/html;charset=utf-8\">\n"
+                "<TITLE>301 Moved</TITLE></HEAD><BODY>\n"
+                "<H1>301 Moved</H1>\n"
+                "The document has moved\n"
+                "<A HREF=\"http://www.google.com/\">here</A>.\r\n"
+                "</BODY></HTML>\r\n" }
 
 #define NO_CONTENT_LENGTH_RESPONSE 1
-/* The client should wait for the server's EOF. That is, when content-length
- * is not specified, and "Connection: close", the end of body is specified
- * by the EOF.
- * Compare with APACHEBENCH_GET
- */
-, {.name= "no content-length response"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 200 OK\r\n"
-         "Date: Tue, 04 Aug 2009 07:59:32 GMT\r\n"
-         "Server: Apache\r\n"
-         "X-Powered-By: Servlet/2.5 JSP/2.1\r\n"
-         "Content-Type: text/xml; charset=utf-8\r\n"
-         "Connection: close\r\n"
-         "\r\n"
-         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-         "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\">\n"
-         "  <SOAP-ENV:Body>\n"
-         "    <SOAP-ENV:Fault>\n"
-         "       <faultcode>SOAP-ENV:Client</faultcode>\n"
-         "       <faultstring>Client Error</faultstring>\n"
-         "    </SOAP-ENV:Fault>\n"
-         "  </SOAP-ENV:Body>\n"
-         "</SOAP-ENV:Envelope>"
-  ,.should_keep_alive= FALSE
-  ,.message_complete_on_eof= TRUE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 200
-  ,.response_status= "OK"
-  ,.content_length= -1
-  ,.num_headers= 5
-  ,.headers=
-    { { "Date", "Tue, 04 Aug 2009 07:59:32 GMT" }
-    , { "Server", "Apache" }
-    , { "X-Powered-By", "Servlet/2.5 JSP/2.1" }
-    , { "Content-Type", "text/xml; charset=utf-8" }
-    , { "Connection", "close" }
-    }
-  ,.body= "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-          "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\">\n"
+      /* The client should wait for the server's EOF. That is, when
+       * content-length is not specified, and "Connection: close", the end of
+       * body is specified by the EOF. Compare with APACHEBENCH_GET
+       */
+      ,
+      { .name = "no content-length response",
+        .type = HTTP_RESPONSE,
+        .raw
+        = "HTTP/1.1 200 OK\r\n"
+          "Date: Tue, 04 Aug 2009 07:59:32 GMT\r\n"
+          "Server: Apache\r\n"
+          "X-Powered-By: Servlet/2.5 JSP/2.1\r\n"
+          "Content-Type: text/xml; charset=utf-8\r\n"
+          "Connection: close\r\n"
+          "\r\n"
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+          "<SOAP-ENV:Envelope "
+          "xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\">\n"
           "  <SOAP-ENV:Body>\n"
           "    <SOAP-ENV:Fault>\n"
           "       <faultcode>SOAP-ENV:Client</faultcode>\n"
           "       <faultstring>Client Error</faultstring>\n"
           "    </SOAP-ENV:Fault>\n"
           "  </SOAP-ENV:Body>\n"
-          "</SOAP-ENV:Envelope>"
-  }
+          "</SOAP-ENV:Envelope>",
+        .should_keep_alive = FALSE,
+        .message_complete_on_eof = TRUE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 200,
+        .response_status = "OK",
+        .content_length = -1,
+        .num_headers = 5,
+        .headers = { { "Date", "Tue, 04 Aug 2009 07:59:32 GMT" },
+                     { "Server", "Apache" },
+                     { "X-Powered-By", "Servlet/2.5 JSP/2.1" },
+                     { "Content-Type", "text/xml; charset=utf-8" },
+                     { "Connection", "close" } },
+        .body
+        = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+          "<SOAP-ENV:Envelope "
+          "xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\">\n"
+          "  <SOAP-ENV:Body>\n"
+          "    <SOAP-ENV:Fault>\n"
+          "       <faultcode>SOAP-ENV:Client</faultcode>\n"
+          "       <faultstring>Client Error</faultstring>\n"
+          "    </SOAP-ENV:Fault>\n"
+          "  </SOAP-ENV:Body>\n"
+          "</SOAP-ENV:Envelope>" }
 
 #define NO_HEADERS_NO_BODY_404 2
-, {.name= "404 no headers no body"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 404 Not Found\r\n\r\n"
-  ,.should_keep_alive= FALSE
-  ,.message_complete_on_eof= TRUE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 404
-  ,.response_status= "Not Found"
-  ,.content_length= -1
-  ,.num_headers= 0
-  ,.headers= {}
-  ,.body_size= 0
-  ,.body= ""
-  }
+      ,
+      { .name = "404 no headers no body",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 404 Not Found\r\n\r\n",
+        .should_keep_alive = FALSE,
+        .message_complete_on_eof = TRUE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 404,
+        .response_status = "Not Found",
+        .content_length = -1,
+        .num_headers = 0,
+        .headers = {},
+        .body_size = 0,
+        .body = "" }
 
 #define NO_REASON_PHRASE 3
-, {.name= "301 no response phrase"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 301\r\n\r\n"
-  ,.should_keep_alive = FALSE
-  ,.message_complete_on_eof= TRUE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 301
-  ,.content_length= -1
-  ,.response_status= ""
-  ,.num_headers= 0
-  ,.headers= {}
-  ,.body= ""
-  }
+      ,
+      { .name = "301 no response phrase",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 301\r\n\r\n",
+        .should_keep_alive = FALSE,
+        .message_complete_on_eof = TRUE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 301,
+        .content_length = -1,
+        .response_status = "",
+        .num_headers = 0,
+        .headers = {},
+        .body = "" }
 
 #define TRAILING_SPACE_ON_CHUNKED_BODY 4
-, {.name="200 trailing space on chunked body"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 200 OK\r\n"
-         "Content-Type: text/plain\r\n"
-         "Transfer-Encoding: chunked\r\n"
-         "\r\n"
-         "25  \r\n"
-         "This is the data in the first chunk\r\n"
-         "\r\n"
-         "1C\r\n"
-         "and this is the second one\r\n"
-         "\r\n"
-         "0  \r\n"
-         "\r\n"
-  ,.should_keep_alive= TRUE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 200
-  ,.response_status= "OK"
-  ,.content_length= -1
-  ,.num_headers= 2
-  ,.headers=
-    { {"Content-Type", "text/plain" }
-    , {"Transfer-Encoding", "chunked" }
-    }
-  ,.body_size = 37+28
-  ,.body =
-         "This is the data in the first chunk\r\n"
-         "and this is the second one\r\n"
-  ,.num_chunks_complete= 3
-  ,.chunk_lengths= { 0x25, 0x1c }
-  }
+      ,
+      { .name = "200 trailing space on chunked body",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 200 OK\r\n"
+               "Content-Type: text/plain\r\n"
+               "Transfer-Encoding: chunked\r\n"
+               "\r\n"
+               "25  \r\n"
+               "This is the data in the first chunk\r\n"
+               "\r\n"
+               "1C\r\n"
+               "and this is the second one\r\n"
+               "\r\n"
+               "0  \r\n"
+               "\r\n",
+        .should_keep_alive = TRUE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 200,
+        .response_status = "OK",
+        .content_length = -1,
+        .num_headers = 2,
+        .headers = { { "Content-Type", "text/plain" },
+                     { "Transfer-Encoding", "chunked" } },
+        .body_size = 37 + 28,
+        .body = "This is the data in the first chunk\r\n"
+                "and this is the second one\r\n",
+        .num_chunks_complete = 3,
+        .chunk_lengths = { 0x25, 0x1c } }
 
 #define NO_CARRIAGE_RET 5
-, {.name="no carriage ret"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 200 OK\n"
-         "Content-Type: text/html; charset=utf-8\n"
-         "Connection: close\n"
-         "\n"
-         "these headers are from http://news.ycombinator.com/"
-  ,.should_keep_alive= FALSE
-  ,.message_complete_on_eof= TRUE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 200
-  ,.response_status= "OK"
-  ,.content_length= -1
-  ,.num_headers= 2
-  ,.headers=
-    { {"Content-Type", "text/html; charset=utf-8" }
-    , {"Connection", "close" }
-    }
-  ,.body= "these headers are from http://news.ycombinator.com/"
-  }
+      ,
+      { .name = "no carriage ret",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 200 OK\n"
+               "Content-Type: text/html; charset=utf-8\n"
+               "Connection: close\n"
+               "\n"
+               "these headers are from http://news.ycombinator.com/",
+        .should_keep_alive = FALSE,
+        .message_complete_on_eof = TRUE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 200,
+        .response_status = "OK",
+        .content_length = -1,
+        .num_headers = 2,
+        .headers = { { "Content-Type", "text/html; charset=utf-8" },
+                     { "Connection", "close" } },
+        .body = "these headers are from http://news.ycombinator.com/" }
 
 #define PROXY_CONNECTION 6
-, {.name="proxy connection"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 200 OK\r\n"
-         "Content-Type: text/html; charset=UTF-8\r\n"
-         "Content-Length: 11\r\n"
-         "Proxy-Connection: close\r\n"
-         "Date: Thu, 31 Dec 2009 20:55:48 +0000\r\n"
-         "\r\n"
-         "hello world"
-  ,.should_keep_alive= FALSE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 200
-  ,.response_status= "OK"
-  ,.content_length= 11
-  ,.num_headers= 4
-  ,.headers=
-    { {"Content-Type", "text/html; charset=UTF-8" }
-    , {"Content-Length", "11" }
-    , {"Proxy-Connection", "close" }
-    , {"Date", "Thu, 31 Dec 2009 20:55:48 +0000"}
-    }
-  ,.body= "hello world"
-  }
+      ,
+      { .name = "proxy connection",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 200 OK\r\n"
+               "Content-Type: text/html; charset=UTF-8\r\n"
+               "Content-Length: 11\r\n"
+               "Proxy-Connection: close\r\n"
+               "Date: Thu, 31 Dec 2009 20:55:48 +0000\r\n"
+               "\r\n"
+               "hello world",
+        .should_keep_alive = FALSE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 200,
+        .response_status = "OK",
+        .content_length = 11,
+        .num_headers = 4,
+        .headers = { { "Content-Type", "text/html; charset=UTF-8" },
+                     { "Content-Length", "11" },
+                     { "Proxy-Connection", "close" },
+                     { "Date", "Thu, 31 Dec 2009 20:55:48 +0000" } },
+        .body = "hello world" }
 
 #define UNDERSTORE_HEADER_KEY 7
-  // shown by
-  // curl -o /dev/null -v "http://ad.doubleclick.net/pfadx/DARTSHELLCONFIGXML;dcmt=text/xml;"
-, {.name="underscore header key"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 200 OK\r\n"
-         "Server: DCLK-AdSvr\r\n"
-         "Content-Type: text/xml\r\n"
-         "Content-Length: 0\r\n"
-         "DCLK_imp: v7;x;114750856;0-0;0;17820020;0/0;21603567/21621457/1;;~okv=;dcmt=text/xml;;~cs=o\r\n\r\n"
-  ,.should_keep_alive= TRUE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 200
-  ,.response_status= "OK"
-  ,.content_length= 0
-  ,.num_headers= 4
-  ,.headers=
-    { {"Server", "DCLK-AdSvr" }
-    , {"Content-Type", "text/xml" }
-    , {"Content-Length", "0" }
-    , {"DCLK_imp", "v7;x;114750856;0-0;0;17820020;0/0;21603567/21621457/1;;~okv=;dcmt=text/xml;;~cs=o" }
-    }
-  ,.body= ""
-  }
+      // shown by
+      // curl -o /dev/null -v
+      // "http://ad.doubleclick.net/pfadx/DARTSHELLCONFIGXML;dcmt=text/xml;"
+      ,
+      { .name = "underscore header key",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 200 OK\r\n"
+               "Server: DCLK-AdSvr\r\n"
+               "Content-Type: text/xml\r\n"
+               "Content-Length: 0\r\n"
+               "DCLK_imp: "
+               "v7;x;114750856;0-0;0;17820020;0/0;21603567/21621457/"
+               "1;;~okv=;dcmt=text/xml;;~cs=o\r\n\r\n",
+        .should_keep_alive = TRUE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 200,
+        .response_status = "OK",
+        .content_length = 0,
+        .num_headers = 4,
+        .headers
+        = { { "Server", "DCLK-AdSvr" },
+            { "Content-Type", "text/xml" },
+            { "Content-Length", "0" },
+            { "DCLK_imp", "v7;x;114750856;0-0;0;17820020;0/0;21603567/"
+                          "21621457/1;;~okv=;dcmt=text/xml;;~cs=o" } },
+        .body = "" }
 
 #define BONJOUR_MADAME_FR 8
-/* The client should not merge two headers fields when the first one doesn't
- * have a value.
- */
-, {.name= "bonjourmadame.fr"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.0 301 Moved Permanently\r\n"
-         "Date: Thu, 03 Jun 2010 09:56:32 GMT\r\n"
-         "Server: Apache/2.2.3 (Red Hat)\r\n"
-         "Cache-Control: public\r\n"
-         "Pragma: \r\n"
-         "Location: http://www.bonjourmadame.fr/\r\n"
-         "Vary: Accept-Encoding\r\n"
-         "Content-Length: 0\r\n"
-         "Content-Type: text/html; charset=UTF-8\r\n"
-         "Connection: keep-alive\r\n"
-         "\r\n"
-  ,.should_keep_alive= TRUE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 0
-  ,.status_code= 301
-  ,.response_status= "Moved Permanently"
-  ,.content_length= 0
-  ,.num_headers= 9
-  ,.headers=
-    { { "Date", "Thu, 03 Jun 2010 09:56:32 GMT" }
-    , { "Server", "Apache/2.2.3 (Red Hat)" }
-    , { "Cache-Control", "public" }
-    , { "Pragma", "" }
-    , { "Location", "http://www.bonjourmadame.fr/" }
-    , { "Vary",  "Accept-Encoding" }
-    , { "Content-Length", "0" }
-    , { "Content-Type", "text/html; charset=UTF-8" }
-    , { "Connection", "keep-alive" }
-    }
-  ,.body= ""
-  }
+      /* The client should not merge two headers fields when the first one
+       * doesn't have a value.
+       */
+      ,
+      { .name = "bonjourmadame.fr",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.0 301 Moved Permanently\r\n"
+               "Date: Thu, 03 Jun 2010 09:56:32 GMT\r\n"
+               "Server: Apache/2.2.3 (Red Hat)\r\n"
+               "Cache-Control: public\r\n"
+               "Pragma: \r\n"
+               "Location: http://www.bonjourmadame.fr/\r\n"
+               "Vary: Accept-Encoding\r\n"
+               "Content-Length: 0\r\n"
+               "Content-Type: text/html; charset=UTF-8\r\n"
+               "Connection: keep-alive\r\n"
+               "\r\n",
+        .should_keep_alive = TRUE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 0,
+        .status_code = 301,
+        .response_status = "Moved Permanently",
+        .content_length = 0,
+        .num_headers = 9,
+        .headers = { { "Date", "Thu, 03 Jun 2010 09:56:32 GMT" },
+                     { "Server", "Apache/2.2.3 (Red Hat)" },
+                     { "Cache-Control", "public" },
+                     { "Pragma", "" },
+                     { "Location", "http://www.bonjourmadame.fr/" },
+                     { "Vary", "Accept-Encoding" },
+                     { "Content-Length", "0" },
+                     { "Content-Type", "text/html; charset=UTF-8" },
+                     { "Connection", "keep-alive" } },
+        .body = "" }
 
 #define RES_FIELD_UNDERSCORE 9
-/* Should handle spaces in header fields */
-, {.name= "field underscore"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 200 OK\r\n"
-         "Date: Tue, 28 Sep 2010 01:14:13 GMT\r\n"
-         "Server: Apache\r\n"
-         "Cache-Control: no-cache, must-revalidate\r\n"
-         "Expires: Mon, 26 Jul 1997 05:00:00 GMT\r\n"
-         ".et-Cookie: PlaxoCS=1274804622353690521; path=/; domain=.plaxo.com\r\n"
-         "Vary: Accept-Encoding\r\n"
-         "_eep-Alive: timeout=45\r\n" /* semantic value ignored */
-         "_onnection: Keep-Alive\r\n" /* semantic value ignored */
-         "Transfer-Encoding: chunked\r\n"
-         "Content-Type: text/html\r\n"
-         "Connection: close\r\n"
-         "\r\n"
-         "0\r\n\r\n"
-  ,.should_keep_alive= FALSE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 200
-  ,.response_status= "OK"
-  ,.content_length= -1
-  ,.num_headers= 11
-  ,.headers=
-    { { "Date", "Tue, 28 Sep 2010 01:14:13 GMT" }
-    , { "Server", "Apache" }
-    , { "Cache-Control", "no-cache, must-revalidate" }
-    , { "Expires", "Mon, 26 Jul 1997 05:00:00 GMT" }
-    , { ".et-Cookie", "PlaxoCS=1274804622353690521; path=/; domain=.plaxo.com" }
-    , { "Vary", "Accept-Encoding" }
-    , { "_eep-Alive", "timeout=45" }
-    , { "_onnection", "Keep-Alive" }
-    , { "Transfer-Encoding", "chunked" }
-    , { "Content-Type", "text/html" }
-    , { "Connection", "close" }
-    }
-  ,.body= ""
-  ,.num_chunks_complete= 1
-  ,.chunk_lengths= {}
-  }
+      /* Should handle spaces in header fields */
+      ,
+      { .name = "field underscore",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 200 OK\r\n"
+               "Date: Tue, 28 Sep 2010 01:14:13 GMT\r\n"
+               "Server: Apache\r\n"
+               "Cache-Control: no-cache, must-revalidate\r\n"
+               "Expires: Mon, 26 Jul 1997 05:00:00 GMT\r\n"
+               ".et-Cookie: PlaxoCS=1274804622353690521; path=/; "
+               "domain=.plaxo.com\r\n"
+               "Vary: Accept-Encoding\r\n"
+               "_eep-Alive: timeout=45\r\n" /* semantic value ignored */
+               "_onnection: Keep-Alive\r\n" /* semantic value ignored */
+               "Transfer-Encoding: chunked\r\n"
+               "Content-Type: text/html\r\n"
+               "Connection: close\r\n"
+               "\r\n"
+               "0\r\n\r\n",
+        .should_keep_alive = FALSE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 200,
+        .response_status = "OK",
+        .content_length = -1,
+        .num_headers = 11,
+        .headers
+        = { { "Date", "Tue, 28 Sep 2010 01:14:13 GMT" },
+            { "Server", "Apache" },
+            { "Cache-Control", "no-cache, must-revalidate" },
+            { "Expires", "Mon, 26 Jul 1997 05:00:00 GMT" },
+            { ".et-Cookie",
+              "PlaxoCS=1274804622353690521; path=/; domain=.plaxo.com" },
+            { "Vary", "Accept-Encoding" },
+            { "_eep-Alive", "timeout=45" },
+            { "_onnection", "Keep-Alive" },
+            { "Transfer-Encoding", "chunked" },
+            { "Content-Type", "text/html" },
+            { "Connection", "close" } },
+        .body = "",
+        .num_chunks_complete = 1,
+        .chunk_lengths = {} }
 
 #define NON_ASCII_IN_STATUS_LINE 10
-/* Should handle non-ASCII in status line */
-, {.name= "non-ASCII in status line"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 500 Oriëntatieprobleem\r\n"
-         "Date: Fri, 5 Nov 2010 23:07:12 GMT+2\r\n"
-         "Content-Length: 0\r\n"
-         "Connection: close\r\n"
-         "\r\n"
-  ,.should_keep_alive= FALSE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 500
-  ,.response_status= "Oriëntatieprobleem"
-  ,.content_length= 0
-  ,.num_headers= 3
-  ,.headers=
-    { { "Date", "Fri, 5 Nov 2010 23:07:12 GMT+2" }
-    , { "Content-Length", "0" }
-    , { "Connection", "close" }
-    }
-  ,.body= ""
-  }
+      /* Should handle non-ASCII in status line */
+      ,
+      { .name = "non-ASCII in status line",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 500 Oriëntatieprobleem\r\n"
+               "Date: Fri, 5 Nov 2010 23:07:12 GMT+2\r\n"
+               "Content-Length: 0\r\n"
+               "Connection: close\r\n"
+               "\r\n",
+        .should_keep_alive = FALSE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 500,
+        .response_status = "Oriëntatieprobleem",
+        .content_length = 0,
+        .num_headers = 3,
+        .headers = { { "Date", "Fri, 5 Nov 2010 23:07:12 GMT+2" },
+                     { "Content-Length", "0" },
+                     { "Connection", "close" } },
+        .body = "" }
 
 #define HTTP_VERSION_0_9 11
-/* Should handle HTTP/0.9 */
-, {.name= "http version 0.9"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/0.9 200 OK\r\n"
-         "\r\n"
-  ,.should_keep_alive= FALSE
-  ,.message_complete_on_eof= TRUE
-  ,.http_major= 0
-  ,.http_minor= 9
-  ,.status_code= 200
-  ,.response_status= "OK"
-  ,.content_length= -1
-  ,.num_headers= 0
-  ,.headers=
-    {}
-  ,.body= ""
-  }
+      /* Should handle HTTP/0.9 */
+      ,
+      { .name = "http version 0.9",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/0.9 200 OK\r\n"
+               "\r\n",
+        .should_keep_alive = FALSE,
+        .message_complete_on_eof = TRUE,
+        .http_major = 0,
+        .http_minor = 9,
+        .status_code = 200,
+        .response_status = "OK",
+        .content_length = -1,
+        .num_headers = 0,
+        .headers = {},
+        .body = "" }
 
 #define NO_CONTENT_LENGTH_NO_TRANSFER_ENCODING_RESPONSE 12
-/* The client should wait for the server's EOF. That is, when neither
- * content-length nor transfer-encoding is specified, the end of body
- * is specified by the EOF.
- */
-, {.name= "neither content-length nor transfer-encoding response"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 200 OK\r\n"
-         "Content-Type: text/plain\r\n"
-         "\r\n"
-         "hello world"
-  ,.should_keep_alive= FALSE
-  ,.message_complete_on_eof= TRUE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 200
-  ,.response_status= "OK"
-  ,.content_length= -1
-  ,.num_headers= 1
-  ,.headers=
-    { { "Content-Type", "text/plain" }
-    }
-  ,.body= "hello world"
-  }
+      /* The client should wait for the server's EOF. That is, when neither
+       * content-length nor transfer-encoding is specified, the end of body
+       * is specified by the EOF.
+       */
+      ,
+      { .name = "neither content-length nor transfer-encoding response",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 200 OK\r\n"
+               "Content-Type: text/plain\r\n"
+               "\r\n"
+               "hello world",
+        .should_keep_alive = FALSE,
+        .message_complete_on_eof = TRUE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 200,
+        .response_status = "OK",
+        .content_length = -1,
+        .num_headers = 1,
+        .headers = { { "Content-Type", "text/plain" } },
+        .body = "hello world" }
 
 #define NO_BODY_HTTP10_KA_200 13
-, {.name= "HTTP/1.0 with keep-alive and EOF-terminated 200 status"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.0 200 OK\r\n"
-         "Connection: keep-alive\r\n"
-         "\r\n"
-  ,.should_keep_alive= FALSE
-  ,.message_complete_on_eof= TRUE
-  ,.http_major= 1
-  ,.http_minor= 0
-  ,.status_code= 200
-  ,.response_status= "OK"
-  ,.content_length= -1
-  ,.num_headers= 1
-  ,.headers=
-    { { "Connection", "keep-alive" }
-    }
-  ,.body_size= 0
-  ,.body= ""
-  }
+      ,
+      { .name = "HTTP/1.0 with keep-alive and EOF-terminated 200 status",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.0 200 OK\r\n"
+               "Connection: keep-alive\r\n"
+               "\r\n",
+        .should_keep_alive = FALSE,
+        .message_complete_on_eof = TRUE,
+        .http_major = 1,
+        .http_minor = 0,
+        .status_code = 200,
+        .response_status = "OK",
+        .content_length = -1,
+        .num_headers = 1,
+        .headers = { { "Connection", "keep-alive" } },
+        .body_size = 0,
+        .body = "" }
 
 #define NO_BODY_HTTP10_KA_204 14
-, {.name= "HTTP/1.0 with keep-alive and a 204 status"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.0 204 No content\r\n"
-         "Connection: keep-alive\r\n"
-         "\r\n"
-  ,.should_keep_alive= TRUE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 0
-  ,.status_code= 204
-  ,.response_status= "No content"
-  ,.content_length= -1
-  ,.num_headers= 1
-  ,.headers=
-    { { "Connection", "keep-alive" }
-    }
-  ,.body_size= 0
-  ,.body= ""
-  }
+      ,
+      { .name = "HTTP/1.0 with keep-alive and a 204 status",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.0 204 No content\r\n"
+               "Connection: keep-alive\r\n"
+               "\r\n",
+        .should_keep_alive = TRUE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 0,
+        .status_code = 204,
+        .response_status = "No content",
+        .content_length = -1,
+        .num_headers = 1,
+        .headers = { { "Connection", "keep-alive" } },
+        .body_size = 0,
+        .body = "" }
 
 #define NO_BODY_HTTP11_KA_200 15
-, {.name= "HTTP/1.1 with an EOF-terminated 200 status"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 200 OK\r\n"
-         "\r\n"
-  ,.should_keep_alive= FALSE
-  ,.message_complete_on_eof= TRUE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 200
-  ,.response_status= "OK"
-  ,.content_length= -1
-  ,.num_headers= 0
-  ,.headers={}
-  ,.body_size= 0
-  ,.body= ""
-  }
+      ,
+      { .name = "HTTP/1.1 with an EOF-terminated 200 status",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 200 OK\r\n"
+               "\r\n",
+        .should_keep_alive = FALSE,
+        .message_complete_on_eof = TRUE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 200,
+        .response_status = "OK",
+        .content_length = -1,
+        .num_headers = 0,
+        .headers = {},
+        .body_size = 0,
+        .body = "" }
 
 #define NO_BODY_HTTP11_KA_204 16
-, {.name= "HTTP/1.1 with a 204 status"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 204 No content\r\n"
-         "\r\n"
-  ,.should_keep_alive= TRUE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 204
-  ,.response_status= "No content"
-  ,.content_length= -1
-  ,.num_headers= 0
-  ,.headers={}
-  ,.body_size= 0
-  ,.body= ""
-  }
+      ,
+      { .name = "HTTP/1.1 with a 204 status",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 204 No content\r\n"
+               "\r\n",
+        .should_keep_alive = TRUE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 204,
+        .response_status = "No content",
+        .content_length = -1,
+        .num_headers = 0,
+        .headers = {},
+        .body_size = 0,
+        .body = "" }
 
 #define NO_BODY_HTTP11_NOKA_204 17
-, {.name= "HTTP/1.1 with a 204 status and keep-alive disabled"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 204 No content\r\n"
-         "Connection: close\r\n"
-         "\r\n"
-  ,.should_keep_alive= FALSE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 204
-  ,.response_status= "No content"
-  ,.content_length= -1
-  ,.num_headers= 1
-  ,.headers=
-    { { "Connection", "close" }
-    }
-  ,.body_size= 0
-  ,.body= ""
-  }
+      ,
+      { .name = "HTTP/1.1 with a 204 status and keep-alive disabled",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 204 No content\r\n"
+               "Connection: close\r\n"
+               "\r\n",
+        .should_keep_alive = FALSE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 204,
+        .response_status = "No content",
+        .content_length = -1,
+        .num_headers = 1,
+        .headers = { { "Connection", "close" } },
+        .body_size = 0,
+        .body = "" }
 
 #define NO_BODY_HTTP11_KA_CHUNKED_200 18
-, {.name= "HTTP/1.1 with chunked endocing and a 200 response"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 200 OK\r\n"
-         "Transfer-Encoding: chunked\r\n"
-         "\r\n"
-         "0\r\n"
-         "\r\n"
-  ,.should_keep_alive= TRUE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 200
-  ,.response_status= "OK"
-  ,.content_length= -1
-  ,.num_headers= 1
-  ,.headers=
-    { { "Transfer-Encoding", "chunked" }
-    }
-  ,.body_size= 0
-  ,.body= ""
-  ,.num_chunks_complete= 1
-  }
+      ,
+      { .name = "HTTP/1.1 with chunked endocing and a 200 response",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 200 OK\r\n"
+               "Transfer-Encoding: chunked\r\n"
+               "\r\n"
+               "0\r\n"
+               "\r\n",
+        .should_keep_alive = TRUE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 200,
+        .response_status = "OK",
+        .content_length = -1,
+        .num_headers = 1,
+        .headers = { { "Transfer-Encoding", "chunked" } },
+        .body_size = 0,
+        .body = "",
+        .num_chunks_complete = 1 }
 
 #if !HTTP_PARSER_STRICT
 #define SPACE_IN_FIELD_RES 19
-/* Should handle spaces in header fields */
-, {.name= "field space"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 200 OK\r\n"
-         "Server: Microsoft-IIS/6.0\r\n"
-         "X-Powered-By: ASP.NET\r\n"
-         "en-US Content-Type: text/xml\r\n" /* this is the problem */
-         "Content-Type: text/xml\r\n"
-         "Content-Length: 16\r\n"
-         "Date: Fri, 23 Jul 2010 18:45:38 GMT\r\n"
-         "Connection: keep-alive\r\n"
-         "\r\n"
-         "<xml>hello</xml>" /* fake body */
-  ,.should_keep_alive= TRUE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 200
-  ,.response_status= "OK"
-  ,.content_length= 16
-  ,.num_headers= 7
-  ,.headers=
-    { { "Server",  "Microsoft-IIS/6.0" }
-    , { "X-Powered-By", "ASP.NET" }
-    , { "en-US Content-Type", "text/xml" }
-    , { "Content-Type", "text/xml" }
-    , { "Content-Length", "16" }
-    , { "Date", "Fri, 23 Jul 2010 18:45:38 GMT" }
-    , { "Connection", "keep-alive" }
-    }
-  ,.body= "<xml>hello</xml>"
-  }
+      /* Should handle spaces in header fields */
+      ,
+      { .name = "field space",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 200 OK\r\n"
+               "Server: Microsoft-IIS/6.0\r\n"
+               "X-Powered-By: ASP.NET\r\n"
+               "en-US Content-Type: text/xml\r\n" /* this is the problem */
+               "Content-Type: text/xml\r\n"
+               "Content-Length: 16\r\n"
+               "Date: Fri, 23 Jul 2010 18:45:38 GMT\r\n"
+               "Connection: keep-alive\r\n"
+               "\r\n"
+               "<xml>hello</xml>" /* fake body */
+        ,
+        .should_keep_alive = TRUE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 200,
+        .response_status = "OK",
+        .content_length = 16,
+        .num_headers = 7,
+        .headers = { { "Server", "Microsoft-IIS/6.0" },
+                     { "X-Powered-By", "ASP.NET" },
+                     { "en-US Content-Type", "text/xml" },
+                     { "Content-Type", "text/xml" },
+                     { "Content-Length", "16" },
+                     { "Date", "Fri, 23 Jul 2010 18:45:38 GMT" },
+                     { "Connection", "keep-alive" } },
+        .body = "<xml>hello</xml>" }
 #endif /* !HTTP_PARSER_STRICT */
 
 #define AMAZON_COM 20
-, {.name= "amazon.com"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 301 MovedPermanently\r\n"
-         "Date: Wed, 15 May 2013 17:06:33 GMT\r\n"
-         "Server: Server\r\n"
-         "x-amz-id-1: 0GPHKXSJQ826RK7GZEB2\r\n"
-         "p3p: policyref=\"http://www.amazon.com/w3c/p3p.xml\",CP=\"CAO DSP LAW CUR ADM IVAo IVDo CONo OTPo OUR DELi PUBi OTRi BUS PHY ONL UNI PUR FIN COM NAV INT DEM CNT STA HEA PRE LOC GOV OTC \"\r\n"
-         "x-amz-id-2: STN69VZxIFSz9YJLbz1GDbxpbjG6Qjmmq5E3DxRhOUw+Et0p4hr7c/Q8qNcx4oAD\r\n"
-         "Location: http://www.amazon.com/Dan-Brown/e/B000AP9DSU/ref=s9_pop_gw_al1?_encoding=UTF8&refinementId=618073011&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=center-2&pf_rd_r=0SHYY5BZXN3KR20BNFAY&pf_rd_t=101&pf_rd_p=1263340922&pf_rd_i=507846\r\n"
-         "Vary: Accept-Encoding,User-Agent\r\n"
-         "Content-Type: text/html; charset=ISO-8859-1\r\n"
-         "Transfer-Encoding: chunked\r\n"
-         "\r\n"
-         "1\r\n"
-         "\n\r\n"
-         "0\r\n"
-         "\r\n"
-  ,.should_keep_alive= TRUE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 301
-  ,.response_status= "MovedPermanently"
-  ,.content_length= -1
-  ,.num_headers= 9
-  ,.headers= { { "Date", "Wed, 15 May 2013 17:06:33 GMT" }
-             , { "Server", "Server" }
-             , { "x-amz-id-1", "0GPHKXSJQ826RK7GZEB2" }
-             , { "p3p", "policyref=\"http://www.amazon.com/w3c/p3p.xml\",CP=\"CAO DSP LAW CUR ADM IVAo IVDo CONo OTPo OUR DELi PUBi OTRi BUS PHY ONL UNI PUR FIN COM NAV INT DEM CNT STA HEA PRE LOC GOV OTC \"" }
-             , { "x-amz-id-2", "STN69VZxIFSz9YJLbz1GDbxpbjG6Qjmmq5E3DxRhOUw+Et0p4hr7c/Q8qNcx4oAD" }
-             , { "Location", "http://www.amazon.com/Dan-Brown/e/B000AP9DSU/ref=s9_pop_gw_al1?_encoding=UTF8&refinementId=618073011&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=center-2&pf_rd_r=0SHYY5BZXN3KR20BNFAY&pf_rd_t=101&pf_rd_p=1263340922&pf_rd_i=507846" }
-             , { "Vary", "Accept-Encoding,User-Agent" }
-             , { "Content-Type", "text/html; charset=ISO-8859-1" }
-             , { "Transfer-Encoding", "chunked" }
-             }
-  ,.body= "\n"
-  ,.num_chunks_complete= 2
-  ,.chunk_lengths= { 1 }
-  }
+      ,
+      { .name = "amazon.com",
+        .type = HTTP_RESPONSE,
+        .raw
+        = "HTTP/1.1 301 MovedPermanently\r\n"
+          "Date: Wed, 15 May 2013 17:06:33 GMT\r\n"
+          "Server: Server\r\n"
+          "x-amz-id-1: 0GPHKXSJQ826RK7GZEB2\r\n"
+          "p3p: policyref=\"http://www.amazon.com/w3c/p3p.xml\",CP=\"CAO DSP "
+          "LAW CUR ADM IVAo IVDo CONo OTPo OUR DELi PUBi OTRi BUS PHY ONL UNI "
+          "PUR FIN COM NAV INT DEM CNT STA HEA PRE LOC GOV OTC \"\r\n"
+          "x-amz-id-2: "
+          "STN69VZxIFSz9YJLbz1GDbxpbjG6Qjmmq5E3DxRhOUw+Et0p4hr7c/"
+          "Q8qNcx4oAD\r\n"
+          "Location: "
+          "http://www.amazon.com/Dan-Brown/e/B000AP9DSU/"
+          "ref=s9_pop_gw_al1?_encoding=UTF8&refinementId=618073011&pf_rd_m="
+          "ATVPDKIKX0DER&pf_rd_s=center-2&pf_rd_r=0SHYY5BZXN3KR20BNFAY&pf_rd_"
+          "t=101&pf_rd_p=1263340922&pf_rd_i=507846\r\n"
+          "Vary: Accept-Encoding,User-Agent\r\n"
+          "Content-Type: text/html; charset=ISO-8859-1\r\n"
+          "Transfer-Encoding: chunked\r\n"
+          "\r\n"
+          "1\r\n"
+          "\n\r\n"
+          "0\r\n"
+          "\r\n",
+        .should_keep_alive = TRUE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 301,
+        .response_status = "MovedPermanently",
+        .content_length = -1,
+        .num_headers = 9,
+        .headers
+        = { { "Date", "Wed, 15 May 2013 17:06:33 GMT" },
+            { "Server", "Server" },
+            { "x-amz-id-1", "0GPHKXSJQ826RK7GZEB2" },
+            { "p3p",
+              "policyref=\"http://www.amazon.com/w3c/p3p.xml\",CP=\"CAO DSP "
+              "LAW CUR ADM IVAo IVDo CONo OTPo OUR DELi PUBi OTRi BUS PHY ONL "
+              "UNI PUR FIN COM NAV INT DEM CNT STA HEA PRE LOC GOV OTC \"" },
+            { "x-amz-id-2", "STN69VZxIFSz9YJLbz1GDbxpbjG6Qjmmq5E3DxRhOUw+"
+                            "Et0p4hr7c/Q8qNcx4oAD" },
+            { "Location",
+              "http://www.amazon.com/Dan-Brown/e/B000AP9DSU/"
+              "ref=s9_pop_gw_al1?_encoding=UTF8&refinementId=618073011&pf_rd_"
+              "m=ATVPDKIKX0DER&pf_rd_s=center-2&pf_rd_r=0SHYY5BZXN3KR20BNFAY&"
+              "pf_rd_t=101&pf_rd_p=1263340922&pf_rd_i=507846" },
+            { "Vary", "Accept-Encoding,User-Agent" },
+            { "Content-Type", "text/html; charset=ISO-8859-1" },
+            { "Transfer-Encoding", "chunked" } },
+        .body = "\n",
+        .num_chunks_complete = 2,
+        .chunk_lengths = { 1 } }
 
 #define EMPTY_REASON_PHRASE_AFTER_SPACE 21
-, {.name= "empty reason phrase after space"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 200 \r\n"
-         "\r\n"
-  ,.should_keep_alive= FALSE
-  ,.message_complete_on_eof= TRUE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 200
-  ,.response_status= ""
-  ,.content_length= -1
-  ,.num_headers= 0
-  ,.headers= {}
-  ,.body= ""
-  }
+      ,
+      { .name = "empty reason phrase after space",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 200 \r\n"
+               "\r\n",
+        .should_keep_alive = FALSE,
+        .message_complete_on_eof = TRUE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 200,
+        .response_status = "",
+        .content_length = -1,
+        .num_headers = 0,
+        .headers = {},
+        .body = "" }
 
 #define CONTENT_LENGTH_X 22
-, {.name= "Content-Length-X"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 200 OK\r\n"
-         "Content-Length-X: 0\r\n"
-         "Transfer-Encoding: chunked\r\n"
-         "\r\n"
-         "2\r\n"
-         "OK\r\n"
-         "0\r\n"
-         "\r\n"
-  ,.should_keep_alive= TRUE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 200
-  ,.response_status= "OK"
-  ,.content_length= -1
-  ,.num_headers= 2
-  ,.headers= { { "Content-Length-X", "0" }
-             , { "Transfer-Encoding", "chunked" }
-             }
-  ,.body= "OK"
-  ,.num_chunks_complete= 2
-  ,.chunk_lengths= { 2 }
-  }
+      ,
+      { .name = "Content-Length-X",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 200 OK\r\n"
+               "Content-Length-X: 0\r\n"
+               "Transfer-Encoding: chunked\r\n"
+               "\r\n"
+               "2\r\n"
+               "OK\r\n"
+               "0\r\n"
+               "\r\n",
+        .should_keep_alive = TRUE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 200,
+        .response_status = "OK",
+        .content_length = -1,
+        .num_headers = 2,
+        .headers
+        = { { "Content-Length-X", "0" }, { "Transfer-Encoding", "chunked" } },
+        .body = "OK",
+        .num_chunks_complete = 2,
+        .chunk_lengths = { 2 } }
 
 #define HTTP_101_RESPONSE_WITH_UPGRADE_HEADER 23
-, {.name= "HTTP 101 response with Upgrade header"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 101 Switching Protocols\r\n"
-         "Connection: upgrade\r\n"
-         "Upgrade: h2c\r\n"
-         "\r\n"
-         "proto"
-  ,.should_keep_alive= TRUE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 101
-  ,.response_status= "Switching Protocols"
-  ,.upgrade= "proto"
-  ,.content_length= -1
-  ,.num_headers= 2
-  ,.headers=
-    { { "Connection", "upgrade" }
-    , { "Upgrade", "h2c" }
-    }
-  }
+      ,
+      { .name = "HTTP 101 response with Upgrade header",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 101 Switching Protocols\r\n"
+               "Connection: upgrade\r\n"
+               "Upgrade: h2c\r\n"
+               "\r\n"
+               "proto",
+        .should_keep_alive = TRUE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 101,
+        .response_status = "Switching Protocols",
+        .upgrade = "proto",
+        .content_length = -1,
+        .num_headers = 2,
+        .headers = { { "Connection", "upgrade" }, { "Upgrade", "h2c" } } }
 
 #define HTTP_101_RESPONSE_WITH_UPGRADE_HEADER_AND_CONTENT_LENGTH 24
-, {.name= "HTTP 101 response with Upgrade and Content-Length header"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 101 Switching Protocols\r\n"
-         "Connection: upgrade\r\n"
-         "Upgrade: h2c\r\n"
-         "Content-Length: 4\r\n"
-         "\r\n"
-         "body"
-         "proto"
-  ,.should_keep_alive= TRUE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 101
-  ,.response_status= "Switching Protocols"
-  ,.body= "body"
-  ,.upgrade= "proto"
-  ,.content_length= 4
-  ,.num_headers= 3
-  ,.headers=
-    { { "Connection", "upgrade" }
-    , { "Upgrade", "h2c" }
-    , { "Content-Length", "4" }
-    }
-  }
+      ,
+      { .name = "HTTP 101 response with Upgrade and Content-Length header",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 101 Switching Protocols\r\n"
+               "Connection: upgrade\r\n"
+               "Upgrade: h2c\r\n"
+               "Content-Length: 4\r\n"
+               "\r\n"
+               "body"
+               "proto",
+        .should_keep_alive = TRUE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 101,
+        .response_status = "Switching Protocols",
+        .body = "body",
+        .upgrade = "proto",
+        .content_length = 4,
+        .num_headers = 3,
+        .headers = { { "Connection", "upgrade" },
+                     { "Upgrade", "h2c" },
+                     { "Content-Length", "4" } } }
 
 #define HTTP_101_RESPONSE_WITH_UPGRADE_HEADER_AND_TRANSFER_ENCODING 25
-, {.name= "HTTP 101 response with Upgrade and Transfer-Encoding header"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 101 Switching Protocols\r\n"
-         "Connection: upgrade\r\n"
-         "Upgrade: h2c\r\n"
-         "Transfer-Encoding: chunked\r\n"
-         "\r\n"
-         "2\r\n"
-         "bo\r\n"
-         "2\r\n"
-         "dy\r\n"
-         "0\r\n"
-         "\r\n"
-         "proto"
-  ,.should_keep_alive= TRUE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 101
-  ,.response_status= "Switching Protocols"
-  ,.body= "body"
-  ,.upgrade= "proto"
-  ,.content_length= -1
-  ,.num_headers= 3
-  ,.headers=
-    { { "Connection", "upgrade" }
-    , { "Upgrade", "h2c" }
-    , { "Transfer-Encoding", "chunked" }
-    }
-  ,.num_chunks_complete= 3
-  ,.chunk_lengths= { 2, 2 }
-  }
+      ,
+      { .name = "HTTP 101 response with Upgrade and Transfer-Encoding header",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 101 Switching Protocols\r\n"
+               "Connection: upgrade\r\n"
+               "Upgrade: h2c\r\n"
+               "Transfer-Encoding: chunked\r\n"
+               "\r\n"
+               "2\r\n"
+               "bo\r\n"
+               "2\r\n"
+               "dy\r\n"
+               "0\r\n"
+               "\r\n"
+               "proto",
+        .should_keep_alive = TRUE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 101,
+        .response_status = "Switching Protocols",
+        .body = "body",
+        .upgrade = "proto",
+        .content_length = -1,
+        .num_headers = 3,
+        .headers = { { "Connection", "upgrade" },
+                     { "Upgrade", "h2c" },
+                     { "Transfer-Encoding", "chunked" } },
+        .num_chunks_complete = 3,
+        .chunk_lengths = { 2, 2 } }
 
 #define HTTP_200_RESPONSE_WITH_UPGRADE_HEADER 26
-, {.name= "HTTP 200 response with Upgrade header"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 200 OK\r\n"
-         "Connection: upgrade\r\n"
-         "Upgrade: h2c\r\n"
-         "\r\n"
-         "body"
-  ,.should_keep_alive= FALSE
-  ,.message_complete_on_eof= TRUE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 200
-  ,.response_status= "OK"
-  ,.body= "body"
-  ,.upgrade= NULL
-  ,.content_length= -1
-  ,.num_headers= 2
-  ,.headers=
-    { { "Connection", "upgrade" }
-    , { "Upgrade", "h2c" }
-    }
-  }
+      ,
+      { .name = "HTTP 200 response with Upgrade header",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 200 OK\r\n"
+               "Connection: upgrade\r\n"
+               "Upgrade: h2c\r\n"
+               "\r\n"
+               "body",
+        .should_keep_alive = FALSE,
+        .message_complete_on_eof = TRUE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 200,
+        .response_status = "OK",
+        .body = "body",
+        .upgrade = NULL,
+        .content_length = -1,
+        .num_headers = 2,
+        .headers = { { "Connection", "upgrade" }, { "Upgrade", "h2c" } } }
 
 #define HTTP_200_RESPONSE_WITH_UPGRADE_HEADER_AND_CONTENT_LENGTH 27
-, {.name= "HTTP 200 response with Upgrade and Content-Length header"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 200 OK\r\n"
-         "Connection: upgrade\r\n"
-         "Upgrade: h2c\r\n"
-         "Content-Length: 4\r\n"
-         "\r\n"
-         "body"
-  ,.should_keep_alive= TRUE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 200
-  ,.response_status= "OK"
-  ,.content_length= 4
-  ,.num_headers= 3
-  ,.body= "body"
-  ,.upgrade= NULL
-  ,.headers=
-    { { "Connection", "upgrade" }
-    , { "Upgrade", "h2c" }
-    , { "Content-Length", "4" }
-    }
-  }
+      ,
+      { .name = "HTTP 200 response with Upgrade and Content-Length header",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 200 OK\r\n"
+               "Connection: upgrade\r\n"
+               "Upgrade: h2c\r\n"
+               "Content-Length: 4\r\n"
+               "\r\n"
+               "body",
+        .should_keep_alive = TRUE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 200,
+        .response_status = "OK",
+        .content_length = 4,
+        .num_headers = 3,
+        .body = "body",
+        .upgrade = NULL,
+        .headers = { { "Connection", "upgrade" },
+                     { "Upgrade", "h2c" },
+                     { "Content-Length", "4" } } }
 
 #define HTTP_200_RESPONSE_WITH_UPGRADE_HEADER_AND_TRANSFER_ENCODING 28
-, {.name= "HTTP 200 response with Upgrade and Transfer-Encoding header"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 200 OK\r\n"
-         "Connection: upgrade\r\n"
-         "Upgrade: h2c\r\n"
-         "Transfer-Encoding: chunked\r\n"
-         "\r\n"
-         "2\r\n"
-         "bo\r\n"
-         "2\r\n"
-         "dy\r\n"
-         "0\r\n"
-         "\r\n"
-  ,.should_keep_alive= TRUE
-  ,.message_complete_on_eof= FALSE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 200
-  ,.response_status= "OK"
-  ,.content_length= -1
-  ,.num_headers= 3
-  ,.body= "body"
-  ,.upgrade= NULL
-  ,.headers=
-    { { "Connection", "upgrade" }
-    , { "Upgrade", "h2c" }
-    , { "Transfer-Encoding", "chunked" }
-    }
-  ,.num_chunks_complete= 3
-  ,.chunk_lengths= { 2, 2 }
-  }
+      ,
+      { .name = "HTTP 200 response with Upgrade and Transfer-Encoding header",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 200 OK\r\n"
+               "Connection: upgrade\r\n"
+               "Upgrade: h2c\r\n"
+               "Transfer-Encoding: chunked\r\n"
+               "\r\n"
+               "2\r\n"
+               "bo\r\n"
+               "2\r\n"
+               "dy\r\n"
+               "0\r\n"
+               "\r\n",
+        .should_keep_alive = TRUE,
+        .message_complete_on_eof = FALSE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 200,
+        .response_status = "OK",
+        .content_length = -1,
+        .num_headers = 3,
+        .body = "body",
+        .upgrade = NULL,
+        .headers = { { "Connection", "upgrade" },
+                     { "Upgrade", "h2c" },
+                     { "Transfer-Encoding", "chunked" } },
+        .num_chunks_complete = 3,
+        .chunk_lengths = { 2, 2 } }
 #define HTTP_200_MULTI_TE_NOT_LAST_CHUNKED 29
-, {.name= "HTTP 200 response with `chunked` being *not last* Transfer-Encoding"
-  ,.type= HTTP_RESPONSE
-  ,.raw= "HTTP/1.1 200 OK\r\n"
-         "Transfer-Encoding: chunked, identity\r\n"
-         "\r\n"
-         "2\r\n"
-         "OK\r\n"
-         "0\r\n"
-         "\r\n"
-  ,.should_keep_alive= FALSE
-  ,.message_complete_on_eof= TRUE
-  ,.http_major= 1
-  ,.http_minor= 1
-  ,.status_code= 200
-  ,.response_status= "OK"
-  ,.content_length= -1
-  ,.num_headers= 1
-  ,.headers= { { "Transfer-Encoding", "chunked, identity" }
-             }
-  ,.body= "2\r\nOK\r\n0\r\n\r\n"
-  ,.num_chunks_complete= 0
-  }
-};
+      ,
+      { .name = "HTTP 200 response with `chunked` being *not last* "
+                "Transfer-Encoding",
+        .type = HTTP_RESPONSE,
+        .raw = "HTTP/1.1 200 OK\r\n"
+               "Transfer-Encoding: chunked, identity\r\n"
+               "\r\n"
+               "2\r\n"
+               "OK\r\n"
+               "0\r\n"
+               "\r\n",
+        .should_keep_alive = FALSE,
+        .message_complete_on_eof = TRUE,
+        .http_major = 1,
+        .http_minor = 1,
+        .status_code = 200,
+        .response_status = "OK",
+        .content_length = -1,
+        .num_headers = 1,
+        .headers = { { "Transfer-Encoding", "chunked, identity" } },
+        .body = "2\r\nOK\r\n0\r\n\r\n",
+        .num_chunks_complete = 0 } };
 
 /* strnlen() is a POSIX.2008 addition. Can't rely on it being available so
  * define it ourselves.
  */
 size_t
-strnlen(const char *s, size_t maxlen)
+strnlen (const char *s, size_t maxlen)
 {
   const char *p;
 
-  p = memchr(s, '\0', maxlen);
+  p = memchr (s, '\0', maxlen);
   if (p == NULL)
     return maxlen;
 
@@ -2175,69 +2163,67 @@ strnlen(const char *s, size_t maxlen)
 }
 
 size_t
-strlncat(char *dst, size_t len, const char *src, size_t n)
+strlncat (char *dst, size_t len, const char *src, size_t n)
 {
   size_t slen;
   size_t dlen;
   size_t rlen;
   size_t ncpy;
 
-  slen = strnlen(src, n);
-  dlen = strnlen(dst, len);
+  slen = strnlen (src, n);
+  dlen = strnlen (dst, len);
 
-  if (dlen < len) {
-    rlen = len - dlen;
-    ncpy = slen < rlen ? slen : (rlen - 1);
-    memcpy(dst + dlen, src, ncpy);
-    dst[dlen + ncpy] = '\0';
-  }
+  if (dlen < len)
+    {
+      rlen = len - dlen;
+      ncpy = slen < rlen ? slen : (rlen - 1);
+      memcpy (dst + dlen, src, ncpy);
+      dst[dlen + ncpy] = '\0';
+    }
 
-  assert(len > slen + dlen);
+  assert (len > slen + dlen);
   return slen + dlen;
 }
 
 size_t
-strlncpy(char *dst, size_t len, const char *src, size_t n)
+strlncpy (char *dst, size_t len, const char *src, size_t n)
 {
   size_t slen;
   size_t ncpy;
 
-  slen = strnlen(src, n);
+  slen = strnlen (src, n);
 
-  if (len > 0) {
-    ncpy = slen < len ? slen : (len - 1);
-    memcpy(dst, src, ncpy);
-    dst[ncpy] = '\0';
-  }
+  if (len > 0)
+    {
+      ncpy = slen < len ? slen : (len - 1);
+      memcpy (dst, src, ncpy);
+      dst[ncpy] = '\0';
+    }
 
-  assert(len > slen);
+  assert (len > slen);
   return slen;
 }
 
 int
 request_url_cb (http_parser *p, const char *buf, size_t len)
 {
-  assert(p == &parser);
-  strlncat(messages[num_messages].request_url,
-           sizeof(messages[num_messages].request_url),
-           buf,
-           len);
+  assert (p == &parser);
+  strlncat (messages[num_messages].request_url,
+            sizeof (messages[num_messages].request_url), buf, len);
   return 0;
 }
 
 int
 header_field_cb (http_parser *p, const char *buf, size_t len)
 {
-  assert(p == &parser);
+  assert (p == &parser);
   struct message *m = &messages[num_messages];
 
   if (m->last_header_element != FIELD)
     m->num_headers++;
 
-  strlncat(m->headers[m->num_headers-1][0],
-           sizeof(m->headers[m->num_headers-1][0]),
-           buf,
-           len);
+  strlncat (m->headers[m->num_headers - 1][0],
+            sizeof (m->headers[m->num_headers - 1][0]), buf, len);
 
   m->last_header_element = FIELD;
 
@@ -2247,13 +2233,11 @@ header_field_cb (http_parser *p, const char *buf, size_t len)
 int
 header_value_cb (http_parser *p, const char *buf, size_t len)
 {
-  assert(p == &parser);
+  assert (p == &parser);
   struct message *m = &messages[num_messages];
 
-  strlncat(m->headers[m->num_headers-1][1],
-           sizeof(m->headers[m->num_headers-1][1]),
-           buf,
-           len);
+  strlncat (m->headers[m->num_headers - 1][1],
+            sizeof (m->headers[m->num_headers - 1][1]), buf, len);
 
   m->last_header_element = VALUE;
 
@@ -2263,45 +2247,44 @@ header_value_cb (http_parser *p, const char *buf, size_t len)
 void
 check_body_is_final (const http_parser *p)
 {
-  if (messages[num_messages].body_is_final) {
-    fprintf(stderr, "\n\n *** Error http_body_is_final() should return 1 "
-                    "on last on_body callback call "
-                    "but it doesn't! ***\n\n");
-    assert(0);
-    abort();
-  }
-  messages[num_messages].body_is_final = http_body_is_final(p);
+  if (messages[num_messages].body_is_final)
+    {
+      fprintf (stderr, "\n\n *** Error http_body_is_final() should return 1 "
+                       "on last on_body callback call "
+                       "but it doesn't! ***\n\n");
+      assert (0);
+      abort ();
+    }
+  messages[num_messages].body_is_final = http_body_is_final (p);
 }
 
 int
 body_cb (http_parser *p, const char *buf, size_t len)
 {
-  assert(p == &parser);
-  strlncat(messages[num_messages].body,
-           sizeof(messages[num_messages].body),
-           buf,
-           len);
+  assert (p == &parser);
+  strlncat (messages[num_messages].body, sizeof (messages[num_messages].body),
+            buf, len);
   messages[num_messages].body_size += len;
-  check_body_is_final(p);
- // printf("body_cb: '%s'\n", requests[num_messages].body);
+  check_body_is_final (p);
+  // printf("body_cb: '%s'\n", requests[num_messages].body);
   return 0;
 }
 
 int
 count_body_cb (http_parser *p, const char *buf, size_t len)
 {
-  assert(p == &parser);
-  assert(buf);
+  assert (p == &parser);
+  assert (buf);
   messages[num_messages].body_size += len;
-  check_body_is_final(p);
+  check_body_is_final (p);
   return 0;
 }
 
 int
 message_begin_cb (http_parser *p)
 {
-  assert(p == &parser);
-  assert(!messages[num_messages].message_begin_cb_called);
+  assert (p == &parser);
+  assert (!messages[num_messages].message_begin_cb_called);
   messages[num_messages].message_begin_cb_called = TRUE;
   return 0;
 }
@@ -2309,41 +2292,41 @@ message_begin_cb (http_parser *p)
 int
 headers_complete_cb (http_parser *p)
 {
-  assert(p == &parser);
+  assert (p == &parser);
   messages[num_messages].method = parser.method;
   messages[num_messages].status_code = parser.status_code;
   messages[num_messages].http_major = parser.http_major;
   messages[num_messages].http_minor = parser.http_minor;
   messages[num_messages].content_length = parser.content_length;
   messages[num_messages].headers_complete_cb_called = TRUE;
-  messages[num_messages].should_keep_alive = http_should_keep_alive(&parser);
+  messages[num_messages].should_keep_alive = http_should_keep_alive (&parser);
   return 0;
 }
 
 int
 message_complete_cb (http_parser *p)
 {
-  assert(p == &parser);
-  if (messages[num_messages].should_keep_alive !=
-      http_should_keep_alive(&parser))
-  {
-    fprintf(stderr, "\n\n *** Error http_should_keep_alive() should have same "
-                    "value in both on_message_complete and on_headers_complete "
-                    "but it doesn't! ***\n\n");
-    assert(0);
-    abort();
-  }
+  assert (p == &parser);
+  if (messages[num_messages].should_keep_alive
+      != http_should_keep_alive (&parser))
+    {
+      fprintf (stderr,
+               "\n\n *** Error http_should_keep_alive() should have same "
+               "value in both on_message_complete and on_headers_complete "
+               "but it doesn't! ***\n\n");
+      assert (0);
+      abort ();
+    }
 
-  if (messages[num_messages].body_size &&
-      http_body_is_final(p) &&
-      !messages[num_messages].body_is_final)
-  {
-    fprintf(stderr, "\n\n *** Error http_body_is_final() should return 1 "
-                    "on last on_body callback call "
-                    "but it doesn't! ***\n\n");
-    assert(0);
-    abort();
-  }
+  if (messages[num_messages].body_size && http_body_is_final (p)
+      && !messages[num_messages].body_is_final)
+    {
+      fprintf (stderr, "\n\n *** Error http_body_is_final() should return 1 "
+                       "on last on_body callback call "
+                       "but it doesn't! ***\n\n");
+      assert (0);
+      abort ();
+    }
 
   messages[num_messages].message_complete_cb_called = TRUE;
 
@@ -2356,26 +2339,25 @@ message_complete_cb (http_parser *p)
 int
 response_status_cb (http_parser *p, const char *buf, size_t len)
 {
-  assert(p == &parser);
+  assert (p == &parser);
 
   messages[num_messages].status_cb_called = TRUE;
 
-  strlncat(messages[num_messages].response_status,
-           sizeof(messages[num_messages].response_status),
-           buf,
-           len);
+  strlncat (messages[num_messages].response_status,
+            sizeof (messages[num_messages].response_status), buf, len);
   return 0;
 }
 
 int
 chunk_header_cb (http_parser *p)
 {
-  assert(p == &parser);
+  assert (p == &parser);
   int chunk_idx = messages[num_messages].num_chunks;
   messages[num_messages].num_chunks++;
-  if (chunk_idx < MAX_CHUNKS) {
-    messages[num_messages].chunk_lengths[chunk_idx] = p->content_length;
-  }
+  if (chunk_idx < MAX_CHUNKS)
+    {
+      messages[num_messages].chunk_lengths[chunk_idx] = p->content_length;
+    }
 
   return 0;
 }
@@ -2383,14 +2365,14 @@ chunk_header_cb (http_parser *p)
 int
 chunk_complete_cb (http_parser *p)
 {
-  assert(p == &parser);
+  assert (p == &parser);
 
   /* Here we want to verify that each chunk_header_cb is matched by a
    * chunk_complete_cb, so not only should the total number of calls to
    * both callbacks be the same, but they also should be interleaved
    * properly */
-  assert(messages[num_messages].num_chunks ==
-         messages[num_messages].num_chunks_complete + 1);
+  assert (messages[num_messages].num_chunks
+          == messages[num_messages].num_chunks_complete + 1);
 
   messages[num_messages].num_chunks_complete++;
   return 0;
@@ -2401,98 +2383,121 @@ chunk_complete_cb (http_parser *p)
 int
 dontcall_message_begin_cb (http_parser *p)
 {
-  if (p) { } // gcc
-  fprintf(stderr, "\n\n*** on_message_begin() called on paused parser ***\n\n");
-  abort();
+  if (p)
+    {
+    } // gcc
+  fprintf (stderr,
+           "\n\n*** on_message_begin() called on paused parser ***\n\n");
+  abort ();
 }
 
 int
 dontcall_header_field_cb (http_parser *p, const char *buf, size_t len)
 {
-  if (p || buf || len) { } // gcc
-  fprintf(stderr, "\n\n*** on_header_field() called on paused parser ***\n\n");
-  abort();
+  if (p || buf || len)
+    {
+    } // gcc
+  fprintf (stderr,
+           "\n\n*** on_header_field() called on paused parser ***\n\n");
+  abort ();
 }
 
 int
 dontcall_header_value_cb (http_parser *p, const char *buf, size_t len)
 {
-  if (p || buf || len) { } // gcc
-  fprintf(stderr, "\n\n*** on_header_value() called on paused parser ***\n\n");
-  abort();
+  if (p || buf || len)
+    {
+    } // gcc
+  fprintf (stderr,
+           "\n\n*** on_header_value() called on paused parser ***\n\n");
+  abort ();
 }
 
 int
 dontcall_request_url_cb (http_parser *p, const char *buf, size_t len)
 {
-  if (p || buf || len) { } // gcc
-  fprintf(stderr, "\n\n*** on_request_url() called on paused parser ***\n\n");
-  abort();
+  if (p || buf || len)
+    {
+    } // gcc
+  fprintf (stderr, "\n\n*** on_request_url() called on paused parser ***\n\n");
+  abort ();
 }
 
 int
 dontcall_body_cb (http_parser *p, const char *buf, size_t len)
 {
-  if (p || buf || len) { } // gcc
-  fprintf(stderr, "\n\n*** on_body_cb() called on paused parser ***\n\n");
-  abort();
+  if (p || buf || len)
+    {
+    } // gcc
+  fprintf (stderr, "\n\n*** on_body_cb() called on paused parser ***\n\n");
+  abort ();
 }
 
 int
 dontcall_headers_complete_cb (http_parser *p)
 {
-  if (p) { } // gcc
-  fprintf(stderr, "\n\n*** on_headers_complete() called on paused "
-                  "parser ***\n\n");
-  abort();
+  if (p)
+    {
+    } // gcc
+  fprintf (stderr, "\n\n*** on_headers_complete() called on paused "
+                   "parser ***\n\n");
+  abort ();
 }
 
 int
 dontcall_message_complete_cb (http_parser *p)
 {
-  if (p) { } // gcc
-  fprintf(stderr, "\n\n*** on_message_complete() called on paused "
-                  "parser ***\n\n");
-  abort();
+  if (p)
+    {
+    } // gcc
+  fprintf (stderr, "\n\n*** on_message_complete() called on paused "
+                   "parser ***\n\n");
+  abort ();
 }
 
 int
 dontcall_response_status_cb (http_parser *p, const char *buf, size_t len)
 {
-  if (p || buf || len) { } // gcc
-  fprintf(stderr, "\n\n*** on_status() called on paused parser ***\n\n");
-  abort();
+  if (p || buf || len)
+    {
+    } // gcc
+  fprintf (stderr, "\n\n*** on_status() called on paused parser ***\n\n");
+  abort ();
 }
 
 int
 dontcall_chunk_header_cb (http_parser *p)
 {
-  if (p) { } // gcc
-  fprintf(stderr, "\n\n*** on_chunk_header() called on paused parser ***\n\n");
-  exit(1);
+  if (p)
+    {
+    } // gcc
+  fprintf (stderr,
+           "\n\n*** on_chunk_header() called on paused parser ***\n\n");
+  exit (1);
 }
 
 int
 dontcall_chunk_complete_cb (http_parser *p)
 {
-  if (p) { } // gcc
-  fprintf(stderr, "\n\n*** on_chunk_complete() "
-          "called on paused parser ***\n\n");
-  exit(1);
+  if (p)
+    {
+    } // gcc
+  fprintf (stderr, "\n\n*** on_chunk_complete() "
+                   "called on paused parser ***\n\n");
+  exit (1);
 }
 
-static http_parser_settings settings_dontcall =
-  {.on_message_begin = dontcall_message_begin_cb
-  ,.on_header_field = dontcall_header_field_cb
-  ,.on_header_value = dontcall_header_value_cb
-  ,.on_url = dontcall_request_url_cb
-  ,.on_status = dontcall_response_status_cb
-  ,.on_body = dontcall_body_cb
-  ,.on_headers_complete = dontcall_headers_complete_cb
-  ,.on_message_complete = dontcall_message_complete_cb
-  ,.on_chunk_header = dontcall_chunk_header_cb
-  ,.on_chunk_complete = dontcall_chunk_complete_cb
-  };
+static http_parser_settings settings_dontcall
+    = { .on_message_begin = dontcall_message_begin_cb,
+        .on_header_field = dontcall_header_field_cb,
+        .on_header_value = dontcall_header_value_cb,
+        .on_url = dontcall_request_url_cb,
+        .on_status = dontcall_response_status_cb,
+        .on_body = dontcall_body_cb,
+        .on_headers_complete = dontcall_headers_complete_cb,
+        .on_message_complete = dontcall_message_complete_cb,
+        .on_chunk_header = dontcall_chunk_header_cb,
+        .on_chunk_complete = dontcall_chunk_complete_cb };
 
 /* These pause_* callbacks always pause the parser and just invoke the regular
  * callback that tracks content. Before returning, we overwrite the parser
@@ -2501,259 +2506,265 @@ static http_parser_settings settings_dontcall =
 int
 pause_message_begin_cb (http_parser *p)
 {
-  http_parser_pause(p, 1);
+  http_parser_pause (p, 1);
   *current_pause_parser = settings_dontcall;
-  return message_begin_cb(p);
+  return message_begin_cb (p);
 }
 
 int
 pause_header_field_cb (http_parser *p, const char *buf, size_t len)
 {
-  http_parser_pause(p, 1);
+  http_parser_pause (p, 1);
   *current_pause_parser = settings_dontcall;
-  return header_field_cb(p, buf, len);
+  return header_field_cb (p, buf, len);
 }
 
 int
 pause_header_value_cb (http_parser *p, const char *buf, size_t len)
 {
-  http_parser_pause(p, 1);
+  http_parser_pause (p, 1);
   *current_pause_parser = settings_dontcall;
-  return header_value_cb(p, buf, len);
+  return header_value_cb (p, buf, len);
 }
 
 int
 pause_request_url_cb (http_parser *p, const char *buf, size_t len)
 {
-  http_parser_pause(p, 1);
+  http_parser_pause (p, 1);
   *current_pause_parser = settings_dontcall;
-  return request_url_cb(p, buf, len);
+  return request_url_cb (p, buf, len);
 }
 
 int
 pause_body_cb (http_parser *p, const char *buf, size_t len)
 {
-  http_parser_pause(p, 1);
+  http_parser_pause (p, 1);
   *current_pause_parser = settings_dontcall;
-  return body_cb(p, buf, len);
+  return body_cb (p, buf, len);
 }
 
 int
 pause_headers_complete_cb (http_parser *p)
 {
-  http_parser_pause(p, 1);
+  http_parser_pause (p, 1);
   *current_pause_parser = settings_dontcall;
-  return headers_complete_cb(p);
+  return headers_complete_cb (p);
 }
 
 int
 pause_message_complete_cb (http_parser *p)
 {
-  http_parser_pause(p, 1);
+  http_parser_pause (p, 1);
   *current_pause_parser = settings_dontcall;
-  return message_complete_cb(p);
+  return message_complete_cb (p);
 }
 
 int
 pause_response_status_cb (http_parser *p, const char *buf, size_t len)
 {
-  http_parser_pause(p, 1);
+  http_parser_pause (p, 1);
   *current_pause_parser = settings_dontcall;
-  return response_status_cb(p, buf, len);
+  return response_status_cb (p, buf, len);
 }
 
 int
 pause_chunk_header_cb (http_parser *p)
 {
-  http_parser_pause(p, 1);
+  http_parser_pause (p, 1);
   *current_pause_parser = settings_dontcall;
-  return chunk_header_cb(p);
+  return chunk_header_cb (p);
 }
 
 int
 pause_chunk_complete_cb (http_parser *p)
 {
-  http_parser_pause(p, 1);
+  http_parser_pause (p, 1);
   *current_pause_parser = settings_dontcall;
-  return chunk_complete_cb(p);
+  return chunk_complete_cb (p);
 }
 
 int
 connect_headers_complete_cb (http_parser *p)
 {
-  headers_complete_cb(p);
+  headers_complete_cb (p);
   return 1;
 }
 
 int
 connect_message_complete_cb (http_parser *p)
 {
-  messages[num_messages].should_keep_alive = http_should_keep_alive(&parser);
-  return message_complete_cb(p);
+  messages[num_messages].should_keep_alive = http_should_keep_alive (&parser);
+  return message_complete_cb (p);
 }
 
-static http_parser_settings settings_pause =
-  {.on_message_begin = pause_message_begin_cb
-  ,.on_header_field = pause_header_field_cb
-  ,.on_header_value = pause_header_value_cb
-  ,.on_url = pause_request_url_cb
-  ,.on_status = pause_response_status_cb
-  ,.on_body = pause_body_cb
-  ,.on_headers_complete = pause_headers_complete_cb
-  ,.on_message_complete = pause_message_complete_cb
-  ,.on_chunk_header = pause_chunk_header_cb
-  ,.on_chunk_complete = pause_chunk_complete_cb
-  };
+static http_parser_settings settings_pause
+    = { .on_message_begin = pause_message_begin_cb,
+        .on_header_field = pause_header_field_cb,
+        .on_header_value = pause_header_value_cb,
+        .on_url = pause_request_url_cb,
+        .on_status = pause_response_status_cb,
+        .on_body = pause_body_cb,
+        .on_headers_complete = pause_headers_complete_cb,
+        .on_message_complete = pause_message_complete_cb,
+        .on_chunk_header = pause_chunk_header_cb,
+        .on_chunk_complete = pause_chunk_complete_cb };
 
-static http_parser_settings settings =
-  {.on_message_begin = message_begin_cb
-  ,.on_header_field = header_field_cb
-  ,.on_header_value = header_value_cb
-  ,.on_url = request_url_cb
-  ,.on_status = response_status_cb
-  ,.on_body = body_cb
-  ,.on_headers_complete = headers_complete_cb
-  ,.on_message_complete = message_complete_cb
-  ,.on_chunk_header = chunk_header_cb
-  ,.on_chunk_complete = chunk_complete_cb
-  };
+static http_parser_settings settings
+    = { .on_message_begin = message_begin_cb,
+        .on_header_field = header_field_cb,
+        .on_header_value = header_value_cb,
+        .on_url = request_url_cb,
+        .on_status = response_status_cb,
+        .on_body = body_cb,
+        .on_headers_complete = headers_complete_cb,
+        .on_message_complete = message_complete_cb,
+        .on_chunk_header = chunk_header_cb,
+        .on_chunk_complete = chunk_complete_cb };
 
-static http_parser_settings settings_count_body =
-  {.on_message_begin = message_begin_cb
-  ,.on_header_field = header_field_cb
-  ,.on_header_value = header_value_cb
-  ,.on_url = request_url_cb
-  ,.on_status = response_status_cb
-  ,.on_body = count_body_cb
-  ,.on_headers_complete = headers_complete_cb
-  ,.on_message_complete = message_complete_cb
-  ,.on_chunk_header = chunk_header_cb
-  ,.on_chunk_complete = chunk_complete_cb
-  };
+static http_parser_settings settings_count_body
+    = { .on_message_begin = message_begin_cb,
+        .on_header_field = header_field_cb,
+        .on_header_value = header_value_cb,
+        .on_url = request_url_cb,
+        .on_status = response_status_cb,
+        .on_body = count_body_cb,
+        .on_headers_complete = headers_complete_cb,
+        .on_message_complete = message_complete_cb,
+        .on_chunk_header = chunk_header_cb,
+        .on_chunk_complete = chunk_complete_cb };
 
-static http_parser_settings settings_connect =
-  {.on_message_begin = message_begin_cb
-  ,.on_header_field = header_field_cb
-  ,.on_header_value = header_value_cb
-  ,.on_url = request_url_cb
-  ,.on_status = response_status_cb
-  ,.on_body = dontcall_body_cb
-  ,.on_headers_complete = connect_headers_complete_cb
-  ,.on_message_complete = connect_message_complete_cb
-  ,.on_chunk_header = chunk_header_cb
-  ,.on_chunk_complete = chunk_complete_cb
-  };
+static http_parser_settings settings_connect
+    = { .on_message_begin = message_begin_cb,
+        .on_header_field = header_field_cb,
+        .on_header_value = header_value_cb,
+        .on_url = request_url_cb,
+        .on_status = response_status_cb,
+        .on_body = dontcall_body_cb,
+        .on_headers_complete = connect_headers_complete_cb,
+        .on_message_complete = connect_message_complete_cb,
+        .on_chunk_header = chunk_header_cb,
+        .on_chunk_complete = chunk_complete_cb };
 
-static http_parser_settings settings_null =
-  {.on_message_begin = 0
-  ,.on_header_field = 0
-  ,.on_header_value = 0
-  ,.on_url = 0
-  ,.on_status = 0
-  ,.on_body = 0
-  ,.on_headers_complete = 0
-  ,.on_message_complete = 0
-  ,.on_chunk_header = 0
-  ,.on_chunk_complete = 0
-  };
+static http_parser_settings settings_null = { .on_message_begin = 0,
+                                              .on_header_field = 0,
+                                              .on_header_value = 0,
+                                              .on_url = 0,
+                                              .on_status = 0,
+                                              .on_body = 0,
+                                              .on_headers_complete = 0,
+                                              .on_message_complete = 0,
+                                              .on_chunk_header = 0,
+                                              .on_chunk_complete = 0 };
 
 void
 parser_init (enum http_parser_type type)
 {
   num_messages = 0;
-  http_parser_init(&parser, type);
-  memset(&messages, 0, sizeof messages);
+  http_parser_init (&parser, type);
+  memset (&messages, 0, sizeof messages);
 }
 
-size_t parse (const char *buf, size_t len)
+size_t
+parse (const char *buf, size_t len)
 {
   size_t nparsed;
   currently_parsing_eof = (len == 0);
-  nparsed = http_parser_execute(&parser, &settings, buf, len);
+  nparsed = http_parser_execute (&parser, &settings, buf, len);
   return nparsed;
 }
 
-size_t parse_count_body (const char *buf, size_t len)
+size_t
+parse_count_body (const char *buf, size_t len)
 {
   size_t nparsed;
   currently_parsing_eof = (len == 0);
-  nparsed = http_parser_execute(&parser, &settings_count_body, buf, len);
+  nparsed = http_parser_execute (&parser, &settings_count_body, buf, len);
   return nparsed;
 }
 
-size_t parse_pause (const char *buf, size_t len)
+size_t
+parse_pause (const char *buf, size_t len)
 {
   size_t nparsed;
   http_parser_settings s = settings_pause;
 
   currently_parsing_eof = (len == 0);
   current_pause_parser = &s;
-  nparsed = http_parser_execute(&parser, current_pause_parser, buf, len);
+  nparsed = http_parser_execute (&parser, current_pause_parser, buf, len);
   return nparsed;
 }
 
-size_t parse_connect (const char *buf, size_t len)
+size_t
+parse_connect (const char *buf, size_t len)
 {
   size_t nparsed;
   currently_parsing_eof = (len == 0);
-  nparsed = http_parser_execute(&parser, &settings_connect, buf, len);
+  nparsed = http_parser_execute (&parser, &settings_connect, buf, len);
   return nparsed;
 }
 
 static inline int
-check_str_eq (const struct message *m,
-              const char *prop,
-              const char *expected,
-              const char *found) {
-  if ((expected == NULL) != (found == NULL)) {
-    printf("\n*** Error: %s in '%s' ***\n\n", prop, m->name);
-    printf("expected %s\n", (expected == NULL) ? "NULL" : expected);
-    printf("   found %s\n", (found == NULL) ? "NULL" : found);
-    return 0;
-  }
-  if (expected != NULL && 0 != strcmp(expected, found)) {
-    printf("\n*** Error: %s in '%s' ***\n\n", prop, m->name);
-    printf("expected '%s'\n", expected);
-    printf("   found '%s'\n", found);
-    return 0;
-  }
+check_str_eq (const struct message *m, const char *prop, const char *expected,
+              const char *found)
+{
+  if ((expected == NULL) != (found == NULL))
+    {
+      printf ("\n*** Error: %s in '%s' ***\n\n", prop, m->name);
+      printf ("expected %s\n", (expected == NULL) ? "NULL" : expected);
+      printf ("   found %s\n", (found == NULL) ? "NULL" : found);
+      return 0;
+    }
+  if (expected != NULL && 0 != strcmp (expected, found))
+    {
+      printf ("\n*** Error: %s in '%s' ***\n\n", prop, m->name);
+      printf ("expected '%s'\n", expected);
+      printf ("   found '%s'\n", found);
+      return 0;
+    }
   return 1;
 }
 
 static inline int
-check_num_eq (const struct message *m,
-              const char *prop,
-              int expected,
-              int found) {
-  if (expected != found) {
-    printf("\n*** Error: %s in '%s' ***\n\n", prop, m->name);
-    printf("expected %d\n", expected);
-    printf("   found %d\n", found);
-    return 0;
-  }
+check_num_eq (const struct message *m, const char *prop, int expected,
+              int found)
+{
+  if (expected != found)
+    {
+      printf ("\n*** Error: %s in '%s' ***\n\n", prop, m->name);
+      printf ("expected %d\n", expected);
+      printf ("   found %d\n", found);
+      return 0;
+    }
   return 1;
 }
 
-#define MESSAGE_CHECK_STR_EQ(expected, found, prop) \
-  if (!check_str_eq(expected, #prop, expected->prop, found->prop)) return 0
+#define MESSAGE_CHECK_STR_EQ(expected, found, prop)                           \
+  if (!check_str_eq (expected, #prop, expected->prop, found->prop))           \
+  return 0
 
-#define MESSAGE_CHECK_NUM_EQ(expected, found, prop) \
-  if (!check_num_eq(expected, #prop, expected->prop, found->prop)) return 0
+#define MESSAGE_CHECK_NUM_EQ(expected, found, prop)                           \
+  if (!check_num_eq (expected, #prop, expected->prop, found->prop))           \
+  return 0
 
-#define MESSAGE_CHECK_URL_EQ(u, expected, found, prop, fn)           \
-do {                                                                 \
-  char ubuf[256];                                                    \
-                                                                     \
-  if ((u)->field_set & (1 << (fn))) {                                \
-    memcpy(ubuf, (found)->request_url + (u)->field_data[(fn)].off,   \
-      (u)->field_data[(fn)].len);                                    \
-    ubuf[(u)->field_data[(fn)].len] = '\0';                          \
-  } else {                                                           \
-    ubuf[0] = '\0';                                                  \
-  }                                                                  \
-                                                                     \
-  check_str_eq(expected, #prop, expected->prop, ubuf);               \
-} while(0)
+#define MESSAGE_CHECK_URL_EQ(u, expected, found, prop, fn)                    \
+  do                                                                          \
+    {                                                                         \
+      char ubuf[256];                                                         \
+                                                                              \
+      if ((u)->field_set & (1 << (fn)))                                       \
+        {                                                                     \
+          memcpy (ubuf, (found)->request_url + (u)->field_data[(fn)].off,     \
+                  (u)->field_data[(fn)].len);                                 \
+          ubuf[(u)->field_data[(fn)].len] = '\0';                             \
+        }                                                                     \
+      else                                                                    \
+        {                                                                     \
+          ubuf[0] = '\0';                                                     \
+        }                                                                     \
+                                                                              \
+      check_str_eq (expected, #prop, expected->prop, ubuf);                   \
+    }                                                                         \
+  while (0)
 
 int
 message_eq (int index, int connect, const struct message *expected)
@@ -2761,90 +2772,112 @@ message_eq (int index, int connect, const struct message *expected)
   int i;
   struct message *m = &messages[index];
 
-  MESSAGE_CHECK_NUM_EQ(expected, m, http_major);
-  MESSAGE_CHECK_NUM_EQ(expected, m, http_minor);
-  MESSAGE_CHECK_NUM_EQ(expected, m, content_length);
+  MESSAGE_CHECK_NUM_EQ (expected, m, http_major);
+  MESSAGE_CHECK_NUM_EQ (expected, m, http_minor);
+  MESSAGE_CHECK_NUM_EQ (expected, m, content_length);
 
-  if (expected->type == HTTP_REQUEST) {
-    MESSAGE_CHECK_NUM_EQ(expected, m, method);
-  } else {
-    MESSAGE_CHECK_NUM_EQ(expected, m, status_code);
-    MESSAGE_CHECK_STR_EQ(expected, m, response_status);
-    assert(m->status_cb_called);
-  }
+  if (expected->type == HTTP_REQUEST)
+    {
+      MESSAGE_CHECK_NUM_EQ (expected, m, method);
+    }
+  else
+    {
+      MESSAGE_CHECK_NUM_EQ (expected, m, status_code);
+      MESSAGE_CHECK_STR_EQ (expected, m, response_status);
+      assert (m->status_cb_called);
+    }
 
-  if (!connect) {
-    MESSAGE_CHECK_NUM_EQ(expected, m, should_keep_alive);
-    MESSAGE_CHECK_NUM_EQ(expected, m, message_complete_on_eof);
-  }
+  if (!connect)
+    {
+      MESSAGE_CHECK_NUM_EQ (expected, m, should_keep_alive);
+      MESSAGE_CHECK_NUM_EQ (expected, m, message_complete_on_eof);
+    }
 
-  assert(m->message_begin_cb_called);
-  assert(m->headers_complete_cb_called);
-  assert(m->message_complete_cb_called);
+  assert (m->message_begin_cb_called);
+  assert (m->headers_complete_cb_called);
+  assert (m->message_complete_cb_called);
 
-
-  MESSAGE_CHECK_STR_EQ(expected, m, request_url);
+  MESSAGE_CHECK_STR_EQ (expected, m, request_url);
 
   /* Check URL components; we can't do this w/ CONNECT since it doesn't
    * send us a well-formed URL.
    */
-  if (*m->request_url && m->method != HTTP_CONNECT) {
-    struct http_parser_url u;
+  if (*m->request_url && m->method != HTTP_CONNECT)
+    {
+      struct http_parser_url u;
 
-    if (http_parser_parse_url(m->request_url, strlen(m->request_url), 0, &u)) {
-      fprintf(stderr, "\n\n*** failed to parse URL %s ***\n\n",
-        m->request_url);
-      abort();
+      if (http_parser_parse_url (m->request_url, strlen (m->request_url), 0,
+                                 &u))
+        {
+          fprintf (stderr, "\n\n*** failed to parse URL %s ***\n\n",
+                   m->request_url);
+          abort ();
+        }
+
+      if (expected->host)
+        {
+          MESSAGE_CHECK_URL_EQ (&u, expected, m, host, UF_HOST);
+        }
+
+      if (expected->userinfo)
+        {
+          MESSAGE_CHECK_URL_EQ (&u, expected, m, userinfo, UF_USERINFO);
+        }
+
+      m->port = (u.field_set & (1 << UF_PORT)) ? u.port : 0;
+
+      MESSAGE_CHECK_URL_EQ (&u, expected, m, query_string, UF_QUERY);
+      MESSAGE_CHECK_URL_EQ (&u, expected, m, fragment, UF_FRAGMENT);
+      MESSAGE_CHECK_URL_EQ (&u, expected, m, request_path, UF_PATH);
+      MESSAGE_CHECK_NUM_EQ (expected, m, port);
     }
 
-    if (expected->host) {
-      MESSAGE_CHECK_URL_EQ(&u, expected, m, host, UF_HOST);
+  if (connect)
+    {
+      check_num_eq (m, "body_size", 0, m->body_size);
+    }
+  else if (expected->body_size)
+    {
+      MESSAGE_CHECK_NUM_EQ (expected, m, body_size);
+    }
+  else
+    {
+      MESSAGE_CHECK_STR_EQ (expected, m, body);
     }
 
-    if (expected->userinfo) {
-      MESSAGE_CHECK_URL_EQ(&u, expected, m, userinfo, UF_USERINFO);
+  if (connect)
+    {
+      check_num_eq (m, "num_chunks_complete", 0, m->num_chunks_complete);
+    }
+  else
+    {
+      assert (m->num_chunks == m->num_chunks_complete);
+      MESSAGE_CHECK_NUM_EQ (expected, m, num_chunks_complete);
+      for (i = 0; i < m->num_chunks && i < MAX_CHUNKS; i++)
+        {
+          MESSAGE_CHECK_NUM_EQ (expected, m, chunk_lengths[i]);
+        }
     }
 
-    m->port = (u.field_set & (1 << UF_PORT)) ?
-      u.port : 0;
-
-    MESSAGE_CHECK_URL_EQ(&u, expected, m, query_string, UF_QUERY);
-    MESSAGE_CHECK_URL_EQ(&u, expected, m, fragment, UF_FRAGMENT);
-    MESSAGE_CHECK_URL_EQ(&u, expected, m, request_path, UF_PATH);
-    MESSAGE_CHECK_NUM_EQ(expected, m, port);
-  }
-
-  if (connect) {
-    check_num_eq(m, "body_size", 0, m->body_size);
-  } else if (expected->body_size) {
-    MESSAGE_CHECK_NUM_EQ(expected, m, body_size);
-  } else {
-    MESSAGE_CHECK_STR_EQ(expected, m, body);
-  }
-
-  if (connect) {
-    check_num_eq(m, "num_chunks_complete", 0, m->num_chunks_complete);
-  } else {
-    assert(m->num_chunks == m->num_chunks_complete);
-    MESSAGE_CHECK_NUM_EQ(expected, m, num_chunks_complete);
-    for (i = 0; i < m->num_chunks && i < MAX_CHUNKS; i++) {
-      MESSAGE_CHECK_NUM_EQ(expected, m, chunk_lengths[i]);
-    }
-  }
-
-  MESSAGE_CHECK_NUM_EQ(expected, m, num_headers);
+  MESSAGE_CHECK_NUM_EQ (expected, m, num_headers);
 
   int r;
-  for (i = 0; i < m->num_headers; i++) {
-    r = check_str_eq(expected, "header field", expected->headers[i][0], m->headers[i][0]);
-    if (!r) return 0;
-    r = check_str_eq(expected, "header value", expected->headers[i][1], m->headers[i][1]);
-    if (!r) return 0;
-  }
+  for (i = 0; i < m->num_headers; i++)
+    {
+      r = check_str_eq (expected, "header field", expected->headers[i][0],
+                        m->headers[i][0]);
+      if (!r)
+        return 0;
+      r = check_str_eq (expected, "header value", expected->headers[i][1],
+                        m->headers[i][1]);
+      if (!r)
+        return 0;
+    }
 
-  if (!connect) {
-    MESSAGE_CHECK_STR_EQ(expected, m, upgrade);
-  }
+  if (!connect)
+    {
+      MESSAGE_CHECK_STR_EQ (expected, m, upgrade);
+    }
 
   return 1;
 }
@@ -2854,22 +2887,25 @@ message_eq (int index, int connect, const struct message *expected)
  * messages prevent all subsequent messages from being parsed.
  */
 size_t
-count_parsed_messages(const size_t nmsgs, ...) {
+count_parsed_messages (const size_t nmsgs, ...)
+{
   size_t i;
   va_list ap;
 
-  va_start(ap, nmsgs);
+  va_start (ap, nmsgs);
 
-  for (i = 0; i < nmsgs; i++) {
-    struct message *m = va_arg(ap, struct message *);
+  for (i = 0; i < nmsgs; i++)
+    {
+      struct message *m = va_arg (ap, struct message *);
 
-    if (m->upgrade) {
-      va_end(ap);
-      return i + 1;
+      if (m->upgrade)
+        {
+          va_end (ap);
+          return i + 1;
+        }
     }
-  }
 
-  va_end(ap);
+  va_end (ap);
   return nmsgs;
 }
 
@@ -2877,81 +2913,91 @@ count_parsed_messages(const size_t nmsgs, ...) {
  * parse, verify that upgrade bodies are correct.
  */
 void
-upgrade_message_fix(char *body, const size_t nread, const size_t nmsgs, ...) {
+upgrade_message_fix (char *body, const size_t nread, const size_t nmsgs, ...)
+{
   va_list ap;
   size_t i;
   size_t off = 0;
 
-  va_start(ap, nmsgs);
+  va_start (ap, nmsgs);
 
-  for (i = 0; i < nmsgs; i++) {
-    struct message *m = va_arg(ap, struct message *);
+  for (i = 0; i < nmsgs; i++)
+    {
+      struct message *m = va_arg (ap, struct message *);
 
-    off += strlen(m->raw);
+      off += strlen (m->raw);
 
-    if (m->upgrade) {
-      off -= strlen(m->upgrade);
+      if (m->upgrade)
+        {
+          off -= strlen (m->upgrade);
 
-      /* Check the portion of the response after its specified upgrade */
-      if (!check_str_eq(m, "upgrade", body + off, body + nread)) {
-        abort();
-      }
+          /* Check the portion of the response after its specified upgrade */
+          if (!check_str_eq (m, "upgrade", body + off, body + nread))
+            {
+              abort ();
+            }
 
-      /* Fix up the response so that message_eq() will verify the beginning
-       * of the upgrade */
-      *(body + nread + strlen(m->upgrade)) = '\0';
-      messages[num_messages -1 ].upgrade = body + nread;
+          /* Fix up the response so that message_eq() will verify the beginning
+           * of the upgrade */
+          *(body + nread + strlen (m->upgrade)) = '\0';
+          messages[num_messages - 1].upgrade = body + nread;
 
-      va_end(ap);
-      return;
+          va_end (ap);
+          return;
+        }
     }
-  }
 
-  va_end(ap);
-  printf("\n\n*** Error: expected a message with upgrade ***\n");
+  va_end (ap);
+  printf ("\n\n*** Error: expected a message with upgrade ***\n");
 
-  abort();
+  abort ();
 }
 
 static void
 print_error (const char *raw, size_t error_location)
 {
-  fprintf(stderr, "\n*** %s ***\n\n",
-          http_errno_description(HTTP_PARSER_ERRNO(&parser)));
+  fprintf (stderr, "\n*** %s ***\n\n",
+           http_errno_description (HTTP_PARSER_ERRNO (&parser)));
 
   int this_line = 0, char_len = 0;
-  size_t i, j, len = strlen(raw), error_location_line = 0;
-  for (i = 0; i < len; i++) {
-    if (i == error_location) this_line = 1;
-    switch (raw[i]) {
-      case '\r':
-        char_len = 2;
-        fprintf(stderr, "\\r");
-        break;
+  size_t i, j, len = strlen (raw), error_location_line = 0;
+  for (i = 0; i < len; i++)
+    {
+      if (i == error_location)
+        this_line = 1;
+      switch (raw[i])
+        {
+        case '\r':
+          char_len = 2;
+          fprintf (stderr, "\\r");
+          break;
 
-      case '\n':
-        fprintf(stderr, "\\n\n");
+        case '\n':
+          fprintf (stderr, "\\n\n");
 
-        if (this_line) goto print;
+          if (this_line)
+            goto print;
 
-        error_location_line = 0;
-        continue;
+          error_location_line = 0;
+          continue;
 
-      default:
-        char_len = 1;
-        fputc(raw[i], stderr);
-        break;
+        default:
+          char_len = 1;
+          fputc (raw[i], stderr);
+          break;
+        }
+      if (!this_line)
+        error_location_line += char_len;
     }
-    if (!this_line) error_location_line += char_len;
-  }
 
-  fprintf(stderr, "[eof]\n");
+  fprintf (stderr, "[eof]\n");
 
- print:
-  for (j = 0; j < error_location_line; j++) {
-    fputc(' ', stderr);
-  }
-  fprintf(stderr, "^\n\nerror location: %u\n", (unsigned int)error_location);
+print:
+  for (j = 0; j < error_location_line; j++)
+    {
+      fputc (' ', stderr);
+    }
+  fprintf (stderr, "^\n\nerror location: %u\n", (unsigned int)error_location);
 }
 
 void
@@ -2960,14 +3006,17 @@ test_preserve_data (void)
   char my_data[] = "application-specific data";
   http_parser parser;
   parser.data = my_data;
-  http_parser_init(&parser, HTTP_REQUEST);
-  if (parser.data != my_data) {
-    printf("\n*** parser.data not preserved accross http_parser_init ***\n\n");
-    abort();
-  }
+  http_parser_init (&parser, HTTP_REQUEST);
+  if (parser.data != my_data)
+    {
+      printf (
+          "\n*** parser.data not preserved accross http_parser_init ***\n\n");
+      abort ();
+    }
 }
 
-struct url_test {
+struct url_test
+{
   const char *name;
   const char *url;
   int is_connect;
@@ -3533,20 +3582,19 @@ dump_url (const char *url, const struct http_parser_url *u)
 {
   unsigned int i;
 
-  printf("\tfield_set: 0x%x, port: %u\n", u->field_set, u->port);
-  for (i = 0; i < UF_MAX; i++) {
-    if ((u->field_set & (1 << i)) == 0) {
-      printf("\tfield_data[%u]: unset\n", i);
-      continue;
-    }
+  printf ("\tfield_set: 0x%x, port: %u\n", u->field_set, u->port);
+  for (i = 0; i < UF_MAX; i++)
+    {
+      if ((u->field_set & (1 << i)) == 0)
+        {
+          printf ("\tfield_data[%u]: unset\n", i);
+          continue;
+        }
 
-    printf("\tfield_data[%u]: off: %u len: %u part: \"%.*s\n\"",
-           i,
-           u->field_data[i].off,
-           u->field_data[i].len,
-           u->field_data[i].len,
-           url + u->field_data[i].off);
-  }
+      printf ("\tfield_data[%u]: off: %u len: %u part: \"%.*s\n\"", i,
+              u->field_data[i].off, u->field_data[i].len, u->field_data[i].len,
+              url + u->field_data[i].off);
+    }
 }
 
 void
@@ -3557,343 +3605,368 @@ test_parse_url (void)
   unsigned int i;
   int rv;
 
-  for (i = 0; i < (sizeof(url_tests) / sizeof(url_tests[0])); i++) {
-    test = &url_tests[i];
-    memset(&u, 0, sizeof(u));
+  for (i = 0; i < (sizeof (url_tests) / sizeof (url_tests[0])); i++)
+    {
+      test = &url_tests[i];
+      memset (&u, 0, sizeof (u));
 
-    rv = http_parser_parse_url(test->url,
-                               test->url ? strlen(test->url) : 0,
-                               test->is_connect,
-                               &u);
+      rv = http_parser_parse_url (
+          test->url, test->url ? strlen (test->url) : 0, test->is_connect, &u);
 
-    if (test->rv == 0) {
-      if (rv != 0) {
-        printf("\n*** http_parser_parse_url(\"%s\") \"%s\" test failed, "
-               "unexpected rv %d ***\n\n", test->url, test->name, rv);
-        abort();
-      }
+      if (test->rv == 0)
+        {
+          if (rv != 0)
+            {
+              printf (
+                  "\n*** http_parser_parse_url(\"%s\") \"%s\" test failed, "
+                  "unexpected rv %d ***\n\n",
+                  test->url, test->name, rv);
+              abort ();
+            }
 
-      if (memcmp(&u, &test->u, sizeof(u)) != 0) {
-        printf("\n*** http_parser_parse_url(\"%s\") \"%s\" failed ***\n",
-               test->url, test->name);
+          if (memcmp (&u, &test->u, sizeof (u)) != 0)
+            {
+              printf (
+                  "\n*** http_parser_parse_url(\"%s\") \"%s\" failed ***\n",
+                  test->url, test->name);
 
-        printf("target http_parser_url:\n");
-        dump_url(test->url, &test->u);
-        printf("result http_parser_url:\n");
-        dump_url(test->url, &u);
+              printf ("target http_parser_url:\n");
+              dump_url (test->url, &test->u);
+              printf ("result http_parser_url:\n");
+              dump_url (test->url, &u);
 
-        abort();
-      }
-    } else {
-      /* test->rv != 0 */
-      if (rv == 0) {
-        printf("\n*** http_parser_parse_url(\"%s\") \"%s\" test failed, "
-               "unexpected rv %d ***\n\n", test->url, test->name, rv);
-        abort();
-      }
+              abort ();
+            }
+        }
+      else
+        {
+          /* test->rv != 0 */
+          if (rv == 0)
+            {
+              printf (
+                  "\n*** http_parser_parse_url(\"%s\") \"%s\" test failed, "
+                  "unexpected rv %d ***\n\n",
+                  test->url, test->name, rv);
+              abort ();
+            }
+        }
     }
-  }
 }
 
 void
 test_method_str (void)
 {
-  assert(0 == strcmp("GET", http_method_str(HTTP_GET)));
-  assert(0 == strcmp("<unknown>", http_method_str(1337)));
+  assert (0 == strcmp ("GET", http_method_str (HTTP_GET)));
+  assert (0 == strcmp ("<unknown>", http_method_str (1337)));
 }
 
 void
 test_status_str (void)
 {
-  assert(0 == strcmp("OK", http_status_str(HTTP_STATUS_OK)));
-  assert(0 == strcmp("Not Found", http_status_str(HTTP_STATUS_NOT_FOUND)));
-  assert(0 == strcmp("<unknown>", http_status_str(1337)));
+  assert (0 == strcmp ("OK", http_status_str (HTTP_STATUS_OK)));
+  assert (0 == strcmp ("Not Found", http_status_str (HTTP_STATUS_NOT_FOUND)));
+  assert (0 == strcmp ("<unknown>", http_status_str (1337)));
 }
 
 void
 test_message (const struct message *message)
 {
-  size_t raw_len = strlen(message->raw);
+  size_t raw_len = strlen (message->raw);
   size_t msg1len;
-  for (msg1len = 0; msg1len < raw_len; msg1len++) {
-    parser_init(message->type);
-    if (message->allow_chunked_length) {
-      parser.allow_chunked_length = 1;
+  for (msg1len = 0; msg1len < raw_len; msg1len++)
+    {
+      parser_init (message->type);
+      if (message->allow_chunked_length)
+        {
+          parser.allow_chunked_length = 1;
+        }
+
+      size_t read;
+      const char *msg1 = message->raw;
+      const char *msg2 = msg1 + msg1len;
+      size_t msg2len = raw_len - msg1len;
+
+      if (msg1len)
+        {
+          assert (num_messages == 0);
+          messages[0].headers_complete_cb_called = FALSE;
+
+          read = parse (msg1, msg1len);
+
+          if (!messages[0].headers_complete_cb_called && parser.nread != read)
+            {
+              assert (parser.nread == read);
+              print_error (msg1, read);
+              abort ();
+            }
+
+          if (message->upgrade && parser.upgrade && num_messages > 0)
+            {
+              messages[num_messages - 1].upgrade = msg1 + read;
+              goto test;
+            }
+
+          if (read != msg1len)
+            {
+              print_error (msg1, read);
+              abort ();
+            }
+        }
+
+      read = parse (msg2, msg2len);
+
+      if (message->upgrade && parser.upgrade)
+        {
+          messages[num_messages - 1].upgrade = msg2 + read;
+          goto test;
+        }
+
+      if (read != msg2len)
+        {
+          print_error (msg2, read);
+          abort ();
+        }
+
+      read = parse (NULL, 0);
+
+      if (read != 0)
+        {
+          print_error (message->raw, read);
+          abort ();
+        }
+
+    test:
+
+      if (num_messages != 1)
+        {
+          printf ("\n*** num_messages != 1 after testing '%s' ***\n\n",
+                  message->name);
+          abort ();
+        }
+
+      if (!message_eq (0, 0, message))
+        abort ();
     }
-
-    size_t read;
-    const char *msg1 = message->raw;
-    const char *msg2 = msg1 + msg1len;
-    size_t msg2len = raw_len - msg1len;
-
-    if (msg1len) {
-      assert(num_messages == 0);
-      messages[0].headers_complete_cb_called = FALSE;
-
-      read = parse(msg1, msg1len);
-
-      if (!messages[0].headers_complete_cb_called && parser.nread != read) {
-        assert(parser.nread == read);
-        print_error(msg1, read);
-        abort();
-      }
-
-      if (message->upgrade && parser.upgrade && num_messages > 0) {
-        messages[num_messages - 1].upgrade = msg1 + read;
-        goto test;
-      }
-
-      if (read != msg1len) {
-        print_error(msg1, read);
-        abort();
-      }
-    }
-
-
-    read = parse(msg2, msg2len);
-
-    if (message->upgrade && parser.upgrade) {
-      messages[num_messages - 1].upgrade = msg2 + read;
-      goto test;
-    }
-
-    if (read != msg2len) {
-      print_error(msg2, read);
-      abort();
-    }
-
-    read = parse(NULL, 0);
-
-    if (read != 0) {
-      print_error(message->raw, read);
-      abort();
-    }
-
-  test:
-
-    if (num_messages != 1) {
-      printf("\n*** num_messages != 1 after testing '%s' ***\n\n", message->name);
-      abort();
-    }
-
-    if(!message_eq(0, 0, message)) abort();
-  }
 }
 
 void
 test_message_count_body (const struct message *message)
 {
-  parser_init(message->type);
+  parser_init (message->type);
 
   size_t read;
-  size_t l = strlen(message->raw);
+  size_t l = strlen (message->raw);
   size_t i, toread;
   size_t chunk = 4024;
 
-  for (i = 0; i < l; i+= chunk) {
-    toread = MIN(l-i, chunk);
-    read = parse_count_body(message->raw + i, toread);
-    if (read != toread) {
-      print_error(message->raw, read);
-      abort();
+  for (i = 0; i < l; i += chunk)
+    {
+      toread = MIN (l - i, chunk);
+      read = parse_count_body (message->raw + i, toread);
+      if (read != toread)
+        {
+          print_error (message->raw, read);
+          abort ();
+        }
     }
-  }
 
+  read = parse_count_body (NULL, 0);
+  if (read != 0)
+    {
+      print_error (message->raw, read);
+      abort ();
+    }
 
-  read = parse_count_body(NULL, 0);
-  if (read != 0) {
-    print_error(message->raw, read);
-    abort();
-  }
+  if (num_messages != 1)
+    {
+      printf ("\n*** num_messages != 1 after testing '%s' ***\n\n",
+              message->name);
+      abort ();
+    }
 
-  if (num_messages != 1) {
-    printf("\n*** num_messages != 1 after testing '%s' ***\n\n", message->name);
-    abort();
-  }
-
-  if(!message_eq(0, 0, message)) abort();
+  if (!message_eq (0, 0, message))
+    abort ();
 }
 
 void
-test_simple_type (const char *buf,
-                  enum http_errno err_expected,
+test_simple_type (const char *buf, enum http_errno err_expected,
                   enum http_parser_type type)
 {
-  parser_init(type);
+  parser_init (type);
 
   enum http_errno err;
 
-  parse(buf, strlen(buf));
-  err = HTTP_PARSER_ERRNO(&parser);
-  parse(NULL, 0);
+  parse (buf, strlen (buf));
+  err = HTTP_PARSER_ERRNO (&parser);
+  parse (NULL, 0);
 
   /* In strict mode, allow us to pass with an unexpected HPE_STRICT as
    * long as the caller isn't expecting success.
    */
 #if HTTP_PARSER_STRICT
-  if (err_expected != err && err_expected != HPE_OK && err != HPE_STRICT) {
+  if (err_expected != err && err_expected != HPE_OK && err != HPE_STRICT)
+    {
 #else
-  if (err_expected != err) {
+  if (err_expected != err)
+    {
 #endif
-    fprintf(stderr, "\n*** test_simple expected %s, but saw %s ***\n\n%s\n",
-        http_errno_name(err_expected), http_errno_name(err), buf);
-    abort();
-  }
+      fprintf (stderr, "\n*** test_simple expected %s, but saw %s ***\n\n%s\n",
+               http_errno_name (err_expected), http_errno_name (err), buf);
+      abort ();
+    }
 }
 
 void
 test_simple (const char *buf, enum http_errno err_expected)
 {
-  test_simple_type(buf, err_expected, HTTP_REQUEST);
+  test_simple_type (buf, err_expected, HTTP_REQUEST);
 }
 
 void
-test_invalid_header_content (int req, const char* str)
+test_invalid_header_content (int req, const char *str)
 {
   http_parser parser;
-  http_parser_init(&parser, req ? HTTP_REQUEST : HTTP_RESPONSE);
+  http_parser_init (&parser, req ? HTTP_REQUEST : HTTP_RESPONSE);
   size_t parsed;
   const char *buf;
-  buf = req ?
-    "GET / HTTP/1.1\r\n" :
-    "HTTP/1.1 200 OK\r\n";
-  parsed = http_parser_execute(&parser, &settings_null, buf, strlen(buf));
-  assert(parsed == strlen(buf));
+  buf = req ? "GET / HTTP/1.1\r\n" : "HTTP/1.1 200 OK\r\n";
+  parsed = http_parser_execute (&parser, &settings_null, buf, strlen (buf));
+  assert (parsed == strlen (buf));
 
   buf = str;
-  size_t buflen = strlen(buf);
+  size_t buflen = strlen (buf);
 
-  parsed = http_parser_execute(&parser, &settings_null, buf, buflen);
-  if (parsed != buflen) {
-    assert(HTTP_PARSER_ERRNO(&parser) == HPE_INVALID_HEADER_TOKEN);
-    return;
-  }
+  parsed = http_parser_execute (&parser, &settings_null, buf, buflen);
+  if (parsed != buflen)
+    {
+      assert (HTTP_PARSER_ERRNO (&parser) == HPE_INVALID_HEADER_TOKEN);
+      return;
+    }
 
-  fprintf(stderr,
-          "\n*** Error expected but none in invalid header content test ***\n");
-  abort();
+  fprintf (
+      stderr,
+      "\n*** Error expected but none in invalid header content test ***\n");
+  abort ();
 }
 
 void
 test_invalid_header_field_content_error (int req)
 {
-  test_invalid_header_content(req, "Foo: F\01ailure");
-  test_invalid_header_content(req, "Foo: B\02ar");
+  test_invalid_header_content (req, "Foo: F\01ailure");
+  test_invalid_header_content (req, "Foo: B\02ar");
 }
 
 void
-test_invalid_header_field (int req, const char* str)
+test_invalid_header_field (int req, const char *str)
 {
   http_parser parser;
-  http_parser_init(&parser, req ? HTTP_REQUEST : HTTP_RESPONSE);
+  http_parser_init (&parser, req ? HTTP_REQUEST : HTTP_RESPONSE);
   size_t parsed;
   const char *buf;
-  buf = req ?
-    "GET / HTTP/1.1\r\n" :
-    "HTTP/1.1 200 OK\r\n";
-  parsed = http_parser_execute(&parser, &settings_null, buf, strlen(buf));
-  assert(parsed == strlen(buf));
+  buf = req ? "GET / HTTP/1.1\r\n" : "HTTP/1.1 200 OK\r\n";
+  parsed = http_parser_execute (&parser, &settings_null, buf, strlen (buf));
+  assert (parsed == strlen (buf));
 
   buf = str;
-  size_t buflen = strlen(buf);
+  size_t buflen = strlen (buf);
 
-  parsed = http_parser_execute(&parser, &settings_null, buf, buflen);
-  if (parsed != buflen) {
-    assert(HTTP_PARSER_ERRNO(&parser) == HPE_INVALID_HEADER_TOKEN);
-    return;
-  }
+  parsed = http_parser_execute (&parser, &settings_null, buf, buflen);
+  if (parsed != buflen)
+    {
+      assert (HTTP_PARSER_ERRNO (&parser) == HPE_INVALID_HEADER_TOKEN);
+      return;
+    }
 
-  fprintf(stderr,
-          "\n*** Error expected but none in invalid header token test ***\n");
-  abort();
+  fprintf (stderr,
+           "\n*** Error expected but none in invalid header token test ***\n");
+  abort ();
 }
 
 void
 test_invalid_header_field_token_error (int req)
 {
-  test_invalid_header_field(req, "Fo@: Failure");
-  test_invalid_header_field(req, "Foo\01\test: Bar");
+  test_invalid_header_field (req, "Fo@: Failure");
+  test_invalid_header_field (req, "Foo\01\test: Bar");
 }
 
 void
 test_double_content_length_error (int req)
 {
   http_parser parser;
-  http_parser_init(&parser, req ? HTTP_REQUEST : HTTP_RESPONSE);
+  http_parser_init (&parser, req ? HTTP_REQUEST : HTTP_RESPONSE);
   size_t parsed;
   const char *buf;
-  buf = req ?
-    "GET / HTTP/1.1\r\n" :
-    "HTTP/1.1 200 OK\r\n";
-  parsed = http_parser_execute(&parser, &settings_null, buf, strlen(buf));
-  assert(parsed == strlen(buf));
+  buf = req ? "GET / HTTP/1.1\r\n" : "HTTP/1.1 200 OK\r\n";
+  parsed = http_parser_execute (&parser, &settings_null, buf, strlen (buf));
+  assert (parsed == strlen (buf));
 
   buf = "Content-Length: 0\r\nContent-Length: 1\r\n\r\n";
-  size_t buflen = strlen(buf);
+  size_t buflen = strlen (buf);
 
-  parsed = http_parser_execute(&parser, &settings_null, buf, buflen);
-  if (parsed != buflen) {
-    assert(HTTP_PARSER_ERRNO(&parser) == HPE_UNEXPECTED_CONTENT_LENGTH);
-    return;
-  }
+  parsed = http_parser_execute (&parser, &settings_null, buf, buflen);
+  if (parsed != buflen)
+    {
+      assert (HTTP_PARSER_ERRNO (&parser) == HPE_UNEXPECTED_CONTENT_LENGTH);
+      return;
+    }
 
-  fprintf(stderr,
-          "\n*** Error expected but none in double content-length test ***\n");
-  abort();
+  fprintf (
+      stderr,
+      "\n*** Error expected but none in double content-length test ***\n");
+  abort ();
 }
 
 void
 test_chunked_content_length_error (int req)
 {
   http_parser parser;
-  http_parser_init(&parser, req ? HTTP_REQUEST : HTTP_RESPONSE);
+  http_parser_init (&parser, req ? HTTP_REQUEST : HTTP_RESPONSE);
   size_t parsed;
   const char *buf;
-  buf = req ?
-    "GET / HTTP/1.1\r\n" :
-    "HTTP/1.1 200 OK\r\n";
-  parsed = http_parser_execute(&parser, &settings_null, buf, strlen(buf));
-  assert(parsed == strlen(buf));
+  buf = req ? "GET / HTTP/1.1\r\n" : "HTTP/1.1 200 OK\r\n";
+  parsed = http_parser_execute (&parser, &settings_null, buf, strlen (buf));
+  assert (parsed == strlen (buf));
 
   buf = "Transfer-Encoding: anything\r\nContent-Length: 1\r\n\r\n";
-  size_t buflen = strlen(buf);
+  size_t buflen = strlen (buf);
 
-  parsed = http_parser_execute(&parser, &settings_null, buf, buflen);
-  if (parsed != buflen) {
-    assert(HTTP_PARSER_ERRNO(&parser) == HPE_UNEXPECTED_CONTENT_LENGTH);
-    return;
-  }
+  parsed = http_parser_execute (&parser, &settings_null, buf, buflen);
+  if (parsed != buflen)
+    {
+      assert (HTTP_PARSER_ERRNO (&parser) == HPE_UNEXPECTED_CONTENT_LENGTH);
+      return;
+    }
 
-  fprintf(stderr,
-          "\n*** Error expected but none in chunked content-length test ***\n");
-  abort();
+  fprintf (
+      stderr,
+      "\n*** Error expected but none in chunked content-length test ***\n");
+  abort ();
 }
 
 void
 test_header_cr_no_lf_error (int req)
 {
   http_parser parser;
-  http_parser_init(&parser, req ? HTTP_REQUEST : HTTP_RESPONSE);
+  http_parser_init (&parser, req ? HTTP_REQUEST : HTTP_RESPONSE);
   size_t parsed;
   const char *buf;
-  buf = req ?
-    "GET / HTTP/1.1\r\n" :
-    "HTTP/1.1 200 OK\r\n";
-  parsed = http_parser_execute(&parser, &settings_null, buf, strlen(buf));
-  assert(parsed == strlen(buf));
+  buf = req ? "GET / HTTP/1.1\r\n" : "HTTP/1.1 200 OK\r\n";
+  parsed = http_parser_execute (&parser, &settings_null, buf, strlen (buf));
+  assert (parsed == strlen (buf));
 
   buf = "Foo: 1\rBar: 1\r\n\r\n";
-  size_t buflen = strlen(buf);
+  size_t buflen = strlen (buf);
 
-  parsed = http_parser_execute(&parser, &settings_null, buf, buflen);
-  if (parsed != buflen) {
-    assert(HTTP_PARSER_ERRNO(&parser) == HPE_LF_EXPECTED);
-    return;
-  }
+  parsed = http_parser_execute (&parser, &settings_null, buf, buflen);
+  if (parsed != buflen)
+    {
+      assert (HTTP_PARSER_ERRNO (&parser) == HPE_LF_EXPECTED);
+      return;
+    }
 
-  fprintf(stderr,
-          "\n*** Error expected but none in header whitespace test ***\n");
-  abort();
+  fprintf (stderr,
+           "\n*** Error expected but none in header whitespace test ***\n");
+  abort ();
 }
 
 void
@@ -3902,79 +3975,82 @@ test_no_overflow_parse_url (void)
   int rv;
   struct http_parser_url u;
 
-  http_parser_url_init(&u);
-  rv = http_parser_parse_url("http://example.com:8001", 22, 0, &u);
+  http_parser_url_init (&u);
+  rv = http_parser_parse_url ("http://example.com:8001", 22, 0, &u);
 
-  if (rv != 0) {
-    fprintf(stderr,
-            "\n*** test_no_overflow_parse_url invalid return value=%d\n",
-            rv);
-    abort();
-  }
+  if (rv != 0)
+    {
+      fprintf (stderr,
+               "\n*** test_no_overflow_parse_url invalid return value=%d\n",
+               rv);
+      abort ();
+    }
 
-  if (u.port != 800) {
-    fprintf(stderr,
-            "\n*** test_no_overflow_parse_url invalid port number=%d\n",
-            u.port);
-    abort();
-  }
+  if (u.port != 800)
+    {
+      fprintf (stderr,
+               "\n*** test_no_overflow_parse_url invalid port number=%d\n",
+               u.port);
+      abort ();
+    }
 }
 
 void
 test_header_overflow_error (int req)
 {
   http_parser parser;
-  http_parser_init(&parser, req ? HTTP_REQUEST : HTTP_RESPONSE);
+  http_parser_init (&parser, req ? HTTP_REQUEST : HTTP_RESPONSE);
   size_t parsed;
   const char *buf;
   buf = req ? "GET / HTTP/1.1\r\n" : "HTTP/1.0 200 OK\r\n";
-  parsed = http_parser_execute(&parser, &settings_null, buf, strlen(buf));
-  assert(parsed == strlen(buf));
+  parsed = http_parser_execute (&parser, &settings_null, buf, strlen (buf));
+  assert (parsed == strlen (buf));
 
   buf = "header-key: header-value\r\n";
-  size_t buflen = strlen(buf);
+  size_t buflen = strlen (buf);
 
   int i;
-  for (i = 0; i < 10000; i++) {
-    parsed = http_parser_execute(&parser, &settings_null, buf, buflen);
-    if (parsed != buflen) {
-      //fprintf(stderr, "error found on iter %d\n", i);
-      assert(HTTP_PARSER_ERRNO(&parser) == HPE_HEADER_OVERFLOW);
-      return;
+  for (i = 0; i < 10000; i++)
+    {
+      parsed = http_parser_execute (&parser, &settings_null, buf, buflen);
+      if (parsed != buflen)
+        {
+          // fprintf(stderr, "error found on iter %d\n", i);
+          assert (HTTP_PARSER_ERRNO (&parser) == HPE_HEADER_OVERFLOW);
+          return;
+        }
     }
-  }
 
-  fprintf(stderr, "\n*** Error expected but none in header overflow test ***\n");
-  abort();
+  fprintf (stderr,
+           "\n*** Error expected but none in header overflow test ***\n");
+  abort ();
 }
-
 
 void
 test_header_nread_value ()
 {
   http_parser parser;
-  http_parser_init(&parser, HTTP_REQUEST);
+  http_parser_init (&parser, HTTP_REQUEST);
   size_t parsed;
   const char *buf;
   buf = "GET / HTTP/1.1\r\nheader: value\nhdr: value\r\n";
-  parsed = http_parser_execute(&parser, &settings_null, buf, strlen(buf));
-  assert(parsed == strlen(buf));
+  parsed = http_parser_execute (&parser, &settings_null, buf, strlen (buf));
+  assert (parsed == strlen (buf));
 
-  assert(parser.nread == strlen(buf));
+  assert (parser.nread == strlen (buf));
 }
-
 
 static void
 test_content_length_overflow (const char *buf, size_t buflen, int expect_ok)
 {
   http_parser parser;
-  http_parser_init(&parser, HTTP_RESPONSE);
-  http_parser_execute(&parser, &settings_null, buf, buflen);
+  http_parser_init (&parser, HTTP_RESPONSE);
+  http_parser_execute (&parser, &settings_null, buf, buflen);
 
   if (expect_ok)
-    assert(HTTP_PARSER_ERRNO(&parser) == HPE_OK);
+    assert (HTTP_PARSER_ERRNO (&parser) == HPE_OK);
   else
-    assert(HTTP_PARSER_ERRNO(&parser) == HPE_INVALID_CONTENT_LENGTH);
+    assert (HTTP_PARSER_ERRNO (&parser) == HPE_INVALID_CONTENT_LENGTH);
 }
 
 void
@@ -3984,120 +4060,126 @@ test_header_content_length_overflow_error (void)
   "HTTP/1.1 200 OK\r\n"                                                       \
   "Content-Length: " #size "\r\n"                                             \
   "\r\n"
-  const char a[] = X(1844674407370955160);  /* 2^64 / 10 - 1 */
-  const char b[] = X(18446744073709551615); /* 2^64-1 */
-  const char c[] = X(18446744073709551616); /* 2^64   */
+  const char a[] = X (1844674407370955160);  /* 2^64 / 10 - 1 */
+  const char b[] = X (18446744073709551615); /* 2^64-1 */
+  const char c[] = X (18446744073709551616); /* 2^64   */
 #undef X
-  test_content_length_overflow(a, sizeof(a) - 1, 1); /* expect ok      */
-  test_content_length_overflow(b, sizeof(b) - 1, 0); /* expect failure */
-  test_content_length_overflow(c, sizeof(c) - 1, 0); /* expect failure */
+  test_content_length_overflow (a, sizeof (a) - 1, 1); /* expect ok      */
+  test_content_length_overflow (b, sizeof (b) - 1, 0); /* expect failure */
+  test_content_length_overflow (c, sizeof (c) - 1, 0); /* expect failure */
 }
 
 void
 test_chunk_content_length_overflow_error (void)
 {
 #define X(size)                                                               \
-    "HTTP/1.1 200 OK\r\n"                                                     \
-    "Transfer-Encoding: chunked\r\n"                                          \
-    "\r\n"                                                                    \
-    #size "\r\n"                                                              \
-    "..."
-  const char a[] = X(FFFFFFFFFFFFFFE);   /* 2^64 / 16 - 1 */
-  const char b[] = X(FFFFFFFFFFFFFFFF);  /* 2^64-1 */
-  const char c[] = X(10000000000000000); /* 2^64   */
+  "HTTP/1.1 200 OK\r\n"                                                       \
+  "Transfer-Encoding: chunked\r\n"                                            \
+  "\r\n" #size "\r\n"                                                         \
+  "..."
+  const char a[] = X (FFFFFFFFFFFFFFE);   /* 2^64 / 16 - 1 */
+  const char b[] = X (FFFFFFFFFFFFFFFF);  /* 2^64-1 */
+  const char c[] = X (10000000000000000); /* 2^64   */
 #undef X
-  test_content_length_overflow(a, sizeof(a) - 1, 1); /* expect ok      */
-  test_content_length_overflow(b, sizeof(b) - 1, 0); /* expect failure */
-  test_content_length_overflow(c, sizeof(c) - 1, 0); /* expect failure */
+  test_content_length_overflow (a, sizeof (a) - 1, 1); /* expect ok      */
+  test_content_length_overflow (b, sizeof (b) - 1, 0); /* expect failure */
+  test_content_length_overflow (c, sizeof (c) - 1, 0); /* expect failure */
 }
 
 void
 test_no_overflow_long_body (int req, size_t length)
 {
   http_parser parser;
-  http_parser_init(&parser, req ? HTTP_REQUEST : HTTP_RESPONSE);
+  http_parser_init (&parser, req ? HTTP_REQUEST : HTTP_RESPONSE);
   size_t parsed;
   size_t i;
   char buf1[3000];
-  size_t buf1len = sprintf(buf1, "%s\r\nConnection: Keep-Alive\r\nContent-Length: %lu\r\n\r\n",
+  size_t buf1len = sprintf (
+      buf1, "%s\r\nConnection: Keep-Alive\r\nContent-Length: %lu\r\n\r\n",
       req ? "POST / HTTP/1.0" : "HTTP/1.0 200 OK", (unsigned long)length);
-  parsed = http_parser_execute(&parser, &settings_null, buf1, buf1len);
+  parsed = http_parser_execute (&parser, &settings_null, buf1, buf1len);
   if (parsed != buf1len)
     goto err;
 
-  for (i = 0; i < length; i++) {
-    char foo = 'a';
-    parsed = http_parser_execute(&parser, &settings_null, &foo, 1);
-    if (parsed != 1)
-      goto err;
-  }
+  for (i = 0; i < length; i++)
+    {
+      char foo = 'a';
+      parsed = http_parser_execute (&parser, &settings_null, &foo, 1);
+      if (parsed != 1)
+        goto err;
+    }
 
-  parsed = http_parser_execute(&parser, &settings_null, buf1, buf1len);
-  if (parsed != buf1len) goto err;
+  parsed = http_parser_execute (&parser, &settings_null, buf1, buf1len);
+  if (parsed != buf1len)
+    goto err;
   return;
 
- err:
-  fprintf(stderr,
-          "\n*** error in test_no_overflow_long_body %s of length %lu ***\n",
-          req ? "REQUEST" : "RESPONSE",
-          (unsigned long)length);
-  abort();
+err:
+  fprintf (stderr,
+           "\n*** error in test_no_overflow_long_body %s of length %lu ***\n",
+           req ? "REQUEST" : "RESPONSE", (unsigned long)length);
+  abort ();
 }
 
 void
-test_multiple3 (const struct message *r1, const struct message *r2, const struct message *r3)
+test_multiple3 (const struct message *r1, const struct message *r2,
+                const struct message *r3)
 {
-  int message_count = count_parsed_messages(3, r1, r2, r3);
+  int message_count = count_parsed_messages (3, r1, r2, r3);
 
-  char total[ strlen(r1->raw)
-            + strlen(r2->raw)
-            + strlen(r3->raw)
-            + 1
-            ];
+  char total[strlen (r1->raw) + strlen (r2->raw) + strlen (r3->raw) + 1];
   total[0] = '\0';
 
-  strcat(total, r1->raw);
-  strcat(total, r2->raw);
-  strcat(total, r3->raw);
+  strcat (total, r1->raw);
+  strcat (total, r2->raw);
+  strcat (total, r3->raw);
 
-  parser_init(r1->type);
-  if (r1->allow_chunked_length ||
-      r2->allow_chunked_length ||
-      r3->allow_chunked_length) {
-    parser.allow_chunked_length = 1;
-  }
+  parser_init (r1->type);
+  if (r1->allow_chunked_length || r2->allow_chunked_length
+      || r3->allow_chunked_length)
+    {
+      parser.allow_chunked_length = 1;
+    }
 
   size_t read;
 
-  read = parse(total, strlen(total));
+  read = parse (total, strlen (total));
 
-  if (parser.upgrade) {
-    upgrade_message_fix(total, read, 3, r1, r2, r3);
-    goto test;
-  }
+  if (parser.upgrade)
+    {
+      upgrade_message_fix (total, read, 3, r1, r2, r3);
+      goto test;
+    }
 
-  if (read != strlen(total)) {
-    print_error(total, read);
-    abort();
-  }
+  if (read != strlen (total))
+    {
+      print_error (total, read);
+      abort ();
+    }
 
-  read = parse(NULL, 0);
+  read = parse (NULL, 0);
 
-  if (read != 0) {
-    print_error(total, read);
-    abort();
-  }
+  if (read != 0)
+    {
+      print_error (total, read);
+      abort ();
+    }
 
 test:
 
-  if (message_count != num_messages) {
-    fprintf(stderr, "\n\n*** Parser didn't see 3 messages only %d *** \n", num_messages);
-    abort();
-  }
+  if (message_count != num_messages)
+    {
+      fprintf (stderr, "\n\n*** Parser didn't see 3 messages only %d *** \n",
+               num_messages);
+      abort ();
+    }
 
-  if (!message_eq(0, 0, r1)) abort();
-  if (message_count > 1 && !message_eq(1, 0, r2)) abort();
-  if (message_count > 2 && !message_eq(2, 0, r3)) abort();
+  if (!message_eq (0, 0, r1))
+    abort ();
+  if (message_count > 1 && !message_eq (1, 0, r2))
+    abort ();
+  if (message_count > 2 && !message_eq (2, 0, r3))
+    abort ();
 }
 
 /* SCAN through every possible breaking to make sure the
@@ -4105,155 +4187,179 @@ test:
  * might come from the socket
  */
 void
-test_scan (const struct message *r1, const struct message *r2, const struct message *r3)
+test_scan (const struct message *r1, const struct message *r2,
+           const struct message *r3)
 {
-  char total[80*1024] = "\0";
-  char buf1[80*1024] = "\0";
-  char buf2[80*1024] = "\0";
-  char buf3[80*1024] = "\0";
+  char total[80 * 1024] = "\0";
+  char buf1[80 * 1024] = "\0";
+  char buf2[80 * 1024] = "\0";
+  char buf3[80 * 1024] = "\0";
 
-  strcat(total, r1->raw);
-  strcat(total, r2->raw);
-  strcat(total, r3->raw);
+  strcat (total, r1->raw);
+  strcat (total, r2->raw);
+  strcat (total, r3->raw);
 
   size_t read;
 
-  int total_len = strlen(total);
+  int total_len = strlen (total);
 
   int total_ops = 2 * (total_len - 1) * (total_len - 2) / 2;
-  int ops = 0 ;
+  int ops = 0;
 
   size_t buf1_len, buf2_len, buf3_len;
-  int message_count = count_parsed_messages(3, r1, r2, r3);
+  int message_count = count_parsed_messages (3, r1, r2, r3);
 
-  int i,j,type_both;
-  for (type_both = 0; type_both < 2; type_both ++ ) {
-    for (j = 2; j < total_len; j ++ ) {
-      for (i = 1; i < j; i ++ ) {
+  int i, j, type_both;
+  for (type_both = 0; type_both < 2; type_both++)
+    {
+      for (j = 2; j < total_len; j++)
+        {
+          for (i = 1; i < j; i++)
+            {
 
-        if (ops % 1000 == 0)  {
-          printf("\b\b\b\b%3.0f%%", 100 * (float)ops /(float)total_ops);
-          fflush(stdout);
+              if (ops % 1000 == 0)
+                {
+                  printf ("\b\b\b\b%3.0f%%",
+                          100 * (float)ops / (float)total_ops);
+                  fflush (stdout);
+                }
+              ops += 1;
+
+              parser_init (type_both ? HTTP_BOTH : r1->type);
+
+              buf1_len = i;
+              strlncpy (buf1, sizeof (buf1), total, buf1_len);
+              buf1[buf1_len] = 0;
+
+              buf2_len = j - i;
+              strlncpy (buf2, sizeof (buf1), total + i, buf2_len);
+              buf2[buf2_len] = 0;
+
+              buf3_len = total_len - j;
+              strlncpy (buf3, sizeof (buf1), total + j, buf3_len);
+              buf3[buf3_len] = 0;
+
+              assert (num_messages == 0);
+              messages[0].headers_complete_cb_called = FALSE;
+
+              read = parse (buf1, buf1_len);
+
+              if (!messages[0].headers_complete_cb_called
+                  && parser.nread != read)
+                {
+                  print_error (buf1, read);
+                  goto error;
+                }
+
+              if (parser.upgrade)
+                goto test;
+
+              if (read != buf1_len)
+                {
+                  print_error (buf1, read);
+                  goto error;
+                }
+
+              read += parse (buf2, buf2_len);
+
+              if (parser.upgrade)
+                goto test;
+
+              if (read != buf1_len + buf2_len)
+                {
+                  print_error (buf2, read);
+                  goto error;
+                }
+
+              read += parse (buf3, buf3_len);
+
+              if (parser.upgrade)
+                goto test;
+
+              if (read != buf1_len + buf2_len + buf3_len)
+                {
+                  print_error (buf3, read);
+                  goto error;
+                }
+
+              parse (NULL, 0);
+
+            test:
+              if (parser.upgrade)
+                {
+                  upgrade_message_fix (total, read, 3, r1, r2, r3);
+                }
+
+              if (message_count != num_messages)
+                {
+                  fprintf (stderr,
+                           "\n\nParser didn't see %d messages only %d\n",
+                           message_count, num_messages);
+                  goto error;
+                }
+
+              if (!message_eq (0, 0, r1))
+                {
+                  fprintf (stderr,
+                           "\n\nError matching messages[0] in test_scan.\n");
+                  goto error;
+                }
+
+              if (message_count > 1 && !message_eq (1, 0, r2))
+                {
+                  fprintf (stderr,
+                           "\n\nError matching messages[1] in test_scan.\n");
+                  goto error;
+                }
+
+              if (message_count > 2 && !message_eq (2, 0, r3))
+                {
+                  fprintf (stderr,
+                           "\n\nError matching messages[2] in test_scan.\n");
+                  goto error;
+                }
+            }
         }
-        ops += 1;
-
-        parser_init(type_both ? HTTP_BOTH : r1->type);
-
-        buf1_len = i;
-        strlncpy(buf1, sizeof(buf1), total, buf1_len);
-        buf1[buf1_len] = 0;
-
-        buf2_len = j - i;
-        strlncpy(buf2, sizeof(buf1), total+i, buf2_len);
-        buf2[buf2_len] = 0;
-
-        buf3_len = total_len - j;
-        strlncpy(buf3, sizeof(buf1), total+j, buf3_len);
-        buf3[buf3_len] = 0;
-
-        assert(num_messages == 0);
-        messages[0].headers_complete_cb_called = FALSE;
-
-        read = parse(buf1, buf1_len);
-
-        if (!messages[0].headers_complete_cb_called && parser.nread != read) {
-          print_error(buf1, read);
-          goto error;
-        }
-
-        if (parser.upgrade) goto test;
-
-        if (read != buf1_len) {
-          print_error(buf1, read);
-          goto error;
-        }
-
-        read += parse(buf2, buf2_len);
-
-        if (parser.upgrade) goto test;
-
-        if (read != buf1_len + buf2_len) {
-          print_error(buf2, read);
-          goto error;
-        }
-
-        read += parse(buf3, buf3_len);
-
-        if (parser.upgrade) goto test;
-
-        if (read != buf1_len + buf2_len + buf3_len) {
-          print_error(buf3, read);
-          goto error;
-        }
-
-        parse(NULL, 0);
-
-test:
-        if (parser.upgrade) {
-          upgrade_message_fix(total, read, 3, r1, r2, r3);
-        }
-
-        if (message_count != num_messages) {
-          fprintf(stderr, "\n\nParser didn't see %d messages only %d\n",
-            message_count, num_messages);
-          goto error;
-        }
-
-        if (!message_eq(0, 0, r1)) {
-          fprintf(stderr, "\n\nError matching messages[0] in test_scan.\n");
-          goto error;
-        }
-
-        if (message_count > 1 && !message_eq(1, 0, r2)) {
-          fprintf(stderr, "\n\nError matching messages[1] in test_scan.\n");
-          goto error;
-        }
-
-        if (message_count > 2 && !message_eq(2, 0, r3)) {
-          fprintf(stderr, "\n\nError matching messages[2] in test_scan.\n");
-          goto error;
-        }
-      }
     }
-  }
-  puts("\b\b\b\b100%");
+  puts ("\b\b\b\b100%");
   return;
 
- error:
-  fprintf(stderr, "i=%d  j=%d\n", i, j);
-  fprintf(stderr, "buf1 (%u) %s\n\n", (unsigned int)buf1_len, buf1);
-  fprintf(stderr, "buf2 (%u) %s\n\n", (unsigned int)buf2_len , buf2);
-  fprintf(stderr, "buf3 (%u) %s\n", (unsigned int)buf3_len, buf3);
-  abort();
+error:
+  fprintf (stderr, "i=%d  j=%d\n", i, j);
+  fprintf (stderr, "buf1 (%u) %s\n\n", (unsigned int)buf1_len, buf1);
+  fprintf (stderr, "buf2 (%u) %s\n\n", (unsigned int)buf2_len, buf2);
+  fprintf (stderr, "buf3 (%u) %s\n", (unsigned int)buf3_len, buf3);
+  abort ();
 }
 
 // user required to free the result
 // string terminated by \0
 char *
-create_large_chunked_message (int body_size_in_kb, const char* headers)
+create_large_chunked_message (int body_size_in_kb, const char *headers)
 {
   int i;
   size_t wrote = 0;
-  size_t headers_len = strlen(headers);
-  size_t bufsize = headers_len + (5+1024+2)*body_size_in_kb + 6;
-  char * buf = malloc(bufsize);
+  size_t headers_len = strlen (headers);
+  size_t bufsize = headers_len + (5 + 1024 + 2) * body_size_in_kb + 6;
+  char *buf = malloc (bufsize);
 
-  memcpy(buf, headers, headers_len);
+  memcpy (buf, headers, headers_len);
   wrote += headers_len;
 
-  for (i = 0; i < body_size_in_kb; i++) {
-    // write 1kb chunk into the body.
-    memcpy(buf + wrote, "400\r\n", 5);
-    wrote += 5;
-    memset(buf + wrote, 'C', 1024);
-    wrote += 1024;
-    strcpy(buf + wrote, "\r\n");
-    wrote += 2;
-  }
+  for (i = 0; i < body_size_in_kb; i++)
+    {
+      // write 1kb chunk into the body.
+      memcpy (buf + wrote, "400\r\n", 5);
+      wrote += 5;
+      memset (buf + wrote, 'C', 1024);
+      wrote += 1024;
+      strcpy (buf + wrote, "\r\n");
+      wrote += 2;
+    }
 
-  memcpy(buf + wrote, "0\r\n\r\n", 6);
+  memcpy (buf + wrote, "0\r\n\r\n", 6);
   wrote += 6;
-  assert(wrote == bufsize);
+  assert (wrote == bufsize);
 
   return buf;
 }
@@ -4263,71 +4369,80 @@ create_large_chunked_message (int body_size_in_kb, const char* headers)
 void
 test_message_pause (const struct message *msg)
 {
-  char *buf = (char*) msg->raw;
-  size_t buflen = strlen(msg->raw);
+  char *buf = (char *)msg->raw;
+  size_t buflen = strlen (msg->raw);
   size_t nread;
 
-  parser_init(msg->type);
-  if (msg->allow_chunked_length) {
-    parser.allow_chunked_length = 1;
-  }
-
-  do {
-    nread = parse_pause(buf, buflen);
-
-    // We can only set the upgrade buffer once we've gotten our message
-    // completion callback.
-    if (messages[0].message_complete_cb_called &&
-        msg->upgrade &&
-        parser.upgrade) {
-      messages[0].upgrade = buf + nread;
-      goto test;
+  parser_init (msg->type);
+  if (msg->allow_chunked_length)
+    {
+      parser.allow_chunked_length = 1;
     }
 
-    if (nread < buflen) {
+  do
+    {
+      nread = parse_pause (buf, buflen);
 
-      // Not much do to if we failed a strict-mode check
-      if (HTTP_PARSER_ERRNO(&parser) == HPE_STRICT) {
-        return;
-      }
+      // We can only set the upgrade buffer once we've gotten our message
+      // completion callback.
+      if (messages[0].message_complete_cb_called && msg->upgrade
+          && parser.upgrade)
+        {
+          messages[0].upgrade = buf + nread;
+          goto test;
+        }
 
-      assert (HTTP_PARSER_ERRNO(&parser) == HPE_PAUSED);
+      if (nread < buflen)
+        {
+
+          // Not much do to if we failed a strict-mode check
+          if (HTTP_PARSER_ERRNO (&parser) == HPE_STRICT)
+            {
+              return;
+            }
+
+          assert (HTTP_PARSER_ERRNO (&parser) == HPE_PAUSED);
+        }
+
+      buf += nread;
+      buflen -= nread;
+      http_parser_pause (&parser, 0);
     }
+  while (buflen > 0);
 
-    buf += nread;
-    buflen -= nread;
-    http_parser_pause(&parser, 0);
-  } while (buflen > 0);
-
-  nread = parse_pause(NULL, 0);
+  nread = parse_pause (NULL, 0);
   assert (nread == 0);
 
 test:
-  if (num_messages != 1) {
-    printf("\n*** num_messages != 1 after testing '%s' ***\n\n", msg->name);
-    abort();
-  }
+  if (num_messages != 1)
+    {
+      printf ("\n*** num_messages != 1 after testing '%s' ***\n\n", msg->name);
+      abort ();
+    }
 
-  if(!message_eq(0, 0, msg)) abort();
+  if (!message_eq (0, 0, msg))
+    abort ();
 }
 
 /* Verify that body and next message won't be parsed in responses to CONNECT */
 void
 test_message_connect (const struct message *msg)
 {
-  char *buf = (char*) msg->raw;
-  size_t buflen = strlen(msg->raw);
+  char *buf = (char *)msg->raw;
+  size_t buflen = strlen (msg->raw);
 
-  parser_init(msg->type);
+  parser_init (msg->type);
 
-  parse_connect(buf, buflen);
+  parse_connect (buf, buflen);
 
-  if (num_messages != 1) {
-    printf("\n*** num_messages != 1 after testing '%s' ***\n\n", msg->name);
-    abort();
-  }
+  if (num_messages != 1)
+    {
+      printf ("\n*** num_messages != 1 after testing '%s' ***\n\n", msg->name);
+      abort ();
+    }
 
-  if(!message_eq(0, 1, msg)) abort();
+  if (!message_eq (0, 1, msg))
+    abort ();
 }
 
 int
@@ -4339,334 +4454,324 @@ main (void)
   unsigned minor;
   unsigned patch;
 
-  version = http_parser_version();
+  version = http_parser_version ();
   major = (version >> 16) & 255;
   minor = (version >> 8) & 255;
   patch = version & 255;
-  printf("http_parser v%u.%u.%u (0x%06lx)\n", major, minor, patch, version);
+  printf ("http_parser v%u.%u.%u (0x%06lx)\n", major, minor, patch, version);
 
-  printf("sizeof(http_parser) = %u\n", (unsigned int)sizeof(http_parser));
+  printf ("sizeof(http_parser) = %u\n", (unsigned int)sizeof (http_parser));
 
 #if defined(__i386__) || defined(__x86_64__)
   /* Should be 32 on both 32 bits and 64 bits x86 because of struct padding,
    * see https://github.com/nodejs/http-parser/issues/507.
    */
-  assert(sizeof(http_parser) == 32);
+  assert (sizeof (http_parser) == 32);
 #endif
 
   //// API
-  test_preserve_data();
-  test_parse_url();
-  test_method_str();
-  test_status_str();
+  test_preserve_data ();
+  test_parse_url ();
+  test_method_str ();
+  test_status_str ();
 
   //// NREAD
-  test_header_nread_value();
+  test_header_nread_value ();
 
   //// OVERFLOW CONDITIONS
-  test_no_overflow_parse_url();
+  test_no_overflow_parse_url ();
 
-  test_header_overflow_error(HTTP_REQUEST);
-  test_no_overflow_long_body(HTTP_REQUEST, 1000);
-  test_no_overflow_long_body(HTTP_REQUEST, 100000);
+  test_header_overflow_error (HTTP_REQUEST);
+  test_no_overflow_long_body (HTTP_REQUEST, 1000);
+  test_no_overflow_long_body (HTTP_REQUEST, 100000);
 
-  test_header_overflow_error(HTTP_RESPONSE);
-  test_no_overflow_long_body(HTTP_RESPONSE, 1000);
-  test_no_overflow_long_body(HTTP_RESPONSE, 100000);
+  test_header_overflow_error (HTTP_RESPONSE);
+  test_no_overflow_long_body (HTTP_RESPONSE, 1000);
+  test_no_overflow_long_body (HTTP_RESPONSE, 100000);
 
-  test_header_content_length_overflow_error();
-  test_chunk_content_length_overflow_error();
+  test_header_content_length_overflow_error ();
+  test_chunk_content_length_overflow_error ();
 
   //// HEADER FIELD CONDITIONS
-  test_double_content_length_error(HTTP_REQUEST);
-  test_chunked_content_length_error(HTTP_REQUEST);
-  test_header_cr_no_lf_error(HTTP_REQUEST);
-  test_invalid_header_field_token_error(HTTP_REQUEST);
-  test_invalid_header_field_content_error(HTTP_REQUEST);
-  test_double_content_length_error(HTTP_RESPONSE);
-  test_chunked_content_length_error(HTTP_RESPONSE);
-  test_header_cr_no_lf_error(HTTP_RESPONSE);
-  test_invalid_header_field_token_error(HTTP_RESPONSE);
-  test_invalid_header_field_content_error(HTTP_RESPONSE);
+  test_double_content_length_error (HTTP_REQUEST);
+  test_chunked_content_length_error (HTTP_REQUEST);
+  test_header_cr_no_lf_error (HTTP_REQUEST);
+  test_invalid_header_field_token_error (HTTP_REQUEST);
+  test_invalid_header_field_content_error (HTTP_REQUEST);
+  test_double_content_length_error (HTTP_RESPONSE);
+  test_chunked_content_length_error (HTTP_RESPONSE);
+  test_header_cr_no_lf_error (HTTP_RESPONSE);
+  test_invalid_header_field_token_error (HTTP_RESPONSE);
+  test_invalid_header_field_content_error (HTTP_RESPONSE);
 
-  test_simple_type(
+  test_simple_type ("POST / HTTP/1.1\r\n"
+                    "Content-Length:\r\n" // empty
+                    "\r\n",
+                    HPE_INVALID_CONTENT_LENGTH, HTTP_REQUEST);
+
+  test_simple_type (
       "POST / HTTP/1.1\r\n"
-      "Content-Length:\r\n"  // empty
+      "Content-Length:  42 \r\n" // Note the surrounding whitespace.
       "\r\n",
-      HPE_INVALID_CONTENT_LENGTH,
-      HTTP_REQUEST);
+      HPE_OK, HTTP_REQUEST);
 
-  test_simple_type(
-      "POST / HTTP/1.1\r\n"
-      "Content-Length:  42 \r\n"  // Note the surrounding whitespace.
-      "\r\n",
-      HPE_OK,
-      HTTP_REQUEST);
+  test_simple_type ("POST / HTTP/1.1\r\n"
+                    "Content-Length: 4 2\r\n"
+                    "\r\n",
+                    HPE_INVALID_CONTENT_LENGTH, HTTP_REQUEST);
 
-  test_simple_type(
-      "POST / HTTP/1.1\r\n"
-      "Content-Length: 4 2\r\n"
-      "\r\n",
-      HPE_INVALID_CONTENT_LENGTH,
-      HTTP_REQUEST);
+  test_simple_type ("POST / HTTP/1.1\r\n"
+                    "Content-Length: 13 37\r\n"
+                    "\r\n",
+                    HPE_INVALID_CONTENT_LENGTH, HTTP_REQUEST);
 
-  test_simple_type(
-      "POST / HTTP/1.1\r\n"
-      "Content-Length: 13 37\r\n"
-      "\r\n",
-      HPE_INVALID_CONTENT_LENGTH,
-      HTTP_REQUEST);
+  test_simple_type ("POST / HTTP/1.1\r\n"
+                    "Content-Length:  42\r\n"
+                    " Hello world!\r\n",
+                    HPE_INVALID_CONTENT_LENGTH, HTTP_REQUEST);
 
-  test_simple_type(
-      "POST / HTTP/1.1\r\n"
-      "Content-Length:  42\r\n"
-      " Hello world!\r\n",
-      HPE_INVALID_CONTENT_LENGTH,
-      HTTP_REQUEST);
-
-  test_simple_type(
-      "POST / HTTP/1.1\r\n"
-      "Content-Length:  42\r\n"
-      " \r\n",
-      HPE_OK,
-      HTTP_REQUEST);
+  test_simple_type ("POST / HTTP/1.1\r\n"
+                    "Content-Length:  42\r\n"
+                    " \r\n",
+                    HPE_OK, HTTP_REQUEST);
 
   //// RESPONSES
 
-  test_simple_type("HTP/1.1 200 OK\r\n\r\n", HPE_INVALID_VERSION, HTTP_RESPONSE);
-  test_simple_type("HTTP/01.1 200 OK\r\n\r\n", HPE_INVALID_VERSION, HTTP_RESPONSE);
-  test_simple_type("HTTP/11.1 200 OK\r\n\r\n", HPE_INVALID_VERSION, HTTP_RESPONSE);
-  test_simple_type("HTTP/1.01 200 OK\r\n\r\n", HPE_INVALID_VERSION, HTTP_RESPONSE);
-  test_simple_type("HTTP/1.1\t200 OK\r\n\r\n", HPE_INVALID_VERSION, HTTP_RESPONSE);
-  test_simple_type("\rHTTP/1.1\t200 OK\r\n\r\n", HPE_INVALID_VERSION, HTTP_RESPONSE);
+  test_simple_type ("HTP/1.1 200 OK\r\n\r\n", HPE_INVALID_VERSION,
+                    HTTP_RESPONSE);
+  test_simple_type ("HTTP/01.1 200 OK\r\n\r\n", HPE_INVALID_VERSION,
+                    HTTP_RESPONSE);
+  test_simple_type ("HTTP/11.1 200 OK\r\n\r\n", HPE_INVALID_VERSION,
+                    HTTP_RESPONSE);
+  test_simple_type ("HTTP/1.01 200 OK\r\n\r\n", HPE_INVALID_VERSION,
+                    HTTP_RESPONSE);
+  test_simple_type ("HTTP/1.1\t200 OK\r\n\r\n", HPE_INVALID_VERSION,
+                    HTTP_RESPONSE);
+  test_simple_type ("\rHTTP/1.1\t200 OK\r\n\r\n", HPE_INVALID_VERSION,
+                    HTTP_RESPONSE);
 
-  for (i = 0; i < ARRAY_SIZE(responses); i++) {
-    test_message(&responses[i]);
-  }
-
-  for (i = 0; i < ARRAY_SIZE(responses); i++) {
-    test_message_pause(&responses[i]);
-  }
-
-  for (i = 0; i < ARRAY_SIZE(responses); i++) {
-    test_message_connect(&responses[i]);
-  }
-
-  for (i = 0; i < ARRAY_SIZE(responses); i++) {
-    if (!responses[i].should_keep_alive) continue;
-    for (j = 0; j < ARRAY_SIZE(responses); j++) {
-      if (!responses[j].should_keep_alive) continue;
-      for (k = 0; k < ARRAY_SIZE(responses); k++) {
-        test_multiple3(&responses[i], &responses[j], &responses[k]);
-      }
+  for (i = 0; i < ARRAY_SIZE (responses); i++)
+    {
+      test_message (&responses[i]);
     }
-  }
 
-  test_message_count_body(&responses[NO_HEADERS_NO_BODY_404]);
-  test_message_count_body(&responses[TRAILING_SPACE_ON_CHUNKED_BODY]);
+  for (i = 0; i < ARRAY_SIZE (responses); i++)
+    {
+      test_message_pause (&responses[i]);
+    }
+
+  for (i = 0; i < ARRAY_SIZE (responses); i++)
+    {
+      test_message_connect (&responses[i]);
+    }
+
+  for (i = 0; i < ARRAY_SIZE (responses); i++)
+    {
+      if (!responses[i].should_keep_alive)
+        continue;
+      for (j = 0; j < ARRAY_SIZE (responses); j++)
+        {
+          if (!responses[j].should_keep_alive)
+            continue;
+          for (k = 0; k < ARRAY_SIZE (responses); k++)
+            {
+              test_multiple3 (&responses[i], &responses[j], &responses[k]);
+            }
+        }
+    }
+
+  test_message_count_body (&responses[NO_HEADERS_NO_BODY_404]);
+  test_message_count_body (&responses[TRAILING_SPACE_ON_CHUNKED_BODY]);
 
   // test very large chunked response
   {
-    char * msg = create_large_chunked_message(31337,
-      "HTTP/1.0 200 OK\r\n"
-      "Transfer-Encoding: chunked\r\n"
-      "Content-Type: text/plain\r\n"
-      "\r\n");
-    struct message large_chunked =
-      {.name= "large chunked"
-      ,.type= HTTP_RESPONSE
-      ,.raw= msg
-      ,.should_keep_alive= FALSE
-      ,.message_complete_on_eof= FALSE
-      ,.http_major= 1
-      ,.http_minor= 0
-      ,.status_code= 200
-      ,.response_status= "OK"
-      ,.content_length= -1
-      ,.num_headers= 2
-      ,.headers=
-        { { "Transfer-Encoding", "chunked" }
-        , { "Content-Type", "text/plain" }
-        }
-      ,.body_size= 31337*1024
-      ,.num_chunks_complete= 31338
-      };
-    for (i = 0; i < MAX_CHUNKS; i++) {
-      large_chunked.chunk_lengths[i] = 1024;
-    }
-    test_message_count_body(&large_chunked);
-    free(msg);
+    char *msg
+        = create_large_chunked_message (31337, "HTTP/1.0 200 OK\r\n"
+                                               "Transfer-Encoding: chunked\r\n"
+                                               "Content-Type: text/plain\r\n"
+                                               "\r\n");
+    struct message large_chunked
+        = { .name = "large chunked",
+            .type = HTTP_RESPONSE,
+            .raw = msg,
+            .should_keep_alive = FALSE,
+            .message_complete_on_eof = FALSE,
+            .http_major = 1,
+            .http_minor = 0,
+            .status_code = 200,
+            .response_status = "OK",
+            .content_length = -1,
+            .num_headers = 2,
+            .headers = { { "Transfer-Encoding", "chunked" },
+                         { "Content-Type", "text/plain" } },
+            .body_size = 31337 * 1024,
+            .num_chunks_complete = 31338 };
+    for (i = 0; i < MAX_CHUNKS; i++)
+      {
+        large_chunked.chunk_lengths[i] = 1024;
+      }
+    test_message_count_body (&large_chunked);
+    free (msg);
   }
 
+  printf ("response scan 1/2      ");
+  test_scan (&responses[TRAILING_SPACE_ON_CHUNKED_BODY],
+             &responses[NO_BODY_HTTP10_KA_204], &responses[NO_REASON_PHRASE]);
 
+  printf ("response scan 2/2      ");
+  test_scan (&responses[BONJOUR_MADAME_FR], &responses[UNDERSTORE_HEADER_KEY],
+             &responses[NO_CARRIAGE_RET]);
 
-  printf("response scan 1/2      ");
-  test_scan( &responses[TRAILING_SPACE_ON_CHUNKED_BODY]
-           , &responses[NO_BODY_HTTP10_KA_204]
-           , &responses[NO_REASON_PHRASE]
-           );
-
-  printf("response scan 2/2      ");
-  test_scan( &responses[BONJOUR_MADAME_FR]
-           , &responses[UNDERSTORE_HEADER_KEY]
-           , &responses[NO_CARRIAGE_RET]
-           );
-
-  puts("responses okay");
-
+  puts ("responses okay");
 
   /// REQUESTS
 
-  test_simple("GET / IHTTP/1.0\r\n\r\n", HPE_INVALID_CONSTANT);
-  test_simple("GET / ICE/1.0\r\n\r\n", HPE_INVALID_CONSTANT);
-  test_simple("GET / HTP/1.1\r\n\r\n", HPE_INVALID_VERSION);
-  test_simple("GET / HTTP/01.1\r\n\r\n", HPE_INVALID_VERSION);
-  test_simple("GET / HTTP/11.1\r\n\r\n", HPE_INVALID_VERSION);
-  test_simple("GET / HTTP/1.01\r\n\r\n", HPE_INVALID_VERSION);
+  test_simple ("GET / IHTTP/1.0\r\n\r\n", HPE_INVALID_CONSTANT);
+  test_simple ("GET / ICE/1.0\r\n\r\n", HPE_INVALID_CONSTANT);
+  test_simple ("GET / HTP/1.1\r\n\r\n", HPE_INVALID_VERSION);
+  test_simple ("GET / HTTP/01.1\r\n\r\n", HPE_INVALID_VERSION);
+  test_simple ("GET / HTTP/11.1\r\n\r\n", HPE_INVALID_VERSION);
+  test_simple ("GET / HTTP/1.01\r\n\r\n", HPE_INVALID_VERSION);
 
-  test_simple("GET / HTTP/1.0\r\nHello: w\1rld\r\n\r\n", HPE_INVALID_HEADER_TOKEN);
-  test_simple("GET / HTTP/1.0\r\nHello: woooo\2rld\r\n\r\n", HPE_INVALID_HEADER_TOKEN);
+  test_simple ("GET / HTTP/1.0\r\nHello: w\1rld\r\n\r\n",
+               HPE_INVALID_HEADER_TOKEN);
+  test_simple ("GET / HTTP/1.0\r\nHello: woooo\2rld\r\n\r\n",
+               HPE_INVALID_HEADER_TOKEN);
 
-  // Extended characters - see nodejs/test/parallel/test-http-headers-obstext.js
-  test_simple("GET / HTTP/1.1\r\n"
-              "Test: Düsseldorf\r\n",
-              HPE_OK);
+  // Extended characters - see
+  // nodejs/test/parallel/test-http-headers-obstext.js
+  test_simple ("GET / HTTP/1.1\r\n"
+               "Test: Düsseldorf\r\n",
+               HPE_OK);
 
   // Well-formed but incomplete
-  test_simple("GET / HTTP/1.1\r\n"
-              "Content-Type: text/plain\r\n"
-              "Content-Length: 6\r\n"
-              "\r\n"
-              "fooba",
-              HPE_OK);
+  test_simple ("GET / HTTP/1.1\r\n"
+               "Content-Type: text/plain\r\n"
+               "Content-Length: 6\r\n"
+               "\r\n"
+               "fooba",
+               HPE_OK);
 
   // Unknown Transfer-Encoding in request
-  test_simple("GET / HTTP/1.1\r\n"
-              "Transfer-Encoding: unknown\r\n"
-              "\r\n",
-              HPE_INVALID_TRANSFER_ENCODING);
+  test_simple ("GET / HTTP/1.1\r\n"
+               "Transfer-Encoding: unknown\r\n"
+               "\r\n",
+               HPE_INVALID_TRANSFER_ENCODING);
 
   static const char *all_methods[] = {
-    "DELETE",
-    "GET",
-    "HEAD",
-    "POST",
-    "PUT",
+    "DELETE", "GET", "HEAD", "POST", "PUT",
     //"CONNECT", //CONNECT can't be tested like other methods, it's a tunnel
-    "OPTIONS",
-    "TRACE",
-    "COPY",
-    "LOCK",
-    "MKCOL",
-    "MOVE",
-    "PROPFIND",
-    "PROPPATCH",
-    "SEARCH",
-    "UNLOCK",
-    "BIND",
-    "REBIND",
-    "UNBIND",
-    "ACL",
-    "REPORT",
-    "MKACTIVITY",
-    "CHECKOUT",
-    "MERGE",
-    "M-SEARCH",
-    "NOTIFY",
-    "SUBSCRIBE",
-    "UNSUBSCRIBE",
-    "PATCH",
-    "PURGE",
-    "MKCALENDAR",
-    "LINK",
-    "UNLINK",
-    0 };
+    "OPTIONS", "TRACE", "COPY", "LOCK", "MKCOL", "MOVE", "PROPFIND",
+    "PROPPATCH", "SEARCH", "UNLOCK", "BIND", "REBIND", "UNBIND", "ACL",
+    "REPORT", "MKACTIVITY", "CHECKOUT", "MERGE", "M-SEARCH", "NOTIFY",
+    "SUBSCRIBE", "UNSUBSCRIBE", "PATCH", "PURGE", "MKCALENDAR", "LINK",
+    "UNLINK", 0
+  };
   const char **this_method;
-  for (this_method = all_methods; *this_method; this_method++) {
-    char buf[200];
-    sprintf(buf, "%s / HTTP/1.1\r\n\r\n", *this_method);
-    test_simple(buf, HPE_OK);
-  }
+  for (this_method = all_methods; *this_method; this_method++)
+    {
+      char buf[200];
+      sprintf (buf, "%s / HTTP/1.1\r\n\r\n", *this_method);
+      test_simple (buf, HPE_OK);
+    }
 
-  static const char *bad_methods[] = {
-      "ASDF",
-      "C******",
-      "COLA",
-      "GEM",
-      "GETA",
-      "M****",
-      "MKCOLA",
-      "PROPPATCHA",
-      "PUN",
-      "PX",
-      "SA",
-      "hello world",
-      0 };
-  for (this_method = bad_methods; *this_method; this_method++) {
-    char buf[200];
-    sprintf(buf, "%s / HTTP/1.1\r\n\r\n", *this_method);
-    test_simple(buf, HPE_INVALID_METHOD);
-  }
+  static const char *bad_methods[]
+      = { "ASDF",   "C******",    "COLA", "GEM", "GETA", "M****",
+          "MKCOLA", "PROPPATCHA", "PUN",  "PX",  "SA",   "hello world",
+          0 };
+  for (this_method = bad_methods; *this_method; this_method++)
+    {
+      char buf[200];
+      sprintf (buf, "%s / HTTP/1.1\r\n\r\n", *this_method);
+      test_simple (buf, HPE_INVALID_METHOD);
+    }
 
   // illegal header field name line folding
-  test_simple("GET / HTTP/1.1\r\n"
-              "name\r\n"
-              " : value\r\n"
-              "\r\n",
-              HPE_INVALID_HEADER_TOKEN);
+  test_simple ("GET / HTTP/1.1\r\n"
+               "name\r\n"
+               " : value\r\n"
+               "\r\n",
+               HPE_INVALID_HEADER_TOKEN);
 
-  const char *dumbluck2 =
-    "GET / HTTP/1.1\r\n"
-    "X-SSL-Nonsense:   -----BEGIN CERTIFICATE-----\r\n"
-    "\tMIIFbTCCBFWgAwIBAgICH4cwDQYJKoZIhvcNAQEFBQAwcDELMAkGA1UEBhMCVUsx\r\n"
-    "\tETAPBgNVBAoTCGVTY2llbmNlMRIwEAYDVQQLEwlBdXRob3JpdHkxCzAJBgNVBAMT\r\n"
-    "\tAkNBMS0wKwYJKoZIhvcNAQkBFh5jYS1vcGVyYXRvckBncmlkLXN1cHBvcnQuYWMu\r\n"
-    "\tdWswHhcNMDYwNzI3MTQxMzI4WhcNMDcwNzI3MTQxMzI4WjBbMQswCQYDVQQGEwJV\r\n"
-    "\tSzERMA8GA1UEChMIZVNjaWVuY2UxEzARBgNVBAsTCk1hbmNoZXN0ZXIxCzAJBgNV\r\n"
-    "\tBAcTmrsogriqMWLAk1DMRcwFQYDVQQDEw5taWNoYWVsIHBhcmQYJKoZIhvcNAQEB\r\n"
-    "\tBQADggEPADCCAQoCggEBANPEQBgl1IaKdSS1TbhF3hEXSl72G9J+WC/1R64fAcEF\r\n"
-    "\tW51rEyFYiIeZGx/BVzwXbeBoNUK41OK65sxGuflMo5gLflbwJtHBRIEKAfVVp3YR\r\n"
-    "\tgW7cMA/s/XKgL1GEC7rQw8lIZT8RApukCGqOVHSi/F1SiFlPDxuDfmdiNzL31+sL\r\n"
-    "\t0iwHDdNkGjy5pyBSB8Y79dsSJtCW/iaLB0/n8Sj7HgvvZJ7x0fr+RQjYOUUfrePP\r\n"
-    "\tu2MSpFyf+9BbC/aXgaZuiCvSR+8Snv3xApQY+fULK/xY8h8Ua51iXoQ5jrgu2SqR\r\n"
-    "\twgA7BUi3G8LFzMBl8FRCDYGUDy7M6QaHXx1ZWIPWNKsCAwEAAaOCAiQwggIgMAwG\r\n"
-    "\tA1UdEwEB/wQCMAAwEQYJYIZIAYb4QgHTTPAQDAgWgMA4GA1UdDwEB/wQEAwID6DAs\r\n"
-    "\tBglghkgBhvhCAQ0EHxYdVUsgZS1TY2llbmNlIFVzZXIgQ2VydGlmaWNhdGUwHQYD\r\n"
-    "\tVR0OBBYEFDTt/sf9PeMaZDHkUIldrDYMNTBZMIGaBgNVHSMEgZIwgY+AFAI4qxGj\r\n"
-    "\tloCLDdMVKwiljjDastqooXSkcjBwMQswCQYDVQQGEwJVSzERMA8GA1UEChMIZVNj\r\n"
-    "\taWVuY2UxEjAQBgNVBAsTCUF1dGhvcml0eTELMAkGA1UEAxMCQ0ExLTArBgkqhkiG\r\n"
-    "\t9w0BCQEWHmNhLW9wZXJhdG9yQGdyaWQtc3VwcG9ydC5hYy51a4IBADApBgNVHRIE\r\n"
-    "\tIjAggR5jYS1vcGVyYXRvckBncmlkLXN1cHBvcnQuYWMudWswGQYDVR0gBBIwEDAO\r\n"
-    "\tBgwrBgEEAdkvAQEBAQYwPQYJYIZIAYb4QgEEBDAWLmh0dHA6Ly9jYS5ncmlkLXN1\r\n"
-    "\tcHBvcnQuYWMudmT4sopwqlBWsvcHViL2NybC9jYWNybC5jcmwwPQYJYIZIAYb4QgEDBDAWLmh0\r\n"
-    "\tdHA6Ly9jYS5ncmlkLXN1cHBvcnQuYWMudWsvcHViL2NybC9jYWNybC5jcmwwPwYD\r\n"
-    "\tVR0fBDgwNjA0oDKgMIYuaHR0cDovL2NhLmdyaWQt5hYy51ay9wdWIv\r\n"
-    "\tY3JsL2NhY3JsLmNybDANBgkqhkiG9w0BAQUFAAOCAQEAS/U4iiooBENGW/Hwmmd3\r\n"
-    "\tXCy6Zrt08YjKCzGNjorT98g8uGsqYjSxv/hmi0qlnlHs+k/3Iobc3LjS5AMYr5L8\r\n"
-    "\tUO7OSkgFFlLHQyC9JzPfmLCAugvzEbyv4Olnsr8hbxF1MbKZoQxUZtMVu29wjfXk\r\n"
-    "\thTeApBv7eaKCWpSp7MCbvgzm74izKhu3vlDk9w6qVrxePfGgpKPqfHiOoGhFnbTK\r\n"
-    "\twTC6o2xq5y0qZ03JonF7OJspEd3I5zKY3E+ov7/ZhW6DqT8UFvsAdjvQbXyhV8Eu\r\n"
-    "\tYhixw1aKEPzNjNowuIseVogKOLXxWI5vAi5HgXdS0/ES5gDGsABo4fqovUKlgop3\r\n"
-    "\tRA==\r\n"
-    "\t-----END CERTIFICATE-----\r\n"
-    "\r\n";
-  test_simple(dumbluck2, HPE_OK);
+  const char *dumbluck2
+      = "GET / HTTP/1.1\r\n"
+        "X-SSL-Nonsense:   -----BEGIN CERTIFICATE-----\r\n"
+        "\tMIIFbTCCBFWgAwIBAgICH4cwDQYJKoZIhvcNAQEFBQAwcDELMAkGA1UEBhMCVUsx\r"
+        "\n"
+        "\tETAPBgNVBAoTCGVTY2llbmNlMRIwEAYDVQQLEwlBdXRob3JpdHkxCzAJBgNVBAMT\r"
+        "\n"
+        "\tAkNBMS0wKwYJKoZIhvcNAQkBFh5jYS1vcGVyYXRvckBncmlkLXN1cHBvcnQuYWMu\r"
+        "\n"
+        "\tdWswHhcNMDYwNzI3MTQxMzI4WhcNMDcwNzI3MTQxMzI4WjBbMQswCQYDVQQGEwJV\r"
+        "\n"
+        "\tSzERMA8GA1UEChMIZVNjaWVuY2UxEzARBgNVBAsTCk1hbmNoZXN0ZXIxCzAJBgNV\r"
+        "\n"
+        "\tBAcTmrsogriqMWLAk1DMRcwFQYDVQQDEw5taWNoYWVsIHBhcmQYJKoZIhvcNAQEB\r"
+        "\n"
+        "\tBQADggEPADCCAQoCggEBANPEQBgl1IaKdSS1TbhF3hEXSl72G9J+WC/"
+        "1R64fAcEF\r\n"
+        "\tW51rEyFYiIeZGx/"
+        "BVzwXbeBoNUK41OK65sxGuflMo5gLflbwJtHBRIEKAfVVp3YR\r\n"
+        "\tgW7cMA/s/XKgL1GEC7rQw8lIZT8RApukCGqOVHSi/"
+        "F1SiFlPDxuDfmdiNzL31+sL\r\n"
+        "\t0iwHDdNkGjy5pyBSB8Y79dsSJtCW/iaLB0/"
+        "n8Sj7HgvvZJ7x0fr+RQjYOUUfrePP\r\n"
+        "\tu2MSpFyf+9BbC/aXgaZuiCvSR+8Snv3xApQY+fULK/"
+        "xY8h8Ua51iXoQ5jrgu2SqR\r\n"
+        "\twgA7BUi3G8LFzMBl8FRCDYGUDy7M6QaHXx1ZWIPWNKsCAwEAAaOCAiQwggIgMAwG\r"
+        "\n"
+        "\tA1UdEwEB/wQCMAAwEQYJYIZIAYb4QgHTTPAQDAgWgMA4GA1UdDwEB/"
+        "wQEAwID6DAs\r\n"
+        "\tBglghkgBhvhCAQ0EHxYdVUsgZS1TY2llbmNlIFVzZXIgQ2VydGlmaWNhdGUwHQYD\r"
+        "\n"
+        "\tVR0OBBYEFDTt/"
+        "sf9PeMaZDHkUIldrDYMNTBZMIGaBgNVHSMEgZIwgY+AFAI4qxGj\r\n"
+        "\tloCLDdMVKwiljjDastqooXSkcjBwMQswCQYDVQQGEwJVSzERMA8GA1UEChMIZVNj\r"
+        "\n"
+        "\taWVuY2UxEjAQBgNVBAsTCUF1dGhvcml0eTELMAkGA1UEAxMCQ0ExLTArBgkqhkiG\r"
+        "\n"
+        "\t9w0BCQEWHmNhLW9wZXJhdG9yQGdyaWQtc3VwcG9ydC5hYy51a4IBADApBgNVHRIE\r"
+        "\n"
+        "\tIjAggR5jYS1vcGVyYXRvckBncmlkLXN1cHBvcnQuYWMudWswGQYDVR0gBBIwEDAO\r"
+        "\n"
+        "\tBgwrBgEEAdkvAQEBAQYwPQYJYIZIAYb4QgEEBDAWLmh0dHA6Ly9jYS5ncmlkLXN1\r"
+        "\n"
+        "\tcHBvcnQuYWMudmT4sopwqlBWsvcHViL2NybC9jYWNybC5jcmwwPQYJYIZIAYb4QgEDB"
+        "DAWLmh0\r\n"
+        "\tdHA6Ly9jYS5ncmlkLXN1cHBvcnQuYWMudWsvcHViL2NybC9jYWNybC5jcmwwPwYD\r"
+        "\n"
+        "\tVR0fBDgwNjA0oDKgMIYuaHR0cDovL2NhLmdyaWQt5hYy51ay9wdWIv\r\n"
+        "\tY3JsL2NhY3JsLmNybDANBgkqhkiG9w0BAQUFAAOCAQEAS/U4iiooBENGW/"
+        "Hwmmd3\r\n"
+        "\tXCy6Zrt08YjKCzGNjorT98g8uGsqYjSxv/hmi0qlnlHs+k/"
+        "3Iobc3LjS5AMYr5L8\r\n"
+        "\tUO7OSkgFFlLHQyC9JzPfmLCAugvzEbyv4Olnsr8hbxF1MbKZoQxUZtMVu29wjfXk\r"
+        "\n"
+        "\thTeApBv7eaKCWpSp7MCbvgzm74izKhu3vlDk9w6qVrxePfGgpKPqfHiOoGhFnbTK\r"
+        "\n"
+        "\twTC6o2xq5y0qZ03JonF7OJspEd3I5zKY3E+ov7/"
+        "ZhW6DqT8UFvsAdjvQbXyhV8Eu\r\n"
+        "\tYhixw1aKEPzNjNowuIseVogKOLXxWI5vAi5HgXdS0/"
+        "ES5gDGsABo4fqovUKlgop3\r\n"
+        "\tRA==\r\n"
+        "\t-----END CERTIFICATE-----\r\n"
+        "\r\n";
+  test_simple (dumbluck2, HPE_OK);
 
-  const char *corrupted_connection =
-    "GET / HTTP/1.1\r\n"
-    "Host: www.example.com\r\n"
-    "Connection\r\033\065\325eep-Alive\r\n"
-    "Accept-Encoding: gzip\r\n"
-    "\r\n";
-  test_simple(corrupted_connection, HPE_INVALID_HEADER_TOKEN);
+  const char *corrupted_connection = "GET / HTTP/1.1\r\n"
+                                     "Host: www.example.com\r\n"
+                                     "Connection\r\033\065\325eep-Alive\r\n"
+                                     "Accept-Encoding: gzip\r\n"
+                                     "\r\n";
+  test_simple (corrupted_connection, HPE_INVALID_HEADER_TOKEN);
 
-  const char *corrupted_header_name =
-    "GET / HTTP/1.1\r\n"
-    "Host: www.example.com\r\n"
-    "X-Some-Header\r\033\065\325eep-Alive\r\n"
-    "Accept-Encoding: gzip\r\n"
-    "\r\n";
-  test_simple(corrupted_header_name, HPE_INVALID_HEADER_TOKEN);
+  const char *corrupted_header_name
+      = "GET / HTTP/1.1\r\n"
+        "Host: www.example.com\r\n"
+        "X-Some-Header\r\033\065\325eep-Alive\r\n"
+        "Accept-Encoding: gzip\r\n"
+        "\r\n";
+  test_simple (corrupted_header_name, HPE_INVALID_HEADER_TOKEN);
 
 #if 0
   // NOTE(Wed Nov 18 11:57:27 CET 2009) this seems okay. we just read body
@@ -4682,51 +4787,52 @@ main (void)
 #endif
   /* TODO sending junk and large headers gets rejected */
 
-
   /* check to make sure our predefined requests are okay */
-  for (i = 0; i < ARRAY_SIZE(requests); i++) {
-    test_message(&requests[i]);
-  }
-
-  for (i = 0; i < ARRAY_SIZE(requests); i++) {
-    test_message_pause(&requests[i]);
-  }
-
-  for (i = 0; i < ARRAY_SIZE(requests); i++) {
-    if (!requests[i].should_keep_alive) continue;
-    for (j = 0; j < ARRAY_SIZE(requests); j++) {
-      if (!requests[j].should_keep_alive) continue;
-      for (k = 0; k < ARRAY_SIZE(requests); k++) {
-        test_multiple3(&requests[i], &requests[j], &requests[k]);
-      }
+  for (i = 0; i < ARRAY_SIZE (requests); i++)
+    {
+      test_message (&requests[i]);
     }
-  }
 
-  printf("request scan 1/4      ");
-  test_scan( &requests[GET_NO_HEADERS_NO_BODY]
-           , &requests[GET_ONE_HEADER_NO_BODY]
-           , &requests[GET_NO_HEADERS_NO_BODY]
-           );
+  for (i = 0; i < ARRAY_SIZE (requests); i++)
+    {
+      test_message_pause (&requests[i]);
+    }
 
-  printf("request scan 2/4      ");
-  test_scan( &requests[POST_CHUNKED_ALL_YOUR_BASE]
-           , &requests[POST_IDENTITY_BODY_WORLD]
-           , &requests[GET_FUNKY_CONTENT_LENGTH]
-           );
+  for (i = 0; i < ARRAY_SIZE (requests); i++)
+    {
+      if (!requests[i].should_keep_alive)
+        continue;
+      for (j = 0; j < ARRAY_SIZE (requests); j++)
+        {
+          if (!requests[j].should_keep_alive)
+            continue;
+          for (k = 0; k < ARRAY_SIZE (requests); k++)
+            {
+              test_multiple3 (&requests[i], &requests[j], &requests[k]);
+            }
+        }
+    }
 
-  printf("request scan 3/4      ");
-  test_scan( &requests[TWO_CHUNKS_MULT_ZERO_END]
-           , &requests[CHUNKED_W_TRAILING_HEADERS]
-           , &requests[CHUNKED_W_NONSENSE_AFTER_LENGTH]
-           );
+  printf ("request scan 1/4      ");
+  test_scan (&requests[GET_NO_HEADERS_NO_BODY],
+             &requests[GET_ONE_HEADER_NO_BODY],
+             &requests[GET_NO_HEADERS_NO_BODY]);
 
-  printf("request scan 4/4      ");
-  test_scan( &requests[QUERY_URL_WITH_QUESTION_MARK_GET]
-           , &requests[PREFIX_NEWLINE_GET ]
-           , &requests[CONNECT_REQUEST]
-           );
+  printf ("request scan 2/4      ");
+  test_scan (&requests[POST_CHUNKED_ALL_YOUR_BASE],
+             &requests[POST_IDENTITY_BODY_WORLD],
+             &requests[GET_FUNKY_CONTENT_LENGTH]);
 
-  puts("requests okay");
+  printf ("request scan 3/4      ");
+  test_scan (&requests[TWO_CHUNKS_MULT_ZERO_END],
+             &requests[CHUNKED_W_TRAILING_HEADERS],
+             &requests[CHUNKED_W_NONSENSE_AFTER_LENGTH]);
+
+  printf ("request scan 4/4      ");
+  test_scan (&requests[QUERY_URL_WITH_QUESTION_MARK_GET],
+             &requests[PREFIX_NEWLINE_GET], &requests[CONNECT_REQUEST]);
+
+  puts ("requests okay");
 
   return 0;
 }
