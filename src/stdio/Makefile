@@ -71,15 +71,16 @@ ifeq ($(shell test $(_MEMORY_) -gt 0; echo $$?),0)
 CFLAGS += $(f_sanitize)
 endif
 
+
 
 # basic I/O
 stdio_basic_raw_binout := $(bin_path)/$(stdio_prefix)_basic_raw$(bin_ext)
 stdio_basic_raw_cppout := $(tmp_path)/$(stdio_prefix)_basic_raw$(cpp_ext)
 stdio_basic_err_binout := $(bin_path)/$(stdio_prefix)_basic_err$(bin_ext)
 
-stdio_basic: $(stdio_basic_raw_binout)          \
+stdio_basic: $(stdio_basic_raw_binout) \
              $(stdio_basic_err_binout)
-stdio_basic_test: stdio_basic_raw_test          \
+stdio_basic_test: stdio_basic_raw_test \
                   stdio_basic_err_test
 
 stdio_basic_raw_test: $(stdio_basic_raw_binout)
@@ -93,11 +94,12 @@ $(stdio_basic_raw_binout): $(stdio_basic_raw_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(stdio_basic_raw_cppout): $(stdio_root)/basic/b.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_pre) $(cpp_out)$@ $^
 
 $(stdio_basic_err_binout): $(stdio_root)/basic/b1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(cpp_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(cpp_out)$@ $^
 
+
 
 # binary I/O
 stdio_binary_basic_binout := $(bin_path)/$(stdio_prefix)_binary_basic$(bin_ext)

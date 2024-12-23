@@ -1,27 +1,27 @@
-#include "_stdio_.h"
+#include "../_stdio_.h"
 
 /* debugging: C-d */
 
 int
-main(void)
+main (void)
 {
-  int  ch;
+  int ch;
 
-  while (EOF != (ch = fgetc(stdin)))
+  while (EOF != (ch = fgetc (stdin)))
     {
-      fputc(ch, stdout);
+      fputc (ch, stdout);
     }
 
-  if (ferror(stdin))
+  if (ferror (stdin))
     {
-      perror("!stdin");
-      exit(EXIT_FAILURE);
+      perror ("!stdin");
+      exit (EXIT_FAILURE);
     }
 
-  if (feof(stdin))
+  if (feof (stdin))
     {
-      fprintf(stdout, "/* %s */.\n", "end of file");
+      fprintf (stdout, "/* %s */.\n", "end of file");
     }
 
-  exit(EXIT_SUCCESS);
+  exit (EXIT_SUCCESS);
 }

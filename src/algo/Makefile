@@ -1,8 +1,8 @@
+# -*- mode:makefile-gmake -*-
 #
 # ./configure --has-algo
 # make clean test
 #
-
 
 algo: _algo_                                    \
       algo_compress                             \
@@ -168,15 +168,15 @@ algo_hash_djb2_binout := $(bin_path)/$(algo_prefix)_hash_djb2$(bin_ext)
 algo_hash_sdbm_binout := $(bin_path)/$(algo_prefix)_hash_sdbm$(bin_ext)
 algo_hash_jenkins_binout := $(bin_path)/$(algo_prefix)_hash_jenkins$(bin_ext)
 
-algo_hash: $(algo_hash_kr1_binout) \
-           $(algo_hash_kr2_binout) \
-           $(algo_hash_djb2_binout) \
+algo_hash: $(algo_hash_kr1_binout)              \
+           $(algo_hash_kr2_binout)              \
+           $(algo_hash_djb2_binout)             \
            $(algo_hash_sdbm_binout) \
            $(algo_hash_jenkins_binout)
-algo_hash_test: algo_hash_kr1_test \
-                algo_hash_kr2_test \
-                algo_hash_djb2_test \
-                algo_hash_sdbm_test \
+algo_hash_test: algo_hash_kr1_test              \
+                algo_hash_kr2_test              \
+                algo_hash_djb2_test             \
+                algo_hash_sdbm_test             \
                 algo_hash_jenkins_test
 
 algo_hash_kr1_test: $(algo_hash_kr1_binout)
@@ -197,11 +197,11 @@ algo_hash_jenkins_test: $(algo_hash_jenkins_binout)
 
 $(algo_hash_kr1_binout): $(algo_root)/hash/kr1.c \
                          $(algo_root)/hash/_hash_.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(algo_hash_kr2_binout): $(algo_root)/hash/kr2.c \
                          $(algo_root)/hash/_hash_.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(algo_hash_djb2_binout): $(algo_root)/hash/djb2.c \
                           $(algo_root)/hash/_hash_.c
