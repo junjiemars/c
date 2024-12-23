@@ -42,6 +42,7 @@ exp:
   NUM
 | VAR                { $$ = $1->value.var;              }
 | VAR '=' exp        { $$ = $3; $1->value.var = $3;     }
+| '|' exp '|'        { $$ = fabs ($2);                  }
 | FUN '(' exp ')'    { $$ = $1->value.fun ($3);         }
 | exp '+' exp        { $$ = $1 + $3;                    }
 | exp '-' exp        { $$ = $1 - $3;                    }
