@@ -189,7 +189,7 @@ $(flex_fn_binout): $(flex_root)/fn/fn.c \
     $(bin_out)$@ $^ $(flex_lib_math)
 
 $(flex_fn_yout): $(flex_root)/fn/fcalc.y
-	bison -b $(flex_root)/fn/fcalc $^
+	bison -b $(flex_root)/fn/fcalc --html=$(flex_root)/fn/fcalc.html $^
 
 
 
