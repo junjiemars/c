@@ -15,13 +15,15 @@ extern void yyerror (char const *);
 
 typedef double (*FunPtr) (double);
 
-Ast *var_table[N_VAR_TABLE + 1];
-FunPtr fun_table[N_FUN_TABLE + 1];
-
 static unsigned long hash (char const *);
 static void put_var_table (char const *name, Ast *ast);
 static FunPtr lookup_ast_fun (char const *name);
 static double fact (double);
+
+static Ast *var_table[N_VAR_TABLE + 1];
+static FunPtr fun_table[N_FUN_TABLE + 1];
+static double var_e = (double)M_E;
+static double var_pi = (double)M_PI;
 
 Ast *
 new_ast (AstNodeType type, void *val, Ast *lhs, Ast *rhs)
@@ -188,6 +190,13 @@ init_sym_table (void)
 {
   memset (var_table, 0, sizeof (var_table));
   memset (fun_table, 0, sizeof (fun_table));
+
+  /* variable table */
+  var_table[hash ("e")] = new_ast (ANT_VAR, &var_e, NULL, NULL);
+  var_table[hash ("PI")] = var_table[hash ("π")]
+      = new_ast (ANT_VAR, &var_pi, NULL, NULL);
+
+  /* function table */
   fun_table[hash ("atan")] = atan;
   fun_table[hash ("ceil")] = ceil;
   fun_table[hash ("cos")] = cos;

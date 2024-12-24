@@ -40,6 +40,9 @@ EXP	([Ee][-+]?[0-9]+)
 "tan"   { yylval.name = strdup (yytext); return FUN; }
 
  /* name */
+"e" { yylval.name = "e"; return VAR; }
+"π" { yylval.name = "π"; return VAR; }
+"PI" { yylval.name = "PI"; return VAR; }
 [a-z][a-z0-9]* { yylval.name = strdup (yytext); return VAR; }
 
  /* number */
