@@ -8,7 +8,14 @@
 
 
 # check posix features
-# . src/posix/auto
+if [ -z "$POSIX_ROOT" ]; then
+  POSIX_ROOT="src/posix"
+fi
+
+# check ncc.h features
+ncc_sanitize_address="yes"
+ncc_sanitize_leak="yes"
+. ${POSIX_ROOT}/ncc_auto
 
 echo "checking for {flex} ..."
 

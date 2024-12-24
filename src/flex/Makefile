@@ -32,6 +32,7 @@ INC += $(nm_inc_opt)$(flex_root) $(nm_inc_opt)$(root)/posix
 
 YYDEBUG=0
 ifeq ($(nm_build_opt),)
+CFLAGS += $(f_sanitize)
 YYDEBUG=1
 endif
 
