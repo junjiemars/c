@@ -5,7 +5,8 @@
 #
 
 
-flex: flex_basic                                \
+flex: flex_ast                                  \
+      flex_basic                                \
       flex_c                                    \
       flex_calc                                 \
       flex_infix                                \
@@ -13,7 +14,8 @@ flex: flex_basic                                \
       flex_rpn                                  \
       flex_wc
 
-flex_test: flex_basic_test                      \
+flex_test: flex_ast_test                        \
+           flex_basic_test                      \
            flex_c_test                          \
            flex_calc_test                       \
            flex_infix_test                      \
@@ -45,6 +47,42 @@ ifeq (YES, $(has_bison))
 has_flex_bison := YES
 endif
 endif
+
+
+
+# ast: ast on fn
+flex_ast_binout := $(bin_path)/$(flex_prefix)_ast$(bin_ext)
+flex_ast_yout := $(flex_root)/ast/fcalc.tab.c
+flex_ast_yhtml := $(flex_root)/ast/fcalc.html
+flex_ast_lout := $(flex_root)/ast/fcalc.yy.c
+
+ifeq (YES, $(has_bison))
+flex_ast: $(flex_ast_binout)
+flex_ast_test: flex_ast
+	printf "x=sqrt(2)\n x^2 %% 4\n PI\n e\n ln(e)\n" | $(flex_ast_binout)
+else
+flex_ast:
+	@echo "#skip $@, missing bison."
+flex_ast_test: flex_ast
+	@echo "#skip $@, missing bison."
+endif # end of has_bison
+
+flex_ast_clean:
+	test ! -f $(flex_ast_yout) || rm $(flex_root)/ast/fcalc.tab.*
+	test ! -f $(flex_ast_yhtml) || rm $(flex_root)/ast/fcalc.{html,xml}
+	test ! -f $(flex_ast_lout) || rm $(flex_ast_lout)
+
+$(flex_ast_binout): $(flex_root)/ast/ast.c \
+                    $(flex_ast_yout) \
+                    $(flex_ast_lout)
+	$(CC) $(CFLAGS) $(INC) $(LFLAGS) -DYYDEBUG=$(YYDEBUG) \
+    $(bin_out)$@ $^ $(flex_lib_math)
+
+$(flex_ast_yout): $(flex_root)/ast/fcalc.y
+	bison -d -b $(flex_root)/ast/fcalc --html $^
+
+$(flex_ast_lout): $(flex_root)/ast/fcalc.l
+	flex -o $@ $^
 
 
 
