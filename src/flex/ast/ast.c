@@ -25,8 +25,6 @@ static unsigned long hash (char const *);
 static FunPtr lookup_ast_fun (char const *name);
 static double fact (double);
 
-static Var *new_var_table_entry (char const *name);
-
 static Var var_table[N_VAR_TABLE + 1];
 static FunPtr fun_table[N_FUN_TABLE + 1];
 static double var_e = (double)M_E;
@@ -84,7 +82,7 @@ new_ast_fun (char const *name, Ast *rhs)
   fptr = lookup_ast_fun (name);
   if (fptr == NULL)
     {
-      yyerror ("invalid fun: %s", name);
+      yyerror ("fun is invalid: %s", name);
       ast->errnum = ENOENT;
       return ast;
     }
@@ -137,7 +135,7 @@ lookup_ast_var (char const *name)
   if (var.ast == NULL)
     {
       var.ast = new_ast (ANT_VAR, NULL, NULL, NULL);
-      yyerror ("invalid var: %s", name);
+      yyerror ("var is invalid: %s", name);
       var.ast->errnum = ENOENT;
       var.ast->val = NAN;
     }

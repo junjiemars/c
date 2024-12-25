@@ -45,9 +45,9 @@ line:
 
 exp:
   NUM                { $$ = new_ast_val ($1);                  }
-| VAR                { $$ = lookup_ast_var ($1);               }
 | VAR '=' exp        { $$ = new_ast_var ($1, $3);              }
 | FUN '(' exp ')'    { $$ = new_ast_fun ($1, $3);              }
+| VAR                { $$ = lookup_ast_var ($1);               }
 | '|' exp '|'        { $$ = new_ast (ANT_ABS, NULL, NULL, $2); }
 | exp '+' exp        { $$ = new_ast (ANT_ADD, NULL, $1, $3);   }
 | exp '-' exp        { $$ = new_ast (ANT_SUB, NULL, $1, $3);   }
