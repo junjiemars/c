@@ -96,14 +96,12 @@ free_ast (Ast *ast)
   switch (ast->type)
     {
     case ANT_VAR:
+    case ANT_FUN:
       if (ast->rhs)
         {
-          free (ast->rhs);
+          free_ast (ast->rhs);
           ast->rhs = NULL;
         }
-      break;
-    case ANT_FUN:
-      free_ast (ast->rhs);
       break;
     case ANT_ABS:
     case ANT_ADD:
@@ -112,7 +110,11 @@ free_ast (Ast *ast)
     case ANT_DIV:
     case ANT_MOD:
     case ANT_POW:
-      free_ast (ast->rhs);
+      if (ast->rhs)
+        {
+          free_ast (ast->rhs);
+          ast->rhs = NULL;
+        }
     case ANT_FAC:
     case ANT_NEG:
       if (ast->lhs)

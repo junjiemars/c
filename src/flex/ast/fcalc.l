@@ -42,7 +42,7 @@ number	([Ee][-+]?[0-9]+)
 
  /* name */
 "e" { yylval.name = "e"; return VAR; }
-"π" { yylval.name = "PI"; return VAR; }
+"π" |
 "PI" { yylval.name = "PI"; return VAR; }
 [a-z][a-z0-9]* { yylval.name = strdup (yytext); return SYM; }
 
