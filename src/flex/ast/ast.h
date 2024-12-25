@@ -9,6 +9,7 @@ typedef enum AstNodeType
 {
   ANT_NUM = 0,
   ANT_VAR,
+  ANT_ABS,
   ANT_ADD,
   ANT_SUB,
   ANT_MUL,

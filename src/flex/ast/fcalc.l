@@ -15,6 +15,7 @@ EXP	([Ee][-+]?[0-9]+)
 
  /* operator */
 "=" |
+"|" |
 "+" |
 "-" |
 "*" |
@@ -26,22 +27,22 @@ EXP	([Ee][-+]?[0-9]+)
 ")"     { return yytext[0]; }
 
  /* function */
-"atan"  { yylval.name = strdup (yytext); return FUN; }
-"ceil"  { yylval.name = strdup (yytext); return FUN; }
-"cos"   { yylval.name = strdup (yytext); return FUN; }
-"exp"   { yylval.name = strdup (yytext); return FUN; }
-"fabs"  { yylval.name = strdup (yytext); return FUN; }
-"floor" { yylval.name = strdup (yytext); return FUN; }
-"ln"    { yylval.name = strdup (yytext); return FUN; }
-"log"   { yylval.name = strdup (yytext); return FUN; }
-"round" { yylval.name = strdup (yytext); return FUN; }
-"sin"   { yylval.name = strdup (yytext); return FUN; }
-"sqrt"  { yylval.name = strdup (yytext); return FUN; }
-"tan"   { yylval.name = strdup (yytext); return FUN; }
+"atan"  { yylval.name = "atan";  return FUN; }
+"ceil"  { yylval.name = "ceil";  return FUN; }
+"cos"   { yylval.name = "cos";   return FUN; }
+"exp"   { yylval.name = "exp";   return FUN; }
+"fabs"  { yylval.name = "fabs";  return FUN; }
+"floor" { yylval.name = "floor"; return FUN; }
+"ln"    { yylval.name = "ln";    return FUN; }
+"log"   { yylval.name = "log";   return FUN; }
+"round" { yylval.name = "round"; return FUN; }
+"sin"   { yylval.name = "sin";   return FUN; }
+"sqrt"  { yylval.name = "sqrt";  return FUN; }
+"tan"   { yylval.name = "tan";   return FUN; }
 
  /* name */
 "e" { yylval.name = "e"; return VAR; }
-"π" { yylval.name = "π"; return VAR; }
+"π" { yylval.name = "PI"; return VAR; }
 "PI" { yylval.name = "PI"; return VAR; }
 [a-z][a-z0-9]* { yylval.name = strdup (yytext); return VAR; }
 

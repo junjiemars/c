@@ -5,22 +5,29 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define VAR_TABLE_MAX 60
-#define N_VAR_TABLE (VAR_TABLE_MAX + 4)
+#define VAR_TABLE_MAX 64
+#define N_VAR_TABLE (VAR_TABLE_MAX + 3)
 
-#define FUN_TABLE_MAX 60
-#define N_FUN_TABLE (FUN_TABLE_MAX + 4)
+#define FUN_TABLE_MAX 64
+#define N_FUN_TABLE (FUN_TABLE_MAX + 3)
 
-extern void yyerror (char const *);
+extern void yyerror (char const *, ...);
 
 typedef double (*FunPtr) (double);
 
+typedef struct Var
+{
+  Ast *ast;
+  int builtin;
+} Var;
+
 static unsigned long hash (char const *);
-static void put_var_table (char const *name, Ast *ast);
 static FunPtr lookup_ast_fun (char const *name);
 static double fact (double);
 
-static Ast *var_table[N_VAR_TABLE + 1];
+static Var *new_var_table_entry (char const *name);
+
+static Var var_table[N_VAR_TABLE + 1];
 static FunPtr fun_table[N_FUN_TABLE + 1];
 static double var_e = (double)M_E;
 static double var_pi = (double)M_PI;
@@ -53,11 +60,17 @@ new_ast_val (double val)
 Ast *
 new_ast_var (char const *name, Ast *rhs)
 {
-  Ast *ast;
+  unsigned long h = hash (name);
+  Var var = var_table[h];
+  if (var.builtin)
+    {
+      yyerror ("var is builtin: %s", name);
+      return var.ast;
+    }
   rhs->val = eval_ast (rhs);
-  ast = new_ast (ANT_VAR, &rhs->val, NULL, rhs);
-  put_var_table (name, ast);
-  return ast;
+  var.ast = new_ast (ANT_VAR, &rhs->val, NULL, rhs);
+  var_table[h] = var;
+  return var.ast;
 }
 
 Ast *
@@ -65,15 +78,13 @@ new_ast_fun (char const *name, Ast *rhs)
 {
   Ast *ast;
   FunPtr fptr;
-  char err[BUFSIZ] = { 0 };
   rhs->val = eval_ast (rhs);
   ast = new_ast (ANT_FUN, &rhs->val, NULL, rhs);
   ast->val = NAN;
   fptr = lookup_ast_fun (name);
   if (fptr == NULL)
     {
-      snprintf (err, BUFSIZ, "invalid fun: %s", name);
-      yyerror (err);
+      yyerror ("invalid fun: %s", name);
       ast->errnum = ENOENT;
       return ast;
     }
@@ -96,6 +107,7 @@ free_ast (Ast *ast)
     case ANT_FUN:
       free_ast (ast->rhs);
       break;
+    case ANT_ABS:
     case ANT_ADD:
     case ANT_SUB:
     case ANT_MUL:
@@ -121,25 +133,22 @@ Ast *
 lookup_ast_var (char const *name)
 {
   unsigned long h = hash (name);
-  Ast *ast = var_table[h];
-  char err[BUFSIZ] = { 0 };
-  if (ast == NULL)
+  Var var = var_table[h];
+  if (var.ast == NULL)
     {
-      ast = new_ast (ANT_VAR, NULL, NULL, NULL);
-      snprintf (err, BUFSIZ, "invalid var: %s", name);
-      yyerror (err);
-      ast->errnum = ENOENT;
-      ast->val = NAN;
+      var.ast = new_ast (ANT_VAR, NULL, NULL, NULL);
+      yyerror ("invalid var: %s", name);
+      var.ast->errnum = ENOENT;
+      var.ast->val = NAN;
     }
-  return ast;
+  return var.ast;
 }
 
 FunPtr
 lookup_ast_fun (char const *name)
 {
   unsigned long h = hash (name);
-  FunPtr fptr = fun_table[h];
-  return fptr;
+  return fun_table[h];
 }
 
 double
@@ -156,6 +165,9 @@ eval_ast (Ast *ast)
       break;
     case ANT_FUN:
       val = ast->val;
+      break;
+    case ANT_ABS:
+      val = fabs (eval_ast (ast->rhs));
       break;
     case ANT_ADD:
       val = eval_ast (ast->lhs) + eval_ast (ast->rhs);
@@ -192,9 +204,12 @@ init_sym_table (void)
   memset (fun_table, 0, sizeof (fun_table));
 
   /* variable table */
-  var_table[hash ("e")] = new_ast (ANT_VAR, &var_e, NULL, NULL);
-  var_table[hash ("PI")] = var_table[hash ("π")]
-      = new_ast (ANT_VAR, &var_pi, NULL, NULL);
+  var_table[hash ("e")] = (Var){
+    .ast = new_ast (ANT_VAR, &var_e, NULL, NULL),
+    .builtin = 1,
+  };
+  var_table[hash ("PI")]
+      = (Var){ .ast = new_ast (ANT_VAR, &var_pi, NULL, NULL), .builtin = 1 };
 
   /* function table */
   fun_table[hash ("atan")] = atan;
@@ -216,10 +231,10 @@ free_sym_table (void)
 {
   for (int i = 0; i < sizeof (var_table) / sizeof (*var_table); i++)
     {
-      if (var_table[i])
+      if (var_table[i].ast)
         {
-          free (var_table[i]);
-          var_table[i] = NULL;
+          free (var_table[i].ast);
+          var_table[i].ast = NULL;
         }
     }
   for (int i = 0; i < sizeof (fun_table) / sizeof (*fun_table); i++)
@@ -232,22 +247,14 @@ free_sym_table (void)
     }
 }
 
-void
-put_var_table (char const *name, Ast *ast)
-{
-  unsigned long h = hash (name);
-  var_table[h] = ast;
-}
-
 unsigned long
 hash (char const *str)
 {
+  int c;
   unsigned long h;
-  unsigned long w = 3;
-  for (h = 0; *str; str++)
+  for (h = 0; (c = *str) != 0; str++)
     {
-      h += w * (*str);
-      w += 2;
+      h = h * 9 ^ c;
     }
   return h % N_VAR_TABLE + 1;
 }

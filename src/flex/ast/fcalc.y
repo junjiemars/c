@@ -4,7 +4,7 @@
 #include "ast.h"
 
 extern int yylex ();
-void yyerror (char const *);
+void yyerror (char const *, ...);
 
 %}
 
@@ -19,21 +19,19 @@ void yyerror (char const *);
 %token <name> VAR FUN
 %nterm <ast> exp
 
-%left '-' '+'
-%left '*' '/'
-%left '%' '!'
-%right FUN '^'
+%left '-' '+' '*' '/' '%' '!'
+%right FUN '^' '|'
 
 %precedence '='
 %precedence NEG
 
-%start fnseq
+%start astseq
 
 %%
 
-fnseq:
+astseq:
   %empty
-| fnseq line
+| astseq line
 ;
 
 line:
@@ -50,6 +48,7 @@ exp:
 | VAR                { $$ = lookup_ast_var ($1);               }
 | VAR '=' exp        { $$ = new_ast_var ($1, $3);              }
 | FUN '(' exp ')'    { $$ = new_ast_fun ($1, $3);              }
+| '|' exp '|'        { $$ = new_ast (ANT_ABS, NULL, NULL, $2); }
 | exp '+' exp        { $$ = new_ast (ANT_ADD, NULL, $1, $3);   }
 | exp '-' exp        { $$ = new_ast (ANT_SUB, NULL, $1, $3);   }
 | exp '*' exp        { $$ = new_ast (ANT_MUL, NULL, $1, $3);   }
@@ -63,10 +62,9 @@ exp:
 
 %%
 
-#include <ctype.h>
-#include <stddef.h>
+#include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
+#include <stdarg.h>
 
 int
 main (int argc, char **argv)
@@ -82,7 +80,12 @@ main (int argc, char **argv)
 }
 
 void
-yyerror (char const *ss)
+yyerror (char const *fmt, ...)
 {
-  fprintf (stderr, "!panic, %s\n", ss);
+  va_list ap;
+  va_start (ap, fmt);
+  fprintf (stderr, "!panic, ");
+  vfprintf (stderr, fmt, ap);
+  va_end (ap);
+  fprintf (stderr, "\n");
 }
