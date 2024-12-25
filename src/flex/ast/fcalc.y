@@ -16,7 +16,7 @@ void yyerror (char const *, ...);
 
 %token <val> NUM
 %token EOL
-%token <name> VAR FUN
+%token <name> VAR FUN SYM
 %nterm <ast> exp
 
 %left '-' '+' '*' '/' '%' '!'
@@ -46,8 +46,9 @@ line:
 exp:
   NUM                { $$ = new_ast_val ($1);                  }
 | VAR '=' exp        { $$ = new_ast_var ($1, $3);              }
-| FUN '(' exp ')'    { $$ = new_ast_fun ($1, $3);              }
+| SYM '=' exp        { $$ = new_ast_var ($1, $3);              }
 | VAR                { $$ = lookup_ast_var ($1);               }
+| SYM                { $$ = lookup_ast_var ($1);               }
 | '|' exp '|'        { $$ = new_ast (ANT_ABS, NULL, NULL, $2); }
 | exp '+' exp        { $$ = new_ast (ANT_ADD, NULL, $1, $3);   }
 | exp '-' exp        { $$ = new_ast (ANT_SUB, NULL, $1, $3);   }
@@ -58,6 +59,8 @@ exp:
 | exp '^' exp        { $$ = new_ast (ANT_POW, NULL, $1, $3);   }
 | '-' exp  %prec NEG { $$ = new_ast (ANT_NEG, NULL, NULL, $2); }
 | '(' exp ')'        { $$ = $2;                                }
+| FUN '(' exp ')'    { $$ = new_ast_fun ($1, $3);              }
+| SYM '(' exp ')'    { $$ = new_ast_fun ($1, $3);              }
 ;
 
 %%

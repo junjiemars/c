@@ -60,7 +60,7 @@ flex_ast_lout := $(flex_root)/ast/fcalc.yy.c
 ifeq (YES, $(has_bison))
 flex_ast: $(flex_ast_binout)
 flex_ast_test: flex_ast
-	printf "x=sqrt(2)\n x^2 %% 4\n PI\n e\n ln(e)\n" | $(flex_ast_binout)
+	printf "x=sqrt((sqrt1=PI+e+618E-2))\n sqrt1\n e\n" | $(flex_ast_binout)
 else
 flex_ast:
 	@echo "#skip $@, missing bison."

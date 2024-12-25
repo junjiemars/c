@@ -9,7 +9,7 @@ extern void yyerror (char const *);
 %}
 
 /* float exponent */
-EXP	([Ee][-+]?[0-9]+)
+number	([Ee][-+]?[0-9]+)
 
 %%
 
@@ -44,14 +44,14 @@ EXP	([Ee][-+]?[0-9]+)
 "e" { yylval.name = "e"; return VAR; }
 "π" { yylval.name = "PI"; return VAR; }
 "PI" { yylval.name = "PI"; return VAR; }
-[a-z][a-z0-9]* { yylval.name = strdup (yytext); return VAR; }
+[a-z][a-z0-9]* { yylval.name = strdup (yytext); return SYM; }
 
  /* number */
-[0-9]+"."[0-9]*{EXP}? |
-"."?[0-9]+{EXP}? { yylval.val = atof (yytext); return NUM; }
+[0-9]+"."[0-9]*{number}? |
+"."?[0-9]+{number}? { yylval.val = atof (yytext); return NUM; }
 
 \n      { return EOL; }
-[ \t]*  { /* ignore white space */ }
+[ \t]   { /* ignore white space */ }
 .	      { yyerror(yytext); }
 
 %%
