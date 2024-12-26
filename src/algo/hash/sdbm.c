@@ -1,18 +1,11 @@
+#include "../_algo_.h"
 #include "_hash_.h"
 
 int
 main (int argc, char **argv)
 {
-  const char *ss;
-  unsigned long h;
-
-  if (argc > 1)
-    {
-      ss = argv[1];
-      h = hash (ss);
-      print_hash ("sdbm hash", ss, h);
-    }
-
+  FILE *in = (argc > 1) ? fopen (argv[1], "r") : stdin;
+  test_hash (in);
   return 0;
 }
 

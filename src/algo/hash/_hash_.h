@@ -8,8 +8,11 @@
 
 #include "../_algo_.h"
 
-unsigned long hash (const char *ss);
-
-void print_hash (const char *name, const char *ss, unsigned long hash);
+extern unsigned long hash (char const *ss);
+int insert (const char *ss);
+char const *search (char const *ss);
+/* void delete (const char *ss); */
+/* void print_hash (const char *name, const char *ss, unsigned long hash); */
+void test_hash (FILE *in);
 
 #endif /* end of _HASH__H_ */

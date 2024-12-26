@@ -168,32 +168,31 @@ algo_hash_djb2_binout := $(bin_path)/$(algo_prefix)_hash_djb2$(bin_ext)
 algo_hash_sdbm_binout := $(bin_path)/$(algo_prefix)_hash_sdbm$(bin_ext)
 algo_hash_jenkins_binout := $(bin_path)/$(algo_prefix)_hash_jenkins$(bin_ext)
 
-algo_hash: $(algo_hash_kr1_binout)              \
-           $(algo_hash_kr2_binout)              \
-           $(algo_hash_djb2_binout)             \
-           $(algo_hash_sdbm_binout) \
-           $(algo_hash_jenkins_binout)
+algo_hash: algo_hash_kr1                        \
+           algo_hash_kr2                        \
+           algo_hash_djb2                       \
+           algo_hash_sdbm                       \
+           algo_hash_jenkins
 algo_hash_test: algo_hash_kr1_test              \
                 algo_hash_kr2_test              \
                 algo_hash_djb2_test             \
                 algo_hash_sdbm_test             \
                 algo_hash_jenkins_test
-
+algo_hash_kr1: $(algo_hash_kr1_binout)
+algo_hash_kr2: $(algo_hash_kr2_binout)
+algo_hash_djb2: $(algo_hash_djb2_binout)
+algo_hash_sdbm: $(algo_hash_sdbm_binout)
+algo_hash_jenkins: $(algo_hash_jenkins_binout)
 algo_hash_kr1_test: $(algo_hash_kr1_binout)
-	$< "abcABC"
-	$< "abcaBC"
+	echo "abc acb" | $<
 algo_hash_kr2_test: $(algo_hash_kr2_binout)
-	$< "abcABC"
-	$< "abcaBC"
+	echo "abc acb" | $<
 algo_hash_djb2_test: $(algo_hash_djb2_binout)
-	$< "abcABC"
-	$< "abcaBC"
+	echo "abc acb" | $<
 algo_hash_sdbm_test: $(algo_hash_sdbm_binout)
-	$< "abcABC"
-	$< "abcaBC"
+	echo "abc acb" | $<
 algo_hash_jenkins_test: $(algo_hash_jenkins_binout)
-	$< "abcABC"
-	$< "abcaBC"
+	echo "abc acb" | $<
 
 $(algo_hash_kr1_binout): $(algo_root)/hash/kr1.c \
                          $(algo_root)/hash/_hash_.c
