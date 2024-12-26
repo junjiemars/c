@@ -11,6 +11,7 @@ flex: flex_ast                                  \
       flex_calc                                 \
       flex_infix                                \
       flex_fn                                   \
+      flex_lang                                 \
       flex_rpn                                  \
       flex_wc
 
@@ -18,8 +19,9 @@ flex_test: flex_ast_test                        \
            flex_basic_test                      \
            flex_c_test                          \
            flex_calc_test                       \
-           flex_infix_test                      \
            flex_fn_test                         \
+           flex_infix_test                      \
+           flex_lang_test                       \
            flex_rpn_test                        \
            flex_wc_test
 
@@ -155,6 +157,42 @@ $(flex_calc_lexout): $(flex_root)/calc/calc.lex
 	flex -o $@ $^
 $(flex_calc_yout): $(flex_root)/calc/calc.y
 	bison -d -b $(tmp_path)/calc $^
+
+
+
+# lang: on ast
+flex_lang_binout := $(bin_path)/$(flex_prefix)_lang$(bin_ext)
+flex_lang_yout := $(flex_root)/lang/ast.tab.c
+flex_lang_yhtml := $(flex_root)/lang/ast.html
+flex_lang_lout := $(flex_root)/lang/ast.yy.c
+
+ifeq (YES, $(has_bison))
+flex_lang: $(flex_lang_binout)
+flex_lang_test: flex_lang
+	printf "let x=sqrt((PI+e+618E-2));\n x;\n" | $(flex_lang_binout)
+else
+flex_lang:
+	@echo "#skip $@, missing bison."
+flex_lang_test: flex_lang
+	@echo "#skip $@, missing bison."
+endif # end of has_bison
+
+flex_lang_clean:
+	test ! -f $(flex_lang_yout) || rm $(flex_root)/lang/ast.tab.*
+	test ! -f $(flex_lang_yhtml) || rm $(flex_root)/lang/ast.{html,xml}
+	test ! -f $(flex_lang_lout) || rm $(flex_lang_lout)
+
+$(flex_lang_binout): $(flex_root)/lang/lang.c \
+                    $(flex_lang_yout) \
+                    $(flex_lang_lout)
+	$(CC) $(CFLAGS) $(INC) $(LFLAGS) -DYYDEBUG=$(YYDEBUG) \
+    $(bin_out)$@ $^ $(flex_lib_math)
+
+$(flex_lang_yout): $(flex_root)/lang/ast.y
+	bison -d -b $(flex_root)/lang/ast --html $^
+
+$(flex_lang_lout): $(flex_root)/lang/ast.l
+	flex -o $@ $^
 
 
 
