@@ -93,7 +93,7 @@ dump_table (int ninsert)
     {
       if (hash_table[i] != HASH_NONE)
         {
-          printf ("%zu: %s\n", i, hash_table[i]);
+          printf ("%4zu: %s\n", i, hash_table[i]);
           distinct++;
         }
     }
