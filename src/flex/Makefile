@@ -162,7 +162,9 @@ $(flex_calc_yout): $(flex_root)/calc/calc.y
 
 # lang: on ast
 flex_lang_binout := $(bin_path)/$(flex_prefix)_lang$(bin_ext)
-flex_lang_yout := $(flex_root)/lang/ast.tab.c
+flex_lang_ytabc := $(flex_root)/lang/ast.tab.c
+flex_lang_ytabh := $(flex_root)/lang/ast.tab.h
+flex_lang_yout := $(flex_lang_ytabc) $(flex_lang_ytabh)
 flex_lang_yhtml := $(flex_root)/lang/ast.html
 flex_lang_lout := $(flex_root)/lang/ast.yy.c
 
@@ -178,20 +180,21 @@ flex_lang_test: flex_lang
 endif # end of has_bison
 
 flex_lang_clean:
-	test ! -f $(flex_lang_yout) || rm $(flex_root)/lang/ast.tab.*
+	test ! -f $(flex_lang_ytabc) || rm $(flex_lang_ytabc)
+	test ! -f $(flex_lang_ytabh) || rm $(flex_lang_ytabh)
 	test ! -f $(flex_lang_yhtml) || rm $(flex_root)/lang/ast.{html,xml}
 	test ! -f $(flex_lang_lout) || rm $(flex_lang_lout)
 
 $(flex_lang_binout): $(flex_root)/lang/lang.c \
-                    $(flex_lang_yout) \
-                    $(flex_lang_lout)
+                     $(flex_lang_ytabc) \
+                     $(flex_lang_lout)
 	$(CC) $(CFLAGS) $(INC) $(LFLAGS) -DYYDEBUG=$(YYDEBUG) \
     $(bin_out)$@ $^ $(flex_lib_math)
 
 $(flex_lang_yout): $(flex_root)/lang/ast.y
 	bison -d -b $(flex_root)/lang/ast --html $^
 
-$(flex_lang_lout): $(flex_root)/lang/ast.l
+$(flex_lang_lout): $(flex_root)/lang/ast.l $(flex_lang_ytabh)
 	flex -o $@ $^
 
 

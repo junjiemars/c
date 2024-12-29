@@ -34,9 +34,12 @@ Ast *
 new_ast (AstNodeType type, void *val, Ast *lhs, Ast *rhs)
 {
   Ast *ast;
+  int err;
   if (!(ast = calloc (1, sizeof (Ast))))
     {
-      perror (NULL);
+      err = errno;
+      yyerror ("cannot alloc memory");
+      exit (err);
     }
   ast->type = type;
   if (val != NULL)

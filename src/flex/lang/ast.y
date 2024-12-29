@@ -34,11 +34,12 @@ void yyerror (char const *, ...);
 langseq:
   %empty
 | langseq stmt EOL {
-  printf ("= %.19g\n", eval_ast ($2));
+  printf ("= %.19g\n> ", eval_ast ($2));
   free_ast ($2);
 }
-| langseq LET SYM '=' stmt EOL { new_ast_var ($3, $5); }
-| langseq error EOL { yyerrok; }
+| langseq LET SYM '=' stmt EOL { new_ast_var ($3, $5); printf ("> "); }
+| langseq EOL { printf ("> "); }
+| langseq error EOL { yyerrok; printf ("> "); }
 ;
 
 stmt:
@@ -82,6 +83,7 @@ main (int argc, char **argv)
 #endif
     }
   init_sym_table ();
+  printf ("> ");
   return yyparse ();
 }
 
