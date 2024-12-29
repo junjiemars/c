@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 #define VAR_TABLE_MAX 64
 #define N_VAR_TABLE (VAR_TABLE_MAX + 3)
@@ -271,4 +272,15 @@ fact (double d)
       acc *= n--;
     }
   return acc;
+}
+
+void
+yyerror (char const *fmt, ...)
+{
+  va_list ap;
+  va_start (ap, fmt);
+  fprintf (stderr, "!panic, ");
+  vfprintf (stderr, fmt, ap);
+  va_end (ap);
+  fprintf (stderr, "\n");
 }

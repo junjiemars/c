@@ -30,6 +30,8 @@ typedef struct Ast
   struct Ast *rhs;
 } Ast;
 
+void yyerror (char const *fmt, ...);
+
 Ast *new_ast (AstNodeType type, void *val, Ast *lhs, Ast *rhs);
 Ast *new_ast_val (double val);
 Ast *new_ast_var (char const *name, Ast *rhs);

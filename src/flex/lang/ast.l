@@ -4,8 +4,6 @@
 #include "ast.tab.h"
 #include <stdlib.h>
 
-extern void yyerror (char const *);
-
 %}
 
 /* float exponent */
@@ -58,6 +56,6 @@ number	([Ee][-+]?[0-9]+)
 
 \n      { return EOL; }
 [ \t]   { /* ignore white space */ }
-.	      { yyerror (yytext); }
+.	      { yyerror ("character is unkown: (0x%X)", *yytext); }
 
 %%
