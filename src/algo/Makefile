@@ -168,7 +168,7 @@ algo_hash_kr2_binout := $(bin_path)/$(algo_prefix)_hash_kr2$(bin_ext)
 algo_hash_djb2_binout := $(bin_path)/$(algo_prefix)_hash_djb2$(bin_ext)
 algo_hash_sdbm_binout := $(bin_path)/$(algo_prefix)_hash_sdbm$(bin_ext)
 algo_hash_jenkins_binout := $(bin_path)/$(algo_prefix)_hash_jenkins$(bin_ext)
-
+algo_hash_bone_cflags := $(CFLAGS) $(FN_RD) $(FN_LOC)
 algo_hash: algo_hash_bone                       \
            algo_hash_kr1                        \
            algo_hash_kr2                        \
@@ -189,7 +189,7 @@ algo_hash_sdbm: $(algo_hash_sdbm_binout)
 algo_hash_jenkins: $(algo_hash_jenkins_binout)
 
 algo_hash_bone_test: $(algo_hash_bone_binout)
-	echo "25 28 29 23 26 35 22 31 21 26 25 21 31 32 26 20 36 21 27 24" | $<
+	echo "25 28 29 23 26 35 22 31 21 26 25 21 31 32 26 20 36 21 27 24 43" | $<
 algo_hash_kr1_test: $(algo_hash_kr1_binout)
 	echo "abc acb" | $<
 algo_hash_kr2_test: $(algo_hash_kr2_binout)
@@ -202,7 +202,7 @@ algo_hash_jenkins_test: $(algo_hash_jenkins_binout)
 	echo "abc acb" | $<
 
 $(algo_hash_bone_binout): $(algo_root)/hash/bone.c
-	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+	$(CC) $(algo_hash_bone_cflags) $(INC) $(bin_out)$@ $^
 
 $(algo_hash_kr1_binout): $(algo_root)/hash/kr1.c \
                          $(algo_root)/hash/_hash_.c
