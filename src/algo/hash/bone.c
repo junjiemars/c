@@ -21,7 +21,7 @@ typedef int (*fn_probe_t) (int);
 
 int read_number (int *);
 int read_string (int *);
-int insert (int, fn_probe_t, int *);
+int insert (int, int *, fn_probe_t);
 int find_loc_linear_probing (int);
 int find_loc_quadratic_probing (int);
 int find_loc_double_hashing (int);
@@ -51,7 +51,7 @@ main (void)
 
   while (read_table[FN_RD](&n) == 1)
     {
-      if (insert (n, *probe_table[FN_LOC], &i))
+      if (insert (n, &i, *probe_table[FN_LOC]))
         {
           perror ("!panic");
           break;
@@ -87,7 +87,7 @@ read_string (int *out)
 }
 
 int
-insert (int key, fn_probe_t find_loc, int *n)
+insert (int key, int *n, fn_probe_t find_loc)
 {
   int loc;
 
