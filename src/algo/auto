@@ -14,6 +14,9 @@ fi
 # check ncc.h features
 ncc_cache_line_size="yes"
 ncc_cpu_endian="yes"
+ncc_sanitize_address="yes"
+ncc_sanitize_alignment="yes"
+ncc_sanitize_leak="yes"
 . ${POSIX_ROOT}/ncc_auto
 
 # check ndef.h features

@@ -1,8 +1,15 @@
 #include "../_algo_.h"
+#include <ctype.h>
 #include <errno.h>
+#include <stdio.h>
 
+#if !defined(M) || (M < 1)
 #define M 20
-#define N 23
+#endif
+
+#if !defined(N) || (N < M - 3)
+#define N (M + 3)
+#endif
 
 #define H(x) ((x) % N)
 #define H2(x) (((x) + 1) % N)
@@ -18,19 +25,21 @@
 
 typedef struct node_t
 {
-  int num;
+  unsigned num;
   char str[32];
+  int freq;
+  int alpha;
 } node_t;
 
 typedef int (*fn_read_t) (node_t *);
-typedef int (*fn_probe_t) (int);
+typedef int (*fn_probe_t) (unsigned);
 
 int read_number (node_t *);
 int read_string (node_t *);
 int insert (node_t *, int *, fn_probe_t);
-int find_loc_linear_probing (int);
-int find_loc_quadratic_probing (int);
-int find_loc_double_hashing (int);
+int find_loc_linear_probing (unsigned);
+int find_loc_quadratic_probing (unsigned);
+int find_loc_double_hashing (unsigned);
 void dump (void);
 
 node_t hash_table[N + 1];
@@ -51,12 +60,12 @@ fn_probe_t probe_table[] = {
 int
 main (void)
 {
-  node_t node;
   int i = 0;
+  node_t node = { 0 };
 
   memset (hash_table, EMPTY, sizeof (hash_table));
 
-  while (read_table[FN_RD](&node) == 1)
+  while (read_table[FN_RD](&node) != EOF)
     {
       if (insert (&node, &i, *probe_table[FN_LOC]))
         {
@@ -79,16 +88,25 @@ read_number (node_t *node)
 int
 read_string (node_t *node)
 {
-  int h = 0;
-  char *p;
-  int c = scanf ("%s", &node->str[0]);
+  int h = 1;
+  char *p, buf[BUFSIZ];
+  int c = scanf ("%s", &buf[0]);
   if (c == 1)
     {
+      for (char *s1 = buf; *s1; s1++)
+        {
+          if (!isalpha (*s1))
+            {
+              return 0;
+            }
+        }
+      strncpy (node->str, buf, sizeof (node->str));
       for (p = &node->str[0], h = 0; *p; p++)
         {
           h = *p + 31 * h;
         }
     }
+
   node->num = h;
   return c;
 }
@@ -97,6 +115,7 @@ int
 insert (node_t *node, int *n, fn_probe_t find_loc)
 {
   int loc;
+  node_t *one;
 
   loc = find_loc (node->num);
 
@@ -106,18 +125,26 @@ insert (node_t *node, int *n, fn_probe_t find_loc)
       return -1;
     }
 
-  if (hash_table[loc].num == EMPTY)
+  one = &hash_table[loc];
+  node->freq = one->freq;
+
+  if (one->num == EMPTY)
     {
       (*n)++;
+      if (node->str[0] && isalpha (node->str[0]))
+        {
+          node->alpha = tolower (node->str[0]) - 'a' + 1;
+        }
     }
+  node->freq++;
 
-  memcpy (&hash_table[loc], node, sizeof (node_t));
+  memcpy (one, node, sizeof (node_t));
 
   return 0;
 }
 
 int
-find_loc_linear_probing (int key)
+find_loc_linear_probing (unsigned key)
 {
   int loc = H (key);
   while (hash_table[loc].num != EMPTY && hash_table[loc].num != key)
@@ -128,7 +155,7 @@ find_loc_linear_probing (int key)
 }
 
 int
-find_loc_quadratic_probing (int key)
+find_loc_quadratic_probing (unsigned key)
 {
   int i = 0;
   int loc = H (key);
@@ -145,7 +172,7 @@ find_loc_quadratic_probing (int key)
 }
 
 int
-find_loc_double_hashing (int key)
+find_loc_double_hashing (unsigned key)
 {
   int loc = H (key);
   int loc1 = H2 (key);
@@ -154,7 +181,7 @@ find_loc_double_hashing (int key)
       loc += loc1;
       if (loc > N)
         {
-          loc -= N;
+          loc %= N;
         }
     }
   return loc;
@@ -173,7 +200,8 @@ dump (void)
       if (n->num != EMPTY)
         {
           cnt++;
-          printf ("%4zu %8d %s\n", i, n->num, n->str);
+          printf ("%4zu %10u %4d %4d %s\n", i, n->num, n->freq, n->alpha,
+                  n->str);
         }
     }
 
