@@ -40,7 +40,7 @@ nt_to_posix_path() {
 }
 
 
-check_java_env () {
+check_java () {
   local has_java=NO
   local javac_ver=
   local javac=javac
@@ -183,10 +183,28 @@ check_python () {
   fi
 }
 
+# check libffi
+check_libffi ()
+{
+  printf " + checking for libffi ... "
+  has_libffi=no
+  libffi_ldflags=$(pkg-config --cflags --libs libffi 2>/dev/null)
+  if [ -n "$libffi_ldflags" ]; then
+    has_libffi=yes
+    flag="libffi_ldflags" op=":=" value="${libffi_ldflags}" \
+        . ${NORE_ROOT}/auto/make_define
+    flag="has_libffi" op=":=" value="${has_libffi}" \
+        . ${NORE_ROOT}/auto/make_define
+    printf "yes\n"
+  else
+    printf "no\n"
+  fi
+}
+
 
 # check java
 #----------------------------------------
-check_java_env
+check_java
 
 # check nodejs
 #----------------------------------------
@@ -196,5 +214,8 @@ check_nodejs
 #----------------------------------------
 check_python
 
+# check libffi
+#----------------------------------------
+check_libffi
 
 # eof
