@@ -5,7 +5,7 @@
 #define N 23
 
 #define H(x) ((x) % N)
-#define H1(x) (((x) + 1) % N)
+#define H2(x) (((x) + 1) % N)
 #define EMPTY 0
 
 #ifndef FN_RD
@@ -16,18 +16,24 @@
 #define FN_LOC 0
 #endif
 
-typedef int (*fn_read_t) (int *);
+typedef struct node_t
+{
+  int num;
+  char str[32];
+} node_t;
+
+typedef int (*fn_read_t) (node_t *);
 typedef int (*fn_probe_t) (int);
 
-int read_number (int *);
-int read_string (int *);
-int insert (int, int *, fn_probe_t);
+int read_number (node_t *);
+int read_string (node_t *);
+int insert (node_t *, int *, fn_probe_t);
 int find_loc_linear_probing (int);
 int find_loc_quadratic_probing (int);
 int find_loc_double_hashing (int);
 void dump (void);
 
-int hash_table[N + 1];
+node_t hash_table[N + 1];
 
 fn_read_t read_table[] = {
   read_number,
@@ -45,13 +51,14 @@ fn_probe_t probe_table[] = {
 int
 main (void)
 {
-  int n;
+  node_t node;
   int i = 0;
+
   memset (hash_table, EMPTY, sizeof (hash_table));
 
-  while (read_table[FN_RD](&n) == 1)
+  while (read_table[FN_RD](&node) == 1)
     {
-      if (insert (n, &i, *probe_table[FN_LOC]))
+      if (insert (&node, &i, *probe_table[FN_LOC]))
         {
           perror ("!panic");
           break;
@@ -64,34 +71,34 @@ main (void)
 }
 
 int
-read_number (int *out)
+read_number (node_t *node)
 {
-  return scanf ("%d", out);
+  return scanf ("%d", &node->num);
 }
 
 int
-read_string (int *out)
+read_string (node_t *node)
 {
   int h = 0;
-  char buf[64], *p;
-  int c = scanf ("%s", &buf[0]);
+  char *p;
+  int c = scanf ("%s", &node->str[0]);
   if (c == 1)
     {
-      for (p = &buf[0], h = 0; *p; p++)
+      for (p = &node->str[0], h = 0; *p; p++)
         {
           h = *p + 31 * h;
         }
     }
-  *out = h;
+  node->num = h;
   return c;
 }
 
 int
-insert (int key, int *n, fn_probe_t find_loc)
+insert (node_t *node, int *n, fn_probe_t find_loc)
 {
   int loc;
 
-  loc = find_loc (key);
+  loc = find_loc (node->num);
 
   if (*n >= M)
     {
@@ -99,12 +106,12 @@ insert (int key, int *n, fn_probe_t find_loc)
       return -1;
     }
 
-  if (hash_table[loc] == EMPTY)
+  if (hash_table[loc].num == EMPTY)
     {
       (*n)++;
     }
 
-  hash_table[loc] = key;
+  memcpy (&hash_table[loc], node, sizeof (node_t));
 
   return 0;
 }
@@ -113,7 +120,7 @@ int
 find_loc_linear_probing (int key)
 {
   int loc = H (key);
-  while (hash_table[loc] != EMPTY && hash_table[loc] != key)
+  while (hash_table[loc].num != EMPTY && hash_table[loc].num != key)
     {
       loc = loc % N + 1;
     }
@@ -125,13 +132,13 @@ find_loc_quadratic_probing (int key)
 {
   int i = 0;
   int loc = H (key);
-  while (hash_table[loc] != EMPTY && hash_table[loc] != key)
+  while (hash_table[loc].num != EMPTY && hash_table[loc].num != key)
     {
       i++;
       loc = loc + 2 * i + 3 * i * i;
-      while (loc > N)
+      if (loc > N)
         {
-          loc -= N;
+          loc %= N;
         }
     }
   return loc;
@@ -141,8 +148,8 @@ int
 find_loc_double_hashing (int key)
 {
   int loc = H (key);
-  int loc1 = H1 (key);
-  while (hash_table[loc] != EMPTY && hash_table[loc] != key)
+  int loc1 = H2 (key);
+  while (hash_table[loc].num != EMPTY && hash_table[loc].num != key)
     {
       loc += loc1;
       if (loc > N)
@@ -157,14 +164,48 @@ void
 dump (void)
 {
   int cnt = 0;
+  char *read_name, *probe_name;
   size_t total = sizeof (hash_table) / sizeof (hash_table[0]);
+
   for (size_t i = 0; i < total; i++)
     {
-      if (hash_table[i] != EMPTY)
+      node_t *n = &hash_table[i];
+      if (n->num != EMPTY)
         {
           cnt++;
-          printf ("%4zu  %4d\n", i, hash_table[i]);
+          printf ("%4zu %8d %s\n", i, n->num, n->str);
         }
     }
-  printf ("------------\ntable %d/(%d,%zu)\n", cnt, M, total);
+
+  if (read_table[FN_RD] == read_number)
+    {
+      read_name = "number";
+    }
+  else if (read_table[FN_RD] == read_string)
+    {
+      read_name = "string";
+    }
+  else
+    {
+      read_name = "X";
+    }
+  if (probe_table[FN_LOC] == find_loc_linear_probing)
+    {
+      probe_name = "liner probing";
+    }
+  else if (probe_table[FN_LOC] == find_loc_quadratic_probing)
+    {
+      probe_name = "quadratic probing";
+    }
+  else if (probe_table[FN_LOC] == find_loc_double_hashing)
+    {
+      probe_name = "double hashing";
+    }
+  else
+    {
+      probe_name = "X";
+    }
+
+  printf ("------------\ntable %d/(%d,%zu), %s, %s\n", cnt, M, total,
+          read_name, probe_name);
 }
