@@ -7,6 +7,7 @@
 #include <nlim.h>
 #include <nstr.h>
 #include <nustd.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
 

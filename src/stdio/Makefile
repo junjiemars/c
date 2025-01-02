@@ -66,8 +66,8 @@ ifeq ($(CC_NAME),msvc)
 getopt_c := $(root)/posix/getopt.c
 endif
 
-_MEMORY_ ?= 0
-ifeq ($(shell test $(_MEMORY_) -gt 0; echo $$?),0)
+SANITIZE ?= 0
+ifeq ($(shell test $(SANITIZE) -gt 0; echo $$?),0)
 CFLAGS += $(f_sanitize)
 endif
 
