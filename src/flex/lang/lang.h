@@ -8,7 +8,9 @@ extern int yylineno;
 typedef enum AstNodeType
 {
   ANT_NUM = 0,
+	ANT_SEQ,
   ANT_VAR,
+  ANT_FUN,
   ANT_ABS,
   ANT_ADD,
   ANT_SUB,
@@ -17,7 +19,6 @@ typedef enum AstNodeType
   ANT_MOD,
   ANT_FAC,
   ANT_POW,
-  ANT_FUN,
   ANT_NEG
 } AstNodeType;
 

@@ -25,7 +25,7 @@ extern int yylex ();
 %precedence '='
 %precedence NEG
 
-%type <ast> stmt exp
+%type <ast> stmt stmtseq exp
 
 %start langseq
 
@@ -33,13 +33,27 @@ extern int yylex ();
 
 langseq:
   %empty
-| langseq stmt EOL {
+| langseq stmtseq EOL {
   printf ("= %.19g\n> ", eval_ast ($2));
   free_ast ($2);
 }
 | langseq LET SYM '=' stmt EOL { new_ast_var ($3, $5); printf ("> "); }
 | langseq EOL { printf ("> "); }
 | langseq error EOL { yyerrok; printf ("> "); }
+;
+
+stmtseq:
+  stmt { $$ = $1; }
+| stmt ';' stmtseq {
+  if ($3 == NULL)
+		{
+      $$ = $1;
+	  }
+  else
+    {
+			$$ = new_ast (ANT_SEQ, NULL, $1, $3);
+    }
+}
 ;
 
 stmt:

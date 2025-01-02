@@ -100,6 +100,7 @@ free_ast (Ast *ast)
     {
     case ANT_VAR:
     case ANT_FUN:
+		case ANT_SEQ:
       if (ast->rhs)
         {
           free_ast (ast->rhs);
@@ -169,6 +170,9 @@ eval_ast (Ast *ast)
     case ANT_FUN:
       val = ast->val;
       break;
+		case ANT_SEQ:
+			val = eval_ast (ast->rhs);
+			break;
     case ANT_ABS:
       val = fabs (eval_ast (ast->rhs));
       break;
