@@ -171,7 +171,7 @@ flex_lang_lout := $(flex_root)/lang/ast.yy.c
 ifeq (YES, $(has_bison))
 flex_lang: $(flex_lang_binout)
 flex_lang_test: flex_lang
-	printf "let x=sqrt((PI+e+618E-2));\n x;\n" | $(flex_lang_binout)
+	printf "let x=sqrt((PI+e+618E-2));\n x*10;\n" | $(flex_lang_binout)
 else
 flex_lang:
 	@echo "#skip $@, missing bison."
