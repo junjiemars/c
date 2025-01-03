@@ -1,10 +1,10 @@
 #include "lang.h"
 #include <errno.h>
 #include <math.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdarg.h>
 
 #define VAR_TABLE_MAX 64
 #define N_VAR_TABLE (VAR_TABLE_MAX + 3)
@@ -100,7 +100,7 @@ free_ast (Ast *ast)
     {
     case ANT_VAR:
     case ANT_FUN:
-		case ANT_SEQ:
+    case ANT_SEQ:
       if (ast->rhs)
         {
           free_ast (ast->rhs);
@@ -170,9 +170,9 @@ eval_ast (Ast *ast)
     case ANT_FUN:
       val = ast->val;
       break;
-		case ANT_SEQ:
-			val = eval_ast (ast->rhs);
-			break;
+    case ANT_SEQ:
+      val = eval_ast (ast->rhs);
+      break;
     case ANT_ABS:
       val = fabs (eval_ast (ast->rhs));
       break;
@@ -248,7 +248,7 @@ free_sym_table (void)
     {
       if (fun_table[i])
         {
-          free (fun_table[i]);
+          /* free (fun_table[i]); */
           fun_table[i] = NULL;
         }
     }
