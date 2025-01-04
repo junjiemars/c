@@ -1,6 +1,6 @@
-#include "_ds_.h"
-#include <stdlib.h>
+#include "../_ds_.h"
 #include <assert.h>
+#include <stdlib.h>
 
 #define N_PRE (sizeof (int64_t))
 #define N_POS N_PRE
@@ -92,7 +92,7 @@ umbra_str_cmp_pre (const umbra_str_t *u1, const umbra_str_t *u2)
 int
 umbra_str_cmp_str (const umbra_str_t *u1, const umbra_str_t *u2)
 {
-  int max = _max_ (u1->len, u2->len);
+  size_t max = _max_ (u1->len, u2->len);
   if (u1->len < N_IN && u2->len < N_IN)
     {
       return strncmp ((char *)&u1->pre, (char *)&u2->pre, N_IN);

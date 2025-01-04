@@ -1,5 +1,7 @@
 #include "../_lang_.h"
+#ifdef NM_HAVE_ERR_H
 #include <err.h>
+#endif
 
 int
 main (int argc, char **argv)
