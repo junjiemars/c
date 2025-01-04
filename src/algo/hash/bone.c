@@ -91,7 +91,7 @@ read_number (node_t *node)
   if (rc == 0)
     {
       int ch = getchar ();
-      while (ch != EOF && !isnumber (ch))
+      while (ch != EOF && !isdigit (ch))
         {
           ch = getchar ();
         }
