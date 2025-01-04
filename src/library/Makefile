@@ -53,7 +53,7 @@ stdmath_lib :=
 ifeq (msvc, $(CC_NAME))
 LD_LIBRARY_PATH := PATH
 LDLIBS := libgeo$(ar_ext)
-stdmath_lib := $(nm_lib_opt)m
+stdmath_lib := $(nm_link_opt) msvcrt.lib
 endif
 
 ifeq (Linux, $(NM_SYSTEM))
