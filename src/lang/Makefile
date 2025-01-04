@@ -746,8 +746,7 @@ lang_string: lang_string_basic                  \
              lang_string_cat                    \
              lang_string_chr                    \
              lang_string_pbrk                   \
-             lang_string_spn                    \
-             lang_string_bcmp
+             lang_string_spn
 
 lang_string_test: lang_string_basic_test        \
                   lang_string_n_test            \
@@ -757,8 +756,7 @@ lang_string_test: lang_string_basic_test        \
                   lang_string_cat_test          \
                   lang_string_chr_test          \
                   lang_string_pbrk_test         \
-                  lang_string_spn_test          \
-                  lang_string_bcmp_test
+                  lang_string_spn_test
 
 lang_string_basic: $(lang_string_basic_binout)
 lang_string_basic_test: lang_string_basic
@@ -837,9 +835,6 @@ $(lang_string_pbrk_binout): $(lang_root)/string/pbrk.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_string_spn_binout): $(lang_root)/string/spn.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-$(lang_string_bcmp_binout): $(lang_root)/string/bcmp1.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
