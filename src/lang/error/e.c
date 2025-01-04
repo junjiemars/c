@@ -1,4 +1,4 @@
-#include "_lang_.h"
+#include "../_lang_.h"
 
 static void test_open_file (const char *);
 static void test_sqrt (double);

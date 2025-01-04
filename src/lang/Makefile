@@ -224,7 +224,7 @@ $(lang_error_basic_binout): $(lang_root)/error/e.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(error_ldlibs)
 
 $(lang_error_format_binout): $(lang_root)/error/fmt1.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
 
