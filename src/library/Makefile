@@ -49,6 +49,7 @@ $(geo_h): $(library_root)/geo/geo.h
 
 
 # math
+stdmath_lib :=
 ifeq (msvc, $(CC_NAME))
 LD_LIBRARY_PATH := PATH
 LDLIBS := libgeo$(ar_ext)
@@ -57,13 +58,12 @@ endif
 ifeq (Linux, $(NM_SYSTEM))
 LD_LIBRARY_PATH := LD_LIBRARY_PATH
 LDLIBS := $(nm_lib_opt)geo
-LDLIBS += $(nm_lib_opt)m				# std math lib
+stdmath_lib := $(nm_lib_opt)m
 endif
 
 ifeq (Darwin, $(NM_SYSTEM))
 LD_LIBRARY_PATH := DYLD_LIBRARY_PATH
 LDLIBS := $(nm_lib_opt)geo
-LDLIBS += $(nm_lib_opt)m				# std math lib
 endif
 
 
@@ -86,10 +86,10 @@ math_shared_test: math_shared
 endif
 
 $(math_static_binout): $(library_root)/math/math1.c $(geo_arout)
-	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $(stdmath_lib) $^
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^ $(stdmath_lib)
 
 $(math_shared_binout): $(library_root)/math/math1.c $(geo_libout)
-	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $(bin_out)$@ $(LDFLAGS) $(LDLIBS) $<
+	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $(bin_out)$@ $< $(LDFLAGS) $(LDLIBS)
 
 
 
