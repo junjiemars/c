@@ -1,30 +1,30 @@
-#include "_stdio_.h"
+#include "../_stdio_.h"
+#include <ctype.h>
 
 int
-main(void)
+main (void)
 {
-  int  c;
-  int  n  =  16;
+  int c;
+  int n = 16;
 
   while (n-- > 0)
     {
-      if ((c = getc(stdin)) == EOF)
+      if ((c = getc (stdin)) == EOF)
         {
           break;
         }
 
-      if (ferror(stdin))
+      if (ferror (stdin))
         {
           return errno;
         }
 
-      putc(c, stdout);
+      putc (c, stdout);
 
       if ((c & 1) == 0)
         {
-          ungetc(toupper(c+1), stdin);
+          ungetc (toupper (c + 1), stdin);
         }
-
     };
 
   return 0;
