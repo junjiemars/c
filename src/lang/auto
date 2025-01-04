@@ -28,7 +28,7 @@ echo "checking for {lang} ..."
 
 # check header files
 #----------------------------------------
-include="errX.h" . ${NORE_ROOT}/auto/include
+include="err.h" . ${NORE_ROOT}/auto/include
 # include="stdint.h" . ${NORE_ROOT}/auto/include
 # include="inttypes.h" . ${NORE_ROOT}/auto/include
 include="iso646.h" . ${NORE_ROOT}/auto/include
