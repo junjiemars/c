@@ -99,34 +99,6 @@ nm_feature_flags=
 nm_feature_test='strncmp("abc", "aBc", 1);'
 . ${NORE_ROOT}/auto/feature
 
-
-# check strdup
-#----------------------------------------
-case "$CC_NAME" in
-  gcc|clang)
-    nm_feature="strdup()"
-    nm_feature_name="NM_HAVE_STRDUP"
-    nm_feature_run=no
-    nm_feature_h='#include <string.h>
-                  #include <stdlib.h>'
-    nm_feature_flags=
-    nm_feature_test='char *xyz = strdup("xyz");
-                     free(xyz);'
-    . ${NORE_ROOT}/auto/feature
-    ;;
-  msvc)
-    nm_feature="strdup()"
-    nm_feature_name="NM_HAVE_STRDUP"
-    nm_feature_run=no
-    nm_feature_h="#include <string.h>"
-    nm_feature_flags=
-    nm_feature_test='char *xyz = _strdup("xyz");
-                     free(xyz);'
-    . ${NORE_ROOT}/auto/feature
-		;;
-esac
-
-
 # check strndup
 #----------------------------------------
 case "$CC_NAME" in
@@ -134,22 +106,26 @@ case "$CC_NAME" in
     nm_feature="strndup()"
     nm_feature_name="NM_HAVE_STRNDUP"
     nm_feature_run=no
-    nm_feature_h='#include <string.h>
-                  #include <stdlib.h>'
+    nm_feature_h='
+#include <string.h>
+#include <stdlib.h>'
     nm_feature_flags=
-    nm_feature_test='char *xyz = strndup("xyz", sizeof("xyz")-1);
-                     free(xyz);'
+    nm_feature_test='
+char *xyz = strndup("xyz", sizeof("xyz")-1);
+free(xyz);'
     . ${NORE_ROOT}/auto/feature
     ;;
   msvc)
     nm_feature="strndup()"
     nm_feature_name="NM_HAVE_STRNDUP"
     nm_feature_run=no
-    nm_feature_h='#include <string.h>
-                  #include <stdlib.h>'
+    nm_feature_h='
+#include <string.h>
+#include <stdlib.h>'
     nm_feature_flags=
-    nm_feature_test='char *xyz = _strndup("xyz", sizeof("xyz")-1);
-                     free(xyz);'
+    nm_feature_test='
+char *xyz = _strndup("xyz", sizeof("xyz")-1);
+free(xyz);'
     . ${NORE_ROOT}/auto/feature
 		;;
 esac

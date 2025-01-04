@@ -79,11 +79,12 @@ lang_test:  lang_array_test                     \
             lang_variadic_test                  \
             lang_volatile_test
 
+
+
 # env
 lang_prefix := lang
 
 INC += $(nm_inc_opt)$(root) $(nm_inc_opt)$(lang_root) $(nm_inc_opt)$(root)/posix
-
 
 ifeq ($(use_sanitize),yes)
 CFLAGS += $(f_sanitize)
@@ -385,10 +386,10 @@ lang_locale_set_test: $(lang_locale_set_binout)
 	$< "XXX"
 
 $(lang_locale_get_binout): $(lang_root)/locale/c1.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(lang_locale_set_binout): $(lang_root)/locale/b.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
 

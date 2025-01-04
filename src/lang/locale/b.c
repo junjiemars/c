@@ -1,4 +1,4 @@
-#include "_lang_.h"
+#include "../_lang_.h"
 #include <locale.h>
 
 static void print_LC_ALL (void);
