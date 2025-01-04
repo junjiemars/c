@@ -26,5 +26,7 @@ print_locale (const char *locale)
 
   printf ("%s=%s\n", _str_ (LC_TIME), setlocale (LC_TIME, locale));
 
+#ifdef LC_MESSAGES
   printf ("%s=%s\n", _str_ (LC_MESSAGES), setlocale (LC_MESSAGES, locale));
+#endif
 }
