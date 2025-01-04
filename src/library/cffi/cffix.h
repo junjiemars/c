@@ -20,8 +20,8 @@
 extern "C" {
 #endif
 
-  int CFFIX_API inc(int);
-  size_t CFFIX_API str_len(const char *ss);
+int CFFIX_API inc(int);
+size_t CFFIX_API str_len(const char *ss);
 
 #ifdef __cplusplus
 }

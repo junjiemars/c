@@ -23,11 +23,9 @@ case $CC_NAME in
       flag=CFLAGS op='+=' value='-fPIC' . ${NORE_ROOT}/auto/make_define
     fi
   ;;
-
   msvc)
     # msvc do not use position independent code
   ;;
-
 esac
 
 # check linker's -rpath features
@@ -84,7 +82,6 @@ fi
 case $NM_SYSTEM in
   Darwin)
     ;;
-
   Linux)
     nm_feature="math lib"
     nm_feature_name="nm_have_math_lib"
@@ -100,10 +97,8 @@ case $NM_SYSTEM in
           . ${NORE_ROOT}/auto/make_define
     fi
     ;;
-
   WinNT)
     ;;
-
   *)
     ;;
 esac

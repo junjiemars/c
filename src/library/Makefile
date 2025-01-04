@@ -1,3 +1,4 @@
+# -*- mode:makefile-gmake -*-
 #
 # ./configure --has-library
 #
@@ -31,16 +32,16 @@ geo_list_ar: $(geo_arout)
 	nm $<
 
 $(geo_binout): $(library_root)/geo/test.c $(geo_arout)
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(geo_arout): $(geo_objout) $(geo_h)
 	$(AR) $(ARFLAGS) $(ar_out)$@ $<
 
 $(geo_objout): $(library_root)/geo/geo.c
-	$(CC) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $(nm_stage_c) $^
 
 $(geo_libout): $(library_root)/geo/geo.c $(geo_h)
-	$(CC) $(CFLAGS) -DSHARED=0 $(INC) $(nm_shared_opt) $< $(bin_out)$@
+	$(CC) $(CFLAGS) -DSHARED=0 $(INC) $(nm_shared_opt) $(bin_out)$@ $<
 
 $(geo_h): $(library_root)/geo/geo.h
 	cp $< $(inc_path)
@@ -83,10 +84,10 @@ math_shared_test: math_shared
 endif
 
 $(math_static_binout): $(library_root)/math/math1.c $(geo_arout)
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(stdmath_lib)
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $(stdmath_lib) $^
 
 $(math_shared_binout): $(library_root)/math/math1.c $(geo_libout)
-	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $< $(bin_out)$@ $(LDFLAGS) $(LDLIBS)
+	$(CC) $(CFLAGS) -DSHARED=1 $(INC) $(bin_out)$@ $(LDFLAGS) $(LDLIBS) $<
 
 
 
