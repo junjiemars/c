@@ -57,11 +57,13 @@ endif
 ifeq (Linux, $(NM_SYSTEM))
 LD_LIBRARY_PATH := LD_LIBRARY_PATH
 LDLIBS := $(nm_lib_opt)geo
+LDLIBS += $(nm_lib_opt)m				# std math lib
 endif
 
 ifeq (Darwin, $(NM_SYSTEM))
 LD_LIBRARY_PATH := DYLD_LIBRARY_PATH
 LDLIBS := $(nm_lib_opt)geo
+LDLIBS += $(nm_lib_opt)m				# std math lib
 endif
 
 
