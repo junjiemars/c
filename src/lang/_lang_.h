@@ -3,6 +3,7 @@
 
 #include <nore.h>
 #include <ncstd.h>
+#include <nustd.h>
 
 #include <assert.h>
 #include <ctype.h>
