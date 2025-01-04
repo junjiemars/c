@@ -20,7 +20,6 @@ static void test_isut (void);
 static void test_nof (void);
 static void test_swp (void);
 
-
 int
 main (int argc, char **argv)
 {
@@ -156,11 +155,8 @@ test_generic (void)
   printf ("%s: no `generic' found\n", __FUNCTION__);
 #else
 
-#define _ndef_test_generic_(x) \
-  generic ((x), \
-           int : 1, \
-           double : 2, \
-           default : 'a')
+#define _ndef_test_generic_(x)                                                \
+  generic ((x), int : 1, double : 2, default : 'a')
   assert (1 == _ndef_test_generic_ (0) && "int");
   assert (2 == _ndef_test_generic_ (0.1) && "double");
   assert ('a' == _ndef_test_generic_ ("X") && "default");
