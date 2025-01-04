@@ -19,11 +19,11 @@ main (void)
   int r;
   x = 0;
   r = a () + b ();
-  assert (r > 0 && "cannot guarantee the order of execution");
+  assert ((r == 2 || r == 8) && "cannot guarantee the order of execution");
 
   ux = 0u;
   r = (ua () + 5u) + (ub () + 7u);
-  assert (r > 0 && "cannot guarantee the order of left association");
+  assert ((r == 20 || r == 14) && "cannot guarantee the order of left association");
 
   x = 0;
   r = (a () + 5) + (b () + 7);
