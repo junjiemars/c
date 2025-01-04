@@ -126,6 +126,7 @@ test_alignas (void)
   {
     short s;
 #if (MSVC)
+#pragma warning(disable : 4324)
     char alignas (sizeof (int)) ss[sizeof (int)];
 #else
     char alignas (alignof (int)) ss[sizeof (int)];
@@ -182,7 +183,8 @@ void
 test_isut (void)
 {
   assert (_isut_ (unsigned short));
-  if (_isut_ (char))
+  const int is_unsigned_char = _isut_ (char);
+  if (is_unsigned_char)
     {
       assert (_isut_ (char) == _isut_ (unsigned char));
     }
