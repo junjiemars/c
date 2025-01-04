@@ -281,7 +281,7 @@ stdio_open_file := $(tmp_path)/$(stdio_prefix)_open.file
 
 stdio_open: $(stdio_open_re_binout) \
             $(stdio_open_fd_binout) \
-            $(stdio_open_mem_binout)
+            stdio_open_mem
 stdio_open_test: stdio_open_re_test \
                  stdio_open_fd_test \
                  stdio_open_mem_test
@@ -296,8 +296,16 @@ stdio_open_re_test: $(stdio_open_re_binout) \
 stdio_open_fd_test: $(stdio_open_fd_binout)
 	$< < $(stdio_root)/open/fd1.c
 
+ifeq ($(nm_have_fmemopen), yes)
+stdio_open_mem: $(stdio_open_mem_binout)
 stdio_open_mem_test: $(stdio_open_mem_binout)
 	$< < $(stdio_root)/open/mem1.c
+else
+stdio_open_mem:
+	echo "#skip $@ ..."
+stdio_open_mem_test: stdio_open_mem
+	echo "#skip $@ ..."
+endif
 
 $(stdio_open_re_binout): $(stdio_root)/open/ro1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
@@ -453,3 +461,5 @@ stdio_wide_test: stdio_wide
 
 $(stdio_wide_binout): $(stdio_root)/wide/w1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+.PHONY: stdio_open_mem stdio_open_mem_test
