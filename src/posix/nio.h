@@ -48,7 +48,12 @@ char *_libgen_(char *, int);
 
 
 #if (MSVC) && (NM_HAVE_POPEN)
+#  ifdef popen
+#    undef popen
+#    undef pclose
+#  endif
 #  define popen  _popen
+#  define pclose _pclose
 #endif  /* popen */
 
 
