@@ -94,10 +94,10 @@ $(stdio_basic_raw_binout): $(stdio_basic_raw_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(stdio_basic_raw_cppout): $(stdio_root)/basic/b.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_pre) $(cpp_out)$@ $^
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(cpp_out)$@ $(nm_stage_pre) $^
 
 $(stdio_basic_err_binout): $(stdio_root)/basic/b1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(cpp_out)$@ $^
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
 

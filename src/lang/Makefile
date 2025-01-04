@@ -114,10 +114,10 @@ lang_assert_test: lang_assert
 	-$(lang_assert_binout) 49
 
 $(lang_assert_binout): $(lang_assert_cppout)
-	$(CC) $(CFLAGS) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(bin_out)$@ $^
 
 $(lang_assert_cppout): $(lang_root)/assert/a.c
-	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+	$(CPP) $(CPPFLAGS) $(INC) $(cpp_out)$@ $(nm_stage_pre) $^
 
 
 
