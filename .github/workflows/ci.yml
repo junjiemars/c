@@ -35,7 +35,7 @@ jobs:
           echo "_A_MARK_=$(uname -m)-${{ matrix.CC }}" >> $GITHUB_ENV
       - name: Build and Test
         env:
-          _CFG_OPT_: # --with-release=yes --with-optimize=yes --with-symbol=no
+          _CFG_OPT_: --with-release=no --with-optimize=no --with-symbol=yes
           CC: ${{ matrix.CC }}
         run: |
           ./test.sh
@@ -74,7 +74,7 @@ jobs:
           echo "_A_MARK_=$(uname -m)-${{ matrix.CC }}" >> $GITHUB_ENV
       - name: Build and Test
         env:
-          _CFG_OPT_: # --with-release=yes --with-optimize=yes --with-symbol=no
+          _CFG_OPT_: --with-release=no --with-optimize=no --with-symbol=yes
           CC: ${{ matrix.CC }}
         run: |
           ./test.sh
@@ -122,7 +122,7 @@ jobs:
         echo "_A_MARK_=$(uname -m)-${{ matrix.CC }}" >> $GITHUB_ENV
     - name: Build and Test
       env:
-        _CFG_OPT_: # --with-release=yes --with-optimize=-Os --with-symbol=no
+        _CFG_OPT_: --with-release=no --with-optimize=no --with-symbol=yes
         CC: ${{ matrix.CC }}
       run: |
          ./test.sh

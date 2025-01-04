@@ -30,6 +30,7 @@ ctl_test: ctl_deq_test                          \
           ctl_eg_astar_test                     \
           ctl_eg_json_test
 
+
 
 # env
 ctl_prefix := ctl
@@ -40,8 +41,7 @@ ctl_home := $(ctl_root)/ctl_home
 INC += $(nm_inc_opt)$(root) $(nm_inc_opt)$(root)/posix
 INC += $(nm_inc_opt)$(ctl_root) $(nm_inc_opt)$(ctl_home)/ctl
 
-
-ifeq ($(_MEMORY_), 1)
+ifeq ($(use_sanitize), yes)
 	CFLAGS += $(f_sanitize)
 endif
 
@@ -63,6 +63,7 @@ ctl_objout := $(tmp_path)/$(ctl_prefix)$(obj_ext)
 $(ctl_objout): $(ctl_root)/_ctl_.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_c) $^ $(obj_out)$@
 
+
 
 # deq
 ctl_deq_binout := $(bin_path)/$(ctl_prefix)_deq$(bin_ext)
@@ -187,13 +188,13 @@ ctl_ust: $(ctl_home) $(ctl_ust_binout)
 ctl_ust_test: ctl_ust
 	$(ctl_ust_binout)
 
-$(ctl_ust_binout): $(ctl_ust_cppout)            \
-                   $(ctl_objout)
+$(ctl_ust_binout): $(ctl_ust_cppout) $(ctl_objout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
 
 $(ctl_ust_cppout): $(ctl_root)/ust/ust1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
+
 
 # vec
 ctl_vec_binout := $(bin_path)/$(ctl_prefix)_vec$(bin_ext)
@@ -204,16 +205,16 @@ ctl_vec: $(ctl_home) $(ctl_vec_binout)
 ctl_vec_test: ctl_vec
 	$(ctl_vec_binout)
 
-$(ctl_vec_binout): $(ctl_vec_objout)            \
-                   $(ctl_objout)
-	$(LINK) $(CFLAGS) $^ $(obj_out)$@
+$(ctl_vec_binout): $(ctl_vec_objout) $(ctl_objout)
+	$(LINK) $(CFLAGS) $(obj_out)$@ $^
 
 $(ctl_vec_objout): $(ctl_vec_cppout)
-	$(CC) $(CFLAGS) $(nm_stage_c) $^ $(obj_out)$@
+	$(CC) $(CFLAGS) $(obj_out)$@ $(nm_stage_c) $^
 
 $(ctl_vec_cppout): $(ctl_root)/vec/vec1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(cpp_out)$@ $(nm_stage_pre) $^
 
+
 
 # prefix
 ctl_prefix_binout := $(bin_path)/$(ctl_prefix)_prefix$(bin_ext)
