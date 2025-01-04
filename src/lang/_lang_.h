@@ -1,13 +1,13 @@
 #ifndef _LANG_H_
 #define _LANG_H_
 
-#include <ncstd.h>
-
 #include <assert.h>
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
 #include <math.h>
+#include <ncstd.h>
+#include <nore.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>

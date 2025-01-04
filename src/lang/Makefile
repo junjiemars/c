@@ -25,6 +25,7 @@ lang: lang_array                                \
       lang_random                               \
       lang_restrict                             \
       lang_scope                                \
+      lang_sequence                             \
       lang_signal                               \
       lang_sizeof                               \
       lang_stage                                \
@@ -44,11 +45,11 @@ lang: lang_array                                \
 lang_test:  lang_array_test                     \
             lang_assert_test                    \
             lang_duration_test                  \
-            lang_enum_test                     \
-            lang_env_test                      \
-            lang_error_test                    \
-            lang_exit_test                     \
-            lang_fn_test                       \
+            lang_enum_test                      \
+            lang_env_test                       \
+            lang_error_test                     \
+            lang_exit_test                      \
+            lang_fn_test                        \
             lang_goto_test                      \
             lang_iso646_test                    \
             lang_jmp_test                       \
@@ -62,6 +63,7 @@ lang_test:  lang_array_test                     \
             lang_random_test                    \
             lang_restrict_test                  \
             lang_scope_test                     \
+            lang_sequence_test                  \
             lang_signal_test                    \
             lang_sizeof_test                    \
             lang_stage_test                     \
@@ -83,9 +85,9 @@ lang_prefix := lang
 INC += $(nm_inc_opt)$(root) $(nm_inc_opt)$(lang_root) $(nm_inc_opt)$(root)/posix
 
 
-ifeq ($(_MEMORY_),1)
+ifeq ($(use_sanitize),yes)
 CFLAGS += $(f_sanitize)
-endif # end of _MEMORY_
+endif # end of use_sanitize
 
 
 
@@ -634,6 +636,18 @@ $(lang_scope_binout): $(lang_scope_cppout)
 $(lang_scope_cppout): $(lang_root)/scope/scope.c
 	$(CPP) $(CPPFLAGS) $(INC) $^ $(nm_stage_pre) $(cpp_out)$@
 
+
+
+lang_sequence_binout := $(bin_path)/$(lang_prefix)_sequence$(bin_ext)
+
+lang_sequence: $(lang_sequence_binout)
+lang_sequence_test: lang_sequence
+	$(lang_sequence_binout)
+
+$(lang_sequence_binout): $(lang_root)/sequence/s1.c
+	$(CPP) $(CFLAGS) $(INC) $(bin_out)$@ $^
+
+
 
 # signal
 lang_signal_basic_binout := $(bin_path)/$(lang_prefix)_signal_basic$(bin_ext)
