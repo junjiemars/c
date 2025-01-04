@@ -206,7 +206,7 @@ ctl_vec_test: ctl_vec
 	$(ctl_vec_binout)
 
 $(ctl_vec_binout): $(ctl_vec_objout) $(ctl_objout)
-	$(LINK) $(CFLAGS) $(obj_out)$@ $^
+	$(LINK) $(CFLAGS) $(bin_out)$@ $^
 
 $(ctl_vec_objout): $(ctl_vec_cppout)
 	$(CC) $(CFLAGS) $(obj_out)$@ $(nm_stage_c) $^
