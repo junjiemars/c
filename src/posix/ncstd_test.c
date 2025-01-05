@@ -21,11 +21,13 @@ main (void)
   printf ("%s=(no symbol)\n", _str_ (__STDC_VERSION__));
 #endif
 
-/* #if (WINNT) */
+#if (WINNT)
+#  __pragma(warning(suppress: 4996))
+#endif
+
   setenv ("XYZ", "abc", 1);
   assert (strcmp ("abc", getenv ("XYZ")) == 0 && "should set XYZ=abc");
   assert (environ && "environ should be a valid pointer");
-/* #endif */
 
   return 0;
 }
