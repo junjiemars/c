@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
+static void check_ndef (void);
 static void test_unused (int);
 static void test_unused_fn (void);
 static void test_fallthrough (int);
@@ -23,6 +24,8 @@ static void test_swp (void);
 int
 main (int argc, char **argv)
 {
+  check_ndef ();
+
   test_unused (1);
   test_fallthrough (1);
 
@@ -50,6 +53,41 @@ main (int argc, char **argv)
   test_swp ();
 
   return 0;
+}
+
+void
+check_ndef (void)
+{
+  printf ("check __has_attribute ... ");
+#ifdef __has_attribute
+  printf ("yes\n");
+#else
+  printf ("no\n");
+#endif
+  printf ("check __attribute__esc_ ... ");
+#ifdef __attribute__esc_
+  printf ("yes\n");
+#else
+  printf ("no\n");
+#endif
+  printf ("check __attribute__ ... ");
+#ifdef __attribute__
+  printf ("yes\n");
+#else
+  printf ("no\n");
+#endif
+  printf ("check unused ... ");
+#ifdef unused
+  printf ("yes\n");
+#else
+  printf ("no\n");
+#endif
+  printf ("check fallthrough ... ");
+#ifdef fallthrough
+  printf ("yes\n");
+#else
+  printf ("no\n");
+#endif
 }
 
 void

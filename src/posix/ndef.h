@@ -29,7 +29,7 @@
 
 #if (MSVC)
 #  if !defined(fallthrough) && defined(__attribute__)
-#    define fallthrough  [[fallthrough]]
+#    define fallthrough  __pragma(warning(suppress: 26819))
 #  endif
 #endif
 

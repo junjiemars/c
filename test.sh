@@ -85,7 +85,6 @@ test_do() {
     echo "------------"
     echo "# dump out/nore.h ..."
     cat out/nore.h
-    echo "------------"
   fi
   return $rc
 }
