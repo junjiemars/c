@@ -1,20 +1,31 @@
 #include "ncstd.h"
+#include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+extern char **environ;
 
 int
-main(void)
+main (void)
 {
 #if defined(__STDC__)
-  printf("%s=%i\n", _str_(__STDC__), (__STDC__+0));
+  printf ("%s=%i\n", _str_ (__STDC__), (__STDC__ + 0));
 #else
-  printf("%s=(no symbol)\n", _str_(__STDC__));
+  printf ("%s=(no symbol)\n", _str_ (__STDC__));
 #endif
 
 #if defined(__STDC_VERSION__)
-  printf("%s=%liL\n", _str_(__STDC_VERSION__), (__STDC_VERSION__+0L));
+  printf ("%s=%liL\n", _str_ (__STDC_VERSION__), (__STDC_VERSION__ + 0L));
 #else
-  printf("%s=(no symbol)\n", _str_(__STDC_VERSION__));
+  printf ("%s=(no symbol)\n", _str_ (__STDC_VERSION__));
 #endif
+
+/* #if (WINNT) */
+  setenv ("XYZ", "abc", 1);
+  assert (strcmp ("abc", getenv ("XYZ")) == 0 && "should set XYZ=abc");
+  assert (environ && "environ should be a valid pointer");
+/* #endif */
 
   return 0;
 }

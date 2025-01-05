@@ -37,11 +37,14 @@ do                                              \
 #    undef  setenv
 #  endif
 #  define setenv(n, v, _)  _putenv_s((n), (v))
-
 #  if defined(unsetenv)
 #    undef  unsetenv
 #  endif
-#  define unsetenv(n)   _putenv_s((n), "");
+#  define unsetenv(n)   _putenv_s((n), "")
+# if defined(environ)
+#   undefine environ
+#   define environ  _environ
+# endif
 #endif  /* setenv, unsetenv */
 
 

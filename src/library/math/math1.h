@@ -3,7 +3,7 @@
 
 #include <nore.h>
 
-#if (WINDOWS)
+#if (WINNT)
 extern double trunc (double);
 extern double floor (double);
 extern double ceil (double);
