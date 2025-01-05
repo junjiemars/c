@@ -83,6 +83,9 @@ test_do() {
     echo "# dump out/auto.err ..."
     cat out/auto.err
     echo "------------"
+    echo "# dump out/nore.h ..."
+    cat out/nore.h
+    echo "------------"
   fi
   return $rc
 }

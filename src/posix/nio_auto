@@ -187,8 +187,7 @@ if [ "$nio_dirname" = "yes" ]; then
         nm_feature_run=dumb
         nm_feature_h='
 #include <libgen.h>
-#include <string.h>
-'
+#include <string.h>'
         nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
         nm_feature_test='char s[]="/a/b/c"; (void)dirname(s);'
         . ${NORE_ROOT}/auto/feature

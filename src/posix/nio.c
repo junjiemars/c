@@ -1,6 +1,5 @@
 #include <nio.h>
 
-
 /*
  * 1. `getdelim(3)': conform to IEEE Std 1003.1-2017
  * https://pubs.opengroup.org/onlinepubs/9699919799/functions/getdelim.html
@@ -12,7 +11,7 @@
  * https://pubs.opengroup.org/onlinepubs/9699919799/functions/basename.html
  *
  *
-*/
+ */
 
 #if !(NM_HAVE_GETDELIM)
 
@@ -21,14 +20,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 ssize_t
-getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
-         FILE *restrict stream)
+getdelim (char **restrict lineptr, size_t *restrict n, int delimiter,
+          FILE *restrict stream)
 {
-  int       c;
-  char     *p, *p1;
-  ssize_t   len;
+  int c;
+  char *p, *p1;
+  ssize_t len;
 
   if (NULL == lineptr || NULL == n || NULL == stream
       || (UCHAR_MAX < delimiter || delimiter < 0))
@@ -37,7 +35,7 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
       return EOF;
     }
 
-  if (feof(stream) || ferror(stream))
+  if (feof (stream) || ferror (stream))
     {
       return EOF;
     }
@@ -49,7 +47,7 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
           *n = NM_LINE_MAX;
         }
 
-      *lineptr = malloc(*n);
+      *lineptr = malloc (*n);
       if (NULL == *lineptr)
         {
           return EOF;
@@ -59,18 +57,18 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
   p = *lineptr;
   len = 0;
 
-  while (EOF != (c = fgetc(stream)))
+  while (EOF != (c = fgetc (stream)))
     {
-      if (SSIZE_MAX == (ssize_t) len)
+      if (SSIZE_MAX == (ssize_t)len)
         {
           errno = EOVERFLOW;
           return EOF;
         }
 
-      if ((*n - 1) == (size_t) len)
+      if ((*n - 1) == (size_t)len)
         {
           *n <<= 1;
-          p1 = realloc(*lineptr, *n);
+          p1 = realloc (*lineptr, *n);
           if (NULL == p1)
             {
               return EOF;
@@ -78,7 +76,7 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
           *lineptr = p1;
           p = p1 + len;
         }
-      *p++ = (char) c;
+      *p++ = (char)c;
       len++;
 
       if (c == delimiter)
@@ -87,7 +85,7 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
         }
     }
 
-  if (ferror(stream))
+  if (ferror (stream))
     {
       return EOF;
     }
@@ -96,27 +94,26 @@ getdelim(char **restrict lineptr, size_t *restrict n, int delimiter,
   return len;
 }
 
-#endif  /* getdelim */
-
+#endif /* getdelim */
 
 #if (NM_HAVE_DIRNAME_GETFULLPATHNAME) || (NM_HAVE_BASENAME_GETFULLPATHNAME)
-#include <windows.h>
-#include <tchar.h>
 #include <string.h>
+#include <tchar.h>
+#include <windows.h>
 
 char *
-_libgen_(char *path, int dirname)
+_libgen_ (char *path, int dirname)
 {
   static TCHAR d[NM_PATH_MAX + 1], *b;
 
-  if (path == NULL || strcmp(path, "") == 0)
+  if (path == NULL || strcmp (path, "") == 0)
     {
       d[0] = '.';
       d[1] = 0;
       return d;
     }
 
-  if (0 == GetFullPathName(path, _nof_(d), d, &b))
+  if (0 == GetFullPathName (path, _nof_ (d), d, &b))
     {
       return 0;
     }
@@ -132,5 +129,4 @@ _libgen_(char *path, int dirname)
     }
 }
 
-
-#endif  /* _libgen_ */
+#endif /* _libgen_ */
