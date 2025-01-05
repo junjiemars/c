@@ -91,12 +91,12 @@ on_sig_chld (int signo, siginfo_t *info, void *ctx)
       c = (ucontext_t *)ctx;
       printf ("context:%p\n"
               "  uc_link=%p\n"
-              "  uc_sigmask=0x%0x\n"
+              "  uc_sigmask=%0x\n"
               "  uc_stack:\n"
               "    ss_sp=%p\n"
               "    ss_size=%zu\n"
               "    ss_flags=%d\n",
-              ctx, c->uc_link, (unsigned)c->uc_sigmask, c->uc_stack.ss_sp,
+              ctx, c->uc_link, *(unsigned*)&c->uc_sigmask, c->uc_stack.ss_sp,
               c->uc_stack.ss_size, c->uc_stack.ss_flags);
     }
 }
