@@ -314,6 +314,7 @@ $(lang_jmp_catch_binout): $(lang_jmp_catch_cppout)
 $(lang_jmp_catch_cppout): $(lang_root)/jmp/catch.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
+
 
 # linkage
 lang_linkage_lnkc_binout := $(bin_path)/$(lang_prefix)_linkage_lnkc$(bin_ext)

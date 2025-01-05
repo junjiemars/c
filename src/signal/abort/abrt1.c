@@ -1,7 +1,4 @@
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include "../_signal_.h"
 
 /*
  * Emulates POSIX `abort(3)':

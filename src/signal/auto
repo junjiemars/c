@@ -33,14 +33,12 @@ case $NM_SYSTEM in
     nm_feature_run=value
     nm_feature_h='
 #include <stdio.h>
-#include <unistd.h>
-'
+#include <unistd.h>'
   nm_feature_flags=
   nm_feature_test='
 long getpw_r_size_max = sysconf(_SC_GETPW_R_SIZE_MAX);
 printf("%ld\n", getpw_r_size_max);
-return 0;
-'
+return 0;'
   . ${NORE_ROOT}/auto/feature
     ;;
   *)
@@ -55,14 +53,12 @@ nm_feature="nanosleep"
 nm_feature_name="nm_nanosleep"
 nm_feature_run=no
 nm_feature_h='
-#include <time.h>
-'
+#include <time.h>'
 nm_feature_flags=
 nm_feature_test='
 struct timespec req, cur;
 nanosleep(&req, &cur);
-return 0;
-'
+return 0;'
 . ${NORE_ROOT}/auto/feature
 flag="has_nanosleep" op=":=" value="$nm_found" . ${NORE_ROOT}/auto/make_define
 
@@ -80,8 +76,7 @@ nm_feature_flags=
 nm_feature_test='
 struct timespec req, cur;
 clock_nanosleep(CLOCK_REALTIME, &req, &cur);
-return 0;
-'
+return 0;'
 . ${NORE_ROOT}/auto/feature
 flag="has_clock_nanosleep" op=":=" value="$nm_found" . ${NORE_ROOT}/auto/make_define
 
@@ -95,13 +90,11 @@ nm_feature_name="nm_sigqueue"
 nm_feature_run=no
 nm_feature_h='
 #include <signal.h>
-#include <unistd.h>
-'
+#include <unistd.h>'
 nm_feature_flags="-D_POSIX_C_SOURCE=$_POSIX_C_SOURCE"
 nm_feature_test='
 union sigval v = { .sival_int = 0x11223344 };
-(void) sigqueue(getpid(), SIGALRM, v);
-'
+(void) sigqueue(getpid(), SIGALRM, v);'
 . ${NORE_ROOT}/auto/feature
 flag="has_sigqueue" op=":=" value="$nm_found" . ${NORE_ROOT}/auto/make_define
 
