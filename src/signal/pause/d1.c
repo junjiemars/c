@@ -1,4 +1,4 @@
-#include <_signal_.h>
+#include "../_signal_.h"
 
 /*
  * Implementations derived from UNIX System V support the signal
@@ -29,7 +29,8 @@ main (void)
       pause ();
 
       sigprocmask (0, NULL, &oset2);
-      assert (oset1 == oset2 && "signal mark should be restore");
+      assert ((unsigned long)oset1 == (unsigned long)oset2
+              && "signal mark should be restore");
     }
 
   exit (EXIT_SUCCESS);
