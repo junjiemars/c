@@ -84,5 +84,5 @@ on_sig (int signo)
   sigprocmask (0, NULL, &set);
   assert (sigismember (&set, SIGHUP) && "should blocked SIGHUP");
 
-  errno = saved_errno
+  errno = saved_errno;
 }
