@@ -92,8 +92,16 @@ umbra_str_cmp_pre (const umbra_str_t *u1, const umbra_str_t *u2)
 int
 umbra_str_cmp_str (const umbra_str_t *u1, const umbra_str_t *u2)
 {
+#if (GCC)
+#  pragma GCC diagnostic ignored "-Wstringop-overread"
+#endif
   size_t max = _max_ (u1->len, u2->len);
-  if (u1->len < N_IN && u2->len < N_IN)
+
+  if (u1->len <= N_PRE && u2->len <= N_PRE)
+    {
+      return umbra_str_cmp_pre (u1, u2);
+    }
+  else if (u1->len < N_IN && u2->len < N_IN)
     {
       return strncmp ((char *)&u1->pre, (char *)&u2->pre, N_IN);
     }
