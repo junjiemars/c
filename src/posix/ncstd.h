@@ -32,7 +32,7 @@ do                                              \
 } while (0)
 
 
-#if (WINNT)
+#if (MSVC)
 #  if defined(setenv)
 #    undef  setenv
 #  endif

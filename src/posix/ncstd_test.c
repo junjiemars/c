@@ -21,8 +21,8 @@ main (void)
   printf ("%s=(no symbol)\n", _str_ (__STDC_VERSION__));
 #endif
 
-#if (WINNT)
-#  __pragma(warning(suppress: 4996))
+#if (MSVC)
+#pragma warning(disable: 4996)
 #endif
 
   setenv ("XYZ", "abc", 1);
