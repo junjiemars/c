@@ -58,9 +58,11 @@ on_sig_chld (int signo, siginfo_t *info, void *ctx)
     {
       switch (info->si_code)
         {
+#if CLD_NOOP
         case CLD_NOOP:
           code_name = _str_ (CLD_NOOP);
           break;
+#endif  /* CLD_NOOP */
         case CLD_EXITED:
           code_name = _str_ (CLD_EXITED);
           break;
@@ -94,7 +96,7 @@ on_sig_chld (int signo, siginfo_t *info, void *ctx)
               "    ss_sp=%p\n"
               "    ss_size=%zu\n"
               "    ss_flags=%d\n",
-              ctx, c->uc_link, c->uc_sigmask, c->uc_stack.ss_sp,
+              ctx, c->uc_link, (unsigned)c->uc_sigmask, c->uc_stack.ss_sp,
               c->uc_stack.ss_size, c->uc_stack.ss_flags);
     }
 }

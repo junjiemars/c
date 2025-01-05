@@ -1,40 +1,37 @@
-#include "_lang_.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "../_lang_.h"
 
-static int sqr(int);
+static int sqr (int);
 
 int
-main(int argc, const char **argv)
+main (int argc, const char **argv)
 {
-  int  n;
+  int n;
 
   if (argc < 2)
     {
-      fprintf(stderr, "usage: one <int>\n");
+      fprintf (stderr, "usage: one <int>\n");
       return 1;
     }
 
-  printf("# %s mode\n",
+  printf ("# %s mode\n",
 #if (NDEBUG)
-         "RELEASE"
+          "RELEASE"
 #else
-         "DEBUG"
-#endif  /* NDEBUG */
-         );
+          "DEBUG"
+#endif /* NDEBUG */
+  );
 
-  static_assert(4 == sizeof(int), "sizeof(int) != 4 bytes");
+  static_assert (4 == sizeof (int), "sizeof(int) != 4 bytes");
 
-  n = atoi(argv[1]);
-  printf("sqr(%i)=%u\n", n, sqr(n));
+  n = atoi (argv[1]);
+  printf ("sqr(%i)=%u\n", n, sqr (n));
 
   return 0;
 }
 
-
 int
-sqr(int x)
+sqr (int x)
 {
-  assert(((0 < x) && (x < 100)) && "x !in (0, 100)");
+  assert (((0 < x) && (x < 100)) && "x should in (0, 100)");
   return (x * x);
 }
