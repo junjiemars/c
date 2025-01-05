@@ -27,6 +27,11 @@
 #   endif
 #endif
 
+#if (MSVC)
+#  if !defined(fallthrough) && defined(__attribute__)
+#    define fallthrough  [[fallthrough]]
+#  endif
+#endif
 
 #if !defined(__has_attribute) && defined(__attribute__)
 #  if !defined(fallthrough)
