@@ -242,7 +242,7 @@ signal_job_test: signal_job_tstp_test
 signal_job_tstp: $(signal_job_tstp_binout)
 
 signal_job_tstp_test: $(signal_job_tstp_binout)
-	$< | head -n1 | xargs kill -TSTP
+	-@$< | head -n1 | xargs kill -TSTP
 
 $(signal_job_tstp_binout): $(signal_root)/job/j1.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^

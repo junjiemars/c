@@ -5,6 +5,8 @@ long linear_search (void *, void *, size_t, size_t,
 void test_linear_search_int (void);
 void test_linear_search_str (void);
 
+const char *xx[] = { "yes", "no" };
+
 int
 main (void)
 {
@@ -34,7 +36,7 @@ test_linear_search_int (void)
   int found;
   int a1[] = { 0x3, 0x5, 0x4, 0x1, 0x2 };
   int what = 0x1;
-  const char *xx[] = { "yes", "no" };
+
   int xxi = 1;
 
   printf ("linear search for %i\n----------\n", what);
@@ -73,7 +75,6 @@ test_linear_search_str (void)
   int found;
   char *s1[] = { "a", "ccc", "bb", "dddd" };
   char *what = "dddd";
-  const char *xx[] = { "ok", "failed" };
   int xxi = 1;
 
   printf ("linear search for %s\n----------\n", what);
