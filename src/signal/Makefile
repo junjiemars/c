@@ -4,7 +4,7 @@
 #
 #
 
-ifeq ($(CC_NAME), msvc)
+ifeq ($(NM_SYSTEM), Windows)
 signal:
 	@echo "#skip ..."
 signal_test:
