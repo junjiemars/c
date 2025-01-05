@@ -101,7 +101,7 @@ on_sig_alrm (int signo)
 
 #if (_REENTRANT_)
 
-  struct passwd pwd = NULL;
+  struct passwd pwd = { 0 };
   static char buf[NM_GETPW_R_SIZE_MAX];
 
   if (getpwnam_r (username2, &pwd, buf, NM_GETPW_R_SIZE_MAX, &p))

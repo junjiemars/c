@@ -1,4 +1,4 @@
-#include <_signal_.h>
+#include "../_signal_.h"
 
 static void on_sig_tstp (int);
 

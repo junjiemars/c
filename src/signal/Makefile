@@ -231,6 +231,8 @@ $(signal_io_xfsz_binout): $(signal_root)/io/x1.c
     -DBUF_SIZE=$(signal_io_xfsz_n) -DFIL_SIZE=$(signal_io_xfsz_rl) \
     $^ $(bin_out)$@
 
+
+
 # job
 signal_job_tstp_binout := $(bin_path)/$(signal_prefix)_job_tstp$(bin_ext)
 
@@ -551,7 +553,7 @@ signal_wait_test: signal_wait
 	$(signal_wait1_binout)
 
 $(signal_wait1_binout): $(signal_root)/wait/w1.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
 

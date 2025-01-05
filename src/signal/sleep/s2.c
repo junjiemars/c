@@ -1,7 +1,5 @@
-#include <errno.h>
+#include "../_signal_.h"
 #include <setjmp.h>
-#include <signal.h>
-#include <unistd.h>
 
 /*
  * 1st: emulates POSIX `sleep(3)'.
@@ -16,7 +14,7 @@ unsigned int
 sleep (unsigned int secs)
 {
   sigset_t nset, oset, wset;
-  unsigned int wait, unslept;
+  unsigned int wait;
   struct sigaction act, oact;
 
   wait = alarm (0);
@@ -52,7 +50,6 @@ sleep (unsigned int secs)
       sigaction (SIGALRM, &oact, NULL);
       sigprocmask (SIG_SETMASK, &oset, NULL);
     }
-  unslept = alarm (0);
 
   return (wait < secs) ? secs - wait : wait - secs;
 }
