@@ -66,8 +66,7 @@ nlim_times="yes"
 nio_getdelim="yes"
 nio_fileno="yes"
 nio_fdopen="yes"
-nio_dirname="yes"
-nio_basename="yes"
+nio_libgen="yes"
 nio_popen="yes"
 . ${POSIX_ROOT}/nio_auto
 

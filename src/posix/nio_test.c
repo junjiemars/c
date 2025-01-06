@@ -102,8 +102,8 @@ test_fdopen (void)
 void
 test_dirname (void)
 {
-#if !(NM_HAVE_DIRNAME || NM_HAVE_DIRNAME_GETFULLPATHNAME)
-  printf ("%s: no `dirname' found\n", __FUNCTION__);
+#if !defined(NM_HAVE_LIBGEN_H)
+  printf ("%s: no `libgen.h' found\n", __FUNCTION__);
 
 #else
 
@@ -111,7 +111,7 @@ test_dirname (void)
 #pragma warning(disable : 4210)
 #endif
 
-#if (NM_HAVE_DIRNAME_GETFULLPATHNAME)
+#if !defined(NM_HAVE_LIBGEN_H)
   extern char *_libgen_ (char *, int);
 #else
   extern char *dirname (char *);
@@ -139,8 +139,8 @@ test_dirname (void)
 void
 test_basename (void)
 {
-#if !(NM_HAVE_BASENAME || NM_HAVE_BASENAME_GETFULLPATHNAME)
-  printf ("%s: no `basename' found\n", __FUNCTION__);
+#if !defined(NM_HAVE_LIBGEN_H)
+  printf ("%s: no `libgen.h' found\n", __FUNCTION__);
 
 #else
 
@@ -148,7 +148,7 @@ test_basename (void)
 #pragma warning(disable : 4210)
 #endif
 
-#if (NM_HAVE_BASENAME_GETFULLPATHNAME)
+#if !defined(NM_HAVE_LIBGEN_H)
   extern char *_libgen_ (char *, int);
 #else
   extern char *basename (char *);

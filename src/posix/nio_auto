@@ -26,8 +26,7 @@ if [    "$nio_getdelim" = "yes"                 \
      -o "$nio_fileno" = "yes"                   \
      -o "$nio_fdopen" = "yes"                   \
      -o "$nio_fmemopen" = "yes"                 \
-     -o "$nio_dirname" = "yes"                  \
-     -o "$nio_basename" = "yes"                 \
+     -o "$nio_libgen" = "yes"                   \
      -o "$nio_popen" = "yes"                    \
    ]; then
   echo "checking for nio.h ..."
@@ -157,7 +156,7 @@ if [ "$nio_fmemopen" = "yes" ]; then
     nm_feature_flags=
     nm_feature_inc=
     nm_feature_ldlibs=
-    nm_feature_test='char *buf[0];FILE* f=fmemopen(buf,0,"r"); fclose(f);'
+    nm_feature_test='char *buf[0]; FILE* f=fmemopen(buf,0,"r"); fclose(f);'
     . ${NORE_ROOT}/auto/feature
     if [ "$nm_found" = "yes" ]; then
       have=$nm_have_feature . ${NORE_ROOT}/auto/have
@@ -166,102 +165,11 @@ if [ "$nio_fmemopen" = "yes" ]; then
     fi
 fi # end of fmemopen
 
-# check dirname
+# check libgen
 #----------------------------------------
-if [ "$nio_dirname" = "yes" ]; then
-  printf " + checking for dirname ... "
-  nm_feature="dirname"
-  nm_feature_name="nm_have_dirname"
-  nm_feature_run=dumb
-  nm_feature_h='#include <libgen.h>'
-  nm_feature_flags=
-  case $NM_SYSTEM in
-    Linux)
-      nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
-      ;;
-    *)
-      ;;
-  esac
-  nm_feature_test='char ss[]="a/b/c";(void)dirname(ss);'
-  . ${NORE_ROOT}/auto/feature
-  if [ "$nm_found" = "yes" ]; then
-    have=$nm_have_feature . ${NORE_ROOT}/auto/have
-    printf "yes\n"
-  else
-    case $CC_NAME in
-      msvc)
-        nm_feature_name="nm_have_dirname_getfullpathname"
-        nm_feature_run=dumb
-        nm_feature_h='#include <windows.h>'
-        nm_feature_flags="-D_CRT_SECURE_NO_WARNINGS $CFLAGS"
-        nm_feature_test='(void)GetFullPathName(NULL, 0, NULL, NULL);'
-        . ${NORE_ROOT}/auto/feature
-        if [ "$nm_found" = "yes" ]; then
-          have=$nm_have_feature . ${NORE_ROOT}/auto/have
-        fi
-        ;;
-      *)
-        ;;
-    esac
-    printf "${nm_found}\n"
-  fi                            # CC_NAME
-fi                              # nio_dirname
-
-
-# check basename
-#----------------------------------------
-if [ "$nio_basename" = "yes" ]; then
-  printf " + checking for basename ... "
-  nm_feature="basename"
-  nm_feature_name="nm_have_basename"
-  nm_feature_run=dumb
-  nm_feature_h='#include <libgen.h>'
-  nm_feature_flags=
-  nm_feature_test='(void) basename("/a/b/c");'
-  . ${NORE_ROOT}/auto/feature
-  if [ "$nm_found" = "yes" ]; then
-    have=$nm_have_feature . ${NORE_ROOT}/auto/have
-    printf "yes\n"
-  else
-    case $NM_SYSTEM in
-      Linux)
-        nm_feature_name="basename"
-        nm_feature_run=dumb
-        nm_feature_h='#include <libgen.h>'
-        nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
-        nm_feature_test='(void) basename("/a/b/c");'
-        . ${NORE_ROOT}/auto/feature
-        if [ "$nm_found" = "yes" ]; then
-          have=$nm_have_feature . ${NORE_ROOT}/auto/have
-        fi
-        echo "$nm_found"
-        ;;
-      WinNT)
-        nm_feature_name="nm_have_basename_getfullpathname"
-        nm_feature_run=dumb
-        nm_feature_h='#include <windows.h>'
-        case $CC_NAME in
-          msvc)
-            nm_feature_flags="-D_CRT_SECURE_NO_WARNINGS $CFLAGS"
-            ;;
-          *)
-            nm_feature_flags=
-            ;;
-        esac
-        nm_feature_test='(void) GetFullPathName(NULL, 0, NULL, NULL);'
-        . ${NORE_ROOT}/auto/feature
-        if [ "$nm_found" = "yes" ]; then
-          have=$nm_have_feature . ${NORE_ROOT}/auto/have
-        fi
-        echo "$nm_found"
-        ;;
-      *)
-        printf "no\n"
-        ;;
-    esac
-  fi
-fi # nio_basename
-
+if [ "$nio_libgen" = "yes" ]; then
+  include="libgen.h" . ${NORE_ROOT}/auto/include
+fi
 
 #check popen
 #----------------------------------------

@@ -96,7 +96,7 @@ getdelim (char **restrict lineptr, size_t *restrict n, int delimiter,
 
 #endif /* getdelim */
 
-#if (NM_HAVE_DIRNAME_GETFULLPATHNAME) || (NM_HAVE_BASENAME_GETFULLPATHNAME)
+#if !defined(NM_HAVE_LIBGEN_H) && (MSVC)
 #include <string.h>
 #include <tchar.h>
 #include <windows.h>

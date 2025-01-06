@@ -35,7 +35,9 @@ ssize_t getdelim(char ** restrict lineptr, size_t * restrict n, int delimiter,
 #endif  /* fdopen */
 
 
-#if (NM_HAVE_DIRNAME_GETFULLPATHNAME || NM_HAVE_BASENAME_GETFULLPATHNAME)
+#if defined(NM_HAVE_LIBGEN_H)
+#  include <libgen.h>
+#elif (MSVC)
 char *_libgen_(char *, int);
 #  if defined(dirname)
 #    undef dirname
@@ -45,8 +47,6 @@ char *_libgen_(char *, int);
 #    undef basename
 #  endif
 #  define basename(p)  _libgen_((p), 0)
-#elif (NM_HAVE_DIRNAME || NM_HAVE_BASENAME)
-#  include <libgen.h>
 #endif  /* dirname, basename */
 
 
