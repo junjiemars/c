@@ -175,10 +175,14 @@ if [ "$nio_dirname" = "yes" ]; then
   nm_feature_run=dumb
   nm_feature_h='#include <libgen.h>'
   nm_feature_flags=
-  if [ $NM_SYSTEM = Linux ]; then
-    nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
-  fi
-  nm_feature_test='(void)dirname("/a/b/c");'
+  case $NM_SYSTEM in
+    Linux)
+      nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
+      ;;
+    *)
+      ;;
+  esac
+  nm_feature_test='char ss[]="a/b/c";(void)dirname(ss);'
   . ${NORE_ROOT}/auto/feature
   if [ "$nm_found" = "yes" ]; then
     have=$nm_have_feature . ${NORE_ROOT}/auto/have
@@ -196,7 +200,8 @@ if [ "$nio_dirname" = "yes" ]; then
           have=$nm_have_feature . ${NORE_ROOT}/auto/have
         fi
         ;;
-      *) ;;
+      *)
+        ;;
     esac
     printf "${nm_found}\n"
   fi                            # CC_NAME
