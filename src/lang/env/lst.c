@@ -1,6 +1,8 @@
 #include "../_lang_.h"
 
+#if (NM_NEED_ENVIRON)
 extern char **environ;
+#endif
 
 int
 main (int argc, char **argv)
