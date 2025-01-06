@@ -41,6 +41,15 @@ f (void)
 void
 g (jmp_buf *env)
 {
+#if (MSVC)
+#if defined(fallthrough)
+	printf ("defined %s\n", _str_ (fallthrough));
+#endif
+#if defined(__attribute__)
+	printf ("defined %s\n", _str_ (__attribute__));
+#endif
+#endif
+
   jmp_buf local_env;
 
   printf ("%s g()\n", INDENT_1);
