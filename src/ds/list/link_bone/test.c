@@ -1,12 +1,27 @@
-#include "_ds_.h"
+#include "../../_ds_.h"
 #include "list.h"
 #include <stdio.h>
 
 int cmp_int (const void *a, const void *b);
 int cmp_str (const void *a, const void *b);
-
 void print_list_int (list_s *const s);
 void print_list_str (list_s *const s);
+void test_list_new_free_int (void);
+void test_list_int (void);
+void test_list_new_free_str (void);
+void test_list_str (void);
+
+int
+main (void)
+{
+  test_list_new_free_int ();
+  test_list_int ();
+
+  test_list_new_free_str ();
+  test_list_str ();
+
+  return 0;
+}
 
 int
 cmp_int (const void *a, const void *b)
@@ -195,16 +210,4 @@ test_list_str (void)
 
 clean_exit:
   list_free (s);
-}
-
-int
-main (void)
-{
-  test_list_new_free_int ();
-  test_list_int ();
-
-  test_list_new_free_str ();
-  test_list_str ();
-
-  return 0;
 }

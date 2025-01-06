@@ -13,5 +13,4 @@ typedef struct node_s
   struct node_s *sibling;
 } node_s;
 
-
 #endif /* end of _TREE_H_ */

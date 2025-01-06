@@ -1,187 +1,225 @@
-#include "_ds_.h"
+#include "../../_ds_.h"
 #include "list.h"
 #include <stdio.h>
 
-int cmp_int(const void *a, const void *b);
-int cmp_str(const void *a, const void*b);
-
-void print_list_int(list_s *const s);
-void print_list_str(list_s *const s);
+int cmp_int (const void *a, const void *b);
+int cmp_str (const void *a, const void *b);
+void print_list_int (list_s *const s);
+void print_list_str (list_s *const s);
+void test_list_new_free_int (void);
+void test_list_int (void);
+void test_list_new_free_str (void);
+void test_list_str (void);
 
 int
-cmp_int(const void *a, const void *b)
+main (void)
 {
-  int x = *(const int*) a - *(const int*) b;
+  test_list_new_free_int ();
+  test_list_int ();
+
+  test_list_new_free_str ();
+  test_list_str ();
+
+  return 0;
+}
+
+int
+cmp_int (const void *a, const void *b)
+{
+  int x = *(const int *)a - *(const int *)b;
   return x;
 }
 
 void
-print_list_int(list_s *const s)
+print_list_int (list_s *const s)
 {
-  printf("---------------------\n");
+  printf ("---------------------\n");
   node_s *h = s->head;
-  while (h) {
-    printf("%16i  at %p\n", *(int*) h->data, h->data);
-    h = h->next;
-  }
-  putchar('\n');
+  while (h)
+    {
+      printf ("%16i  at %p\n", *(int *)h->data, h->data);
+      h = h->next;
+    }
+  putchar ('\n');
 }
 
 int
-cmp_str(const void *a, const void*b)
+cmp_str (const void *a, const void *b)
 {
-  int c = strcmp(*(char* const*) a, *(char* const*) b);
+  int c = strcmp (*(char *const *)a, *(char *const *)b);
   return c;
 }
 
 void
-print_list_str(list_s *const s)
+print_list_str (list_s *const s)
 {
-  printf("---------------------\n");
+  printf ("---------------------\n");
   node_s *h = s->head;
-  while (h) {
-    printf("%8s %16s  at %p\n", "", *(char**) h->data, h->data);
-    h = h->next;
-  }
-  putchar('\n');
+  while (h)
+    {
+      printf ("%8s %16s  at %p\n", "", *(char **)h->data, h->data);
+      h = h->next;
+    }
+  putchar ('\n');
 }
 
-
 void
-test_list_new_free_int(void) {
-  list_s *s = list_new(0, sizeof(int), cmp_int);
-  list_free(s);
+test_list_new_free_int (void)
+{
+  list_s *s = list_new (0, sizeof (int), cmp_int);
+  list_free (s);
 }
 
-
 void
-test_list_int(void) {
-  int ss[] = { 3, 2, 5, 4, 1, };
-  list_s *s = list_new(0, sizeof(int), cmp_int);
+test_list_int (void)
+{
+  int ss[] = {
+    3, 2, 5, 4, 1,
+  };
+  list_s *s = list_new (0, sizeof (int), cmp_int);
 
-  printf("list[sort|int]: insert/find/remove\n");
-  printf("---------------------\n");
+  printf ("list[sort|int]: insert/find/remove\n");
+  printf ("---------------------\n");
 
   node_s *n;
-  for (size_t i = 0; i < sizeof(ss)/sizeof(ss[0]); i++) {
-    n = list_insert(s, &ss[i]);
-    if (!n) {
-      fprintf(stderr, "insert wrong\n");
-      goto clean_exit;
+  for (size_t i = 0; i < sizeof (ss) / sizeof (ss[0]); i++)
+    {
+      n = list_insert (s, &ss[i]);
+      if (!n)
+        {
+          fprintf (stderr, "insert wrong\n");
+          goto clean_exit;
+        }
+      printf ("%8s %16i  at %p\n", "insert", *(int *)n->data, n->data);
     }
-    printf("%8s %16i  at %p\n", "insert", *(int*)n->data, n->data);
-  }
-  putchar('\n');
+  putchar ('\n');
 
   int f = -1;
-  n = list_find(s, &f);
-  if (!n) {
-    printf("%8s %16i  no found\n", "find", f);
-  } else {
-    printf("%8s %16i  at %p\n", "find", *(int*)n->data, n->data);
-  }
+  n = list_find (s, &f);
+  if (!n)
+    {
+      printf ("%8s %16i  no found\n", "find", f);
+    }
+  else
+    {
+      printf ("%8s %16i  at %p\n", "find", *(int *)n->data, n->data);
+    }
 
   f = 4;
-  n = list_find(s, &f);
-  if (!n) {
-    printf("%8s %16i  no found\n", "find", f);
-  } else {
-    printf("%8s %16i  at %p\n", "find", *(int*)n->data, n->data);
-  }
+  n = list_find (s, &f);
+  if (!n)
+    {
+      printf ("%8s %16i  no found\n", "find", f);
+    }
+  else
+    {
+      printf ("%8s %16i  at %p\n", "find", *(int *)n->data, n->data);
+    }
 
-  f = *(int*)n->data;
-  if (list_remove(s, n)) {
-    printf("%8s %16i  at %p\n", "remove", f, &f);
-  } else {
-    printf("%8s %16i  wrong\n", "remove", f);
-  }
+  f = *(int *)n->data;
+  if (list_remove (s, n))
+    {
+      printf ("%8s %16i  at %p\n", "remove", f, &f);
+    }
+  else
+    {
+      printf ("%8s %16i  wrong\n", "remove", f);
+    }
 
   f = 1;
-  n = list_insert(s, &f);
-  if (n) {
-    printf("%8s %16i  at %p\n", "insert", *(int*)n->data, n->data);
-  } else {
-    printf("%8s %16i  wrong\n", "insert", f);
-  }
+  n = list_insert (s, &f);
+  if (n)
+    {
+      printf ("%8s %16i  at %p\n", "insert", *(int *)n->data, n->data);
+    }
+  else
+    {
+      printf ("%8s %16i  wrong\n", "insert", f);
+    }
 
-  print_list_int(s);
+  print_list_int (s);
 
- clean_exit:
-  list_free(s);
-}
-
-
-void
-test_list_new_free_str(void) {
-  list_s *s = list_new(0, sizeof(char*), cmp_str);
-  list_free(s);
+clean_exit:
+  list_free (s);
 }
 
 void
-test_list_str(void) {
-  char *ss[] = { "ccc", "bb", "a", "dddd", "eeeee", 0, };
-  list_s *s = list_new(0, sizeof(char*), cmp_str);
+test_list_new_free_str (void)
+{
+  list_s *s = list_new (0, sizeof (char *), cmp_str);
+  list_free (s);
+}
 
-  printf("lists[sort|str]: insert/find/remove\n");
-  printf("---------------------\n");
+void
+test_list_str (void)
+{
+  char *ss[] = {
+    "ccc", "bb", "a", "dddd", "eeeee", 0,
+  };
+  list_s *s = list_new (0, sizeof (char *), cmp_str);
+
+  printf ("lists[sort|str]: insert/find/remove\n");
+  printf ("---------------------\n");
 
   char **p = ss;
   node_s *n;
-  while (*p) {
-    n = list_insert(s, p++);
-    if (!n) {
-      fprintf(stderr, "insert wrong\n");
-      goto clean_exit;
+  while (*p)
+    {
+      n = list_insert (s, p++);
+      if (!n)
+        {
+          fprintf (stderr, "insert wrong\n");
+          goto clean_exit;
+        }
+      printf ("%8s %16s  at %p\n", "insert", *(char **)n->data, n->data);
     }
-    printf("%8s %16s  at %p\n", "insert", *(char**)n->data, n->data);
-  }
-  putchar('\n');
+  putchar ('\n');
 
   char *f = "fffffff";
-  n = list_find(s, &f);
-  if (n) {
-    printf("%8s %16s  at %p\n", "find", *(char**)n->data, n->data);
-  } else {
-    printf("%8s %16s  no found\n", "find", f);
-  }
+  n = list_find (s, &f);
+  if (n)
+    {
+      printf ("%8s %16s  at %p\n", "find", *(char **)n->data, n->data);
+    }
+  else
+    {
+      printf ("%8s %16s  no found\n", "find", f);
+    }
 
   f = "dddd";
-  n = list_find(s, &f);
-  if (n) {
-    printf("%8s %16s  at %p\n", "find", *(char**)n->data, n->data);
-  } else {
-    printf("%8s %16s  no found\n", "found", f);
-  }
+  n = list_find (s, &f);
+  if (n)
+    {
+      printf ("%8s %16s  at %p\n", "find", *(char **)n->data, n->data);
+    }
+  else
+    {
+      printf ("%8s %16s  no found\n", "found", f);
+    }
 
-  f = *(char**)n->data;
-  if (list_remove(s, n)) {
-    printf("%8s %16s  at %p\n", "remove", f, &f);
-  } else {
-    printf("%8s %16s wrong\n", "remove", f);
-  }
+  f = *(char **)n->data;
+  if (list_remove (s, n))
+    {
+      printf ("%8s %16s  at %p\n", "remove", f, &f);
+    }
+  else
+    {
+      printf ("%8s %16s wrong\n", "remove", f);
+    }
 
   f = "a";
-  n = list_insert(s, &f);
-  if (n) {
-    printf("%8s %16s  at %p\n", "insert", *(char**)n->data, n->data);
-  } else {
-    printf("%8s %16s  wrong\n", "insert", f);
-  }
+  n = list_insert (s, &f);
+  if (n)
+    {
+      printf ("%8s %16s  at %p\n", "insert", *(char **)n->data, n->data);
+    }
+  else
+    {
+      printf ("%8s %16s  wrong\n", "insert", f);
+    }
 
-  print_list_str(s);
+  print_list_str (s);
 
- clean_exit:
-  list_free(s);
-}
-
-
-int
-main(void) {
-  test_list_new_free_int();
-  test_list_int();
-
-  test_list_new_free_str();
-  test_list_str();
-
-  return 0;
+clean_exit:
+  list_free (s);
 }

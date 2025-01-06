@@ -93,7 +93,7 @@ int
 umbra_str_cmp_str (const umbra_str_t *u1, const umbra_str_t *u2)
 {
 #if (GCC)
-#  pragma GCC diagnostic ignored "-Wstringop-overread"
+#pragma GCC diagnostic ignored "-Wstringop-overread"
 #endif
   size_t max = _max_ (u1->len, u2->len);
 

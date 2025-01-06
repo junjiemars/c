@@ -12,6 +12,10 @@ if [ -z "$POSIX_ROOT" ]; then
 fi
 
 
+# check cc features
+ncc_sanitize_address="yes"
+. ${POSIX_ROOT}/ncc_auto
+
 # check posix features
 ndef_restrict="yes"
 ndef_static_assert="yes"
