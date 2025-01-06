@@ -91,7 +91,7 @@ test_do() {
 
 # basic test
 if [ "basic" = "$_TEST_" ]; then
-  # test_do --has-posix
+  test_do --has-posix
   # test_do --has-algo
   # # test_do --has-cpu
   # test_do --has-ctl
@@ -101,7 +101,7 @@ if [ "basic" = "$_TEST_" ]; then
   # test_do --has-flex
   # test_do --has-hi
   # test_do --has-io
-  test_do --has-lang
+  # test_do --has-lang
   # test_do --has-leptonica
   # test_do --has-library
   # test_do --has-libgccjit

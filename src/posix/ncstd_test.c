@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if !(WINNT)
+#if (NM_NEED_ENVIRON)
 extern char **environ;
 #endif
 
@@ -21,6 +21,12 @@ main (void)
   printf ("%s=%liL\n", _str_ (__STDC_VERSION__), (__STDC_VERSION__ + 0L));
 #else
   printf ("%s=(no symbol)\n", _str_ (__STDC_VERSION__));
+#endif
+
+#if defined(NM_NEED_ENVIRON)
+  printf ("%s=%d\n", _str_ (NM_NEED_ENVIRON), NM_NEED_ENVIRON);
+#else
+  printf ("%s=(no symbol)\n", _str_ (NM_NEED_ENVIRON));
 #endif
 
 #if (MSVC)

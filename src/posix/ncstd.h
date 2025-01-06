@@ -50,5 +50,12 @@ do                                              \
 #  define environ  _environ
 #endif  /* environ */
 
+#if (WINNT) && (GCC)
+#  if defined(NM_NEED_ENVIRON)
+#    undef NM_NEED_ENVIRON
+#  endif
+#else
+#  define NM_NEED_ENVIRON 1
+#endif
 
 #endif /* _NCSTD_H_ */
