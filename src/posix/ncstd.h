@@ -30,7 +30,7 @@ do                                              \
 } while (0)
 
 
-#if (WINNT)
+#if (MSVC)
 #  if defined(setenv)
 #    undef  setenv
 #  endif
@@ -39,12 +39,10 @@ do                                              \
 #    undef  unsetenv
 #  endif
 #  define unsetenv(n)   _putenv_s((n), "")
-#  if (MSVC)
-#    if defined(environ)
-#      undef environ
-#    endif
-#    define environ  _environ
+#  if defined(environ)
+#    undef environ
 #  endif
+#  define environ  _environ
 #endif  /* setenv, unsetenv */
 
 
