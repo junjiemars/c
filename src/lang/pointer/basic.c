@@ -1,7 +1,7 @@
 #include "../_lang_.h"
 
 #if (MSVC)
-#pragma warning(disable: 4048)
+#pragma warning(disable : 4048)
 #endif
 
 int

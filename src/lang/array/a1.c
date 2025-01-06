@@ -1,4 +1,4 @@
-#include "_lang_.h"
+#include "../_lang_.h"
 
 #if (GCC)
 #pragma GCC diagnostic ignored "-Warray-parameter"

@@ -1,23 +1,22 @@
-#include "_lang_.h"
+#include "../_lang_.h"
 #include <assert.h>
 
-void test_raw(int);
-void test_ptr(int);
-void test_ptr_ptr(int);
-
+void test_raw (int);
+void test_ptr (int);
+void test_ptr_ptr (int);
 
 int
-main(void)
+main (void)
 {
-  test_raw('a');
-  test_ptr('a');
-  test_ptr_ptr('a');
+  test_raw ('a');
+  test_ptr ('a');
+  test_ptr_ptr ('a');
 
   return 0;
 }
 
 void
-test_raw(int a)
+test_raw (int a)
 {
   int d;
   d = a + 1;
@@ -25,16 +24,16 @@ test_raw(int a)
   /* d + 1 is a value, not a lvalue */
   /* d + 1 = a; */
 
-  assert(d);
+  assert (d);
 }
 
 void
-test_ptr(int c)
+test_ptr (int c)
 {
   char *cp, *cp1;
 
   /* cp is a memory location, as a lvalue, so assignable */
-  cp = (char*) &c;
+  cp = (char *)&c;
 
   /* &c cannot be a lvalue, not assignable */
   /* &c = (char*) 0; */
@@ -43,27 +42,27 @@ test_ptr(int c)
   cp1 = cp;
 
   /* cp as rvalue */
-  assert(*cp == (char) c);
+  assert (*cp == (char)c);
 
   /* cp as lvalue */
   *cp = 'A';
 
-  assert((*cp + 1) == 'B');
+  assert ((*cp + 1) == 'B');
 
   /* a value not a lvalue */
   /* *cp + 1 = 'C'; */
 
-  assert(cp1);
+  assert (cp1);
 }
 
 void
-test_ptr_ptr(int c)
+test_ptr_ptr (int c)
 {
   char *cp;
 
-  cp = (char*) &c;
+  cp = (char *)&c;
 
   /* cpp = &cp; */
 
-  assert(cp);
+  assert (cp);
 }

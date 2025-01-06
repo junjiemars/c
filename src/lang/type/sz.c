@@ -1,4 +1,4 @@
-#include "_lang_.h"
+#include "../_lang_.h"
 
 static void test_char ();
 static void test_int ();

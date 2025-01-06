@@ -1,16 +1,15 @@
-#include <_lang_.h>
+#include "../_lang_.h"
 
-
-#define SQUARE(x)  ((x)*(x))
-#define CUBE(x)    (SQUARE(x)*(x))
+#define SQUARE(x) ((x) * (x))
+#define CUBE(x) (SQUARE (x) * (x))
 
 int
-main(void)
+main (void)
 {
-	int  x  =  SQUARE(3+3);
-	int  y  =  CUBE(3+3);
+  int x = SQUARE (3 + 3);
+  int y = CUBE (3 + 3);
 
-	printf("square(3)=%i, cube(3)=%i\n", x, y);
+  printf ("square(3)=%i, cube(3)=%i\n", x, y);
 
-	return 0;
+  return 0;
 }

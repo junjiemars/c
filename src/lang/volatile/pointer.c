@@ -1,26 +1,26 @@
-#include <_lang_.h>
+#include "../_lang_.h"
 
 static int *volatile x;
 
 int
-raw(int *i)
+raw (int *i)
 {
-	*i += 0x22;
-	return *i;
+  *i += 0x22;
+  return *i;
 }
 
 int
-foo(int *volatile i)
+foo (int *volatile i)
 {
-	*i += 0x22;
-	return *i;
+  *i += 0x22;
+  return *i;
 }
 
 int
-main(int argc, __attribute__((unused)) char **argv)
+main (int argc, __attribute__ ((unused)) char **argv)
 {
-	x = &argc;
-	foo(x);
+  x = &argc;
+  foo (x);
 
-	return 0;
+  return 0;
 }

@@ -1,4 +1,4 @@
-#include "_lang_.h"
+#include "../_lang_.h"
 
 static int n;
 static volatile int n1;

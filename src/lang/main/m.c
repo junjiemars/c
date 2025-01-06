@@ -1,4 +1,4 @@
-#include "_lang_.h"
+#include "../_lang_.h"
 
 int
 main (int argc, char **argv)

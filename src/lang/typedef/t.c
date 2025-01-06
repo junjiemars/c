@@ -1,4 +1,4 @@
-#include "_lang_.h"
+#include "../_lang_.h"
 #include <stdio.h>
 
 #if (MSVC)
@@ -62,7 +62,7 @@ main (void)
   printf ("sizeof(x_t)       = %4zu\n", sizeof (x_t));
   printf ("sizeof(p_t)       = %4zu\n", sizeof (p_t));
   printf ("sizeof(f_t)       = %4zu\n", sizeof (fn_t));
-	printf ("sizeof(ux_t)      = %4zu\n", sizeof (ux_t));
+  printf ("sizeof(ux_t)      = %4zu\n", sizeof (ux_t));
 
   test_fn ();
 

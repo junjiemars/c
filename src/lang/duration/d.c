@@ -1,56 +1,52 @@
-#include <_lang_.h>
+#include "../_lang_.h"
 #include <stdio.h>
 
-
-static void fn_auto();
-static void fn_static();
-static void fn_extern();
-
+static void fn_auto (void);
+static void fn_static (void);
+static void fn_extern (void);
 
 /* duration: static */
 int g_var_x = 0x11223344;
 
 int
-main(void)
+main (void)
 {
+  printf ("\nstatic duration\n");
+  printf ("-----------------\n");
+  printf ("g_var_x = 0x%08x\n", g_var_x);
 
-	printf("\nstatic duration\n");
-	printf("-----------------\n");
-	printf("g_var_x = 0x%08x\n", g_var_x);
+  printf ("\nautomatic duration\n");
+  printf ("--------------------\n");
+  fn_auto ();
 
-	printf("\nautomatic duration\n");
-	printf("--------------------\n");
-	fn_auto();
+  printf ("\nstatic duration\n");
+  printf ("-----------------\n");
+  fn_static ();
+  fn_static ();
 
-	printf("\nstatic duration\n");
-	printf("-----------------\n");
-	fn_static();
-	fn_static();
-
-	printf("\nstatic duration\n");
-	printf("-----------------\n");
-	fn_extern();
-	fn_extern();
-}
-
-
-void
-fn_auto()
-{
-	int i = 0xaabbccdd;
-	printf("auto i = 0x%08x in fn_auto()\n", i);
+  printf ("\nstatic duration\n");
+  printf ("-----------------\n");
+  fn_extern ();
+  fn_extern ();
 }
 
 void
-fn_static()
+fn_auto ()
 {
-	static int static_i = 0x11223344;
-	printf("static i = 0x%08x in fn_static()\n", static_i++);
+  int i = 0xaabbccdd;
+  printf ("auto i = 0x%08x in fn_auto()\n", i);
 }
 
 void
-fn_extern()
+fn_static ()
 {
-	extern int g_var_y;
-	printf("g_var_y = 0x%08x in fn_extern()\n", g_var_y++);
+  static int static_i = 0x11223344;
+  printf ("static i = 0x%08x in fn_static()\n", static_i++);
+}
+
+void
+fn_extern ()
+{
+  extern int g_var_y;
+  printf ("g_var_y = 0x%08x in fn_extern()\n", g_var_y++);
 }

@@ -1,4 +1,4 @@
-#include "_lang_.h"
+#include "../_lang_.h"
 #include <setjmp.h>
 #include <stdio.h>
 
@@ -9,52 +9,52 @@
  *
  */
 
-static jmp_buf       env;
-static volatile int  flag  =  0x11223344;
+static jmp_buf env;
+static volatile int flag = 0x11223344;
 
-static void  a(void);
-static void  b(volatile int*);
-static void  c(volatile int*);
+static void a (void);
+static void b (volatile int *);
+static void c (volatile int *);
 
 int
-main(void)
+main (void)
 {
-	a();
+  a ();
 }
 
 void
-a(void)
+a (void)
 {
-	int           val;
-	volatile int  flag_in_stack  =  flag;
+  int val;
+  volatile int flag_in_stack = flag;
 
-	printf("> setjmp()\n[flag=0x%x, flag_in_stack=0x%x]\n=> ",
-				 flag, flag_in_stack);
+  printf ("> setjmp()\n[flag=0x%x, flag_in_stack=0x%x]\n=> ", flag,
+          flag_in_stack);
 
-	if (0 != (val = setjmp(env)))
+  if (0 != (val = setjmp (env)))
     {
-      printf("\n< longjmp(0x%x)\n[flag=0x%x, flag_in_stack=0x%x]\n",
-             val, flag, flag_in_stack);
+      printf ("\n< longjmp(0x%x)\n[flag=0x%x, flag_in_stack=0x%x]\n", val,
+              flag, flag_in_stack);
     }
   else
     {
-      printf("b() => ");
-      b(&flag_in_stack);
+      printf ("b() => ");
+      b (&flag_in_stack);
     }
 }
 
 void
-b(volatile int *flag_in_stack)
+b (volatile int *flag_in_stack)
 {
-	printf("c() => ");
-	c(flag_in_stack);
+  printf ("c() => ");
+  c (flag_in_stack);
 }
 
 void
-c(volatile int *flag_in_stack)
+c (volatile int *flag_in_stack)
 {
-	flag = 0x44332211;
-	*flag_in_stack = flag;
-	printf("longjmp() => ");
-	longjmp(env, 0x1234);
+  flag = 0x44332211;
+  *flag_in_stack = flag;
+  printf ("longjmp() => ");
+  longjmp (env, 0x1234);
 }

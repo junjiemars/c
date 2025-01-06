@@ -1,5 +1,5 @@
 #include "scope.h"
-#include "_lang_.h"
+#include "../_lang_.h"
 
 #if MSVC
 /* warning C4702: unreachable code */
@@ -30,7 +30,7 @@ inc ()
 {
   static int i = 0;
   return i++;
-	/* `i' has function scope */
+  /* `i' has function scope */
 }
 
 #if defined(MSVC)

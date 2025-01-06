@@ -1,5 +1,4 @@
-#include "_lang_.h"
-
+#include "../_lang_.h"
 
 /*
  * Note:
@@ -14,22 +13,21 @@
  *
  */
 
-#define  peval(expr)  printf("%-32s: %04zuB\n", #expr, expr);
-
+#define peval(expr) printf ("%-32s: %04zuB\n", #expr, expr);
 
 int
-main(void)
+main (void)
 {
-  peval(sizeof(double));
+  peval (sizeof (double));
 
-  double  d = 1.0;
-  peval(sizeof d + 10);
+  double d = 1.0;
+  peval (sizeof d + 10);
 
-  peval(sizeof(int));
-  peval(sizeof sizeof(int));
+  peval (sizeof (int));
+  peval (sizeof sizeof (int));
 
-  double a[] = {1, 2, 3};
-  peval(sizeof(a)/(sizeof(*a)));
+  double a[] = { 1, 2, 3 };
+  peval (sizeof (a) / (sizeof (*a)));
 
   return 0;
 }

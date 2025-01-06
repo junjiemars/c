@@ -1,4 +1,4 @@
-#include "_lang_.h"
+#include "../_lang_.h"
 #include <signal.h>
 
 /*
@@ -22,7 +22,7 @@ static void psignal (int sig, const char *s);
 
 #if !defined(N) || (N < 0)
 #define N 8
-#endif  /* N */
+#endif /* N */
 
 typedef void (*on_signal) (int);
 

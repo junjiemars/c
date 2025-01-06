@@ -1,4 +1,4 @@
-%:include "_lang_.h"
+%:include "../_lang_.h"
 %:include <iso646.h>
 %:include <stdio.h>
 

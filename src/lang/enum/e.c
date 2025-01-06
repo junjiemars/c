@@ -1,4 +1,4 @@
-#include "_lang_.h"
+#include "../_lang_.h"
 #include <stdio.h>
 
 enum
@@ -35,7 +35,7 @@ typedef enum
 
 enum corvid
 {
-#define XX(num, name, string) CORVID_##name = num ,
+#define XX(num, name, string) CORVID_##name = num,
   CORVID_MAP (XX)
 #undef XX
 };
