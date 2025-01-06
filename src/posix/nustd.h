@@ -63,7 +63,6 @@ typedef long long  ssize_t;
 #endif  /* ssize_t */
 
 
-
 #if (MSVC)
 #  define sleep(x)  Sleep((x) * 1000)
 #endif  /* sleep */
