@@ -6,9 +6,9 @@
 
 ifeq ($(NM_SYSTEM),WinNT)
 io:
-	@echo "#skip ..."
+	@echo "#skip $@ ..."
 io_test:
-	@echo "#skip ..."
+	@echo "#skip $@ ..."
 else
 
 io:                                             \

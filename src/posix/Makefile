@@ -1,3 +1,4 @@
+# -*- mode:makefile-gmake -*-
 #
 # ./configure --has-posix
 #
@@ -11,7 +12,8 @@ posix: posix_npstd                              \
        posix_nio                                \
        posix_nlim                               \
        posix_nbits                              \
-       posix_getopt
+       posix_getopt                             \
+       posix_raw
 
 posix_test: posix_npstd_test                    \
             posix_ndef_test                     \
@@ -22,8 +24,8 @@ posix_test: posix_npstd_test                    \
             posix_nio_test                      \
             posix_nlim_test                     \
             posix_nbits_test                    \
-            posix_getopt_test
-
+            posix_getopt_test                   \
+            posix_raw_test
 
 
 # env
@@ -32,7 +34,7 @@ posix_prefix := posix
 INC += -I$(posix_root)
 
 ifeq ($(_MEMORY_), 1)
-	CFLAGS += $(f_sanitize)
+CFLAGS += $(f_sanitize)
 endif # end of _MEMORY_
 
 
@@ -246,7 +248,59 @@ $(posix_nustd_binout): $(posix_nustd_cppout)
 
 $(posix_nustd_cppout): $(posix_root)/nustd_test.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
-	# cat $@
+
+# raw
+posix_raw_winnt_binout := $(bin_path)/$(posix_prefix)_raw_winnt$(bin_ext)
+posix_raw_darwin_binout := $(bin_path)/$(posix_prefix)_raw_darwin$(bin_ext)
+posix_raw_linux_binout := $(bin_path)/$(posix_prefix)_raw_linux$(bin_ext)
+
+ifeq ($(NM_SYSTEM), WinNT)
+posix_raw: posix_raw_winnt
+posix_raw_test: posix_raw
+	$(posix_raw_winnt_binout)
+else
+ifeq ($(NM_SYSTEM), Darwin)
+posix_raw: posix_raw_darwin
+posix_raw_test: posix_raw
+	$(posix_raw_darwin_binout)
+else
+ifeq ($(NM_SYSTEM), Linux)
+posix_raw: posix_raw_darwin
+posix_raw_test: posix_raw
+	$(posix_raw_darwin_binout)
+else
+posix_raw:
+	@echo "#skip $@ ..."
+posix_raw_test: posix_raw
+	@echo "#skip $@ ..."
+endif														# Linux
+endif														# Darwin
+endif														# WinNT
+
+posix_raw_winnt: $(posix_raw_winnt_binout)
+posix_raw_darwin: $(posix_raw_darwin_binout)
+posix_raw_linux: $(posix_raw_linux_binout)
+
+$(posix_raw_winnt_binout): $(posix_root)/raw_winnt.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+$(posix_raw_darwin_binout): $(posix_root)/raw_darwin.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+$(posix_raw_linux_binout): $(posix_root)/raw_linux.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+
+
+
+.PHONY: posix_npstd posix_npstd_test            \
+        posix_ndef posix_ndef_test              \
+        posix_nint posix_nint_test              \
+        posix_nstr posix_nstr_test              \
+        posix_ncstd posix_ncstd_test            \
+        posix_nustd posix_nustd_test            \
+        posix_nio posix_nio_test                \
+        posix_nlim posix_nlim_test              \
+        posix_nbits posix_nbits_test            \
+        posix_getopt posix_getopt_test          \
+        posix_raw posix_raw_test
 
 
 # eof
