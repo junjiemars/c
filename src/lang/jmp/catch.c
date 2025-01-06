@@ -42,7 +42,7 @@ void
 g (jmp_buf *env)
 {
 #if (MSVC)
-#pragma warning(disable : 2065)
+#pragma warning(disable : 26819)
 #if defined(fallthrough)
 	printf ("defined %s\n", _str_ (fallthrough));
 #endif
