@@ -35,6 +35,7 @@ ifeq ($(_MEMORY_), 1)
 	CFLAGS += $(f_sanitize)
 endif # end of _MEMORY_
 
+
 
 # npstd
 posix_npstd_binout := $(bin_path)/$(posix_prefix)_npstd$(bin_ext)
@@ -138,6 +139,7 @@ $(posix_nint_binout): $(posix_nint_cppout)
 $(posix_nint_cppout): $(posix_root)/nint_test.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(nm_stage_pre) $< $(cpp_out)$@
 
+
 
 # nio
 posix_nio_binout := $(bin_path)/$(posix_prefix)_nio$(bin_ext)
@@ -149,8 +151,9 @@ posix_nio_test: posix_nio
 
 $(posix_nio_binout): $(posix_root)/nio.c        \
                      $(posix_root)/nio_test.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
+
 
 # nstr
 posix_nstr_binout := $(bin_path)/$(posix_prefix)_nstr$(bin_ext)

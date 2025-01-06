@@ -1,7 +1,6 @@
 /**
  * Nore C standard
  */
-
 #ifndef _NCSTD_H_
 #define _NCSTD_H_
 
@@ -32,7 +31,7 @@ do                                              \
 } while (0)
 
 
-#if (MSVC)
+#if (WINNT)
 #  if defined(setenv)
 #    undef  setenv
 #  endif

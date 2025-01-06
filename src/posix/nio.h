@@ -1,3 +1,6 @@
+/**
+ * Nore IO
+ */
 #ifndef _NIO_H_
 #define _NIO_H_
 
@@ -8,7 +11,7 @@
 
 
 #if (MSVC)
-#  pragma warning(disable: 4996)  /* _CRT_SECURE_NO_WARNINGS */
+#  pragma warning(disable : 4996)  /* _CRT_SECURE_NO_WARNINGS */
 #endif
 
 

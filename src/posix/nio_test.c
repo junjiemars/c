@@ -108,7 +108,7 @@ test_dirname (void)
 #else
 
 #if (MSVC)
-#  pragma warning(disable : 4210)
+#pragma warning(disable : 4210)
 #endif
 
 #if (NM_HAVE_DIRNAME_GETFULLPATHNAME)
@@ -145,7 +145,7 @@ test_basename (void)
 #else
 
 #if (MSVC)
-#  pragma warning(disable : 4210)
+#pragma warning(disable : 4210)
 #endif
 
 #if (NM_HAVE_BASENAME_GETFULLPATHNAME)
@@ -181,7 +181,7 @@ test_popen (void)
 #else
 
 #if (MSVC)
-#  pragma warning(disable : 4210)
+#pragma warning(disable : 4210)
 #endif
 
   printf ("# wait...\n");
