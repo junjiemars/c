@@ -9,7 +9,6 @@
 #include <nstr.h>
 
 
-
 #if !defined(_fpos_)
 #  if (LINUX)
 #    define _fpos_(x)  x.__pos
@@ -40,10 +39,12 @@ do                                              \
 #    undef  unsetenv
 #  endif
 #  define unsetenv(n)   _putenv_s((n), "")
-#  if defined(environ)
-#    undef environ
+#  if (MSVC)
+#    if defined(environ)
+#      undef environ
+#    endif
+#    define environ  _environ
 #  endif
-#  define environ  _environ
 #endif  /* setenv, unsetenv */
 
 

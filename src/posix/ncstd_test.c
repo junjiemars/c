@@ -4,7 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if !(WINNT) && !(GCC)
 extern char **environ;
+#endif
 
 int
 main (void)
