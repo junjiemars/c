@@ -7,7 +7,7 @@
 #
 
 ifeq ($(NM_SYSTEM), WinNT)
-io:
+data:
 	@echo "#skip ..."
 data_test:
 	@echo "#skip ..."
@@ -40,8 +40,8 @@ ifeq ($(CC_NAME), msvc)
 getopt_c := $(root)/posix/getopt.c
 endif
 
-_MEMORY_ ?= 0
-ifeq ($(shell test $(_MEMORY_) -gt 0; echo $$?),0)
+use_sanitize ?= 0
+ifeq ($(shell test $(use_sanitize) -gt 0; echo $$?),0)
 CFLAGS += $(cflags_sanitize)
 endif
 

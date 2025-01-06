@@ -1,21 +1,21 @@
-#include "_data_.h"
+#include "../_data_.h"
 #include <sys/time.h>
 #include <time.h>
 
 int
-main(void)
+main (void)
 {
-  time_t          utc;
-  struct timeval  tv;
+  time_t utc;
+  struct timeval tv;
 
-  if (gettimeofday(&tv, NULL) == -1)
+  if (gettimeofday (&tv, NULL) == -1)
     {
-      perror(NULL);
-      exit(EXIT_FAILURE);
+      perror (NULL);
+      exit (EXIT_FAILURE);
     }
 
-  time(&utc);
-  assert(utc >= tv.tv_sec);
+  time (&utc);
+  assert (utc >= tv.tv_sec);
 
-  exit(EXIT_SUCCESS);
+  exit (EXIT_SUCCESS);
 }

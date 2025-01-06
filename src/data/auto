@@ -79,6 +79,4 @@ nm_feature_test='(void) localtime_r(NULL, NULL);'
 . ${NORE_ROOT}/auto/feature
 
 
-
-
 # eof
