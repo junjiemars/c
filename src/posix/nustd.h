@@ -26,7 +26,7 @@
 #include <ncstd.h>
 
 
-#if (WINNT)
+#if (MSVC)
 #  include <BaseTsd.h>
 #  include <windows.h>
 #  include <process.h>
