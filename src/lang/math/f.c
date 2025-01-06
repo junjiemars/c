@@ -9,10 +9,10 @@
 #pragma warning(disable : 4293)
 #endif
 
-#if (WINNT) && (GCC)
-#pragma GCC diagnostic ignored "-Wshift-count-overflow"
-#pragma GCC diagnostic ignored "-Wstringop-overflow"
-#endif
+/* #if (WINNT) && (GCC) */
+/* #pragma GCC diagnostic ignored "-Wshift-count-overflow" */
+/* #pragma GCC diagnostic ignored "-Wstringop-overflow" */
+/* #endif */
 
 #if defined(BIT8_SEP)
 #undef BIT8_SEP

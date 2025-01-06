@@ -23,7 +23,7 @@
 
 #if !defined(__has_attribute) && defined(__attribute__)
 #   if !defined(unused)
-#     define  unused
+#     define unused
 #   endif
 #endif
 
