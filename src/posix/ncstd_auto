@@ -36,6 +36,42 @@ fi
 # checking for <nstr.h>
 . ${POSIX_ROOT}/nstr_auto
 
+# check environ
+#----------------------------------------
+if [ "$nio_environ" = "yes" ]; then
+  case $CC_NAME in
+    clang)
+      nm_feature="environ"
+      nm_feature_name="nm_have_environ"
+      nm_feature_run=no
+      nm_feature_h='extern char **environ;'
+      nm_feature_flags=
+      nm_feature_test='(void*)(environ);'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    gcc)
+      nm_feature="environ"
+      nm_feature_name="nm_have_environ"
+      nm_feature_run=no
+      nm_feature_h='extern char **environ;'
+      nm_feature_flags="-D_POSIX_C_SOURCE=${_POSIX_C_SOURCE}"
+      nm_feature_test='(void*)environ;'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    msvc)
+      nm_feature="environ"
+      nm_feature_name="nm_have_environ"
+      nm_feature_run=no
+      nm_feature_h='extern char **_environ'
+      nm_feature_flags="-D_CRT_SECURE_NO_WARNINGS $CFLAGS"
+      nm_feature_test='(void*)_environ;'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    *)
+      ;;
+  esac
+fi
+
 
 fi                              # define_ncstd_h
 
