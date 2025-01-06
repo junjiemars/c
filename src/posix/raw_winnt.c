@@ -16,8 +16,10 @@ main (void)
   switch (x)
     {
     case 0:
+			__attribute__ ((fallthrough))
 		case 1:
 			f ();
+			__attribute__ ((fallthrough))
 		case 2:
 			printf ("x=%d\n", x);
       break;
