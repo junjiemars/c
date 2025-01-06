@@ -48,10 +48,10 @@ nint_stdbool="yes"
 . ${POSIX_ROOT}/nint_auto
 
 # check for <nustd.h>
-nustd_ssize_t="yes"
-nustd_sleep="yes"
-nustd_getpid="yes"
 nustd_gettimeofday="yes"
+nustd_getpid="yes"
+nustd_sleep="yes"
+nustd_ssize_t="yes"
 . ${POSIX_ROOT}/nustd_auto
 
 # checking for <nlim.h>

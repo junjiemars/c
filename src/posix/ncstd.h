@@ -40,10 +40,10 @@ do                                              \
 #    undef  unsetenv
 #  endif
 #  define unsetenv(n)   _putenv_s((n), "")
-# if (MSVC) && defined(environ)
-#   undef environ
-#   define environ  _environ
-# endif
+#  if defined(environ)
+#    undef environ
+#  endif
+#  define environ  _environ
 #endif  /* setenv, unsetenv */
 
 
