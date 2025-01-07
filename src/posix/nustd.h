@@ -1,7 +1,6 @@
 /**
  * Nore Unix standard
  */
-
 #ifndef _NUSTD_H_
 #define _NUSTD_H_
 

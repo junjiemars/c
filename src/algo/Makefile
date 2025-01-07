@@ -171,12 +171,7 @@ algo_hash_kr2_binout := $(bin_path)/$(algo_prefix)_hash_kr2$(bin_ext)
 algo_hash_djb2_binout := $(bin_path)/$(algo_prefix)_hash_djb2$(bin_ext)
 algo_hash_sdbm_binout := $(bin_path)/$(algo_prefix)_hash_sdbm$(bin_ext)
 algo_hash_jenkins_binout := $(bin_path)/$(algo_prefix)_hash_jenkins$(bin_ext)
-
-algo_hash_bone_cflags := $(CFLAGS)
-ifeq ($(nm_build_opt),)
-algo_hash_bone_cflags +=  $(f_sanitize)
-endif
-algo_hash_bone_cflags += $(FN_LOC) $(M) $(N)
+algo_hash_bone_cflags := $(CFLAGS) $(M) $(N) $(FN_LOC)
 
 algo_hash: algo_hash_num                        \
            algo_hash_str                        \
@@ -218,10 +213,10 @@ algo_hash_jenkins_test: $(algo_hash_jenkins_binout)
 	echo "abc acb" | $<
 
 $(algo_hash_num_binout): $(algo_root)/hash/bone.c
-	$(CC) $(algo_hash_bone_cflags) -DFN_RD=0 $(INC) $(bin_out)$@ $^
+	$(CC) $(algo_hash_bone_cflags) $(INC) -DFN_RD=0 $(bin_out)$@ $^
 
 $(algo_hash_str_binout): $(algo_root)/hash/bone.c
-	$(CC) $(algo_hash_bone_cflags) -DFN_RD=1 $(INC) $(bin_out)$@ $^
+	$(CC) $(algo_hash_bone_cflags) $(INC) -DFN_RD=1 $(bin_out)$@ $^
 
 $(algo_hash_kr1_binout): $(algo_root)/hash/kr1.c \
                          $(algo_root)/hash/_hash_.c

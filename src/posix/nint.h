@@ -1,3 +1,6 @@
+/**
+ * Nore std int
+ */
 #ifndef _NINT_H_
 #define _NINT_H_
 

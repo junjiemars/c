@@ -4,16 +4,17 @@
 #include <limits.h>
 #include <stdio.h>
 
-#if !defined(M) || (M < 1)
+#if !defined(M) || ((M + 0) < 1)
 #define M 20
 #endif
 
-#if !defined(N) || (N < M - 3)
+#if !defined(N) || ((N + 0) < (M - 3))
 #define N (M + 3)
 #endif
 
-#define H(x) ((x) % N + 1)
+#define H1(x) ((x) % N + 1)
 #define H2(x) (((x) + 1) % N + 1)
+#define HE(x) (hash_table[(x)])
 #define EMPTY 0
 
 #ifndef FN_RD
@@ -24,38 +25,38 @@
 #define FN_LOC 0
 #endif
 
-typedef struct node_t
+typedef struct Node
 {
   unsigned num;
   char str[32];
   unsigned freq;
   int alpha;
-} node_t;
+} Node;
 
-typedef int (*fn_read_t) (node_t *);
-typedef int (*fn_probe_t) (unsigned);
+typedef int (*FnRead) (Node *);
+typedef int (*FnProbe) (unsigned);
 
-int read_number (node_t *);
-int read_string (node_t *);
-int insert (node_t *, unsigned *, fn_probe_t);
-int find_loc_linear_probing (unsigned);
-int find_loc_quadratic_probing (unsigned);
-int find_loc_double_hashing (unsigned);
+int read_number (Node *);
+int read_string (Node *);
+int insert (Node *, unsigned *, FnProbe);
+int probe_linear (unsigned);
+int probe_quadratic (unsigned);
+int probe_double_hashing (unsigned);
 void dump (void);
 
-node_t hash_table[N + 1];
+Node hash_table[N + 1];
 
-fn_read_t read_table[] = {
+FnRead read_table[] = {
   read_number,
   read_string,
-  (fn_read_t)0,
+  (FnRead)0,
 };
 
-fn_probe_t probe_table[] = {
-  find_loc_linear_probing,
-  find_loc_quadratic_probing,
-  find_loc_double_hashing,
-  (fn_probe_t)0,
+FnProbe probe_table[] = {
+  probe_linear,
+  probe_quadratic,
+  probe_double_hashing,
+  (FnProbe)0,
 };
 
 int
@@ -63,7 +64,7 @@ main (void)
 {
   int rc;
   unsigned int i = 0;
-  node_t node = { 0 };
+  Node node = { 0 };
 
   memset (hash_table, EMPTY, sizeof (hash_table));
 
@@ -85,7 +86,7 @@ main (void)
 }
 
 int
-read_number (node_t *node)
+read_number (Node *node)
 {
   int rc = scanf ("%u", &node->num);
   if (rc == 0)
@@ -105,11 +106,13 @@ read_number (node_t *node)
 }
 
 int
-read_string (node_t *node)
+read_string (Node *node)
 {
   int rc;
   int h = 1;
   char buf[BUFSIZ];
+
+  assert (sizeof (node->str) < BUFSIZ && "buf should larger than node->str");
 
   if ((rc = scanf ("%s", &buf[0])) == 1)
     {
@@ -132,12 +135,12 @@ read_string (node_t *node)
 }
 
 int
-insert (node_t *node, unsigned *n, fn_probe_t find_loc)
+insert (Node *node, unsigned *n, FnProbe probe)
 {
   int loc;
-  node_t *one;
+  Node *one;
 
-  loc = find_loc (node->num);
+  loc = probe (node->num);
 
   if (*n >= M)
     {
@@ -145,7 +148,7 @@ insert (node_t *node, unsigned *n, fn_probe_t find_loc)
       return EOF;
     }
 
-  one = &hash_table[loc];
+  one = &HE (loc);
 
   if (one->num == EMPTY)
     {
@@ -167,10 +170,10 @@ insert (node_t *node, unsigned *n, fn_probe_t find_loc)
 }
 
 int
-find_loc_linear_probing (unsigned key)
+probe_linear (unsigned key)
 {
-  int loc = H (key);
-  while (hash_table[loc].num != EMPTY && hash_table[loc].num != key)
+  int loc = H1 (key);
+  while (HE (loc).num != EMPTY && HE (loc).num != key)
     {
       loc = loc % N + 1;
     }
@@ -178,11 +181,11 @@ find_loc_linear_probing (unsigned key)
 }
 
 int
-find_loc_quadratic_probing (unsigned key)
+probe_quadratic (unsigned key)
 {
   int i = 0;
-  int loc = H (key);
-  while (hash_table[loc].num != EMPTY && hash_table[loc].num != key)
+  int loc = H1 (key);
+  while (HE (loc).num != EMPTY && HE (loc).num != key)
     {
       i++;
       loc = loc + 2 * i + 3 * i * i;
@@ -195,11 +198,11 @@ find_loc_quadratic_probing (unsigned key)
 }
 
 int
-find_loc_double_hashing (unsigned key)
+probe_double_hashing (unsigned key)
 {
-  int loc = H (key);
+  int loc = H1 (key);
   int loc1 = H2 (key);
-  while (hash_table[loc].num != EMPTY && hash_table[loc].num != key)
+  while (HE (loc).num != EMPTY && HE (loc).num != key)
     {
       loc += loc1;
       if (loc > N)
@@ -219,7 +222,7 @@ dump (void)
 
   for (size_t i = 0; i < total; i++)
     {
-      node_t *n = &hash_table[i];
+      Node *n = &hash_table[i];
       if (n->num != EMPTY)
         {
           cnt++;
@@ -240,15 +243,15 @@ dump (void)
     {
       read_name = "X";
     }
-  if (probe_table[FN_LOC] == find_loc_linear_probing)
+  if (probe_table[FN_LOC] == probe_linear)
     {
       probe_name = "liner probing";
     }
-  else if (probe_table[FN_LOC] == find_loc_quadratic_probing)
+  else if (probe_table[FN_LOC] == probe_quadratic)
     {
       probe_name = "quadratic probing";
     }
-  else if (probe_table[FN_LOC] == find_loc_double_hashing)
+  else if (probe_table[FN_LOC] == probe_double_hashing)
     {
       probe_name = "double hashing";
     }
