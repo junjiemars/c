@@ -110,28 +110,42 @@ test_strcpy (void)
 void
 test_strncpy (void)
 {
-  char b1[8], b2[8];
+  char b1[8];
+  __attribute__ ((unused)) char _z1[8]; /* stack overflow zone */
+  char b2[8];
+  __attribute__ ((unused)) char _z2[8]; /* stack overflow zone */
   char *s1 = "abc";
   char *s2 = "abcd";
-  char *sx1 = "aaaaaaaa";
-  char *sx2 = "aaaaaaaaaaaaaaaa";
+  char *sx8 = "aaaaaaaa";
 
-  strncpy (b1, s2, 3);
-  self_strncpy (b2, s2, 3);
-  assert (0 == strcmp (s1, b1) && 0 == strcmp (s1, b2));
+  /* len < len(src), dst should not terminated */
+  memset (b1, 'X', sizeof (b1));
+  memset (b2, 'X', sizeof (b2));
+  strncpy (b1, s2, 2);
+  self_strncpy (b2, s2, 2);
+  assert (0 == memcmp (s1, b1, 2) && 0 == memcmp (s1, b2, 2));
 
+  /* len > len(src), dst should terminated */
+  memset (b1, 'X', sizeof (b1));
+  memset (b2, 'X', sizeof (b2));
   strncpy (b1, s2, 5);
   self_strncpy (b2, s2, 5);
   assert (0 == strcmp (s2, b1) && 0 == strcmp (s2, b2));
 
+  /* len == len(src), dst should not terminated */
+  memset (b1, 'X', sizeof (b1));
+  memset (b2, 'X', sizeof (b2));
   strncpy (b1, s2, 4);
   self_strncpy (b2, s2, 4);
-  assert (0 == strcmp (s2, b1) && 0 == strcmp (s2, b2));
+  assert (0 == memcmp (s2, b1, 4) && 0 == memcmp (s2, b2, 4));
 
-  strncpy (b1, sx2, sizeof (b1));
-  self_strncpy (b2, sx2, sizeof (b2));
-  assert (0 == memcmp (b1, sx1, sizeof (b1))
-          && 0 == memcmp (b2, sx1, sizeof (b2)));
+  /* strncpy cannot avoid overflow on src */
+  memset (b1, 'X', sizeof (b1) - 1);
+  memset (b2, 'X', sizeof (b2) - 1);
+  strncpy (b1, sx8, sizeof (b1));
+  self_strncpy (b2, sx8, sizeof (b2));
+  assert (0 == memcmp (b1, sx8, sizeof (b1))
+          && 0 == memcmp (b2, sx8, sizeof (b2)));
 }
 
 void
