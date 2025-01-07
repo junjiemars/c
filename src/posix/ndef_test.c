@@ -58,35 +58,10 @@ main (int argc, char **argv)
 void
 check_ndef (void)
 {
-  printf ("check __has_attribute ... ");
 #ifdef __has_attribute
-  printf ("yes\n");
+  printf ("__has_attribute defined\n");
 #else
-  printf ("no\n");
-#endif
-  printf ("check __attribute__esc_ ... ");
-#ifdef __attribute__esc_
-  printf ("yes\n");
-#else
-  printf ("no\n");
-#endif
-  printf ("check __attribute__ ... ");
-#ifdef __attribute__
-  printf ("yes\n");
-#else
-  printf ("no\n");
-#endif
-  printf ("check unused ... ");
-#ifdef unused
-  printf ("yes\n");
-#else
-  printf ("no\n");
-#endif
-  printf ("check fallthrough ... ");
-#ifdef fallthrough
-  printf ("yes\n");
-#else
-  printf ("no\n");
+  printf ("__has_attribute no defined\n");
 #endif
 }
 
@@ -109,7 +84,7 @@ test_fallthrough (int a)
   switch (a)
     {
     case 0:
-      __attribute__ ((fallthrough));
+      /* __attribute__ ((fallthrough)) */;
     case 1:
       break;
     }

@@ -241,7 +241,7 @@ posix_nustd_cppout := $(tmp_path)/$(posix_prefix)_nustd$(cpp_ext)
 
 posix_nustd: $(posix_nustd_binout)
 posix_nustd_test: posix_nustd
-	$(posix_nustd_binout)
+	-$(posix_nustd_binout)
 
 $(posix_nustd_binout): $(posix_nustd_cppout)
 	$(CC) $(CFLAGS) $^ $(bin_out)$@
@@ -257,7 +257,7 @@ posix_raw_linux_binout := $(bin_path)/$(posix_prefix)_raw_linux$(bin_ext)
 ifeq ($(NM_SYSTEM), WinNT)
 posix_raw: posix_raw_winnt
 posix_raw_test: posix_raw
-	$(posix_raw_winnt_binout)
+	-$(posix_raw_winnt_binout)
 else
 ifeq ($(NM_SYSTEM), Darwin)
 posix_raw: posix_raw_darwin

@@ -7,38 +7,35 @@
 
 
 #if !defined(__has_attribute)
-#  if !defined(__attribute__)
-#    define __attribute__esc_(...)  __VA_ARGS__
-#    define __attribute__(x)  __attribute__esc_  x
-#  endif
+#  define __attribute__esc_(...)  __VA_ARGS__
+#  define __attribute__(x)  __attribute__esc_  x
 #endif
 
 
-#if (MSVC)
-#  if !defined(unused) && defined(__attribute__)
+#if defined(__has_attribute)
+#  if !(__has_attribute(unused))
+#    define unused
+#  endif
+#else
+#  if (MSVC)
 #    define unused  __pragma(warning(suppress: 4100 4101 4189))
+#  else
+#    define unused
 #  endif
 #endif
 
 
-#if !defined(__has_attribute) && defined(__attribute__)
-#   if !defined(unused)
-#     define unused
-#   endif
-#endif
-
-#if (MSVC)
-#  if !defined(fallthrough) && defined(__attribute__)
+#if defined(__has_attribute)
+#  if !(__has_attribute(fallthrough))
+#    define fallthrough
+#  endif
+#else
+#  if (MSVC)
 #    define fallthrough  __pragma(warning(suppress: 26819))
-#  endif
-#endif
-
-#if !defined(__has_attribute) && defined(__attribute__)
-#  if !defined(fallthrough)
+#  else
 #    define fallthrough
 #  endif
 #endif
-
 
 
 #if !defined(restrict)
@@ -48,7 +45,6 @@
 #    define restrict
 #  endif
 #endif  /* restrict */
-
 
 
 #if !defined(static_assert)
