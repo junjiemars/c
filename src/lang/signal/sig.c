@@ -1,7 +1,7 @@
 #include "../_lang_.h"
 #include <signal.h>
 
-/*
+/**
  * 1. Using old fashion of `signal' at here, see src/signal for more
  * about signals.
  *
@@ -9,15 +9,12 @@
  *
  */
 
-#ifdef MSVC
-#pragma warning(disable : 4996)
-#include <process.h>
-#include <windows.h>
-#define sleep(x) Sleep ((x)*1000)
-#define getpid() _getpid ()
+#if (MSVC)
+#pragma warning(disable : 4996) /* _CRT_SECURE_NO_WARNINGS */
+#endif
+
+#if (WINNT)
 static void psignal (int sig, const char *s);
-#else
-#include <unistd.h>
 #endif
 
 #if !defined(N) || (N < 0)
@@ -81,7 +78,7 @@ main (void)
   return 0;
 }
 
-#ifdef MSVC
+#if (WINNT)
 void
 psignal (int sig, const char *s)
 {
@@ -105,7 +102,7 @@ psignal (int sig, const char *s)
       fprintf (stderr, "%s: %s\n", s, msg);
     }
 }
-#endif /* end of MSVC */
+#endif /* end of psignal */
 
 void
 on_sigint_stop (int sig)
