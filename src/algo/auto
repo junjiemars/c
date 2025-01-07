@@ -11,48 +11,18 @@ if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
 
-# check ncc.h features
+# check ncstd.h features
 ncc_cache_line_size="yes"
 ncc_cpu_endian="yes"
 ncc_sanitize_address="yes"
 ncc_sanitize_alignment="yes"
 ncc_sanitize_leak="yes"
-. ${POSIX_ROOT}/ncc_auto
-
-# check ndef.h features
 ndef___func__="yes"
 ndef_restrict="yes"
 ndef_static_assert="yes"
-. ${POSIX_ROOT}/ndef_auto
-
-# check ncstd.h features
 . ${POSIX_ROOT}/ncstd_auto
 
 
-
 echo "checking for {algo} ..."
-
-# check compiler features
-#----------------------------------------
-case "$CC_NAME" in
-	clang)
-		;;
-	gcc)
-		nm_feature="$CC_NAME -Wimplicit-fallthrough"
-		nm_feature_name='nm_have_w_implicit_fallthrough'
-		nm_feature_run=no
-		nm_feature_h=
-		nm_feature_flags='-Wimplicit-fallthrough'
-		nm_feature_test='int x = 0x11;
-                     switch (x) {
-                     case 0x11: break;
-                     default: x++; break;
-                     }'
-		. ${NORE_ROOT}/auto/feature
-		;;
-	msvc)
-		;;
-esac
-
 
 # eof
