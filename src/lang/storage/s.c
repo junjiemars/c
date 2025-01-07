@@ -51,7 +51,7 @@ main (void)
 void
 automatic_storage_class (void)
 {
-  auto int x; /* garbage value */
+  __attribute__ ((unused)) auto int x; /* garbage value */
 #if (GCC)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wuninitialized"
@@ -94,7 +94,7 @@ register_storage_class (register int x)
   };
   assert (sizeof (a) / sizeof (char) == 4);
 
-  /* error: address of register variable ‘a’ requested */
+  /* error: address of register variable `a' requested */
   /* array_decay(a); */
 }
 
@@ -129,6 +129,10 @@ external_storage_class (void)
 {
   extern int g_var_x;
   extern int g_var_y;
+#if (MSVC)
+/* C4210: function given file scope */
+#pragma warning(disable : 4210)
+#endif
   extern int external_sum (int, int);
 
   printf ("g_var_x = 0x%x\n", g_var_x++);
