@@ -137,10 +137,10 @@ test_cmp_double (void)
   uint64_t u3 = to_ul (d3);
 
   printf ("compare double\n--------------------\n");
-  printf ("%16lf = 0x%llX\n", d1, to_ul (d1));
-  printf ("%16lf = 0x%llX\n", d2, to_ul (d2));
-  printf ("%16lf = 0x%llX\n", d1 + d2, to_ul (d1 + d2));
-  printf ("%16lf = 0x%llX\n", d3, to_ul (d3));
+  printf ("%16lf = 0x%llX\n", d1, (unsigned long long)to_ul (d1));
+  printf ("%16lf = 0x%llX\n", d2, (unsigned long long)to_ul (d2));
+  printf ("%16lf = 0x%llX\n", d1 + d2, (unsigned long long)to_ul (d1 + d2));
+  printf ("%16lf = 0x%llX\n", d3, (unsigned long long)to_ul (d3));
 
   printf (BPRI64, BIT64 ((unsigned long long)u1));
   printf (BPRI64, BIT64 (u2));
