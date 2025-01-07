@@ -18,7 +18,7 @@
 #  if defined(strerror_r)
 #    undef  strerror_r
 #  endif
-#  define strerror_r(e, b, s)  ((int) strerror_s((b), (s), (e)))
+#  define strerror_r(e, b, s)  ((int)strerror_s((b), (s), (e)))
 #endif  /* strerror_r */
 
 

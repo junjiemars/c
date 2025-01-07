@@ -5,7 +5,7 @@
 /* warning C4702: unreachable code */
 #pragma warning(disable : 4702)
 /* warning C4459: hides global declaration */
-#prgram warning(disable : 4459)
+#pragma warning(disable : 4459)
 #endif
 
 /*
