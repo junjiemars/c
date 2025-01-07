@@ -57,15 +57,11 @@ self_strcat (char *s1, const char *s2)
 void
 test_empty (void)
 {
-  char *s = "";
-  char a[] = "";
+  __attribute__ ((unused)) char *s = "";
+  __attribute__ ((unused)) char a[] = "";
+
   assert (0 == strlen (s));
   assert (0 == strlen (a));
-
-#if NDEBUG
-  _unused_ (s);
-  _unused_ (a);
-#endif
 }
 
 void
@@ -77,14 +73,10 @@ test_static_len (void)
 void
 test_strlen (char *s)
 {
-  size_t len1 = strlen (s);
-  size_t len2 = self_strlen (s);
+  __attribute__ ((unused)) size_t len1 = strlen (s);
+  __attribute__ ((unused)) size_t len2 = self_strlen (s);
 
   assert ((len1 == len2) && "self_strlen() failed");
-#if NDEBUG
-  _unused_ (len1);
-  _unused_ (len2);
-#endif
 }
 
 void
