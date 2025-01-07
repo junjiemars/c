@@ -1,9 +1,11 @@
 #include "scope.h"
 #include "../_lang_.h"
 
-#if MSVC
+#if (MSVC)
 /* warning C4702: unreachable code */
 #pragma warning(disable : 4702)
+/* warning C4459: hides global declaration */
+#prgram warning(disable : 4459)
 #endif
 
 /*

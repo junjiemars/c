@@ -5,11 +5,11 @@
 #define BIT8_SUF "\n"
 #include <nbits.h>
 
-#if (MSVC)
-#pragma warning(disable : 4293)
-#endif
+/* #if (MSVC) */
+/* #pragma warning(disable : 4293) */
+/* #endif */
 
-/* #if (WINNT) && (GCC) */
+/* #if (GCC) */
 /* #pragma GCC diagnostic ignored "-Wshift-count-overflow" */
 /* #pragma GCC diagnostic ignored "-Wstringop-overflow" */
 /* #endif */
@@ -24,8 +24,8 @@
 #define BIT16_SEP " "
 #endif
 
-static unsigned int to_ui (float);
-static unsigned long to_ul (double);
+static uint32_t to_ui (float);
+static uint64_t to_ul (double);
 
 static void test_cmp_float (void);
 static void test_cmp_double (void);
@@ -53,18 +53,18 @@ main (void)
   return 0;
 }
 
-unsigned int
+uint32_t
 to_ui (float x)
 {
-  unsigned int u;
+  uint32_t u;
   memcpy ((char *)&u, (char *)&x, sizeof (x));
   return u;
 }
 
-unsigned long
+uint64_t
 to_ul (double x)
 {
-  unsigned long u;
+  uint64_t u;
   memcpy ((char *)&u, (char *)&x, sizeof (x));
   return u;
 }
@@ -73,10 +73,10 @@ void
 test_cmp_float (void)
 {
   float d1 = 0.1f, d2 = 0.2f, d3 = 0.3f;
-  unsigned int u1 = to_ui (d1);
-  unsigned int u2 = to_ui (d2);
-  unsigned int u12 = to_ui (d1 + d2);
-  unsigned int u3 = to_ui (d3);
+  uint32_t u1 = to_ui (d1);
+  uint32_t u2 = to_ui (d2);
+  uint32_t u12 = to_ui (d1 + d2);
+  uint32_t u3 = to_ui (d3);
 
   printf ("compare float\n--------------------\n");
   printf ("%16f = 0x%X\n", d1, u1);
@@ -131,18 +131,18 @@ void
 test_cmp_double (void)
 {
   double d1 = 0.1, d2 = 0.2, d3 = 0.3;
-  unsigned long u1 = to_ul (d1);
-  unsigned long u2 = to_ul (d2);
-  unsigned long u12 = to_ul (d1 + d2);
-  unsigned long u3 = to_ul (d3);
+  uint64_t u1 = to_ul (d1);
+  uint64_t u2 = to_ul (d2);
+  uint64_t u12 = to_ul (d1 + d2);
+  uint64_t u3 = to_ul (d3);
 
   printf ("compare double\n--------------------\n");
-  printf ("%16lf = 0x%lX\n", d1, to_ul (d1));
-  printf ("%16lf = 0x%lX\n", d2, to_ul (d2));
-  printf ("%16lf = 0x%lX\n", d1 + d2, to_ul (d1 + d2));
-  printf ("%16lf = 0x%lX\n", d3, to_ul (d3));
+  printf ("%16lf = 0x%llX\n", d1, to_ul (d1));
+  printf ("%16lf = 0x%llX\n", d2, to_ul (d2));
+  printf ("%16lf = 0x%llX\n", d1 + d2, to_ul (d1 + d2));
+  printf ("%16lf = 0x%llX\n", d3, to_ul (d3));
 
-  printf (BPRI64, BIT64 (u1));
+  printf (BPRI64, BIT64 ((unsigned long long)u1));
   printf (BPRI64, BIT64 (u2));
   printf (BPRI64, BIT64 (u12));
   printf (BPRI64, BIT64 (u3));
