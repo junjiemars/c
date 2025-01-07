@@ -26,6 +26,7 @@ test_strtok (char *ss, char *d)
 void
 test_strtok_r (void)
 {
+#if (NM_HVAE_STRTOK_R)
   char outer[64], inner[64];
   char *d = "\\/:;=-";
   char *tok1, *lasts1, *tok2, *lasts2;
@@ -43,6 +44,7 @@ test_strtok_r (void)
           printf ("|%s:%s|\n", tok1, tok2);
         }
     }
+#endif
 }
 
 int

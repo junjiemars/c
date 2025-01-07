@@ -22,6 +22,7 @@ fi
 
 if [    "$nstr_strdup" = "yes"                  \
      -o "$nstr_strerror_r" = "yes"              \
+     -o "$nstr_strtok_r" = "yes"                \
    ]; then
   echo "checking for nstr.h ..."
 else
@@ -98,6 +99,40 @@ if [ "$nstr_strerror_r" = "yes" ]; then
       ;;
   esac
 fi                              # strerror_r
+
+# check strtok_r
+#----------------------------------------
+if [ "$nstr_strtok_r" = "yes" ]; then
+  case $NM_SYSTEM in
+    Linux)
+      nm_feature="strtok_r"
+      nm_feature_name="nm_have_strtok_r"
+      nm_feature_run=no
+      nm_feature_h='#include <string.h>'
+      nm_feature_flags="-D_POSIX_C_SOURCE=$_POSIX_C_SOURCE"
+      nm_feature_test='(void)strtok_r(0,0,0);'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    WinNT)
+      nm_feature="strtok_r"
+      nm_feature_name="nm_have_strtok_r"
+      nm_feature_run=no
+      nm_feature_h='#include <string.h>'
+      nm_feature_flags=
+      nm_feature_test='(void)strtok_r(0,0,0);'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    *)
+      nm_feature="strtok_r"
+      nm_feature_name="nm_have_strtok_r"
+      nm_feature_run=no
+      nm_feature_h='#include <string.h>'
+      nm_feature_flags=
+      nm_feature_test='(void)strtok_r(0,0,0);'
+      . ${NORE_ROOT}/auto/feature
+      ;;
+  esac
+fi                              # strtok_r
 
 
 fi                              # define_nstr_h

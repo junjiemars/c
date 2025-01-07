@@ -1,3 +1,6 @@
+/**
+ * Nore C string
+ */
 #ifndef _NSTR_H_
 #define _NSTR_H_
 

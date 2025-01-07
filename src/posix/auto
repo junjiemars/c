@@ -39,6 +39,7 @@ ndef_va_args="yes"
 # check for <nstr.h>
 nstr_strdup="yes"
 nstr_strerror_r="yes"
+nstr_strtok_r="yes"
 . ${POSIX_ROOT}/nstr_auto
 
 # check for <nint.h>
