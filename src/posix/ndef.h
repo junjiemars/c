@@ -38,7 +38,7 @@
 #      define __attribute__fallthrough
 #    endif
 #  endif
-#endif  /* unused, fallthrough */
+#endif  /* __attribute__((fallthrough)) */
 
 
 #if !defined(restrict)
