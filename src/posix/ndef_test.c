@@ -84,7 +84,7 @@ test_fallthrough (int a)
   switch (a)
     {
     case 0:
-      /* __attribute__ ((fallthrough)) */;
+      __attribute__ ((fallthrough));
     case 1:
       break;
     }

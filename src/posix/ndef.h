@@ -5,37 +5,40 @@
 #include <nore.h>
 #include <stddef.h>
 
-
 #if !defined(__has_attribute)
-#  define __attribute__esc_(...)  __VA_ARGS__
+#  define __attribute__esc_(...)  __attribute__##__VA_ARGS__
 #  define __attribute__(x)  __attribute__esc_  x
-#endif
+#endif	/* __has_attribute */
 
 
 #if defined(__has_attribute)
 #  if !(__has_attribute(unused))
-#    define unused
+#    define __attribute__unused
 #  endif
 #else
-#  if (MSVC)
-#    define unused  __pragma(warning(suppress: 4100 4101 4189))
-#  else
-#    define unused
+#  if !defined(__attribute__unused)
+#    if (MSVC)
+#      define __attribute__unused  __pragma(warning(suppress: 4100 4101 4189))
+#    else
+#      define __attribute__unused
+#    endif
 #  endif
-#endif
+#endif  /* __attribute__((unused)) */
 
 
 #if defined(__has_attribute)
 #  if !(__has_attribute(fallthrough))
-#    define fallthrough
+#    define __attribute__fallthrough
 #  endif
 #else
-#  if (MSVC)
-#    define fallthrough  __pragma(warning(suppress: 26819))
-#  else
-#    define fallthrough
+#  if !defined(__attribute__fallthrough)
+#    if (MSVC)
+#      define __attribute__fallthrough  __pragma(warning(suppress: 26819))
+#    else
+#      define __attribute__fallthrough
+#    endif
 #  endif
-#endif
+#endif  /* unused, fallthrough */
 
 
 #if !defined(restrict)
