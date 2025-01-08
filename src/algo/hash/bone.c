@@ -12,8 +12,7 @@
 #define N (M + 3)
 #endif
 
-#define H1(x) ((x) % N + 1)
-#define H2(x) (((x) + 1) % N + 1)
+#define H(x) ((x) % N + 1)
 #define HE(x) (hash_table[(x)])
 #define EMPTY 0
 
@@ -31,6 +30,7 @@ typedef struct Node
   char str[32];
   unsigned freq;
   int alpha;
+	int used;
 } Node;
 
 typedef int (*FnRead) (Node *);
@@ -91,16 +91,16 @@ read_number (Node *node)
   int rc = scanf ("%u", &node->num);
   if (rc == 0)
     {
-      int ch = getchar ();
-      while (ch != EOF && !isdigit (ch))
+      int c;
+      for (c = getchar (); c != EOF && !isdigit (c); c = getchar ())
         {
-          ch = getchar ();
+          /* void */
         }
-      if (ch == EOF)
+      if (c == EOF)
         {
           return EOF;
         }
-      ungetc (ch, stdin);
+      ungetc (c, stdin);
     }
   return rc;
 }
@@ -109,7 +109,7 @@ int
 read_string (Node *node)
 {
   int rc;
-  int h = 1;
+  int h = 1, w = 3;
   char buf[BUFSIZ];
 
   assert (sizeof (node->str) < BUFSIZ && "buf should larger than node->str");
@@ -124,9 +124,9 @@ read_string (Node *node)
             }
         }
       strncpy (node->str, buf, sizeof (node->str));
-      for (char *p = node->str; *p; p++)
+      for (char *p = node->str; *p; w += 2, p++)
         {
-          h = *p + 31 * h;
+          h += w * (*p);
         }
     }
 
@@ -150,16 +150,18 @@ insert (Node *node, unsigned *n, FnProbe probe)
 
   one = &HE (loc);
 
-  if (one->num == EMPTY)
+  if (!one->used)
     {
       (*n)++;
       one->num = node->num;
+			one->used = 1;
 #if FN_RD == 1 /* read_string */
       if (node->str[0] && isalpha (node->str[0]))
         {
           one->alpha = 1 + tolower (node->str[0]) - 'a';
         }
 #endif
+
     }
 #if FN_RD == 1
   strncpy (one->str, node->str, sizeof (one->str));
@@ -172,10 +174,10 @@ insert (Node *node, unsigned *n, FnProbe probe)
 int
 probe_linear (unsigned key)
 {
-  int loc = H1 (key);
-  while (HE (loc).num != EMPTY && HE (loc).num != key)
+  int loc = H (key);
+  while (HE (loc).used && HE (loc).num != key)
     {
-      loc = loc % N + 1;
+      loc = H (loc);
     }
   return loc;
 }
@@ -184,8 +186,8 @@ int
 probe_quadratic (unsigned key)
 {
   int i = 0;
-  int loc = H1 (key);
-  while (HE (loc).num != EMPTY && HE (loc).num != key)
+  int loc = H (key);
+  while (HE (loc).used && HE (loc).num != key)
     {
       i++;
       loc = loc + 2 * i + 3 * i * i;
@@ -200,11 +202,11 @@ probe_quadratic (unsigned key)
 int
 probe_double_hashing (unsigned key)
 {
-  int loc = H1 (key);
-  int loc1 = H2 (key);
-  while (HE (loc).num != EMPTY && HE (loc).num != key)
+  int loc = H (key);
+  int loc2 = H (key + 1);
+  while (HE (loc).used && HE (loc).num != key)
     {
-      loc += loc1;
+      loc += loc2;
       if (loc > N)
         {
           loc -= N;
@@ -222,8 +224,8 @@ dump (void)
 
   for (size_t i = 0; i < total; i++)
     {
-      Node *n = &hash_table[i];
-      if (n->num != EMPTY)
+      Node const *n = &hash_table[i];
+      if (n->used)
         {
           cnt++;
           printf ("%4zu %10u %4d %4d %s\n", i, n->num, n->freq, n->alpha,
