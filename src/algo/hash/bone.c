@@ -20,9 +20,14 @@
 #define FN_RD 0
 #endif
 
+#define RD_NUM 0
+#define RD_STR 1
+
 #ifndef FN_LOC
 #define FN_LOC 0
 #endif
+
+#define PE(f) (probe_table[(f)])
 
 typedef struct Node
 {
@@ -36,13 +41,16 @@ typedef struct Node
 typedef int (*FnRead) (Node *);
 typedef int (*FnProbe) (unsigned);
 
+int insert_entry (Node *, unsigned *, FnProbe);
+int search_entry (unsigned, Node **);
+int delete_entry (unsigned);
 int read_number (Node *);
 int read_string (Node *);
-int insert (Node *, unsigned *, FnProbe);
 int probe_linear (unsigned);
 int probe_quadratic (unsigned);
 int probe_double_hashing (unsigned);
 unsigned get_relative_prime (unsigned);
+unsigned str_to_num (char const *, unsigned);
 void dump (void);
 
 Node hash_table[N + 1];
@@ -73,7 +81,7 @@ main (void)
     {
       if (rc == 1)
         {
-          if (insert (&node, &i, *probe_table[FN_LOC]))
+          if (insert_entry (&node, &i, *probe_table[FN_LOC]))
             {
               perror ("!panic");
               break;
@@ -110,7 +118,7 @@ int
 read_string (Node *node)
 {
   int rc;
-  int h = 1, w = 3;
+  int h = 1;
   char buf[BUFSIZ];
 
   assert (sizeof (node->str) < BUFSIZ && "buf should larger than node->str");
@@ -125,10 +133,7 @@ read_string (Node *node)
             }
         }
       strncpy (node->str, buf, sizeof (node->str));
-      for (char *p = node->str; *p; w += 2, p++)
-        {
-          h += w * (*p);
-        }
+      h = str_to_num (node->str, h);
     }
 
   node->num = h;
@@ -136,7 +141,7 @@ read_string (Node *node)
 }
 
 int
-insert (Node *node, unsigned *n, FnProbe probe)
+insert_entry (Node *node, unsigned *n, FnProbe probe)
 {
   int loc;
   Node *one;
@@ -156,18 +161,43 @@ insert (Node *node, unsigned *n, FnProbe probe)
       (*n)++;
       one->num = node->num;
       one->used = 1;
-#if FN_RD == 1 /* read_string */
+#if FN_RD == RD_STR
       if (node->str[0] && isalpha (node->str[0]))
         {
           one->alpha = 1 + tolower (node->str[0]) - 'a';
         }
 #endif
     }
-#if FN_RD == 1
+#if FN_RD == RD_STR
   strncpy (one->str, node->str, sizeof (one->str));
 #endif
   one->freq++;
 
+  return 0;
+}
+
+int
+search_entry (unsigned key, Node **found)
+{
+  int loc = PE (FN_LOC) (key);
+  *found = NULL;
+  if (HE (loc).used && HE (loc).num == key)
+    {
+      *found = &HE (loc);
+      return 1;
+    }
+  return 0;
+}
+
+int
+delete_entry (unsigned key)
+{
+  Node *found;
+  if (search_entry (key, &found))
+    {
+      found->used = EMPTY;
+      return 1;
+    }
   return 0;
 }
 
@@ -186,6 +216,7 @@ probe_linear (unsigned key)
     {
       loc = H (loc + rp);
     }
+
   return loc;
 }
 
@@ -233,6 +264,17 @@ get_relative_prime (unsigned n)
         }
     }
   return (n - 1);
+}
+
+unsigned
+str_to_num (char const *ss, unsigned base)
+{
+  int w = 3;
+  for (char const *p = ss; *p; w += 2, p++)
+    {
+      base += w * (*p);
+    }
+  return base;
 }
 
 void
