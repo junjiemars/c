@@ -30,7 +30,7 @@ typedef struct Node
   char str[32];
   unsigned freq;
   int alpha;
-	int used;
+  int used;
 } Node;
 
 typedef int (*FnRead) (Node *);
@@ -42,6 +42,7 @@ int insert (Node *, unsigned *, FnProbe);
 int probe_linear (unsigned);
 int probe_quadratic (unsigned);
 int probe_double_hashing (unsigned);
+unsigned get_relative_prime (unsigned);
 void dump (void);
 
 Node hash_table[N + 1];
@@ -154,14 +155,13 @@ insert (Node *node, unsigned *n, FnProbe probe)
     {
       (*n)++;
       one->num = node->num;
-			one->used = 1;
+      one->used = 1;
 #if FN_RD == 1 /* read_string */
       if (node->str[0] && isalpha (node->str[0]))
         {
           one->alpha = 1 + tolower (node->str[0]) - 'a';
         }
 #endif
-
     }
 #if FN_RD == 1
   strncpy (one->str, node->str, sizeof (one->str));
@@ -174,10 +174,17 @@ insert (Node *node, unsigned *n, FnProbe probe)
 int
 probe_linear (unsigned key)
 {
+  static unsigned rp = EMPTY;
   int loc = H (key);
+
+  if (rp == EMPTY)
+    {
+      rp = get_relative_prime (N);
+    }
+
   while (HE (loc).used && HE (loc).num != key)
     {
-      loc = H (loc);
+      loc = H (loc + rp);
     }
   return loc;
 }
@@ -213,6 +220,19 @@ probe_double_hashing (unsigned key)
         }
     }
   return loc;
+}
+
+unsigned
+get_relative_prime (unsigned n)
+{
+  for (unsigned x = 2; x < n; x++)
+    {
+      if ((n / x) * x != n)
+        {
+          return x;
+        }
+    }
+  return (n - 1);
 }
 
 void
