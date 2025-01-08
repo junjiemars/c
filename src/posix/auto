@@ -27,12 +27,14 @@ ncc_pic="yes"
 
 # check for <ndef.h>
 ndef___func__="yes"
+ndef_bool="yes"
 ndef_alignof="yes"
 ndef_alignas="yes"
 ndef_complex="yes"
 ndef_generic="yes"
 ndef_restrict="yes"
 ndef_static_assert="yes"
+ndef_stdbool="yes"
 ndef_va_args="yes"
 . ${POSIX_ROOT}/ndef_auto
 
@@ -45,7 +47,6 @@ nstr_strtok_r="yes"
 # check for <nint.h>
 nint_stdint="yes"
 nint_inttypes="yes"
-nint_stdbool="yes"
 . ${POSIX_ROOT}/nint_auto
 
 # check for <nustd.h>

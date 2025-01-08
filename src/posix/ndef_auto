@@ -22,12 +22,14 @@ fi
 
 
 if [    "$ndef___func__" = "yes"                \
+     -o "$ndef_bool" = "yes"                    \
      -o "$ndef_alignas" = "yes"                 \
      -o "$ndef_alignof" = "yes"                 \
      -o "$ndef_complex" = "yes"                 \
      -o "$ndef_generic" = "yes"                 \
      -o "$ndef_restrict" = "yes"                \
      -o "$ndef_static_assert" = "yes"           \
+     -o "$ndef_stdbool" = "yes"                 \
      -o "$ndef_va_args" = "yes"                 \
    ]; then
   echo "checking for ndef.h ..."
@@ -49,6 +51,19 @@ if [ "$ndef___func__" = "yes" ]; then
 fi
 
 
+# check _Bool
+#----------------------------------------
+if [ "$ndef_bool" = "yes" ]; then
+	nm_feature="_Bool"
+	nm_feature_name="nm_have_bool"
+	nm_feature_run=
+	nm_feature_h=
+	nm_feature_flags="$CFLAGS"
+	nm_feature_test='_Bool b = 1; (void)(b != 0);'
+	. ${NORE_ROOT}/auto/feature
+fi
+
+
 # check alignas
 #----------------------------------------
 if [ "$ndef_alignas" = "yes" ]; then
@@ -57,7 +72,7 @@ if [ "$ndef_alignas" = "yes" ]; then
 	nm_feature_run=
 	nm_feature_h=
 	nm_feature_flags="$CFLAGS"
-	nm_feature_test='int _Alignas(int) a; (void) sizeof(a);'
+	nm_feature_test='int _Alignas(int) a; (void)sizeof(a);'
 	. ${NORE_ROOT}/auto/feature
 fi
 
@@ -132,6 +147,13 @@ if [ "$ndef_static_assert" = "yes" ]; then
   nm_feature_test='enum {N=5}; _Static_assert(N==5, "N is not equal 5");'
   . ${NORE_ROOT}/auto/feature
 fi  # end of _Static_assert
+
+
+# check stdbool
+#----------------------------------------
+if [ "$ndef_stdbool" = "yes" ]; then
+  include="stdbool.h" . ${NORE_ROOT}/auto/include
+fi
 
 
 # check __VA_ARGS__
