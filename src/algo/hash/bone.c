@@ -196,7 +196,7 @@ insert_table (Node *node, unsigned *n, FnProbe probe)
           cur->num = node->num;
           cur->used = 1;
 #if (FN_RD == RD_STR)
-					cur->alpha = alpha_order (node->str);
+          cur->alpha = alpha_order (node->str);
           strncpy (cur->str, node->str, sizeof (cur->str) - 1);
 #endif
         }
@@ -242,6 +242,19 @@ delete_entry (unsigned key)
       found->used = EMPTY;
       return 1;
     }
+#if (FN_LOC == LOC_CHAIN)
+  Node *pre, *cur;
+  int loc = PE (FN_LOC) (key);
+  for (pre = &HE (loc), cur = pre->next; cur; pre = cur, cur = cur->next)
+    {
+      if (cur->used && cur->num == key)
+        {
+          pre->next = cur->next;
+          free (cur);
+          return 1;
+        }
+    }
+#endif
   return 0;
 }
 
@@ -367,6 +380,7 @@ dump_table (void)
     {
       read_name = "X";
     }
+
   if (probe_table[FN_LOC] == probe_linear)
     {
       probe_name = _str_ (probe_liner);
@@ -378,6 +392,10 @@ dump_table (void)
   else if (probe_table[FN_LOC] == probe_double_hashing)
     {
       probe_name = _str_ (probe_double_hashing);
+    }
+  else if (probe_table[FN_LOC] == probe_chain)
+    {
+      probe_name = _str_ (probe_chain);
     }
   else
     {
@@ -394,7 +412,7 @@ dump_table (void)
       Node const *n = &hash_table[i];
       if (n->used)
         {
-          printf ("%4zu %6u %4d %5d %-16s\n", i, n->num, n->freq, n->alpha,
+          printf ("%4zu %6u %4d %5d %-32s\n", i, n->num, n->freq, n->alpha,
                   n->str);
 #if (FN_LOC == LOC_CHAIN)
           for (Node *cur = n->next; cur; cur = cur->next)
