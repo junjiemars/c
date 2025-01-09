@@ -68,6 +68,11 @@ ifeq ($(NM_SYSTEM), Linux)
 LDLIBS += -lm
 endif
 
+ifeq ($(CC_NAME), msvc)
+posix_getopt_h := $(posix_root)/getopt.h
+posix_getopt_c := $(posix_root)/getopt.c
+endif # end of msvc
+
 
 
 # _algo
@@ -211,7 +216,8 @@ algo_hash_sdbm_test: $(algo_hash_sdbm_binout)
 algo_hash_jenkins_test: $(algo_hash_jenkins_binout)
 	echo "abc acb" | $<
 
-$(algo_hash_bone_binout): $(algo_root)/hash/bone.c
+$(algo_hash_bone_binout): $(algo_root)/hash/bone.c \
+                          $(posix_getopt_c)
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(algo_hash_kr1_binout): $(algo_root)/hash/kr1.c \
