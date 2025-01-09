@@ -383,7 +383,7 @@ dump_table (void)
 
   if (probe_table[FN_LOC] == probe_linear)
     {
-      probe_name = _str_ (probe_liner);
+      probe_name = _str_ (probe_linear);
     }
   else if (probe_table[FN_LOC] == probe_quadratic)
     {
@@ -402,8 +402,8 @@ dump_table (void)
       probe_name = "X";
     }
 
-  fprintf (stderr, "table %d/(%d,%zu) %s %s\n------------\n", cnt, M, total,
-           read_name, probe_name);
+  fprintf (stderr, "hash_table %d/(%d,%zu) %s %s\n------------\n", cnt, M,
+           total, read_name, probe_name);
   fprintf (stderr, "%4s %6s %4s %5s %-32s\n", "idx", "num", "freq", "alpha",
            "str");
 

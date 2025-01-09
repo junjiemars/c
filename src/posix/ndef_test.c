@@ -26,8 +26,6 @@ main (int argc, char **argv)
 {
   check_ndef ();
 
-	_Bool b = 1;
-
   test_unused (1);
   test_fallthrough (1);
 
