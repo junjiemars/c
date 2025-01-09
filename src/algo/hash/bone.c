@@ -1,6 +1,7 @@
 #include "../_algo_.h"
 #include <ctype.h>
 #include <errno.h>
+#include <getopt.h>
 #include <limits.h>
 #include <stdio.h>
 
@@ -44,14 +45,14 @@ typedef struct Node
   struct Node *next;
 } Node;
 
-typedef int (*FnRead) (Node *);
+typedef int (*FnRead) (FILE *, Node *);
 typedef int (*FnProbe) (unsigned);
 
 int insert_table (Node *, unsigned *, FnProbe);
 int search_table (unsigned, Node **);
 int delete_entry (unsigned);
-int read_number (Node *);
-int read_string (Node *);
+int read_number (FILE *, Node *);
+int read_string (FILE *, Node *);
 int probe_linear (unsigned);
 int probe_quadratic (unsigned);
 int probe_double_hashing (unsigned);
@@ -60,8 +61,9 @@ unsigned get_relative_prime (unsigned);
 unsigned str_to_num (char const *, unsigned);
 int alpha_order (char const *);
 void dump_table (void);
+static void usage (char const *);
 
-Node hash_table[N + 1];
+Node *hash_table;
 
 FnRead read_table[] = {
   read_number, /* RD_NUM */
@@ -74,16 +76,102 @@ FnProbe probe_table[] = {
   probe_quadratic, probe_double_hashing, probe_chain, (FnProbe)0,
 };
 
+static struct option longopts[] = {
+  { "help", no_argument, 0, 'h' },
+  { 0, optional_argument, 0, 'M' },
+  { 0, optional_argument, 0, 'N' },
+  { "read", optional_argument, 0, 'r' },
+  { "search", optional_argument, 0, 's' },
+  { "unlink", optional_argument, 0, 'u' },
+  { "dump", no_argument, 0, 'd' },
+  { 0, 0, 0, 0 },
+};
+
+static FILE *opt_file = NULL;
+static char *opt_search = NULL;
+static int opt_dump = 0;
+static int opt_fn_read = RD_NUM;
+static int opt_ht_m = M;
+static int opt_ht_n = N;
+
 int
-main (void)
+main (int argc, char **argv)
 {
-  int rc;
+  int rc, ch;
   unsigned int i = 0;
   Node node = { 0 };
 
+  while ((ch = getopt_long (argc, argv, "hr:M:N:s:u:d", longopts, 0)) != -1)
+    {
+      switch (ch)
+        {
+        case 'd':
+          opt_dump = 1;
+          break;
+        case 'M':
+          opt_ht_m = atoi (optarg);
+					if (opt_ht_m < 1)
+						{
+						}
+          break;
+        case 'N':
+          opt_ht_n = atoi (optarg);
+					if (opt_ht_n < opt_ht_m - 3)
+						{
+							opt_ht_n = opt_ht_m + 3;
+						}
+          break;
+        case 'i':
+          opt_file = fopen (optarg, "r");
+          if (!opt_file)
+            {
+              perror ("!panic");
+              goto clean_exit;
+            }
+          break;
+        case 'r':
+          if (strcmp ("number", optarg) == 0)
+            {
+              opt_fn_read = RD_NUM;
+            }
+          else if (strcmp ("string", optarg) == 0)
+            {
+              opt_fn_read = RD_STR;
+            }
+          else
+            {
+              fprintf (stderr, "!panic, invalid -r argument: %s\n", optarg);
+              goto clean_exit;
+            }
+          break;
+        case 's':
+          opt_search = optarg;
+          break;
+        default:
+          usage (argv[0]);
+          goto clean_exit;
+        }
+    }
+
+  if (optind < argc)
+    {
+      fprintf (stderr, "file:%s\n", argv[optind]);
+      opt_file = fopen (argv[optind], "r");
+      if (!opt_file)
+        {
+          perror ("!panic");
+          goto clean_exit;
+        }
+    }
+  else
+    {
+      opt_file = stdin;
+    }
+
+	hash_table = calloc (1, sizeof (Node) * (opt_ht_n + 1))
   memset (hash_table, EMPTY, sizeof (hash_table));
 
-  while ((rc = read_table[FN_RD](&node)) != EOF)
+  while ((rc = read_table[opt_fn_read](opt_file, &node)) != EOF)
     {
       if (rc == 1)
         {
@@ -97,17 +185,18 @@ main (void)
 
   dump_table ();
 
+clean_exit:
   return 0;
 }
 
 int
-read_number (Node *node)
+read_number (FILE *stream, Node *node)
 {
-  int rc = scanf ("%u", &node->num);
+  int rc = fscanf (stream, "%u", &node->num);
   if (rc == 0)
     {
       int c;
-      for (c = getchar (); c != EOF && !isdigit (c); c = getchar ())
+      for (c = getc (stream); c != EOF && !isdigit (c); c = getc (stream))
         {
           /* void */
         }
@@ -115,13 +204,13 @@ read_number (Node *node)
         {
           return EOF;
         }
-      ungetc (c, stdin);
+      ungetc (c, stream);
     }
   return rc;
 }
 
 int
-read_string (Node *node)
+read_string (FILE *stream, Node *node)
 {
   int rc;
   int h = 1;
@@ -129,7 +218,7 @@ read_string (Node *node)
 
   assert (sizeof (node->str) < BUFSIZ && "buf should larger than node->str");
 
-  if ((rc = scanf ("%s", &buf[0])) == 1)
+  if ((rc = fscanf (stream, "%s", &buf[0])) == 1)
     {
       for (char *s1 = buf; *s1; s1++)
         {
@@ -167,10 +256,11 @@ insert_table (Node *node, unsigned *n, FnProbe probe)
       (*n)++;
       one->num = node->num;
       one->used = 1;
-#if (FN_RD == RD_STR)
-      one->alpha = alpha_order (node->str);
-      strncpy (one->str, node->str, sizeof (one->str) - 1);
-#endif
+      if (opt_fn_read == RD_STR)
+        {
+          one->alpha = alpha_order (node->str);
+          strncpy (one->str, node->str, sizeof (one->str) - 1);
+        }
     }
   else
     {
@@ -193,10 +283,11 @@ insert_table (Node *node, unsigned *n, FnProbe probe)
           pre->next = cur;
           cur->num = node->num;
           cur->used = 1;
-#if (FN_RD == RD_STR)
-          cur->alpha = alpha_order (node->str);
-          strncpy (cur->str, node->str, sizeof (cur->str) - 1);
-#endif
+          if (opt_fn_read == RD_STR)
+            {
+              cur->alpha = alpha_order (node->str);
+              strncpy (cur->str, node->str, sizeof (cur->str) - 1);
+            }
         }
       one = cur;
 #endif
@@ -366,11 +457,11 @@ dump_table (void)
         }
     }
 
-  if (read_table[FN_RD] == read_number)
+  if (read_table[opt_fn_read] == read_number)
     {
       read_name = _str_ (read_numer);
     }
-  else if (read_table[FN_RD] == read_string)
+  else if (read_table[opt_fn_read] == read_string)
     {
       read_name = _str_ (read_string);
     }
@@ -424,4 +515,19 @@ dump_table (void)
 #endif
         }
     }
+}
+
+void
+usage (char const *p)
+{
+  printf ("Usage %s [options ...] [file]\n", p);
+  printf ("  -h, --help          this help text\n");
+  printf ("  -r, --read          read [number|string], default is number\n");
+  printf (
+      "  -M                  effective bounds of hash table, default is %d\n",
+      M);
+  printf ("  -N                  up bounds of hash table, default is %d\n", N);
+  printf ("  -s, --search        search entry in hash table\n");
+  printf ("  -u, --unlink        unlink entry in hash table\n");
+  printf ("  -d, --dump          dump hash table to stdout\n");
 }

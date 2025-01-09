@@ -164,6 +164,7 @@ $(algo_gcd_binout): $(algo_root)/gcd/gcd.c
 
 
 # hash
+algo_hash_bone_binout := $(bin_path)/$(algo_prefix)_hash_bone$(bin_ext)
 algo_hash_num_binout := $(bin_path)/$(algo_prefix)_hash_num$(bin_ext)
 algo_hash_str_binout := $(bin_path)/$(algo_prefix)_hash_str$(bin_ext)
 algo_hash_kr1_binout := $(bin_path)/$(algo_prefix)_hash_kr1$(bin_ext)
@@ -173,7 +174,8 @@ algo_hash_sdbm_binout := $(bin_path)/$(algo_prefix)_hash_sdbm$(bin_ext)
 algo_hash_jenkins_binout := $(bin_path)/$(algo_prefix)_hash_jenkins$(bin_ext)
 algo_hash_bone_cflags := $(CFLAGS) $(M) $(N) $(FN_LOC)
 
-algo_hash: algo_hash_num                        \
+algo_hash: algo_hash_bone                       \
+           algo_hash_num                        \
            algo_hash_str                        \
            algo_hash_kr1                        \
            algo_hash_kr2                        \
@@ -181,7 +183,8 @@ algo_hash: algo_hash_num                        \
            algo_hash_sdbm                       \
            algo_hash_jenkins
 
-algo_hash_test: algo_hash_num_test              \
+algo_hash_test: algo_hash_bone_test             \
+                algo_hash_num_test              \
                 algo_hash_str_test              \
                 algo_hash_kr1_test              \
                 algo_hash_kr2_test              \
@@ -189,6 +192,7 @@ algo_hash_test: algo_hash_num_test              \
                 algo_hash_sdbm_test             \
                 algo_hash_jenkins_test
 
+algo_hash_bone: $(algo_hash_bone_binout)
 algo_hash_num: $(algo_hash_num_binout)
 algo_hash_str: $(algo_hash_str_binout)
 algo_hash_kr1: $(algo_hash_kr1_binout)
@@ -197,8 +201,14 @@ algo_hash_djb2: $(algo_hash_djb2_binout)
 algo_hash_sdbm: $(algo_hash_sdbm_binout)
 algo_hash_jenkins: $(algo_hash_jenkins_binout)
 
+algo_hash_bone_test: $(algo_hash_bone_binout)
+	echo "25 28 29" | $<
+	echo "abc aaa acb bbb" | $< --read=string
+
 algo_hash_num_test: $(algo_hash_num_binout)
-	echo "25 28 29 23 26 35 22 31 21 26 25 21 31 32 26 20 36 21 27 24 43" | $<
+	$< -h
+	# $< $(CURDIR)/$(algo_root)/hash/bone_num.in
+	# echo "25 28 29 23 26 35 22 31 21 26 25 21 31 32 26 20 36 21 27 24 43" | $<
 algo_hash_str_test: $(algo_hash_str_binout)
 	echo "abc acb aaa abc bbb bcb bbc zoo bbbb" | $<
 algo_hash_kr1_test: $(algo_hash_kr1_binout)
@@ -211,6 +221,9 @@ algo_hash_sdbm_test: $(algo_hash_sdbm_binout)
 	echo "abc acb" | $<
 algo_hash_jenkins_test: $(algo_hash_jenkins_binout)
 	echo "abc acb" | $<
+
+$(algo_hash_bone_binout): $(algo_root)/hash/bone.c
+	$(CC) $(algo_hash_bone_cflags) $(INC) $(bin_out)$@ $^
 
 $(algo_hash_num_binout): $(algo_root)/hash/bone.c
 	$(CC) $(algo_hash_bone_cflags) $(INC) -DFN_RD=RD_NUM $(bin_out)$@ $^
