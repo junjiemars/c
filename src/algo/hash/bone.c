@@ -175,7 +175,6 @@ insert_table (Node *node, unsigned *n, FnProbe probe)
   else
     {
 #if (FN_LOC == LOC_CHAIN)
-      int err;
       Node *cur, *pre;
       for (pre = cur = one; cur; pre = cur, cur = cur->next)
         {
@@ -189,7 +188,6 @@ insert_table (Node *node, unsigned *n, FnProbe probe)
           cur = calloc (1, sizeof (Node));
           if (!cur)
             {
-              err = errno;
               return EOF;
             }
           pre->next = cur;
