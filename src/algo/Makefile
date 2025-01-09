@@ -69,8 +69,7 @@ LDLIBS += -lm
 endif
 
 ifeq ($(CC_NAME), msvc)
-posix_getopt_h := $(posix_root)/getopt.h
-posix_getopt_c := $(posix_root)/getopt.c
+posix_getopt_c := $(src_root)/posix/getopt.c
 endif # end of msvc
 
 
