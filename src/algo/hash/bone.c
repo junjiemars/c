@@ -39,7 +39,7 @@ typedef struct Node
   unsigned num;
   unsigned freq;
   int used;
-  char str[16];
+  char str[32];
   int alpha;
   struct Node *next;
 } Node;
@@ -58,6 +58,7 @@ int probe_double_hashing (unsigned);
 int probe_chain (unsigned);
 unsigned get_relative_prime (unsigned);
 unsigned str_to_num (char const *, unsigned);
+int alpha_order (char const *);
 void dump_table (void);
 
 Node hash_table[N + 1];
@@ -167,10 +168,7 @@ insert_table (Node *node, unsigned *n, FnProbe probe)
       one->num = node->num;
       one->used = 1;
 #if (FN_RD == RD_STR)
-      if (node->str[0] && isalpha (node->str[0]))
-        {
-          one->alpha = 1 + tolower (node->str[0]) - 'a';
-        }
+      one->alpha = alpha_order (node->str);
       strncpy (one->str, node->str, sizeof (one->str) - 1);
 #endif
     }
@@ -198,7 +196,8 @@ insert_table (Node *node, unsigned *n, FnProbe probe)
           cur->num = node->num;
           cur->used = 1;
 #if (FN_RD == RD_STR)
-          strncpy (one->str, node->str, sizeof (one->str) - 1);
+					cur->alpha = alpha_order (node->str);
+          strncpy (cur->str, node->str, sizeof (cur->str) - 1);
 #endif
         }
       one = cur;
@@ -220,6 +219,17 @@ search_table (unsigned key, Node **found)
       *found = &HE (loc);
       return 1;
     }
+#if (FN_LOC == LOC_CHAIN)
+  Node *cur;
+  for (cur = HE (loc).next; cur; cur = cur->next)
+    {
+      if (cur->used && cur->num == key)
+        {
+          *found = cur;
+          return 1;
+        }
+    }
+#endif
   return 0;
 }
 
@@ -320,6 +330,16 @@ str_to_num (char const *ss, unsigned base)
   return n;
 }
 
+int
+alpha_order (char const *ss)
+{
+  if (ss[0] && isalpha (ss[0]))
+    {
+      return 1 + tolower (ss[0]) - 'a';
+    }
+  return 0;
+}
+
 void
 dump_table (void)
 {
@@ -366,23 +386,26 @@ dump_table (void)
 
   fprintf (stderr, "table %d/(%d,%zu) %s %s\n------------\n", cnt, M, total,
            read_name, probe_name);
-  fprintf (stderr, "%4s %10s %4s %5s %-16s %4s\n", "idx", "num", "freq",
-           "alpha", "str", "lnk");
+  fprintf (stderr, "%4s %6s %4s %5s %-32s\n", "idx", "num", "freq", "alpha",
+           "str");
 
   for (size_t i = 0; i < total; i++)
     {
       Node const *n = &hash_table[i];
       if (n->used)
         {
-          int lnk = 0;
+          printf ("%4zu %6u %4d %5d %-16s\n", i, n->num, n->freq, n->alpha,
+                  n->str);
 #if (FN_LOC == LOC_CHAIN)
-          for (Node *cur = hash_table[i].next; cur; cur = cur->next)
+          for (Node *cur = n->next; cur; cur = cur->next)
             {
-              lnk++;
+              if (cur->used)
+                {
+                  printf ("%4zu %6u %4d %5d %-32s\n", i, cur->num, cur->freq,
+                          cur->alpha, cur->str);
+                }
             }
 #endif
-          printf ("%4zu %10u %4d %5d %-16s %4d\n", i, n->num, n->freq,
-                  n->alpha, n->str, lnk);
         }
     }
 }
