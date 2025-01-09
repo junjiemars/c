@@ -23,49 +23,54 @@
 #define FN_RD RD_NUM
 #endif
 
+#define LOC_LINER 0
+#define LOC_QUADRATIC 1
+#define LOC_DOUBLE 2
+#define LOC_CHAIN 3
+
 #ifndef FN_LOC
-#define FN_LOC 0
+#define FN_LOC LOC_LINER
 #endif
 
 #define PE(f) (probe_table[(f)])
 
-typedef struct Entry
+typedef struct Node
 {
   unsigned num;
-  char str[32];
   unsigned freq;
-  int alpha;
   int used;
-} Entry;
+  char str[16];
+  int alpha;
+  struct Node *next;
+} Node;
 
-typedef int (*FnRead) (Entry *);
+typedef int (*FnRead) (Node *);
 typedef int (*FnProbe) (unsigned);
 
-int insert_entry (Entry *, unsigned *, FnProbe);
-int search_entry (unsigned, Entry **);
+int insert_table (Node *, unsigned *, FnProbe);
+int search_table (unsigned, Node **);
 int delete_entry (unsigned);
-int read_number (Entry *);
-int read_string (Entry *);
+int read_number (Node *);
+int read_string (Node *);
 int probe_linear (unsigned);
 int probe_quadratic (unsigned);
 int probe_double_hashing (unsigned);
+int probe_chain (unsigned);
 unsigned get_relative_prime (unsigned);
 unsigned str_to_num (char const *, unsigned);
-void dump (void);
+void dump_table (void);
 
-Entry hash_table[N + 1];
+Node hash_table[N + 1];
 
 FnRead read_table[] = {
-  read_number,
+  read_number, /* RD_NUM */
   read_string,
   (FnRead)0,
 };
 
 FnProbe probe_table[] = {
-  probe_linear,
-  probe_quadratic,
-  probe_double_hashing,
-  (FnProbe)0,
+  probe_linear, /* LOC_LINER */
+  probe_quadratic, probe_double_hashing, probe_chain, (FnProbe)0,
 };
 
 int
@@ -73,7 +78,7 @@ main (void)
 {
   int rc;
   unsigned int i = 0;
-  Entry node = { 0 };
+  Node node = { 0 };
 
   memset (hash_table, EMPTY, sizeof (hash_table));
 
@@ -81,7 +86,7 @@ main (void)
     {
       if (rc == 1)
         {
-          if (insert_entry (&node, &i, *probe_table[FN_LOC]))
+          if (insert_table (&node, &i, *probe_table[FN_LOC]))
             {
               perror ("!panic");
               break;
@@ -89,13 +94,13 @@ main (void)
         }
     }
 
-  dump ();
+  dump_table ();
 
   return 0;
 }
 
 int
-read_number (Entry *node)
+read_number (Node *node)
 {
   int rc = scanf ("%u", &node->num);
   if (rc == 0)
@@ -115,7 +120,7 @@ read_number (Entry *node)
 }
 
 int
-read_string (Entry *node)
+read_string (Node *node)
 {
   int rc;
   int h = 1;
@@ -132,7 +137,7 @@ read_string (Entry *node)
               return 0;
             }
         }
-      strncpy (node->str, buf, sizeof (node->str));
+      strncpy (node->str, buf, sizeof (node->str) - 1);
       h = str_to_num (node->str, h);
     }
 
@@ -141,10 +146,10 @@ read_string (Entry *node)
 }
 
 int
-insert_entry (Entry *node, unsigned *n, FnProbe probe)
+insert_table (Node *node, unsigned *n, FnProbe probe)
 {
   int loc;
-  Entry *one;
+  Node *one;
 
   loc = probe (node->num);
 
@@ -166,18 +171,47 @@ insert_entry (Entry *node, unsigned *n, FnProbe probe)
         {
           one->alpha = 1 + tolower (node->str[0]) - 'a';
         }
+      strncpy (one->str, node->str, sizeof (one->str) - 1);
 #endif
     }
+  else
+    {
+#if (FN_LOC == LOC_CHAIN)
+      int err;
+      Node *cur, *pre;
+      for (pre = cur = one; cur; pre = cur, cur = cur->next)
+        {
+          if (cur->used && cur->num == node->num)
+            {
+              break;
+            }
+        }
+      if (!cur)
+        {
+          cur = calloc (1, sizeof (Node));
+          if (!cur)
+            {
+              err = errno;
+              return EOF;
+            }
+          pre->next = cur;
+          cur->num = node->num;
+          cur->used = 1;
 #if (FN_RD == RD_STR)
-  strncpy (one->str, node->str, sizeof (one->str));
+          strncpy (one->str, node->str, sizeof (one->str) - 1);
 #endif
+        }
+      one = cur;
+#endif
+    }
+
   one->freq++;
 
   return 0;
 }
 
 int
-search_entry (unsigned key, Entry **found)
+search_table (unsigned key, Node **found)
 {
   int loc = PE (FN_LOC) (key);
   *found = NULL;
@@ -192,8 +226,8 @@ search_entry (unsigned key, Entry **found)
 int
 delete_entry (unsigned key)
 {
-  Entry *found;
-  if (search_entry (key, &found))
+  Node *found;
+  if (search_table (key, &found))
     {
       found->used = EMPTY;
       return 1;
@@ -229,9 +263,10 @@ probe_quadratic (unsigned key)
     {
       i++;
       loc = loc + 2 * i + 3 * i * i;
-      if (loc > N)
+      /* keep loc in [1,N] */
+      while (loc > N)
         {
-          loc %= N;
+          loc -= N;
         }
     }
   return loc;
@@ -253,6 +288,13 @@ probe_double_hashing (unsigned key)
   return loc;
 }
 
+int
+probe_chain (unsigned key)
+{
+  int loc = H (key);
+  return loc;
+}
+
 unsigned
 get_relative_prime (unsigned n)
 {
@@ -270,15 +312,16 @@ unsigned
 str_to_num (char const *ss, unsigned base)
 {
   int w = 3;
+  int n = base;
   for (char const *p = ss; *p; w += 2, p++)
     {
-      base += w * (*p);
+      n += w * (*p);
     }
-  return base;
+  return n;
 }
 
 void
-dump (void)
+dump_table (void)
 {
   int cnt = 0;
   char *read_name, *probe_name;
@@ -323,16 +366,23 @@ dump (void)
 
   fprintf (stderr, "table %d/(%d,%zu) %s %s\n------------\n", cnt, M, total,
            read_name, probe_name);
-  fprintf (stderr, "%4s %10s %4s %5s %s\n", "idx", "num", "freq", "alpha",
-           "str");
+  fprintf (stderr, "%4s %10s %4s %5s %-16s %4s\n", "idx", "num", "freq",
+           "alpha", "str", "lnk");
 
   for (size_t i = 0; i < total; i++)
     {
-      Entry const *n = &hash_table[i];
+      Node const *n = &hash_table[i];
       if (n->used)
         {
-          printf ("%4zu %10u %4d %5d %s\n", i, n->num, n->freq, n->alpha,
-                  n->str);
+          int lnk = 0;
+#if (FN_LOC == LOC_CHAIN)
+          for (Node *cur = hash_table[i].next; cur; cur = cur->next)
+            {
+              lnk++;
+            }
+#endif
+          printf ("%4zu %10u %4d %5d %-16s %4d\n", i, n->num, n->freq,
+                  n->alpha, n->str, lnk);
         }
     }
 }

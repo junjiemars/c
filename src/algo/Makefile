@@ -200,7 +200,7 @@ algo_hash_jenkins: $(algo_hash_jenkins_binout)
 algo_hash_num_test: $(algo_hash_num_binout)
 	echo "25 28 29 23 26 35 22 31 21 26 25 21 31 32 26 20 36 21 27 24 43" | $<
 algo_hash_str_test: $(algo_hash_str_binout)
-	echo "abc acb aaa abc bbb bcb bbc zoo" | $<
+	echo "abc acb aaa abc bbb bcb bbc zoo bbbb" | $<
 algo_hash_kr1_test: $(algo_hash_kr1_binout)
 	echo "abc acb" | $<
 algo_hash_kr2_test: $(algo_hash_kr2_binout)
@@ -213,10 +213,10 @@ algo_hash_jenkins_test: $(algo_hash_jenkins_binout)
 	echo "abc acb" | $<
 
 $(algo_hash_num_binout): $(algo_root)/hash/bone.c
-	$(CC) $(algo_hash_bone_cflags) $(INC) -DFN_RD=0 $(bin_out)$@ $^
+	$(CC) $(algo_hash_bone_cflags) $(INC) -DFN_RD=RD_NUM $(bin_out)$@ $^
 
 $(algo_hash_str_binout): $(algo_root)/hash/bone.c
-	$(CC) $(algo_hash_bone_cflags) $(INC) -DFN_RD=1 $(bin_out)$@ $^
+	$(CC) $(algo_hash_bone_cflags) $(INC) -DFN_RD=RD_STR $(bin_out)$@ $^
 
 $(algo_hash_kr1_binout): $(algo_root)/hash/kr1.c \
                          $(algo_root)/hash/_hash_.c
