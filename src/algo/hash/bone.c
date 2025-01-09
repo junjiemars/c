@@ -23,13 +23,13 @@
 #define FN_RD RD_NUM
 #endif
 
-#define LOC_LINER 0
+#define LOC_LINEAR 0
 #define LOC_QUADRATIC 1
 #define LOC_DOUBLE 2
 #define LOC_CHAIN 3
 
 #ifndef FN_LOC
-#define FN_LOC LOC_LINER
+#define FN_LOC LOC_LINEAR
 #endif
 
 #define PE(f) (probe_table[(f)])
@@ -70,7 +70,7 @@ FnRead read_table[] = {
 };
 
 FnProbe probe_table[] = {
-  probe_linear, /* LOC_LINER */
+  probe_linear, /* LOC_LINEAR */
   probe_quadratic, probe_double_hashing, probe_chain, (FnProbe)0,
 };
 
