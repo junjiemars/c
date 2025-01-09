@@ -16,12 +16,12 @@
 #define HE(x) (hash_table[(x)])
 #define EMPTY 0
 
-#ifndef FN_RD
-#define FN_RD 0
-#endif
-
 #define RD_NUM 0
 #define RD_STR 1
+
+#ifndef FN_RD
+#define FN_RD RD_NUM
+#endif
 
 #ifndef FN_LOC
 #define FN_LOC 0
@@ -29,23 +29,23 @@
 
 #define PE(f) (probe_table[(f)])
 
-typedef struct Node
+typedef struct Entry
 {
   unsigned num;
   char str[32];
   unsigned freq;
   int alpha;
   int used;
-} Node;
+} Entry;
 
-typedef int (*FnRead) (Node *);
+typedef int (*FnRead) (Entry *);
 typedef int (*FnProbe) (unsigned);
 
-int insert_entry (Node *, unsigned *, FnProbe);
-int search_entry (unsigned, Node **);
+int insert_entry (Entry *, unsigned *, FnProbe);
+int search_entry (unsigned, Entry **);
 int delete_entry (unsigned);
-int read_number (Node *);
-int read_string (Node *);
+int read_number (Entry *);
+int read_string (Entry *);
 int probe_linear (unsigned);
 int probe_quadratic (unsigned);
 int probe_double_hashing (unsigned);
@@ -53,7 +53,7 @@ unsigned get_relative_prime (unsigned);
 unsigned str_to_num (char const *, unsigned);
 void dump (void);
 
-Node hash_table[N + 1];
+Entry hash_table[N + 1];
 
 FnRead read_table[] = {
   read_number,
@@ -73,7 +73,7 @@ main (void)
 {
   int rc;
   unsigned int i = 0;
-  Node node = { 0 };
+  Entry node = { 0 };
 
   memset (hash_table, EMPTY, sizeof (hash_table));
 
@@ -95,7 +95,7 @@ main (void)
 }
 
 int
-read_number (Node *node)
+read_number (Entry *node)
 {
   int rc = scanf ("%u", &node->num);
   if (rc == 0)
@@ -115,7 +115,7 @@ read_number (Node *node)
 }
 
 int
-read_string (Node *node)
+read_string (Entry *node)
 {
   int rc;
   int h = 1;
@@ -141,10 +141,10 @@ read_string (Node *node)
 }
 
 int
-insert_entry (Node *node, unsigned *n, FnProbe probe)
+insert_entry (Entry *node, unsigned *n, FnProbe probe)
 {
   int loc;
-  Node *one;
+  Entry *one;
 
   loc = probe (node->num);
 
@@ -161,14 +161,14 @@ insert_entry (Node *node, unsigned *n, FnProbe probe)
       (*n)++;
       one->num = node->num;
       one->used = 1;
-#if FN_RD == RD_STR
+#if (FN_RD == RD_STR)
       if (node->str[0] && isalpha (node->str[0]))
         {
           one->alpha = 1 + tolower (node->str[0]) - 'a';
         }
 #endif
     }
-#if FN_RD == RD_STR
+#if (FN_RD == RD_STR)
   strncpy (one->str, node->str, sizeof (one->str));
 #endif
   one->freq++;
@@ -177,7 +177,7 @@ insert_entry (Node *node, unsigned *n, FnProbe probe)
 }
 
 int
-search_entry (unsigned key, Node **found)
+search_entry (unsigned key, Entry **found)
 {
   int loc = PE (FN_LOC) (key);
   *found = NULL;
@@ -192,7 +192,7 @@ search_entry (unsigned key, Node **found)
 int
 delete_entry (unsigned key)
 {
-  Node *found;
+  Entry *found;
   if (search_entry (key, &found))
     {
       found->used = EMPTY;
@@ -256,7 +256,7 @@ probe_double_hashing (unsigned key)
 unsigned
 get_relative_prime (unsigned n)
 {
-  for (unsigned x = 2; x < n; x++)
+  for (unsigned x = 3; x < n; x++)
     {
       if ((n / x) * x != n)
         {
@@ -286,22 +286,19 @@ dump (void)
 
   for (size_t i = 0; i < total; i++)
     {
-      Node const *n = &hash_table[i];
-      if (n->used)
+      if (hash_table[i].used)
         {
           cnt++;
-          printf ("%4zu %10u %4d %4d %s\n", i, n->num, n->freq, n->alpha,
-                  n->str);
         }
     }
 
   if (read_table[FN_RD] == read_number)
     {
-      read_name = "number";
+      read_name = _str_ (read_numer);
     }
   else if (read_table[FN_RD] == read_string)
     {
-      read_name = "string";
+      read_name = _str_ (read_string);
     }
   else
     {
@@ -309,21 +306,33 @@ dump (void)
     }
   if (probe_table[FN_LOC] == probe_linear)
     {
-      probe_name = "liner probing";
+      probe_name = _str_ (probe_liner);
     }
   else if (probe_table[FN_LOC] == probe_quadratic)
     {
-      probe_name = "quadratic probing";
+      probe_name = _str_ (probe_quadratic);
     }
   else if (probe_table[FN_LOC] == probe_double_hashing)
     {
-      probe_name = "double hashing";
+      probe_name = _str_ (probe_double_hashing);
     }
   else
     {
       probe_name = "X";
     }
 
-  printf ("------------\ntable %d/(%d,%zu), %s, %s\n", cnt, M, total,
-          read_name, probe_name);
+  fprintf (stderr, "table %d/(%d,%zu) %s %s\n------------\n", cnt, M, total,
+           read_name, probe_name);
+  fprintf (stderr, "%4s %10s %4s %5s %s\n", "idx", "num", "freq", "alpha",
+           "str");
+
+  for (size_t i = 0; i < total; i++)
+    {
+      Entry const *n = &hash_table[i];
+      if (n->used)
+        {
+          printf ("%4zu %10u %4d %5d %s\n", i, n->num, n->freq, n->alpha,
+                  n->str);
+        }
+    }
 }
