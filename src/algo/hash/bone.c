@@ -14,6 +14,7 @@
 #endif
 
 #define H(x) ((x) % opt_ht_n + 1)
+#define H2(x, n) ((x) % (n) + 1)
 #define HE(x) (hash_table[(x)])
 #define EMPTY 0
 
@@ -440,8 +441,16 @@ probe_quadratic (unsigned key)
 unsigned
 probe_double_hashing (unsigned key)
 {
-  unsigned loc = H (key);
-  int loc2 = H (key + 1);
+	static unsigned rp = EMPTY;
+  unsigned loc, loc2;
+
+	if (rp == EMPTY)
+		{
+			rp = get_relative_prime (opt_ht_n);
+		}
+	loc = H (key);
+	loc2 = H2 (key, rp);
+
   while (HE (loc).used && HE (loc).num != key)
     {
       loc += loc2;
@@ -463,9 +472,9 @@ probe_chain (unsigned key)
 unsigned
 get_relative_prime (unsigned n)
 {
-  for (unsigned x = 3; x < n; x++)
+  for (unsigned x = n - 2; x > 1; x--)
     {
-      if ((n / x) * x != n)
+      if ((x & 1) == 1 && (n / x) * x != n)
         {
           return x;
         }
