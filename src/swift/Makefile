@@ -144,5 +144,10 @@ $(swift_os_binout): $(swift_os_package) \
 
 
 
+.PHONY: swift_hi swift_hi_test swift_hi_clean                         \
+        swift_cli swift_cli_test swift_cli_clean                      \
+        swift_lang swift_lang_test swift_lang_clean                   \
+        swift_foundation swift_foundation_test swift_foundation_clean \
+        swift_os swift_os_test swift_os_clean
 
 # eof
