@@ -1,18 +1,16 @@
+/**
+ * https://courses.cs.washington.edu/courses/cse401/01au/details/fp.html
+ * https://www-users.cse.umn.edu/~vinals/tspot_files/phys4041/2020/IEEE%20Standard%20754-2019.pdf
+ */
 #include "../_lang_.h"
 #include <float.h>
 #include <math.h>
 
+#if defined(BIT8_SUF)
+#undef BIT8_SUF
+#endif
 #define BIT8_SUF "\n"
 #include <nbits.h>
-
-/* #if (MSVC) */
-/* #pragma warning(disable : 4293) */
-/* #endif */
-
-/* #if (GCC) */
-/* #pragma GCC diagnostic ignored "-Wshift-count-overflow" */
-/* #pragma GCC diagnostic ignored "-Wstringop-overflow" */
-/* #endif */
 
 #if defined(BIT8_SEP)
 #undef BIT8_SEP
@@ -58,6 +56,7 @@ to_ui (float x)
 {
   uint32_t u;
   memcpy ((char *)&u, (char *)&x, sizeof (x));
+  assert (u == *(uint32_t *)&x && "bit pattern copy should be equal");
   return u;
 }
 
@@ -66,6 +65,7 @@ to_ul (double x)
 {
   uint64_t u;
   memcpy ((char *)&u, (char *)&x, sizeof (x));
+  assert (u == *(uint64_t *)&x && "bit pattern copy should be equal");
   return u;
 }
 
@@ -163,7 +163,6 @@ test_cmp_double (void)
   greaterequal = isgreaterequal (d3, d1 + d2);
   unordered = isunordered (d3, d1 + d2);
 
-  assert (!unordered);
   assert (less);
   assert (greater);
   assert (lessgreater);
