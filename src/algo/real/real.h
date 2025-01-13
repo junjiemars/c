@@ -4,9 +4,13 @@
 /**
  * Real number
  */
+#include <stddef.h>
 
-void *init_real (int, int);
-void *real_add (void *, void *);
-char *real_str (void *, void *, size_t);
+struct Real;
+
+struct Real *real_from_decimal (int, int, int);
+struct Real *real_add (struct Real *, struct Real *);
+char *real_str (struct Real *, char *, size_t);
+void free_real (struct Real *);
 
 #endif

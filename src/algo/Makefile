@@ -364,16 +364,25 @@ $(algo_prime_binout): $(algo_root)/prime/p1.c
 
 
 # real
-algo_real_binout := $(bin_path)/$(algo_prefix)_real$(bin_ext)
+algo_real_r1_binout := $(bin_path)/$(algo_prefix)_real_r1$(bin_ext)
+algo_real_r2_binout := $(bin_path)/$(algo_prefix)_real_r2$(bin_ext)
 
-algo_reverse: $(algo_real_binout)
-algo_reverse_test: algo_real_test
+algo_real: $(algo_real_r1_binout) \
+           $(algo_real_r2_binout)
+algo_real_test: algo_real_r1_test \
+                algo_real_r2_test
 
-algo_real_test: $(algo_real_binout)
+algo_real_r1_test: $(algo_real_r1_binout)
+	$<
+algo_real_r2_test: $(algo_real_r2_binout)
 	$<
 
-$(algo_real_binout): $(algo_root)/real/r1.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(algo_real_r1_binout): $(algo_root)/real/r1.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+
+$(algo_real_r2_binout): $(algo_root)/real/r2.c \
+                        $(algo_root)/real/real_test.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
 
