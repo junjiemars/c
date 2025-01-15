@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <strings.h>
 
 #define BIAS 0x7f
 #define LEN_MANTISSA 23
@@ -14,21 +15,51 @@ struct Real
   uint32_t sign : 1;
 };
 
-struct Real *
-real_from_decimal (int sign, int exponent, int mantissa)
+int
+real_from_decimal (int whole, unsigned int fraction, struct Real *real)
 {
-  struct Real *r;
-  r = calloc (1, sizeof (struct Real));
-  if (!r)
+  uint32_t s, w, f;
+  uint32_t w2, f10;
+  uint32_t i, m;
+
+  s = whole < 0 ? 1 : 0;
+  w = s ? -whole : whole;
+
+  f10 = 1;
+  for (f = fraction; f > 0; f /= 10)
     {
-      return NULL;
+      f10 *= 10;
     }
-  *r = (struct Real){
-    .sign = sign,
-    .exponent = exponent + BIAS,
-    .mantissa = 1 << (LEN_MANTISSA - mantissa + 1),
-  };
-  return r;
+
+  i = 0;
+  m = 0;
+  f = fraction;
+  while (f > 0 && f < f10 && i < (LEN_MANTISSA + 1))
+    {
+      f *= 2;
+      i++;
+      if (f >= f10)
+        {
+          m += 1 << (LEN_MANTISSA - i);
+          f -= f10;
+        }
+    }
+  m += w << LEN_MANTISSA;
+  i = flsl ((long)m);
+  w2 = i - (LEN_MANTISSA + 1);
+  if (i > (LEN_MANTISSA + 1))
+    {
+      m >>= i - (LEN_MANTISSA + 1);
+    }
+  else
+    {
+      m <<= (LEN_MANTISSA + 1) - i;
+    }
+
+  real->sign = s;
+  real->exponent = w2 + BIAS;
+  real->mantissa = m & 0x7fffff;
+  return 1;
 }
 
 struct Real *
@@ -50,4 +81,10 @@ void
 free_real (struct Real *real)
 {
   free (real);
+}
+
+struct Real *
+new_real (void)
+{
+  return calloc (1, sizeof (struct Real));
 }

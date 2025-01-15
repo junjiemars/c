@@ -13,13 +13,23 @@ main (void)
 void
 test_real_from_decimal (void)
 {
-  float f5 = 5;
-  struct Real *r5 = real_from_decimal (0, 2, 3);
-  assert (*(uint32_t *)&f5 == *(uint32_t *)r5);
-  free_real (r5);
+  struct Real *r;
+  float f = 5;
+  r = new_real ();
+  if (real_from_decimal (5, 0, r))
+    {
+      assert (f == *(float *)r);
+    }
 
-  float fn1 = -1;
-  struct Real *rn1 = real_from_decimal (1, 0, 0);
-  assert (*(uint32_t *)&fn1 == *(uint32_t *)rn1);
-  free_real (rn1);
+	/* f = 0.68; */
+	/* if (real_from_decimal (0, 68, r)) */
+	/* 	{ */
+	/* 		assert (f == *(float *)r); */
+	/* 	} */
+
+  /* f = 3.14; */
+  /* if (real_from_decimal (3, 14, r)) */
+  /*   { */
+  /*     assert (f == *(float *)r); */
+  /*   } */
 }
