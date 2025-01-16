@@ -50,9 +50,9 @@ real_from_decimal (int whole, unsigned int fraction, struct Real *real)
     }
 
   i = flsl (m);
-  shift = shift > 0 ? shift : shift - (i - LEN_REAL);
   if (shift < 0)
     {
+      shift -= i - LEN_REAL;
       m <<= -shift;
     }
   else
@@ -65,7 +65,7 @@ real_from_decimal (int whole, unsigned int fraction, struct Real *real)
       m |= 1 << (LEN_EXPONENT + 1);
     }
   m >>= LEN_REAL - LEN_MANTISSA;
-  m |= w & 0x7fffff;
+  m |= w & ((1 << LEN_MANTISSA) - 1);
 
   real->sign = s;
   real->exponent = shift + BIAS;
