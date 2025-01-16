@@ -6,24 +6,29 @@
 #include <strings.h>
 
 #define BIAS 0x7f
+#define LEN_EXPONENT 8
 #define LEN_MANTISSA 23
+#define LEN_REAL (sizeof (uint32_t) * 8)
 
 struct Real
 {
   uint32_t mantissa : LEN_MANTISSA;
-  uint32_t exponent : 8;
+  uint32_t exponent : LEN_EXPONENT;
   uint32_t sign : 1;
 };
 
 int
 real_from_decimal (int whole, unsigned int fraction, struct Real *real)
 {
+  int shift;
   uint32_t s, w, f;
-  uint32_t w2, f10;
-  uint32_t i, m;
+  uint32_t i, m, f10;
 
   s = whole < 0 ? 1 : 0;
   w = s ? -whole : whole;
+
+  i = flsl (w);
+  shift = i > 0 ? i - 1 : -1;
 
   f10 = 1;
   for (f = fraction; f > 0; f /= 10)
@@ -31,34 +36,40 @@ real_from_decimal (int whole, unsigned int fraction, struct Real *real)
       f10 *= 10;
     }
 
-  i = 0;
-  m = 0;
+  i = m = 0;
   f = fraction;
-  while (f > 0 && f < f10 && i < (LEN_MANTISSA + 1))
+  while (f > 0 && f < f10 && i < LEN_REAL)
     {
       f *= 2;
       i++;
       if (f >= f10)
         {
-          m += 1 << (LEN_MANTISSA - i);
           f -= f10;
+          m += 1 << (LEN_REAL - i);
         }
     }
-  m += w << LEN_MANTISSA;
-  i = flsl ((long)m);
-  w2 = i - (LEN_MANTISSA + 1);
-  if (i > (LEN_MANTISSA + 1))
+
+  i = flsl (m);
+  shift = shift > 0 ? shift : shift - (i - LEN_REAL);
+  if (shift < 0)
     {
-      m >>= i - (LEN_MANTISSA + 1);
+      m <<= -shift;
     }
   else
     {
-      m <<= (LEN_MANTISSA + 1) - i;
+      m >>= shift;
+      w <<= LEN_MANTISSA - shift;
     }
+  if (m & (1 << LEN_EXPONENT))
+    {
+      m |= 1 << (LEN_EXPONENT + 1);
+    }
+  m >>= LEN_REAL - LEN_MANTISSA;
+  m |= w & 0x7fffff;
 
   real->sign = s;
-  real->exponent = w2 + BIAS;
-  real->mantissa = m & 0x7fffff;
+  real->exponent = shift + BIAS;
+  real->mantissa = m;
   return 1;
 }
 
