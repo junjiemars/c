@@ -30,8 +30,8 @@ test_real_from_decimal (void)
       assert (3.14f == *(float *)r);
     }
 
-  /* if (real_from_decimal (32, 14, r)) */
-  /*   { */
-  /*     assert (32.14f == *(float *)r); */
-  /*   } */
+  if (real_from_decimal (32, 14, r))
+    {
+      assert (32.14f == *(float *)r);
+    }
 }

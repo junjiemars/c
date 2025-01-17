@@ -20,40 +20,23 @@ struct Real
   uint32_t sign : SIGN_WIDTH;
 };
 
+static uint32_t fraction_to_binary (uint32_t fraction);
+
 int
 real_from_decimal (int whole, unsigned int fraction, struct Real *real)
 {
   int shift;
-  uint32_t s, w, f;
-  uint32_t i, m, f10;
+  uint32_t s, w, i, m;
 
   s = whole < 0 ? 1 : 0;
   w = s ? -whole : whole;
 
-  f10 = 1;
-  for (f = fraction; f > 0; f /= 10)
-    {
-      f10 *= 10;
-    }
-
-  i = m = 0;
-  f = fraction;
-  while (f > 0 && f < f10 && i < REAL_WIDTH)
-    {
-      i++;
-      f <<= 1;
-      if (f >= f10)
-        {
-          f -= f10;
-          m += 1 << (REAL_WIDTH - i);
-        }
-    }
+  m = fraction_to_binary (fraction);
 
   if ((i = flsl (w)) > 0)
     {
       shift = i - 1;
       m >>= shift;
-      w >>= shift;
       w <<= MANTISSA_WIDTH - shift;
     }
   else
@@ -69,9 +52,7 @@ real_from_decimal (int whole, unsigned int fraction, struct Real *real)
     }
   m >>= REAL_WIDTH - MANTISSA_WIDTH;
 
-  /* TODO: round again */
-  m |= w & ((1 << MANTISSA_WIDTH) - 1);
-
+  m |= w;
   shift = shift ? shift + BIAS : 0;
 
   real->sign = s;
@@ -105,4 +86,30 @@ struct Real *
 new_real (void)
 {
   return calloc (1, sizeof (struct Real));
+}
+
+uint32_t
+fraction_to_binary (uint32_t fraction)
+{
+  uint32_t i, m, f, f10;
+
+  f10 = 1;
+  for (f = fraction; f > 0; f /= 10)
+    {
+      f10 *= 10;
+    }
+
+  i = m = 0;
+  f = fraction;
+  while (f > 0 && f < f10 && i < REAL_WIDTH)
+    {
+      i++;
+      f <<= 1;
+      if (f >= f10)
+        {
+          f -= f10;
+          m += 1 << (REAL_WIDTH - i);
+        }
+    }
+  return m;
 }
