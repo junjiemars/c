@@ -53,6 +53,7 @@ real_from_decimal (int whole, unsigned int fraction, struct Real *real)
   m >>= REAL_WIDTH - MANTISSA_WIDTH;
 
   m |= w;
+  m &= (1 << MANTISSA_WIDTH) - 1;
   shift = shift ? shift + BIAS : 0;
 
   real->sign = s;
@@ -61,11 +62,41 @@ real_from_decimal (int whole, unsigned int fraction, struct Real *real)
   return 1;
 }
 
-struct Real *
-real_add (__attribute__ ((unused)) struct Real *lhs,
-          __attribute__ ((unused)) struct Real *rhs)
+int
+real_add (struct Real *lhs, struct Real *rhs, struct Real *sum)
 {
-  return 0;
+  int shift;
+  uint32_t round;
+  struct Real r1, r2;
+
+  shift = lhs->exponent - rhs->exponent;
+  if (shift < 0)
+    {
+      r1 = *rhs;
+      r2 = *lhs;
+      shift = -shift;
+    }
+  else
+    {
+      r1 = *lhs;
+      r2 = *rhs;
+    }
+
+  r2.sign = 0;
+  r2.exponent -= BIAS;
+  round = r2.mantissa & (1 << EXPONENT_WIDTH);
+  *(uint32_t *)&r2 >>= shift;
+  r2.mantissa += r1.mantissa & ((1 << MANTISSA_WIDTH) - 1);
+  if (round)
+    {
+      r2.mantissa += 1;
+    }
+
+  sum->sign = r1.sign;
+  sum->exponent = r1.exponent;
+  sum->mantissa = r2.mantissa;
+
+  return 1;
 }
 
 char *
