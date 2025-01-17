@@ -5,16 +5,19 @@
 #include <stdlib.h>
 #include <strings.h>
 
+/* bias = 2^{k-1} - 1 */
 #define BIAS 0x7f
-#define LEN_EXPONENT 8
-#define LEN_MANTISSA 23
-#define LEN_REAL (sizeof (uint32_t) * 8)
+#define SIGN_WIDTH 1
+#define EXPONENT_WIDTH 8
+#define MANTISSA_WIDTH 23
+#define REAL_WIDTH (sizeof (uint32_t) * 8)
 
+/* R = (-1)^s \cdot M \cdot 2^E */
 struct Real
 {
-  uint32_t mantissa : LEN_MANTISSA;
-  uint32_t exponent : LEN_EXPONENT;
-  uint32_t sign : 1;
+  uint32_t mantissa : MANTISSA_WIDTH;
+  uint32_t exponent : EXPONENT_WIDTH;
+  uint32_t sign : SIGN_WIDTH;
 };
 
 int
@@ -27,9 +30,6 @@ real_from_decimal (int whole, unsigned int fraction, struct Real *real)
   s = whole < 0 ? 1 : 0;
   w = s ? -whole : whole;
 
-  i = flsl (w);
-  shift = i > 0 ? i - 1 : -1;
-
   f10 = 1;
   for (f = fraction; f > 0; f /= 10)
     {
@@ -38,37 +38,44 @@ real_from_decimal (int whole, unsigned int fraction, struct Real *real)
 
   i = m = 0;
   f = fraction;
-  while (f > 0 && f < f10 && i < LEN_REAL)
+  while (f > 0 && f < f10 && i < REAL_WIDTH)
     {
-      f *= 2;
       i++;
+      f <<= 1;
       if (f >= f10)
         {
           f -= f10;
-          m += 1 << (LEN_REAL - i);
+          m += 1 << (REAL_WIDTH - i);
         }
     }
 
-  i = flsl (m);
-  if (shift < 0)
+  if ((i = flsl (w)) > 0)
     {
-      shift -= i - LEN_REAL;
-      m <<= -shift;
+      shift = i - 1;
+      m >>= shift;
+      w >>= shift;
+      w <<= MANTISSA_WIDTH - shift;
     }
   else
     {
-      m >>= shift;
-      w <<= LEN_MANTISSA - shift;
+      i = flsl (m);
+      shift = -(i > 0 ? (REAL_WIDTH + 1 - i) : i);
+      m <<= -shift;
     }
-  if (m & (1 << LEN_EXPONENT))
+
+  if (m & (1 << EXPONENT_WIDTH))
     {
-      m |= 1 << (LEN_EXPONENT + 1);
+      m |= 1 << (EXPONENT_WIDTH + 1);
     }
-  m >>= LEN_REAL - LEN_MANTISSA;
-  m |= w & ((1 << LEN_MANTISSA) - 1);
+  m >>= REAL_WIDTH - MANTISSA_WIDTH;
+
+  /* TODO: round again */
+  m |= w & ((1 << MANTISSA_WIDTH) - 1);
+
+  shift = shift ? shift + BIAS : 0;
 
   real->sign = s;
-  real->exponent = shift + BIAS;
+  real->exponent = shift;
   real->mantissa = m;
   return 1;
 }

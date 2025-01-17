@@ -14,22 +14,24 @@ void
 test_real_from_decimal (void)
 {
   struct Real *r = new_real ();
-  float f = 5;
 
   if (real_from_decimal (5, 0, r))
     {
-      assert (f == *(float *)r);
+      assert (5.0f == *(float *)r);
     }
 
-  f = 0.68;
   if (real_from_decimal (0, 68, r))
     {
-      assert (f == *(float *)r);
+      assert (0.68f == *(float *)r);
     }
 
-  f = 3.14;
   if (real_from_decimal (3, 14, r))
     {
-      assert (f == *(float *)r);
+      assert (3.14f == *(float *)r);
     }
+
+  /* if (real_from_decimal (32, 14, r)) */
+  /*   { */
+  /*     assert (32.14f == *(float *)r); */
+  /*   } */
 }
