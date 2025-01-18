@@ -20,7 +20,8 @@ struct Real
   uint32_t sign : SIGN_WIDTH;
 };
 
-static uint32_t fraction_to_binary (uint32_t fraction);
+static uint32_t fraction_to_binary (uint32_t);
+static uint32_t fraction_sum_shift (uint32_t, uint32_t, int *);
 
 int
 real_from_decimal (int whole, unsigned int fraction, struct Real *real)
@@ -84,13 +85,10 @@ real_add (struct Real *lhs, struct Real *rhs, struct Real *sum)
 
   r2.sign = 0;
   r2.exponent -= BIAS;
-  round = r2.mantissa & (1 << EXPONENT_WIDTH);
+	round = (r2.mantissa & (1 << EXPONENT_WIDTH)) == (1 << EXPONENT_WIDTH);
   *(uint32_t *)&r2 >>= shift;
-  r2.mantissa += r1.mantissa & ((1 << MANTISSA_WIDTH) - 1);
-  if (round)
-    {
-      r2.mantissa += 1;
-    }
+  r2.mantissa = fraction_sum_shift (r2.mantissa, r1.mantissa, &shift);
+  r2.mantissa = fraction_sum_shift (r2.mantissa, round, &shift);
 
   sum->sign = r1.sign;
   sum->exponent = r1.exponent;
@@ -143,4 +141,12 @@ fraction_to_binary (uint32_t fraction)
         }
     }
   return m;
+}
+
+uint32_t
+fraction_sum_shift (uint32_t m1, uint32_t m2, int *shift)
+{
+  uint32_t f = m1 + m2;
+  *shift += f >> MANTISSA_WIDTH;
+  return f;
 }
