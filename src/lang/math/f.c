@@ -2,6 +2,7 @@
  * https://courses.cs.northwestern.edu/213/slides/04-FloatingPoint.pdf
  * https://courses.cs.washington.edu/courses/cse401/01au/details/fp.html
  * https://www-users.cse.umn.edu/~vinals/tspot_files/phys4041/2020/IEEE%20Standard%20754-2019.pdf
+ * https://www2.math.uconn.edu/~leykekhman/courses/MATH3795/Lectures/Lecture_2_Floating_point.pdf
  */
 #include "../_lang_.h"
 #include <float.h>

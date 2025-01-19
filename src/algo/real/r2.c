@@ -21,61 +21,60 @@ struct Real
 };
 
 static uint32_t fraction_to_binary (uint32_t);
-static uint32_t fraction_sum_shift (uint32_t, uint32_t, int *);
+static uint32_t fraction_sum_shift (int32_t, int32_t, int32_t *);
 
-int
-real_from_decimal (int whole, unsigned int fraction, struct Real *real)
+bool
+real_from_decimal (bool sign, unsigned int whole, unsigned int fraction,
+                   struct Real *real)
 {
   int shift;
-  uint32_t s, w, i, m;
+  uint32_t w, f, i, r;
 
-  s = whole < 0 ? 1 : 0;
-  w = s ? -whole : whole;
-
-  m = fraction_to_binary (fraction);
+  w = whole;
+  f = fraction_to_binary (fraction);
 
   if ((i = flsl (w)) > 0)
     {
       shift = i - 1;
-      m >>= shift;
+      f >>= shift;
       w <<= MANTISSA_WIDTH - shift;
     }
   else
     {
-      i = flsl (m);
-      shift = -(i > 0 ? (REAL_WIDTH + 1 - i) : i);
-      m <<= -shift;
+      i = flsl (f);
+      shift = -(i > 0 ? (REAL_WIDTH + 1 - i) : 0);
+      f <<= -shift;
     }
 
-  if (m & (1 << EXPONENT_WIDTH))
+  if (f & (1 << EXPONENT_WIDTH))
     {
-      m |= 1 << (EXPONENT_WIDTH + 1);
+      r = fraction_sum_shift (f >> (REAL_WIDTH - MANTISSA_WIDTH), 1, &shift);
+      f = r << (REAL_WIDTH - MANTISSA_WIDTH);
     }
-  m >>= REAL_WIDTH - MANTISSA_WIDTH;
+  f >>= REAL_WIDTH - MANTISSA_WIDTH;
 
-  m |= w;
-  m &= (1 << MANTISSA_WIDTH) - 1;
-  shift = shift ? shift + BIAS : 0;
+  f |= w;
+  shift += BIAS;
 
-  real->sign = s;
+  real->sign = sign;
   real->exponent = shift;
-  real->mantissa = m;
-  return 1;
+  real->mantissa = f;
+  return true;
 }
 
-int
+bool
 real_add (struct Real *lhs, struct Real *rhs, struct Real *sum)
 {
-  int shift;
-  uint32_t round;
+  int diff, neg, shift;
+  uint32_t sign;
   struct Real r1, r2;
 
-  shift = lhs->exponent - rhs->exponent;
-  if (shift < 0)
+  diff = lhs->exponent - rhs->exponent;
+  if (diff < 0)
     {
       r1 = *rhs;
       r2 = *lhs;
-      shift = -shift;
+      diff = -diff;
     }
   else
     {
@@ -83,18 +82,24 @@ real_add (struct Real *lhs, struct Real *rhs, struct Real *sum)
       r2 = *rhs;
     }
 
-  r2.sign = 0;
-  r2.exponent -= BIAS;
-	round = (r2.mantissa & (1 << EXPONENT_WIDTH)) == (1 << EXPONENT_WIDTH);
-  *(uint32_t *)&r2 >>= shift;
-  r2.mantissa = fraction_sum_shift (r2.mantissa, r1.mantissa, &shift);
-  r2.mantissa = fraction_sum_shift (r2.mantissa, round, &shift);
+  sign = r1.sign;
+  neg = r1.sign != r2.sign ? -1 : 1;
 
-  sum->sign = r1.sign;
+  r1.exponent -= diff;
+  r1.mantissa <<= diff;
+  shift = 0;
+  r1.mantissa = fraction_sum_shift (r1.mantissa, neg * r2.mantissa, &shift);
+  if (shift < 0)
+    {
+      r1.mantissa <<= -shift;
+    }
+  r1.exponent += shift;
+
+  sum->sign = sign;
   sum->exponent = r1.exponent;
-  sum->mantissa = r2.mantissa;
+  sum->mantissa = r1.mantissa;
 
-  return 1;
+  return true;
 }
 
 char *
@@ -144,9 +149,9 @@ fraction_to_binary (uint32_t fraction)
 }
 
 uint32_t
-fraction_sum_shift (uint32_t m1, uint32_t m2, int *shift)
+fraction_sum_shift (int32_t m1, int32_t m2, int32_t *shift)
 {
-  uint32_t f = m1 + m2;
+  int32_t f = m1 + m2;
   *shift += f >> MANTISSA_WIDTH;
   return f;
 }
