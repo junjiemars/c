@@ -10,7 +10,7 @@
 #define SIGN_WIDTH 1
 #define EXPONENT_WIDTH 8
 #define MANTISSA_WIDTH 23
-#define REAL_WIDTH (sizeof (uint32_t) * 8)
+#define REAL_WIDTH (SIGN_WIDTH + EXPONENT_WIDTH + MANTISSA_WIDTH)
 
 /* R = (-1)^s \cdot M \cdot 2^E */
 struct Real
