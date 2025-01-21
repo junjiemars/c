@@ -25,4 +25,16 @@ ndef_static_assert="yes"
 
 echo "checking for {algo} ..."
 
+
+# check flsl
+#----------------------------------------
+nm_feature="flsl"
+nm_feature_name="nm_have_flsl"
+nm_feature_run=
+nm_feature_h='#include <strings.h>'
+nm_feature_flags="$CFLAGS"
+nm_feature_test='(void)flsl(0);'
+. ${NORE_ROOT}/auto/feature
+
+
 # eof

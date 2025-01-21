@@ -22,6 +22,8 @@ struct Real
 
 static uint32_t fraction_to_binary (uint32_t);
 static uint32_t fraction_sum_shift (int32_t, int32_t, int32_t *);
+static bool is_normal (struct Real *);
+static bool is_subnormal (struct Real *);
 
 bool
 real_from_decimal (bool sign, unsigned int whole, unsigned int fraction,
@@ -154,4 +156,18 @@ fraction_sum_shift (int32_t m1, int32_t m2, int32_t *shift)
   int32_t f = m1 + m2;
   *shift += f >> MANTISSA_WIDTH;
   return f;
+}
+
+__attribute__ ((unused)) bool
+is_normal (struct Real *real)
+{
+	struct Real r1;
+	r1.exponent = ~0;
+	return !(real->exponent == 0 || real->exponent == r1.exponent);
+}
+
+__attribute__ ((unused)) bool
+is_subnormal (struct Real *real)
+{
+  return real->exponent == 0 && real->mantissa > 0;
 }
