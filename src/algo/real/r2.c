@@ -23,7 +23,7 @@ static bool is_normal (struct Real *);
 static bool is_subnormal (struct Real *);
 
 #if !(NM_HAVE_FLSL)
-static int flsl (long);
+int flsl1 (long);
 #endif
 
 bool
@@ -175,7 +175,7 @@ is_subnormal (struct Real *real)
 
 #if !(NM_HAVE_FLSL)
 int
-flsl (long x)
+flsl1 (long x)
 {
   int i;
   if (x == 0)
@@ -188,6 +188,6 @@ flsl (long x)
       x >>= 1;
       i++;
     }
-	return i;
+  return i;
 }
-#endif
+#endif /* NM_HAVE_FLSL */
