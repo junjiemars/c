@@ -1,6 +1,7 @@
 #include "../_algo_.h"
 #include "real.h"
 #include <strings.h>
+#include <limits.h>
 
 /* bias = 2^{k-1} - 1 */
 #define BIAS 0x7f
@@ -23,7 +24,7 @@ static bool is_normal (struct Real *);
 static bool is_subnormal (struct Real *);
 
 #if !(NM_HAVE_FLSL)
-int flsl1 (long);
+int flsl (long);
 #endif
 
 bool
@@ -175,19 +176,24 @@ is_subnormal (struct Real *real)
 
 #if !(NM_HAVE_FLSL)
 int
-flsl1 (long x)
+flsl (long a)
 {
-  int i;
-  if (x == 0)
+	int i;
+	size_t n;
+
+  if (a == 0)
     {
       return 0;
     }
-  i = 1;
-  while ((x & 1) == 0)
-    {
-      x >>= 1;
-      i++;
-    }
+
+	n = sizeof (long) * CHAR_BIT;
+	for (i = n; i; i--)
+		{
+			if (a & ((unsigned long)1 << (unsigned long)(i - 1)))
+				{
+					break;
+				}
+		}
   return i;
 }
 #endif /* NM_HAVE_FLSL */
