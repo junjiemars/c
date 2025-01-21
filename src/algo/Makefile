@@ -367,17 +367,10 @@ $(algo_prime_binout): $(algo_root)/prime/p1.c
 algo_real_r1_binout := $(bin_path)/$(algo_prefix)_real_r1$(bin_ext)
 algo_real_r2_binout := $(bin_path)/$(algo_prefix)_real_r2$(bin_ext)
 
-# ifeq ($(NM_SYSTEM),Darwin)
 algo_real: $(algo_real_r1_binout) \
            $(algo_real_r2_binout)
 algo_real_test: algo_real_r1_test \
                 algo_real_r2_test
-# else
-# algo_real:
-# 	@echo "# skip $@ ..."
-# algo_real_test:
-# 	@echo "# skip $@ ..."
-# endif
 
 algo_real_r1_test: $(algo_real_r1_binout)
 	$<
