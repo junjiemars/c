@@ -1,21 +1,30 @@
 #include "../_algo_.h"
 #include "real.h"
-#include <strings.h>
 #include <limits.h>
+#include <strings.h>
 
-/* bias = 2^{k-1} - 1 */
 #define BIAS 0x7f
 #define SIGN_WIDTH 1
 #define EXPONENT_WIDTH 8
 #define MANTISSA_WIDTH 23
 #define REAL_WIDTH (SIGN_WIDTH + EXPONENT_WIDTH + MANTISSA_WIDTH)
 
-/* R = (-1)^s \cdot M \cdot 2^E */
+/**
+ * $R = (-1)^s \cdot m \cdot 2^e$
+ * e: $ e_{min} \le e + p - 1 \le e_{max} \text{ with } e_{min} = 1 - e_{max} $
+ * m: $ d_0 \cdot d_1 d_2 d_3 \ldots d_{p-1} \text{ with } 0 \le d_i < 2 $
+ */
 struct Real
 {
+#if (NM_CPU_LITTLE_ENDIAN)
   uint32_t mantissa : MANTISSA_WIDTH;
   uint32_t exponent : EXPONENT_WIDTH;
   uint32_t sign : SIGN_WIDTH;
+#else
+  uint32_t sign : SIGN_WIDTH;
+  uint32_t exponent : EXPONENT_WIDTH;
+  uint32_t mantissa : MANTISSA_WIDTH;
+#endif
 };
 
 static uint32_t fraction_to_binary (uint32_t);
@@ -25,7 +34,7 @@ static bool is_subnormal (struct Real *);
 
 #if !(NM_HAVE_FLSL)
 int flsl (long);
-#endif
+#endif /* flsl */
 
 bool
 real_from_decimal (bool sign, unsigned int whole, unsigned int fraction,
@@ -178,22 +187,22 @@ is_subnormal (struct Real *real)
 int
 flsl (long a)
 {
-	int i;
-	size_t n;
+  int i;
+  size_t n;
 
   if (a == 0)
     {
       return 0;
     }
 
-	n = sizeof (long) * CHAR_BIT;
-	for (i = n; i; i--)
-		{
-			if (a & ((unsigned long)1 << (unsigned long)(i - 1)))
-				{
-					break;
-				}
-		}
+  n = sizeof (long) * CHAR_BIT;
+  for (i = n; i; i--)
+    {
+      if (a & ((long)1 << (long)(i - 1)))
+        {
+          break;
+        }
+    }
   return i;
 }
-#endif /* NM_HAVE_FLSL */
+#endif /* flsl */
