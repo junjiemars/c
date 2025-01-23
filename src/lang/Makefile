@@ -466,7 +466,7 @@ $(lang_math_float_cppout): $(lang_root)/math/f.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $(cpp_out)$@ $^
 
 $(lang_math_fenv_binout): $(lang_root)/math/e1.c
-	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $(lang_math_ldlibs) $^
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^ $(lang_math_ldlibs)
 
 
 
