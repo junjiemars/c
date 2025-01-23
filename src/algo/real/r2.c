@@ -61,7 +61,7 @@ real_from_decimal (bool sign, unsigned int whole, unsigned int fraction,
   else
     {
       i = flsl (f);
-      shift = -(i > 0 ? (REAL_WIDTH + 1 - i) : 0);
+      shift = -1 * (i > 0 ? (REAL_WIDTH + 1 - i) : 0);
       f <<= -shift;
     }
 
@@ -179,7 +179,7 @@ __attribute__ ((unused)) bool
 is_normal (struct Real *real)
 {
   struct Real r1;
-  r1.exponent = ~0;
+  r1.exponent = ~(uint32_t)0;
   return !(real->exponent == 0 || real->exponent == r1.exponent);
 }
 
@@ -222,7 +222,7 @@ flsl (long a)
     }
 
   n = sizeof (long) * CHAR_BIT;
-  for (i = n; i; i--)
+  for (i = (int)n; i; i--)
     {
       if (a & ((long)1 << (long)(i - 1)))
         {
