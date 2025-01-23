@@ -2,20 +2,24 @@
 #include "real.h"
 #include <limits.h>
 
-#if (NM_HAVE_FFSL || NM_HAVE_FLSL)
-#include <strings.h>
-#endif
-
 #define BIAS 0x7f
 #define SIGN_WIDTH 1
 #define EXPONENT_WIDTH 8
 #define MANTISSA_WIDTH 23
 #define REAL_WIDTH (SIGN_WIDTH + EXPONENT_WIDTH + MANTISSA_WIDTH)
 
+#if (NM_HAVE_FFSL || NM_HAVE_FLSL)
+#include <strings.h>
+#endif
+
+#if (GCC)
+#pragma GCC diagnostic ignored "-Woverflow"
+#endif
+
 /**
- * $Real = (-1)^s \cdot m \cdot 2^e$
- * e: $ e_{min} \le e + p - 1 \le e_{max} \text{ with } e_{min} = 1 - e_{max} $
- * m: $ d_0 \cdot d_1 d_2 d_3 \ldots d_{p-1} \text{ with } 0 \le d_i < 2 $
+ * $Real = (-1)^s \cdot 2^e \cdot m$
+ * $e_{min} \le e \le e_{max} \text{ with } e_{min} = 1 - e_{max}$
+ * $m = d_0 . d_1 d_2 d_3 \ldots d_{p-1} \text{ with } 0 \le d_i < 2$
  */
 struct Real
 {
