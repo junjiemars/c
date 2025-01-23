@@ -435,11 +435,14 @@ $(lang_main_envp_binout): $(lang_root)/main/m_envp.c
 lang_math_complex_binout := $(bin_path)/$(lang_prefix)_math_complex$(bin_ext)
 lang_math_float_binout := $(bin_path)/$(lang_prefix)_math_float$(bin_ext)
 lang_math_float_cppout := $(tmp_path)/$(lang_prefix)_math_float$(cpp_ext)
+lang_math_fenv_binout := $(bin_path)/$(lang_prefix)_math_fenv$(bin_ext)
 
 lang_math: $(lang_math_complex_binout)          \
-           $(lang_math_float_binout)
+           $(lang_math_float_binout)            \
+           $(lang_math_fenv_binout)
 lang_math_test: lang_math_complex_test          \
-                lang_math_float_test
+                lang_math_float_test            \
+                lang_math_fenv_test
 
 lang_math_ldlibs :=
 ifeq ($(NM_SYSTEM),Linux)
@@ -448,9 +451,10 @@ endif
 
 lang_math_complex_test: $(lang_math_complex_binout)
 	$(lang_math_complex_binout)
-
 lang_math_float_test: $(lang_math_float_binout)
 	$(lang_math_float_binout)
+lang_math_fenv_test: $(lang_math_fenv_binout)
+	$(lang_math_fenv_binout)
 
 $(lang_math_complex_binout): $(lang_root)/math/m.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $(lang_math_ldlibs) $^
@@ -460,6 +464,9 @@ $(lang_math_float_binout): $(lang_math_float_cppout)
 
 $(lang_math_float_cppout): $(lang_root)/math/f.c
 	$(CPP) $(CPPFLAGS) $(INC) $(nm_stage_pre) $(cpp_out)$@ $^
+
+$(lang_math_fenv_binout): $(lang_root)/math/e1.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $(lang_math_ldlibs) $^
 
 
 

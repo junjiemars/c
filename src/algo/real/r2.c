@@ -10,7 +10,7 @@
 #define REAL_WIDTH (SIGN_WIDTH + EXPONENT_WIDTH + MANTISSA_WIDTH)
 
 /**
- * $R = (-1)^s \cdot m \cdot 2^e$
+ * $Real = (-1)^s \cdot m \cdot 2^e$
  * e: $ e_{min} \le e + p - 1 \le e_{max} \text{ with } e_{min} = 1 - e_{max} $
  * m: $ d_0 \cdot d_1 d_2 d_3 \ldots d_{p-1} \text{ with } 0 \le d_i < 2 $
  */
