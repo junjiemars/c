@@ -1,7 +1,10 @@
 #include "../_algo_.h"
 #include "real.h"
 #include <limits.h>
+
+#if (NM_HAVE_FFSL || NM_HAVE_FLSL)
 #include <strings.h>
+#endif
 
 #define BIAS 0x7f
 #define SIGN_WIDTH 1
@@ -32,6 +35,9 @@ static uint32_t fraction_sum_shift (int32_t, int32_t, int32_t *);
 static bool is_normal (struct Real *);
 static bool is_subnormal (struct Real *);
 
+#if !(NM_HAVE_FFSL)
+int ffsl (long);
+#endif /* ffsl */
 #if !(NM_HAVE_FLSL)
 int flsl (long);
 #endif /* flsl */
@@ -182,6 +188,26 @@ is_subnormal (struct Real *real)
 {
   return real->exponent == 0 && real->mantissa > 0;
 }
+
+#if !(NM_HAVE_FFSL)
+int
+ffsl (long a)
+{
+  int i;
+  if (a == 0)
+    {
+      return 0;
+    }
+  for (i = 1; a; a >>= 1, i++)
+    {
+      if (a & 1)
+        {
+          return i;
+        }
+    }
+  return 0;
+}
+#endif /* ffsl */
 
 #if !(NM_HAVE_FLSL)
 int
