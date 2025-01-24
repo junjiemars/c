@@ -34,7 +34,7 @@ struct Real
 #endif
 };
 
-static uint32_t fraction_to_binary (uint32_t);
+static uint32_t fraction_to_binary (uint32_t, int);
 static uint32_t fraction_sum_shift (int32_t, int32_t, int32_t *);
 static bool is_normal (struct Real *);
 static bool is_subnormal (struct Real *);
@@ -47,14 +47,31 @@ int flsl (long);
 #endif /* flsl */
 
 bool
-real_from_decimal (bool sign, unsigned int whole, unsigned int fraction,
-                   struct Real *real)
+from_decimal (bool sign, unsigned whole, int scale, struct Real *real)
 {
   int shift;
   uint32_t w, f, i, r;
 
   w = whole;
-  f = fraction_to_binary (fraction);
+  f = 0;
+  if (scale < 0)
+    {
+			f = 1;
+      for (int s = scale; s; s++)
+        {
+          w /= 10;
+          f *= 10;
+        }
+			r = w > 0 ? whole - w * f : whole;
+      f = fraction_to_binary (r, -scale);
+    }
+  else if (scale > 0)
+    {
+      for (; scale; scale--)
+        {
+          w *= 10;
+        }
+    }
 
   if ((i = flsl (w)) > 0)
     {
@@ -86,10 +103,10 @@ real_from_decimal (bool sign, unsigned int whole, unsigned int fraction,
 }
 
 bool
-real_add (struct Real *lhs, struct Real *rhs, struct Real *sum)
+sum (struct Real *lhs, struct Real *rhs, struct Real *sum)
 {
   int diff, neg, shift;
-  uint32_t sign;
+  uint32_t sign, round;
   struct Real r1, r2;
 
   diff = lhs->exponent - rhs->exponent;
@@ -107,6 +124,8 @@ real_add (struct Real *lhs, struct Real *rhs, struct Real *sum)
 
   sign = r1.sign;
   neg = r1.sign != r2.sign ? -1 : 1;
+  round = r2.mantissa & 1;
+  (void)round;
 
   r1.exponent -= diff;
   r1.mantissa <<= diff;
@@ -146,12 +165,13 @@ new_real (void)
 }
 
 uint32_t
-fraction_to_binary (uint32_t fraction)
+fraction_to_binary (uint32_t fraction, int scale)
 {
-  uint32_t i, m, f, f10;
+  uint32_t s, i, m, f, f10;
 
   f10 = 1;
-  for (f = fraction; f > 0; f /= 10)
+	s = scale;
+  for (f = fraction; f || s; f /= 10, s--)
     {
       f10 *= 10;
     }
@@ -191,6 +211,34 @@ __attribute__ ((unused)) bool
 is_subnormal (struct Real *real)
 {
   return real->exponent == 0 && real->mantissa > 0;
+}
+
+bool
+is_sign (struct Real const *real)
+{
+  return (*(uint32_t *)real >> (EXPONENT_WIDTH + MANTISSA_WIDTH)) & 1;
+}
+
+bool
+is_nan (struct Real const *real)
+{
+  struct Real r1;
+  r1.exponent = ~(uint32_t)0;
+  return real->exponent == r1.exponent && real->mantissa > 0;
+}
+
+bool
+is_inf (struct Real const *real)
+{
+  struct Real r1;
+  r1.exponent = ~(uint32_t)0;
+  return real->exponent == r1.exponent && real->mantissa == 0;
+}
+
+bool
+is_zero (struct Real const *real)
+{
+  return real->exponent == 0 && real->mantissa == 0;
 }
 
 #if !(NM_HAVE_FFSL)
