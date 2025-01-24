@@ -40,6 +40,8 @@ test_real_from_decimal (void)
 {
   struct Real *r = new_real ();
 
+  assert (from_decimal (false, 0, 0, r) && (0.0f == *(float *)r));
+
   assert (from_decimal (false, 4, 0, r) && (4.0f == *(float *)r));
 
   assert (from_decimal (false, 5, 0, r) && (5.0f == *(float *)r));
@@ -67,12 +69,16 @@ test_sum (void)
   struct Real *r3 = new_real ();
 
   /* from_decimal (false, 4, 0, r1); */
-  /* from_decimal (false, 2, 0, r2); */
-  /* assert (sum (r1, r2, r3) && (6.0f == *(float *)r3)); */
+  /* from_decimal (false, 25, -2, r2); */
+  /* assert (sum (r1, r2, r3) && (4.25f == *(float *)r3)); */
 
   /* from_decimal (false, 0, 0, r1); */
-  /* from_decimal (false, 3, 14, r2); */
+  /* from_decimal (false, 314, -2, r2); */
   /* assert (sum (r1, r2, r3) && (0.0f + 3.14f == *(float *)r3)); */
+
+  /* from_decimal (false, 4, 0, r1); */
+  /* from_decimal (true, 314, -2, r2); */
+  /* assert (sum (r1, r2, r3) && (4.0f - 3.14f == *(float *)r3)); */
 
   from_decimal (false, 5, 0, r1);
   from_decimal (true, 314, -2, r2);

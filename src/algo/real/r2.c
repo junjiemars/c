@@ -52,17 +52,23 @@ from_decimal (bool sign, unsigned whole, int scale, struct Real *real)
   int shift;
   uint32_t w, f, i, r;
 
+  if (whole == 0)
+    {
+      *real = (struct Real){ 0 };
+      return true;
+    }
+
   w = whole;
   f = 0;
   if (scale < 0)
     {
-			f = 1;
+      f = 1;
       for (int s = scale; s; s++)
         {
           w /= 10;
           f *= 10;
         }
-			r = w > 0 ? whole - w * f : whole;
+      r = w > 0 ? whole - w * f : whole;
       f = fraction_to_binary (r, -scale);
     }
   else if (scale > 0)
@@ -106,8 +112,19 @@ bool
 sum (struct Real *lhs, struct Real *rhs, struct Real *sum)
 {
   int diff, neg, shift;
-  uint32_t sign, round;
+  uint32_t sign;
   struct Real r1, r2;
+
+  if (is_zero (lhs))
+    {
+      *sum = *rhs;
+      return true;
+    }
+  else if (is_zero (rhs))
+    {
+      *sum = *lhs;
+      return true;
+    }
 
   diff = lhs->exponent - rhs->exponent;
   if (diff < 0)
@@ -124,11 +141,22 @@ sum (struct Real *lhs, struct Real *rhs, struct Real *sum)
 
   sign = r1.sign;
   neg = r1.sign != r2.sign ? -1 : 1;
-  round = r2.mantissa & 1;
-  (void)round;
 
-  r1.exponent -= diff;
-  r1.mantissa <<= diff;
+  if (diff > 0)
+    {
+      if (neg == 1)
+        {
+          r2.mantissa >>= 1;
+          r2.mantissa |= (1 << (MANTISSA_WIDTH - 1));
+          r2.exponent += 1;
+          r2.mantissa >>= r1.exponent - r2.exponent;
+        }
+      else
+        {
+          r1.exponent -= diff;
+          r1.mantissa <<= diff;
+        }
+    }
   shift = 0;
   r1.mantissa = fraction_sum_shift (r1.mantissa, neg * r2.mantissa, &shift);
   if (shift < 0)
@@ -170,8 +198,7 @@ fraction_to_binary (uint32_t fraction, int scale)
   uint32_t s, i, m, f, f10;
 
   f10 = 1;
-	s = scale;
-  for (f = fraction; f || s; f /= 10, s--)
+  for (f = fraction, s = scale; f || s; f /= 10, s--)
     {
       f10 *= 10;
     }
