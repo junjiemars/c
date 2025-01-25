@@ -4,14 +4,16 @@
 
 static void test_real_value (void);
 static void test_real_from_decimal (void);
-static void test_sum (void);
+static void test_real_add (void);
+static void test_real_mul (void);
 
 int
 main (void)
 {
   test_real_value ();
   test_real_from_decimal ();
-  test_sum ();
+  test_real_add ();
+  test_real_mul ();
   return 0;
 }
 
@@ -62,25 +64,41 @@ test_real_from_decimal (void)
 }
 
 void
-test_sum (void)
+test_real_add (void)
 {
   struct Real *r1 = new_real ();
   struct Real *r2 = new_real ();
   struct Real *r3 = new_real ();
 
-  /* from_decimal (false, 4, 0, r1); */
-  /* from_decimal (false, 25, -2, r2); */
-  /* assert (sum (r1, r2, r3) && (4.25f == *(float *)r3)); */
+  from_decimal (false, 4, 0, r1);
+  from_decimal (false, 25, -2, r2);
+  assert (add (r1, r2, r3) && (4.25f == *(float *)r3));
 
   /* from_decimal (false, 0, 0, r1); */
   /* from_decimal (false, 314, -2, r2); */
-  /* assert (sum (r1, r2, r3) && (0.0f + 3.14f == *(float *)r3)); */
+  /* assert (add (r1, r2, r3) && (0.0f + 3.14f == *(float *)r3)); */
 
   /* from_decimal (false, 4, 0, r1); */
   /* from_decimal (true, 314, -2, r2); */
-  /* assert (sum (r1, r2, r3) && (4.0f - 3.14f == *(float *)r3)); */
+  /* assert (add (r1, r2, r3) && (4.0f - 3.14f == *(float *)r3)); */
 
-  from_decimal (false, 5, 0, r1);
-  from_decimal (true, 314, -2, r2);
-  assert (sum (r1, r2, r3) && (5.0f - 3.14f == *(float *)r3));
+  /* from_decimal (false, 5, 0, r1); */
+  /* from_decimal (true, 314, -2, r2); */
+  /* assert (add (r1, r2, r3) && (5.0f - 3.14f == *(float *)r3)); */
+}
+
+void
+test_real_mul (void)
+{
+  struct Real *r1 = new_real ();
+  struct Real *r2 = new_real ();
+  struct Real *r3 = new_real ();
+
+  /* from_decimal (false, 2, 0, r1); */
+  /* from_decimal (false, 3, 0, r2); */
+  /* assert (mul (r1, r2, r3) && (2.0f * 3.0f == *(float *)r3)); */
+
+  from_decimal (false, 2, 0, r1);
+  from_decimal (false, 25, -2, r2);
+  assert (mul (r1, r2, r3) && (2.0f * 0.25f == *(float *)r3));
 }

@@ -10,7 +10,9 @@
 struct Real;
 
 bool from_decimal (bool, unsigned, int, struct Real *);
-bool sum (struct Real *, struct Real *, struct Real *);
+bool add (struct Real const *, struct Real const *, struct Real *);
+bool mul (struct Real const *, struct Real const *, struct Real *);
+bool is_normal (struct Real const *);
 bool is_sign (struct Real const *);
 bool is_nan (struct Real const *);
 bool is_inf (struct Real const *);
