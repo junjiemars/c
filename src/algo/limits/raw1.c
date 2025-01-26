@@ -1,4 +1,5 @@
 #include "../_algo_.h"
+#include <float.h>
 #include <limits.h>
 
 #define LIMIT_U_MAX(t) ((t)~0)
@@ -8,6 +9,10 @@
 #define LIMIT_S_MIN(t) ((t)(-(LIMIT_S_MAX (t)) - 1))
 
 static int char_bit (void);
+static float float_min (void);
+static float float_max (void);
+static double double_min (void);
+static double double_max (void);
 
 int
 main (void)
@@ -37,6 +42,12 @@ main (void)
   assert (LLONG_MAX == LIMIT_S_MAX (long long));
   assert (ULLONG_MAX == LIMIT_U_MAX (unsigned long long));
 
+  assert (FLT_MIN == float_min ());
+  assert (FLT_MAX == float_max ());
+
+  assert (DBL_MIN == double_min ());
+  assert (DBL_MAX == double_max ());
+
   return 0;
 }
 
@@ -49,4 +60,52 @@ char_bit (void)
       n++;
     }
   return n;
+}
+
+float
+float_min (void)
+{
+  union
+  {
+    float f;
+    uint32_t u;
+  } u1;
+  u1.u = 1 << 23;
+  return u1.f;
+}
+
+float
+float_max (void)
+{
+  union
+  {
+    float f;
+    uint32_t u;
+  } u1;
+  u1.u = (uint32_t)0x00fe << 23 | (uint32_t)0x007fffff;
+  return u1.f;
+}
+
+double
+double_min (void)
+{
+  union
+  {
+    double d;
+    uint64_t u;
+  } u1;
+  u1.u = (uint64_t)1 << 52;
+  return u1.d;
+}
+
+double
+double_max (void)
+{
+  union
+  {
+    double d;
+    uint64_t u;
+  } u1;
+  u1.u = (uint64_t)0x07fe << 52 | (uint64_t)0x000fffffffffffff;
+  return u1.d;
 }
