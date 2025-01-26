@@ -2,23 +2,23 @@
 #include "real.h"
 #include <math.h>
 
-static void test_real_value (void);
-static void test_real_from_decimal (void);
-static void test_real_add (void);
-static void test_real_mul (void);
+static void test_special_quantity (void);
+static void test_from_decimal (void);
+static void test_add (void);
+static void test_mul (void);
 
 int
 main (void)
 {
-  test_real_value ();
-  test_real_from_decimal ();
-  test_real_add ();
-  test_real_mul ();
+  test_special_quantity ();
+  test_from_decimal ();
+  test_add ();
+  test_mul ();
   return 0;
 }
 
 void
-test_real_value (void)
+test_special_quantity (void)
 {
   float f;
 
@@ -38,7 +38,7 @@ test_real_value (void)
 }
 
 void
-test_real_from_decimal (void)
+test_from_decimal (void)
 {
   struct Real *r = new_real ();
 
@@ -64,15 +64,19 @@ test_real_from_decimal (void)
 }
 
 void
-test_real_add (void)
+test_add (void)
 {
   struct Real *r1 = new_real ();
   struct Real *r2 = new_real ();
   struct Real *r3 = new_real ();
 
-  from_decimal (false, 4, 0, r1);
-  from_decimal (false, 25, -2, r2);
-  assert (add (r1, r2, r3) && (4.25f == *(float *)r3));
+  from_decimal (false, 101, -1, r1);
+  from_decimal (true, 993, -2, r2);
+  assert (add (r1, r2, r3) && (10.1f - 9.93f == *(float *)r3));
+
+  /* from_decimal (false, 4, 0, r1); */
+  /* from_decimal (false, 25, -2, r2); */
+  /* assert (add (r1, r2, r3) && (4.25f == *(float *)r3)); */
 
   /* from_decimal (false, 0, 0, r1); */
   /* from_decimal (false, 314, -2, r2); */
@@ -84,11 +88,11 @@ test_real_add (void)
 
   /* from_decimal (false, 5, 0, r1); */
   /* from_decimal (true, 314, -2, r2); */
-  /* assert (add (r1, r2, r3) && (5.0f - 3.14f == *(float *)r3)); */
+  /* assert (add (r1, r2, r3) && ((5.0f - 3.14f) == *(float *)r3)); */
 }
 
 void
-test_real_mul (void)
+test_mul (void)
 {
   struct Real *r1 = new_real ();
   struct Real *r2 = new_real ();

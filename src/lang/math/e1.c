@@ -22,6 +22,14 @@ main (void)
   printf ("%s(%d)\n", _str_ (FLT_RADIX), FLT_RADIX);
 #endif /* FLT_RADIX */
 
+#ifdef FLT_MIN
+  printf ("%s(%g)\n", _str_ (FLT_MIN), FLT_MIN);
+#endif /* FLT_MIN */
+
+#ifdef FLT_MAX
+  printf ("%s(%g)\n", _str_ (FLT_MAX), FLT_MAX);
+#endif /* FLT_MAX */
+
 #ifdef NM_HAVE_FENV_H
   int round;
 

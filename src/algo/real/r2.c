@@ -8,8 +8,8 @@
 #define MANTISSA_WIDTH 23
 #define REAL_WIDTH (SIGN_WIDTH + EXPONENT_WIDTH + MANTISSA_WIDTH)
 
-#define EXPONENT_MAX (BIAS + BIAS)
-#define EXPONENT_MIN (-BIAS - 1)
+#define EXPONENT_MAX (BIAS << 1)
+#define EXPONENT_MIN ((~BIAS) | 2)
 #define REAL_SIGN_MAX (((1 << EXPONENT_WIDTH) - 1) << MANTISSA_WIDTH)
 #define REAL_UNSIGN_MAX (((1 << (EXPONENT_WIDTH + 1)) - 1) << MANTISSA_WIDTH)
 
@@ -55,7 +55,7 @@ struct Real
 
 static uint32_t fraction_to_binary (uint32_t, int);
 static uint32_t fraction_sum_shift (int32_t, int32_t, int32_t *);
-static void normalize (uint32_t, int *);
+static void normalize (uint32_t *, int *);
 static bool is_subnormal (struct Real *);
 
 #if !(NM_HAVE_FFSL)
@@ -134,6 +134,11 @@ add (struct Real const *lhs, struct Real const *rhs, struct Real *sum)
   uint32_t s, m1, m2;
   struct Real r1, r2;
 
+  if (is_nan (lhs) || is_nan (rhs))
+    {
+      return false;
+    }
+
   if (is_zero (lhs))
     {
       *sum = *rhs;
@@ -184,17 +189,7 @@ add (struct Real const *lhs, struct Real const *rhs, struct Real *sum)
         }
     }
 
-  while (m1 >= (1 << (MANTISSA_WIDTH + 1)))
-    {
-      m1 >>= 1;
-      e += 1;
-    }
-
-  while (m1 < (1 << MANTISSA_WIDTH))
-    {
-      m1 <<= 1;
-      e -= 1;
-    }
+  normalize (&m1, &e);
 
   if (e > EXPONENT_MAX)
     {
@@ -222,6 +217,11 @@ mul (struct Real const *lhs, struct Real const *rhs, struct Real *product)
   uint32_t s, m, m1, m2;
   struct Real r1, r2;
 
+  if (is_nan (lhs) || is_nan (rhs))
+    {
+      return false;
+    }
+
   if (is_zero (lhs))
     {
       *product = *rhs;
@@ -241,7 +241,7 @@ mul (struct Real const *lhs, struct Real const *rhs, struct Real *product)
   m2 = (r2.mantissa & ((1 << MANTISSA_WIDTH) - 1)) | (1 << MANTISSA_WIDTH);
   m = m1 * m2;
 
-  normalize (m, &e);
+  normalize (&m, &e);
 
   if (e > EXPONENT_MAX)
     {
@@ -316,14 +316,14 @@ fraction_sum_shift (int32_t m1, int32_t m2, int32_t *shift)
 }
 
 void
-normalize (uint32_t mantissa, int *exponent)
+normalize (uint32_t *mantissa, int *exponent)
 {
-  for (; mantissa >= (1 << (MANTISSA_WIDTH)); mantissa >>= 1)
+  for (; *mantissa >= (1 << (MANTISSA_WIDTH + 1)); *mantissa >>= 1)
     {
       *exponent += 1;
     }
 
-  for (; mantissa && mantissa < (1 << (MANTISSA_WIDTH)); mantissa <<= 1)
+  for (; *mantissa && *mantissa < (1 << (MANTISSA_WIDTH)); *mantissa <<= 1)
     {
       *exponent -= 1;
     }
