@@ -14,8 +14,12 @@ main (void)
 {
   assert (CHAR_BIT == char_bit ());
 
-  assert (CHAR_MIN == LIMIT_S_MIN (char));
-  assert (CHAR_MAX == LIMIT_S_MAX (char));
+  if (!_isut_ (char))
+    {
+      assert (CHAR_MIN == LIMIT_S_MIN (char));
+      assert (CHAR_MAX == LIMIT_S_MAX (char));
+    }
+  assert (UCHAR_MAX == LIMIT_U_MAX (unsigned char));
 
   assert (SHRT_MAX == LIMIT_S_MAX (short));
   assert (SHRT_MIN == LIMIT_S_MIN (short));
