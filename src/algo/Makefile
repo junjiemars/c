@@ -15,6 +15,7 @@ algo: _algo_                                    \
       algo_is_unsigned_integer                  \
       algo_is_unsigned_type                     \
       algo_levenshtein                          \
+      algo_limits                               \
       algo_loop                                 \
       algo_merge                                \
       algo_num                                  \
@@ -28,7 +29,6 @@ algo: _algo_                                    \
       algo_strlen_utf8                          \
       algo_strscpy
 
-
 algo_test: _algo_test                           \
            algo_compress_test                   \
            algo_coroutine_test                  \
@@ -40,6 +40,7 @@ algo_test: _algo_test                           \
            algo_is_unsigned_integer_test        \
            algo_is_unsigned_type_test           \
            algo_levenshtein_test                \
+           algo_limits_test                     \
            algo_loop_test                       \
            algo_merge_test                      \
            algo_num_test                        \
@@ -284,6 +285,21 @@ algo_levenshtein_test: algo_levenshtein
 $(algo_levenshtein_binout): $(algo_root)/levenshtein/ld.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
+
+# limits
+algo_limits_raw_binout := $(bin_path)/$(algo_prefix)_limits_raw$(bin_ext)
+
+algo_limits: $(algo_limits_raw_binout)
+algo_limits_test: algo_limits_raw_test
+
+algo_limits_raw_test: $(algo_limits_raw_binout)
+	$<
+
+$(algo_limits_raw_binout): $(algo_root)/limits/raw1.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+
+
 
 # loop
 algo_loop_tile_binout := $(bin_path)/$(algo_prefix)_loop_tile$(bin_ext)
@@ -313,6 +329,7 @@ $(algo_loop_invar_binout): $(algo_root)/loop/invar.c
 $(algo_loop_hoist_binout): $(algo_root)/loop/hoist.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+
 
 # merge
 algo_merge_binout := $(bin_path)/$(algo_prefix)_merge$(bin_ext)
@@ -527,3 +544,5 @@ algo_strscpy_test: algo_strscpy
 
 $(algo_strscpy_binout): $(algo_root)/strscpy/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+.PHONY: _algo_ _algo_test

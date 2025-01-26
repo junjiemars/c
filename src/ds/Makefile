@@ -4,7 +4,6 @@
 # make clean test
 #
 
-
 ds: ds_dl_list                                  \
     ds_sl_list                                  \
     ds_list                                     \
@@ -128,16 +127,25 @@ $(ds_stack_binout): $(ds_root)/stack/test.c
 
 
 # tree
-ds_tree_bone_binout := $(bin_path)/$(ds_prefix)_tree_bone$(bin_ext)
+ds_tree_binary_binout := $(bin_path)/$(ds_prefix)_tree_binary$(bin_ext)
+ds_tree_tenary_binout := $(bin_path)/$(ds_prefix)_tree_tenary$(bin_ext)
 
-ds_tree: $(ds_tree_bone_binout)
-ds_tree_test: ds_tree_bone_test
+ds_tree: $(ds_tree_binary_binout)               \
+         $(ds_tree_tenary_binout)
+ds_tree_test: ds_tree_binary_test               \
+              ds_tree_tenary_test
 
-ds_tree_bone_test: $(ds_tree_bone_binout)
+ds_tree_binary_test: $(ds_tree_binary_binout)
+	$<
+ds_tree_tenary_test: $(ds_tree_tenary_binout)
 	$<
 
-$(ds_tree_bone_binout): $(ds_root)/tree/test.c      \
-                        $(ds_root)/tree/bone/tb1.c
+$(ds_tree_binary_binout): $(ds_root)/tree/test.c  \
+                          $(ds_root)/tree/tb1.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+
+$(ds_tree_tenary_binout): $(ds_root)/tree/test.c  \
+                          $(ds_root)/tree/te1.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 

@@ -5,12 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct node_s
-{
-  void *data;
-  struct node_s *parent;
-  struct node_s *child;
-  struct node_s *sibling;
-} node_s;
+struct Node;
+
+typedef struct Node *link;
+
 
 #endif /* end of _TREE_H_ */

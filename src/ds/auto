@@ -11,12 +11,8 @@ if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
 
-
-# check cc features
+# check C's std features
 ncc_sanitize_address="yes"
-. ${POSIX_ROOT}/ncc_auto
-
-# check posix features
 ndef_restrict="yes"
 ndef_static_assert="yes"
 . ${POSIX_ROOT}/ncstd_auto
