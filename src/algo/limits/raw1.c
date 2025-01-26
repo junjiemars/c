@@ -4,7 +4,7 @@
 #define LIMIT_U_MAX(t) ((t)~0)
 #define LIMIT_U_MIN(t) (0)
 
-#define LIMIT_S_MAX(t) (((t)1 << (sizeof (t) * 8 - 1)) - 1)
+#define LIMIT_S_MAX(t) (((t)1 << (sizeof (t) * CHAR_BIT - 1)) - 1)
 #define LIMIT_S_MIN(t) ((t)(-(LIMIT_S_MAX (t)) - 1))
 
 static int char_bit (void);
