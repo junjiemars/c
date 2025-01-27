@@ -11,13 +11,14 @@ if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
 
-if [    "$ncc_cpu_endian" = "yes"               \
-     -o "$ncc_cache_line_size" = "yes"          \
-     -o "$ncc_omit_frame_pointer" = "yes"       \
-     -o "$ncc_no_omit_frame_pointer" = "yes"    \
-     -o "$ncc_sanitize_address" = "yes"         \
-     -o "$ncc_sanitize_alignment" = "yes"       \
-     -o "$ncc_sanitize_leak" = "yes"            \
+if [    "$ncc_cpu_endian" = "yes"                       \
+     -o "$ncc_cache_line_size" = "yes"                  \
+     -o "$ncc_omit_frame_pointer" = "yes"               \
+     -o "$ncc_no_omit_frame_pointer" = "yes"            \
+     -o "$ncc_sanitize_address" = "yes"                 \
+     -o "$ncc_sanitize_alignment" = "yes"               \
+     -o "$ncc_sanitize_signed_integer_overflow" = "yes" \
+     -o "$ncc_sanitize_leak" = "yes"                    \
      -o "$ncc_pic" = "yes"                      \
    ]; then
   echo "checking for CC's features ..."
@@ -276,6 +277,25 @@ case "$CC_NAME" in
            . ${NORE_ROOT}/auto/make_define
        fi
        ncc_sanitize_leak_done="yes"
+     fi
+     if [ "$ncc_sanitize_signed_integer_overflow" = "yes" ] \
+        && [ -z "$ncc_sanitize_signed_integer_overflow_done" ]; then
+       nm_feature="-fsanitize=signed-integer-overflow"
+       nm_feature_name=
+       nm_feature_indent=yes
+       nm_feature_run=no
+       nm_feature_h=
+       nm_feature_flags='-fsanitize=signed-integer-overflow'
+       nm_feature_test=
+       . ${NORE_ROOT}/auto/feature
+       if [ yes = $nm_found ]; then
+        flag=f_sanitize_signed_integer_overflow \
+          op=':=' value=$nm_feature_flags \
+          . ${NORE_ROOT}/auto/make_define
+        flag=f_sanitize op="+=" value=$nm_feature_flags \
+           . ${NORE_ROOT}/auto/make_define
+       fi
+       ncc_sanitize_signed_integer_overflow_done="yes"
      fi
      ;;
    msvc)
