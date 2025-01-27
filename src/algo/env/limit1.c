@@ -54,10 +54,8 @@ main (void)
   assert (DBL_MIN == double_min ());
   assert (DBL_MAX == double_max ());
 
-#if (NM_LONG_DOUBLE_WIDTH == 8)
   assert (LDBL_MIN == long_double_min ());
   assert (LDBL_MAX == long_double_max ());
-#endif
 
   return 0;
 }
@@ -126,27 +124,43 @@ double_max (void)
 long double
 long_double_min (void)
 {
+#if (NM_LONG_DOUBLE_WIDTH == 8)
   union
   {
     long double d;
     uint64_t u;
   } u1;
   u1.u = (uint64_t)1 << 52;
+#else
+  union
+  {
+    long double d;
+    uint64_t u[2];
+  } u1;
+  u1.u[1] = (uint64_t)0x0001000000000000;
+  u1.u[0] = (uint64_t)0;
+#endif
   return u1.d;
 }
 
 long double
 long_double_max (void)
 {
+#if (NM_LONG_DOUBLE_WIDTH == 8)
   union
   {
     long double d;
-#if (NM_LONG_DOUBLE_WIDTH == 8)
     uint64_t u;
-#endif
   } u1;
-#if (NM_LONG_DOUBLE_WIDTH == 8)
   u1.u = (uint64_t)0x07fe << 52 | (uint64_t)0x000fffffffffffff;
+#else
+  union
+  {
+    long double d;
+    uint64_t u[2];
+  } u1;
+  u1.u[1] = (uint64_t)0x7ffeffffffffffff;
+  u1.u[0] = (uint64_t)0xffffffffffffffff;
 #endif
   return u1.d;
 }
