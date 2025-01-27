@@ -13,8 +13,6 @@ algo: _algo_                                    \
       algo_fibonacci                            \
       algo_gcd                                  \
       algo_hash                                 \
-      algo_is_unsigned_integer                  \
-      algo_is_unsigned_type                     \
       algo_levenshtein                          \
       algo_limits                               \
       algo_loop                                 \
@@ -39,8 +37,6 @@ algo_test: _algo_test                           \
            algo_fibonacci_test                  \
            algo_gcd_test                        \
            algo_hash_test                       \
-           algo_is_unsigned_integer_test        \
-           algo_is_unsigned_type_test           \
            algo_levenshtein_test                \
            algo_limits_test                     \
            algo_loop_test                       \
@@ -150,19 +146,19 @@ $(algo_dynamic_array_binout): $(algo_root)/dynamic_array/da.c
 
 
 # env
-algo_env_limits_binout := $(bin_path)/$(algo_prefix)_env_limits$(bin_ext)
+algo_env_limit_binout := $(bin_path)/$(algo_prefix)_env_limit$(bin_ext)
 algo_env_random_binout := $(bin_path)/$(algo_prefix)_env_random$(bin_ext)
 
-algo_env: $(algo_env_limits_binout)             \
+algo_env: $(algo_env_limit_binout)             \
           $(algo_env_random_binout)
-algo_env_test: algo_env_limits_test             \
+algo_env_test: algo_env_limit_test             \
                algo_env_random_test
-algo_env_limits_test: $(algo_env_limits_binout)
+algo_env_limit_test: $(algo_env_limit_binout)
 	$<
 algo_env_random_test: $(algo_env_random_binout)
 	$<
 	$< 1
-$(algo_env_limits_binout): $(algo_root)/env/limits1.c
+$(algo_env_limit_binout): $(algo_root)/env/limit1.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 $(algo_env_random_binout): $(algo_root)/env/random1.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
@@ -265,35 +261,6 @@ $(algo_hash_jenkins_binout): $(algo_root)/hash/jenkins.c \
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
-
-# is unsigned integer
-algo_is_uint_binout := $(bin_path)/$(algo_prefix)_is_uint$(bin_ext)
-algo_is_uint_cppout := $(tmp_path)/$(algo_prefix)_is_uint$(cpp_ext)
-
-algo_is_unsigned_integer: $(algo_is_uint_binout)
-algo_is_unsigned_integer_test: algo_is_unsigned_integer
-	$(algo_is_uint_binout)
-
-$(algo_is_uint_binout): $(algo_is_uint_cppout)
-	$(CC) $(CFLAGS) $^ $(bin_out)$@
-
-$(algo_is_uint_cppout): $(algo_root)/is_unsigned_integer/is_uint.c
-	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
-
-
-# is unsigned type
-algo_is_utype_binout := $(bin_path)/$(algo_prefix)_is_utype$(bin_ext)
-algo_is_utype_cppout := $(tmp_path)/$(algo_prefix)_is_utype$(cpp_ext)
-
-algo_is_unsigned_type: $(algo_is_utype_binout)
-algo_is_unsigned_type_test: algo_is_unsigned_type
-	$(algo_is_utype_binout)
-
-$(algo_is_utype_binout): $(algo_is_utype_cppout)
-	$(CC) $(CFLAGS) $^ $(bin_out)$@
-
-$(algo_is_utype_cppout): $(algo_root)/is_unsigned_type/is_utype.c
-	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # levenshtein
 algo_levenshtein_binout := $(bin_path)/$(algo_prefix)_levenshtein$(bin_ext)
