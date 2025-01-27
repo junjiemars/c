@@ -59,11 +59,13 @@ main (void)
 int
 char_bit (void)
 {
-  int n = 1;
-  for (char c = 1; c > 0; c <<= 1)
-    {
-      n++;
-    }
+  int n = 0;
+	char c = 1;
+	while (c)
+		{
+			c <<= 1;
+			n++;
+		}
   return n;
 }
 
