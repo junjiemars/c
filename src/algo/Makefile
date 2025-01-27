@@ -11,6 +11,7 @@ algo: _algo_                                    \
       algo_dynamic_array                        \
       algo_env                                  \
       algo_fibonacci                            \
+      algo_fraction                             \
       algo_gcd                                  \
       algo_hash                                 \
       algo_levenshtein                          \
@@ -35,6 +36,7 @@ algo_test: _algo_test                           \
            algo_dynamic_array_test              \
            algo_env_test                        \
            algo_fibonacci_test                  \
+           algo_fraction_test                   \
            algo_gcd_test                        \
            algo_hash_test                       \
            algo_levenshtein_test                \
@@ -174,6 +176,21 @@ algo_fibonacci_test: algo_fibonacci
 
 $(algo_fibonacci_binout): $(algo_root)/fibonacci/fibo.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+
+algo_fraction_binout := $(bin_path)/$(algo_prefix)_fraction$(bin_ext)
+algo_inc := $(INC) $(nm_inc_opt)$(algo_root)/gcd
+
+algo_fraction: $(algo_fraction_binout)
+algo_fraction_test: algo_fraction
+	$(algo_fraction_binout)
+
+$(algo_fraction_binout): $(algo_root)/fraction/f1.c       \
+                         $(algo_root)/gcd/gcd_ecluid_tr.c
+	$(CC) $(CFLAGS) $(algo_inc) $(bin_out)$@ $^
+
+
 
 # gcd
 algo_gcd_binout := $(bin_path)/$(algo_prefix)_gcd$(bin_ext)
