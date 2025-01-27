@@ -9,6 +9,7 @@ algo: _algo_                                    \
       algo_coroutine                            \
       algo_duff_device                          \
       algo_dynamic_array                        \
+      algo_env                                  \
       algo_fibonacci                            \
       algo_gcd                                  \
       algo_hash                                 \
@@ -34,6 +35,7 @@ algo_test: _algo_test                           \
            algo_coroutine_test                  \
            algo_duff_device_test                \
            algo_dynamic_array_test              \
+           algo_env_test                        \
            algo_fibonacci_test                  \
            algo_gcd_test                        \
            algo_hash_test                       \
@@ -144,6 +146,28 @@ algo_dynamic_array_test: algo_dynamic_array
 
 $(algo_dynamic_array_binout): $(algo_root)/dynamic_array/da.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+
+
+# env
+algo_env_limits_binout := $(bin_path)/$(algo_prefix)_env_limits$(bin_ext)
+algo_env_random_binout := $(bin_path)/$(algo_prefix)_env_random$(bin_ext)
+
+algo_env: $(algo_env_limits_binout)             \
+          $(algo_env_random_binout)
+algo_env_test: algo_env_limits_test             \
+               algo_env_random_test
+algo_env_limits_test: $(algo_env_limits_binout)
+	$<
+algo_env_random_test: $(algo_env_random_binout)
+	$<
+	$< 1
+$(algo_env_limits_binout): $(algo_root)/env/limits1.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+$(algo_env_random_binout): $(algo_root)/env/random1.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+
+
 
 # fibonacci
 algo_fibonacci_binout := $(bin_path)/$(algo_prefix)_fibonacci$(bin_ext)
@@ -284,20 +308,6 @@ algo_levenshtein_test: algo_levenshtein
 
 $(algo_levenshtein_binout): $(algo_root)/levenshtein/ld.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-
-
-# limits
-algo_limits_raw_binout := $(bin_path)/$(algo_prefix)_limits_raw$(bin_ext)
-
-algo_limits: $(algo_limits_raw_binout)
-algo_limits_test: algo_limits_raw_test
-
-algo_limits_raw_test: $(algo_limits_raw_binout)
-	$<
-
-$(algo_limits_raw_binout): $(algo_root)/limits/raw1.c
-	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
 
