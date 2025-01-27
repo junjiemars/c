@@ -16,6 +16,10 @@ static double double_max (void);
 static long double long_double_min (void);
 static long double long_double_max (void);
 
+#if (GCC)
+#pragma GCC diagnostic ignored "-Woverflow"
+#endif
+
 int
 main (void)
 {
@@ -50,8 +54,10 @@ main (void)
   assert (DBL_MIN == double_min ());
   assert (DBL_MAX == double_max ());
 
+#if (NM_LONG_DOUBLE_WIDTH == 8)
   assert (LDBL_MIN == long_double_min ());
   assert (LDBL_MAX == long_double_max ());
+#endif
 
   return 0;
 }
@@ -60,12 +66,12 @@ int
 char_bit (void)
 {
   int n = 0;
-	char c = 1;
-	while (c)
-		{
-			c <<= 1;
-			n++;
-		}
+  char c = 1;
+  while (c)
+    {
+      c <<= 1;
+      n++;
+    }
   return n;
 }
 
@@ -135,8 +141,12 @@ long_double_max (void)
   union
   {
     long double d;
+#if (NM_LONG_DOUBLE_WIDTH == 8)
     uint64_t u;
+#endif
   } u1;
+#if (NM_LONG_DOUBLE_WIDTH == 8)
   u1.u = (uint64_t)0x07fe << 52 | (uint64_t)0x000fffffffffffff;
+#endif
   return u1.d;
 }

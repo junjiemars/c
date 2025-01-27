@@ -46,5 +46,15 @@ nm_feature_flags="$CFLAGS"
 nm_feature_test='(void)flsl(0);'
 . ${NORE_ROOT}/auto/feature
 
+# check long double width
+#----------------------------------------
+nm_feature="long double width"
+nm_feature_name="nm_long_double_width"
+nm_feature_run=value
+nm_feature_h='#include <stdio.h>'
+nm_feature_flags="$CFLAGS"
+nm_feature_test='printf("%zu\n",sizeof(long double));'
+. ${NORE_ROOT}/auto/feature
+
 
 # eof
