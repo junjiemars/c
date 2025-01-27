@@ -13,6 +13,8 @@ static float float_min (void);
 static float float_max (void);
 static double double_min (void);
 static double double_max (void);
+static long double long_double_min (void);
+static long double long_double_max (void);
 
 int
 main (void)
@@ -47,6 +49,9 @@ main (void)
 
   assert (DBL_MIN == double_min ());
   assert (DBL_MAX == double_max ());
+
+  assert (LDBL_MIN == long_double_min ());
+  assert (LDBL_MAX == long_double_max ());
 
   return 0;
 }
@@ -104,6 +109,30 @@ double_max (void)
   union
   {
     double d;
+    uint64_t u;
+  } u1;
+  u1.u = (uint64_t)0x07fe << 52 | (uint64_t)0x000fffffffffffff;
+  return u1.d;
+}
+
+long double
+long_double_min (void)
+{
+  union
+  {
+    long double d;
+    uint64_t u;
+  } u1;
+  u1.u = (uint64_t)1 << 52;
+  return u1.d;
+}
+
+long double
+long_double_max (void)
+{
+  union
+  {
+    long double d;
     uint64_t u;
   } u1;
   u1.u = (uint64_t)0x07fe << 52 | (uint64_t)0x000fffffffffffff;
