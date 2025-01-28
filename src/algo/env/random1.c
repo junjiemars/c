@@ -18,7 +18,7 @@ main (int argc, char **argv)
       mode = atoi (argv[1]);
     }
 
-  srand (time (NULL));
+  srand ((unsigned)time (NULL));
 
   for (int r = 0; r < (int)_nof_ (rs); r++)
     {
