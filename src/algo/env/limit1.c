@@ -58,8 +58,13 @@ main (void)
   assert (DBL_MIN == double_min ());
   assert (DBL_MAX == double_max ());
 
+#if (NM_LONG_DOUBLE_WIDTH == 8)
   assert (LDBL_MIN == long_double_min ());
   assert (LDBL_MAX == long_double_max ());
+#else
+  (void)long_double_min ();
+  (void)long_double_max ();
+#endif
 
   return 0;
 }
@@ -128,7 +133,15 @@ double_max (void)
 long double
 long_double_min (void)
 {
-#if (NM_LONG_DOUBLE_WIDTH == 8)
+#if (NM_LONG_DOUBLE_WIDTH == 16)
+  union
+  {
+    long double d;
+    uint64_t u[2];
+  } u1;
+  u1.u[1] = (uint64_t)0x0001000000000000;
+  u1.u[0] = (uint64_t)0;
+#elif (NM_LONG_DOUBLE_WIDTH == 8)
   union
   {
     long double d;
@@ -139,10 +152,9 @@ long_double_min (void)
   union
   {
     long double d;
-    uint64_t u[2];
+    uint32_t u;
   } u1;
-  u1.u[1] = (uint64_t)0x0001000000000000;
-  u1.u[0] = (uint64_t)0;
+  u1.u = 0;
 #endif
   return u1.d;
 }
@@ -150,7 +162,16 @@ long_double_min (void)
 long double
 long_double_max (void)
 {
-#if (NM_LONG_DOUBLE_WIDTH == 8)
+#if (NM_LONG_DOUBLE_WIDTH == 16)
+  union
+  {
+    long double d;
+    uint64_t u[2];
+  } u1;
+  u1.u[1] = (uint64_t)0x7ffeffffffffffff;
+  u1.u[0] = (uint64_t)0xffffffffffffffff;
+
+#elif (NM_LONG_DOUBLE_WIDTH == 8)
   union
   {
     long double d;
@@ -161,10 +182,9 @@ long_double_max (void)
   union
   {
     long double d;
-    uint64_t u[2];
+    uint32_t u;
   } u1;
-  u1.u[1] = (uint64_t)0x7ffeffffffffffff;
-  u1.u[0] = (uint64_t)0xffffffffffffffff;
+  u1.u = 1;
 #endif
   return u1.d;
 }
