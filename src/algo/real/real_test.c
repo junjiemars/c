@@ -28,9 +28,11 @@ test_special_quantity (void)
   f = NAN;
   assert (is_nan ((struct Real const *)&f));
 
+#if !(MSVC)
   f = -1.0f / 0.0f;
   assert (is_inf ((struct Real const *)&f)
           && is_sign ((struct Real const *)&f));
+#endif
 
   f = -0.0f;
   assert (is_zero ((struct Real const *)&f)
