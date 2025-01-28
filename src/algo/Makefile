@@ -150,6 +150,7 @@ $(algo_dynamic_array_binout): $(algo_root)/dynamic_array/da.c
 # env
 algo_env_limit_binout := $(bin_path)/$(algo_prefix)_env_limit$(bin_ext)
 algo_env_random_binout := $(bin_path)/$(algo_prefix)_env_random$(bin_ext)
+algo_env_layout_binout := $(bin_path)/$(algo_prefix)_env_layout$(bin_ext)
 
 algo_env: $(algo_env_limit_binout)             \
           $(algo_env_random_binout)
@@ -160,9 +161,13 @@ algo_env_limit_test: $(algo_env_limit_binout)
 algo_env_random_test: $(algo_env_random_binout)
 	$<
 	$< 1
+algo_env_layout_test: $(algo_env_layout_binout)
+	$<
 $(algo_env_limit_binout): $(algo_root)/env/limit1.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 $(algo_env_random_binout): $(algo_root)/env/random1.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+$(algo_env_layout_binout): $(algo_root)/env/layout1.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
