@@ -20,6 +20,10 @@ static long double long_double_max (void);
 #pragma GCC diagnostic ignored "-Woverflow"
 #endif
 
+#if (MSVC)
+#pragma warning(disable : 4127 4307)
+#endif
+
 int
 main (void)
 {
