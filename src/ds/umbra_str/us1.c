@@ -2,6 +2,12 @@
 #include <assert.h>
 #include <stdlib.h>
 
+/**
+ * Umbra string
+ * https://cedardb.com/blog/german_strings/
+ * https://db.in.tum.de/~freitag/papers/p29-neumann-cidr20.pdf
+ */
+
 #define N_PRE (sizeof (int64_t))
 #define N_POS N_PRE
 #define N_IN (N_PRE + N_POS)
