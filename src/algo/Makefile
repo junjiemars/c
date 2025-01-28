@@ -15,7 +15,6 @@ algo: _algo_                                    \
       algo_gcd                                  \
       algo_hash                                 \
       algo_levenshtein                          \
-      algo_limits                               \
       algo_loop                                 \
       algo_merge                                \
       algo_num                                  \
@@ -40,7 +39,6 @@ algo_test: _algo_test                           \
            algo_gcd_test                        \
            algo_hash_test                       \
            algo_levenshtein_test                \
-           algo_limits_test                     \
            algo_loop_test                       \
            algo_merge_test                      \
            algo_num_test                        \
@@ -296,7 +294,7 @@ algo_levenshtein_test: algo_levenshtein
 	$(algo_levenshtein_binout) "LAWYQQKPGKA" "YWCQPGK"
 
 $(algo_levenshtein_binout): $(algo_root)/levenshtein/ld.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
 
