@@ -1,4 +1,5 @@
 #include "../_algo_.h"
+#include <arpa/inet.h>
 
 struct A
 {
@@ -12,14 +13,23 @@ union B
   int i2[2];
 };
 
+union C
+{
+  uint32_t u32;
+  uint32_t b1 : 16;
+  uint32_t b2 : 16;
+};
+
 static void test_struct_layout (void);
 static void test_union_layout (void);
+static void test_bitfield_layout (void);
 
 int
 main (void)
 {
   test_struct_layout ();
-	test_union_layout ();
+  test_union_layout ();
+  test_bitfield_layout ();
   return 0;
 }
 
@@ -59,4 +69,14 @@ test_union_layout (void)
   printf ("%-12s %16p\n%-12s %16p\n%-12s %16p\n%-12s %16p\n", _str_ (hb1), hb1,
           _str_ (&hb1->i1), &hb1->i1, _str_ (&hb1->i2[0]), &hb1->i2[0],
           _str_ (&hb1->i2[1]), &hb1->i2[1]);
+}
+
+void
+test_bitfield_layout (void)
+{
+  union C hc1, nc1;
+  hc1.u32 = 0x11223344;
+  printf ("%-12s %#16x\n", _str_ (hc1), *(uint32_t *)&hc1);
+  nc1.u32 = htonl (hc1.u32);
+  printf ("%-12s %#16x\n", _str_ (nc1), *(uint32_t *)&nc1);
 }
