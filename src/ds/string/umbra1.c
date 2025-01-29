@@ -59,7 +59,7 @@ from_cstr (char const *s)
   Umbra us1 = { 0 };
   char *ps1 = ((char *)&us1) + offsetof (Umbra, s1);
 
-  us1.len = strlen (s);
+  us1.len = (uint32_t)strlen (s);
   strncpy (ps1, s, sizeof (us1.s1) + sizeof (us1.s2) - 1);
 
   if (us1.len >= sizeof (us1.ptr))
@@ -94,7 +94,7 @@ umbra_strcmp (Umbra const *s1, Umbra const *s2)
 
   if (s1->len < sizeof (s1->ptr) && s2->len < sizeof (s2->ptr))
     {
-      return *(uint64_t *)s1 - *(uint64_t *)s2;
+      return (int)(*(uint64_t *)s1 - *(uint64_t *)s2);
     }
 
   n = memcmp ((char *)&s1->s1, (char *)&s2->s1, sizeof (s1->s1) - 1);
