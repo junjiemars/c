@@ -59,7 +59,9 @@ self_strchr (const char *s, int c)
   do
     {
       if (*s == c)
-        return (char *)s;
+        {
+          return (char *)s;
+        }
     }
   while (*s++);
   return NULL;
@@ -69,6 +71,7 @@ char *
 self_strrchr (const char *s, int c)
 {
   char const *pre = NULL;
+
   if (!s)
     {
       return NULL;
