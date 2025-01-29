@@ -21,6 +21,7 @@ typedef struct Umbra
 
 Umbra from_cstr (char const *);
 char *to_cstr (Umbra const *);
+Umbra *new_umbra (size_t);
 size_t umbra_strlen (Umbra const *);
 int umbra_strcmp (Umbra const *, Umbra const *);
 Umbra *umbra_strcpy (Umbra *, Umbra const *);
@@ -46,7 +47,7 @@ main (void)
   assert (umbra_strcmp (&u1, &u2) > 0);
   assert (umbra_strcmp (&u2, &u1) < 0);
 
-  u3 = malloc (sizeof (Umbra));
+  u3 = new_umbra (1);
   (void)umbra_strcpy (u3, &u2);
   assert (umbra_strcmp (&u2, u3) == 0);
 
@@ -79,6 +80,12 @@ to_cstr (Umbra const *u)
       return (char *)u + offsetof (Umbra, s1);
     }
   return (char *)u->ptr;
+}
+
+Umbra *
+new_umbra (size_t count)
+{
+  return calloc (count, sizeof (Umbra));
 }
 
 size_t
