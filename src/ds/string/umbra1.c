@@ -10,10 +10,9 @@
 
 typedef struct Umbra
 {
-  uint32_t pre;
   union
   {
-    uint32_t pos;
+    uint32_t str[2];
     char const *ptr;
   };
   uint32_t len;
@@ -36,7 +35,10 @@ main (void)
   u2 = from_cstr (s2);
   assert (umbra_strcmp (&u1, &u1) == 0);
   assert (umbra_strcmp (&u1, &u2) < 0);
-	assert (umbra_strcmp (&u2, &u1) > 0);
+  assert (umbra_strcmp (&u2, &u1) > 0);
+
+	u2 = from_cstr ("Hell0");
+	assert (umbra_strcmp (&u1, &u2) > 0);
 
   return 0;
 }

@@ -14,6 +14,8 @@ fi
 # check C's std features
 ncc_cpu_endian="yes"
 ncc_sanitize_address="yes"
+ncc_sanitize_alignment="yes"
+ncc_sanitize_leak="yes"
 ndef_restrict="yes"
 ndef_static_assert="yes"
 . ${POSIX_ROOT}/ncstd_auto
