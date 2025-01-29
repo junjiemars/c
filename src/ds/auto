@@ -12,6 +12,7 @@ if [ -z "$POSIX_ROOT" ]; then
 fi
 
 # check C's std features
+ncc_cpu_endian="yes"
 ncc_sanitize_address="yes"
 ndef_restrict="yes"
 ndef_static_assert="yes"

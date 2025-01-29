@@ -13,7 +13,7 @@ ds: ds_dl_list                                  \
     ds_calc                                     \
     ds_d2b                                      \
     ds_python                                   \
-    ds_umbra_str
+    ds_string
 
 ds_test: ds_dl_list_test                        \
          ds_sl_list_test                        \
@@ -24,7 +24,7 @@ ds_test: ds_dl_list_test                        \
          ds_calc_test                           \
          ds_d2b_test                            \
          ds_python_test                         \
-         ds_umbra_str_test
+         ds_string_test
 
 # env
 ds_prefix := ds
@@ -196,14 +196,17 @@ $(ds_python_pystr_binout): $(ds_root)/python/pystr1.c
 
 
 
-# umbra str
-ds_umbra_str_binout := $(bin_path)/$(ds_prefix)_umbra_str$(bin_ext)
+# string
+ds_string_umbra_binout := $(bin_path)/$(ds_prefix)_string_umbra$(bin_ext)
 
-ds_umbra_str: $(ds_umbra_str_binout)
-ds_umbra_str_test: ds_umbra_str
-	$(ds_umbra_str_binout)
+ds_string: ds_string_umbra
+ds_string_test: ds_string_umbra_test
 
-$(ds_umbra_str_binout): $(ds_root)/umbra_str/us1.c
+ds_string_umbra: $(ds_string_umbra_binout)
+ds_string_umbra_test: ds_string_umbra
+	$(ds_string_umbra_binout)
+
+$(ds_string_umbra_binout): $(ds_root)/string/umbra1.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $<
 
 
