@@ -12,6 +12,25 @@
 static void test_strtok (char *, char *);
 static void test_strtok_r (void);
 
+int
+main (int argc, char **argv)
+{
+  if (argc < 3)
+    {
+      printf ("usage: string delimeter\n");
+      return 1;
+    }
+
+  char *ss = argv[1];
+  char *d = argv[2];
+  test_strtok (ss, d);
+
+  printf ("----------\n");
+  test_strtok_r ();
+
+  return 0;
+}
+
 void
 test_strtok (char *ss, char *d)
 {
@@ -45,23 +64,4 @@ test_strtok_r (void)
         }
     }
 #endif
-}
-
-int
-main (int argc, char **argv)
-{
-  if (argc < 3)
-    {
-      printf ("usage: string delimeter\n");
-      return 1;
-    }
-
-  char *ss = argv[1];
-  char *d = argv[2];
-  test_strtok (ss, d);
-
-  printf ("----------\n");
-  test_strtok_r ();
-
-  return 0;
 }
