@@ -795,9 +795,7 @@ lang_string_dup_test: lang_string_dup
 
 lang_string_chr: $(lang_string_chr_binout)
 lang_string_chr_test: lang_string_chr
-	$(lang_string_chr_binout) "the quick brown fox jumps over the lazy dog" "j"
-	$(lang_string_chr_binout) "the quick brown fox jumps over the lazy dog" "t"
-	$(lang_string_chr_binout) "the quick brown fox jumps over the lazy dog" "1"
+	$(lang_string_chr_binout)
 
 lang_string_len: $(lang_string_len_binout)
 lang_string_len_test: lang_string_len

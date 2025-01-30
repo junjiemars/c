@@ -1,52 +1,25 @@
 #include "../_lang_.h"
 
+char *self_strchr (const char *s, int);
+char *self_strrchr (const char *s, int);
+
 typedef char *(*strchr_fn) (const char *s, int);
 typedef char *(*strrchr_fn) (const char *s, int);
 
-static char *self_strchr (const char *s, int);
-static char *self_strrchr (const char *s, int);
-
-static void test_strchr (strchr_fn, char *s, int);
+static void test_strchr (strchr_fn);
+static void test_strrchr (strrchr_fn);
 
 int
-main (int argc, char **argv)
+main (void)
 {
-  char *ss;
-  int c;
-
-  if (argc < 3)
-    {
-      fprintf (stderr, "usage: <src> <find>\n");
-      return 1;
-    }
-
-  ss = argv[1];
-  c = argv[2][0];
-
-  test_strchr (strchr, ss, c);
-  test_strchr (strrchr, ss, c);
-
-  test_strchr (self_strchr, ss, c);
-  test_strchr (self_strrchr, ss, c);
+  test_strchr (self_strchr);
+  test_strchr (strchr);
+  test_strrchr (self_strchr);
+  test_strrchr (strrchr);
 
   return 0;
 }
 
-void
-test_strchr (strchr_fn fn, char *s, int c)
-{
-  char *s1;
-
-  s1 = fn (s, c);
-  if (s1)
-    {
-      fprintf (stdout, "%s\n", s1);
-    }
-  else
-    {
-      fprintf (stdout, "%c: no found\n", c);
-    }
-}
 
 char *
 self_strchr (const char *s, int c)
@@ -86,4 +59,28 @@ self_strrchr (const char *s, int c)
     }
   while (*s++);
   return (char *)pre;
+}
+
+void
+test_strchr (strchr_fn fn)
+{
+	char *p;
+	p = fn ("", 'a');
+	assert (p == NULL);
+	p = fn ("abc", 'a');
+	assert (*p == 'a');
+	p = fn ("abc", '\0');
+	assert (*p == '\0');
+}
+
+void
+test_strrchr (strrchr_fn fn)
+{
+	char *p;
+	p = fn ("", 'a');
+	assert (p == NULL);
+	p = fn ("abc", 'a');
+	assert (*p == 'a');
+	p = fn ("abc", '\0');
+	assert (*p == '\0');
 }
