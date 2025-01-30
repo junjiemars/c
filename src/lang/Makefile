@@ -735,7 +735,6 @@ $(lang_stor_extern_objout): $(lang_root)/storage/extern.c
 
 
 # string
-lang_string_basic_binout := $(bin_path)/$(lang_prefix)_string_basic$(bin_ext)
 lang_string_cat_binout := $(bin_path)/$(lang_prefix)_string_cat$(bin_ext)
 lang_string_cpy_binout := $(bin_path)/$(lang_prefix)_string_cpy$(bin_ext)
 lang_string_cmp_binout := $(bin_path)/$(lang_prefix)_string_cmp$(bin_ext)
@@ -744,11 +743,9 @@ lang_string_dup_binout := $(bin_path)/$(lang_prefix)_string_dup$(bin_ext)
 lang_string_len_binout := $(bin_path)/$(lang_prefix)_string_len$(bin_ext)
 lang_string_pbrk_binout := $(bin_path)/$(lang_prefix)_string_pbrk$(bin_ext)
 lang_string_spn_binout := $(bin_path)/$(lang_prefix)_string_spn$(bin_ext)
-lang_string_bcmp_binout := $(bin_path)/$(lang_prefix)_string_bcmp$(bin_ext)
 lang_string_tok_binout := $(bin_path)/$(lang_prefix)_string_tok$(bin_ext)
 
-lang_string: lang_string_basic                  \
-             lang_string_cat                    \
+lang_string: lang_string_cat                    \
              lang_string_cmp                    \
              lang_string_cpy                    \
              lang_string_chr                    \
@@ -758,8 +755,7 @@ lang_string: lang_string_basic                  \
              lang_string_spn                    \
              lang_string_tok
 
-lang_string_test: lang_string_basic_test        \
-                  lang_string_cat_test          \
+lang_string_test: lang_string_cat_test          \
                   lang_string_cmp_test          \
                   lang_string_cpy_test          \
                   lang_string_chr_test          \
@@ -768,14 +764,6 @@ lang_string_test: lang_string_basic_test        \
                   lang_string_pbrk_test         \
                   lang_string_spn_test          \
                   lang_string_tok_test
-
-lang_string_basic: $(lang_string_basic_binout)
-lang_string_basic_test: lang_string_basic
-	$(lang_string_basic_binout)
-
-lang_string_s: $(lang_string_s_binout)
-lang_string_s_test: lang_string_s
-	$(lang_string_s_binout)
 
 lang_string_cat: $(lang_string_cat_binout)
 lang_string_cat_test: lang_string_cat
@@ -807,15 +795,7 @@ lang_string_pbrk_test: lang_string_pbrk
 
 lang_string_spn: $(lang_string_spn_binout)
 lang_string_spn_test: lang_string_spn
-	$(lang_string_spn_binout) "the quick brown fox jumps over the lazy dog" "f"
-	$(lang_string_spn_binout) "the quick brown fox jumps over the lazy dog" "q"
-	$(lang_string_spn_binout) "the quick brown fox jumps over the lazy dog" "the q"
-	$(lang_string_spn_binout) "the quick brown fox jumps over the lazy dog" "fthe q"
-	$(lang_string_spn_binout) "the quick brown fox jumps over the lazy dog" "fthe x"
-
-lang_string_bcmp: $(lang_string_bcmp_binout)
-lang_string_bcmp_test: lang_string_bcmp
-	$(lang_string_bcmp_binout)
+	$(lang_string_spn_binout)
 
 lang_string_tok: $(lang_string_tok_binout)
 lang_string_tok_test: lang_string_tok
@@ -823,9 +803,6 @@ lang_string_tok_test: lang_string_tok
 	$(lang_string_tok_binout) "this is a simple    sample for strtok." " ."
 
 $(lang_string_basic_binout): $(lang_root)/string/basic.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-$(lang_string_s_binout): $(lang_root)/string/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_string_cat_binout): $(lang_root)/string/cat.c
@@ -850,7 +827,7 @@ $(lang_string_pbrk_binout): $(lang_root)/string/pbrk.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_string_spn_binout): $(lang_root)/string/spn.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(lang_string_tok_binout): $(lang_root)/string/tok.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
