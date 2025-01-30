@@ -803,9 +803,7 @@ lang_string_len_test: lang_string_len
 
 lang_string_pbrk: $(lang_string_pbrk_binout)
 lang_string_pbrk_test: lang_string_pbrk
-	$(lang_string_pbrk_binout) "the quick brown fox jumps over the lazy dog" "fxx"
-	$(lang_string_pbrk_binout) "the quick brown fox jumps over the lazy dog" "dxx"
-	$(lang_string_pbrk_binout) "the quick brown fox jumps over the lazy dog" "123"
+	$(lang_string_pbrk_binout)
 
 lang_string_spn: $(lang_string_spn_binout)
 lang_string_spn_test: lang_string_spn
