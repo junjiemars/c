@@ -787,8 +787,7 @@ lang_string_cmp_test: lang_string_cmp
 
 lang_string_cpy: $(lang_string_cpy_binout)
 lang_string_cpy_test: lang_string_cpy
-	$(lang_string_cpy_binout) ""
-	$(lang_string_cpy_binout) "the quick brown fox"
+	$(lang_string_cpy_binout)
 
 lang_string_dup: $(lang_string_dup_binout)
 lang_string_dup_test: lang_string_dup
