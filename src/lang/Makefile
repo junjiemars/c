@@ -736,41 +736,38 @@ $(lang_stor_extern_objout): $(lang_root)/storage/extern.c
 
 # string
 lang_string_basic_binout := $(bin_path)/$(lang_prefix)_string_basic$(bin_ext)
-lang_string_s_binout := $(bin_path)/$(lang_prefix)_string_s$(bin_ext)
-lang_string_dup_binout := $(bin_path)/$(lang_prefix)_string_dup$(bin_ext)
-lang_string_tok_binout := $(bin_path)/$(lang_prefix)_string_tok$(bin_ext)
 lang_string_cat_binout := $(bin_path)/$(lang_prefix)_string_cat$(bin_ext)
 lang_string_cpy_binout := $(bin_path)/$(lang_prefix)_string_cpy$(bin_ext)
 lang_string_cmp_binout := $(bin_path)/$(lang_prefix)_string_cmp$(bin_ext)
 lang_string_chr_binout := $(bin_path)/$(lang_prefix)_string_chr$(bin_ext)
+lang_string_dup_binout := $(bin_path)/$(lang_prefix)_string_dup$(bin_ext)
 lang_string_len_binout := $(bin_path)/$(lang_prefix)_string_len$(bin_ext)
 lang_string_pbrk_binout := $(bin_path)/$(lang_prefix)_string_pbrk$(bin_ext)
 lang_string_spn_binout := $(bin_path)/$(lang_prefix)_string_spn$(bin_ext)
 lang_string_bcmp_binout := $(bin_path)/$(lang_prefix)_string_bcmp$(bin_ext)
+lang_string_tok_binout := $(bin_path)/$(lang_prefix)_string_tok$(bin_ext)
 
 lang_string: lang_string_basic                  \
-             lang_string_s                      \
-             lang_string_dup                    \
-             lang_string_tok                    \
              lang_string_cat                    \
              lang_string_cmp                    \
              lang_string_cpy                    \
              lang_string_chr                    \
+             lang_string_dup                    \
              lang_string_len                    \
              lang_string_pbrk                   \
-             lang_string_spn
+             lang_string_spn                    \
+             lang_string_tok
 
 lang_string_test: lang_string_basic_test        \
-                  lang_string_s_test            \
-                  lang_string_dup_test          \
-                  lang_string_tok_test          \
                   lang_string_cat_test          \
                   lang_string_cmp_test          \
                   lang_string_cpy_test          \
                   lang_string_chr_test          \
+                  lang_string_dup_test          \
                   lang_string_len_test          \
                   lang_string_pbrk_test         \
-                  lang_string_spn_test
+                  lang_string_spn_test          \
+                  lang_string_tok_test
 
 lang_string_basic: $(lang_string_basic_binout)
 lang_string_basic_test: lang_string_basic
@@ -782,9 +779,7 @@ lang_string_s_test: lang_string_s
 
 lang_string_cat: $(lang_string_cat_binout)
 lang_string_cat_test: lang_string_cat
-	$(lang_string_cat_binout) "the quick brown fox" " jumps over the lazy dog"
-	$(lang_string_cat_binout) "the quick brown fo" ""
-	$(lang_string_cat_binout) "" "umps over the lazy dog"
+	$(lang_string_cat_binout)
 
 lang_string_cmp: $(lang_string_cmp_binout)
 lang_string_cmp_test: lang_string_cmp

@@ -37,7 +37,7 @@ self_strlen (char const *s)
 size_t
 self_strnlen (char const *s, size_t n)
 {
-	size_t len;
+	size_t len = 0;
 	for (len = 0; len < n && *s; s++, len++)
 		{
 			continue;

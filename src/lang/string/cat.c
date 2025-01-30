@@ -1,50 +1,25 @@
 #include "../_lang_.h"
 
-typedef char *(*strcat_fn) (char *s1, const char *s2);
+char *self_strcat (char *restrict, char const *restrict);
+char *self_strncat (char *restrict, char const *restrict, size_t);
 
-static char *self_strcat (char *restrict, char const *restrict);
-static void test_strcat (strcat_fn, char *, char const *);
+typedef char *(*strcat_fn) (char *, char const *);
+typedef char *(*strncat_fn) (char *, char const *, size_t);
+
+static void test_strcat (strcat_fn);
+static void test_strncat (strncat_fn);
 
 int
-main (int argc, char **argv)
+main (void)
 {
-  char *s1, *s2;
-  char *arg1, *arg2;
-  size_t len1, len2;
+  test_strcat (self_strcat);
+  test_strcat (strcat);
 
-  if (argc < 3)
-    {
-      fprintf (stderr, "usage: <s1> <s2>\n");
-      return 0;
-    }
-  arg1 = argv[1];
-  arg2 = argv[2];
+  test_strncat (self_strncat);
 
-  len1 = strlen (arg1);
-  len2 = strlen (arg2);
-
-  if ((s1 = malloc (len1 + len2 + 1)) == NULL)
-    {
-      perror (NULL);
-      goto clean_exit;
-    }
-  if ((s2 = malloc (len2 + 1)) == NULL)
-    {
-      perror (NULL);
-      goto clean_exit;
-    }
-
-  strcpy (s1, arg1);
-  strcpy (s2, arg2);
-  test_strcat (strcat, s1, s2);
-
-  strcpy (s1, arg1);
-  strcpy (s2, arg2);
-  test_strcat (self_strcat, s1, s2);
-
-clean_exit:
-  free (s1);
-  free (s2);
+#if (NM_HAVE_STRNCAT)
+  test_strncat (strncat);
+#endif
 
   return 0;
 }
@@ -58,10 +33,46 @@ self_strcat (char *restrict s1, char const *restrict s2)
   return s1;
 }
 
-void
-test_strcat (strcat_fn fn, char *s1, const char *s2)
+char *
+self_strncat (char *restrict s1, char const *restrict s2, size_t n)
 {
-  char *ss;
-  ss = fn (s1, s2);
-  fprintf (stdout, "%s\n", ss);
+  size_t len1 = strlen (s1);
+  size_t len2 = strlen (s2);
+	if (n < len2)
+		{
+			len2 = n;
+		}
+  memcpy (s1 + len1, s2, len2 + 1);
+  return s1;
+}
+
+void
+test_strcat (strcat_fn fn)
+{
+  char *s1 = malloc (16);
+
+  s1 = fn (s1, "");
+  assert (*s1 == '\0');
+
+  s1 = fn (s1, "abc");
+  assert (memcmp (s1, "abc", 3) == 0);
+
+  s1 = fn (s1, "def");
+  assert (memcmp (s1, "abcdef", 6) == 0);
+}
+
+
+void
+test_strncat (strncat_fn fn)
+{
+  char *s1 = malloc (16);
+
+  s1 = fn (s1, "", 0);
+  assert (*s1 == '\0');
+
+  s1 = fn (s1, "abc", 10);
+  assert (memcmp (s1, "abc", 3) == 0);
+
+  s1 = fn (s1, "def", 2);
+  assert (memcmp (s1, "abcde", 5) == 0);
 }

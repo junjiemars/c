@@ -89,6 +89,15 @@ nm_feature_test='char buf[16];
                  strncpy(buf, "xyz", sizeof(buf));'
 . ${NORE_ROOT}/auto/feature
 
+# check strncat
+#----------------------------------------
+nm_feature="strncat()"
+nm_feature_name="NM_HAVE_STRNCAT"
+nm_feature_run=no
+nm_feature_h="#include <string.h>"
+nm_feature_flags=
+nm_feature_test='char *s1=0;strncat(s1, "abc", 1);'
+. ${NORE_ROOT}/auto/feature
 
 # check strncmp
 #----------------------------------------
