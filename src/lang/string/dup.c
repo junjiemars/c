@@ -60,10 +60,14 @@ self_strndup (const char *s, size_t n)
   size_t len;
 
   for (len = 0; len < n && s[len]; len++)
-    continue;
+    {
+      continue;
+    }
 
   if ((s1 = malloc (len + 1)) == NULL)
-    return NULL;
+    {
+      return NULL;
+    }
 
   memcpy (s1, s, len);
   s1[len] = '\0';

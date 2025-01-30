@@ -741,6 +741,7 @@ lang_string_s_binout := $(bin_path)/$(lang_prefix)_string_s$(bin_ext)
 lang_string_dup_binout := $(bin_path)/$(lang_prefix)_string_dup$(bin_ext)
 lang_string_tok_binout := $(bin_path)/$(lang_prefix)_string_tok$(bin_ext)
 lang_string_cat_binout := $(bin_path)/$(lang_prefix)_string_cat$(bin_ext)
+lang_string_cpy_binout := $(bin_path)/$(lang_prefix)_string_cpy$(bin_ext)
 lang_string_chr_binout := $(bin_path)/$(lang_prefix)_string_chr$(bin_ext)
 lang_string_pbrk_binout := $(bin_path)/$(lang_prefix)_string_pbrk$(bin_ext)
 lang_string_spn_binout := $(bin_path)/$(lang_prefix)_string_spn$(bin_ext)
@@ -752,6 +753,7 @@ lang_string: lang_string_basic                  \
              lang_string_dup                    \
              lang_string_tok                    \
              lang_string_cat                    \
+             lang_string_cpy                    \
              lang_string_chr                    \
              lang_string_pbrk                   \
              lang_string_spn
@@ -762,6 +764,7 @@ lang_string_test: lang_string_basic_test        \
                   lang_string_dup_test          \
                   lang_string_tok_test          \
                   lang_string_cat_test          \
+                  lang_string_cpy_test          \
                   lang_string_chr_test          \
                   lang_string_pbrk_test         \
                   lang_string_spn_test
@@ -779,6 +782,17 @@ lang_string_s: $(lang_string_s_binout)
 lang_string_s_test: lang_string_s
 	$(lang_string_s_binout)
 
+lang_string_cat: $(lang_string_cat_binout)
+lang_string_cat_test: lang_string_cat
+	$(lang_string_cat_binout) "the quick brown fox" " jumps over the lazy dog"
+	$(lang_string_cat_binout) "the quick brown fo" ""
+	$(lang_string_cat_binout) "" "umps over the lazy dog"
+
+lang_string_cpy: $(lang_string_cpy_binout)
+lang_string_cpy_test: lang_string_cpy
+	$(lang_string_cpy_binout) ""
+	$(lang_string_cpy_binout) "the quick brown fox"
+
 lang_string_dup: $(lang_string_dup_binout)
 lang_string_dup_test: lang_string_dup
 	$(lang_string_dup_binout) "the quick brown fox"
@@ -787,12 +801,6 @@ lang_string_tok: $(lang_string_tok_binout)
 lang_string_tok_test: lang_string_tok
 	$(lang_string_tok_binout) "this is a simple sample for strtok." " ."
 	$(lang_string_tok_binout) "this is a simple    sample for strtok." " ."
-
-lang_string_cat: $(lang_string_cat_binout)
-lang_string_cat_test: lang_string_cat
-	$(lang_string_cat_binout) "the quick brown fox" " jumps over the lazy dog"
-	$(lang_string_cat_binout) "the quick brown fo" ""
-	$(lang_string_cat_binout) "" "umps over the lazy dog"
 
 lang_string_chr: $(lang_string_chr_binout)
 lang_string_chr_test: lang_string_chr
@@ -827,13 +835,16 @@ $(lang_string_n_binout): $(lang_root)/string/n.c
 $(lang_string_s_binout): $(lang_root)/string/s.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+$(lang_string_cat_binout): $(lang_root)/string/cat.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+
+$(lang_string_cpy_binout): $(lang_root)/string/cpy.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+
 $(lang_string_dup_binout): $(lang_root)/string/dup.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_string_tok_binout): $(lang_root)/string/tok.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
-
-$(lang_string_cat_binout): $(lang_root)/string/cat.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 $(lang_string_chr_binout): $(lang_root)/string/chr.c
