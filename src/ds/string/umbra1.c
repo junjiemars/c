@@ -25,6 +25,7 @@ Umbra *new_umbra (size_t);
 size_t umbra_strlen (Umbra const *);
 int umbra_strcmp (Umbra const *, Umbra const *);
 Umbra *umbra_strcpy (Umbra *, Umbra const *);
+Umbra *umbra_strcat (Umbra *restrict, Umbra const *restrict);
 
 int
 main (void)
@@ -50,6 +51,9 @@ main (void)
   u3 = new_umbra (1);
   (void)umbra_strcpy (u3, &u2);
   assert (umbra_strcmp (&u2, u3) == 0);
+
+  u3 = umbra_strcat (&u1, &u2);
+	assert (u3->len > u2.len);
 
   return 0;
 }
@@ -128,4 +132,36 @@ umbra_strcpy (Umbra *dst, Umbra const *src)
 {
   *dst = *src;
   return dst;
+}
+
+Umbra *
+umbra_strcat (Umbra *restrict s1, Umbra const *restrict s2)
+{
+  char *ss;
+
+  if ((ss = malloc (s1->len + s2->len + 1)) == NULL)
+    {
+      return NULL;
+    }
+
+  if (s1->len < sizeof (s1->s1) + sizeof (s1->s2))
+    {
+      memcpy (ss, (char *)&s1->s1, s1->len + 1);
+    }
+  else
+    {
+      memcpy (ss, s1->ptr, s1->len + 1);
+    }
+
+  if (s2->len < sizeof (s2->s1) + sizeof (s2->s2))
+    {
+      memcpy (ss + s1->len, (char *)&s2->s1, s2->len + 1);
+    }
+  else
+    {
+      memcpy (ss + s1->len, s2->ptr, s2->len + 1);
+    }
+
+  *s1 = from_cstr (ss);
+  return s1;
 }
