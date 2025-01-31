@@ -17,9 +17,7 @@
 
 #if (MSVC)
 /*
-	warning C4996: 'strncpy': This function or variable may be
-   unsafe. Consider using strcpy_s instead. To disable deprecation,
-   use _CRT_SECURE_NO_WARNINGS.
+	warning C4996: 'xxx': This function or variable may be unsafe.
  */
 #pragma warning(disable : 4996)
 #endif /* end of MSVC */

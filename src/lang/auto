@@ -140,6 +140,25 @@ free(xyz);'
 		;;
 esac
 
+# check strsep
+#----------------------------------------
+nm_feature="strsep()"
+nm_feature_name="NM_HAVE_STRSEP"
+nm_feature_run=no
+nm_feature_h="#include <string.h>"
+nm_feature_flags=
+nm_feature_test='char *s;strsep(&s, ",");'
+. ${NORE_ROOT}/auto/feature
+
+# check strtok_r
+#----------------------------------------
+nm_feature="strtok_r()"
+nm_feature_name="NM_HAVE_STRTOK_R"
+nm_feature_run=no
+nm_feature_h="#include <string.h>"
+nm_feature_flags=
+nm_feature_test='strtok_r("a,b,c", ",", 1);'
+. ${NORE_ROOT}/auto/feature
 
 # check arc4random_uniform
 #----------------------------------------

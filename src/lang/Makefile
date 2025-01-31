@@ -799,8 +799,7 @@ lang_string_spn_test: lang_string_spn
 
 lang_string_tok: $(lang_string_tok_binout)
 lang_string_tok_test: lang_string_tok
-	$(lang_string_tok_binout) "this is a simple sample for strtok." " ."
-	$(lang_string_tok_binout) "this is a simple    sample for strtok." " ."
+	$(lang_string_tok_binout)
 
 $(lang_string_basic_binout): $(lang_root)/string/basic.c
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
