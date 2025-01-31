@@ -27,33 +27,20 @@ int umbra_strcmp (Umbra const *, Umbra const *);
 Umbra *umbra_strcpy (Umbra *, Umbra const *);
 Umbra *umbra_strcat (Umbra *restrict, Umbra const *restrict);
 
+static void test_cstr (void);
+static void test_strlen (void);
+static void test_strcmp (void);
+static void test_strcpy (void);
+static void test_strcat (void);
+
 int
 main (void)
 {
-  char *s1 = "Hello";
-  char *s2 = "Hello, Nore!";
-  Umbra u1, u2, *u3;
-
-  u1 = from_cstr (s1);
-  assert (umbra_strlen (&u1) == strlen (s1));
-  assert (strcmp (s1, to_cstr (&u1)) == 0);
-
-  u2 = from_cstr (s2);
-  assert (umbra_strcmp (&u1, &u1) == 0);
-  assert (umbra_strcmp (&u1, &u2) < 0);
-  assert (umbra_strcmp (&u2, &u1) > 0);
-  assert (strcmp (s2, to_cstr (&u2)) == 0);
-
-  u1 = from_cstr ("hello, Nore!");
-  assert (umbra_strcmp (&u1, &u2) > 0);
-  assert (umbra_strcmp (&u2, &u1) < 0);
-
-  u3 = new_umbra (1);
-  (void)umbra_strcpy (u3, &u2);
-  assert (umbra_strcmp (&u2, u3) == 0);
-
-  u3 = umbra_strcat (&u1, &u2);
-	assert (u3->len > u2.len);
+  test_cstr ();
+  test_strlen ();
+  test_strcmp ();
+  test_strcpy ();
+  test_strcat ();
 
   return 0;
 }
@@ -63,14 +50,17 @@ from_cstr (char const *s)
 {
   Umbra us1 = { 0 };
   char *ps1 = ((char *)&us1) + offsetof (Umbra, s1);
+  size_t size12 = sizeof (us1.s1) + sizeof (us1.s2);
 
   us1.len = (uint32_t)strlen (s);
-  strncpy (ps1, s, sizeof (us1.s1) + sizeof (us1.s2) - 1);
-
-  if (us1.len >= sizeof (us1.ptr))
+  if (us1.len > 0)
     {
-      ((char *)&us1.s1)[sizeof (us1.s1) - 1] = 0;
-      us1.ptr = s;
+      strncpy (ps1, s, size12);
+
+      if (us1.len >= size12)
+        {
+          us1.ptr = s;
+        }
     }
 
   return us1;
@@ -102,29 +92,29 @@ int
 umbra_strcmp (Umbra const *s1, Umbra const *s2)
 {
   int n;
+  size_t size12 = sizeof (s1->s1) + sizeof (s1->s2);
 
-  if (s1->len < sizeof (s1->ptr) && s2->len < sizeof (s2->ptr))
-    {
-      return (int)(*(uint64_t *)s1 - *(uint64_t *)s2);
-    }
-
-  n = memcmp ((char *)&s1->s1, (char *)&s2->s1, sizeof (s1->s1) - 1);
-  if (n)
+  if ((n = s1->s1 - s2->s1) != 0)
     {
       return n;
     }
 
-  if (s1->len < sizeof (uint64_t))
+  if (s1->len < size12 && s2->len < size12)
     {
-      return strcmp ((char *)&s1->s1, s2->ptr);
+      return (int)(*(uint64_t *)&s1->s1 - *(uint64_t *)&s2->s1);
     }
 
-  if (s2->len < sizeof (uint64_t))
+  if (s1->len < size12)
     {
-      return strcmp (s1->ptr, (char *)&s2->s1);
+      return strcmp ((char *)&s1->s2, s2->ptr + sizeof (s2->s1));
     }
 
-  return strcmp (s1->ptr, s2->ptr);
+  if (s2->len < size12)
+    {
+      return strcmp (s1->ptr + sizeof (s1->s1), (char *)&s2->s1);
+    }
+
+  return strcmp (s1->ptr + sizeof (s1->s1), s2->ptr + sizeof (s2->s1));
 }
 
 Umbra *
@@ -138,30 +128,153 @@ Umbra *
 umbra_strcat (Umbra *restrict s1, Umbra const *restrict s2)
 {
   char *ss;
+  size_t size = s1->len + s2->len;
 
-  if ((ss = malloc (s1->len + s2->len + 1)) == NULL)
+  if (size == 0)
     {
-      return NULL;
+      return s1;
     }
 
-  if (s1->len < sizeof (s1->s1) + sizeof (s1->s2))
+  if (size >= sizeof (s1->s1) + sizeof (s1->s2))
     {
+      if ((ss = malloc (size + 1)) == NULL)
+        {
+          return NULL;
+        }
       memcpy (ss, (char *)&s1->s1, s1->len + 1);
-    }
-  else
-    {
-      memcpy (ss, s1->ptr, s1->len + 1);
-    }
-
-  if (s2->len < sizeof (s2->s1) + sizeof (s2->s2))
-    {
       memcpy (ss + s1->len, (char *)&s2->s1, s2->len + 1);
+      *s1 = from_cstr (ss);
     }
   else
     {
-      memcpy (ss + s1->len, s2->ptr, s2->len + 1);
+      memcpy ((char *)&s1->s1 + s1->len, (char *)&s2->s1, s2->len + 1);
+      s1->len = size;
     }
 
-  *s1 = from_cstr (ss);
   return s1;
+}
+
+void
+test_cstr (void)
+{
+  Umbra u1;
+  char *s1;
+
+  s1 = "";
+  u1 = from_cstr (s1);
+  assert (memcmp (s1, to_cstr (&u1), strlen (s1)) == 0);
+
+  s1 = "12345678901";
+  u1 = from_cstr (s1);
+  assert (memcmp (s1, to_cstr (&u1), strlen (s1)) == 0);
+
+  s1 = "123456789012";
+  u1 = from_cstr (s1);
+  assert (memcmp (s1, to_cstr (&u1), strlen (s1)) == 0);
+}
+
+void
+test_strlen (void)
+{
+  Umbra u1;
+  char *s1;
+
+  s1 = "";
+  u1 = from_cstr (s1);
+  assert (umbra_strlen (&u1) == strlen (s1));
+
+  s1 = "12345678901";
+  u1 = from_cstr (s1);
+  assert (umbra_strlen (&u1) == strlen (s1));
+
+  s1 = "123456789012";
+  u1 = from_cstr (s1);
+  assert (umbra_strlen (&u1) == strlen (s1));
+}
+
+void
+test_strcmp (void)
+{
+  Umbra u1, u2;
+
+  u1 = from_cstr ("");
+  u2 = from_cstr ("");
+  assert (umbra_strcmp (&u1, &u2) == 0);
+
+  u1 = from_cstr ("12345678901");
+  u2 = from_cstr ("12345678901");
+  assert (umbra_strcmp (&u1, &u2) == 0);
+
+  u1 = from_cstr ("12345678901");
+  u2 = from_cstr ("123456789012");
+  assert (umbra_strcmp (&u1, &u2) < 0);
+  assert (umbra_strcmp (&u2, &u1) > 0);
+
+  u1 = from_cstr ("123456789012");
+  u2 = from_cstr ("123456789012");
+  assert (umbra_strcmp (&u1, &u2) == 0);
+
+  u1 = from_cstr ("12356");
+  u2 = from_cstr ("12345678901");
+  assert (umbra_strcmp (&u1, &u2) > 0);
+  assert (umbra_strcmp (&u2, &u1) < 0);
+
+  u1 = from_cstr ("123356789012");
+  u2 = from_cstr ("123456789012");
+  assert (umbra_strcmp (&u1, &u2) < 0);
+  assert (umbra_strcmp (&u2, &u1) > 0);
+
+  u1 = from_cstr ("123456789012");
+  u2 = from_cstr ("123456789013");
+  assert (umbra_strcmp (&u1, &u2) < 0);
+  assert (umbra_strcmp (&u2, &u1) > 0);
+}
+
+void
+test_strcpy (void)
+{
+  Umbra u1, u2;
+  u1 = from_cstr ("");
+  (void)umbra_strcpy (&u2, &u1);
+  assert (umbra_strcmp (&u1, &u2) == 0);
+
+  u1 = from_cstr ("12345678901");
+  (void)umbra_strcpy (&u2, &u1);
+  assert (umbra_strcmp (&u1, &u2) == 0);
+
+  u1 = from_cstr ("123456789012");
+  (void)umbra_strcpy (&u2, &u1);
+  assert (umbra_strcmp (&u1, &u2) == 0);
+}
+
+void
+test_strcat (void)
+{
+  Umbra u1, u2, u3;
+  size_t size;
+
+  u1 = from_cstr ("");
+  u2 = from_cstr ("");
+  assert (umbra_strcat (&u1, &u2) != NULL);
+  assert (umbra_strlen (&u1) == 0);
+
+  u1 = from_cstr ("1234");
+  u2 = from_cstr ("5678901");
+  u3 = from_cstr ("12345678901");
+  size = u1.len + u2.len;
+  assert (umbra_strcat (&u1, &u2) != NULL);
+  assert (umbra_strlen (&u1) == size);
+  assert (umbra_strcmp (&u1, &u3) == 0);
+
+  u1 = from_cstr ("12345678901");
+  u2 = from_cstr ("12345678901");
+  u3 = from_cstr ("1234567890112345678901");
+  size = u1.len + u2.len;
+  assert (umbra_strcat (&u1, &u2) != NULL);
+  assert (umbra_strlen (&u1) == size);
+  assert (umbra_strcmp (&u1, &u3) == 0);
+  if (u1.ptr)
+    {
+      free ((void *)u1.ptr);
+    }
 }
