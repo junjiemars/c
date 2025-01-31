@@ -84,7 +84,7 @@ skip_leading_sep:
 char *
 self_strtok_r (char *restrict s, char const *restrict sep, char **last)
 {
-  if (!s)
+  if (s == NULL)
     {
       s = *last;
     }
