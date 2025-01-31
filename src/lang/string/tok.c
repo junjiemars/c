@@ -1,7 +1,9 @@
 #include "../_lang_.h"
 
 char *self_strtok (char *restrict, char const *restrict);
+char *self_strtok1 (char *restrict, char const *restrict);
 char *self_strtok_r (char *restrict, char const *restrict, char **restrict);
+char *self_strtok_r1 (char *restrict, char const *restrict, char **restrict);
 
 typedef char *(*strtok_fn) (char *restrict, char const *restrict);
 typedef char *(*strtok_r_fn) (char *restrict, char const *restrict,
@@ -14,18 +16,21 @@ int
 main (void)
 {
   test_strtok (self_strtok);
+  test_strtok (self_strtok1);
   test_strtok (strtok);
+
   test_strtok_r (self_strtok_r);
+  test_strtok_r (self_strtok_r1);
 
 #if (NM_HAVE_STRTOK_R)
   test_strtok_r (strtok_r);
-#endif
+#endif /* strtok_r */
 
   return 0;
 }
 
 char *
-self_strtok_r (char *restrict s, char const *restrict sep, char **last)
+self_strtok_r1 (char *restrict s, char const *restrict sep, char **last)
 {
   int c, sc;
   char *psep, *tok;
@@ -77,27 +82,67 @@ skip_leading_sep:
 }
 
 char *
+self_strtok_r (char *restrict s, char const *restrict sep, char **last)
+{
+  if (!s)
+    {
+      s = *last;
+    }
+
+  /* skip leading sep */
+  while (*s && strchr (sep, *s))
+    {
+      ++s;
+    }
+
+  if (*s)
+    {
+      char *start = s;
+      *last = start + 1;
+
+      while (**last && !strchr (sep, **last))
+        {
+          ++*last;
+        }
+
+      if (**last)
+        {
+          **last = '\0';
+          ++*last;
+        }
+
+      return start;
+    }
+
+  return NULL;
+}
+
+char *
 self_strtok (char *restrict ss, char const *restrict sep)
 {
   static char *last;
   return self_strtok_r (ss, sep, &last);
 }
 
+char *
+self_strtok1 (char *restrict ss, char const *restrict sep)
+{
+  static char *last;
+  return self_strtok_r1 (ss, sep, &last);
+}
+
 void
 test_strtok (strtok_fn fn)
 {
-  char s[128], d[32];
-  char *tok;
+  char s[64], *tok;
+  char *d = ",";
 
   strcpy (s, ",,,a,bb,,ccc,,");
-  strcpy (d, ",");
 
-  printf ("(%s) (%s)\n------------\n", s, d);
-  tok = fn (s, d);
-  while (tok)
+  printf ("\"%s\" \"%s\"\n------------\n", s, d);
+  for (tok = fn (s, d); tok; tok = fn (NULL, d))
     {
       printf ("|%s|\n", tok);
-      tok = fn (0, d);
     }
 }
 
@@ -110,7 +155,7 @@ test_strtok_r (strtok_r_fn fn)
   char *tok1, *last1, *tok2, *last2;
 
   strcpy (s1, "a,bb/ccc\\ddd");
-  printf ("(%s) (%s)\n------------\n", s1, d);
+  printf ("\"%s\" \"%s\"\n------------\n", s1, d);
 
   for (tok1 = fn (s1, d, &last1); tok1; tok1 = fn (NULL, d, &last1))
     {
