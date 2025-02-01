@@ -108,7 +108,7 @@ umbra_strcmp (Umbra const *s1, Umbra const *s2)
   int n;
   size_t size12 = sizeof (s1->s1) + sizeof (s1->s2);
 
-  n = (int)(_hton32_ (s1->s1) - _hton32_ (s2->s1));
+  n = (int)(_flip32_ (s1->s1) - _flip32_ (s2->s1));
   if (n)
     {
       return n;
@@ -116,7 +116,7 @@ umbra_strcmp (Umbra const *s1, Umbra const *s2)
 
   if (s1->len < size12 && s2->len < size12)
     {
-      return (int)(_hton64_ (s1->s2) - _hton64_ (s2->s2));
+      return (int)(_flip64_ (s1->s2) - _flip64_ (s2->s2));
     }
 
   if (s1->len < size12)

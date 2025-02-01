@@ -37,15 +37,15 @@ main (void)
   assert (strcmp ("abc", getenv ("XYZ")) == 0 && "should set XYZ=abc");
   assert (environ && "environ should be a valid pointer");
 
-  /* _hton16_t */
-#if (NM_CPU_LITTLE_ENDIAN)
+  /* _endian16_t */
 #if (MSVC)
 #pragma warning(disable : 4310)
 #endif /* MSVC */
-  assert (_hton16_ (0x1122) == (uint16_t)0x2211);
-  assert (_hton32_ (0x11223344) == (uint32_t)0x44332211);
-  assert (_hton64_ (0x1122334455667788) == (uint64_t)0x8877665544332211);
-#endif
+  assert (_flip16_ (0x1122) == (uint16_t)0x2211);
+  assert (_flip16_ (_flip16_ (0x1122)) == (uint16_t)0x1122);
+  assert (_flip32_ (_flip32_ (0x11223344)) == (uint32_t)0x11223344);
+  assert (_flip64_ (_flip64_ (0x1122334455667788))
+          == (uint64_t)0x1122334455667788LL);
 
   return 0;
 }

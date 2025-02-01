@@ -20,15 +20,17 @@
 #endif
 
 
-#define _hton16_(x) ((((uint16_t)(x) & 0xff) << 8) | (uint16_t)(x) >> 8)
+#define _flip16_(x)                               \
+  ((uint16_t)((((uint16_t)(x) & 0x00ff) << 8)     \
+              | (((uint16_t)(x) & 0xff00) >> 8)))
 
-#define _hton32_(x)                             \
-  (((uint32_t)_hton16_(x) << 16)                \
-   | ((uint32_t)_hton16_((uint32_t)(x) >> 16)))
+#define _flip32_(x)                                         \
+  ((uint32_t)(((uint32_t)_flip16_(x) << 16)                 \
+              | ((uint32_t)_flip16_((uint32_t)(x) >> 16))))
 
-#define _hton64_(x)                             \
-  (((uint64_t)_hton32_(x) << 32)                \
-   | ((uint64_t)_hton32_((uint64_t)(x) >> 32)))
+#define _flip64_(x)                                         \
+  ((uint64_t)(((uint64_t)_flip32_(x) << 32)                 \
+              | ((uint64_t)_flip32_((uint64_t)(x) >> 32))))
 
 
 #include <time.h>
