@@ -13,12 +13,12 @@ int
 main (void)
 {
   test_strcat (self_strcat);
-  test_strcat (strcat);
+  test_strcat ((strcat_fn)strcat);
 
   test_strncat (self_strncat);
 
 #if (NM_HAVE_STRNCAT)
-  test_strncat (strncat);
+  test_strncat ((strncat_fn)strncat);
 #endif
 
   return 0;
