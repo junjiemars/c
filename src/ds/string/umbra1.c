@@ -148,7 +148,7 @@ umbra_strcat (Umbra *restrict s1, Umbra const *restrict s2)
   else
     {
       memcpy ((char *)&s1->s1 + s1->len, (char *)&s2->s1, s2->len + 1);
-      s1->len = size;
+      s1->len = (uint32_t)size;
     }
 
   return s1;
