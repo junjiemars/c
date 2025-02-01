@@ -37,7 +37,7 @@ main (void)
   assert (strcmp ("abc", getenv ("XYZ")) == 0 && "should set XYZ=abc");
   assert (environ && "environ should be a valid pointer");
 
-  /* _endian16_t */
+  /* _flip16_t */
 #if (MSVC)
 #pragma warning(disable : 4310)
 #endif /* MSVC */
