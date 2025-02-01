@@ -39,6 +39,9 @@ main (void)
 
   /* _hton16_t */
 #if (NM_CPU_LITTLE_ENDIAN)
+#if (MSVC)
+#pragma warning(disable : 4310)
+#endif /* MSVC */
   assert (_hton16_ (0x1122) == (uint16_t)0x2211);
   assert (_hton32_ (0x11223344) == (uint32_t)0x44332211);
   assert (_hton64_ (0x1122334455667788) == (uint64_t)0x8877665544332211);

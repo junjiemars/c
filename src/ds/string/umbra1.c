@@ -43,6 +43,10 @@ static void test_strcmp (void);
 static void test_strcpy (void);
 static void test_strcat (void);
 
+#if (MSVC)
+#pragma warning(disable : 4310)
+#endif /* MSVC */
+
 int
 main (void)
 {
