@@ -37,12 +37,11 @@ main (void)
   assert (strcmp ("abc", getenv ("XYZ")) == 0 && "should set XYZ=abc");
   assert (environ && "environ should be a valid pointer");
 
-	/* _hton16_t */
+  /* _hton16_t */
 #if (NM_CPU_LITTLE_ENDIAN)
-	printf ("_hton16_\n");
-  assert (_hton16_(0x1122) == 0x2211);
-	assert (_hton32_(0x11223344) == 0x44332211);
-	assert (_hton64_(0x1122334455667788) == 0x8877665544332211);
+  assert (_hton16_ (0x1122) == (uint16_t)0x2211);
+  assert (_hton32_ (0x11223344) == (uint32_t)0x44332211);
+  assert (_hton64_ (0x1122334455667788) == (uint64_t)0x8877665544332211);
 #endif
 
   return 0;
