@@ -2,6 +2,16 @@
 #include <assert.h>
 #include <stdlib.h>
 
+#if (NM_CPU_LITTLE_ENDIAN)
+#include <arpa/inet.h>
+#define _hton32_(x) (htonl ((x)))
+#define _hton64_(x)                                                           \
+  ((uint64_t)htonl ((x)&0xffffffff) << 32 | htonl ((x) >> 32))
+#else
+#define _hton32_(x) (x)
+#define _hton64_(x) (x)
+#endif
+
 /**
  * Umbra string
  * https://cedardb.com/blog/german_strings/
@@ -10,6 +20,7 @@
 
 typedef struct Umbra
 {
+#if (NM_CPU_LITTLE_ENDIAN)
   uint32_t len;
   uint32_t s1;
   union
@@ -17,6 +28,15 @@ typedef struct Umbra
     uint64_t s2;
     char const *ptr;
   };
+#else
+  union
+  {
+    uint64_t s2;
+    char const *ptr;
+  };
+  uint32_t s1;
+  uint32_t len;
+#endif
 } Umbra;
 
 Umbra from_cstr (char const *);
@@ -94,14 +114,15 @@ umbra_strcmp (Umbra const *s1, Umbra const *s2)
   int n;
   size_t size12 = sizeof (s1->s1) + sizeof (s1->s2);
 
-  if ((n = (int)(s1->s1 - s2->s1)) != 0)
+  n = (int)(_hton32_ (s1->s1) - _hton32_ (s2->s1));
+  if (n)
     {
       return n;
     }
 
   if (s1->len < size12 && s2->len < size12)
     {
-      return (int)(s1->s2 - s2->s2);
+      return (int)(_hton64_ (s1->s2) - _hton64_ (s2->s2));
     }
 
   if (s1->len < size12)
@@ -201,9 +222,21 @@ test_strcmp (void)
   u2 = from_cstr ("");
   assert (umbra_strcmp (&u1, &u2) == 0);
 
+  u1 = from_cstr ("1234");
+  u2 = from_cstr ("1234");
+  assert (umbra_strcmp (&u1, &u2) == 0);
+
+  u1 = from_cstr ("1234");
+  u2 = from_cstr ("4321");
+  assert (umbra_strcmp (&u1, &u2) < 0);
+
   u1 = from_cstr ("12345678901");
   u2 = from_cstr ("12345678901");
   assert (umbra_strcmp (&u1, &u2) == 0);
+
+  u1 = from_cstr ("12345678901");
+  u2 = from_cstr ("12341098765 ");
+  assert (umbra_strcmp (&u1, &u2) > 0);
 
   u1 = from_cstr ("12345678901");
   u2 = from_cstr ("123456789012");
