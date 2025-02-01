@@ -779,7 +779,7 @@ lang_string_cpy_test: lang_string_cpy
 
 lang_string_dup: $(lang_string_dup_binout)
 lang_string_dup_test: lang_string_dup
-	$(lang_string_dup_binout) "the quick brown fox"
+	$(lang_string_dup_binout)
 
 lang_string_chr: $(lang_string_chr_binout)
 lang_string_chr_test: lang_string_chr
@@ -802,7 +802,7 @@ lang_string_tok_test: lang_string_tok
 	$(lang_string_tok_binout)
 
 $(lang_string_basic_binout): $(lang_root)/string/basic.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(lang_string_cat_binout): $(lang_root)/string/cat.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
@@ -814,22 +814,22 @@ $(lang_string_cmp_binout): $(lang_root)/string/cmp.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(lang_string_chr_binout): $(lang_root)/string/chr.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(lang_string_dup_binout): $(lang_root)/string/dup.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(lang_string_len_binout): $(lang_root)/string/len.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(lang_string_pbrk_binout): $(lang_root)/string/pbrk.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(lang_string_spn_binout): $(lang_root)/string/spn.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 $(lang_string_tok_binout): $(lang_root)/string/tok.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
 

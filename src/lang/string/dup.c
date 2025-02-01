@@ -6,35 +6,22 @@ typedef char *(*strndup_fn) (const char *s, size_t n);
 static char *self_strdup (const char *s);
 static char *self_strndup (const char *s, size_t n);
 
-static void test_strdup (strdup_fn fn, const char *s);
-static void test_strndup (strndup_fn fn, const char *s);
+static void test_strdup (strdup_fn fn);
+static void test_strndup (strndup_fn fn);
 
 int
-main (int argc, char **argv)
+main (void)
 {
-  const char *s = 0;
-
-  if (argc < 2)
-    {
-      fprintf (stderr, "usage: <source-string>\n");
-      return 0;
-    }
-
-  s = argv[1];
+  test_strdup (self_strdup);
+  test_strndup (self_strndup);
 
 #if (NM_HAVE_STRDUP)
-  test_strdup (strdup, s);
-
+  test_strdup (strdup);
 #endif /* NM_HAVE_STRDUP */
 
-  test_strdup (self_strdup, s);
-
 #if (NM_HAVE_STRNDUP)
-  test_strndup (strndup, s);
-
+  test_strndup (strndup);
 #endif /* NM_HAVE_STRNDUP */
-
-  test_strndup (self_strndup, s);
 
   return 0;
 }
@@ -45,11 +32,13 @@ self_strdup (const char *s)
   char *s1;
   size_t len;
 
-  len = strlen (s);
-  if ((s1 = malloc (len + 1)) == NULL)
-    return NULL;
-
+  len = strlen (s) + 1;
+  if ((s1 = malloc (len)) == NULL)
+    {
+      return NULL;
+    }
   memcpy (s1, s, len);
+
   return s1;
 }
 
@@ -75,50 +64,37 @@ self_strndup (const char *s, size_t n)
 }
 
 void
-test_strdup (strdup_fn fn, const char *s)
+test_strdup (strdup_fn fn)
 {
   char *s1;
-  if ((s1 = fn (s)) == NULL)
-    {
-      perror (NULL);
-      return;
-    }
-  printf ("dup: %s\n", s1);
+  s1 = fn ("");
+  assert (*s1 == '\0');
   free (s1);
+
+	s1 = fn ("abc");
+	assert (strcmp (s1, "abc") == 0);
+	free (s1);
 }
 
 void
-test_strndup (strndup_fn fn, const char *s)
+test_strndup (strndup_fn fn)
 {
-  char *eq, *gt, *lt;
-  size_t n;
+  char *s1;
 
-  n = strlen (s);
+  s1 = fn ("", 0);
+	assert (*s1 == '\0');
+  free (s1);
 
-  if ((eq = fn (s, n)) == NULL)
-    {
-      perror (NULL);
-      return;
-    }
-  assert (memcmp (s, eq, n) == 0);
-  printf ("ndup: %s\n", eq);
-  free (eq);
+	s1 = fn ("", 1);
+	assert (*s1 == '\0');
+  free (s1);
 
-  if ((lt = fn (s, n - 1)) == NULL)
-    {
-      perror (NULL);
-      return;
-    }
-  assert (memcmp (s, lt, n - 1) == 0);
-  printf ("ndup: %s\n", lt);
-  free (lt);
+	s1 = fn ("abc", 2);
+	assert (strcmp (s1, "ab") == 0);
+	assert (strcmp (s1, "abc") < 0);
+	free (s1);
 
-  if ((gt = fn (s, n + 1)) == NULL)
-    {
-      perror (NULL);
-      return;
-    }
-  assert (memcmp (s, gt, n + 1) == 0);
-  printf ("ndup: %s\n", gt);
-  free (gt);
+	s1 = fn ("abc", 8);
+	assert (strcmp (s1, "abc") == 0);
+	free (s1);
 }

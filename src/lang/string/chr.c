@@ -20,7 +20,6 @@ main (void)
   return 0;
 }
 
-
 char *
 self_strchr (const char *s, int c)
 {
@@ -64,23 +63,23 @@ self_strrchr (const char *s, int c)
 void
 test_strchr (strchr_fn fn)
 {
-	char *p;
-	p = fn ("", 'a');
-	assert (p == NULL);
-	p = fn ("abc", 'a');
-	assert (*p == 'a');
-	p = fn ("abc", '\0');
-	assert (*p == '\0');
+  char *p;
+  p = fn ("", 'a');
+  assert (p == NULL);
+  p = fn ("abc", 'a');
+  assert (*p == 'a');
+  p = fn ("abc", '\0');
+  assert (*p == '\0');
 }
 
 void
 test_strrchr (strrchr_fn fn)
 {
-	char *p;
-	p = fn ("", 'a');
-	assert (p == NULL);
-	p = fn ("abc", 'a');
-	assert (*p == 'a');
-	p = fn ("abc", '\0');
-	assert (*p == '\0');
+  char *p;
+  p = fn ("", 'a');
+  assert (p == NULL);
+  p = fn ("abc", 'a');
+  assert (*p == 'a');
+  p = fn ("abc", '\0');
+  assert (*p == '\0');
 }
