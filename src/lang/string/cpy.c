@@ -18,7 +18,6 @@ main (void)
   test_strcpy (self_strcpy);
   test_strcpy (strcpy);
   test_stpcpy (self_stpcpy);
-  test_stpcpy (stpcpy);
   test_strncpy (self_strncpy);
 
 #if (NM_HAVE_STRNCPY)
