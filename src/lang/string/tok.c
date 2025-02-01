@@ -17,10 +17,10 @@ main (void)
 {
   test_strtok (self_strtok);
   test_strtok (self_strtok1);
-  test_strtok (strtok);
+  test_strtok ((strtok_fn)strtok);
 
   test_strtok_r (self_strtok_r);
-  test_strtok_r (self_strtok_r1);
+  test_strtok_r ((strtok_r_fn)self_strtok_r1);
 
 #if (NM_HAVE_STRTOK_R)
   test_strtok_r (strtok_r);
