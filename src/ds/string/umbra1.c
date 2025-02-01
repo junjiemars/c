@@ -47,6 +47,14 @@ static void test_strcat (void);
 #pragma warning(disable : 4310)
 #endif /* MSVC */
 
+#if (NM_CPU_LITTLE_ENDIAN)
+#define _hton32_(x) _flip32_ (x)
+#define _hton64_(x) _flip64_ (x)
+#else
+#define _hton32_(x) (x)
+#define _hton64_(x) (x)
+#endif /* NM_CPU_LITTLE_ENDIAN */
+
 int
 main (void)
 {
