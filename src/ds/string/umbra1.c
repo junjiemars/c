@@ -3,21 +3,25 @@
 #include <stdlib.h>
 
 #if (NM_CPU_LITTLE_ENDIAN)
+#if (MSVC)
+#include <winsock.h>
+#else
 #include <arpa/inet.h>
+#endif /* MSVC */
 #define _hton32_(x) (htonl ((x)))
 #define _hton64_(x)                                                           \
-  ((uint64_t)htonl ((x)&0xffffffff) << 32 | htonl ((x) >> 32))
+  ((uint64_t)htonl ((x)&0xffffffff) << 32 | (uint64_t)htonl ((x) >> 32))
 #else
 #define _hton32_(x) (x)
 #define _hton64_(x) (x)
-#endif
+#endif /* NM_CPU_LITTLE_ENDIAN */
+
 
 /**
- * Umbra string
- * https://cedardb.com/blog/german_strings/
+ * Umbra string https://cedardb.com/blog/german_strings/
  * https://db.in.tum.de/~freitag/papers/p29-neumann-cidr20.pdf
+ *
  */
-
 typedef struct Umbra
 {
 #if (NM_CPU_LITTLE_ENDIAN)
