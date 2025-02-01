@@ -149,7 +149,6 @@ test_strtok (strtok_fn fn)
 void
 test_strtok_r (strtok_r_fn fn)
 {
-#if (NM_HAVE_STRTOK_R)
   char s1[64], s2[64];
   char *d = ",/\\;";
   char *tok1, *last1, *tok2, *last2;
@@ -166,5 +165,4 @@ test_strtok_r (strtok_r_fn fn)
           printf ("|%s:%s|\n", tok1, tok2);
         }
     }
-#endif /* strtok_r */
 }
