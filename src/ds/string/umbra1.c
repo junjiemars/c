@@ -94,14 +94,14 @@ umbra_strcmp (Umbra const *s1, Umbra const *s2)
   int n;
   size_t size12 = sizeof (s1->s1) + sizeof (s1->s2);
 
-  if ((n = s1->s1 - s2->s1) != 0)
+  if ((n = (int)(s1->s1 - s2->s1)) != 0)
     {
       return n;
     }
 
   if (s1->len < size12 && s2->len < size12)
     {
-      return (int)(*(uint64_t *)&s1->s1 - *(uint64_t *)&s2->s1);
+      return (int)(s1->s2 - s2->s2);
     }
 
   if (s1->len < size12)
@@ -226,6 +226,11 @@ test_strcmp (void)
 
   u1 = from_cstr ("123456789012");
   u2 = from_cstr ("123456789013");
+  assert (umbra_strcmp (&u1, &u2) < 0);
+  assert (umbra_strcmp (&u2, &u1) > 0);
+
+  u1 = from_cstr ("123456789012");
+  u2 = from_cstr ("1234567890123");
   assert (umbra_strcmp (&u1, &u2) < 0);
   assert (umbra_strcmp (&u2, &u1) > 0);
 }
