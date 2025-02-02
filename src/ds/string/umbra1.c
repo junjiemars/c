@@ -48,8 +48,10 @@ static void test_strcat (void);
 #endif /* MSVC */
 
 #if (NM_CPU_LITTLE_ENDIAN)
-#define _hton32_(x) _flip32_ (x)
-#define _hton64_(x) _flip64_ (x)
+#define _hton32_(x) flip32(x)
+#define _hton64_(x) flip64(x)
+static uint32_t flip32 (uint32_t);
+static uint64_t flip64 (uint64_t);
 #else
 #define _hton32_(x) (x)
 #define _hton64_(x) (x)
@@ -116,7 +118,7 @@ umbra_strcmp (Umbra const *s1, Umbra const *s2)
   int n;
   size_t size12 = sizeof (s1->s1) + sizeof (s1->s2);
 
-  n = (int)(_flip32_ (s1->s1) - _flip32_ (s2->s1));
+  n = (int)(_hton32_ (s1->s1) - _hton32_ (s2->s1));
   if (n)
     {
       return n;
@@ -124,7 +126,7 @@ umbra_strcmp (Umbra const *s1, Umbra const *s2)
 
   if (s1->len < size12 && s2->len < size12)
     {
-      return (int)(_flip64_ (s1->s2) - _flip64_ (s2->s2));
+      return (int)(_hton64_ (s1->s2) - _hton64_ (s2->s2));
     }
 
   if (s1->len < size12)
@@ -176,6 +178,20 @@ umbra_strcat (Umbra *restrict s1, Umbra const *restrict s2)
 
   return s1;
 }
+
+#if (NM_CPU_LITTLE_ENDIAN)
+uint32_t
+flip32 (uint32_t a)
+{
+  return _flip32_ (a);
+}
+
+uint64_t
+flip64 (uint64_t a)
+{
+  return _flip64_ (a);
+}
+#endif /* NM_CPU_LITTLE_ENDIAN */
 
 void
 test_cstr (void)
