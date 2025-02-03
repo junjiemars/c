@@ -171,12 +171,16 @@ test_generic (void)
 
 #define _ndef_test_generic_(x)                                                \
   generic ((x), int : 1, double : 2, default : 'a')
-  assert (1 == _ndef_test_generic_ (0) && "int");
-  assert (2 == _ndef_test_generic_ (0.1) && "double");
-  assert ('a' == _ndef_test_generic_ ("X") && "default");
+
+  int i = 0;
+  double d = 0.1;
+  char a[] = { 0 };
+  assert (1 == _ndef_test_generic_ (i) && "int");
+  assert (2 == _ndef_test_generic_ (d) && "double");
+  assert ('a' == _ndef_test_generic_ (a) && "default");
 #undef _ndef_test_generic_
 
-#endif
+#endif /* NM_HAVE_GENERIC */
 }
 
 void

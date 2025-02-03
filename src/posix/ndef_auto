@@ -104,7 +104,7 @@ double _Complex d = 3.0 + 4.0i;
   ndef_complex_done="yes"
 fi
 
-# check _Generic
+# check _Generic, since C11
 #----------------------------------------
 if [ "$ndef_generic" = "yes" -a -z "$ndef_generic_done" ]; then
   nm_feature="_Generic"
