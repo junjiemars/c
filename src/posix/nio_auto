@@ -7,11 +7,6 @@
 ####
 
 
-if [ -z "$define_nio_h" ]; then
-
-define_nio_h="nio.h"
-
-
 if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
@@ -37,7 +32,7 @@ fi
 
 # check getdelim
 #----------------------------------------
-if [ "$nio_getdelim" = "yes" ]; then
+if [ "$nio_getdelim" = "yes" -a -z "$nio_getdelim_done" ]; then
   case $CC_NAME in
     clang)
       nm_feature="getdelim"
@@ -69,13 +64,14 @@ if [ "$nio_getdelim" = "yes" ]; then
     *)
       ;;
   esac
-fi # end of getdelim
+  nio_getdelim_done="yes"
+fi                              # end of getdelim
 
 
 # check fileno
 #----------------------------------------
-if [ "$nio_fileno" = "yes" ]; then
-   case $CC_NAME in
+if [ "$nio_fileno" = "yes" -a -z "$nio_fileno_done" ]; then
+  case $CC_NAME in
     clang)
       nm_feature="fileno"
       nm_feature_name="nm_have_fileno"
@@ -106,12 +102,13 @@ if [ "$nio_fileno" = "yes" ]; then
     *)
       ;;
   esac
+  nio_fileno_done="yes"
 fi
 
 
 # check fdopen
 #----------------------------------------
-if [ "$nio_fdopen" = "yes" ]; then
+if [ "$nio_fdopen" = "yes" -a -z "$nio_fdopen_done" ]; then
   case $CC_NAME in
     clang)
       nm_feature="fdopen"
@@ -143,44 +140,47 @@ if [ "$nio_fdopen" = "yes" ]; then
     *)
       ;;
   esac
-fi
+  nio_fdopen_done="yes"
+fi                              # nio_fdopen
 
 
 #check fmemopen
 #----------------------------------------
-if [ "$nio_fmemopen" = "yes" ]; then
-    nm_feature="fmemopen"
-    nm_feature_name="nm_have_fmemopen"
-    nm_feature_run=no
-    nm_feature_h='#include <stdio.h>'
-    nm_feature_flags=
-    nm_feature_inc=
-    nm_feature_ldlibs=
-    nm_feature_test='char *buf[0]; FILE* f=fmemopen(buf,0,"r"); fclose(f);'
-    . ${NORE_ROOT}/auto/feature
-    if [ "$nm_found" = "yes" ]; then
-      have=$nm_have_feature . ${NORE_ROOT}/auto/have
-      flag=$nm_feature_name op=":=" value="yes" \
-        . ${NORE_ROOT}/auto/make_define
-    fi
-fi # end of fmemopen
+if [ "$nio_fmemopen" = "yes" -a -z "$nio_fmemopen_done" ]; then
+  nm_feature="fmemopen"
+  nm_feature_name="nm_have_fmemopen"
+  nm_feature_run=no
+  nm_feature_h='#include <stdio.h>'
+  nm_feature_flags=
+  nm_feature_inc=
+  nm_feature_ldlibs=
+  nm_feature_test='char *buf[0]; FILE* f=fmemopen(buf,0,"r"); fclose(f);'
+  . ${NORE_ROOT}/auto/feature
+  if [ "$nm_found" = "yes" ]; then
+    have=$nm_have_feature . ${NORE_ROOT}/auto/have
+    flag=$nm_feature_name \
+      op=":=" value="yes" . ${NORE_ROOT}/auto/make_define
+  fi
+  nio_fmemopen_done="yes"
+fi                              # end of fmemopen
 
 # check libgen
 #----------------------------------------
-if [ "$nio_libgen" = "yes" ]; then
+if [ "$nio_libgen" = "yes" -a -z "$nio_libgen_done" ]; then
   include="libgen.h" . ${NORE_ROOT}/auto/include
+  nio_libgen_done="yes"
 fi
 
 #check popen
 #----------------------------------------
-if [ "$nio_popen" = "yes" ]; then
-    nm_feature="popen"
-    nm_feature_name="nm_have_popen"
-    nm_feature_run=no
-    nm_feature_h='#include <stdio.h>'
-    nm_feature_flags=
-    nm_feature_inc=
-    nm_feature_ldlibs=
+if [ "$nio_popen" = "yes" -a -z "$nio_popen_done" ]; then
+  nm_feature="popen"
+  nm_feature_name="nm_have_popen"
+  nm_feature_run=no
+  nm_feature_h='#include <stdio.h>'
+  nm_feature_flags=
+  nm_feature_inc=
+  nm_feature_ldlibs=
   case $CC_NAME in
     clang|gcc)
       nm_feature_test='FILE* f=popen("dir","r"); if (f) pclose(f);'
@@ -192,9 +192,8 @@ if [ "$nio_popen" = "yes" ]; then
       . ${NORE_ROOT}/auto/feature
       ;;
   esac
-fi # end of popen
+  nio_popen_done="yes"
+fi                              # end of popen
 
-
-fi # define_nio_h
 
 # eof

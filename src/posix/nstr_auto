@@ -7,11 +7,6 @@
 ####
 
 
-if [ -z "$define_nstr_h" ]; then
-
-define_nstr_h="nstr.h"
-
-
 if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
@@ -33,7 +28,7 @@ fi
 
 # check strdup
 #----------------------------------------
-if [ "$nstr_strdup" = "yes" ]; then
+if [ "$nstr_strdup" = "yes" -a -z "$nstr_strdup_done" ]; then
   case $NM_SYSTEM in
     Linux)
       nm_feature="strdup"
@@ -63,12 +58,13 @@ if [ "$nstr_strdup" = "yes" ]; then
       . ${NORE_ROOT}/auto/feature
       ;;
   esac
+  nstr_strdup_done="yes"
 fi
 
 
 # check strerror_r
 #----------------------------------------
-if [ "$nstr_strerror_r" = "yes" ]; then
+if [ "$nstr_strerror_r" = "yes" -a -z "$nstr_strerror_r_done" ]; then
   case $NM_SYSTEM in
     Linux)
       nm_feature="strerror_r"
@@ -98,11 +94,12 @@ if [ "$nstr_strerror_r" = "yes" ]; then
       . ${NORE_ROOT}/auto/feature
       ;;
   esac
+  nstr_strerror_r_done="yes"
 fi                              # strerror_r
 
 # check strtok_r
 #----------------------------------------
-if [ "$nstr_strtok_r" = "yes" ]; then
+if [ "$nstr_strtok_r" = "yes" -a -z "$nstr_strtok_r_done" ]; then
   case $NM_SYSTEM in
     Linux)
       nm_feature="strtok_r"
@@ -132,9 +129,9 @@ if [ "$nstr_strtok_r" = "yes" ]; then
       . ${NORE_ROOT}/auto/feature
       ;;
   esac
+  nstr_strtok_r_done="yes"
 fi                              # strtok_r
 
 
-fi                              # define_nstr_h
 
 # eof

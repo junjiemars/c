@@ -7,11 +7,6 @@
 ####
 
 
-if [ -z "$define_ndef_h" ]; then
-
-define_ndef_h="ndef.h"
-
-
 if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
@@ -19,7 +14,6 @@ fi
 
 # check for <npstd.h>
 . ${POSIX_ROOT}/npstd_auto
-
 
 if [    "$ndef___func__" = "yes"                \
      -o "$ndef_bool" = "yes"                    \
@@ -40,7 +34,7 @@ fi
 
 # check __func__ constant
 #----------------------------------------
-if [ "$ndef___func__" = "yes" ]; then
+if [ "$ndef___func__" = "yes" -a -z "$ndef___func___done" ]; then
   nm_feature="__func__"
   nm_feature_name="nm_have___func__"
   nm_feature_run=
@@ -48,12 +42,13 @@ if [ "$ndef___func__" = "yes" ]; then
   nm_feature_flags="$CFLAGS"
   nm_feature_test='printf("fn=%s", __func__);'
   . ${NORE_ROOT}/auto/feature
+  ndef___func___done="yes"
 fi
 
 
 # check _Bool
 #----------------------------------------
-if [ "$ndef_bool" = "yes" ]; then
+if [ "$ndef_bool" = "yes" -a -z "$ndef_bool_done" ]; then
 	nm_feature="_Bool"
 	nm_feature_name="nm_have_bool"
 	nm_feature_run=
@@ -61,12 +56,13 @@ if [ "$ndef_bool" = "yes" ]; then
 	nm_feature_flags="$CFLAGS"
 	nm_feature_test='_Bool b = 1; (void)(b != 0);'
 	. ${NORE_ROOT}/auto/feature
+  ndef_bool_done="yes"
 fi
 
 
 # check alignas
 #----------------------------------------
-if [ "$ndef_alignas" = "yes" ]; then
+if [ "$ndef_alignas" = "yes" -a -z "$ndef_alignas_done" ]; then
 	nm_feature="_Alignas"
 	nm_feature_name="nm_have_alignas"
 	nm_feature_run=
@@ -74,12 +70,13 @@ if [ "$ndef_alignas" = "yes" ]; then
 	nm_feature_flags="$CFLAGS"
 	nm_feature_test='int _Alignas(int) a; (void)sizeof(a);'
 	. ${NORE_ROOT}/auto/feature
+  ndef_alignas_done="yes"
 fi
 
 
 # check alignof
 #----------------------------------------
-if [ "$ndef_alignof" = "yes" ]; then
+if [ "$ndef_alignof" = "yes" -a -z "$ndef_alignof_done" ]; then
 	nm_feature="_Alignof"
 	nm_feature_name="nm_have_alignof"
 	nm_feature_run=
@@ -87,12 +84,13 @@ if [ "$ndef_alignof" = "yes" ]; then
 	nm_feature_flags="$CFLAGS"
 	nm_feature_test='int a = (int) _Alignof(short); (void) sizeof(a);'
 	. ${NORE_ROOT}/auto/feature
+  ndef_alignof_done="yes"
 fi
 
 
 # check _Complex
 #----------------------------------------
-if [ "$ndef_complex" = "yes" ]; then
+if [ "$ndef_complex" = "yes" -a -z "$ndef_complex_done" ]; then
   nm_feature="_Complex"
   nm_feature_name="nm_have_complex"
   nm_feature_run=no
@@ -101,14 +99,14 @@ if [ "$ndef_complex" = "yes" ]; then
   nm_feature_test='
 float _Complex f = 1.0 + 2.0i;
 double _Complex d = 3.0 + 4.0i;
-(void) f; (void) d;
-'
+(void) f; (void) d;'
   . ${NORE_ROOT}/auto/feature
+  ndef_complex_done="yes"
 fi
 
 # check _Generic
 #----------------------------------------
-if [ "$ndef_generic" = "yes" ]; then
+if [ "$ndef_generic" = "yes" -a -z "$ndef_generic_done" ]; then
   nm_feature="_Generic"
   nm_feature_name="nm_have_generic"
   nm_feature_run=no
@@ -117,15 +115,15 @@ if [ "$ndef_generic" = "yes" ]; then
   nm_feature_test='
 #define type_name(x) _Generic((x), int:1, double:2, default: 3)
 (void) sizeof(type_name(1));
-(void) sizeof(type_name(1.0));
-'
+(void) sizeof(type_name(1.0));'
   . ${NORE_ROOT}/auto/feature
+  ndef_generic_done="yes"
 fi
 
 
 # check restrict keyword
 #----------------------------------------
-if [ "$ndef_restrict" = "yes" ]; then
+if [ "$ndef_restrict" = "yes" -a -z "$ndef_restrict_done" ]; then
 	nm_feature="__restrict"
 	nm_feature_name="nm_have_restrict"
 	nm_feature_run=
@@ -133,12 +131,13 @@ if [ "$ndef_restrict" = "yes" ]; then
 	nm_feature_flags="$CFLAGS"
 	nm_feature_test='int x = 0x11; int *__restrict p = &x; (void)sizeof(p);'
 	. ${NORE_ROOT}/auto/feature
-fi # end of __restrict
+  ndef_restrict_done="yes"
+fi                              # end of __restrict
 
 
 # check static_assert
 #----------------------------------------
-if [ "$ndef_static_assert" = "yes" ]; then
+if [ "$ndef_static_assert" = "yes" -a -z "$ndef_static_assert_done" ]; then
   nm_feature="_Static_assert"
   nm_feature_name="nm_have_static_assert"
   nm_feature_run=yes
@@ -146,19 +145,21 @@ if [ "$ndef_static_assert" = "yes" ]; then
   nm_feature_flags="$CFLAGS"
   nm_feature_test='enum {N=5}; _Static_assert(N==5, "N is not equal 5");'
   . ${NORE_ROOT}/auto/feature
-fi  # end of _Static_assert
+  ndef_static_assert_done="yes"
+fi                              # end of _Static_assert
 
 
 # check stdbool
 #----------------------------------------
-if [ "$ndef_stdbool" = "yes" ]; then
+if [ "$ndef_stdbool" = "yes" -a -z "$ndef_stdbool_done" ]; then
   include="stdbool.h" . ${NORE_ROOT}/auto/include
+  ndef_stdbool_done="yes"
 fi
 
 
 # check __VA_ARGS__
 #----------------------------------------
-if [ "$ndef_va_args" = "yes" ]; then
+if [ "$ndef_va_args" = "yes" -a -z "$ndef_va_args_done" ]; then
   nm_feature="variadic macro"
   nm_feature_name="nm_have_va_args"
   nm_feature_run=yes
@@ -166,18 +167,9 @@ if [ "$ndef_va_args" = "yes" ]; then
   nm_feature_flags=
   nm_feature_test='
 #define _vm_(fmt, ...)  printf(fmt, __VA_ARGS__)
-_vm_("variadic=%s", "a");
-'
-  . ${NORE_ROOT}/auto/feature     # end of __VA_ARGS__
-fi
-
-
-
-
-
-fi                              # define_npstd_h
-
-
-
+_vm_("variadic=%s", "a");'
+  . ${NORE_ROOT}/auto/feature
+  ndef_va_args_done="yes"
+fi                              # end of __VA_ARGS__
 
 # eof

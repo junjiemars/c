@@ -7,10 +7,6 @@
 ####
 
 
-if [ -z "$define_nint_h" ]; then
-
-define_nint_h="nint.h"
-
 if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
@@ -19,7 +15,7 @@ fi
 
 
 if [    "$nint_stdint" = "yes"                  \
-     -o "$nint_inttypes" = "yes"                   \
+     -o "$nint_inttypes" = "yes"                \
      -o "$nint_stdbool" = "yes"                 \
    ]; then
   echo "checking for nint.h ..."
@@ -29,22 +25,22 @@ fi
 
 
 
-
 # check header file existing
 #----------------------------------------
-if [ "$nint_stdint" = "yes" ]; then
+if [ "$nint_stdint" = "yes" -a -z "$nint_stdint_done" ]; then
   include="stdint.h" . ${NORE_ROOT}/auto/include
+  nint_stdint_done="yes"
 fi
 
-if [ "$nint_inttypes" = "yes" ]; then
+if [ "$nint_inttypes" = "yes" -a -z "$nint_inttypes_done" ]; then
   include="inttypes.h" . ${NORE_ROOT}/auto/include
+  nint_inttypes_done="yes"
 fi
 
-if [ "$nint_stdbool" = "yes" ]; then
+if [ "$nint_stdbool" = "yes" -a -z "$nint_stdbool_done" ]; then
   include="stdbool.h" . ${NORE_ROOT}/auto/include
+  nint_stdbool_done="yes"
 fi
 
-
-fi                              # define_nint_h
 
 # eof

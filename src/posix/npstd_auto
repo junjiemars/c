@@ -8,6 +8,7 @@ if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
 
+echo "checking for npstd.h ..."
 
 npstd_h="${POSIX_ROOT}/npstd.h"
 

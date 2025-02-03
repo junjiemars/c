@@ -48,20 +48,19 @@ fi
 
 # check cache-line features
 # ----------------------------------------
-if [ "$ncc_cache_line_size" = "yes" ]; then
-
-case "$NM_SYSTEM" in
- Darwin)
-   nm_feature="cache line size"
-   nm_feature_name='nm_cpu_cache_line'
-   nm_feature_indent=yes
-   nm_feature_run=value
-   nm_feature_h='
-#include <stdio.h>
-#include<sys/sysctl.h>'
-   nm_feature_flags=
-   nm_feature_value=
-   nm_feature_test='
+if [ "$ncc_cache_line_size" = "yes" -a -z "$ncc_cache_line_size_done" ]; then
+  case "$NM_SYSTEM" in
+    Darwin)
+      nm_feature="cache line size"
+      nm_feature_name='nm_cpu_cache_line'
+      nm_feature_indent=yes
+      nm_feature_run=value
+      nm_feature_h='
+      #include <stdio.h>
+      #include<sys/sysctl.h>'
+      nm_feature_flags=
+      nm_feature_value=
+      nm_feature_test='
 size_t line = 0;
 size_t size = sizeof(line);
 if (!sysctlbyname("hw.cachelinesize", &line, &size, 0, 0)) {
@@ -69,17 +68,17 @@ if (!sysctlbyname("hw.cachelinesize", &line, &size, 0, 0)) {
    return 0;
 }
 return 1;'
-   . ${NORE_ROOT}/auto/feature
-   ;;
- Linux)
-   nm_feature="cache line size"
-   nm_feature_name='nm_cpu_cache_line'
-   nm_feature_indent=yes
-   nm_feature_run=value
-   nm_feature_h='#include <stdio.h>'
-   nm_feature_flags=
-   nm_feature_value=
-   nm_feature_test='
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    Linux)
+      nm_feature="cache line size"
+      nm_feature_name='nm_cpu_cache_line'
+      nm_feature_indent=yes
+      nm_feature_run=value
+      nm_feature_h='#include <stdio.h>'
+      nm_feature_flags=
+      nm_feature_value=
+      nm_feature_test='
 FILE * p = fopen("/sys/devices/system/cpu/cpu0/cache/index0/"
                  "coherency_line_size", "r");
 if (p) {
@@ -90,20 +89,20 @@ if (p) {
     return 0;
 }
 return 1;'
-   . ${NORE_ROOT}/auto/feature
-   ;;
- WinNT)
-   nm_feature="cache line size"
-   nm_feature_name='nm_cpu_cache_line'
-   nm_feature_indent=yes
-   nm_feature_run=value
-   nm_feature_h='
-#include <stdlib.h>
-#include <stdio.h>
-#include <windows.h>'
-   nm_feature_flags=
-   nm_feature_value=
-   nm_feature_test='
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    WinNT)
+      nm_feature="cache line size"
+      nm_feature_name='nm_cpu_cache_line'
+      nm_feature_indent=yes
+      nm_feature_run=value
+      nm_feature_h='
+      #include <stdlib.h>
+      #include <stdio.h>
+      #include <windows.h>'
+      nm_feature_flags=
+      nm_feature_value=
+      nm_feature_test='
 size_t line = 0;
 DWORD size = 0;
 SYSTEM_LOGICAL_PROCESSOR_INFORMATION *buf = 0;
@@ -129,92 +128,96 @@ if (line) {
   return 0;
 }
 return 1;'
-   . ${NORE_ROOT}/auto/feature
-   ;;
- *)
-   nm_found=no
-   ;;
-esac
-if [ "yes" = "$nm_found" ]; then
-  NM_CPU_CACHE_LINE=$nm_feature_value
-else
-  case "$NM_MACHINE" in
-    aarch64)           NM_CPU_CACHE_LINE=128 ;;
-    x86_64|amd64|ia64) NM_CPU_CACHE_LINE=64 ;;
-    i386|i686|i86pc|*) NM_CPU_CACHE_LINE=32 ;;
+      . ${NORE_ROOT}/auto/feature
+      ;;
+    *)
+      nm_found=no
+      ;;
   esac
-  have=NM_CPU_CACHE_LINE value=$NM_CPU_CACHE_LINE \
-      . ${NORE_ROOT}/auto/define
-fi # end of check cache line size
-
-fi # end of $ncc_cache_line_size
+  if [ "yes" = "$nm_found" ]; then
+    NM_CPU_CACHE_LINE=$nm_feature_value
+  else
+    case "$NM_MACHINE" in
+      aarch64)           NM_CPU_CACHE_LINE=128 ;;
+      x86_64|amd64|ia64) NM_CPU_CACHE_LINE=64 ;;
+      i386|i686|i86pc|*) NM_CPU_CACHE_LINE=32 ;;
+    esac
+    have=NM_CPU_CACHE_LINE \
+      value=$NM_CPU_CACHE_LINE . ${NORE_ROOT}/auto/define
+  fi                            # end of check cache line size
+  ncc_cache_line_size_done="yes"
+fi                              # end of $ncc_cache_line_size
 
 
 
 # check frame-pointer features
 #----------------------------------------
-case "$CC_NAME" in
-  clang|gcc)
-    if [ "$ncc_omit_frame_pointer" = "yes" ]; then
-      nm_feature="-fomit-frame-pointer"
-      nm_feature_name=
-      nm_feature_indent=yes
-      nm_feature_run=no
-      nm_feature_h=
-      nm_feature_flags='-fomit-frame-pointer'
-      nm_feature_test=
-      . ${NORE_ROOT}/auto/feature
-      if [ yes = $nm_found ]; then
-        flag=f_omit_frame_pointer op=':=' value=$nm_feature_flags \
-          . ${NORE_ROOT}/auto/make_define
+if [ "$ncc_omit_frame_pointer" = "yes" ] \
+     && [ -z "$ncc_omit_frame_pointer_done" ]; then
+  case "$CC_NAME" in
+    clang|gcc)
+      if [ "$ncc_omit_frame_pointer" = "yes" ]; then
+        nm_feature="-fomit-frame-pointer"
+        nm_feature_name=
+        nm_feature_indent=yes
+        nm_feature_run=no
+        nm_feature_h=
+        nm_feature_flags='-fomit-frame-pointer'
+        nm_feature_test=
+        . ${NORE_ROOT}/auto/feature
+        if [ yes = $nm_found ]; then
+          flag=f_omit_frame_pointer \
+            op=':=' value=$nm_feature_flags . ${NORE_ROOT}/auto/make_define
+        fi
       fi
-    fi
-    if [ "$ncc_no_omit_frame_pointer" = "yes" ]; then
-      nm_feature="-fno-omit-frame-pointer"
-      nm_feature_name=
-      nm_feature_indent=yes
-      nm_feature_run=no
-      nm_feature_h=
-      nm_feature_flags='-fno-omit-frame-pointer'
-      nm_feature_test=
-      . ${NORE_ROOT}/auto/feature
-      if [ yes = $nm_found ]; then
-        flag=f_no_omit_frame_pointer op=':=' value=$nm_feature_flags \
-          . ${NORE_ROOT}/auto/make_define
+      if [ "$ncc_no_omit_frame_pointer" = "yes" ]; then
+        nm_feature="-fno-omit-frame-pointer"
+        nm_feature_name=
+        nm_feature_indent=yes
+        nm_feature_run=no
+        nm_feature_h=
+        nm_feature_flags='-fno-omit-frame-pointer'
+        nm_feature_test=
+        . ${NORE_ROOT}/auto/feature
+        if [ yes = $nm_found ]; then
+          flag=f_no_omit_frame_pointer \
+            op=':=' value=$nm_feature_flags . ${NORE_ROOT}/auto/make_define
+        fi
       fi
-     fi
-     ;;
-   msvc)
-     if [ "$ncc_omit_frame_pointer" = "yes" ]; then
-       nm_feature="-Oy"
-       nm_feature_name=
-       nm_feature_indent=yes
-       nm_feature_run=no
-       nm_feature_h=
-       nm_feature_flags='-Oy'
-       nm_feature_test=
-       . ${NORE_ROOT}/auto/feature
-       if [ yes = $nm_found ]; then
-         flag=f_omit_frame_pointer op=':=' value=$nm_feature_flags \
-           . ${NORE_ROOT}/auto/make_define
-       fi
-     fi
-     if [ "$ncc_no_omit_frame_pointer" = "yes" ]; then
-       nm_feature="-Oy-"
-       nm_feature_name=
-       nm_feature_indent=yes
-       nm_feature_run=no
-       nm_feature_h=
-       nm_feature_flags='-Oy-'
-       nm_feature_test=
-       . ${NORE_ROOT}/auto/feature
-       if [ yes = $nm_found ]; then
-         flag=f_no_omit_frame_pointer op=':=' value=$nm_feature_flags \
-           . ${NORE_ROOT}/auto/make_define
-       fi
-     fi
-     ;;
-esac
+      ;;
+    msvc)
+      if [ "$ncc_omit_frame_pointer" = "yes" ]; then
+        nm_feature="-Oy"
+        nm_feature_name=
+        nm_feature_indent=yes
+        nm_feature_run=no
+        nm_feature_h=
+        nm_feature_flags='-Oy'
+        nm_feature_test=
+        . ${NORE_ROOT}/auto/feature
+        if [ yes = $nm_found ]; then
+          flag=f_omit_frame_pointer \
+            op=':=' value=$nm_feature_flags . ${NORE_ROOT}/auto/make_define
+        fi
+      fi
+      if [ "$ncc_no_omit_frame_pointer" = "yes" ]; then
+        nm_feature="-Oy-"
+        nm_feature_name=
+        nm_feature_indent=yes
+        nm_feature_run=no
+        nm_feature_h=
+        nm_feature_flags='-Oy-'
+        nm_feature_test=
+        . ${NORE_ROOT}/auto/feature
+        if [ yes = $nm_found ]; then
+          flag=f_no_omit_frame_pointer \
+            op=':=' value=$nm_feature_flags . ${NORE_ROOT}/auto/make_define
+        fi
+      fi
+      ;;
+  esac
+  ncc_omit_frame_pointer_done="yes"
+fi                              # ncc_omit_frame_pointer
 
 
 # check sanitize feature
@@ -299,6 +302,9 @@ case "$CC_NAME" in
      fi
      ;;
    msvc)
+     ncc_sanitize_address_done="yes"
+     ncc_sanitize_alignment_done="yes"
+     ncc_sanitize_signed_integer_overflow_done="yes"
      ;;
 esac
 
@@ -326,7 +332,8 @@ if [ "$ncc_pic" = "yes" -a -z "$ncc_pic_done" ]; then
       # msvc do not use position independent code
     ;;
   esac
-fi
+  ncc_pic_done="yes"
+fi                              # ncc_pic
 
 
 # eof

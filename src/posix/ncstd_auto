@@ -7,11 +7,6 @@
 ####
 
 
-if [ -z "$define_ncstd_h" ]; then
-
-define_ncstd_h="ncstd.h"
-
-
 if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
 fi
@@ -36,9 +31,18 @@ fi
 # checking for <nstr.h>
 . ${POSIX_ROOT}/nstr_auto
 
+
+if [    "$ncstd_environ" = "yes"                \
+   ]; then
+  echo "checking for ncstd.h ..."
+else
+  return
+fi
+
+
 # check environ
 #----------------------------------------
-if [ "$nio_environ" = "yes" ]; then
+if [ "$ncstd_environ" = "yes" -a -z "$ncstd_environ_done" ]; then
   case $CC_NAME in
     clang)
       nm_feature="environ"
@@ -70,9 +74,8 @@ if [ "$nio_environ" = "yes" ]; then
     *)
       ;;
   esac
+  ncstd_environ_done="yes"
 fi
 
-
-fi                              # define_ncstd_h
 
 # eof
