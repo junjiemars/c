@@ -444,7 +444,6 @@ lang_math_test: lang_math_complex_test          \
                 lang_math_float_test            \
                 lang_math_fenv_test
 
-lang_math_ldlibs :=
 ifeq ($(NM_SYSTEM),Linux)
 lang_math_ldlibs += $(nm_lib_opt)m
 endif
