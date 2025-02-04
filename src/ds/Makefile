@@ -37,6 +37,10 @@ ifeq ($(use_sanitize), yes)
 CFLAGS += $(f_sanitize)
 endif
 
+ifeq ($(NM_SYSTEM),Linux)
+ds_math_ldlibs += $(nm_lib_opt)m
+endif
+
 
 
 # dl_list: double linked list
@@ -106,7 +110,7 @@ ds_point_test: ds_point
 
 $(ds_point_binout): $(ds_root)/point/test.c \
                     $(ds_root)/point/p1.c
-	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^ $(ds_math_ldlibs)
 
 
 
