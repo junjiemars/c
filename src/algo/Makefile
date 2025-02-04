@@ -64,7 +64,7 @@ CFLAGS += $(f_sanitize)
 endif
 
 ifeq ($(NM_SYSTEM), Linux)
-LDLIBS += -lm
+algo_math_ldlibs += $(nm_lib_opt)m
 endif
 
 ifeq ($(CC_NAME), msvc)
@@ -370,10 +370,12 @@ algo_prime_binout := $(bin_path)/$(algo_prefix)_prime$(bin_ext)
 
 algo_prime: $(algo_prime_binout)
 algo_prime_test: algo_prime
-	$(algo_prime_binout) 1 64
+	$(algo_prime_binout) -l0,1000
+	$(algo_prime_binout) -c997
 
-$(algo_prime_binout): $(algo_root)/prime/p1.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@ $(LDLIBS)
+$(algo_prime_binout): $(algo_root)/prime/test.c   \
+                      $(algo_root)/prime/prime1.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^ $(algo_math_ldlibs)
 
 
 
