@@ -12,6 +12,7 @@ ds: ds_dl_list                                  \
     ds_tree                                     \
     ds_calc                                     \
     ds_d2b                                      \
+    ds_point                                    \
     ds_python                                   \
     ds_string
 
@@ -23,6 +24,7 @@ ds_test: ds_dl_list_test                        \
          ds_tree_test                           \
          ds_calc_test                           \
          ds_d2b_test                            \
+         ds_point_test                          \
          ds_python_test                         \
          ds_string_test
 
@@ -90,6 +92,32 @@ $(ds_list_link_bone_binout): $(ds_root)/list/link_bone/test.c \
 
 $(ds_list_link_sorted_binout): $(ds_root)/list/link_sorted/test.c \
                                $(ds_root)/list/link_sorted/list.h
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $<
+
+
+
+# point
+ds_point_binout := $(bin_path)/$(ds_prefix)_point$(bin_ext)
+
+ds_point: $(ds_point_binout)
+
+ds_point_test: ds_point
+	$(ds_point_binout)
+
+$(ds_point_binout): $(ds_root)/point/test.c \
+                    $(ds_root)/point/p1.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+
+
+
+# python
+ds_python_pystr_binout := $(bin_path)/$(ds_prefix)_python_pystr$(bin_ext)
+
+ds_python: $(ds_python_pystr_binout)
+ds_python_test: ds_python
+	$(ds_python_pystr_binout)
+
+$(ds_python_pystr_binout): $(ds_root)/python/pystr1.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $<
 
 
@@ -183,18 +211,6 @@ $(ds_calc_binout): $(ds_root)/calc/calc.c       \
     -I$(ds_root)/stack \
     -I$(ds_root)/queue \
     $(bin_out)$@ $<
-
-# python
-ds_python_pystr_binout := $(bin_path)/$(ds_prefix)_python_pystr$(bin_ext)
-
-ds_python: $(ds_python_pystr_binout)
-ds_python_test: ds_python
-	$(ds_python_pystr_binout)
-
-$(ds_python_pystr_binout): $(ds_root)/python/pystr1.c
-	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $<
-
-
 
 # string
 ds_string_umbra_binout := $(bin_path)/$(ds_prefix)_string_umbra$(bin_ext)
