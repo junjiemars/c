@@ -1,27 +1,32 @@
 #include "unique_ptr.h"
+#include <nore.h>
 #include <stddef.h>
+#include <stdlib.h>
 
-UniquePtr
-new_unique_ptr (void *datum, void (*free_datum) (void *))
+UniquePtr *
+new_unique_ptr (void *ptr, void (*free_ptr) (void *))
 {
-  UniquePtr ptr = {
-    .datum = datum,
-    .free_datum = free_datum,
-  };
-  return ptr;
+  UniquePtr *p;
+  if ((p = calloc (1, sizeof (UniquePtr))) == NULL)
+    {
+      return NULL;
+    }
+  p->free_ptr = free_ptr;
+  p->ptr = ptr;
+  return p;
 }
 
 void
-free_unique_ptr (UniquePtr *ptr)
+free_unique_ptr (UniquePtr *p)
 {
-  if (ptr)
+  if (p)
     {
-      if (ptr->datum)
+      if (p->ptr)
         {
-          ptr->free_datum ((void *)ptr->datum);
+          p->free_ptr ((void *)p->ptr);
         }
-      ptr->datum = NULL;
-      ptr->free_datum = NULL;
+      p->ptr = NULL;
+      p->free_ptr = NULL;
     }
 }
 
@@ -32,8 +37,8 @@ unique_ptr_move (UniquePtr *dst, UniquePtr *src)
   if (dst && src)
     {
       *dst = *src;
-      src->datum = NULL;
-      src->free_datum = NULL;
+      src->ptr = NULL;
+      src->free_ptr = NULL;
       return dst;
     }
   return NULL;

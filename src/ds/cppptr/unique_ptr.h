@@ -1,18 +1,16 @@
 #ifndef _UNIQUE_PTR_H_
 #define _UNIQUE_PTR_H_
 
-#include <nore.h>
-
 typedef struct UniquePtr
 {
-  void *datum;
-  void (*free_datum) (void *);
+  void *ptr;
+  void (*free_ptr) (void *);
 } UniquePtr;
 
-#define unique_ptr_ref(p, t) ((p) ? (t *)(p)->datum : NULL)
+#define unique_ptr_ref(p, t) ((p) ? (t *)(p)->ptr : NULL)
 
-UniquePtr new_unique_ptr (void *, void (*free) (void *));
-void free_unique_ptr (UniquePtr *);
-UniquePtr *unique_ptr_move (UniquePtr *, UniquePtr *);
+UniquePtr *new_unique_ptr (void *ptr, void (*free_ptr) (void *));
+void free_unique_ptr (UniquePtr *p);
+UniquePtr *unique_ptr_move (UniquePtr *dst, UniquePtr *src);
 
 #endif /* _UNIQUE_PTR_H_ */

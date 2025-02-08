@@ -53,7 +53,8 @@ ds_cppptr_test: ds_cppptr
 	$(ds_cppptr_binout)
 
 $(ds_cppptr_binout): $(ds_root)/cppptr/test.c       \
-                     $(ds_root)/cppptr/unique_ptr.c
+                     $(ds_root)/cppptr/unique_ptr.c \
+                     $(ds_root)/cppptr/shared_ptr.c
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
