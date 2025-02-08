@@ -24,6 +24,10 @@ free_shared_ptr (SharedPtr *p)
 {
   if (p)
     {
+      if (p->ptr)
+        {
+          p->free_ptr ((void *)p->ptr);
+        }
       free ((void *)p);
     }
 }
