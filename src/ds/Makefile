@@ -4,7 +4,8 @@
 # make clean test
 #
 
-ds: ds_dl_list                                  \
+ds: ds_cppptr                                   \
+    ds_dl_list                                  \
     ds_sl_list                                  \
     ds_list                                     \
     ds_queue                                    \
@@ -16,7 +17,8 @@ ds: ds_dl_list                                  \
     ds_python                                   \
     ds_string
 
-ds_test: ds_dl_list_test                        \
+ds_test: ds_cppptr_test                         \
+         ds_dl_list_test                        \
          ds_sl_list_test                        \
          ds_list_test                           \
          ds_queue_test                          \
@@ -40,6 +42,19 @@ endif
 ifeq ($(NM_SYSTEM),Linux)
 ds_math_ldlibs += $(nm_lib_opt)m
 endif
+
+
+
+# cppptr
+ds_cppptr_binout := $(bin_path)/$(ds_prefix)_cppptr$(bin_ext)
+
+ds_cppptr: $(ds_cppptr_binout)
+ds_cppptr_test: ds_cppptr
+	$(ds_cppptr_binout)
+
+$(ds_cppptr_binout): $(ds_root)/cppptr/test.c       \
+                     $(ds_root)/cppptr/unique_ptr.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
 
