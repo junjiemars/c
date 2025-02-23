@@ -33,6 +33,10 @@
               | ((uint64_t)_flip32_((uint64_t)(x) >> 32))))
 
 
+#define _hi8_(x) (((uint8_t)(x) >> 4) & (uint8_t)0x0f)
+#define _lo8_(x) ((uint8_t)(x) & (uint8_t)0x0f)
+
+
 #include <time.h>
 #define _time_(E, R)                            \
 do                                              \
