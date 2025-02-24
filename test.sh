@@ -66,6 +66,9 @@ test_do() {
   local cfg="$_CFG_OPT_ $*"
   echo "------------"
   echo "# $*"
+  echo "# git submodule update"
+  git submodule update
+  echo "------------"
   if [ -z "$_WIN_ENV_" ]; then
     echo "# ${_ROOT_DIR_%/}/configure $cfg"
     echo "------------"
