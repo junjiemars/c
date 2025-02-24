@@ -19,6 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          submodules: recursive
           fetch-depth: 0
       - name: Install Dependencies
         run: |
@@ -60,6 +61,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          submodules: recursive
           fetch-depth: 0
       - name: Install Dependencies
         run: |
@@ -103,6 +105,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
+        submodules: recursive
         fetch-depth: 0 # checkout history and tags
     - name: Install Dependencies
       uses: msys2/setup-msys2@v2
