@@ -1,4 +1,3 @@
-[submodule "src/nginx/nginx_home"]
-	path = src/nginx/nginx_home
-	url = git@github.com:nginx/nginx.git
-	ignore = dirty
+[submodule "src/posix"]
+	path = src/posix
+	url = git@github.com:junjiemars/posix.git
