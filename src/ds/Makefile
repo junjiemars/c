@@ -50,7 +50,7 @@ ds_cppptr_binout := $(bin_path)/$(ds_prefix)_cppptr$(bin_ext)
 ds_cppptr_cflags := $(CFLAGS)
 
 ifeq ($(CC_NAME),msvc)
-ds_cppptr_cflags += $(nm_c11_atomic_opt)
+ds_cppptr_cflags += $(nm_atomic_opt)
 endif
 
 ds_cppptr: $(ds_cppptr_binout)
