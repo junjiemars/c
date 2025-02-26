@@ -6,11 +6,6 @@
 ## ds/auto
 ####
 
-
-if [ -z "$POSIX_ROOT" ]; then
-  POSIX_ROOT="src/posix"
-fi
-
 # check C's std features
 ncc_cpu_endian="yes"
 ncc_sanitize_address="yes"

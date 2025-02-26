@@ -1,9 +1,0 @@
-out/tmp/*
-out/bin/*.ilk
-out/bin/*.pdb
-out/bin/*.o
-out/bin/*.dSYM
-out/lib/*.ilk
-out/lib/*.pdb
-out/lib/*.o
-out/lib/*.dSYM

@@ -56,8 +56,9 @@ algo_test: _algo_test                           \
 
 # env
 algo_prefix := algo
+posix_root ?= $(POSIX_ROOT)
 
-INC += $(nm_inc_opt)$(algo_root) $(nm_inc_opt)$(root)/posix
+INC += $(nm_inc_opt)$(algo_root) $(nm_inc_opt)$(posix_root)
 
 ifeq ($(use_sanitize), yes)
 CFLAGS += $(f_sanitize)
