@@ -35,7 +35,7 @@ ds_prefix := ds
 
 INC += $(nm_inc_opt)$(ds_root) $(nm_inc_opt)$(root)/posix
 
-ifeq ($(use_sanitize), yes)
+ifeq ($(use_sanitize),yes)
 CFLAGS += $(f_sanitize)
 endif
 
@@ -47,6 +47,11 @@ endif
 
 # cppptr
 ds_cppptr_binout := $(bin_path)/$(ds_prefix)_cppptr$(bin_ext)
+ds_cppptr_cflags := $(CFLAGS)
+
+ifeq ($(CC_NAME),msvc)
+ds_cppptr_cflags += $(nm_c11_atomic_opt)
+endif
 
 ds_cppptr: $(ds_cppptr_binout)
 ds_cppptr_test: ds_cppptr
@@ -55,7 +60,7 @@ ds_cppptr_test: ds_cppptr
 $(ds_cppptr_binout): $(ds_root)/cppptr/test.c       \
                      $(ds_root)/cppptr/unique_ptr.c \
                      $(ds_root)/cppptr/shared_ptr.c
-	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
+	$(CC) $(ds_cppptr_cflags) $(INC) $(bin_out)$@ $^
 
 
 

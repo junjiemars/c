@@ -63,12 +63,12 @@ ifeq ($(use_sanitize), yes)
 CFLAGS += $(f_sanitize)
 endif
 
-ifeq ($(NM_SYSTEM), Linux)
+ifeq ($(NM_SYSTEM),Linux)
 algo_math_ldlibs += $(nm_lib_opt)m
 endif
 
-ifeq ($(CC_NAME), msvc)
-posix_getopt_c := $(root)/posix/getopt.c
+ifeq ($(CC_NAME),msvc)
+posix_getopt_c := $(posix_root)/getopt.c
 endif # end of msvc
 
 
@@ -256,7 +256,7 @@ algo_hash_sdbm_test: $(algo_hash_sdbm_binout)
 algo_hash_jenkins_test: $(algo_hash_jenkins_binout)
 	echo "abc acb" | $<
 
-$(algo_hash_bone_binout): $(algo_root)/hash/bone.c \
+$(algo_hash_bone_binout): $(algo_root)/hash/bone.c  \
                           $(posix_getopt_c)
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
@@ -374,7 +374,8 @@ algo_prime_test: algo_prime
 	$(algo_prime_binout) -c997
 
 $(algo_prime_binout): $(algo_root)/prime/test.c   \
-                      $(algo_root)/prime/prime1.c
+                      $(algo_root)/prime/prime1.c \
+                      $(posix_getopt_c)
 	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^ $(algo_math_ldlibs)
 
 
