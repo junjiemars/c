@@ -14,12 +14,14 @@
 swift: swift_hi                                 \
        swift_cli                                \
        swift_lang                               \
+       swift_lib                                \
        swift_foundation                         \
        swift_os
 
 swift_test: swift_hi_test                       \
             swift_cli_test                      \
             swift_lang_test                     \
+            swift_lib_test                      \
             swift_foundation_test               \
             swift_os_test
 
@@ -83,6 +85,26 @@ $(swift_lang_binout): $(swift_lang_package) \
                       $(swift_root)/lang/Sources/errors.swift \
                       $(swift_root)/lang/Sources/protocols.swift
 	$(SWIFT) build --package-path=$(swift_root)/lang -c $(swift_build)
+
+
+
+# lib
+swift_lib_package := $(swift_root)/lib/Package.swift
+swift_lib_binout := $(swift_root)/lib/.build/$(swift_build)/lib
+
+swift_lib: $(swift_lib_binout)
+swift_lib_test: swift_lib
+	$(SWIFT) test --package-path=$(swift_root)/lib
+swift_lib_clean:
+	$(SWIFT) package --package-path=$(swift_root)/lib clean
+
+$(swift_lib_package):
+	$(SWIFT) package --package-path=$(swift_root)/lib \
+		init --type=executable --name=Lib
+
+$(swift_lib_binout): $(swift_lib_package) \
+                    $(swift_root)/lib/Sources/lib/Lib.swift
+	$(SWIFT) build --package-path=$(swift_root)/lib -c $(swift_build)
 
 
 
