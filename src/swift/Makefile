@@ -51,7 +51,7 @@ $(swift_hi_package):
 		init --type=executable --name=hi
 
 $(swift_hi_binout): $(swift_hi_package) \
-                    $(swift_root)/hi/Sources/main.swift
+                    $(swift_root)/hi/Sources/hi/main.swift
 	$(SWIFT) build --package-path=$(swift_root)/hi -c $(swift_build)
 
 
