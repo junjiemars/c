@@ -48,7 +48,7 @@ swift_hi_clean:
 
 $(swift_hi_package):
 	$(SWIFT) package --package-path=$(swift_root)/hi \
-		init --type=executable --name=hi
+		init --type=executable --name=Hi
 
 $(swift_hi_binout): $(swift_hi_package) \
                     $(swift_root)/hi/Sources/hi/main.swift
