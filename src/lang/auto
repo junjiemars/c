@@ -6,11 +6,10 @@
 ## lang/auto
 ####
 
-
 if [ -z "$POSIX_ROOT" ]; then
   POSIX_ROOT="src/posix"
+  flag="POSIX_ROOT" op=":=" value="$POSIX_ROOT" . ${NORE_ROOT}/auto/make_define
 fi
-
 
 # check ncstd.h features
 ncc_cache_line_size="yes"
