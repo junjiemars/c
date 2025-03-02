@@ -441,26 +441,26 @@ $(algo_sizeof_cppout): $(algo_root)/sizeof/s.c
 	$(CC) $(CPPFLAGS) $(INC) $(nm_stage_pre) $^ $(cpp_out)$@
 
 # search
-algo_s_linear_binout := $(bin_path)/$(algo_prefix)_search_linear$(bin_ext)
-algo_s_binary_binout := $(bin_path)/$(algo_prefix)_search_binary$(bin_ext)
+algo_search_linear_binout := $(bin_path)/$(algo_prefix)_search_linear$(bin_ext)
+algo_search_binary_binout := $(bin_path)/$(algo_prefix)_search_binary$(bin_ext)
 
-algo_search: $(algo_s_linear_binout)            \
-             $(algo_s_binary_binout)
-algo_search_test: algo_s_linear_test            \
-                  algo_s_binary_test
+algo_search: $(algo_search_linear_binout)            \
+             $(algo_search_binary_binout)
+algo_search_test: algo_search_linear_test            \
+                  algo_search_binary_test
 
-algo_s_linear_test: $(algo_s_linear_binout)
-	$(algo_s_linear_binout)
-algo_s_binary_test: $(algo_s_binary_binout)
-	$(algo_s_binary_binout)
+algo_search_linear_test: $(algo_search_linear_binout)
+	$(algo_search_linear_binout)
+algo_search_binary_test: $(algo_search_binary_binout)
+	$(algo_search_binary_binout)
 
-$(algo_s_linear_binout): $(algo_root)/_algo_.c    \
-                         $(algo_root)/search/ls.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(algo_search_linear_binout): $(algo_root)/_algo_.c     \
+                              $(algo_root)/search/ls.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
-$(algo_s_binary_binout): $(algo_root)/_algo_.c    \
-                         $(algo_root)/search/bs.c
-	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
+$(algo_search_binary_binout): $(algo_root)/_algo_.c     \
+                              $(algo_root)/search/bs.c
+	$(CC) $(CFLAGS) $(INC) $(bin_out)$@ $^
 
 
 # sort

@@ -1,11 +1,12 @@
 #include "../_algo_.h"
 
-long linear_search (void *, void *, size_t, size_t,
-                    int (*) (const void *, const void *));
+void *linear_search (void *what, void *base, size_t nel, size_t width,
+                     int (*cmp) (void const *, void const *));
+
 void test_linear_search_int (void);
 void test_linear_search_str (void);
 
-const char *xx[] = { "yes", "no" };
+static char const *xx[] = { "yes", "no" };
 
 int
 main (void)
@@ -16,24 +17,26 @@ main (void)
   return 0;
 }
 
-long
+void *
 linear_search (void *what, void *base, size_t nel, size_t width,
-               int (*cmp) (const void *, const void *))
+               int (*cmp) (void const *, void const *))
 {
+  void *el;
   for (size_t i = 0; i < nel; i++)
     {
-      if (0 == cmp ((char *)what, (char *)base + i * width))
+      el = (char *)base + i * width;
+      if (0 == cmp (what, el))
         {
-          return (long)i;
+          return el;
         }
     }
-  return -1;
+  return NULL;
 }
 
 void
 test_linear_search_int (void)
 {
-  int found;
+  int *found;
   int a1[] = { 0x3, 0x5, 0x4, 0x1, 0x2 };
   int what = 0x1;
 
@@ -43,14 +46,14 @@ test_linear_search_int (void)
   list_array (a1, sizeof (a1) / sizeof (*a1), sizeof (*a1), print_int);
   found = linear_search (&what, a1, sizeof (a1) / sizeof (*a1), sizeof (*a1),
                          cmp_int);
-  if (found >= 0)
+  if (found)
     {
-      if (0 == verify (&what, &a1[found], sizeof (*a1)))
+      if (0 == verify (&what, found, sizeof (*a1)))
         {
           xxi = 0;
         }
     }
-  printf ("found: [%i] ... %s\n", found, xx[xxi]);
+  printf ("found: [%i] ... %s\n", what, xx[xxi]);
 
   what = 0x6;
   printf ("linear search for %i\n----------\n", what);
@@ -58,21 +61,20 @@ test_linear_search_int (void)
   found = linear_search (&what, a1, sizeof (a1) / sizeof (*a1), sizeof (*a1),
                          cmp_int);
   xxi = 1;
-  if (found >= 0)
+  if (found)
     {
-      if (0 == verify (&what, &a1[found], sizeof (*a1)))
+      if (0 == verify (&what, found, sizeof (*a1)))
         {
           xxi = 0;
         }
     }
-
-  printf ("found: [%i] ... %s\n", found, xx[xxi]);
+  printf ("found: [%i] ... %s\n", what, xx[xxi]);
 }
 
 void
 test_linear_search_str (void)
 {
-  int found;
+  char **found;
   char *s1[] = { "a", "ccc", "bb", "dddd" };
   char *what = "dddd";
   int xxi = 1;
@@ -82,14 +84,14 @@ test_linear_search_str (void)
   found = linear_search (&what, s1, sizeof (s1) / sizeof (*s1), sizeof (*s1),
                          cmp_str);
 
-  if (found >= 0)
+  if (found)
     {
-      if (0 == verify (&what, &s1[found], strlen (what)))
+      if (0 == verify (&what, found, strlen (what)))
         {
           xxi = 0;
         }
     }
-  printf ("found: [%i] ... %s\n", found, xx[xxi]);
+  printf ("found: [%s] ... %s\n", what, xx[xxi]);
 
   what = "eeeee";
   printf ("linear search for %s\n----------\n", what);
@@ -98,12 +100,12 @@ test_linear_search_str (void)
                          cmp_str);
 
   xxi = 1;
-  if (found >= 0)
+  if (found)
     {
-      if (0 == verify (&what, &s1[found], strlen (what)))
+      if (0 == verify (&what, found, strlen (what)))
         {
           xxi = 0;
         }
     }
-  printf ("found: [%i] ... %s\n", found, xx[xxi]);
+  printf ("found: [%s] ... %s\n", what, xx[xxi]);
 }
