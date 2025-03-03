@@ -1,7 +1,5 @@
 #include "../_algo_.h"
-
-void *linear_search (void *what, void *base, size_t nel, size_t width,
-                     int (*cmp) (void const *, void const *));
+#include "algo_search.h"
 
 void test_linear_search_int (void);
 void test_linear_search_str (void);
@@ -18,16 +16,17 @@ main (void)
 }
 
 void *
-linear_search (void *what, void *base, size_t nel, size_t width,
+linear_search (void const *what, void const *base, size_t n, size_t width,
                int (*cmp) (void const *, void const *))
 {
-  void *el;
-  for (size_t i = 0; i < nel; i++)
+  char *ep, *endp;
+
+  ep = (char *)base;
+  for (endp = (char *)(ep + width * n); ep < endp; ep += width)
     {
-      el = (char *)base + i * width;
-      if (0 == cmp (what, el))
+      if (cmp (what, ep) == 0)
         {
-          return el;
+          return ep;
         }
     }
   return NULL;

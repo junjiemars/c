@@ -80,6 +80,34 @@ main (void)
 }
 
 void *
+binary_search (void const *key, void const *base, size_t n, size_t width,
+               int (*cmp) (void const *, void const *))
+{
+  if (n < 1)
+    {
+      return NULL;
+    }
+
+  size_t mid = n / 2;
+  void *cur = (char *)base + mid * width;
+  int c;
+
+  if ((c = cmp (key, cur)) == 0)
+    {
+      return cur;
+    }
+  else if (c < 0)
+    {
+      return binary_search (key, base, mid - 1 + 1, width, cmp);
+    }
+  else
+    {
+      return binary_search (key, (char *)base + (mid + 1) * width, n - mid - 1,
+                            width, cmp);
+    }
+}
+
+void *
 bs (const void *key, const void *base, size_t n, size_t width,
     int (*cmp) (const void *lhs, const void *rhs))
 {
@@ -143,7 +171,7 @@ test_bs_int (const void *key, const void *base, size_t n, size_t width)
 
   printf ("binary search for %i\n----------\n", *(int *)key);
   list_array (base, n, width, print_int);
-  found = bs (key, base, n, width, cmp_int);
+  found = binary_search (key, base, n, width, cmp_int);
   printf ("found: [%ld]\n",
           (NULL == found ? -1L : (long)_diff_ (base, found, sizeof (*found))));
 }
@@ -157,7 +185,7 @@ test_bs_str (const void *key, const void *base, size_t n, size_t width)
 
   printf ("binary search for %s\n----------\n", *(char **)key);
   list_array (base, n, width, print_str);
-  found = bs (key, base, n, width, cmp_str);
+  found = binary_search (key, base, n, width, cmp_str);
   printf ("found: [%ld]\n",
           (NULL == found ? -1L : (long)_diff_ (base, found, width)));
 }
