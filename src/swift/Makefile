@@ -27,13 +27,21 @@ swift_test: swift_hi_test                       \
 
 # env
 swift_prefix := swift
-SWIFTC := $(has_swiftc)
 SWIFT := $(has_swift)
 
 swift_build := debug
 ifeq ($(NM_BUILD),YES)
 swift_build := release
 endif
+
+ifeq ($(NM_VERBOSE),YES)
+swift_build += --verbose
+endif
+
+swiftc_v5 := -Xswiftc -swift-version -Xswiftc 5
+swiftc_v6 := -Xswiftc -swift-version -Xswiftc 6
+
+swift_package_root := --package-path=$(swift_root)
 
 
 
@@ -44,17 +52,17 @@ swift_hi_binout := $(swift_root)/hi/.build/$(swift_build)/hi
 
 swift_hi: $(swift_hi_binout)
 swift_hi_test: swift_hi
-	$(swift_hi_binout)
+	$(SWIFT) run $(swift_package_root)/hi
 swift_hi_clean:
-	$(SWIFT) package --package-path=$(swift_root)/hi clean
+	$(SWIFT) package $(swift_package_root)/hi clean
 
 $(swift_hi_package):
-	$(SWIFT) package --package-path=$(swift_root)/hi \
+	$(SWIFT) package $(swift_package_root)/hi \
 		init --type=executable --name=Hi
 
 $(swift_hi_binout): $(swift_hi_package) \
                     $(swift_root)/hi/Sources/hi/main.swift
-	$(SWIFT) build --package-path=$(swift_root)/hi -c $(swift_build)
+	$(SWIFT) build $(swift_package_root)/hi -c $(swift_build) $(swiftc_v5)
 
 
 
@@ -66,10 +74,10 @@ swift_lang: $(swift_lang_binout)
 swift_lang_test: swift_lang
 	$(swift_lang_binout)
 swift_lang_clean:
-	$(SWIFT) package --package-path=$(swift_root)/lang clean
+	$(SWIFT) package $(swift_package_root)/lang clean
 
 $(swift_lang_package):
-	$(SWIFT) package --package-path=$(swift_root)/lang \
+	$(SWIFT) package $(swift_package_root)/lang \
 		init --type=executable --name=lang
 
 $(swift_lang_binout): $(swift_lang_package) \
@@ -84,7 +92,7 @@ $(swift_lang_binout): $(swift_lang_package) \
                       $(swift_root)/lang/Sources/protocols.swift \
                       $(swift_root)/lang/Sources/errors.swift \
                       $(swift_root)/lang/Sources/protocols.swift
-	$(SWIFT) build --package-path=$(swift_root)/lang -c $(swift_build)
+	$(SWIFT) build $(swift_package_root)/lang -c $(swift_build)
 
 
 
@@ -94,17 +102,17 @@ swift_lib_binout := $(swift_root)/lib/.build/$(swift_build)/lib
 
 swift_lib: $(swift_lib_binout)
 swift_lib_test: swift_lib
-	$(SWIFT) test --package-path=$(swift_root)/lib
+	$(SWIFT) test $(swift_package_root)/lib
 swift_lib_clean:
-	$(SWIFT) package --package-path=$(swift_root)/lib clean
+	$(SWIFT) package $(swift_package_root)/lib clean
 
 $(swift_lib_package):
-	$(SWIFT) package --package-path=$(swift_root)/lib \
+	$(SWIFT) package $(swift_package_root)/lib \
 		init --type=executable --name=Lib
 
 $(swift_lib_binout): $(swift_lib_package) \
-                    $(swift_root)/lib/Sources/lib/Lib.swift
-	$(SWIFT) build --package-path=$(swift_root)/lib -c $(swift_build)
+                     $(swift_root)/lib/Sources/lib/Lib.swift
+	$(SWIFT) build $(swift_package_root)/lib -c $(swift_build) $(swiftc_v5)
 
 
 
@@ -116,11 +124,11 @@ swift_cli: $(swift_cli_binout)
 swift_cli_test: swift_cli
 	$(swift_cli_binout) --input $@
 swift_cli_clean:
-	$(SWIFT) package --package-path=$(swift_root)/cli clean
+	$(SWIFT) package $(swift_package_root)/cli clean
 
 $(swift_cli_binout): $(swift_cli_package) \
                      $(swift_root)/cli/Sources/cli.swift
-	$(SWIFT) build --package-path=$(swift_root)/cli -c $(swift_build)
+	$(SWIFT) build $(swift_package_root)/cli -c $(swift_build)
 
 
 
@@ -132,15 +140,15 @@ swift_foundation: $(swift_foundation_binout)
 swift_foundation_test: swift_foundation
 	$(swift_foundation_binout)
 swift_foundation_clean:
-	$(SWIFT) package --package-path=$(swift_root)/foundation clean
+	$(SWIFT) package $(swift_package_root)/foundation clean
 
 $(swift_foundation_package):
-	$(SWIFT) package --package-path=$(swift_root)/foundation \
+	$(SWIFT) package $(swift_package_root)/foundation \
 		init --type=executable --name=foundation
 
 $(swift_foundation_binout): $(swift_foundation_package) \
                       $(swift_root)/foundation/Sources/main.swift
-	$(SWIFT) build --package-path=$(swift_root)/foundation -c $(swift_build)
+	$(SWIFT) build $(swift_package_root)/foundation -c $(swift_build)
 
 
 
@@ -152,17 +160,17 @@ swift_os: $(swift_os_binout)
 swift_os_test: swift_os
 	$(swift_os_binout)
 swift_os_clean:
-	$(SWIFT) package --package-path=$(swift_root)/os clean
+	$(SWIFT) package $(swift_package_root)/os clean
 
 $(swift_os_package):
-	$(SWIFT) package --package-path=$(swift_root)/os \
+	$(SWIFT) package $(swift_package_root)/os \
 		init --type=executable --name=os
 
 $(swift_os_binout): $(swift_os_package) \
                     $(swift_root)/os/Sources/main.swift \
                     $(swift_root)/os/Sources/c.swift \
                     $(swift_root)/os/Sources/lib.swift
-	$(SWIFT) build --package-path=$(swift_root)/os -c $(swift_build)
+	$(SWIFT) build $(swift_package_root)/os -c $(swift_build)
 
 
 
