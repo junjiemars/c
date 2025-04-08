@@ -1,4 +1,4 @@
-#include "../_algo_.h"
+#include <_algo_.h>
 #include "prime.h"
 #include <math.h>
 

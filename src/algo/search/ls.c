@@ -1,4 +1,4 @@
-#include "../_algo_.h"
+#include <_algo_.h>
 #include "algo_search.h"
 
 void test_linear_search_int (void);
