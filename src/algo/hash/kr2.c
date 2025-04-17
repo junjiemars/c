@@ -1,5 +1,5 @@
 #include "_hash_.h"
-#include "../_algo_.h"
+#include <_algo_.h>
 
 int
 main (int argc, char **argv)

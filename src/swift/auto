@@ -6,19 +6,7 @@
 ## posix/swift_auto
 ####
 
-has_swiftc=""
 has_swift=""
-
-printf " + checking for swiftc ... "
-has_swiftc="`command -v swiftc`"
-if [ -x "$has_swiftc" ]; then
-  flag=has_swiftc value="${has_swiftc}" . ${NORE_ROOT}/auto/make_define
-  printf "yes\n"
-else
-  has_swiftc=""
-  printf "no\n"
-fi
-
 
 printf " + checking for swift ... "
 has_swift="`command -v swift`"

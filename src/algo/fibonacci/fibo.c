@@ -1,4 +1,4 @@
-#include "../_algo_.h"
+#include <_algo_.h>
 
 static int fibo1 (int);
 static int fibo2 (int, int, int);

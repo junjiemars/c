@@ -1,4 +1,4 @@
-#include "../_algo_.h"
+#include <_algo_.h>
 
 int ecluid (int a, int b);
 int ecluid_tr (int a, int b);

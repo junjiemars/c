@@ -1,4 +1,4 @@
-#include "../_algo_.h"
+#include <_algo_.h>
 
 /*
  * bs and bs_iter implement the same functionality as the bsearch in

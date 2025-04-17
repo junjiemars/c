@@ -1,4 +1,4 @@
-#include "../_algo_.h"
+#include <_algo_.h>
 
 /*
  * let N = count, M = device's width.
