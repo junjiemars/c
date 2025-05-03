@@ -36,34 +36,36 @@ io:                                             \
     io_sync                                     \
     io_time                                     \
     io_trunc                                    \
-    io_umask
+    io_umask                                    \
+    io_utime
 
 io_test:                                        \
-         io_access_test                         \
-         io_adv_test                            \
-         io_close_test                          \
-         io_copy_test                           \
-         io_dir_test                            \
-         io_dup_test                            \
-         io_fcntl_test                          \
-         io_link_test                           \
-         io_ls_test                             \
-         io_multiplex_test                      \
-         io_name_test                           \
-         io_open_test                           \
-         io_own_test                            \
-         io_read_test                           \
-         io_redirect_test                       \
-         io_rename_test                         \
-         io_share_test                          \
-         io_seek_test                           \
-         io_size_test                           \
-         io_stat_test                           \
-         io_struct_test                         \
-         io_sync_test                           \
-         io_time_test                           \
-         io_trunc_test                          \
-         io_umask_test
+   io_access_test                               \
+   io_adv_test                                  \
+   io_close_test                                \
+   io_copy_test                                 \
+   io_dir_test                                  \
+   io_dup_test                                  \
+   io_fcntl_test                                \
+   io_link_test                                 \
+   io_ls_test                                   \
+   io_multiplex_test                            \
+   io_name_test                                 \
+   io_open_test                                 \
+   io_own_test                                  \
+   io_read_test                                 \
+   io_redirect_test                             \
+   io_rename_test                               \
+   io_share_test                                \
+   io_seek_test                                 \
+   io_size_test                                 \
+   io_stat_test                                 \
+   io_struct_test                               \
+   io_sync_test                                 \
+   io_time_test                                 \
+   io_trunc_test                                \
+   io_umask_test                                \
+   io_utime_test
 
 endif
 
@@ -992,6 +994,7 @@ io_trunc_test: io_trunc
 $(io_trunc_binout): $(io_root)/trunc/t1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+# end of trunc
 
 # umask
 io_umask_create_binout := $(bin_path)/$(io_prefix)_umask_create$(bin_ext)
@@ -1036,5 +1039,18 @@ $(io_umask_change_binout): $(io_root)/umask/uc1.c
 $(io_umask_fork_binout): $(io_root)/umask/uf1.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
+# end of umask
+
+# utime
+io_utime_binout := $(bin_path)/$(io_prefix)_utime$(bin_ext)
+
+io_utime: $(io_utime_binout)
+io_utime_test: io_utime
+	$(io_utime_binout)
+
+$(io_utime_binout): $(io_root)/utime/ut1.c
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(INC) $^ $(bin_out)$@
+
+# end of utime
 
 # eof
