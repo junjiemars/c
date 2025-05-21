@@ -30,6 +30,7 @@ rust: rust_attr                                 \
       rust_owner                                \
       rust_rest                                 \
       rust_string                               \
+      rust_tauri                                \
       rust_unsafe                               \
       rust_websrv                               \
       rust_ws
@@ -59,6 +60,7 @@ rust_test: rust_attr_test                       \
            rust_owner_test                      \
            rust_rest_test                       \
            rust_string_test                     \
+           rust_tauri_test                      \
            rust_unsafe_test                     \
            rust_websrv_test                     \
            rust_ws_test
@@ -691,6 +693,29 @@ $(rust_string_binout): $(rust_string_cargo)
 		--manifest-path $< \
     --target-dir $(cargo_target_dir) \
   && cp $(cargo_out_dir)/$(rust_string_name) $@
+
+
+
+# tauri
+.PHONY: rust_tauri_require \
+        rust_tauri_hi_desktop_dev \
+        rust_tauri_hi_ios_dev
+
+rust_tauri_hi_root := $(rust_root)/tauri/tauri-hi/
+
+rust_tauri_require:
+	$(CARGO) install --registry crates-io create-tauri-app --locked
+	$(CARGO) install --registry crates-io tauri-cli --version='^2.0.0' --locked
+
+rust_tauri_hi_desktop_dev:
+	cd $(rust_tauri_hi_root) && $(CARGO) tauri dev
+rust_tauri_hi_ios_dev:
+	cd $(rust_tauri_hi_root) && $(CARGO) tauri ios dev
+
+rust_tauri:
+	echo "#skip $@ ..."
+rust_tauri_test: rust_tauri
+	echo "#skip $@ ..."
 
 
 
