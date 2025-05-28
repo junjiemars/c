@@ -8,6 +8,7 @@
 rust: rust_attr                                 \
       rust_box                                  \
       rust_core                                 \
+      rust_cbindgen                             \
       rust_eframe                               \
       rust_enum                                 \
       rust_error                                \
@@ -38,6 +39,7 @@ rust: rust_attr                                 \
 rust_test: rust_attr_test                       \
            rust_box_test                        \
            rust_core_test                       \
+           rust_cbindgen                        \
            rust_eframe_test                     \
            rust_enum_test                       \
            rust_error_test                      \
@@ -158,6 +160,30 @@ $(rust_box_binout): $(rust_box_cargo) \
     --manifest-path $< \
     --target-dir $(cargo_target_dir) \
 	&& cp $(cargo_out_dir)/$(rust_box_name) $(bin_path)
+
+
+
+# cbindgen
+.PHONY: rust_cbindgen_require \
+        rust_cbindgen_home \
+        rust_cbindgen \
+        rust_cbindgen_test
+
+rust_cbindgen_root := $(rust_root)/cbindgen
+rust_cbindgen_home := $(rust_cbindgen_root)/cbindgen_home
+rust_cbindgen_git := git@github.com:mozilla/cbindgen
+
+rust_cbindgen_require: $(rust_cbindgen_home)
+	$(CARGO) install --registry crates-io cbindgen
+
+$(rust_cbindgen_home): $(rust_cbindgen_root)
+	test -d $^ || mkdir -p $^
+	git clone --depth=1 --branch=v0.29.0 $(rust_cbindgen_git) $(rust_cbindgen_home)
+
+rust_cbindgen:
+	@echo "#skip $@ ..."
+rust_cbindgen_test: rust_cbindgen
+	@echo "#skip $@ ..."
 
 
 
@@ -713,9 +739,9 @@ rust_tauri_hi_ios_dev:
 	cd $(rust_tauri_hi_root) && $(CARGO) tauri ios dev
 
 rust_tauri:
-	echo "#skip $@ ..."
+	@echo "#skip $@ ..."
 rust_tauri_test: rust_tauri
-	echo "#skip $@ ..."
+	@echo "#skip $@ ..."
 
 
 
