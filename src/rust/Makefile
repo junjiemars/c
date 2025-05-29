@@ -181,7 +181,7 @@ $(rust_cbindgen_home): $(rust_cbindgen_root)
 	git rev-parse -q --verify HEAD $@ \
     || git clone --depth=1 --branch=master $(cbindgen_git_src) $@
 
-rust_cbindgen: $(rust_cbindgen_require)
+rust_cbindgen: rust_cbindgen_require
 	cd $(rust_cbindgen_home) && $(CARGO) build
 rust_cbindgen_test: rust_cbindgen
 	cd $(rust_cbindgen_home) && $(CARGO) test
