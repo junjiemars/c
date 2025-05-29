@@ -171,19 +171,20 @@ $(rust_box_binout): $(rust_box_cargo) \
 
 rust_cbindgen_root := $(rust_root)/cbindgen
 rust_cbindgen_home := $(rust_cbindgen_root)/cbindgen_home
-rust_cbindgen_git := git@github.com:mozilla/cbindgen
+cbindgen_git_src := 'git@github.com:mozilla/cbindgen'
 
 rust_cbindgen_require: $(rust_cbindgen_home)
-	$(CARGO) install --registry crates-io cbindgen
+	@printf "[toolchain]\nchannel = \"stable\"\n" > $^/rust-toolchain.toml
 
 $(rust_cbindgen_home): $(rust_cbindgen_root)
 	test -d $^ || mkdir -p $^
-	git clone --depth=1 --branch=v0.29.0 $(rust_cbindgen_git) $(rust_cbindgen_home)
+	git rev-parse -q --verify HEAD $@ \
+    || git clone --depth=1 --branch=master $(cbindgen_git_src) $@
 
-rust_cbindgen:
-	@echo "#skip $@ ..."
+rust_cbindgen: $(rust_cbindgen_require)
+	cd $(rust_cbindgen_home) && $(CARGO) build
 rust_cbindgen_test: rust_cbindgen
-	@echo "#skip $@ ..."
+	cd $(rust_cbindgen_home) && $(CARGO) test
 
 
 
