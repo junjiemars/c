@@ -724,25 +724,34 @@ $(rust_string_binout): $(rust_string_cargo)
 
 
 # tauri
-.PHONY: rust_tauri_require \
-        rust_tauri_hi_desktop_dev \
-        rust_tauri_hi_ios_dev
+.PHONY: rust_tauri rust_tauri_test \
+        rust_tauri_require rust_tauri_root \
+        rust_tauri_hi_dev
 
-rust_tauri_hi_root := $(rust_root)/tauri/tauri-hi/
+rust_tauri_root := $(rust_root)/tauri
+rust_tauri_hi_root := $(rust_tauri_root)/hi
+rust_tauri_hi_init := $(rust_tauri_hi_root)/package.json
+rust_tauri_hi_binout := $(rust_tauri_hi_root)/src-tauri/target/release/hi
 
-rust_tauri_require:
-	$(CARGO) install --registry crates-io create-tauri-app --locked
-	$(CARGO) install --registry crates-io tauri-cli --version='^2.0.0' --locked
+rust_tauri_require: $(rust_tauri_root)
+	$(CARGO) --list | grep -q 'create-tauri-app' \
+    || $(CARGO) install --registry crates-io create-tauri-app --locked
 
-rust_tauri_hi_desktop_dev:
-	cd $(rust_tauri_hi_root) && $(CARGO) tauri dev
-rust_tauri_hi_ios_dev:
-	cd $(rust_tauri_hi_root) && $(CARGO) tauri ios dev
+$(rust_tauri_root):
+	test -d $^ || mkdir -p $@
 
-rust_tauri:
-	@echo "#skip $@ ..."
+$(rust_tauri_hi_init): $(rust_tauri_require)
+	cd $(rust_tauri_root) \
+    && $(CARGO) create-tauri-app -y -m deno -t vanilla hi
+
+rust_tauri_hi_dev: $(rust_tauri_hi_init)
+	cd $(rust_tauri_hi_root) && deno install && deno task tauri dev
+
+$(rust_tauri_hi_binout): $(rust_tauri_hi_init)
+	cd $(rust_tauri_hi_root) && deno install && deno task tauri build
+
+rust_tauri: $(rust_tauri_hi_binout)
 rust_tauri_test: rust_tauri
-	@echo "#skip $@ ..."
 
 
 
