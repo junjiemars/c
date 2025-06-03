@@ -9,7 +9,7 @@
 # https://swiftpackageindex.com
 # https://developer.apple.com/library/archive/documentation/Porting/Conceptual/PortingUnix/intro/intro.html
 #
-
+
 
 swift: swift_hi                                 \
        swift_cli                                \
@@ -24,6 +24,7 @@ swift_test: swift_hi_test                       \
             swift_lib_test                      \
             swift_foundation_test               \
             swift_os_test
+
 
 # env
 swift_prefix := swift
@@ -45,7 +46,6 @@ swift_package_root := --package-path=$(swift_root)
 
 
 
-
 # hi
 swift_hi_package := $(swift_root)/hi/Package.swift
 swift_hi_binout := $(swift_root)/hi/.build/$(swift_build)/hi
@@ -57,8 +57,7 @@ swift_hi_clean:
 	$(SWIFT) package $(swift_package_root)/hi clean
 
 $(swift_hi_package):
-	$(SWIFT) package $(swift_package_root)/hi \
-		init --type=executable --name=Hi
+	$(SWIFT) package $(swift_package_root)/hi init --type=executable --name=Hi
 
 $(swift_hi_binout): $(swift_hi_package) \
                     $(swift_root)/hi/Sources/hi/main.swift
@@ -68,7 +67,7 @@ $(swift_hi_binout): $(swift_hi_package) \
 
 # lang
 swift_lang_package := $(swift_root)/lang/Package.swift
-swift_lang_binout := $(swift_root)/lang/.build/$(swift_build)/lang
+swift_lang_binout := $(swift_root)/lang/.build/$(swift_build)/Lang
 
 swift_lang: $(swift_lang_binout)
 swift_lang_test: swift_lang
@@ -78,7 +77,7 @@ swift_lang_clean:
 
 $(swift_lang_package):
 	$(SWIFT) package $(swift_package_root)/lang \
-		init --type=executable --name=lang
+		init --type=executable --name=Lang
 
 $(swift_lang_binout): $(swift_lang_package) \
                       $(swift_root)/lang/Sources/main.swift \
@@ -92,7 +91,7 @@ $(swift_lang_binout): $(swift_lang_package) \
                       $(swift_root)/lang/Sources/protocols.swift \
                       $(swift_root)/lang/Sources/errors.swift \
                       $(swift_root)/lang/Sources/protocols.swift
-	$(SWIFT) build $(swift_package_root)/lang -c $(swift_build)
+	$(SWIFT) build $(swift_package_root)/lang -c $(swift_build) $(swiftc_v5)
 
 
 
@@ -112,7 +111,7 @@ $(swift_lib_package):
 
 $(swift_lib_binout): $(swift_lib_package) \
                      $(swift_root)/lib/Sources/lib/Lib.swift
-	$(SWIFT) build $(swift_package_root)/lib -c $(swift_build) $(swiftc_v5)
+	$(SWIFT) build $(swift_package_root)/lib -c $(swift_build)
 
 
 
