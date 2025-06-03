@@ -725,7 +725,7 @@ $(rust_string_binout): $(rust_string_cargo)
 
 # tauri
 .PHONY: rust_tauri rust_tauri_test \
-        rust_tauri_require rust_tauri_root \
+        rust_tauri_root \
         rust_tauri_hi_dev
 
 rust_tauri_root := $(rust_root)/tauri
@@ -733,19 +733,20 @@ rust_tauri_hi_root := $(rust_tauri_root)/hi
 rust_tauri_hi_init := $(rust_tauri_hi_root)/package.json
 rust_tauri_hi_binout := $(rust_tauri_hi_root)/src-tauri/target/release/hi
 
-rust_tauri_require: $(rust_tauri_root)
-	$(CARGO) --list | grep -q 'create-tauri-app' \
-    || $(CARGO) install --registry crates-io create-tauri-app --locked
-
 $(rust_tauri_root):
-	test -d $^ || mkdir -p $@
+	@mkdir -p $@
 
-$(rust_tauri_hi_init): $(rust_tauri_require)
+$(rust_tauri_hi_init): $(rust_tauri_root)
 	cd $(rust_tauri_root) \
+    && $(CARGO) install --registry crates-io create-tauri-app --locked \
     && $(CARGO) create-tauri-app -y -m deno -t vanilla hi
 
-rust_tauri_hi_dev: $(rust_tauri_hi_init)
-	cd $(rust_tauri_hi_root) && deno install && deno task tauri dev
+rust_tauri_hi_dev: $(rust_tauri_hi_binout)
+	grep -e'objc2' $(rust_tauri_hi_root)/src-tauri/Cargo.toml \
+    || printf "\n[profile.dev.package.objc2]\n debug-assertions = false\n" \
+         >> $(rust_tauri_hi_root)/src-tauri/Cargo.toml
+	cd $(rust_tauri_hi_root) \
+    && deno install && deno task tauri dev
 
 $(rust_tauri_hi_binout): $(rust_tauri_hi_init)
 	cd $(rust_tauri_hi_root) && deno install && deno task tauri build
