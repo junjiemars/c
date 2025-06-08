@@ -12,25 +12,22 @@ regexp_test: regexp_os_test \
 
 # env
 regexp_prefix := regexp
+posix_root ?= $(POSIX_ROOT)
 
-INC += $(nm_inc_opt)$(regexp_root)/ $(nm_inc_opt)$(root) $(nm_inc_opt)$(root)/posix
+INC += $(nm_inc_opt)$(regexp_root) $(nm_inc_opt)$(posix_root)
+
+ifeq ($(use_sanitize),yes)
+CFLAGS += $(f_sanitize)
+endif
 
 ifeq ($(CC_NAME),msvc)
-getopt_c := $(root)/posix/getopt.c
+posix_getopt_c := $(posix_root)/getopt.c
 endif # end of msvc
-
 
 ifeq ($(NM_SYSTEM),Linux)
 	# CFLAGS += -D_GNU_SOURCE
 	CFLAGS += -D_POSIX_C_SOURCE=200809L
 endif # end of Linux
-
-
-ifeq ($(_MEMORY_),1)
-ifeq ($(has_sanitize),YES)
-CFLAGS += $(cflags_sanitize)
-endif # end of has_sanitize
-endif # end of _MEMORY_
 
 
 
@@ -45,10 +42,10 @@ else
 regexp_os: $(regexp_os_binout)
 regexp_os_test: regexp_os
 	$(regexp_os_binout)
-	$(regexp_os_binout) -p'aaa' -s'aaa'
+	$(regexp_os_binout) -p'(a*?)*((?i)bb)((?#comment)c{2,})' -s'aaaBBcc' -n3
 endif # end of WinNT
 
-$(regexp_os_binout): $(regexp_root)/os/o1.c $(getopt_c)
+$(regexp_os_binout): $(regexp_root)/os/o1.c $(posix_getopt_c)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
@@ -68,7 +65,7 @@ regexp_pcre:
 regexp_pcre_test: regexp_pcre
 endif # end of has_libpcre
 
-$(regexp_pcre_binout): $(regexp_root)/pcre/a.c $(getopt_c)
+$(regexp_pcre_binout): $(regexp_root)/pcre/a.c $(posix_getopt_c)
 	$(CC) $(CFLAGS) $(pcre_cflags) $(INC) $^ $(bin_out)$@ $(LIBS) $(pcre_ldlibs)
 
 # eof

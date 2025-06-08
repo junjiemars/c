@@ -1,22 +1,12 @@
+#include <_regex.h>
 #include <_regexp_.h>
-#include <posix/getopt.h>
+#include <getopt.h>
 #include <regex.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef REG_BASIC
-#define REG_BASIC 0
-#endif
-
-#define ERRBUF_SIZE 512
-
-static char errbuf[ERRBUF_SIZE];
-static char matbuf[ERRBUF_SIZE];
-
 void usage (void);
-
-void run_auto_test (void);
 
 int test_bone (const char *pattern, const char *subject, int cflags,
                int eflags, size_t nmatch, regmatch_t *matches, size_t *re_nsub,
@@ -36,54 +26,72 @@ static struct option long_options[] = {
   { 0, 0, 0, 0 },
 };
 
+static char errbuf[BUFSIZ];
+static char matbuf[BUFSIZ];
+
 int
-main (__attribute__ ((unused)) int argc, __attribute__ ((unused)) char **argv)
+main (int argc, char **argv)
 {
+  int ch;
+  int cflags, eflags, nmatch;
+  char *pattern, *subject;
+
+  cflags = eflags = nmatch = 0;
+  pattern = subject = NULL;
+
   if (argc < 2)
     {
-      run_auto_test ();
+      usage ();
+      goto clean_exit;
     }
-  else
+
+  while (EOF
+         != (ch = getopt_long (argc, argv, "hp:s:c:e:n:", long_options, 0)))
     {
-      int ch;
-      int cflags, eflags, nmatch;
-      char *pattern, *subject;
-
-      cflags = eflags = nmatch = 0;
-      pattern = subject = NULL;
-
-      while (
-          EOF
-          != (ch = getopt_long (argc, argv, "hp:s:c:e:n:", long_options, 0)))
+      switch (ch)
         {
-          switch (ch)
-            {
-            case 'p':
-              pattern = strdup (optarg);
-              break;
-            case 's':
-              subject = strdup (optarg);
-              break;
-            case 'c':
-              cflags = atoi (optarg);
-              break;
-            case 'e':
-              eflags = atoi (optarg);
-              break;
-            case 'n':
-              nmatch = atoi (optarg);
-              break;
-            case 'h':
-            default:
-              usage ();
-            }
+        case 'p':
+          pattern = strdup (optarg);
+          break;
+        case 's':
+          subject = strdup (optarg);
+          break;
+        case 'c':
+          cflags = atoi (optarg);
+          break;
+        case 'e':
+          eflags = atoi (optarg);
+          break;
+        case 'n':
+          nmatch = atoi (optarg);
+          break;
+        case 'h':
+        default:
+          usage ();
+          goto clean_exit;
         }
-      argc -= optind;
-      argv += optind;
+    }
+  argc -= optind;
+  argv += optind;
 
-      test_basic (pattern, subject, cflags, NULL, eflags, NULL, nmatch);
+  if (cflags == 0)
+    {
+      cflags |= REG_EXTENDED;
+#ifdef __APPLE__
+      cflags |= REG_ENHANCED;
+#endif
     }
 
+  if (eflags == 0)
+    {
+      eflags |= REG_TRACE;
+    }
+
+  test_basic (pattern, subject, cflags, NULL, eflags, NULL, nmatch);
+
+clean_exit:
+  free (pattern);
+  free (subject);
   return 0;
 }
 
@@ -95,107 +103,79 @@ usage (void)
   printf ("Validate regexp pattern.\n");
   printf ("  -h, --help             print this message\n");
   printf ("  -p, --pattern          regexp pattern\n");
-  printf ("  -s, --subject          subject\n");
-  printf ("  -c, --cflags           cflags, default is 0\n");
-  printf ("  -e, --eflags           eflags, default is 0\n");
+  printf ("  -s, --string           string\n");
+  printf ("  -c, --cflags           cflags, default is 0001\n");
+  printf ("  -e, --eflags           eflags, default is 00400\n");
   printf ("  -n, --nmatch           nmatch, default is 0\n");
 }
 
-void
-run_auto_test (void)
-{
-  test_basic ("car", "caaar", REG_BASIC, _str_ (REG_BASIC), 0, _str_ (0), 0);
-  test_basic ("ca*r", "caaar", REG_BASIC, _str_ (REG_BASIC), 0, _str_ (0), 1);
-  test_basic ("ca*r", "acaaar", REG_BASIC, _str_ (REG_BASIC), 0, _str_ (0), 1);
-
-  test_basic ("ca*r", "CAAAR", REG_BASIC, _str_ (REG_BASIC), 0, _str_ (0), 1);
-  test_basic ("ca*r", "CAAAR", REG_ICASE, _str_ (REG_ICASE), 0, _str_ (0), 1);
-
-  test_basic ("ca*r", "acaaar", REG_NOSUB, _str_ (REG_NOSUB), 0, _str_ (0), 1);
-  test_basic ("ca*r", "acaaar", REG_BASIC, _str_ (REG_BASIC), 0, _str_ (0), 0);
-
-  test_basic ("^ca*r", "\ncaaar", REG_BASIC, _str_ (REG_BASIC), 0, _str_ (0),
-              1);
-  test_basic ("ca*r$", "caaar\n", REG_BASIC, _str_ (REG_BASIC), 0, _str_ (0),
-              1);
-  test_basic ("^ca*r$", "\ncaaar\n", REG_NEWLINE, _str_ (REG_NEWLINE), 0,
-              _str_ (0), 1);
-
-  test_basic ("c[abc]+r", "caaar", REG_BASIC, _str_ (REG_BASIC), 0, _str_ (0),
-              1);
-  test_basic ("c[abc]+r", "caaar", REG_EXTENDED, _str_ (REG_EXTENDED), 0,
-              _str_ (0), 1);
-
-  test_basic ("abc(Ca*r|Tru*ck)?", "abcTruuuck", REG_EXTENDED,
-              _str_ (REG_EXTENDED), 0, _str_ (0), 2);
-}
-
 int
-test_bone (const char *pattern, const char *subject, int cflags, int eflags,
+test_bone (const char *pattern, const char *string, int cflags, int eflags,
            size_t nmatch, regmatch_t *pmatch, size_t *re_nsub,
-           size_t errbuf_size, char *errbuf)
+           size_t errbuf_sz, char *errbuf)
 {
-  int errcode = 0;
+  int rc = 0;
   regex_t re;
 
-  errcode = regcomp (&re, pattern, cflags);
-  if (errcode)
+  rc = regcomp (&re, pattern, cflags);
+  if (rc)
     {
-      regerror (errcode, &re, errbuf, errbuf_size);
-      return errcode;
+      regerror (rc, &re, errbuf, errbuf_sz);
+      return rc;
     }
 
-  errcode = regexec (&re, subject, nmatch, pmatch, eflags);
-  if (errcode)
+  rc = regexec (&re, string, nmatch, pmatch, eflags);
+  if (rc)
     {
-      regerror (errcode, &re, errbuf, errbuf_size);
+      regerror (rc, &re, errbuf, errbuf_sz);
       goto clean_exit;
     }
   *re_nsub = re.re_nsub;
 
 clean_exit:
   regfree (&re);
-  return errcode;
+  return rc;
 }
 
 void
-test_basic (const char *pattern, const char *subject, int cflags,
+test_basic (const char *pattern, const char *string, int cflags,
             const char *cflags_str, int eflags, const char *eflags_str,
             int nmatch)
 {
-  int errcode = 0;
+  int rc = 0;
   size_t nsub = 0;
-  regmatch_t *match = NULL;
+  regmatch_t *pmatch = NULL;
 
   printf ("----------\n"
-          "pattern = %s\n"
-          "subject = '%s'\n"
+          "pattern = '%s'\n"
+          "string = '%s'\n"
           "nmatch: %d\n"
-          "cflags: %d%s\n"
-          "eflags: %d%s\n"
+          "cflags: %04d(%s)\n"
+          "eflags: %04d(%s)\n"
           "----------\n",
-          pattern, subject, nmatch, cflags, cflags_str, eflags, eflags_str);
+          pattern, string, nmatch, cflags, cflags_str ? cflags_str : "null",
+          eflags, eflags_str ? eflags_str : "null");
 
-  match = calloc (nmatch + 1, sizeof (*match));
-  memset (errbuf, 0, ERRBUF_SIZE);
+  pmatch = calloc (nmatch + 1, sizeof (*pmatch));
+  memset (errbuf, 0, BUFSIZ);
 
-  errcode = test_bone (pattern, subject, cflags, eflags, nmatch, match, &nsub,
-                       ERRBUF_SIZE, errbuf);
-  if (errcode)
+  rc = test_bone (pattern, string, cflags, eflags, nmatch, pmatch, &nsub,
+                  BUFSIZ, errbuf);
+  if (rc)
     {
       fprintf (stdout, "%s\n", errbuf);
       goto clean_exit;
     }
 
-  for (size_t i = 0; i <= nsub; i++)
+  for (size_t i = 0; i < nsub; i++)
     {
-      const regmatch_t m = match[i];
-      memset (matbuf, 0, ERRBUF_SIZE);
-      strncpy (matbuf, subject + m.rm_so, m.rm_eo - m.rm_so);
-      printf ("matched(%s): start = %i, end = %i\n", matbuf, (int)m.rm_so,
-              (int)m.rm_eo);
+      regmatch_t const m = pmatch[i];
+      memset (matbuf, 0, BUFSIZ);
+      strncpy (matbuf, string + m.rm_so, m.rm_eo - m.rm_so);
+      printf ("#%zu matched(%s): start = %i, end = %i\n", i, matbuf,
+              (int)m.rm_so, (int)m.rm_eo);
     }
 
 clean_exit:
-  free (match);
+  free (pmatch);
 }
