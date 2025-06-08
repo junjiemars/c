@@ -1,5 +1,5 @@
 #include <_regexp_.h>
-/* #include <posix/getopt.h> */
+#include <posix/getopt.h>
 #include <regex.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,6 +14,8 @@
 static char errbuf[ERRBUF_SIZE];
 static char matbuf[ERRBUF_SIZE];
 
+void usage (void);
+
 void run_auto_test (void);
 
 int test_bone (const char *pattern, const char *subject, int cflags,
@@ -24,6 +26,16 @@ void test_basic (const char *pattern, const char *subject, int cflags,
                  const char *cflags_str, int eflags, const char *eflags_str,
                  int nmatch);
 
+static struct option long_options[] = {
+  { "help", no_argument, 0, 'h' },
+  { "pattern", required_argument, 0, 'p' },
+  { "subject", required_argument, 0, 's' },
+  { "cflags", optional_argument, 0, 'c' },
+  { "eflags", optional_argument, 0, 'e' },
+  { "nmatch", optional_argument, 0, 'n' },
+  { 0, 0, 0, 0 },
+};
+
 int
 main (__attribute__ ((unused)) int argc, __attribute__ ((unused)) char **argv)
 {
@@ -33,12 +45,60 @@ main (__attribute__ ((unused)) int argc, __attribute__ ((unused)) char **argv)
     }
   else
     {
-      fprintf (stderr,
-               "usage: <pattern> <subject> [cflags] [eflags] [nmatch]\n");
-      return 1;
+      int ch;
+      int cflags, eflags, nmatch;
+      char *pattern, *subject;
+
+      cflags = eflags = nmatch = 0;
+      pattern = subject = NULL;
+
+      while (
+          EOF
+          != (ch = getopt_long (argc, argv, "hp:s:c:e:n:", long_options, 0)))
+        {
+          switch (ch)
+            {
+            case 'p':
+              pattern = strdup (optarg);
+              break;
+            case 's':
+              subject = strdup (optarg);
+              break;
+            case 'c':
+              cflags = atoi (optarg);
+              break;
+            case 'e':
+              eflags = atoi (optarg);
+              break;
+            case 'n':
+              nmatch = atoi (optarg);
+              break;
+            case 'h':
+            default:
+              usage ();
+            }
+        }
+      argc -= optind;
+      argv += optind;
+
+      test_basic (pattern, subject, cflags, NULL, eflags, NULL, nmatch);
     }
 
   return 0;
+}
+
+void
+usage (void)
+{
+  printf ("Usage: <pattern> <subject> [cflags] [eflags] [nmatch]\n");
+  printf ("\n");
+  printf ("Validate regexp pattern.\n");
+  printf ("  -h, --help             print this message\n");
+  printf ("  -p, --pattern          regexp pattern\n");
+  printf ("  -s, --subject          subject\n");
+  printf ("  -c, --cflags           cflags, default is 0\n");
+  printf ("  -e, --eflags           eflags, default is 0\n");
+  printf ("  -n, --nmatch           nmatch, default is 0\n");
 }
 
 void
@@ -108,12 +168,13 @@ test_basic (const char *pattern, const char *subject, int cflags,
   regmatch_t *match = NULL;
 
   printf ("----------\n"
-          "cflags: %s\n"
-          "eflags: %s\n"
           "pattern = %s\n"
           "subject = '%s'\n"
+          "nmatch: %d\n"
+          "cflags: %d%s\n"
+          "eflags: %d%s\n"
           "----------\n",
-          cflags_str, eflags_str, pattern, subject);
+          pattern, subject, nmatch, cflags, cflags_str, eflags, eflags_str);
 
   match = calloc (nmatch + 1, sizeof (*match));
   memset (errbuf, 0, ERRBUF_SIZE);

@@ -45,9 +45,10 @@ else
 regexp_os: $(regexp_os_binout)
 regexp_os_test: regexp_os
 	$(regexp_os_binout)
+	$(regexp_os_binout) -p'aaa' -s'aaa'
 endif # end of WinNT
 
-$(regexp_os_binout): $(regexp_root)/os/o1.c
+$(regexp_os_binout): $(regexp_root)/os/o1.c $(getopt_c)
 	$(CC) $(CFLAGS) $(INC) $^ $(bin_out)$@
 
 
