@@ -77,7 +77,7 @@ main (int argc, char **argv)
   if (cflags == 0)
     {
       cflags |= REG_EXTENDED;
-#ifdef __APPLE__
+#ifdef DARWIN
       cflags |= REG_ENHANCED;
 #endif
     }
