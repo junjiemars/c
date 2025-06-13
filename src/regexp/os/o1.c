@@ -14,14 +14,11 @@ typedef struct
   char const *name;
 } RegFlagDef;
 
-void usage (int cflags, int eflags, char const *cbuf, char const *ebuf);
-int parse_reg_flags (char const *ss, int *flags, RegFlagDef const *, char *buf,
-                     size_t bufsz);
-int str_reg_flags (int flags, RegFlagDef const *def, char *buf, size_t bufsz);
-int int_reg_flags (char const *ss, RegFlagDef const *def, int *flags);
-
-void test (char const *pattern, char const *subject, int cflags,
-           char const *cflags_str, int eflags, char const *eflags_str);
+void usage (int, int, char const *, char const *);
+void dump_flags (RegFlagDef const *, int);
+int parse_reg_flags (char const *, int *, RegFlagDef const *);
+int str_reg_flags (int, RegFlagDef const *, char *, size_t);
+void test (char const *, char const *, int, char const *, int, char const *);
 
 static struct option long_options[] = {
   { "help", no_argument, 0, 'h' },
@@ -29,6 +26,7 @@ static struct option long_options[] = {
   { "subject", required_argument, 0, 's' },
   { "cflags", optional_argument, 0, 'c' },
   { "eflags", optional_argument, 0, 'e' },
+  { "dump", no_argument, 0, 'd' },
   { 0, 0, 0, 0 },
 };
 
@@ -56,21 +54,17 @@ int
 main (int argc, char **argv)
 {
   int ch;
-  int cflags, eflags;
-  char *pattern, *subject;
+  int opt_dump = 0;
+  int cflags = 0, eflags = 0;
+  char *pattern = NULL, *subject = NULL;
+  char *opt_cflag = NULL, *opt_eflag = NULL;
   char cbuf[BUFSIZ], ebuf[BUFSIZ];
 
-  cflags = eflags = 0;
-  pattern = subject = NULL;
   memset (cbuf, 0, sizeof (cbuf));
   memset (ebuf, 0, sizeof (ebuf));
-
   cflags |= REG_EXTENDED;
   cflags |= REG_ENHANCED;
-  str_reg_flags (cflags, reg_cflag_map, cbuf, sizeof (cbuf));
-
   eflags |= REG_TRACE;
-  str_reg_flags (eflags, reg_eflag_map, ebuf, sizeof (ebuf));
 
   if (argc < 2)
     {
@@ -78,7 +72,7 @@ main (int argc, char **argv)
       goto clean_exit;
     }
 
-  while (EOF != (ch = getopt_long (argc, argv, "hp:s:c:e:", long_options, 0)))
+  while (EOF != (ch = getopt_long (argc, argv, "hdp:s:c:e:", long_options, 0)))
     {
       switch (ch)
         {
@@ -89,12 +83,13 @@ main (int argc, char **argv)
           subject = strdup (optarg);
           break;
         case 'c':
-          parse_reg_flags (optarg, &cflags, reg_cflag_map, cbuf,
-                           sizeof (cbuf));
+          opt_cflag = strdup (optarg);
           break;
         case 'e':
-          parse_reg_flags (optarg, &eflags, reg_eflag_map, ebuf,
-                           sizeof (ebuf));
+          opt_eflag = strdup (optarg);
+          break;
+        case 'd':
+          opt_dump++;
           break;
         case 'h':
         default:
@@ -105,9 +100,35 @@ main (int argc, char **argv)
   argc -= optind;
   argv += optind;
 
+  if (opt_dump)
+    {
+      if (opt_cflag)
+        {
+          dump_flags (reg_cflag_map, 4);
+        }
+      if (opt_eflag)
+        {
+          dump_flags (reg_eflag_map, 5);
+        }
+      goto clean_exit;
+    }
+
+  if (opt_cflag)
+    {
+      parse_reg_flags (opt_cflag, &cflags, reg_cflag_map);
+    }
+  if (opt_eflag)
+    {
+      parse_reg_flags (opt_eflag, &eflags, reg_eflag_map);
+    }
+  str_reg_flags (eflags, reg_eflag_map, ebuf, sizeof (ebuf));
+  str_reg_flags (cflags, reg_cflag_map, cbuf, sizeof (cbuf));
+
   test (pattern, subject, cflags, cbuf, eflags, ebuf);
 
 clean_exit:
+  free (opt_cflag);
+  free (opt_eflag);
   free (pattern);
   free (subject);
   return 0;
@@ -126,20 +147,53 @@ usage (int cflags, int eflags, char const *cbuf, char const *ebuf)
           cbuf);
   printf ("  -e, --eflags           eflags, default is %05o(%s)\n", eflags,
           ebuf);
+  printf ("  -d, --dump-flags      dump all cflags and eflags\n");
+}
+
+void
+dump_flags (RegFlagDef const *map, int width)
+{
+  char fmt[64];
+  snprintf (fmt, sizeof (fmt), "%%0%do %%-20s\n", width);
+  for (RegFlagDef const *d = map; d && d->flag != EOF; d++)
+    {
+      printf (fmt, d->flag, d->name);
+    }
 }
 
 int
-parse_reg_flags (char const *ss, int *flags, RegFlagDef const *def, char *buf,
-                 size_t bufsz)
+parse_reg_flags (char const *ss, int *flags, RegFlagDef const *def)
 {
-  if (isalpha (ss[0]))
+  char s1[BUFSIZ];
+  char const *d1 = "|";
+
+  *flags = 0;
+  strcpy (s1, ss);
+
+  for (char *tok = strtok (s1, d1); tok; tok = strtok (NULL, d1))
     {
-      int_reg_flags (ss, def, flags);
+      for (RegFlagDef const *d = def; d->flag != EOF; d++)
+        {
+          if (isnumber (*tok))
+            {
+              int oct = atoi (tok);
+              if (oct == d->flag)
+                {
+                  *flags |= d->flag;
+                  continue;
+                }
+            }
+          else if (isalpha (*tok))
+            {
+              if (strcmp (tok, d->name) == 0)
+                {
+                  *flags |= d->flag;
+                  continue;
+                }
+            }
+        }
     }
-  else
-    {
-      str_reg_flags (*flags, def, buf, bufsz);
-    }
+
   return 0;
 }
 
@@ -164,35 +218,13 @@ str_reg_flags (int flags, RegFlagDef const *def, char *buf, size_t bufsz)
   return 0;
 }
 
-int
-int_reg_flags (char const *ss, RegFlagDef const *def, int *flags)
-{
-  char s1[BUFSIZ];
-  char const *d1 = "|";
-
-  *flags = 0;
-  memcpy (s1, ss, strlen (ss));
-
-  for (char *tok = strtok (s1, d1); tok; tok = strtok (NULL, d1))
-    {
-      for (RegFlagDef const *d = def; d->flag != EOF; d++)
-        {
-          if (strcmp (tok, d->name) == 0)
-            {
-              *flags |= d->flag;
-            }
-        }
-    }
-
-  return 0;
-}
-
 void
 test (char const *pattern, char const *string, int cflags,
       char const *cflags_str, int eflags, char const *eflags_str)
 {
   int rc = 0;
   int err = 0;
+  size_t len;
   regex_t re = { 0 };
   regmatch_t *pmatch = NULL;
   char errbuf[BUFSIZ] = { 0 };
@@ -209,7 +241,8 @@ test (char const *pattern, char const *string, int cflags,
 
   if ((rc = regcomp (&re, pattern, cflags)))
     {
-      regerror (rc, &re, errbuf, sizeof (errbuf));
+      len = regerror (rc, &re, errbuf, sizeof (errbuf));
+      assert (len <= sizeof (errbuf) && "errbuf too small");
       fprintf (stderr, "!%s\n", errbuf);
       goto clean_exit;
     }
@@ -223,7 +256,8 @@ test (char const *pattern, char const *string, int cflags,
 
   if ((rc = regexec (&re, string, re.re_nsub + 1, pmatch, eflags)))
     {
-      regerror (rc, &re, errbuf, sizeof (errbuf));
+      len = regerror (rc, &re, errbuf, sizeof (errbuf));
+      assert (len <= sizeof (errbuf) && "errbuf too small");
       fprintf (stderr, "!%s\n", errbuf);
       goto clean_exit;
     }

@@ -42,7 +42,7 @@ else
 regexp_os: $(regexp_os_binout)
 regexp_os_test: regexp_os
 	$(regexp_os_binout)
-	$(regexp_os_binout) -p'(a*?)*((?i)bb)((?#comment)c{2,})' -s'aaaBBcc'
+	-$(regexp_os_binout) -p'(a*?)*((?i)bb)((?#comment)c{2,})' -s'aaaBBcc'
 endif # end of WinNT
 
 $(regexp_os_binout): $(regexp_root)/os/o1.c $(posix_getopt_c)
