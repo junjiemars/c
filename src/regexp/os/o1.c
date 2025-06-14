@@ -65,6 +65,8 @@ main (int argc, char **argv)
   cflags |= REG_EXTENDED;
   cflags |= REG_ENHANCED;
   eflags |= REG_TRACE;
+  str_reg_flags (cflags, reg_cflag_map, cbuf, sizeof (cbuf));
+  str_reg_flags (eflags, reg_eflag_map, ebuf, sizeof (ebuf));
 
   if (argc < 2)
     {
@@ -72,7 +74,8 @@ main (int argc, char **argv)
       goto clean_exit;
     }
 
-  while (EOF != (ch = getopt_long (argc, argv, "hdp:s:c:e:", long_options, 0)))
+  while (EOF
+         != (ch = getopt_long (argc, argv, "hdp:s:c::e::", long_options, 0)))
     {
       switch (ch)
         {
@@ -83,10 +86,10 @@ main (int argc, char **argv)
           subject = strdup (optarg);
           break;
         case 'c':
-          opt_cflag = strdup (optarg);
+          opt_cflag = strdup (optarg ? optarg : "0");
           break;
         case 'e':
-          opt_eflag = strdup (optarg);
+          opt_eflag = strdup (optarg ? optarg : "0");
           break;
         case 'd':
           opt_dump++;
@@ -116,13 +119,13 @@ main (int argc, char **argv)
   if (opt_cflag)
     {
       parse_reg_flags (opt_cflag, &cflags, reg_cflag_map);
+      str_reg_flags (cflags, reg_cflag_map, cbuf, sizeof (cbuf));
     }
   if (opt_eflag)
     {
       parse_reg_flags (opt_eflag, &eflags, reg_eflag_map);
+      str_reg_flags (eflags, reg_eflag_map, ebuf, sizeof (ebuf));
     }
-  str_reg_flags (eflags, reg_eflag_map, ebuf, sizeof (ebuf));
-  str_reg_flags (cflags, reg_cflag_map, cbuf, sizeof (cbuf));
 
   test (pattern, subject, cflags, cbuf, eflags, ebuf);
 
@@ -147,7 +150,7 @@ usage (int cflags, int eflags, char const *cbuf, char const *ebuf)
           cbuf);
   printf ("  -e, --eflags           eflags, default is %05o(%s)\n", eflags,
           ebuf);
-  printf ("  -d, --dump-flags      dump all cflags and eflags\n");
+  printf ("  -d, --dump-flags       dump all cflags and eflags\n");
 }
 
 void
@@ -164,35 +167,30 @@ dump_flags (RegFlagDef const *map, int width)
 int
 parse_reg_flags (char const *ss, int *flags, RegFlagDef const *def)
 {
-  char s1[BUFSIZ];
+  char *s1;
   char const *d1 = "|";
 
   *flags = 0;
-  strcpy (s1, ss);
+  s1 = strdup (ss);
 
   for (char *tok = strtok (s1, d1); tok; tok = strtok (NULL, d1))
     {
+      int oct;
+      if (sscanf (tok, "%o", &oct) <= 0)
+        {
+          oct = EOF;
+        }
+
       for (RegFlagDef const *d = def; d->flag != EOF; d++)
         {
-          if (isnumber (*tok))
+          if ((oct > 0 && (oct == d->flag)) || strcmp (tok, d->name) == 0)
             {
-              int oct = atoi (tok);
-              if (oct == d->flag)
-                {
-                  *flags |= d->flag;
-                  continue;
-                }
-            }
-          else if (isalpha (*tok))
-            {
-              if (strcmp (tok, d->name) == 0)
-                {
-                  *flags |= d->flag;
-                  continue;
-                }
+              *flags |= d->flag;
+              break;
             }
         }
     }
+  free (s1);
 
   return 0;
 }
@@ -210,7 +208,7 @@ str_reg_flags (int flags, RegFlagDef const *def, char *buf, size_t bufsz)
         }
     }
 
-  if (buf && buf[len - 1] == '|')
+  if (buf && len && buf[len - 1] == '|')
     {
       buf[len - 1] = '\0';
     }
