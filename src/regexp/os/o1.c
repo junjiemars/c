@@ -140,17 +140,16 @@ clean_exit:
 void
 usage (int cflags, int eflags, char const *cbuf, char const *ebuf)
 {
-  printf ("Usage: <pattern> <subject> [cflags] [eflags] [nmatch]\n");
-  printf ("\n");
+  printf ("Usage: <pattern> <subject> [cflags] [eflags] [nmatch]\n\n");
   printf ("Validate regexp pattern.\n");
-  printf ("  -h, --help             print this message\n");
-  printf ("  -p, --pattern          regexp pattern\n");
-  printf ("  -s, --subject          subject\n");
-  printf ("  -c, --cflags           cflags, default is %04o(%s)\n", cflags,
+  printf ("  -h, --help           print this message\n");
+  printf ("  -p, --pattern        regexp pattern\n");
+  printf ("  -s, --subject        subject\n");
+  printf ("  -c, --cflags         cflags, default is %04o(%s)\n", cflags,
           cbuf);
-  printf ("  -e, --eflags           eflags, default is %05o(%s)\n", eflags,
+  printf ("  -e, --eflags         eflags, default is %05o(%s)\n", eflags,
           ebuf);
-  printf ("  -d, --dump-flags       dump all cflags and eflags\n");
+  printf ("  -d, --dump-flags     dump all cflags or eflags\n");
 }
 
 void
@@ -183,7 +182,7 @@ parse_reg_flags (char const *ss, int *flags, RegFlagDef const *def)
 
       for (RegFlagDef const *d = def; d->flag != EOF; d++)
         {
-          if ((oct > 0 && (oct == d->flag)) || strcmp (tok, d->name) == 0)
+          if ((oct && (oct == d->flag)) || strcmp (tok, d->name) == 0)
             {
               *flags |= d->flag;
               break;
