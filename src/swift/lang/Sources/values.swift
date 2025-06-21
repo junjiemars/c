@@ -1,10 +1,11 @@
-func simpleValues() {
-  immutableAndMutable()
+func simple_values() {
+  immutable_and_mutable()
   strings()
-  foo()
+  floats()
+  arrays_and_dictionaries()
 }
 
-func immutableAndMutable() {
+func immutable_and_mutable() {
   var v1 = 0x11
   v1 += 1
   let c1 = 0x22
@@ -41,7 +42,7 @@ func strings() {
   print("\(cafe)=\(cafe1)")
 }
 
-func foo() {
+func floats() {
   let d1 = 70.0
   let d2: Double = 70.000001
   assert(d1 < d2)
@@ -52,7 +53,9 @@ func foo() {
 
   // assert(d1 == f1)
   assert(d1 == Double(f1))
+}
 
+func arrays_and_dictionaries() {
   var a1 = ["strawberries", "limes", "tangerines"]
   assert(a1[1] == "limes")
   a1.append("blueberries")

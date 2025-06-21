@@ -47,19 +47,22 @@ swiftc_v6 := -Xswiftc -swift-version -Xswiftc 6
 
 
 # hi
-.PHONY: swift_hi_clean
+.PHONY: swift_hi \
+        swift_hi_test \
+        swift_hi_clean \
+        swift_hi_require
+
 swift_hi_package := $(swift_root)/hi/Package.swift
 swift_hi_binout := $(swift_build_root)/hi/$(swift_build_opt)/Hi
 
-swift_hi: $(swift_hi_binout)
+swift_hi: $(swift_hi_package) $(swift_hi_binout)
 swift_hi_test: swift_hi
 	$(SWIFT) run --build-path=$(swift_build_root)/hi \
     --package-path=$(swift_root)/hi Hi
 swift_hi_clean:
 	$(SWIFT) package --build-path=$(swift_build_root)/hi \
     --package-path=$(swift_root)/hi clean
-
-$(swift_hi_package):
+swift_hi_require:
 	$(SWIFT) package $(swift_package_root)/hi init --type=executable --name=Hi
 
 $(swift_hi_binout): $(swift_hi_package) \
@@ -71,22 +74,24 @@ $(swift_hi_binout): $(swift_hi_package) \
 
 
 # lang
-.PHONY: swift_lang_clean
+.PHONY: swift_lang \
+        swift_lang_test \
+        swift_lang_clean \
+        swift_lang_require
+
 swift_lang_package := $(swift_root)/lang/Package.swift
 swift_lang_binout := $(swift_build_root)/lang/$(swift_build_opt)/Lang
 
-swift_lang: $(swift_lang_binout)
+swift_lang: $(swift_lang_package) $(swift_lang_binout)
 swift_lang_test: swift_lang
 	$(swift_lang_binout)
 swift_lang_clean: $(swift_build_root)/lang
 	$(SWIFT) package --build-path=$^ --package-path=$(swift_root)/lang clean
-
-$(swift_lang_package):
+swift_lang_require:
 	$(SWIFT) package $(swift_build_root)/lang \
 		init --type=executable --name=Lang
 
-$(swift_lang_binout): $(swift_lang_package) \
-                      $(wildcard $(swift_root)/lang/*.swift)
+$(swift_lang_binout): $(wildcard $(swift_root)/lang/Sources/*.swift)
 	$(SWIFT) build --build-path=$(swift_build_root)/lang \
     --package-path=$(swift_root)/lang \
     -c $(swift_build_opt) $(swiftc_v5)
