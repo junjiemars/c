@@ -30,68 +30,66 @@ swift_test: swift_hi_test                       \
 swift_prefix := swift
 SWIFT := $(has_swift)
 
-swift_build := debug
+swift_build_opt := debug
 ifeq ($(NM_BUILD),YES)
-swift_build := release
+swift_build_opt := release
 endif
 
 ifeq ($(NM_VERBOSE),YES)
 swift_build += --verbose
 endif
 
+swift_build_root := $(var_path)
+
 swiftc_v5 := -Xswiftc -swift-version -Xswiftc 5
 swiftc_v6 := -Xswiftc -swift-version -Xswiftc 6
-
-swift_package_root := --package-path=$(swift_root)
 
 
 
 # hi
+.PHONY: swift_hi_clean
 swift_hi_package := $(swift_root)/hi/Package.swift
-swift_hi_binout := $(swift_root)/hi/.build/$(swift_build)/hi
+swift_hi_binout := $(swift_build_root)/hi/$(swift_build_opt)/Hi
 
 swift_hi: $(swift_hi_binout)
 swift_hi_test: swift_hi
-	$(SWIFT) run $(swift_package_root)/hi
+	$(SWIFT) run --build-path=$(swift_build_root)/hi \
+    --package-path=$(swift_root)/hi Hi
 swift_hi_clean:
-	$(SWIFT) package $(swift_package_root)/hi clean
+	$(SWIFT) package --build-path=$(swift_build_root)/hi \
+    --package-path=$(swift_root)/hi clean
 
 $(swift_hi_package):
 	$(SWIFT) package $(swift_package_root)/hi init --type=executable --name=Hi
 
 $(swift_hi_binout): $(swift_hi_package) \
-                    $(swift_root)/hi/Sources/hi/main.swift
-	$(SWIFT) build $(swift_package_root)/hi -c $(swift_build) $(swiftc_v5)
+                    $(wildcard $(swift_root)/hi/*.swift)
+	$(SWIFT) build --build-path=$(swift_build_root)/hi \
+    --package-path=$(swift_root)/hi \
+    -c $(swift_build_opt) $(swiftc_v5)
 
 
 
 # lang
+.PHONY: swift_lang_clean
 swift_lang_package := $(swift_root)/lang/Package.swift
-swift_lang_binout := $(swift_root)/lang/.build/$(swift_build)/Lang
+swift_lang_binout := $(swift_build_root)/lang/$(swift_build_opt)/Lang
 
 swift_lang: $(swift_lang_binout)
 swift_lang_test: swift_lang
 	$(swift_lang_binout)
-swift_lang_clean:
-	$(SWIFT) package $(swift_package_root)/lang clean
+swift_lang_clean: $(swift_build_root)/lang
+	$(SWIFT) package --build-path=$^ --package-path=$(swift_root)/lang clean
 
 $(swift_lang_package):
-	$(SWIFT) package $(swift_package_root)/lang \
+	$(SWIFT) package $(swift_build_root)/lang \
 		init --type=executable --name=Lang
 
 $(swift_lang_binout): $(swift_lang_package) \
-                      $(swift_root)/lang/Sources/main.swift \
-                      $(swift_root)/lang/Sources/lang.swift \
-                      $(swift_root)/lang/Sources/values.swift \
-                      $(swift_root)/lang/Sources/controls.swift \
-                      $(swift_root)/lang/Sources/functions.swift \
-                      $(swift_root)/lang/Sources/objects.swift \
-                      $(swift_root)/lang/Sources/enumerations.swift \
-                      $(swift_root)/lang/Sources/concurrency.swift \
-                      $(swift_root)/lang/Sources/protocols.swift \
-                      $(swift_root)/lang/Sources/errors.swift \
-                      $(swift_root)/lang/Sources/protocols.swift
-	$(SWIFT) build $(swift_package_root)/lang -c $(swift_build) $(swiftc_v5)
+                      $(wildcard $(swift_root)/lang/*.swift)
+	$(SWIFT) build --build-path=$(swift_build_root)/lang \
+    --package-path=$(swift_root)/lang \
+    -c $(swift_build_opt) $(swiftc_v5)
 
 
 

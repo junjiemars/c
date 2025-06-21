@@ -87,15 +87,6 @@ struct Card {
   var suit: Suit
 }
 
-// concurrency
-
-func slowFetch(from server: String) async -> Int {
-  if server == "primary" {
-    return 200
-  }
-  return 501
-}
-
 // errorHandling
 enum PrinterError: Error {
   case outOfPaper

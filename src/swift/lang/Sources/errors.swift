@@ -1,4 +1,5 @@
 // how to qualify the throws type
+#if swift(>=6)
 func send(job: Int, toPrinter printerName: String) throws -> String {
   if printerName == "HP2211" {
     throw PrinterError.noToner(percent: 7)
@@ -55,3 +56,4 @@ func errorHandling() {
 
   sendWithThrowsNever(job: 101, toPrinter: "HP2210")
 }
+#endif
