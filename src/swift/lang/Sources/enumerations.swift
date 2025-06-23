@@ -1,4 +1,4 @@
-func enumerationsAndStructures() {
+func enumerations() {
   let ace = Rank.ace
   assert(ace.rawValue == 1)
 
