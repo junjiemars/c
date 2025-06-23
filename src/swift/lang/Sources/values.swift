@@ -1,4 +1,4 @@
-func simple_values() {
+func values() {
   immutable_and_mutable()
   strings()
   floats()

@@ -40,9 +40,7 @@ swift_build += --verbose
 endif
 
 swift_build_root := $(var_path)
-
-swiftc_v5 := -Xswiftc -swift-version -Xswiftc 5
-swiftc_v6 := -Xswiftc -swift-version -Xswiftc 6
+swiftc_ver := -Xswiftc -swift-version -Xswiftc $(swift_ver)
 
 
 
@@ -69,7 +67,7 @@ $(swift_hi_binout): $(swift_hi_package) \
                     $(wildcard $(swift_root)/hi/*.swift)
 	$(SWIFT) build --build-path=$(swift_build_root)/hi \
     --package-path=$(swift_root)/hi \
-    -c $(swift_build_opt) $(swiftc_v5)
+    -c $(swift_build_opt) $(swiftc_ver)
 
 
 
@@ -94,7 +92,7 @@ swift_lang_require:
 $(swift_lang_binout): $(wildcard $(swift_root)/lang/Sources/*.swift)
 	$(SWIFT) build --build-path=$(swift_build_root)/lang \
     --package-path=$(swift_root)/lang \
-    -c $(swift_build_opt) $(swiftc_v5)
+    -c $(swift_build_opt) $(swiftc_ver)
 
 
 

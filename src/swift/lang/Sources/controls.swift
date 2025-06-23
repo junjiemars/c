@@ -1,4 +1,4 @@
-func control_flow() {
+func controls() {
     for_in()
     for_in_destruct()
     conditional_assign()
