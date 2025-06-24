@@ -1,4 +1,4 @@
-func objectsAndClasses() {
+func objects() {
   let shape1 = Shape(name: "unnamed")
   assert(shape1.name == "unnamed")
 

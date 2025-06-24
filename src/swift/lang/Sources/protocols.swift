@@ -1,4 +1,4 @@
-func protocolsAndExtensions() {
+func protocols() {
   let c1 = SimpleClassExample()
   c1.adjust()
   assert(c1.desc.count > 0)
