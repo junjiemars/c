@@ -95,18 +95,13 @@ enum PrinterError: Error {
 }
 
 
-// generics
+// generic functions
 func makeArray<T>(repeating item: T, numberOfTimes: Int) -> [T] {
     var result: [T] = []
     for _ in 0..<numberOfTimes {
         result.append(item)
     }
     return result
-}
-
-enum OptionalValue<Wrapped> {
-    case none
-    case some(Wrapped)
 }
 
 func anyOverlapped<T: Sequence, U: Sequence>(_ lhs: T, _ rhs: U) -> Bool
@@ -119,6 +114,12 @@ func anyOverlapped<T: Sequence, U: Sequence>(_ lhs: T, _ rhs: U) -> Bool
         }
     }
     return false
+}
+
+// enumerations
+enum OptionalValue<Wrapped> {
+    case none
+    case some(Wrapped)
 }
 
 // protocols
@@ -151,3 +152,22 @@ extension Int: ExampleProtocol {
         self += 1
     }
 }
+
+// macros
+struct Colors1: OptionSet {
+    let rawValue: Int
+    static let red = Colors1(rawValue: 1 << 0)
+    static let green = Colors1(rawValue: 1 << 1)
+    static let blue = Colors1(rawValue: 1 << 2)
+}
+
+#if swift(>=6)
+@OptionSet<Int>
+struct Colors2 {
+    private enum Options: Int {
+        case red
+        case green
+        case blue
+    }
+}
+#endif
